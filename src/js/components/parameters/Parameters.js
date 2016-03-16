@@ -1,39 +1,24 @@
 import * as _ from 'lodash';
+import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React from 'react';
 
 import Loader from '../ui/Loader';
-import NotificationActions from '../../actions/NotificationActions';
+import ParametersActions from '../../actions/ParametersActions';
 import ParameterTree from './ParameterTree';
-import TripleOApiService from '../../services/TripleOApiService';
-import TripleOApiErrorHandler from '../../services/TripleOApiErrorHandler';
 
-export default class Parameters extends React.Component {
+class Parameters extends React.Component {
   constructor() {
     super();
     this.state = {
-      canSubmit: false,
-      formErrors: [],
-      parameters: {},
-      parametersLoaded: false
+      canSubmit: false
     };
   }
 
   componentDidMount() {
-    this.setState({ parametersLoaded: false });
-    TripleOApiService.getPlanParameters(this.props.currentPlanName).then(response => {
-      this.setState({
-        parameters: response.parameters,
-        parametersLoaded: true
-      });
-    }).catch(error => {
-      this.props.history.pushState(null, this.props.parentPath);
-      let errorHandler = new TripleOApiErrorHandler(error);
-      errorHandler.errors.forEach((error) => {
-        NotificationActions.notify(error);
-      });
-    });
+    this.props.fetchParameters(this.props.currentPlanName);
   }
 
   enableButton() {
@@ -59,31 +44,13 @@ export default class Parameters extends React.Component {
 
   handleSubmit(formData, resetForm, invalidateForm) {
     this.disableButton();
-    this.setState({ parametersLoaded: false });
-    TripleOApiService.updatePlanParameters(this.props.currentPlanName,
-                                           this._jsonParseformData(formData))
-    .then((response) => {
-      this.setState({
-        parameters: response.parameters,
-        parametersLoaded: true
-      });
-      this.props.history.pushState(null, this.props.parentPath);
-      NotificationActions.notify({
-        title: 'Parameters updated',
-        message: 'The Deployment parameters have been successfully updated',
-        type: 'success'
-      });
-    }).catch((error) => {
-      this.enableButton();
-      this.setState({ parametersLoaded: true });
-      console.error('Error in Parameters.handleSubmit', error); //eslint-disable-line no-console
-      let errorHandler = new TripleOApiErrorHandler(error,
-                               Object.keys(this.refs.parameterConfigurationForm.inputs));
-      invalidateForm(errorHandler.formFieldErrors);
-      this.setState({
-        formErrors: errorHandler.errors
-      });
-    });
+
+    this.props.updateParameters(
+      this.props.currentPlanName,
+      this._jsonParseformData(formData),
+      Object.keys(this.refs.parameterConfigurationForm.inputs),
+      this.props.parentPath
+    );
   }
 
   render() {
@@ -108,9 +75,9 @@ export default class Parameters extends React.Component {
               </div>
 
               <Loader height={60}
-                      loaded={this.state.parametersLoaded}>
-                <ParameterTree parameters={this.state.parameters}
-                               formErrors={this.state.formErrors}/>
+                      loaded={!this.props.isPending}>
+                <ParameterTree parameters={this.props.parameters}
+                               formErrors={this.props.form.formErrors}/>
               </Loader>
 
               <div className="modal-footer">
@@ -133,10 +100,36 @@ export default class Parameters extends React.Component {
 }
 Parameters.propTypes = {
   currentPlanName: React.PropTypes.string,
+  fetchParameters: React.PropTypes.func,
+  form: ImmutablePropTypes.map,
   history: React.PropTypes.object,
-  parentPath: React.PropTypes.string.isRequired
+  isPending: React.PropTypes.bool,
+  parameters: ImmutablePropTypes.map,
+  parentPath: React.PropTypes.string.isRequired,
+  updateParameters: React.PropTypes.func
 };
 
 Parameters.defaultProps = {
   parentPath: '/deployment-plan'
 };
+
+function mapStateToProps(state) {
+  return {
+    form: state.parameters.form,
+    isPending: state.parameters.isPending,
+    parameters: state.parameters.parameters
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchParameters: currentPlanName => {
+      dispatch(ParametersActions.fetchParameters(currentPlanName));
+    },
+    updateParameters: (currentPlanName, data, inputFields, url) => {
+      dispatch(ParametersActions.updateParameters(currentPlanName, data, inputFields, url));
+    }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Parameters);

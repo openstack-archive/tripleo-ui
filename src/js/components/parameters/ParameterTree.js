@@ -24,9 +24,10 @@ export default class ParameterTree extends React.Component {
             <div className="treeview">
               <ul className="list-group">
                 <ResourceGroupTab name="RootParameters"
-                                  description={this.props.parameters.Description}
+                                  description={this.props.parameters.get('Description')}
                                   level={0}
-                                  nestedParameters={this.props.parameters.NestedParameters}
+                                  nestedParameters={this.props.parameters.get(
+                                    'NestedParameters').toJS()}
                                   activateTab={this.activateTab.bind(this)}
                                   activeTab={this.state.activeTab}/>
               </ul>
@@ -36,8 +37,9 @@ export default class ParameterTree extends React.Component {
             <FormErrorList errors={this.props.formErrors}/>
             <ParametersTabPane name="RootParameters"
                                activeTab={this.state.activeTab}
-                               nestedParameters={this.props.parameters.NestedParameters}
-                               parameters={this.props.parameters.Parameters}/>
+                               nestedParameters={this.props.parameters.get(
+                                'NestedParameters').toJS()}
+                               parameters={this.props.parameters.get('Parameters').toJS()}/>
           </div>
         </div>
       </div>
@@ -47,4 +49,8 @@ export default class ParameterTree extends React.Component {
 ParameterTree.propTypes = {
   formErrors: React.PropTypes.array,
   parameters: React.PropTypes.object
+};
+
+ParameterTree.defaultProps = {
+  formErrors: []
 };
