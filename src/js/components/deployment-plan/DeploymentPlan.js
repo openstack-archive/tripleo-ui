@@ -1,12 +1,16 @@
 import { connect } from 'react-redux';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React from 'react';
 
+import { getAllPlansButCurrent } from '../../selectors/plans';
 import DeploymentStep from './DeploymentStep';
+import RecentPlansDropdown from './RecentPlansDropdown';
 import FlavorStore from '../../stores/FlavorStore';
 import Loader from '../ui/Loader';
 import NoPlans from './NoPlans';
 import NotificationActions from '../../actions/NotificationActions';
+import PlansActions from '../../actions/PlansActions';
 import TripleOApiService from '../../services/TripleOApiService';
 import TripleOApiErrorHandler from '../../services/TripleOApiErrorHandler';
 
@@ -70,7 +74,13 @@ class DeploymentPlan extends React.Component {
           {this.props.hasPlans ? (
             <div className="col-sm-12 deployment-step-list">
               <div className="page-header">
-                <h1>{this.props.currentPlanName}</h1>
+
+                <h1>
+                  {this.props.currentPlanName}
+                  <RecentPlansDropdown currentPlanName={this.props.currentPlanName}
+                                       recentPlans={this.props.recentPlans}
+                                       choosePlan={this.props.choosePlan}/>
+                </h1>
               </div>
               <ol className="deployment-step-list">
                 <DeploymentStep title="Specify Deployment Configuration"
@@ -107,9 +117,11 @@ class DeploymentPlan extends React.Component {
 
 DeploymentPlan.propTypes = {
   children: React.PropTypes.node,
+  choosePlan: React.PropTypes.func,
   currentPlanName: React.PropTypes.string,
   hasPlans: React.PropTypes.bool,
   isFetchingPlans: React.PropTypes.bool,
+  recentPlans: ImmutablePropTypes.map,
   route: React.PropTypes.object
 };
 
@@ -117,8 +129,17 @@ export function mapStateToProps(state) {
   return {
     currentPlanName: state.plans.get('currentPlanName'),
     isFetchingPlans: state.plans.get('isFetchingPlans'),
-    hasPlans: !state.plans.get('all').isEmpty()
+    hasPlans: !state.plans.get('all').isEmpty(),
+    recentPlans: getAllPlansButCurrent(state)
   };
 }
 
-export default connect(mapStateToProps)(DeploymentPlan);
+function mapDispatchToProps(dispatch) {
+  return {
+    choosePlan: planName => {
+      dispatch(PlansActions.choosePlan(planName));
+    }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeploymentPlan);
