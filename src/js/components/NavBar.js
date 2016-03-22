@@ -16,7 +16,7 @@ export default class NavBar extends React.Component {
       <nav className="navbar navbar-default navbar-pf navbar-fixed-top" role="navigation">
         <div className="navbar-header">
           <button type="button" className="navbar-toggle collapsed"
-                  data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                  data-toggle="collapse" data-target="#tripleo-navbar-collapse"
                   aria-expanded="false">
             <span className="sr-only">Toggle navigation</span>
             <span className="icon-bar"></span>
@@ -24,11 +24,10 @@ export default class NavBar extends React.Component {
             <span className="icon-bar"></span>
           </button>
           <Link className="navbar-brand" to="/">
-            {/*TODO: new logo goes here instead of the div*/}
-            <div style={{height: '10px'}}></div>
+              <img src="/img/tripleo-owl.svg" alt="TripleO"></img>
           </Link>
         </div>
-        <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div className="navbar-collapse collapse" id="tripleo-navbar-collapse">
           <ul className="nav navbar-nav navbar-utility">
             <li>
               <a>
