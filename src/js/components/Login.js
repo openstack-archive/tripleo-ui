@@ -59,7 +59,7 @@ class Login extends React.Component {
           <div className="row">
             <div className="col-sm-12">
               <div id="brand">
-                {/*TODO: new logo goes here*/}
+                <img src="/img/tripleo-owl.svg" alt="TripleO Deployment Manager"></img>
               </div>
             </div>
             <div className="col-sm-7 col-md-6 col-lg-5 login">
