@@ -71,11 +71,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rdo-management/rdo-director-ui"
+    "url": "https://github.com/openstack/tripleo-ui"
   },
   "keywords": [
-    "tuskar-ui-extras",
-    "tuskar-ui"
+    "tripleo-ui-extras",
+    "tripleo-ui"
   ],
   "author": "Jiri Tomasek jtomasek@redhat.com",
   "license": "Apache License 2.0"
