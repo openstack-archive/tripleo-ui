@@ -41,6 +41,17 @@ export default class Footer extends React.Component {
     this.setState({isOpen: true, listShown: 'validations'});
   }
 
+  renderValidationsRefresh() {
+    if(this.state.isOpen && this.state.listShown === 'validations') {
+      return (
+        <a className="link pull-right refresh"
+           onClick={this.props.fetchValidationStages.bind(this)}>
+          <span className="pficon pficon-refresh"></span> Refresh Validations
+        </a>
+      );
+    }
+  }
+
   render() {
     let indicatorsClasses = ClassNames({
       'drawer-nav' : true,
@@ -88,6 +99,7 @@ export default class Footer extends React.Component {
                                     onClick={this.showValidations.bind(this)}/>
             </li>
           </ul>
+          {this.renderValidationsRefresh()}
         </div>
         <div className={contentClasses}>
           <NotificationList active={this.state.isOpen && this.state.listShown === 'notifications'}
