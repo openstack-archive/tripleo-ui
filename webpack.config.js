@@ -12,7 +12,7 @@ module.exports = {
         exclude: /src\/js\/workers/,
         loader: 'babel-loader',
         query: {
-          presets: ['es2015', 'stage-0', 'react']
+          presets: ['es2015', 'stage-1', 'react']
         }
       }
     ]
