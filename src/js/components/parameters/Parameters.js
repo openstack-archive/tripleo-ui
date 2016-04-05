@@ -63,46 +63,29 @@ class Parameters extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="modal modal-routed in" role="dialog">
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              <Formsy.Form ref="parameterConfigurationForm"
-                           role="form"
-                           className="form form-horizontal"
-                           onSubmit={this.handleSubmit.bind(this)}
-                           onValid={this.enableButton.bind(this)}
-                           onInvalid={this.disableButton.bind(this)}>
-              <div className="modal-header">
-                <Link to={this.props.parentPath}
-                      type="button"
-                      className="close">
-                  <span aria-hidden="true" className="pficon pficon-close"/>
-                </Link>
-                <h4 className="modal-title">Parameters Configuration</h4>
-              </div>
+      <Formsy.Form ref="parameterConfigurationForm"
+                   role="form"
+                   className="form form-horizontal"
+                   onSubmit={this.handleSubmit.bind(this)}
+                   onValid={this.enableButton.bind(this)}
+                   onInvalid={this.disableButton.bind(this)}>
 
-              <Loader height={60}
-                      loaded={!this.props.isPending}>
-                <ParameterTree parameters={this.props.parameters}
-                               formErrors={this.props.formErrors.toJS()}/>
-              </Loader>
+        <Loader height={60}
+                loaded={!this.props.isPending}>
+          <ParameterTree parameters={this.props.parameters}
+                         formErrors={this.props.formErrors.toJS()}/>
+        </Loader>
 
-              <div className="modal-footer">
-                <button type="submit" disabled={!this.state.canSubmit}
-                        className="btn btn-primary">
-                  Save Configuration
-                </button>
-                <Link to={this.props.parentPath} type="button" className="btn btn-default" >
-                  Cancel
-                </Link>
-              </div>
-              </Formsy.Form>
-            </div>
-          </div>
+        <div className="modal-footer">
+          <button type="submit" disabled={!this.state.canSubmit}
+                  className="btn btn-primary">
+            Save Changes
+          </button>
+          <Link to={this.props.parentPath} type="button" className="btn btn-default" >
+            Cancel
+          </Link>
         </div>
-        <div className="modal-backdrop in"></div>
-      </div>
+      </Formsy.Form>
     );
   }
 }

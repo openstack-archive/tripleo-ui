@@ -45,13 +45,13 @@ class DeploymentPlan extends React.Component {
 
   render() {
     let deploymentConfigLinks = [
-      <Link className="btn btn-link" key="1" to={'/' + this.props.route.path + '/environment'}>
+      <Link className="btn btn-link" key="1" to={'/deployment-plan/configuration'}>
         Edit Configuration
       </Link>
     ];
 
     let roleConfigLinks = [
-      <Link className="btn btn-link" key="2" to={'/' + this.props.route.path + '/parameters'}>
+      <Link className="btn btn-link" key="2" to={'/deployment-plan/configuration/parameters'}>
         Edit Parameters
       </Link>
     ];
@@ -76,7 +76,6 @@ class DeploymentPlan extends React.Component {
           {this.props.hasPlans ? (
             <div className="col-sm-12 deployment-step-list">
               <div className="page-header">
-
                 <h1>
                   {this.props.currentPlanName}
                   <PlansDropdown currentPlanName={this.props.currentPlanName}
