@@ -22,7 +22,7 @@
     "keymirror": "~0.1.1",
     "lodash": "^4.0.0",
     "normalizr": "^2.0.0",
-    "patternfly": "~2.5.0",
+    "patternfly": "^2.5.0",
     "react": "~0.14.1",
     "react-dom": "~0.14.1",
     "react-immutable-proptypes": "~1.5.1",
@@ -78,5 +78,5 @@
     "tuskar-ui"
   ],
   "author": "Jiri Tomasek jtomasek@redhat.com",
-  "license": "Apache License 2.0"
+  "license": "Apache-2.0"
 }
