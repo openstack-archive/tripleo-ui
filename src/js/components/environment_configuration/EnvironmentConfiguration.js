@@ -104,59 +104,41 @@ class EnvironmentConfiguration extends React.Component {
     });
 
     return (
-      <div>
-        <div className="modal modal-routed in" role="dialog">
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              <Formsy.Form ref="environmentConfigurationForm"
-                           role="form"
-                           className="form"
-                           onSubmit={this.handleSubmit.bind(this)}
-                           onValid={this.enableButton.bind(this)}
-                           onInvalid={this.disableButton.bind(this)}>
-                <div className="modal-header">
-                  <Link to={this.props.parentPath}
-                        type="button"
-                        className="close">
-                    <span aria-hidden="true" className="pficon pficon-close"/>
-                  </Link>
-                  <h4 className="modal-title">Environment Configuration</h4>
+      <Formsy.Form ref="environmentConfigurationForm"
+                   role="form"
+                   className="form"
+                   onSubmit={this.handleSubmit.bind(this)}
+                   onValid={this.enableButton.bind(this)}
+                   onInvalid={this.disableButton.bind(this)}>
+        <div className="modal-body">
+          <Loader height={60}
+                  loaded={this.props.isLoaded}>
+            <FormErrorList errors={this.props.formErrors.toJS()}/>
+            <div className="row">
+              <div className="col-xs-5">
+                <ul className="nav nav-pills nav-stacked nav-arrows">
+                  {topicTabs}
+                </ul>
+              </div>
+              <div className="col-xs-7">
+                <div className="tab-content">
+                  {topics}
                 </div>
-                <div className="modal-body">
-
-                  <Loader height={60}
-                          loaded={this.props.isLoaded}>
-                    <FormErrorList errors={this.props.formErrors.toJS()}/>
-                    <div className="row">
-                      <div className="col-xs-5">
-                        <ul className="nav nav-pills nav-stacked nav-arrows">
-                          {topicTabs}
-                        </ul>
-                      </div>
-                      <div className="col-xs-7">
-                        <div className="tab-content">
-                          {topics}
-                        </div>
-                      </div>
-                    </div>
-                  </Loader>
-
-                </div>
-                <div className="modal-footer">
-                  <button type="submit" disabled={!this.state.canSubmit}
-                          className="btn btn-primary">
-                    Save Configuration
-                  </button>
-                  <Link to={this.props.parentPath} type="button" className="btn btn-default" >
-                    Cancel
-                  </Link>
-                </div>
-              </Formsy.Form>
+              </div>
             </div>
-          </div>
+          </Loader>
         </div>
-        <div className="modal-backdrop in"></div>
-      </div>
+        
+        <div className="modal-footer">
+          <button type="submit" disabled={!this.state.canSubmit}
+                  className="btn btn-primary">
+            Save Changes
+          </button>
+          <Link to={this.props.parentPath} type="button" className="btn btn-default" >
+            Cancel
+          </Link>
+        </div>
+      </Formsy.Form>
     );
   }
 }

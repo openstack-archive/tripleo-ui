@@ -11,6 +11,7 @@ import App from './components/App';
 import AuthenticatedContent from './components/AuthenticatedContent';
 import DeletePlan from './components/plan/DeletePlan';
 import IntrospectedNodesTabPane from './components/nodes/IntrospectedNodesTabPane';
+import DeploymentConfiguration from './components/deployment-plan/DeploymentConfiguration';
 import DeploymentPlan from './components/deployment-plan/DeploymentPlan';
 import EditPlan from './components/plan/EditPlan';
 import EnvironmentConfiguration from
@@ -57,8 +58,11 @@ TempStorage.initialized.then(() => {
         <Route component={AuthenticatedContent} onEnter={checkAuth}>
 
           <Route path="deployment-plan" component={DeploymentPlan}>
-            <Route path="environment" component={EnvironmentConfiguration}/>
-            <Route path="parameters" component={Parameters}/>
+            <Redirect from="configuration" to="configuration/environment"/>
+            <Route path="configuration" component={DeploymentConfiguration}>
+              <Route path="environment" component={EnvironmentConfiguration}/>
+              <Route path="parameters" component={Parameters}/>
+            </Route>
           </Route>
 
           <Route path="roles" component={Roles}/>
