@@ -33,7 +33,7 @@ export default class ParameterTree extends React.Component {
               </ul>
             </div>
           </div>
-          <div className="col-sm-8">
+          <div className="col-sm-8 parameters-right">
             <FormErrorList errors={this.props.formErrors}/>
             <ParametersTabPane name="RootParameters"
                                activeTab={this.state.activeTab}

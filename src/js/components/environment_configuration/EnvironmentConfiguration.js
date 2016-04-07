@@ -122,18 +122,17 @@ class EnvironmentConfiguration extends React.Component {
                   </Link>
                   <h4 className="modal-title">Environment Configuration</h4>
                 </div>
-                <div className="modal-body">
-
+                <div className="modal-body environment-configuration">
                   <Loader height={60}
                           loaded={this.props.isLoaded}>
                     <FormErrorList errors={this.props.formErrors.toJS()}/>
-                    <div className="row">
-                      <div className="col-xs-5">
+                    <div className="row row-eq-height">
+                      <div className="col-sm-4">
                         <ul className="nav nav-pills nav-stacked nav-arrows">
                           {topicTabs}
                         </ul>
                       </div>
-                      <div className="col-xs-7">
+                      <div className="col-sm-8">
                         <div className="tab-content">
                           {topics}
                         </div>
