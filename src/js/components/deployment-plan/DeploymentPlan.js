@@ -4,13 +4,16 @@ import { Link } from 'react-router';
 import React from 'react';
 
 import { getAllPlansButCurrent } from '../../selectors/plans';
+import { getIntrospectedNodes, getUnassignedIntrospectedNodes } from '../../selectors/nodes';
 import DeploymentStep from './DeploymentStep';
 import PlansDropdown from './PlansDropdown';
-import FlavorStore from '../../stores/FlavorStore';
 import Loader from '../ui/Loader';
+import NodesActions from '../../actions/NodesActions';
 import NoPlans from './NoPlans';
 import NotificationActions from '../../actions/NotificationActions';
 import PlansActions from '../../actions/PlansActions';
+import Roles from './Roles';
+import RolesActions from '../../actions/RolesActions';
 import TripleOApiService from '../../services/TripleOApiService';
 import TripleOApiErrorHandler from '../../services/TripleOApiErrorHandler';
 
@@ -18,13 +21,8 @@ class DeploymentPlan extends React.Component {
   constructor() {
     super();
     this.state = {
-      readyToDeploy: false,
-      flavors: []
+      readyToDeploy: false
     };
-  }
-
-  componentDidMount() {
-    this.setState({flavors: FlavorStore.getState().flavors});
   }
 
   handleDeploy() {
@@ -44,16 +42,23 @@ class DeploymentPlan extends React.Component {
   }
 
   render() {
-    let deploymentConfigLinks = [
-      <Link className="btn btn-link" key="1" to={'/deployment-plan/configuration'}>
+    const deploymentConfigLinks = [
+      <Link className="btn btn-link"
+            key="deploymentConfiguration"
+            to={'/deployment-plan/configuration'}>
         Edit Configuration
       </Link>
     ];
 
-    let roleConfigLinks = [
-      <Link className="btn btn-link" key="2" to={'/deployment-plan/configuration/parameters'}>
-        Edit Parameters
-      </Link>
+    const registerAndAssignLinks = [
+      <Link className="btn btn-default" key="registerNodes" to={'/nodes/registered/register'}>
+        <span className="fa fa-plus"/> Register Nodes
+      </Link>,
+      <span key="space">&nbsp;</span>,
+      <Loader key="rolesLoader"
+              loaded={!(this.props.rolesLoaded && this.props.isFetchingRoles)}
+              content="Loading Deployment Roles..."
+              inline/>
     ];
 
     let children;
@@ -87,12 +92,16 @@ class DeploymentPlan extends React.Component {
                 <DeploymentStep title="Specify Deployment Configuration"
                                 subTitle={deploymentConfigDescription}
                                 links={deploymentConfigLinks}/>
-                <DeploymentStep title="Create Flavors and Register Nodes"
-                                subTitle={this.state.flavors.length > 0 ?
-                                 '' : 'There are no flavors or nodes currently.'} />
-                <DeploymentStep title="Configure and Assign Roles"
-                                subTitle="Parameters for all roles can be configured."
-                                links={roleConfigLinks}/>
+                <DeploymentStep title="Register and Assign Nodes"
+                                links={registerAndAssignLinks}>
+                  <Roles roles={this.props.roles.toList().toJS()}
+                         introspectedNodes={this.props.introspectedNodes}
+                         unassignedIntrospectedNodes={this.props.unassignedIntrospectedNodes}
+                         fetchRoles={this.props.fetchRoles}
+                         fetchNodes={this.props.fetchNodes}
+                         isFetchingNodes={this.props.isFetchingNodes}
+                         loaded={this.props.rolesLoaded}/>
+                </DeploymentStep>
                 <DeploymentStep title="Deploy">
                   <div className="actions pull-left">
                     <a className={'link btn btn-primary btn-lg ' +
@@ -120,26 +129,40 @@ DeploymentPlan.propTypes = {
   children: React.PropTypes.node,
   choosePlan: React.PropTypes.func,
   currentPlanName: React.PropTypes.string,
+  fetchNodes: React.PropTypes.func,
+  fetchRoles: React.PropTypes.func,
   hasPlans: React.PropTypes.bool,
   inactivePlans: ImmutablePropTypes.map,
+  introspectedNodes: ImmutablePropTypes.list,
+  isFetchingNodes: React.PropTypes.bool,
   isFetchingPlans: React.PropTypes.bool,
-  route: React.PropTypes.object
+  isFetchingRoles: React.PropTypes.bool,
+  roles: ImmutablePropTypes.map,
+  rolesLoaded: React.PropTypes.bool,
+  route: React.PropTypes.object,
+  unassignedIntrospectedNodes: ImmutablePropTypes.list
 };
 
 export function mapStateToProps(state) {
   return {
     currentPlanName: state.plans.get('currentPlanName'),
+    isFetchingNodes: state.nodes.get('isFetching'),
     isFetchingPlans: state.plans.get('isFetchingPlans'),
+    isFetchingRoles: state.roles.get('isFetching'),
     hasPlans: !state.plans.get('all').isEmpty(),
-    inactivePlans: getAllPlansButCurrent(state)
+    inactivePlans: getAllPlansButCurrent(state),
+    introspectedNodes: getIntrospectedNodes(state),
+    roles: state.roles.get('roles'),
+    rolesLoaded: state.roles.get('loaded'),
+    unassignedIntrospectedNodes: getUnassignedIntrospectedNodes(state)
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    choosePlan: planName => {
-      dispatch(PlansActions.choosePlan(planName));
-    }
+    choosePlan: planName => dispatch(PlansActions.choosePlan(planName)),
+    fetchRoles: () => dispatch(RolesActions.fetchRoles()),
+    fetchNodes: () => dispatch(NodesActions.fetchNodes())
   };
 }
 

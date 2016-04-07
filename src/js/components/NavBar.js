@@ -40,7 +40,6 @@ export default class NavBar extends React.Component {
           </ul>
           <ul className="nav navbar-nav navbar-primary">
             <NavTab to="/deployment-plan">Deployment Plan</NavTab>
-            <NavTab to="/roles">Roles</NavTab>
             <NavTab to="/nodes">Nodes</NavTab>
           </ul>
         </div>

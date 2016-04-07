@@ -3,16 +3,15 @@ import TestUtils from 'react-addons-test-utils';
 
 import Login from '../../js/components/Login';
 import LoginActions from '../../js/actions/LoginActions';
-import LoginStore from '../../js/stores/LoginStore';
 
 let loginInstance;
 
-let loggedInState = {
-  token: '123123123',
-  user: 'admin',
-  serviceCatalog: 'some service catalog',
-  metadata: 'some metadata'
-};
+// let loggedInState = {
+//   token: '123123123',
+//   user: 'admin',
+//   serviceCatalog: 'some service catalog',
+//   metadata: 'some metadata'
+// };
 
 describe('Login component', () => {
   describe('When user is not logged in', () => {
@@ -49,10 +48,6 @@ describe('Login component', () => {
   });
 
   describe('When user is logged in', () => {
-    beforeEach(() => {
-      LoginStore.getState = LoginStore.getState.mockReturnValue(loggedInState);
-      LoginStore.isLoggedIn = LoginStore.isLoggedIn.mockReturnValue(true);
-    });
     xit('redirects to nextPath when user is logged in and visits login page', () => {
       loginInstance = new Login();
       loginInstance.context = {
