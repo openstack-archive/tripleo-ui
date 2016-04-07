@@ -1,4 +1,4 @@
-import { List, Map } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 
 import NodesConstants from '../constants/NodesConstants';
 
@@ -21,7 +21,7 @@ export default function nodesReducer(state = initialState, action) {
 
   case NodesConstants.RECEIVE_NODES:
     return state
-            .set('all', List(action.payload))
+            .set('all', fromJS(action.payload))
             .set('isFetching', false);
 
   case NodesConstants.START_NODES_OPERATION:

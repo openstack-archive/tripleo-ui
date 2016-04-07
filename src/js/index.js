@@ -27,7 +27,6 @@ import Plans from './components/plan/Plans.js';
 import ProvisionedNodesTabPane from './components/nodes/ProvisionedNodesTabPane';
 import RegisterNodesDialog from './components/nodes/RegisterNodesDialog';
 import RegisteredNodesTabPane from './components/nodes/RegisteredNodesTabPane';
-import Roles from './components/roles/Roles.js';
 import TempStorage from './services/TempStorage.js';
 import store from './store';
 
@@ -64,8 +63,6 @@ TempStorage.initialized.then(() => {
               <Route path="parameters" component={Parameters}/>
             </Route>
           </Route>
-
-          <Route path="roles" component={Roles}/>
 
           <Redirect from="nodes" to="nodes/registered"/>
           <Route path="nodes" component={Nodes}>
