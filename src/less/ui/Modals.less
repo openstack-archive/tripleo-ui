@@ -3,6 +3,12 @@
     display: block;
     overflow: auto;
   }
+  @media (max-width: 992px) {
+    .modal-dialog {
+      /*wider variable modal eliminates pop at 768 and 992*/
+      width: 93%;
+    }
+  }
   .modal-dialog {
     margin: 50px auto;
     .nav-tabs {
@@ -12,5 +18,27 @@
     .modal-body.loader {
       padding: 30px 15px;
     }
+    .environment-configuration{
+      padding: 0;
+    }
+  }
+  .modal-header {
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .modal-footer {
+    margin-top: 0px;
+    background-color: #f8f8f8;
+    border-top: 1px solid #e5e5e5;
+    padding: 10px 18px;
+  }
+
+  .modal-content {
+    max-height: 89vh;
+  }
+
+  .parameters-right {
+    overflow-y: auto;
+    max-height: 83vh;
   }
 }
