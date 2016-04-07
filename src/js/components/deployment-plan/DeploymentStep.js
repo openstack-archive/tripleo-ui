@@ -10,8 +10,10 @@ export default class DeploymentStep extends React.Component {
         </h3>
         <div className="row">
           <div className="col-sm-12">
-            <span className="deployment-step-subtitle">{this.props.subTitle}</span>
-            {this.props.links}
+            <div className="deployment-step-subtitle">
+              <span>{this.props.subTitle}</span>
+              {this.props.links}
+            </div>
           </div>
           <div className="col-sm-12">
             {this.props.children}

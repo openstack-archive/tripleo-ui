@@ -15,7 +15,7 @@ export default class Loader extends React.Component {
     if(!this.props.loaded) {
       if(this.props.global) {
         return (
-          <div>
+          <div className={this.props.className}>
             <div className="modal modal-routed in" role="loading">
               <div className="modal-dialog modal-sm">
                 <div className="modal-content">
@@ -31,7 +31,7 @@ export default class Loader extends React.Component {
         );
       } else if(this.props.inline) {
         return (
-          <span>
+          <span className={this.props.className}>
             <span className={classes}></span>
             {this.props.content}
           </span>
@@ -39,7 +39,8 @@ export default class Loader extends React.Component {
       } else {
         return (
           <div style={{marginTop: `${this.props.height/2}px`,
-                       marginBottom: `${this.props.height/2}px`}}>
+                       marginBottom: `${this.props.height/2}px`}}
+               className={this.props.className}>
             <div className={classes}/>
             <div className="text-center">{this.props.content}</div>
           </div>
@@ -54,6 +55,7 @@ Loader.propTypes = {
     React.PropTypes.arrayOf(React.PropTypes.node),
     React.PropTypes.node
   ]),
+  className: React.PropTypes.string,
   component: React.PropTypes.any, // Component to wrap children when loaded
   content: React.PropTypes.string,
   global: React.PropTypes.bool,

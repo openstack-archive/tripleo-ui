@@ -6,6 +6,10 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import NavTab from '../ui/NavTab';
 import NodesActions from '../../actions/NodesActions';
+import { getRegisteredNodes,
+         getIntrospectedNodes,
+         getProvisionedNodes,
+         getMaintenanceNodes } from '../../selectors/nodes';
 
 class Nodes extends React.Component {
   componentDidMount() {
@@ -88,13 +92,10 @@ function mapStateToProps(state) {
   return {
     nodes: state.nodes.merge(
       Map({
-        registered: state.nodes.get('all').filter( node => node.provision_state === 'available' &&
-                                                   !node.provision_updated_at ||
-                                                   node.provision_state === 'manageable' ),
-        introspected: state.nodes.get('all').filter( node => node.provision_state === 'available' &&
-                                                   !!node.provision_updated_at ),
-        provisioned: state.nodes.get('all').filter( node => node.instance_uuid ),
-        maintenance: state.nodes.get('all').filter( node => node.maintenance )
+        registered: getRegisteredNodes(state),
+        introspected: getIntrospectedNodes(state),
+        provisioned: getProvisionedNodes(state),
+        maintenance: getMaintenanceNodes(state)
       })
     )
   };

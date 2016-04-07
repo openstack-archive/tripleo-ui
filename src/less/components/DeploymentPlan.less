@@ -27,8 +27,36 @@ ol.deployment-step-list {
     }
 
     .deployment-step-subtitle {
-      margin-left: 10px;
-      vertical-align: middle;
+      margin-bottom: 10px;
+      & > span {
+        vertical-align: middle;
+      }
     }
+  }
+}
+
+.roles-panel .panel-body {
+  padding-bottom: 0;
+  background: #f5f5f5;
+}
+
+.role-color-mixin(@colour) {
+  border-top-color: @colour;
+}
+
+.card-pf.role-card {
+  .card-pf-body {
+    margin: 0;
+    .card-pf-utilization-details {
+      border-bottom: 0;
+      padding: 0;
+    }
+  }
+  &.card-pf-accented {
+    &.control{ .role-color-mixin(#f0ab00); }
+    &.compute{ .role-color-mixin(#007a87); }
+    &.blockStorage{ .role-color-mixin(#3b0083); }
+    &.objectStorage{ .role-color-mixin(#0088ce); }
+    &.cephStorage{ .role-color-mixin(#b35c00); }
   }
 }
