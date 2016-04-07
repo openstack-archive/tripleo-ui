@@ -129,7 +129,7 @@ class EnvironmentConfiguration extends React.Component {
             </div>
           </Loader>
         </div>
-        
+
         <div className="modal-footer">
           <button type="submit" disabled={!this.state.canSubmit}
                   className="btn btn-primary">

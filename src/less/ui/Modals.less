@@ -1,8 +1,22 @@
+@modal-xl: 1198px;
+
+@media (min-width: @screen-sm-min) {
+  .modal-xl {
+    width: auto;
+    padding: 0 20px;
+  }
+}
+
+@media (min-width: @screen-lg-min) {
+  .modal-xl { width: @modal-xl; }
+}
+
 .modal {
   &.modal-routed {
     display: block;
     overflow: auto;
   }
+
   .modal-dialog {
     margin: 50px auto;
     .nav-tabs {
@@ -18,5 +32,19 @@
     .modal-body.loader {
       padding: 30px 15px;
     }
+    .environment-configuration{
+      padding: 0;
+    }
+  }
+
+  .modal-header {
+    border-bottom: 1px solid @modal-header-border-color ;
+  }
+
+  .modal-footer {
+    margin-top: 0px;
+    background-color: #f8f8f8;
+    border-top: 1px solid @modal-footer-border-color ;
+    padding: 10px 18px;
   }
 }
