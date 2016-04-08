@@ -16,3 +16,7 @@ export function getServiceUrl(serviceName) {
 export function getAuthTokenId() {
   return store.getState().login.getIn(['keystoneAccess', 'token', 'id']);
 }
+
+export function getTenantId() {
+  return store.getState().login.getIn(['keystoneAccess', 'token', 'tenant', 'id']);
+}

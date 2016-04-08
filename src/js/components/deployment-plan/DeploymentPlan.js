@@ -3,7 +3,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React from 'react';
 
-import { getAllPlansButCurrent } from '../../selectors/plans';
+import { getCurrentStack, getAllPlansButCurrent } from '../../selectors/plans';
+import DeploymentStatus from './DeploymentStatus';
 import DeploymentStep from './DeploymentStep';
 import PlansDropdown from './PlansDropdown';
 import FlavorStore from '../../stores/FlavorStore';
@@ -18,18 +19,20 @@ class DeploymentPlan extends React.Component {
   constructor() {
     super();
     this.state = {
-      readyToDeploy: false,
+      readyToDeploy: true,
       flavors: []
     };
   }
 
   componentDidMount() {
     this.setState({flavors: FlavorStore.getState().flavors});
+    this.props.fetchStacks();
   }
 
   handleDeploy() {
     TripleOApiService.deployPlan(this.props.currentPlanName).then((response) => {
       this.setState({ parameters: response.parameters });
+      this.props.fetchStacks();
       NotificationActions.notify({
         title: 'Deployment started',
         message: 'The Deployment has been successfully initiated',
@@ -41,6 +44,21 @@ class DeploymentPlan extends React.Component {
         NotificationActions.notify(error);
       });
     });
+  }
+
+  renderDeployStep() {
+    return !this.props.currentStack ? (
+      <div className="actions pull-left">
+        <a className={'link btn btn-primary btn-lg ' +
+                      (this.state.readyToDeploy ? '' : 'disabled')}
+           onClick={this.handleDeploy.bind(this)}>
+          <span className="fa fa-send"/> Verify and Deploy
+        </a>
+      </div>
+    ) : (
+      <DeploymentStatus stack={this.props.currentStack}
+                        fetchStacks={this.props.fetchStacks}/>
+    );
   }
 
   render() {
@@ -95,13 +113,7 @@ class DeploymentPlan extends React.Component {
                                 subTitle="Parameters for all roles can be configured."
                                 links={roleConfigLinks}/>
                 <DeploymentStep title="Deploy">
-                  <div className="actions pull-left">
-                    <a className={'link btn btn-primary btn-lg ' +
-                                  (this.state.readyToDeploy ? '' : 'disabled')}
-                       onClick={this.handleDeploy.bind(this)}>
-                      <span className="fa fa-send"/> Verify and Deploy
-                    </a>
-                  </div>
+                  {this.renderDeployStep()}
                 </DeploymentStep>
               </ol>
             </div>
@@ -121,6 +133,8 @@ DeploymentPlan.propTypes = {
   children: React.PropTypes.node,
   choosePlan: React.PropTypes.func,
   currentPlanName: React.PropTypes.string,
+  currentStack: ImmutablePropTypes.record,
+  fetchStacks: React.PropTypes.func,
   hasPlans: React.PropTypes.bool,
   inactivePlans: ImmutablePropTypes.map,
   isFetchingPlans: React.PropTypes.bool,
@@ -130,6 +144,7 @@ DeploymentPlan.propTypes = {
 export function mapStateToProps(state) {
   return {
     currentPlanName: state.plans.get('currentPlanName'),
+    currentStack: getCurrentStack(state),
     isFetchingPlans: state.plans.get('isFetchingPlans'),
     hasPlans: !state.plans.get('all').isEmpty(),
     inactivePlans: getAllPlansButCurrent(state)
@@ -140,6 +155,9 @@ function mapDispatchToProps(dispatch) {
   return {
     choosePlan: planName => {
       dispatch(PlansActions.choosePlan(planName));
+    },
+    fetchStacks: () => {
+      dispatch(PlansActions.fetchStacks());
     }
   };
 }
