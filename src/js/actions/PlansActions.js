@@ -7,6 +7,8 @@ import { planSchema } from '../normalizrSchemas/plans';
 import TripleOApiService from '../services/TripleOApiService';
 import TripleOApiErrorHandler from '../services/TripleOApiErrorHandler';
 
+import HeatApiService from '../services/HeatApiService';
+
 export default {
   requestPlans() {
     return {
@@ -238,6 +240,36 @@ export default {
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
+      });
+    };
+  },
+
+  fetchStacksPending() {
+    return {
+      type: PlansConstants.FETCH_STACK_PENDING
+    };
+  },
+
+  fetchStacksSuccess(data) {
+    return {
+      type: PlansConstants.FETCH_STACK_SUCCESS,
+      payload: data
+    };
+  },
+
+  fetchStacksFailed(error) {
+    return {
+      type: PlansConstants.FETCH_STACK_FAILED
+    };
+  },
+
+  fetchStacks(planName) {
+    return dispatch => {
+      dispatch(this.fetchStacksPending());
+      HeatApiService.getStacks().then(response => {
+        dispatch(this.fetchStacksSuccess(response.stacks));
+      }).catch(error => {
+        dispatch(this.fetchStacksFailed(error));
       });
     };
   }

@@ -16,3 +16,17 @@ export const PlanFile = Record({
   contents: '',
   info: Map()
 });
+
+export const Stack = Record({
+  stack_name: '',
+  stack_status: ''
+});
+
+export const InitialPlanState = Record({
+  isFetchingPlans: false,
+  isFetchingStacks: false,
+  conflict: undefined,
+  currentPlanName: undefined,
+  stacks: Map(),
+  all: Map()
+});
