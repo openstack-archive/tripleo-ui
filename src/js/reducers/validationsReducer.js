@@ -4,6 +4,7 @@ import ValidationsConstants from '../constants/ValidationsConstants';
 import { Validation, ValidationResult, ValidationStage } from '../immutableRecords/validations';
 
 const initialState = Map({
+  loaded: false,
   isFetching: false,
   validationStages: Map(),
   validations: Map(),
@@ -26,12 +27,14 @@ export default function validationsReducer(state = initialState, action) {
                   .map(validation => new Validation(validation)) : Map())
                 .set('validationResults', validationResults ? fromJS(validationResults)
                   .map(result => new ValidationResult(result)) : Map())
-                .set('isFetching', false);
+                .set('isFetching', false)
+                .set('loaded', true);
 
   }
 
   case ValidationsConstants.FETCH_VALIDATION_STAGES_FAILED:
-    return state.set('isFetching', false);
+    return state.set('isFetching', false)
+                .set('loaded', true);
 
   case ValidationsConstants.UPDATE_STAGE_STATUS: {
     return state.setIn(['validationStages', action.payload.uuid, 'status'],

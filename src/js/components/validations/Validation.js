@@ -2,6 +2,8 @@ import * as _ from 'lodash';
 import ClassNames from 'classnames';
 import React from 'react';
 
+import Loader from '../ui/Loader';
+
 export default class Validation extends React.Component {
   viewDetails (e) {
     e.preventDefault();
@@ -28,16 +30,24 @@ export default class Validation extends React.Component {
     }
   }
 
-  render() {
-    let status = this.props.status;
-    let statusIconClass = ClassNames({
+  renderValidationStatus(status) {
+    const statusIconClass = ClassNames({
       'validation-icon' : true,
       'pficon pficon-error-circle-o': _.includes(['error', 'failed'], status),
       'pficon pficon-ok':             status === 'success',
-      'pficon pficon-running':        status === 'running',
       'pficon pficon-flag':           status === 'new'
     });
+    return (
+      <Loader loaded={status != 'running'}
+              className="validation-icon"
+              size="sm"
+              inline>
+        <span className={statusIconClass}></span>
+      </Loader>
+    );
+  }
 
+  render() {
     let messageClass = ClassNames({
       'validation-message' : true,
       'no-message' : !this.props.description
@@ -46,9 +56,9 @@ export default class Validation extends React.Component {
     let message = this.props.description || 'Not Available';
 
     return (
-      <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12 validation">
+      <div className="col-sm-12 validation">
         <div className="validation-content">
-          <span className={statusIconClass}></span>
+          {this.renderValidationStatus(this.props.status)}
           <div className="validation-info-container">
               <span>{this.props.name}</span>
               <span className={messageClass}>{message}</span>
