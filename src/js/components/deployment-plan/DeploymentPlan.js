@@ -80,7 +80,7 @@ class DeploymentPlan extends React.Component {
                 global>
           {this.props.hasPlans ? (
             <div className="col-sm-12 deployment-step-list">
-              <div className="page-header">
+              <div className="page-header page-header-bleed-right">
                 <h1>
                   {this.props.currentPlanName}
                   <PlansDropdown currentPlanName={this.props.currentPlanName}
