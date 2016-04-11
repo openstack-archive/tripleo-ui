@@ -17,42 +17,27 @@
 
 .validation-stages-container {
   margin-bottom: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 0;
-
-  &.collapsed {
-    display: none;
-  }
+  margin-top: -20px;
 }
 
 .validation-stage-panel-heading {
-  > .row {
-    margin-left: 0;
-    margin-right: 0;
-    > [class*='col-'] {
-      padding-right: 0;
-      padding-left: 0;
-    }
-  }
-
   .panel-title {
+    float: left;
     font-size: 12px;
     line-height: @line-height-base;
     padding-top: @padding-base-vertical;
     padding-bottom: @padding-base-vertical;
   }
 
-  .status-container {
-    float: left;
-    margin-left: 20px;
-    margin-top: 2px;
+  .states {
+    display: inline-block;
+    margin-right: 15px;
+    vertical-align: middle;
+  }
 
-    .badge-title {
-      min-width: 50px;
-      text-align: right;
-      display: inline-block;
-    }
+  .status-container {
+    display: inline-block;
+    margin-left: 10px;
 
     .badge {
       color: #fff;
@@ -76,10 +61,6 @@
       }
     }
   }
-}
-
-.validations-container {
-  margin-right: -21px;
 }
 
 .validation {

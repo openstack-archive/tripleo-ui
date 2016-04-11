@@ -8,8 +8,7 @@ import ValidationStage from './ValidationStage';
 export default class ValidationsList extends React.Component {
   render () {
     const classes = ClassNames({
-      'panel-group validation-stages-container col-sm-12': true,
-      'collapsed': !this.props.active
+      'panel-group validation-stages-container col-sm-12': true
     });
 
     const stages = this.props.validationStages.toList().map(stage => {
@@ -26,18 +25,19 @@ export default class ValidationsList extends React.Component {
     });
 
     return (
-      <div className={classes}>
-        {this.props.validationStages.isEmpty() ?
-          <BlankSlate iconClass="pficon pficon-flag"
-                      title="No Validations"
-                      message="There are no validations at this time." /> : stages}
+      <div className="row">
+        <div className={classes}>
+          {this.props.validationStages.isEmpty() ?
+            <BlankSlate iconClass="pficon pficon-flag"
+                        title="No Validations"
+                        message="There are no validations at this time." /> : stages}
+        </div>
       </div>
     );
   }
 }
 
 ValidationsList.propTypes = {
-  active: React.PropTypes.bool,
   runValidation: React.PropTypes.func.isRequired,
   runValidationStage: React.PropTypes.func.isRequired,
   stopValidation: React.PropTypes.func.isRequired,

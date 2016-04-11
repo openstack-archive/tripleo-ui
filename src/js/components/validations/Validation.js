@@ -46,7 +46,7 @@ export default class Validation extends React.Component {
     let message = this.props.description || 'Not Available';
 
     return (
-      <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12 validation">
+      <div className="col-sm-12 validation">
         <div className="validation-content">
           <span className={statusIconClass}></span>
           <div className="validation-info-container">

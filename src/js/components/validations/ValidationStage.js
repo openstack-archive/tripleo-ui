@@ -29,7 +29,7 @@ export default class ValidationStage extends React.Component {
     if (count > 0) {
       return (
         <div className="status-container">
-          <span className="badge-title">{title}</span>
+          {title}
           <span className={'badge ' + badgeStyle}>{count}</span>
         </div>
       );
@@ -41,7 +41,7 @@ export default class ValidationStage extends React.Component {
     const statusCounts = new ValidationsStatusCounts(
       this.props.validations.countBy(validation => validation.status));
     return (
-      <div>
+      <div className="states">
         {this.getStatusBadge('Running', 'running',   statusCounts.running)}
         {this.getStatusBadge('New',     'available', statusCounts.new)}
         {this.getStatusBadge('Success', 'success',   statusCounts.success)}
@@ -76,28 +76,22 @@ export default class ValidationStage extends React.Component {
 
     return (
       <div className="panel panel-default">
-        <div className="panel-heading validation-stage-panel-heading container-fluid">
-          <div className="row">
-            <div className="col-md-2 col-xs-3">
-              <h4 className="panel-title">
-                <a onClick={this.toggleOpen.bind(this)} className={titleClass}>
-                  {this.props.name}
-                </a>
-              </h4>
-            </div>
-            <div className="col-md-9 col-sm-8 col-xs-7">
-              {this.getStatusBadges()}
-            </div>
-            <div className="col-sm-1 col-xs-2">
-              <button className="btn btn-primary pull-right" onClick={this.runStage.bind(this)}>
-                Run All
-              </button>
-            </div>
+        <div className="panel-heading validation-stage-panel-heading clearfix">
+          <h4 className="panel-title">
+            <a onClick={this.toggleOpen.bind(this)} className={titleClass}>
+              {this.props.name}
+            </a>
+          </h4>
+          <div className="pull-right">
+            {this.getStatusBadges()}
+            <button className="btn btn-primary" onClick={this.runStage.bind(this)}>
+              Run All
+            </button>
           </div>
         </div>
         <div className={contentClass}>
           <div className="container-fluid">
-            <div className="row validations-container">
+            <div className="row">
               {validations}
             </div>
           </div>

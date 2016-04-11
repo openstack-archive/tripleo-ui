@@ -13,7 +13,6 @@
 @import "ui/Modals";
 @import "ui/Tables";
 @import "ui/Navs";
-@import "components/Footer";
 @import "components/EnvironmentConfiguration";
 @import "components/DeploymentPlan";
 @import "components/NodeStack";
@@ -24,50 +23,6 @@
 
 .wrapper-fixed-body {
   padding-top: @header-height;
-  padding-bottom: @footer-height;
-}
-
-.wrapper-fixed-footer {
-  bottom: 0;
-  left: 0;
-  position: fixed;
-  right: 0;
-  z-index: @zindex-navbar-fixed;
-}
-
-.panel.flavor-panel > .panel-body{
-  padding-bottom: 0;
-}
-
-.role-panel-mixin(@colour) {
-  border-color: @colour;
-  & > .panel-heading {
-    background-color: lighten(@colour, 25%);
-    border-bottom-color: @colour;
-    color: darken(@colour, 25%);
-  }
-  .node-stack .stack {
-    background-color: lighten(@colour, 20%);
-    border-color: @colour;
-    color: darken(@colour, 25%);
-  }
-}
-
-.panel.role-panel{
-  text-align: center;
-  margin-bottom: 15px;
-  &.controller{ .role-panel-mixin(#fdc800); }
-  &.compute{ .role-panel-mixin(#7bb544); }
-  &.drop-zone-panel {
-    border-style: dashed;
-    & > .panel-heading {
-      background: transparent;
-      border-bottom-style: dashed;
-    }
-    & > .panel-body {
-      line-height: 40px;
-    }
-  }
 }
 
 a {
