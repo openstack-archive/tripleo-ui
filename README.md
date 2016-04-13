@@ -63,12 +63,39 @@ below 8585 rule and restart iptables
 
 ### Configure CORS for OpenStack services
 
+#### Keystone under httpd method:
+
+**NOTE**: If you're **not** using httpd, skip to the pastedeploy method.
+
+When utilising httpd for Keystone, you have to ensure that httpd is configured for CORS:
+
+```
+sudo cat << EOF >> /etc/httpd/conf/httpd.conf
+LoadModule headers_module modules/mod_headers.so
+
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PUT"
+Header always set Access-Control-Max-Age "3600"
+EOF
+```
+
+Then, ensure that you restart httpd:
+
+```
+sudo systemctl restart httpd
+```
+
 #### Keystone - pastedeploy method:
+
+**NOTE**: If you **are** using httpd, you do not have to complete this section.
+
 ```
 ssh ssh root@<undercloud_vm_ip>
 vi /usr/share/keystone/keystone-dist-paste.ini
 ```
-add cors filter
+
+Add cors filter
+
 ```
 [filter:cors]
 paste.filter_factory = oslo_middleware.cors:filter_factory
@@ -78,7 +105,9 @@ allow_methods=GET,POST,PUT,DELETE
 allow_headers=Content-Type,Cache-Control,Content-Language,Expires,Last-Modified,Pragma,X-Auth-Token
 expose_headers=Content-Type,Cache-Control,Content-Language,Expires,Last-Modified,Pragma
 ```
+
 and run the filter on all pipelines like this example:
+
 ```
 [pipeline:public_api]
 # The last item in this pipeline must be public_service or an equivalent
