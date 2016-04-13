@@ -29,6 +29,7 @@ export default class Roles extends React.Component {
         <div className="col-xs-6 col-sm-4 col-md-3 col-lg-2" key={role.name}>
           <RoleCard name={role.name}
                     title={role.title}
+                    fetchNodes={this.props.fetchNodes}
                     isFetchingNodes={this.props.isFetchingNodes}
                     assignedNodesCount={this.getAssignedNodes(role.name).size}
                     availableNodesCount={this.props.introspectedNodes.size}/>
