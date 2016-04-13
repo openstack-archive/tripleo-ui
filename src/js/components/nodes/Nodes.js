@@ -6,6 +6,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import NavTab from '../ui/NavTab';
 import NodesActions from '../../actions/NodesActions';
+import RolesActions from '../../actions/RolesActions';
 import { getRegisteredNodes,
          getIntrospectedNodes,
          getProvisionedNodes,
@@ -14,11 +15,13 @@ import { getRegisteredNodes,
 class Nodes extends React.Component {
   componentDidMount() {
     this.props.dispatch(NodesActions.fetchNodes());
+    this.props.dispatch(RolesActions.fetchRoles());
   }
 
   refreshResults(e) {
     e.preventDefault();
     this.props.dispatch(NodesActions.fetchNodes());
+    this.props.dispatch(RolesActions.fetchRoles());
   }
 
   introspectNodes() {
@@ -59,6 +62,7 @@ class Nodes extends React.Component {
           <div className="tab-pane">
             {React.cloneElement(this.props.children,
                                 { nodes: this.props.nodes,
+                                  roles: this.props.roles,
                                   introspectNodes: this.introspectNodes.bind(this) })}
           </div>
         </div>
@@ -69,13 +73,13 @@ class Nodes extends React.Component {
 Nodes.propTypes = {
   children: React.PropTypes.node.isRequired,
   dispatch: React.PropTypes.func.isRequired,
-  nodes: ImmutablePropTypes.map.isRequired
+  nodes: ImmutablePropTypes.map.isRequired,
+  roles: ImmutablePropTypes.map
 };
 
-// Which props do we want to inject, given the global state?
-// Note: use https://github.com/faassen/reselect for better performance.
 function mapStateToProps(state) {
   return {
+    roles: state.roles.get('roles'),
     nodes: state.nodes.merge(
       Map({
         registered: getRegisteredNodes(state),

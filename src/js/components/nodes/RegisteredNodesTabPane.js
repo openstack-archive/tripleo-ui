@@ -24,8 +24,10 @@ export default class RegisteredNodesTabPane extends React.Component {
   render() {
     return (
       <div>
-        <NodesTable data={this.props.nodes.get('registered')}
+        <NodesTable nodes={this.props.nodes.get('registered')}
+                    roles={this.props.roles}
                     dataOperationInProgress={this.props.nodes.get('dataOperationInProgress')}
+                    isFetchingNodes={this.props.nodes.get('isFetching')}
                     tableActions={this.getTableActions.bind(this)}/>
         {this.props.children}
       </div>
@@ -35,5 +37,6 @@ export default class RegisteredNodesTabPane extends React.Component {
 RegisteredNodesTabPane.propTypes = {
   children: React.PropTypes.node,
   introspectNodes: React.PropTypes.func,
-  nodes: ImmutablePropTypes.map
+  nodes: ImmutablePropTypes.map,
+  roles: ImmutablePropTypes.map
 };

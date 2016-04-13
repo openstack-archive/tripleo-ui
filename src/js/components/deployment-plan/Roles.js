@@ -1,6 +1,7 @@
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
+import { getAssignedNodes } from '../../selectors/nodes';
 import Loader from '../ui/Loader';
 import RoleCard from './RoleCard';
 
@@ -17,8 +18,8 @@ export default class Roles extends React.Component {
     }
   }
 
-  getAssignedNodes(roleName) {
-    return this.props.introspectedNodes.filter(
+  getAssignedNodes(introspectedNodes, roleName) {
+    return introspectedNodes.filter(
       node => node.getIn(['properties', 'capabilities']).includes(`profile:${roleName}`)
     );
   }
@@ -29,7 +30,9 @@ export default class Roles extends React.Component {
         <div className="col-xs-6 col-sm-4 col-md-3 col-lg-2" key={role.name}>
           <RoleCard name={role.name}
                     title={role.title}
-                    assignedNodesCount={this.getAssignedNodes(role.name).size}
+                    fetchNodes={this.props.fetchNodes}
+                    assignedNodesCount={getAssignedNodes(this.props.introspectedNodes,
+                                                         role.name).size}
                     availableNodesCount={this.props.introspectedNodes.size}/>
         </div>
       );

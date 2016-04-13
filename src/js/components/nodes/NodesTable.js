@@ -1,10 +1,13 @@
+import * as _ from 'lodash';
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import DataTable from '../ui/tables/DataTable';
-import { DataTableDataFieldCell,
+import { DataTableCell,
+         DataTableDataFieldCell,
          DataTableHeaderCell } from '../ui/tables/DataTableCells';
 import DataTableColumn from '../ui/tables/DataTableColumn';
+import Loader from '../ui/Loader';
 
 export default class NodesTable extends React.Component {
   constructor() {
@@ -19,9 +22,12 @@ export default class NodesTable extends React.Component {
   renderNoNodesFound() {
     return (
       <tr>
-        <td colSpan="7">
-          <p></p>
-          <p className="text-center">There are no Nodes available</p>
+        <td className="no-results" colSpan="9">
+          <Loader loaded={!this.props.isFetchingNodes}
+                  height={40}
+                  content="Loading Nodes...">
+            <p className="text-center">There are no Nodes available</p>
+          </Loader>
         </td>
       </tr>
     );
@@ -44,10 +50,10 @@ export default class NodesTable extends React.Component {
   }
 
   render() {
-    let filteredData = this._filterData(this.state.filterString, this.props.data).toJS();
+    let filteredData = this._filterData(this.state.filterString, this.props.nodes.toJS());
     return (
       <DataTable {...this.props}
-        data={this.props.data.toJS()} // TODO(jtomasek): remove this when DataTable is migrated to use ImmutableJS data. It will get passed as part of ...this.props
+        data={this.props.nodes.toJS()}
         rowsCount={filteredData.length}
         noRowsRenderer={this.renderNoNodesFound.bind(this)}
         onFilter={this.onFilter.bind(this)}
@@ -56,6 +62,10 @@ export default class NodesTable extends React.Component {
           key="uuid"
           header={<DataTableHeaderCell key="uuid">UUID</DataTableHeaderCell>}
           cell={<DataTableDataFieldCell data={filteredData} field="uuid"/>}/>
+        <DataTableColumn
+          key="role"
+          header={<DataTableHeaderCell key="role">Role</DataTableHeaderCell>}
+          cell={<NodesTableRoleCell data={filteredData} roles={this.props.roles}/>}/>
         <DataTableColumn
           key="properties.cpu_arch"
           header={<DataTableHeaderCell key="properties.cpu_arch">CPU Arch.</DataTableHeaderCell>}
@@ -85,5 +95,34 @@ export default class NodesTable extends React.Component {
   }
 }
 NodesTable.propTypes = {
-  data: ImmutablePropTypes.list.isRequired
+  isFetchingNodes: React.PropTypes.bool.isRequired,
+  nodes: ImmutablePropTypes.list.isRequired,
+  roles: ImmutablePropTypes.map.isRequired
+};
+
+
+export class NodesTableRoleCell extends React.Component {
+  getAssignedRoleTitle() {
+    const fieldValue = _.result(this.props.data[this.props.rowIndex], 'properties.capabilities');
+    const capabilitiesMatch = fieldValue.match(/.*boot_option:(\w+)/);
+    if(capabilitiesMatch && Array.isArray(capabilitiesMatch) && capabilitiesMatch.length > 1) {
+      const role = this.props.roles.get(capabilitiesMatch[1]);
+      return role ? role.title : 'Not assigned';
+    } else {
+      return 'Not assigned';
+    }
+  }
+
+  render() {
+    return (
+      <DataTableCell {...this.props}>
+        {this.getAssignedRoleTitle()}
+      </DataTableCell>
+    );
+  }
+}
+NodesTableRoleCell.propTypes = {
+  data: React.PropTypes.array.isRequired,
+  roles: ImmutablePropTypes.map.isRequired,
+  rowIndex: React.PropTypes.number
 };

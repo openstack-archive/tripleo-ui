@@ -22,6 +22,7 @@ import LoginActions from './actions/LoginActions';
 import MaintenanceNodesTabPane from './components/nodes/MaintenanceNodesTabPane';
 import NewPlan from './components/plan/NewPlan';
 import Nodes from './components/nodes/Nodes';
+import NodesAssignment from './components/deployment-plan/NodesAssignment';
 import Parameters from './components/parameters/Parameters.js';
 import Plans from './components/plan/Plans.js';
 import ProvisionedNodesTabPane from './components/nodes/ProvisionedNodesTabPane';
@@ -62,6 +63,7 @@ TempStorage.initialized.then(() => {
               <Route path="environment" component={EnvironmentConfiguration}/>
               <Route path="parameters" component={Parameters}/>
             </Route>
+            <Route path=":roleName/assignNodes" component={NodesAssignment}/>
           </Route>
 
           <Redirect from="nodes" to="nodes/registered"/>
