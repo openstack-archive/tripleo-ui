@@ -44,9 +44,10 @@ describe('EnvironmentConfigurationActions', () => {
       spyOn(EnvironmentConfigurationActions, 'updateEnvironmentConfigurationSuccess');
       spyOn(history, 'pushState');
       // Mock the service call.
-      spyOn(TripleOApiService, 'updatePlanEnvironments').and.callFake(createResolvingPromise({
-        topics: []
-      }));
+      spyOn(TripleOApiService, 'updateAndDeletePlanEnvironments')
+        .and.callFake(createResolvingPromise({
+          topics: []
+        }));
       EnvironmentConfigurationActions.updateEnvironmentConfiguration(
         'overcloud', {}, {}, '/redirect/url')(() => {}, () => {}
       );

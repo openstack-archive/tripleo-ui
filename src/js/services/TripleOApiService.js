@@ -60,6 +60,28 @@ class TripleOApiService {
   }
 
   /**
+   * TripleO API: DELETE /v1/plans/<planName>/environments
+   * @returns Plan's environments mapping.
+   */
+  deletePlanEnvironments(planName) {
+    return when(request(this.defaultRequest({
+      url: `${TRIPLEOAPI_URL}/plans/${planName}/environments`,
+      method: 'DELETE'
+    })));
+  }
+
+  /**
+   * Chain `updatePlanEnvironments` and `deletePlanEnvironments`
+   * @returns Plan's environments mapping
+   */
+  updateAndDeletePlanEnvironments(planName, data) {
+    return this.updatePlanEnvironments(planName, data)
+      .then((response) => {
+        return this.deletePlanEnvironments(planName);
+      });
+  }
+
+  /**
    * TripleO API: GET /v1/plans/<planName>/parameters
    * @returns Plan's parameters.
    */

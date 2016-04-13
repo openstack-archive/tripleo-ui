@@ -45,7 +45,7 @@ export default {
   updateEnvironmentConfiguration(planName, data, formFields, parentPath) {
     return dispatch => {
       dispatch(this.updateEnvironmentConfigurationPending());
-      TripleOApiService.updatePlanEnvironments(planName, data).then((response) => {
+      TripleOApiService.updateAndDeletePlanEnvironments(planName, data).then((response) => {
         dispatch(this.updateEnvironmentConfigurationSuccess(response.environments));
         history.pushState(null, parentPath);
         dispatch(NotificationActions.notify({
