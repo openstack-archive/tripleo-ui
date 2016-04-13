@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 export default class RoleCard extends React.Component {
   render() {
@@ -22,9 +23,10 @@ export default class RoleCard extends React.Component {
         </div>
         <div className="card-pf-footer">
           <p>
-            <a href="#" className="card-pf-link-with-icon">
+            <Link to={`/deployment-plan/${this.props.name}/assignNodes`}
+                  className="card-pf-link-with-icon">
               <span className="pficon pficon-add-circle-o"></span>Assign Nodes
-            </a>
+            </Link>
           </p>
         </div>
       </div>
