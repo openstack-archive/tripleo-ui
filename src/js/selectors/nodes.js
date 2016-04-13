@@ -36,3 +36,9 @@ export const getUnassignedIntrospectedNodes = createSelector(
     );
   }
 );
+
+export const getAssignedNodes = (introspectedNodes, roleName) => {
+  return introspectedNodes.filter(
+    node => node.getIn(['properties', 'capabilities']).includes(`profile:${roleName}`)
+  );
+};
