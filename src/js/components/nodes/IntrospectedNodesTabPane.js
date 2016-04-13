@@ -6,11 +6,14 @@ import NodesTable from './NodesTable';
 export default class IntrospectedNodesTabPane extends React.Component {
   render() {
     return (
-      <NodesTable data={this.props.nodes.get('introspected')}
+      <NodesTable nodes={this.props.nodes.get('introspected')}
+                  roles={this.props.roles}
+                  isFetchingNodes={this.props.nodes.get('isFetching')}
                   dataOperationInProgress={this.props.nodes.get('dataOperationInProgress')}/>
     );
   }
 }
 IntrospectedNodesTabPane.propTypes = {
-  nodes: ImmutablePropTypes.map
+  nodes: ImmutablePropTypes.map,
+  roles: ImmutablePropTypes.map
 };

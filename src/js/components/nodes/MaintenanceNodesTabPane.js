@@ -6,11 +6,14 @@ import NodesTable from './NodesTable';
 export default class MaintenanceNodesTabPane extends React.Component {
   render() {
     return (
-      <NodesTable data={this.props.nodes.get('maintenance')}
+      <NodesTable nodes={this.props.nodes.get('maintenance')}
+                  roles={this.props.roles}
+                  isFetchingNodes={this.props.nodes.get('isFetching')}
                   dataOperationInProgress={this.props.nodes.get('dataOperationInProgress')}/>
     );
   }
 }
 MaintenanceNodesTabPane.propTypes = {
-  nodes: ImmutablePropTypes.map
+  nodes: ImmutablePropTypes.map,
+  roles: ImmutablePropTypes.map
 };
