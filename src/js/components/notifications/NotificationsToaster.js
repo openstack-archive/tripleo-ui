@@ -93,7 +93,7 @@ export default class NotificationsToaster extends React.Component {
 
   render() {
     return this.state.toasterNotification ? (
-      <div className='notification-toaster col-lg-5 col-md-6 col-sm-8 col-xs-12'>
+      <div className="notification-toaster col-lg-5 col-md-6 col-sm-8 col-xs-12">
         <Notification
           title={this.state.toasterNotification.title}
           message={this.state.toasterNotification.message}

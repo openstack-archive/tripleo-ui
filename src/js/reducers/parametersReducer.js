@@ -7,6 +7,9 @@ import { Parameter,
 const initialState = new ParametersDefaultState();
 
 export default function parametersReducer(state = initialState, action) {
+  let nestedParams;
+  let params;
+
   switch(action.type) {
 
   case ParametersConstants.FETCH_PARAMETERS_PENDING:
@@ -16,8 +19,8 @@ export default function parametersReducer(state = initialState, action) {
             .set('parameters', Map());
 
   case ParametersConstants.FETCH_PARAMETERS_SUCCESS:
-    let nestedParams = deepAddParameterRecords(action.payload.NestedParameters);
-    let params = deepAddParameterRecords(action.payload.Parameters);
+    nestedParams = deepAddParameterRecords(action.payload.NestedParameters);
+    params = deepAddParameterRecords(action.payload.Parameters);
     return state
             .set('isPending', false)
             .set('form', Map({

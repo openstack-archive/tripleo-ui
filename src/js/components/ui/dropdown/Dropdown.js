@@ -36,7 +36,7 @@ export default class Dropdown extends React.Component {
         <div className={ClassNames('dropdown btn-group', dropdownClasses, this.props.className)}>
           {otherChildren}
           {React.cloneElement(toggle, { toggleDropdown: this.toggleDropdown.bind(this) })}
-          <ul className="dropdown-menu" role="menu" ref='menu'>
+          <ul className="dropdown-menu" role="menu" ref="menu">
             {items}
           </ul>
         </div>

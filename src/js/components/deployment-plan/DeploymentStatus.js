@@ -18,7 +18,7 @@ export default class DeploymentStatus extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     let intervalId = setInterval(() => {
       this.props.fetchStacks();
     }, 5000);

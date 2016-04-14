@@ -47,14 +47,14 @@ class PlanFileInput extends React.Component {
   renderErrorMessage() {
     let errorMessage = this.props.getErrorMessage();
     return errorMessage ? (
-      <span className='help-block'>{errorMessage}</span>
+      <span className="help-block">{errorMessage}</span>
     ) : false;
   }
 
   renderDescription() {
     let description = this.props.description;
     return description ? (
-      <small className='help-block'>{description}</small>
+      <small className="help-block">{description}</small>
     ) : false;
   }
 

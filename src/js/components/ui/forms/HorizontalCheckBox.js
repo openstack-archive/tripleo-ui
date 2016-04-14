@@ -10,7 +10,7 @@ class HorizontalCheckBox extends React.Component {
   renderErrorMessage() {
     let errorMessage = this.props.getErrorMessage();
     return errorMessage ? (
-      <span className='help-block'>{errorMessage}</span>
+      <span className="help-block">{errorMessage}</span>
     ) : false;
   }
 

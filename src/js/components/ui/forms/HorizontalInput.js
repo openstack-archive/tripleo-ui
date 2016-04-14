@@ -11,14 +11,14 @@ class HorizontalInput extends React.Component {
   renderErrorMessage() {
     let errorMessage = this.props.getErrorMessage();
     return errorMessage ? (
-      <small className='help-block'>{errorMessage}</small>
+      <small className="help-block">{errorMessage}</small>
     ) : false;
   }
 
   renderDescription() {
     let description = this.props.description;
     return description ? (
-      <small className='help-block'>{description}</small>
+      <small className="help-block">{description}</small>
     ) : false;
   }
 
