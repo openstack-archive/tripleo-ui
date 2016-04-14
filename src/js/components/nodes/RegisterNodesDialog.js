@@ -100,7 +100,7 @@ class RegisterNodesDialog extends React.Component {
     // TODO(jtomasek): fix the name setting here
     let nodeName = node.driver_info.get('ssh_address') ||
                    node.driver_info.get('ipmi_address') ||
-                   `Undefined Node`;
+                   'Undefined Node';
     let validationIconClasses = ClassNames({
       'pficon': true,
       'pficon-error-circle-o': !node.valid

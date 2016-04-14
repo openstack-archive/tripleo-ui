@@ -9,7 +9,6 @@ import PlansConstants from '../constants/PlansConstants';
 const initialState = new InitialPlanState;
 
 export default function plansReducer(state = initialState, action) {
-
   switch(action.type) {
 
   case PlansConstants.REQUEST_PLAN:
@@ -35,7 +34,7 @@ export default function plansReducer(state = initialState, action) {
   case PlansConstants.REQUEST_PLANS:
     return state.set('isFetchingPlans', true);
 
-  case PlansConstants.RECEIVE_PLANS:
+  case PlansConstants.RECEIVE_PLANS: {
     let planData = {};
     action.payload.result.forEach(name => {
       planData[name] = new Plan(action.payload.entities.plan[name]);
@@ -43,6 +42,7 @@ export default function plansReducer(state = initialState, action) {
     return state
             .set('isFetchingPlans', false)
             .set('all', Map(planData));
+  }
 
   case PlansConstants.PLAN_CHOSEN:
     return state.set('currentPlanName', action.payload);

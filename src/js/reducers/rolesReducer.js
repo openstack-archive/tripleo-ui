@@ -11,16 +11,18 @@ const initialState = Map({
 });
 
 export default function rolesReducer(state = initialState, action) {
+
   switch(action.type) {
 
   case RolesConstants.FETCH_ROLES_PENDING:
     return state.set('isFetching', true);
 
-  case RolesConstants.FETCH_ROLES_SUCCESS:
+  case RolesConstants.FETCH_ROLES_SUCCESS: {
     const roles = action.payload || {};
     return state.set('roles', fromJS(roles).map(role => new Role(role)))
                 .set('isFetching', false)
                 .set('loaded', true);
+  }
 
   case RolesConstants.FETCH_ROLES_FAILED:
     return state.set('roles', Map())

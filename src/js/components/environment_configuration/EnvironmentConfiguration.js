@@ -13,6 +13,7 @@ import Tab from '../ui/Tab';
 import TabPane from '../ui/TabPane';
 
 class EnvironmentConfiguration extends React.Component {
+
   constructor() {
     super();
     this.state = {
@@ -190,9 +191,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(EnvironmentConfigura
 */
 Formsy.addValidationRule('requiresEnvironments',
                          function (values, value, requiredEnvironmentFieldNames) {
-  if(value) {
-    return !_.filter(_.values(_.pick(values, requiredEnvironmentFieldNames)),
-                     function(val){return val === false;}).length;
-  }
-  return true;
-});
+                           if (value) {
+                             return !_.filter(
+                               _.values(
+                                 _.pick(values, requiredEnvironmentFieldNames)
+                               ), function(val){return val === false;}).length;
+                           }
+                           return true;
+                         });

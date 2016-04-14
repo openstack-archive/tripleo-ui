@@ -51,7 +51,7 @@ export default class ParametersTabPane extends React.Component {
         <HorizontalInput key={index}
                                name={parameter.name}
                                title={parameter.Label}
-                               type='number'
+                               type="number"
                                min={0}
                                description={parameter.Description}
                                value={parameter.Default}

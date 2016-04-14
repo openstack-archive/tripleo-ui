@@ -10,14 +10,14 @@ class HorizontalSelect extends React.Component {
   renderErrorMessage() {
     let errorMessage = this.props.getErrorMessage();
     return errorMessage ? (
-      <span className='help-block'>{errorMessage}</span>
+      <span className="help-block">{errorMessage}</span>
     ) : false;
   }
 
   renderDescription() {
     let description = this.props.description;
     return description ? (
-      <small className='help-block'>{description}</small>
+      <small className="help-block">{description}</small>
     ) : false;
   }
 
@@ -38,7 +38,7 @@ class HorizontalSelect extends React.Component {
           <select name={this.props.name}
                   ref={this.props.name}
                   id={this.props.name}
-                  className='form-control'
+                  className="form-control"
                   onChange={this.changeValue.bind(this)}
                   value={this.props.getValue()}>
             {options}

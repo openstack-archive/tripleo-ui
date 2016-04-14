@@ -15,7 +15,7 @@ export default function parametersReducer(state = initialState, action) {
             .set('form', Map({ formErrors: List(), formFieldErrors: Map() }))
             .set('parameters', Map());
 
-  case ParametersConstants.FETCH_PARAMETERS_SUCCESS:
+  case ParametersConstants.FETCH_PARAMETERS_SUCCESS: {
     let nestedParams = deepAddParameterRecords(action.payload.NestedParameters);
     let params = deepAddParameterRecords(action.payload.Parameters);
     return state
@@ -29,6 +29,7 @@ export default function parametersReducer(state = initialState, action) {
               NestedParameters: nestedParams,
               Parameters: params
             }));
+  }
 
   case ParametersConstants.FETCH_PARAMETERS_FAILED:
     return state
