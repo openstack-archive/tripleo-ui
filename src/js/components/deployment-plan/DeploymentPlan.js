@@ -79,7 +79,18 @@ class DeploymentPlan extends React.Component {
       <Loader key="rolesLoader"
               loaded={!(this.props.rolesLoaded && this.props.isFetchingRoles)}
               content="Loading Deployment Roles..."
-              inline/>
+              component="span"
+              inline/>,
+      <span key="space2">&nbsp;</span>,
+      <Loader key="nodesLoader"
+              loaded={!this.props.isFetchingNodes}
+              content="Loading Nodes..."
+              component="span"
+              inline>
+        There are <strong>{this.props.unassignedIntrospectedNodes.size}</strong> of <strong>
+        {this.props.introspectedNodes.size}</strong> Introspected
+        Nodes available to assign
+      </Loader>
     ];
 
     let children;

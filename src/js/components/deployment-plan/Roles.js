@@ -29,7 +29,6 @@ export default class Roles extends React.Component {
         <div className="col-xs-6 col-sm-4 col-md-3 col-lg-2" key={role.name}>
           <RoleCard name={role.name}
                     title={role.title}
-                    isFetchingNodes={this.props.isFetchingNodes}
                     assignedNodesCount={this.getAssignedNodes(role.name).size}
                     availableNodesCount={this.props.introspectedNodes.size}/>
         </div>
@@ -39,27 +38,17 @@ export default class Roles extends React.Component {
 
   render() {
     return (
-      <Loader loaded={this.props.loaded}
-              content="Loading Deployment Roles..."
-              size="lg"
-              inline>
-        <Loader loaded={!this.props.isFetchingNodes}
-                content="Loading Nodes..."
-                inline>
-          <p>
-            There are <strong>{this.props.unassignedIntrospectedNodes.size}</strong> of <strong>
-            {this.props.introspectedNodes.size}</strong> Introspected
-            Nodes available to assign
-          </p>
-        </Loader>
-        <div className="panel panel-default roles-panel">
-          <div className="panel-body">
+      <div className="panel panel-default roles-panel">
+        <div className="panel-body">
+          <Loader loaded={this.props.loaded}
+                  content="Loading Deployment Roles..."
+                  height={40}>
             <div className="row-cards-pf">
               {this.renderRoleCards()}
             </div>
-          </div>
+          </Loader>
         </div>
-      </Loader>
+      </div>
     );
   }
 }

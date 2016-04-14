@@ -1,7 +1,5 @@
 import React from 'react';
 
-import Loader from '../ui/Loader';
-
 export default class RoleCard extends React.Component {
   render() {
     return (
@@ -10,21 +8,17 @@ export default class RoleCard extends React.Component {
           {this.props.title}
         </h2>
         <div className="card-pf-body">
-          <Loader loaded={!this.props.isFetchingNodes}
-                  content="Loading Nodes..."
-                  inline>
-            <p className="card-pf-utilization-details">
-              <span className="card-pf-utilization-card-details-count">
-                {this.props.assignedNodesCount}
+          <p className="card-pf-utilization-details">
+            <span className="card-pf-utilization-card-details-count">
+              {this.props.assignedNodesCount}
+            </span>
+            <span className="card-pf-utilization-card-details-description">
+              <span className="card-pf-utilization-card-details-line-1">Nodes assigned</span>
+              <span className="card-pf-utilization-card-details-line-2">
+                of {this.props.availableNodesCount} available
               </span>
-              <span className="card-pf-utilization-card-details-description">
-                <span className="card-pf-utilization-card-details-line-1">Nodes assigned</span>
-                <span className="card-pf-utilization-card-details-line-2">
-                  of {this.props.availableNodesCount} available
-                </span>
-              </span>
-            </p>
-          </Loader>
+            </span>
+          </p>
         </div>
         <div className="card-pf-footer">
           <p>
@@ -40,7 +34,6 @@ export default class RoleCard extends React.Component {
 RoleCard.propTypes = {
   assignedNodesCount: React.PropTypes.number.isRequired,
   availableNodesCount: React.PropTypes.number.isRequired,
-  isFetchingNodes: React.PropTypes.bool,
   name: React.PropTypes.string.isRequired,
   title: React.PropTypes.string.isRequired
 };
