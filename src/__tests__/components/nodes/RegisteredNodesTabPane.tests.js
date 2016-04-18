@@ -1,15 +1,15 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import { List, Map } from 'immutable';
+import { Map } from 'immutable';
 
 import RegisteredNodesTabPane from '../../../js/components/nodes/RegisteredNodesTabPane';
 
 const nodes = Map({
   isFetching: false,
-  registered: List([
-    { uuid: 1 },
-    { uuid: 2 }
-  ])
+  registered: Map({
+    1: { uuid: 1 },
+    2: { uuid: 2 }
+  })
 });
 
 let roles = Map();

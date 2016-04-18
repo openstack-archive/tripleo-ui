@@ -71,7 +71,7 @@ describe('Asynchronous Nodes Actions', () => {
     spyOn(NodesActions, 'receiveNodes');
     // Mock the service call.
     spyOn(IronicApiService, 'getNodes').and.callFake(
-      createResolvingPromise({ nodes: mockGetNodesResponse })
+      createResolvingPromise({ nodes: [{ uuid: 0 }] })
     );
     // Note that `getNode` is called multilpe times but always returns the same response
     // to keep the test simple.
@@ -88,6 +88,6 @@ describe('Asynchronous Nodes Actions', () => {
   });
 
   it('dispatches receiveNodes', () => {
-    expect(NodesActions.receiveNodes).toHaveBeenCalledWith([{ uuid: 0 }, { uuid: 0 }]);
+    expect(NodesActions.receiveNodes).toHaveBeenCalledWith({ 0:{ uuid: 0 }});
   });
 });
