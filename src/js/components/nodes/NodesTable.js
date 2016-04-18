@@ -6,8 +6,10 @@ import DataTable from '../ui/tables/DataTable';
 import { DataTableCell,
          DataTableDataFieldCell,
          DataTableHeaderCell } from '../ui/tables/DataTableCells';
+import { DataTableCheckBoxCell } from '../ui/tables/DataTableCells';
 import DataTableColumn from '../ui/tables/DataTableColumn';
 import Loader from '../ui/Loader';
+
 
 export default class NodesTable extends React.Component {
   constructor() {
@@ -22,7 +24,7 @@ export default class NodesTable extends React.Component {
   renderNoNodesFound() {
     return (
       <tr>
-        <td colSpan="8">
+        <td colSpan="9">
           <Loader loaded={!this.props.isFetchingNodes}
                   height={40}
                   content="Loading Nodes...">
@@ -59,6 +61,10 @@ export default class NodesTable extends React.Component {
         noRowsRenderer={this.renderNoNodesFound.bind(this)}
         onFilter={this.onFilter.bind(this)}
         filterString={this.state.filterString}>
+        <DataTableColumn
+          key="select"
+          header={<DataTableHeaderCell key="select"/>}
+          cell={<DataTableCheckBoxCell data={filteredData} field="uuid"/>}/>
         <DataTableColumn
           key="uuid"
           header={<DataTableHeaderCell key="uuid">UUID</DataTableHeaderCell>}
@@ -100,7 +106,6 @@ NodesTable.propTypes = {
   nodes: ImmutablePropTypes.list.isRequired,
   roles: ImmutablePropTypes.map.isRequired
 };
-
 
 export class NodesTableRoleCell extends React.Component {
   getAssignedRoleTitle() {

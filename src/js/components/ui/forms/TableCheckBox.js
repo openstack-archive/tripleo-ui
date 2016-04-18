@@ -1,8 +1,7 @@
-import ClassNames from 'classnames';
 import Formsy from 'formsy-react';
 import React from 'react';
 
-class GenericCheckBox extends React.Component {
+class TableCheckBox extends React.Component {
   changeValue(event) {
     this.props.setValue(event.target.checked);
   }
@@ -22,32 +21,18 @@ class GenericCheckBox extends React.Component {
   }
 
   render() {
-    let divClasses = ClassNames({
-      'checkbox': this.props.type === 'checkbox',
-      'radio': this.props.type === 'radio',
-      'has-error': this.props.showError(),
-      'required': this.props.showRequired()
-    });
-
     return (
-      <div className={divClasses}>
-        <label htmlFor={this.props.id} className="control-label">
-          <input type={this.props.type}
-                 name={this.props.name}
-                 ref={this.props.id}
-                 id={this.props.id}
-                 onChange={this.changeValue.bind(this)}
-                 checked={!!this.props.getValue()}
-                 value={this.props.getValue()}/>
-          {this.props.title}
-        </label>
-        {this.renderErrorMessage()}
-        {this.renderDescription()}
-      </div>
+      <input type={this.props.type}
+             name={this.props.name}
+             ref={this.props.id}
+             id={this.props.id}
+             onChange={this.changeValue.bind(this)}
+             checked={!!this.props.getValue()}
+             value={this.props.getValue()}/>
     );
   }
 }
-GenericCheckBox.propTypes = {
+TableCheckBox.propTypes = {
   description: React.PropTypes.string,
   getErrorMessage: React.PropTypes.func,
   getValue: React.PropTypes.func,
@@ -62,7 +47,7 @@ GenericCheckBox.propTypes = {
   title: React.PropTypes.string,
   type: React.PropTypes.string
 };
-GenericCheckBox.defaultProps = {
+TableCheckBox.defaultProps = {
   type: 'checkbox'
 };
-export default Formsy.HOC(GenericCheckBox);
+export default Formsy.HOC(TableCheckBox);
