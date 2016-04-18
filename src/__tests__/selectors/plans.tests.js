@@ -2,7 +2,9 @@ import { Map } from 'immutable';
 import matchers from 'jasmine-immutable-matchers';
 
 import { Plan } from '../../js/immutableRecords/plans';
-import { getAllPlansButCurrent, getCurrentStack } from '../../js/selectors/plans';
+import { getAllPlansButCurrent,
+         getCurrentStackDeploymentProgress,
+         getCurrentStack } from '../../js/selectors/plans';
 import { InitialPlanState, Stack } from '../../js/immutableRecords/plans';
 
 describe('plans selectors', () => {
@@ -52,6 +54,46 @@ describe('plans selectors', () => {
       expect(getCurrentStack(state)).toEqualImmutable(
          Stack({ stack_name: 'overcloud', stack_status: 'CREATE_COMPLETE' })
       );
+    });
+  });
+
+  describe('getCurrentStackDeploymentProgress', () => {
+    it('returns true if the current plan\'s deployment is in progress', () => {
+      const state = {
+        plans: InitialPlanState({
+          currentPlanName: 'overcloud',
+          stacks: Map({
+            overcloud: Stack({ stack_name: 'overcloud', stack_status: 'CREATE_IN_PROGRESS' }),
+            anothercloud: Stack({ stack_name: 'anothercloud', stack_status: 'CREATE_FAILED' })
+          })
+        })
+      };
+      expect(getCurrentStackDeploymentProgress(state)).toBe(true);
+    });
+
+    it('returns false if the current plan\'s deployment is not in progress', () => {
+      const state = {
+        plans: InitialPlanState({
+          currentPlanName: 'overcloud',
+          stacks: Map({
+            overcloud: Stack({ stack_name: 'overcloud', stack_status: 'CREATE_FAILED' }),
+            anothercloud: Stack({ stack_name: 'anothercloud', stack_status: 'CREATE_IN_PROGRESS' })
+          })
+        })
+      };
+      expect(getCurrentStackDeploymentProgress(state)).toBe(false);
+    });
+
+    it('returns false if the current plan does not have an associated stack', () => {
+      const state = {
+        plans: InitialPlanState({
+          currentPlanName: 'overcloud',
+          stacks: Map({
+            anothercloud: Stack({ stack_name: 'anothercloud', stack_status: 'CREATE_IN_PROGRESS' })
+          })
+        })
+      };
+      expect(getCurrentStackDeploymentProgress(state)).toBe(false);
     });
   });
 });

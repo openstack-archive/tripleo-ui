@@ -16,12 +16,14 @@ import DeploymentPlan from './components/deployment-plan/DeploymentPlan';
 import EditPlan from './components/plan/EditPlan';
 import EnvironmentConfiguration from
   './components/environment_configuration/EnvironmentConfiguration.js';
+import { getCurrentStackDeploymentProgress } from './selectors/plans';
 import ListPlans from './components/plan/ListPlans';
 import Login from './components/Login';
 import LoginActions from './actions/LoginActions';
 import MaintenanceNodesTabPane from './components/nodes/MaintenanceNodesTabPane';
 import NewPlan from './components/plan/NewPlan';
 import Nodes from './components/nodes/Nodes';
+import NotificationActions from './actions/NotificationActions';
 import Parameters from './components/parameters/Parameters.js';
 import Plans from './components/plan/Plans.js';
 import ProvisionedNodesTabPane from './components/nodes/ProvisionedNodesTabPane';
@@ -50,6 +52,21 @@ TempStorage.initialized.then(() => {
     }
   }
 
+  function checkRunningDeployment(nextState, replaceState) {
+    const state = store.getState();
+    let currentPlanName = state.plans.currentPlanName;
+    if(getCurrentStackDeploymentProgress(state)) {
+      store.dispatch(NotificationActions.notify({
+        title: 'Not allowed',
+        message: `A deployment for the plan ${currentPlanName} is already in progress.`,
+        type: 'warning'
+      }));
+      // TODO(flfuchs): Redirect to deployment status modal instead of DeploymentPlan
+      // page (in separate patch).
+      replaceState(null, '/deployment-plan/');
+    }
+  }
+
   let routes = (
     <Route>
       <Redirect from="/" to="/deployment-plan"/>
@@ -58,7 +75,9 @@ TempStorage.initialized.then(() => {
 
           <Route path="deployment-plan" component={DeploymentPlan}>
             <Redirect from="configuration" to="configuration/environment"/>
-            <Route path="configuration" component={DeploymentConfiguration}>
+            <Route path="configuration"
+                   component={DeploymentConfiguration}
+                   onEnter={checkRunningDeployment}>
               <Route path="environment" component={EnvironmentConfiguration}/>
               <Route path="parameters" component={Parameters}/>
             </Route>
