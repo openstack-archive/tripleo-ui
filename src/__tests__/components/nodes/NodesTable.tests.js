@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import { List, Map } from 'immutable';
+import { Map } from 'immutable';
 
 import NodesTable from '../../../js/components/nodes/NodesTable';
 import { NodesTableRoleCell } from '../../../js/components/nodes/NodesTable';
@@ -14,23 +14,26 @@ const initialState = {
 
 const filterString = '1';
 
-let nodes = List([
-  { uuid: '1',
+let nodes = Map({
+  1: {
+    uuid: '1',
     properties: {
       capabilities: 'boot_option:local,profile:compute'
     }
   },
-  { uuid: '2',
+  2: {
+    uuid: '2',
     properties: {
       capabilities: 'boot_option:local'
     }
   },
-  { uuid: '3',
+  3: {
+    uuid: '3',
     properties: {
       capabilities: 'boot_option:local,profile:nonexistentRole'
     }
   }
-]);
+});
 
 let roles = Map({
   control: new Role({
@@ -39,7 +42,7 @@ let roles = Map({
   }),
   compute: new Role({
     name: 'compute',
-    title: 'Conpute'
+    title: 'Compute'
   })
 });
 
@@ -58,7 +61,7 @@ describe('NodesTable component', () => {
 
   it('should render DataTable and pass data', () => {
     expect(nodesTableVdom.type.name).toEqual('DataTable');
-    expect(nodesTableVdom.props.data).toEqual(nodes.toJS());
+    expect(nodesTableVdom.props.data).toEqual(nodes.toList().toJS());
     expect(nodesTableVdom.props.noRowsRenderer.name).toBeDefined();
     expect(nodesTableVdom.props.children.length).toEqual(9);
   });
@@ -68,7 +71,7 @@ describe('NodesTable component', () => {
     nodesTableInstance.onFilter(filterString);
     expect(nodesTableInstance.state).toEqual({ filterString: '1', sortBy: '', sortDir: 'asc' });
     expect(nodesTableInstance._filterData)
-      .toHaveBeenCalledWith('1', nodesTableInstance.props.nodes.toJS());
+      .toHaveBeenCalledWith('1', nodesTableInstance.props.nodes.toList().toJS());
   });
 });
 
@@ -77,14 +80,18 @@ describe('NodesTableRoleCell', () => {
   describe('getAssignedRoleTitle', () => {
     it('should return Not Assigned when profile is not set in node.properties.capabilities', () => {
       let shallowRenderer = TestUtils.createRenderer();
-      shallowRenderer.render(<NodesTableRoleCell data={nodes.toJS()} roles={roles} rowIndex={0}/>);
+      shallowRenderer.render(<NodesTableRoleCell data={nodes.toList().toJS()}
+                                                 roles={roles}
+                                                 rowIndex={0}/>);
       roleCellInstance = shallowRenderer._instance._instance;
-      expect(roleCellInstance.getAssignedRoleTitle()).toEqual('Not assigned');
+      expect(roleCellInstance.getAssignedRoleTitle()).toEqual('Compute');
     });
 
     it('should return Not Assigned when profile is not set in node.properties.capabilities', () => {
       let shallowRenderer = TestUtils.createRenderer();
-      shallowRenderer.render(<NodesTableRoleCell data={nodes.toJS()} roles={roles} rowIndex={1}/>);
+      shallowRenderer.render(<NodesTableRoleCell data={nodes.toList().toJS()}
+                                                 roles={roles}
+                                                 rowIndex={1}/>);
       roleCellInstance = shallowRenderer._instance._instance;
       expect(roleCellInstance.getAssignedRoleTitle()).toEqual('Not assigned');
     });

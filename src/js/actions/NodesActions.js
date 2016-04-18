@@ -1,3 +1,4 @@
+import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
 
 import IronicApiErrorHandler from '../services/IronicApiErrorHandler';
@@ -6,6 +7,7 @@ import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NodesConstants from '../constants/NodesConstants';
 import NotificationActions from './NotificationActions';
+import { nodeSchema } from '../normalizrSchemas/nodes';
 
 export default {
   startOperation(workflowId) {
@@ -41,9 +43,10 @@ export default {
           return IronicApiService.getNode(node.uuid);
         }));
       }).then((nodes) => {
-        dispatch(this.receiveNodes(nodes));
+        const normalizedNodes = normalize(nodes, arrayOf(nodeSchema)).entities.nodes;
+        dispatch(this.receiveNodes(normalizedNodes));
       }).catch((error) => {
-        dispatch(this.receiveNodes([]));
+        dispatch(this.receiveNodes({}));
         console.error('Error in NodesActions.fetchNodes', error); //eslint-disable-line no-console
         let errorHandler = new IronicApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
@@ -97,6 +100,43 @@ export default {
         });
         dispatch(this.finishOperation());
       });
+    };
+  },
+
+  updateNode(nodePatch) {
+    return (dispatch, getState) => {
+      dispatch(this.updateNodePending(nodePatch.uuid));
+      IronicApiService.patchNode(nodePatch).then(response => {
+        dispatch(this.updateNodeSuccess(response));
+      }).catch(error => {
+        dispatch(this.updateNodeFailed(nodePatch.uuid));
+        console.error('Error in NodesActions.UpdateNode', error.stack || error); //eslint-disable-line no-console
+        let errorHandler = new IronicApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+      });
+    };
+  },
+
+  updateNodePending(nodeId) {
+    return {
+      type: NodesConstants.UPDATE_NODE_PENDING,
+      payload: nodeId
+    };
+  },
+
+  updateNodeFailed(nodeId) {
+    return {
+      type: NodesConstants.UPDATE_NODE_FAILED,
+      payload: nodeId
+    };
+  },
+
+  updateNodeSuccess(node) {
+    return {
+      type: NodesConstants.UPDATE_NODE_SUCCESS,
+      payload: node
     };
   }
 

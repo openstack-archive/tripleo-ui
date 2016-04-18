@@ -42,6 +42,16 @@ class IronicApiService {
     )));
   }
 
+  patchNode(nodePatch) {
+    return when(request(this.defaultRequest(
+      {
+        method: 'PATCH',
+        url: getServiceUrl('ironic') + '/nodes/' + nodePatch.uuid,
+        data: JSON.stringify(nodePatch.patches)
+      }
+    )));
+  }
+
 }
 
 export default new IronicApiService();
