@@ -1,11 +1,15 @@
+import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React from 'react';
+import { List, Map } from 'immutable';
 
-import { getIntrospectedNodes, getUnassignedIntrospectedNodes } from '../../selectors/nodes';
-// import FormErrorList from '../ui/forms/FormErrorList';
+import { getIntrospectedNodes,
+         getUnassignedIntrospectedNodes,
+         getAssignedNodes } from '../../selectors/nodes';
+import FormErrorList from '../ui/forms/FormErrorList';
 import NodesActions from '../../actions/NodesActions';
 import NodesTable from '../nodes/NodesTable';
 
@@ -25,6 +29,14 @@ export default class NodesAssignment extends React.Component {
     this.invalidateForm(this.props.formFieldErrors.toJS());
   }
 
+  canSubmit() {
+    if(_.includes(_.values(this.refs.nodesAssignmentForm.getCurrentValues()), true)) {
+      this.enableButton();
+    } else {
+      this.disableButton();
+    }
+  }
+
   enableButton() {
     this.setState({ canSubmit: true });
   }
@@ -37,10 +49,23 @@ export default class NodesAssignment extends React.Component {
     this.refs.nodesAssignmentForm.updateInputsWithError(formFieldErrors);
   }
 
+  getTableActions() {
+    return (
+      <div className="btn-group">
+        <button className="btn btn-primary"
+                type="submit"
+                disabled={!this.state.canSubmit || this.props.nodesOperationInProgress}>
+          Assign/Unassign Selected Nodes
+        </button>
+      </div>
+    );
+  }
+
   handleSubmit(formData, resetForm, invalidateForm) {
     // const data = this._convertFormData(formData);
     // const formFields = Object.keys(this.refs.nodesAssignmentForm.inputs);
     this.disableButton();
+    resetForm();
     // this.props.updateEnvironmentConfiguration(
     //   this.props.currentPlanName,
     //   data,
@@ -52,6 +77,8 @@ export default class NodesAssignment extends React.Component {
   render() {
     const { roleName } = this.props.params;
     const role = this.props.roles.get(roleName);
+    const nodesToAssign = this.props.unassignedIntrospectedNodes
+                            .merge(getAssignedNodes(this.props.introspectedNodes, roleName));
 
     return (
       <div>
@@ -62,7 +89,7 @@ export default class NodesAssignment extends React.Component {
                            role="form"
                            className="form"
                            onSubmit={this.handleSubmit.bind(this)}
-                           onValid={this.enableButton.bind(this)}
+                           onValid={this.canSubmit.bind(this)}
                            onInvalid={this.disableButton.bind(this)}>
                 <div className="modal-header">
                   <Link to="/deployment-plan"
@@ -76,19 +103,17 @@ export default class NodesAssignment extends React.Component {
                 </div>
 
                 <div className="modal-body">
-                  <NodesTable nodes={this.props.introspectedNodes}
+                  <FormErrorList errors={this.props.formErrors.toJS()}/>
+                  <NodesTable nodes={nodesToAssign}
                               roles={this.props.roles}
                               isFetchingNodes={this.props.isFetchingNodes}
-                              dataOperationInProgress={this.props.nodesOperationInProgress}/>
+                              dataOperationInProgress={this.props.nodesOperationInProgress}
+                              tableActions={this.getTableActions.bind(this)}/>
                 </div>
 
                 <div className="modal-footer">
-                  <button type="submit" disabled={!this.state.canSubmit}
-                          className="btn btn-primary">
-                    Save Changes
-                  </button>
                   <Link to="/deployment-plan" type="button" className="btn btn-default" >
-                    Cancel
+                    Done
                   </Link>
                 </div>
               </Formsy.Form>
@@ -111,11 +136,13 @@ NodesAssignment.propTypes = {
   roles: ImmutablePropTypes.map.isRequired,
   unassignedIntrospectedNodes: ImmutablePropTypes.list
 };
+NodesAssignment.defaultProps = {
+  formErrors: List(),
+  formFieldErrors: Map()
+};
 
 function mapStateToProps(state) {
   return {
-    formErrors: state.environmentConfiguration.getIn(['form', 'formErrors']),
-    formFieldErrors: state.environmentConfiguration.getIn(['form', 'formFieldErrors']),
     introspectedNodes: getIntrospectedNodes(state),
     isFetchingNodes: state.nodes.get('isFetching'),
     nodesOperationInProgress: state.nodes.get('dataOperationInProgress'),

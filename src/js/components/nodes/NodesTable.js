@@ -6,8 +6,10 @@ import DataTable from '../ui/tables/DataTable';
 import { DataTableCell,
          DataTableDataFieldCell,
          DataTableHeaderCell } from '../ui/tables/DataTableCells';
+import { DataTableCheckBoxCell } from '../ui/tables/DataTableCells';
 import DataTableColumn from '../ui/tables/DataTableColumn';
 import Loader from '../ui/Loader';
+
 
 export default class NodesTable extends React.Component {
   constructor() {
@@ -59,6 +61,10 @@ export default class NodesTable extends React.Component {
         onFilter={this.onFilter.bind(this)}
         filterString={this.state.filterString}>
         <DataTableColumn
+          key="select"
+          header={<DataTableHeaderCell key="select"/>}
+          cell={<DataTableCheckBoxCell data={filteredData} field="uuid"/>}/>
+        <DataTableColumn
           key="uuid"
           header={<DataTableHeaderCell key="uuid">UUID</DataTableHeaderCell>}
           cell={<DataTableDataFieldCell data={filteredData} field="uuid"/>}/>
@@ -99,7 +105,6 @@ NodesTable.propTypes = {
   nodes: ImmutablePropTypes.list.isRequired,
   roles: ImmutablePropTypes.map.isRequired
 };
-
 
 export class NodesTableRoleCell extends React.Component {
   getAssignedRoleTitle() {

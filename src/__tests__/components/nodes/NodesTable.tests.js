@@ -60,7 +60,7 @@ describe('NodesTable component', () => {
     expect(nodesTableVdom.type.name).toEqual('DataTable');
     expect(nodesTableVdom.props.data).toEqual(nodes.toJS());
     expect(nodesTableVdom.props.noRowsRenderer.name).toBeDefined();
-    expect(nodesTableVdom.props.children.length).toEqual(8);
+    expect(nodesTableVdom.props.children.length).toEqual(9);
   });
 
   it('should be able to filter rows', () => {

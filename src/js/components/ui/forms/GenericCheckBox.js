@@ -59,7 +59,7 @@ GenericCheckBox.propTypes = {
   setValue: React.PropTypes.func,
   showError: React.PropTypes.func,
   showRequired: React.PropTypes.func,
-  title: React.PropTypes.string.isRequired,
+  title: React.PropTypes.string,
   type: React.PropTypes.string
 };
 GenericCheckBox.defaultProps = {
