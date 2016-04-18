@@ -1,15 +1,15 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import { List, Map } from 'immutable';
+import { Map } from 'immutable';
 
 import MaintenanceNodesTabPane from '../../../js/components/nodes/MaintenanceNodesTabPane';
 
 let nodes = Map({
   isFetching: false,
-  maintenance: List([
-    { uuid: 1 },
-    { uuid: 2 }
-  ])
+  maintenance: Map({
+    1: { uuid: 1 },
+    2: { uuid: 2 }
+  })
 });
 
 let roles = Map();

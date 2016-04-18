@@ -62,23 +62,36 @@ export default class NodesAssignment extends React.Component {
   }
 
   handleSubmit(formData, resetForm, invalidateForm) {
-    // const data = this._convertFormData(formData);
-    // const formFields = Object.keys(this.refs.nodesAssignmentForm.inputs);
     this.disableButton();
+    const nodesToUpdate = _.pickBy(formData, value => !!value);
+    _.keys(nodesToUpdate).map(nodeId => {
+      const node = this.props.introspectedNodes.get(nodeId);
+      let value;
+      if(this.props.unassignedIntrospectedNodes.includes(node)) {
+        value = node.getIn(['properties', 'capabilities']) +
+                `,profile:${this.props.params.roleName}`;
+      } else {
+        value = node.getIn(['properties', 'capabilities']).replace(/,profile:(\w+)/, '');
+      }
+      const nodePatch = {
+        uuid: nodeId,
+        patches: [{
+          op: 'replace',
+          path: '/properties/capabilities',
+          value: value
+        }]
+      };
+      this.props.updateNode(nodePatch);
+    });
     resetForm();
-    // this.props.updateEnvironmentConfiguration(
-    //   this.props.currentPlanName,
-    //   data,
-    //   formFields,
-    //   this.props.parentPath
-    // );
   }
 
   render() {
     const { roleName } = this.props.params;
     const role = this.props.roles.get(roleName);
     const nodesToAssign = this.props.unassignedIntrospectedNodes
-                            .merge(getAssignedNodes(this.props.introspectedNodes, roleName));
+                            .merge(getAssignedNodes(this.props.introspectedNodes, roleName))
+                            .sortBy(node => node.get('uuid'));
 
     return (
       <div>
@@ -126,15 +139,16 @@ export default class NodesAssignment extends React.Component {
   }
 }
 NodesAssignment.propTypes = {
-  fetchNodes: React.PropTypes.func,
+  fetchNodes: React.PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
-  introspectedNodes: ImmutablePropTypes.list,
+  introspectedNodes: ImmutablePropTypes.map,
   isFetchingNodes: React.PropTypes.bool,
   nodesOperationInProgress: React.PropTypes.bool,
   params: React.PropTypes.object.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
-  unassignedIntrospectedNodes: ImmutablePropTypes.list
+  unassignedIntrospectedNodes: ImmutablePropTypes.map,
+  updateNode: React.PropTypes.func.isRequired
 };
 NodesAssignment.defaultProps = {
   formErrors: List(),
@@ -153,7 +167,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchNodes: () => dispatch(NodesActions.fetchNodes())
+    fetchNodes: () => dispatch(NodesActions.fetchNodes()),
+    updateNode: (node) => dispatch(NodesActions.updateNode(node))
   };
 }
 

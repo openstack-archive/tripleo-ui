@@ -58,9 +58,9 @@ export default class Roles extends React.Component {
 Roles.propTypes = {
   fetchNodes: React.PropTypes.func.isRequired,
   fetchRoles: React.PropTypes.func.isRequired,
-  introspectedNodes: ImmutablePropTypes.list,
+  introspectedNodes: ImmutablePropTypes.map,
   isFetchingNodes: React.PropTypes.bool,
   loaded: React.PropTypes.bool.isRequired,
   roles: React.PropTypes.array.isRequired,
-  unassignedIntrospectedNodes: ImmutablePropTypes.list
+  unassignedIntrospectedNodes: ImmutablePropTypes.map
 };
