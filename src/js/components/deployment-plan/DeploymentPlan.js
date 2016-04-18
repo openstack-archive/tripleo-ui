@@ -161,14 +161,14 @@ DeploymentPlan.propTypes = {
   fetchStacks: React.PropTypes.func,
   hasPlans: React.PropTypes.bool,
   inactivePlans: ImmutablePropTypes.map,
-  introspectedNodes: ImmutablePropTypes.list,
+  introspectedNodes: ImmutablePropTypes.map,
   isFetchingNodes: React.PropTypes.bool,
   isFetchingPlans: React.PropTypes.bool,
   isFetchingRoles: React.PropTypes.bool,
   roles: ImmutablePropTypes.map,
   rolesLoaded: React.PropTypes.bool,
   route: React.PropTypes.object,
-  unassignedIntrospectedNodes: ImmutablePropTypes.list
+  unassignedIntrospectedNodes: ImmutablePropTypes.map
 };
 
 export function mapStateToProps(state) {
