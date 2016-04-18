@@ -23,7 +23,7 @@ describe('ProvisionedNodesTabPane component', () => {
   });
 
   it('should render NodesTable and pass nodes as data prop', () => {
-    expect(tabPaneVdom.type.name).toEqual('NodesTable');
-    expect(tabPaneVdom.props.nodes).toEqual(nodes.get('provisioned'));
+    expect(tabPaneVdom.props.children[1].type.name).toEqual('NodesTable');
+    expect(tabPaneVdom.props.children[1].props.nodes).toEqual(nodes.get('provisioned'));
   });
 });

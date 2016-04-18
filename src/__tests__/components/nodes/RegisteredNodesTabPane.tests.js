@@ -26,7 +26,8 @@ describe('RegisteredNodesTabPane component', () => {
   });
 
   it('should render NodesTable and pass nodes as data prop', () => {
-    expect(tabPaneVdom.props.children[0].type.name).toEqual('NodesTable');
-    expect(tabPaneVdom.props.children[0].props.nodes).toEqual(nodes.get('registered'));
+    expect(tabPaneVdom.props.children[0].props.children[1].type.name).toEqual('NodesTable');
+    expect(tabPaneVdom.props.children[0].props.children[1].props.nodes)
+      .toEqual(nodes.get('registered'));
   });
 });
