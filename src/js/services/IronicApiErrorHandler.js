@@ -19,6 +19,12 @@ export default class IronicApiErrorHandler extends BaseHttpRequestErrorHandler {
       });
       break;
     default:
+      error = xmlHttpRequestError.responseText;
+      status = xmlHttpRequestError.status;
+      errors.push({
+        title: `Error ${status}`,
+        message: error
+      });
       break;
     }
     return errors;

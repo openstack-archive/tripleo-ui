@@ -53,6 +53,34 @@ describe('Nodes Actions', () => {
     };
     expect(NodesActions.finishOperation(mockGetNodesResponse)).toEqual(expectedAction);
   });
+
+  it('should create an action for pending Node update', () => {
+    const expectedAction = {
+      type: NodesConstants.UPDATE_NODE_PENDING,
+      payload: 'someId'
+    };
+    expect(NodesActions.updateNodePending('someId')).toEqual(expectedAction);
+  });
+
+  it('should create an action for successful Node update', () => {
+    const updatedNode = {
+      uuid: 1
+    };
+    const expectedAction = {
+      type: NodesConstants.UPDATE_NODE_SUCCESS,
+      payload: updatedNode
+    };
+    expect(NodesActions.updateNodeSuccess(updatedNode))
+      .toEqual(expectedAction);
+  });
+
+  it('should create an action for failed Node update', () => {
+    const expectedAction = {
+      type: NodesConstants.UPDATE_NODE_FAILED,
+      payload: 'someNodeId'
+    };
+    expect(NodesActions.updateNodeFailed('someNodeId')).toEqual(expectedAction);
+  });
 });
 
 // Use this to mock asynchronous functions which return a promise.
@@ -71,7 +99,7 @@ describe('Asynchronous Nodes Actions', () => {
     spyOn(NodesActions, 'receiveNodes');
     // Mock the service call.
     spyOn(IronicApiService, 'getNodes').and.callFake(
-      createResolvingPromise({ nodes: mockGetNodesResponse })
+      createResolvingPromise({ nodes: [{ uuid: 0 }] })
     );
     // Note that `getNode` is called multilpe times but always returns the same response
     // to keep the test simple.
@@ -88,6 +116,40 @@ describe('Asynchronous Nodes Actions', () => {
   });
 
   it('dispatches receiveNodes', () => {
-    expect(NodesActions.receiveNodes).toHaveBeenCalledWith([{ uuid: 0 }, { uuid: 0 }]);
+    expect(NodesActions.receiveNodes).toHaveBeenCalledWith({ 0:{ uuid: 0 }});
+  });
+});
+
+describe('Update Node thunk action', () => {
+  beforeEach(done => {
+    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
+    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
+    spyOn(NodesActions, 'updateNodePending');
+    spyOn(NodesActions, 'updateNodeSuccess');
+    // Mock the service call.
+    spyOn(IronicApiService, 'patchNode').and.callFake(
+      createResolvingPromise({ uuid: 'someId' })
+    );
+
+    const nodePatch = {
+      uuid: 'someId',
+      patches: [{
+        op: 'replace',
+        path: '/properties/capabilities',
+        value: 'updated value for path'
+      }]
+    };
+
+    NodesActions.updateNode(nodePatch)(() => {}, () => {});
+    // Call `done` with a minimal timeout.
+    setTimeout(() => { done(); }, 1);
+  });
+
+  it('dispatches updateNodePending action', () => {
+    expect(NodesActions.updateNodePending).toHaveBeenCalledWith('someId');
+  });
+
+  it('dispatches updateNodeSuccess action', () => {
+    expect(NodesActions.updateNodeSuccess).toHaveBeenCalledWith({ uuid: 'someId' });
   });
 });

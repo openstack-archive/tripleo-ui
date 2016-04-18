@@ -1,15 +1,15 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import { List, Map } from 'immutable';
+import { Map } from 'immutable';
 
 import ProvisionedNodesTabPane from '../../../js/components/nodes/ProvisionedNodesTabPane';
 
 let nodes = Map({
   isFetching: false,
-  provisioned: List([
-    { uuid: 1 },
-    { uuid: 2 }
-  ])
+  provisioned: Map({
+    1: { uuid: 1 },
+    2: { uuid: 2 }
+  })
 });
 
 let roles = Map();

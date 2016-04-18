@@ -1,15 +1,15 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import { List, Map } from 'immutable';
+import { Map } from 'immutable';
 
 import IntrospectedNodesTabPane from '../../../js/components/nodes/IntrospectedNodesTabPane';
 
 let nodes = Map({
   isFetching: false,
-  introspected: List([
-    { uuid: 1 },
-    { uuid: 2 }
-  ])
+  introspected: Map({
+    1: { uuid: 1 },
+    2: { uuid: 2 }
+  })
 });
 
 let roles = Map();

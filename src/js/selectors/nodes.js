@@ -32,7 +32,7 @@ export const getMaintenanceNodes = createSelector(
 export const getUnassignedIntrospectedNodes = createSelector(
   getIntrospectedNodes, (introspectedNodes) => {
     return introspectedNodes.filterNot(
-      node => node.getIn(['properties', 'capabilities']).match(/.*profile:.+(,|$)/)
+      node => node.getIn(['properties', 'capabilities']).match(/.*profile:(\w+)/)
     );
   }
 );

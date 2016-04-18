@@ -52,10 +52,10 @@ export default class NodesTable extends React.Component {
   }
 
   render() {
-    let filteredData = this._filterData(this.state.filterString, this.props.nodes.toJS());
+    let filteredData = this._filterData(this.state.filterString, this.props.nodes.toList().toJS());
     return (
       <DataTable {...this.props}
-        data={this.props.nodes.toJS()}
+        data={this.props.nodes.toList().toJS()}
         rowsCount={filteredData.length}
         noRowsRenderer={this.renderNoNodesFound.bind(this)}
         onFilter={this.onFilter.bind(this)}
@@ -102,14 +102,14 @@ export default class NodesTable extends React.Component {
 }
 NodesTable.propTypes = {
   isFetchingNodes: React.PropTypes.bool.isRequired,
-  nodes: ImmutablePropTypes.list.isRequired,
+  nodes: ImmutablePropTypes.map.isRequired,
   roles: ImmutablePropTypes.map.isRequired
 };
 
 export class NodesTableRoleCell extends React.Component {
   getAssignedRoleTitle() {
     const fieldValue = _.result(this.props.data[this.props.rowIndex], 'properties.capabilities');
-    const capabilitiesMatch = fieldValue.match(/.*boot_option:(\w+)/);
+    const capabilitiesMatch = fieldValue.match(/.*profile:(\w+)/);
     if(capabilitiesMatch && Array.isArray(capabilitiesMatch) && capabilitiesMatch.length > 1) {
       const role = this.props.roles.get(capabilitiesMatch[1]);
       return role ? role.title : 'Not assigned';
