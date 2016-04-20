@@ -7,6 +7,7 @@ import React from 'react';
 import FormErrorList from '../ui/forms/FormErrorList';
 import PlanEditFormTabs from './PlanEditFormTabs';
 import PlansActions from '../../actions/PlansActions';
+import Modal from '../ui/Modal';
 
 class EditPlan extends React.Component {
 
@@ -63,45 +64,38 @@ class EditPlan extends React.Component {
     let planFiles = plan ? plan.files : undefined;
 
     return (
-      <div>
-        <div className="modal modal-routed in" role="dialog">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <Formsy.Form ref="EditPlanForm"
-                           role="form"
-                           className="form-horizontal"
-                           onChange={this.onPlanFilesChange.bind(this)}
-                           onValidSubmit={this.onFormSubmit.bind(this)}
-                           onValid={this.onFormValid.bind(this)}
-                           onInvalid={this.onFormInvalid.bind(this)}>
-              <div className="modal-header">
-                <Link to="/plans/list"
-                     type="button"
-                     className="close">
-                     <span aria-hidden="true">&times;</span>
-                </Link>
-                <h4>Update {this.state.planName} Files</h4>
-              </div>
-              <div className="modal-body">
-                <FormErrorList errors={this.state.formErrors}/>
-                <PlanEditFormTabs currentTab={this.props.location.query.tab || 'editPlan'}
-                                  planFiles={planFiles}
-                                  selectedFiles={this.state.selectedFiles}
-                                  planName={this.state.planName}/>
-              </div>
-              <div className="modal-footer">
-                <button disabled={!this.state.canSubmit}
-                        className="btn btn-primary btn-lg"
-                        type="submit">
-                  Upload Files and Update Plan
-                </button>
-              </div>
-              </Formsy.Form>
-            </div>
-          </div>
+      <Modal dialogClasses="modal-lg">
+        <Formsy.Form ref="EditPlanForm"
+                     role="form"
+                     className="form-horizontal"
+                     onChange={this.onPlanFilesChange.bind(this)}
+                     onValidSubmit={this.onFormSubmit.bind(this)}
+                     onValid={this.onFormValid.bind(this)}
+                     onInvalid={this.onFormInvalid.bind(this)}>
+        <div className="modal-header">
+          <Link to="/plans/list"
+               type="button"
+               className="close">
+               <span aria-hidden="true">&times;</span>
+          </Link>
+          <h4>Update {this.state.planName} Files</h4>
         </div>
-        <div className="modal-backdrop in"></div>
-      </div>
+        <div className="modal-body">
+          <FormErrorList errors={this.state.formErrors}/>
+          <PlanEditFormTabs currentTab={this.props.location.query.tab || 'editPlan'}
+                            planFiles={planFiles}
+                            selectedFiles={this.state.selectedFiles}
+                            planName={this.state.planName}/>
+        </div>
+        <div className="modal-footer">
+          <button disabled={!this.state.canSubmit}
+                  className="btn btn-primary btn-lg"
+                  type="submit">
+            Upload Files and Update Plan
+          </button>
+        </div>
+        </Formsy.Form>
+      </Modal>
     );
   }
 }
