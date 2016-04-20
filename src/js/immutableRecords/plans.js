@@ -25,6 +25,7 @@ export const Stack = Record({
 export const InitialPlanState = Record({
   isFetchingPlans: false,
   isFetchingStacks: false,
+  isCreatingPlan: false,
   conflict: undefined,
   currentPlanName: undefined,
   stacks: Map(),
