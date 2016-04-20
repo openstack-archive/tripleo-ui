@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router';
 
 import PlansActions from '../../actions/PlansActions';
+import Modal from '../ui/Modal';
 
 class DeletePlan extends React.Component {
   getNameFromUrl() {
@@ -19,38 +20,31 @@ class DeletePlan extends React.Component {
 
   render () {
     return (
-      <div>
-        <div className="modal modal-routed in" role="dialog">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <Link to="/plans/list"
-                      type="button"
-                      className="close">
-                  <span className="pficon pficon-close"></span>
-                </Link>
-                <h4 className="modal-title">
-                  <span className="pficon pficon-delete"></span> Delete {this.getNameFromUrl()}
-                </h4>
-              </div>
-              <div className="modal-body">
-                <p>
-                  Are you sure you want to delete plan <strong>{this.getNameFromUrl()}</strong>?
-                </p>
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-danger"
-                        onClick={this.onDeleteClick.bind(this)}
-                        type="submit">
-                  Delete Plan
-                </button>
-                <Link to="/plans/list" type="button" className="btn btn-default" >Cancel</Link>
-              </div>
-            </div>
-          </div>
+      <Modal>
+        <div className="modal-header">
+          <Link to="/plans/list"
+                type="button"
+                className="close">
+            <span className="pficon pficon-close"></span>
+          </Link>
+          <h4 className="modal-title">
+            <span className="pficon pficon-delete"></span> Delete {this.getNameFromUrl()}
+          </h4>
         </div>
-        <div className="modal-backdrop in"></div>
-      </div>
+        <div className="modal-body">
+          <p>
+            Are you sure you want to delete plan <strong>{this.getNameFromUrl()}</strong>?
+          </p>
+        </div>
+        <div className="modal-footer">
+          <button className="btn btn-danger"
+                  onClick={this.onDeleteClick.bind(this)}
+                  type="submit">
+            Delete Plan
+          </button>
+          <Link to="/plans/list" type="button" className="btn btn-default" >Cancel</Link>
+        </div>
+      </Modal>
     );
   }
 }
