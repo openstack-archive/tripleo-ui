@@ -111,17 +111,17 @@ class EnvironmentConfiguration extends React.Component {
                    onSubmit={this.handleSubmit.bind(this)}
                    onValid={this.enableButton.bind(this)}
                    onInvalid={this.disableButton.bind(this)}>
-        <div className="modal-body">
+        <div className="container-fluid">
           <Loader height={60}
                   loaded={this.props.isLoaded}>
             <FormErrorList errors={this.props.formErrors.toJS()}/>
-            <div className="row">
-              <div className="col-xs-5">
+            <div className="row row-eq-height">
+              <div className="col-sm-4 sidebar-pf sidebar-pf-left">
                 <ul className="nav nav-pills nav-stacked nav-arrows">
                   {topicTabs}
                 </ul>
               </div>
-              <div className="col-xs-7">
+              <div className="col-sm-8">
                 <div className="tab-content">
                   {topics}
                 </div>

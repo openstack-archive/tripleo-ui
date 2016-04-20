@@ -37,6 +37,17 @@
 // Actions bar above nav-stacked
 .nav-stacked-actions {
   border-bottom: 1px solid @nav-tabs-border-color;
-  margin: 0 0 15px;
-  padding: 0 0 15px 0;
+  padding: 15px 0;
+}
+
+.sidebar-pf .nav-pills.nav-arrows > li > a {
+  padding: 8px 20px;
+}
+
+.sidebar-pf .nav-pills > li.active > a {
+  border-color: @nav-pills-active-link-hover-bg !important;
+  background: @nav-pills-active-link-hover-bg !important;
+  &:after {
+    content: "";
+  }
 }

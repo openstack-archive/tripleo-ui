@@ -156,9 +156,9 @@ class RegisterNodesDialog extends React.Component {
                 </Link>
                 <h4 className="modal-title">Register Nodes</h4>
               </div>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-xs-5">
+              <div className="container-fluid">
+                <div className="row row-eq-height">
+                  <div className="col-sm-4 sidebar-pf sidebar-pf-left">
                     <div className="nav-stacked-actions">
                       <button className="btn btn-default"
                               type="button"
@@ -183,7 +183,7 @@ class RegisterNodesDialog extends React.Component {
                       {this.renderNodeTabs().reverse()}
                     </ul>
                   </div>
-                  <div className="col-xs-7">
+                  <div className="col-sm-8">
                     <div className="tab-content">
                       {this.renderTabPanes()}
                     </div>
