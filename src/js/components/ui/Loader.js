@@ -1,21 +1,18 @@
 import ClassNames from 'classnames';
 import React from 'react';
 
+import Modal from '../ui/Modal';
+
 export default class Loader extends React.Component {
   renderGlobalLoader(classes) {
     return (
       <div className={this.props.className}>
-        <div className="modal modal-routed in" role="loading">
-          <div className="modal-dialog modal-sm">
-            <div className="modal-content">
-              <div className="modal-body loader">
-                <div className={classes}/>
-                <div className="text-center">{this.props.content}</div>
-              </div>
-            </div>
+        <Modal dialogClasses="modal-sm">
+          <div className="modal-body loader">
+            <div className={classes}/>
+            <div className="text-center">{this.props.content}</div>
           </div>
-        </div>
-        <div className="modal-backdrop in"></div>
+        </Modal>
       </div>
     );
   }

@@ -13,6 +13,7 @@ import RegisterNodesActions from '../../actions/RegisterNodesActions';
 import RegisterNodeForm from './RegisterNodeForm';
 import Tab from '../ui/Tab';
 import TabPane from '../ui/TabPane';
+import Modal from '../ui/Modal';
 
 class RegisterNodesDialog extends React.Component {
   onNodeChange(updatedNode) {
@@ -144,67 +145,60 @@ class RegisterNodesDialog extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="modal modal-routed in" role="dialog">
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              <div className="modal-header">
-                <Link to="/nodes/registered"
-                      type="button"
-                      className="close">
-                  <span className="pficon pficon-close"></span>
-                </Link>
-                <h4 className="modal-title">Register Nodes</h4>
-              </div>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-xs-5">
-                    <div className="nav-stacked-actions">
-                      <button className="btn btn-default"
-                              type="button"
-                              onClick={this.onAddNewClick.bind(this)}>
-                        <span className="fa fa-plus"/> Add New
-                      </button>
-                      &nbsp; or &nbsp;
-                      <button className="btn btn-default"
-                              onClick={this.selectFile.bind(this)}
-                              type="button">
-                        <span className="fa fa-upload"/> Upload From File
-                      </button>
-                      <form ref="regNodesUploadFileForm">
-                        <input style={{display: 'none'}}
-                               ref="regNodesUploadFileInput"
-                               id="regNodesUploadFileInput"
-                               type="file" accept="text/csv,text/json"
-                               onChange={this.uploadFromFile.bind(this)}/>
-                       </form>
-                    </div>
-                    <ul className="nav nav-pills nav-stacked nav-arrows">
-                      {this.renderNodeTabs().reverse()}
-                    </ul>
-                  </div>
-                  <div className="col-xs-7">
-                    <div className="tab-content">
-                      {this.renderTabPanes()}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <Link to="/nodes/registered"
-                      type="button"
-                      className="btn btn-default">Cancel</Link>
-                <button disabled={!this.props.canSubmit}
-                        className="btn btn-primary"
-                        type="submit">
-                  Register Nodes
+      <Modal dialogClasses="modal-lg">
+        <div className="modal-header">
+          <Link to="/nodes/registered"
+                type="button"
+                className="close">
+            <span className="pficon pficon-close"></span>
+          </Link>
+          <h4 className="modal-title">Register Nodes</h4>
+        </div>
+        <div className="modal-body">
+          <div className="row">
+            <div className="col-xs-5">
+              <div className="nav-stacked-actions">
+                <button className="btn btn-default"
+                        type="button"
+                        onClick={this.onAddNewClick.bind(this)}>
+                  <span className="fa fa-plus"/> Add New
                 </button>
+                &nbsp; or &nbsp;
+                <button className="btn btn-default"
+                        onClick={this.selectFile.bind(this)}
+                        type="button">
+                  <span className="fa fa-upload"/> Upload From File
+                </button>
+                <form ref="regNodesUploadFileForm">
+                  <input style={{display: 'none'}}
+                         ref="regNodesUploadFileInput"
+                         id="regNodesUploadFileInput"
+                         type="file" accept="text/csv,text/json"
+                         onChange={this.uploadFromFile.bind(this)}/>
+                 </form>
+              </div>
+              <ul className="nav nav-pills nav-stacked nav-arrows">
+                {this.renderNodeTabs().reverse()}
+              </ul>
+            </div>
+            <div className="col-xs-7">
+              <div className="tab-content">
+                {this.renderTabPanes()}
               </div>
             </div>
           </div>
         </div>
-        <div className="modal-backdrop in"></div>
-      </div>
+        <div className="modal-footer">
+          <Link to="/nodes/registered"
+                type="button"
+                className="btn btn-default">Cancel</Link>
+          <button disabled={!this.props.canSubmit}
+                  className="btn btn-primary"
+                  type="submit">
+            Register Nodes
+          </button>
+        </div>
+      </Modal>
     );
   }
 }
