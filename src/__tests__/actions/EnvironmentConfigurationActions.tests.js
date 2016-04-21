@@ -23,7 +23,7 @@ describe('EnvironmentConfigurationActions', () => {
       spyOn(EnvironmentConfigurationActions, 'fetchEnvironmentConfigurationSuccess');
       // Mock the service call.
       spyOn(TripleOApiService, 'getPlanEnvironments').and.callFake(createResolvingPromise({
-        topics: []
+        environments: { topics: [] }
       }));
       EnvironmentConfigurationActions.fetchEnvironmentConfiguration(
         'overcloud')(() => {}, () => {}
@@ -45,7 +45,7 @@ describe('EnvironmentConfigurationActions', () => {
       spyOn(history, 'pushState');
       // Mock the service call.
       spyOn(TripleOApiService, 'updatePlanEnvironments').and.callFake(createResolvingPromise({
-        topics: []
+        environments: { topics: [] }
       }));
       EnvironmentConfigurationActions.updateEnvironmentConfiguration(
         'overcloud', {}, {}, '/redirect/url')(() => {}, () => {}

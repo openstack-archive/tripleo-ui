@@ -27,6 +27,6 @@ export default class DeploymentStep extends React.Component {
 DeploymentStep.propTypes = {
   children: React.PropTypes.node,
   links: React.PropTypes.array,
-  subTitle: React.PropTypes.string,
+  subTitle: React.PropTypes.node,
   title: React.PropTypes.string.isRequired
 };

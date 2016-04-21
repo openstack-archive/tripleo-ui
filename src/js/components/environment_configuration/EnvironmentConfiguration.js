@@ -8,6 +8,7 @@ import React from 'react';
 import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentConfigurationTopic from './EnvironmentConfigurationTopic';
 import FormErrorList from '../ui/forms/FormErrorList';
+import { getTopicsTree } from '../../selectors/environmentConfiguration';
 import Loader from '../ui/Loader';
 import Tab from '../ui/Tab';
 import TabPane from '../ui/TabPane';
@@ -80,7 +81,7 @@ class EnvironmentConfiguration extends React.Component {
   }
 
   render() {
-    let topics = this.props.environmentConfigurationTopics.toArray().map((topic, index) => {
+    let topics = this.props.environmentConfigurationTopics.toList().map((topic, index) => {
       let tabName = _.camelCase(topic.get('title'));
       return (
         <TabPane isActive={this.isTabActive(tabName)}
@@ -93,7 +94,7 @@ class EnvironmentConfiguration extends React.Component {
       );
     });
 
-    let topicTabs = this.props.environmentConfigurationTopics.toArray().map((topic, index) => {
+    let topicTabs = this.props.environmentConfigurationTopics.toList().map((topic, index) => {
       let tabName = _.camelCase(topic.get('title'));
       return (
         <Tab key={index} isActive={this.isTabActive(tabName)}>
@@ -113,7 +114,7 @@ class EnvironmentConfiguration extends React.Component {
                    onInvalid={this.disableButton.bind(this)}>
         <div className="container-fluid">
           <Loader height={60}
-                  loaded={this.props.isLoaded}>
+                  loaded={!this.props.isFetching}>
             <FormErrorList errors={this.props.formErrors.toJS()}/>
             <div className="row row-eq-height">
               <div className="col-sm-4 sidebar-pf sidebar-pf-left">
@@ -145,11 +146,11 @@ class EnvironmentConfiguration extends React.Component {
 }
 EnvironmentConfiguration.propTypes = {
   currentPlanName: React.PropTypes.string,
-  environmentConfigurationTopics: ImmutablePropTypes.list.isRequired,
+  environmentConfigurationTopics: ImmutablePropTypes.map.isRequired,
   fetchEnvironmentConfiguration: React.PropTypes.func,
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
-  isLoaded: React.PropTypes.bool,
+  isFetching: React.PropTypes.bool,
   location: React.PropTypes.object,
   parentPath: React.PropTypes.string.isRequired,
   updateEnvironmentConfiguration: React.PropTypes.func
@@ -162,10 +163,10 @@ EnvironmentConfiguration.defaultProps = {
 function mapStateToProps(state) {
   return {
     currentPlanName: state.plans.get('currentPlanName'),
-    environmentConfigurationTopics: state.environmentConfiguration.topics,
+    environmentConfigurationTopics: getTopicsTree(state),
     formErrors: state.environmentConfiguration.getIn(['form', 'formErrors']),
     formFieldErrors: state.environmentConfiguration.getIn(['form', 'formFieldErrors']),
-    isLoaded: state.environmentConfiguration.isLoaded
+    isFetching: state.environmentConfiguration.isFetching
   };
 }
 

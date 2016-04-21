@@ -5,8 +5,11 @@ import React from 'react';
 
 import { getAllPlansButCurrent, getCurrentStack } from '../../selectors/plans';
 import { getIntrospectedNodes, getUnassignedIntrospectedNodes } from '../../selectors/nodes';
+import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
+import DeploymentConfigurationSummary from './DeploymentConfigurationSummary';
 import DeploymentStatus from './DeploymentStatus';
 import DeploymentStep from './DeploymentStep';
+import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
 import PlansDropdown from './PlansDropdown';
 import Loader from '../ui/Loader';
 import NodesActions from '../../actions/NodesActions';
@@ -101,8 +104,14 @@ class DeploymentPlan extends React.Component {
                                      parentPath: '/' + this.props.route.path});
     }
 
-    // TODO: Detemerine the real deployment configuration descriptions string
-    let deploymentConfigDescription = 'KVM, Neutron with VLAN, Ceph (Default)';
+    let deploymentConfigDescription = (
+      <DeploymentConfigurationSummary
+        fetchEnvironmentConfiguration={this.props.fetchEnvironmentConfiguration.bind(this)}
+        summary={this.props.environmentConfigurationSummary}
+        planName={this.props.currentPlanName}
+        isFetching={this.props.isFetchingEnvironmentConfiguration}
+        loaded={this.props.environmentConfigurationLoaded}/>
+    );
 
     return (
       <div className="row">
@@ -116,8 +125,8 @@ class DeploymentPlan extends React.Component {
                 <h1>
                   {this.props.currentPlanName}
                   <PlansDropdown currentPlanName={this.props.currentPlanName}
-                                       plans={this.props.inactivePlans}
-                                       choosePlan={this.props.choosePlan}/>
+                                 plans={this.props.inactivePlans}
+                                 choosePlan={this.props.choosePlan}/>
                 </h1>
               </div>
               <ol className="deployment-step-list">
@@ -156,12 +165,16 @@ DeploymentPlan.propTypes = {
   choosePlan: React.PropTypes.func,
   currentPlanName: React.PropTypes.string,
   currentStack: ImmutablePropTypes.record,
+  environmentConfigurationLoaded: React.PropTypes.bool,
+  environmentConfigurationSummary: React.PropTypes.string,
+  fetchEnvironmentConfiguration: React.PropTypes.func,
   fetchNodes: React.PropTypes.func,
   fetchRoles: React.PropTypes.func,
   fetchStacks: React.PropTypes.func,
   hasPlans: React.PropTypes.bool,
   inactivePlans: ImmutablePropTypes.map,
   introspectedNodes: ImmutablePropTypes.map,
+  isFetchingEnvironmentConfiguration: React.PropTypes.bool,
   isFetchingNodes: React.PropTypes.bool,
   isFetchingPlans: React.PropTypes.bool,
   isFetchingRoles: React.PropTypes.bool,
@@ -175,6 +188,9 @@ export function mapStateToProps(state) {
   return {
     currentPlanName: state.plans.get('currentPlanName'),
     currentStack: getCurrentStack(state),
+    environmentConfigurationLoaded: state.environmentConfiguration.loaded,
+    environmentConfigurationSummary: getEnvironmentConfigurationSummary(state),
+    isFetchingEnvironmentConfiguration: state.environmentConfiguration.isFetching,
     isFetchingNodes: state.nodes.get('isFetching'),
     isFetchingPlans: state.plans.get('isFetchingPlans'),
     isFetchingRoles: state.roles.get('isFetching'),
@@ -190,6 +206,9 @@ export function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     choosePlan: planName => dispatch(PlansActions.choosePlan(planName)),
+    fetchEnvironmentConfiguration: (planName, parentPath) => {
+      dispatch(EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName, parentPath));
+    },
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
     fetchRoles: () => dispatch(RolesActions.fetchRoles()),
     fetchStacks: () => dispatch(PlansActions.fetchStacks())
