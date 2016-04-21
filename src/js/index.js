@@ -82,13 +82,13 @@ TempStorage.initialized.then(() => {
               <Route path="environment" component={EnvironmentConfiguration}/>
               <Route path="parameters" component={Parameters}/>
             </Route>
-            <Route path=":roleName/assignNodes" component={NodesAssignment}/>
+            <Route path=":roleName/assignNodes" component={NodesAssignment} onEnter={checkRunningDeployment}/>
           </Route>
 
           <Redirect from="nodes" to="nodes/registered"/>
           <Route path="nodes" component={Nodes}>
             <Route path="registered" component={RegisteredNodesTabPane}>
-              <Route path="register" component={RegisterNodesDialog}/>
+              <Route path="register" component={RegisterNodesDialog} onEnter={checkRunningDeployment}/>
             </Route>
             <Route path="introspected" component={IntrospectedNodesTabPane}/>
             <Route path="provisioned" component={ProvisionedNodesTabPane}/>
