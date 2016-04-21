@@ -1,6 +1,8 @@
 import { List, Map } from 'immutable';
 
 import { InitialPlanState } from '../../../js/immutableRecords/plans';
+import { InitialEnvironmentConfigurationState }
+  from '../../../js/immutableRecords/environmentConfiguration';
 import { mapStateToProps } from '../../../js/components/deployment-plan/DeploymentPlan.js';
 
 describe('DeploymentPlan mapStateToProps', () => {
@@ -8,7 +10,7 @@ describe('DeploymentPlan mapStateToProps', () => {
     it('returns ``hasPlans`` as `false`', () => {
       let props = mapStateToProps(
         {
-          plans: InitialPlanState({ all: List() }),
+          plans: new InitialPlanState({ all: List() }),
           roles: Map({
             loaded: false,
             isFetching: false,
@@ -17,7 +19,8 @@ describe('DeploymentPlan mapStateToProps', () => {
           nodes: Map({
             isFetching: false,
             all: Map()
-          })
+          }),
+          environmentConfiguration: new InitialEnvironmentConfigurationState()
         }
       );
       expect(props.hasPlans).toBe(false);
@@ -25,7 +28,7 @@ describe('DeploymentPlan mapStateToProps', () => {
     it('returns ``hasPlans`` as `false`', () => {
       let props = mapStateToProps(
         {
-          plans: InitialPlanState({ all: List(['foo', 'bar']) }),
+          plans: new InitialPlanState({ all: List(['foo', 'bar']) }),
           roles: Map({
             loaded: false,
             isFetching: false,
@@ -34,7 +37,8 @@ describe('DeploymentPlan mapStateToProps', () => {
           nodes: Map({
             isFetching: false,
             all: Map()
-          })
+          }),
+          environmentConfiguration: new InitialEnvironmentConfigurationState()
         }
       );
       expect(props.hasPlans).toBe(true);
