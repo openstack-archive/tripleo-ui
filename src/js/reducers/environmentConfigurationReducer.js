@@ -1,7 +1,8 @@
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
 import EnvironmentConfigurationConstants from '../constants/EnvironmentConfigurationConstants';
 import { InitialEnvironmentConfigurationState } from '../immutableRecords/environmentConfiguration';
+import PlansConstants from '../constants/PlansConstants';
 
 const initialState = new InitialEnvironmentConfigurationState;
 
@@ -9,28 +10,47 @@ export default function environmentConfigurationReducer(state = initialState, ac
   switch(action.type) {
 
   case EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_PENDING:
-    return initialState.set('isLoaded', false);
+    return initialState.set('isFetching', true);
 
-  case EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_SUCCESS:
+  case EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_SUCCESS: {
+    const topics = action.payload.topics || Map();
+    const environmentGroups = action.payload.environmentGroups || Map();
+    const environments = action.payload.environments || Map();
     return state
-        .set('isLoaded', true)
-        .set('topics', fromJS(action.payload.topics));
+        .set('isFetching', false)
+        .set('loaded', true)
+        .set('topics', fromJS(topics))
+        .set('environmentGroups', fromJS(environmentGroups))
+        .set('environments', fromJS(environments));
+  }
 
   case EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_FAILED:
-    return initialState.set('isLoaded', true);
+    return initialState.set('isFetching', false)
+                       .set('loaded', true);
 
   case EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_PENDING:
-    return state.set('isLoaded', false);
+    return state.set('isFetching', true);
 
-  case EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS:
+  case EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS: {
+    const topics = action.payload.topics || Map();
+    const environmentGroups = action.payload.environmentGroups || Map();
+    const environments = action.payload.environments || Map();
     return state
-        .set('isLoaded', true)
-        .set('topics', fromJS(action.payload.topics));
+        .set('loaded', false)
+        .set('isFetching', false)
+        .set('topics', fromJS(topics))
+        .set('environmentGroups', fromJS(environmentGroups))
+        .set('environments', fromJS(environments));
+  }
 
   case EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_FAILED:
     return state
-        .set('isLoaded', true)
+        .set('isFetching', false)
+        .set('loaded', true)
         .set('form', fromJS(action.payload));
+
+  case PlansConstants.PLAN_CHOSEN:
+    return state.set('loaded', false);
 
   default:
     return state;

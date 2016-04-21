@@ -1,8 +1,11 @@
+import { normalize, arrayOf } from 'normalizr';
+
 import EnvironmentConfigurationConstants from '../constants/EnvironmentConfigurationConstants';
 import history from '../history';
 import NotificationActions from '../actions/NotificationActions';
 import TripleOApiService from '../services/TripleOApiService';
 import TripleOApiErrorHandler from '../services/TripleOApiErrorHandler';
+import { topicSchema } from '../normalizrSchemas/environmentConfiguration';
 
 export default {
 
@@ -10,10 +13,12 @@ export default {
     return dispatch => {
       dispatch(this.fetchEnvironmentConfigurationPending());
       TripleOApiService.getPlanEnvironments(planName).then((response) => {
-        dispatch(this.fetchEnvironmentConfigurationSuccess(response.environments));
+        const entities = normalize(response.environments.topics, arrayOf(topicSchema)).entities;
+        dispatch(this.fetchEnvironmentConfigurationSuccess(entities));
       }).catch(error => {
-        console.error('Error retrieving EnvironmentConfigurationActions.fetchEnvironment', error); //eslint-disable-line no-console
-        history.pushState(null, parentPath);
+        console.error('Error retrieving EnvironmentConfigurationActions.fetchEnvironment', //eslint-disable-line no-console
+                      error.stack || error); //eslint-disable-line no-console
+        if(parentPath) { history.pushState(null, parentPath); }
         dispatch(this.fetchEnvironmentConfigurationFailed());
         let errorHandler = new TripleOApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
@@ -29,10 +34,10 @@ export default {
     };
   },
 
-  fetchEnvironmentConfigurationSuccess(environment) {
+  fetchEnvironmentConfigurationSuccess(entities) {
     return {
       type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_SUCCESS,
-      payload: environment
+      payload: entities
     };
   },
 
@@ -46,7 +51,8 @@ export default {
     return dispatch => {
       dispatch(this.updateEnvironmentConfigurationPending());
       TripleOApiService.updatePlanEnvironments(planName, data).then((response) => {
-        dispatch(this.updateEnvironmentConfigurationSuccess(response.environments));
+        const entities = normalize(response.environments.topics, arrayOf(topicSchema)).entities;
+        dispatch(this.updateEnvironmentConfigurationSuccess(entities));
         history.pushState(null, parentPath);
         dispatch(NotificationActions.notify({
           title: 'Environment Configuration updated',
@@ -70,10 +76,10 @@ export default {
     };
   },
 
-  updateEnvironmentConfigurationSuccess(environment) {
+  updateEnvironmentConfigurationSuccess(entities) {
     return {
       type: EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS,
-      payload: environment
+      payload: entities
     };
   },
 
