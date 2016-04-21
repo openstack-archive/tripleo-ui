@@ -3,7 +3,9 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React from 'react';
 
-import { getAllPlansButCurrent, getCurrentStack } from '../../selectors/plans';
+import { getAllPlansButCurrent,
+         getCurrentStack,
+         getCurrentStackDeploymentProgress } from '../../selectors/plans';
 import { getIntrospectedNodes, getUnassignedIntrospectedNodes } from '../../selectors/nodes';
 import DeploymentStatus from './DeploymentStatus';
 import DeploymentStep from './DeploymentStep';
@@ -123,9 +125,11 @@ class DeploymentPlan extends React.Component {
               <ol className="deployment-step-list">
                 <DeploymentStep title="Specify Deployment Configuration"
                                 subTitle={deploymentConfigDescription}
-                                links={deploymentConfigLinks}/>
+                                links={deploymentConfigLinks}
+                                disabled={this.props.currentStackDeploymentProgress}/>
                 <DeploymentStep title="Register and Assign Nodes"
-                                links={registerAndAssignLinks}>
+                                links={registerAndAssignLinks}
+                                disabled={this.props.currentStackDeploymentProgress}>
                   <Roles roles={this.props.roles.toList().toJS()}
                          introspectedNodes={this.props.introspectedNodes}
                          unassignedIntrospectedNodes={this.props.unassignedIntrospectedNodes}
@@ -156,6 +160,7 @@ DeploymentPlan.propTypes = {
   choosePlan: React.PropTypes.func,
   currentPlanName: React.PropTypes.string,
   currentStack: ImmutablePropTypes.record,
+  currentStackDeploymentProgress: React.PropTypes.bool,
   fetchNodes: React.PropTypes.func,
   fetchRoles: React.PropTypes.func,
   fetchStacks: React.PropTypes.func,
@@ -175,6 +180,7 @@ export function mapStateToProps(state) {
   return {
     currentPlanName: state.plans.get('currentPlanName'),
     currentStack: getCurrentStack(state),
+    currentStackDeploymentProgress: getCurrentStackDeploymentProgress(state),
     isFetchingNodes: state.nodes.get('isFetching'),
     isFetchingPlans: state.plans.get('isFetchingPlans'),
     isFetchingRoles: state.roles.get('isFetching'),
