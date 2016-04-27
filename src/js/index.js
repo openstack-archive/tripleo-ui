@@ -7,6 +7,7 @@ import { IntlProvider } from 'react-intl';
 import { Router, Route, Redirect } from 'react-router';
 import history from './history';
 
+import ApiStatus from './components/api_status/ApiStatus';
 import App from './components/App';
 import AuthenticatedContent from './components/AuthenticatedContent';
 import DeletePlan from './components/plan/DeletePlan';
@@ -108,6 +109,7 @@ TempStorage.initialized.then(() => {
         </Route>
         <Route path="login" component={Login}/>
         <Route path="status" component={Status}/>
+        <Route path="api-status" component={ApiStatus}/>
       </Route>
     </Route>
   );
