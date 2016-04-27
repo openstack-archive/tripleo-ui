@@ -19,6 +19,7 @@ import Roles from './Roles';
 import RolesActions from '../../actions/RolesActions';
 import TripleOApiService from '../../services/TripleOApiService';
 import TripleOApiErrorHandler from '../../services/TripleOApiErrorHandler';
+import ValidationsActions from '../../actions/ValidationsActions';
 
 class DeploymentPlan extends React.Component {
   constructor() {
@@ -64,13 +65,36 @@ class DeploymentPlan extends React.Component {
     );
   }
 
+  getValidationStageUuidByName(name) {
+    return this.props.validationStages.find((stage) => stage.get('stage') === name).get('uuid');
+  }
+
+  runNetworkValidations(e) {
+    e.preventDefault();
+    this.props.runValidationStage(this.getValidationStageUuidByName('network-validation'));
+  }
+
+  runHardwareValidations(e) {
+    e.preventDefault();
+    this.props.runValidationStage(this.getValidationStageUuidByName('discovery'));
+  }
+
+  runPostDeploymentValidations(e) {
+    e.preventDefault();
+    this.props.runValidationStage(this.getValidationStageUuidByName('post-deployment'));
+  }
+
   render() {
     const deploymentConfigLinks = [
       <Link className="btn btn-link"
             key="deploymentConfiguration"
             to={'/deployment-plan/configuration'}>
         Edit Configuration
-      </Link>
+      </Link>,
+      <p>
+        At this point you
+        should <a href onClick={this.runNetworkValidations.bind(this)}>run Network Validations</a>.
+      </p>
     ];
 
     const registerAndAssignLinks = [
@@ -137,9 +161,21 @@ class DeploymentPlan extends React.Component {
                          fetchNodes={this.props.fetchNodes}
                          isFetchingNodes={this.props.isFetchingNodes}
                          loaded={this.props.rolesLoaded}/>
+                  <p>
+                    At this point you should run the <a href
+                    onClick={this.runHardwareValidations.bind(this)}>Hardware
+                    Validations</a>.
+                  </p>
                 </DeploymentStep>
                 <DeploymentStep title="Deploy">
                   {this.renderDeployStep()}
+                  <div style={{clear: 'both'}}>
+                    <p>
+                      At this point you should run <a href
+                       onClick={this.runPostDeploymentValidations.bind(this)}>
+                      the Post Deployment Validations</a>.
+                    </p>
+                  </div>
                 </DeploymentStep>
               </ol>
             </div>
@@ -173,7 +209,9 @@ DeploymentPlan.propTypes = {
   roles: ImmutablePropTypes.map,
   rolesLoaded: React.PropTypes.bool,
   route: React.PropTypes.object,
-  unassignedIntrospectedNodes: ImmutablePropTypes.map
+  runValidationStage: React.PropTypes.func,
+  unassignedIntrospectedNodes: ImmutablePropTypes.map,
+  validationStages: React.PropTypes.array
 };
 
 export function mapStateToProps(state) {
@@ -189,7 +227,8 @@ export function mapStateToProps(state) {
     introspectedNodes: getIntrospectedNodes(state),
     roles: state.roles.get('roles'),
     rolesLoaded: state.roles.get('loaded'),
-    unassignedIntrospectedNodes: getUnassignedIntrospectedNodes(state)
+    unassignedIntrospectedNodes: getUnassignedIntrospectedNodes(state),
+    validationStages: state.validations ? state.validations.get('validationStages', {}) : []
   };
 }
 
@@ -198,7 +237,10 @@ function mapDispatchToProps(dispatch) {
     choosePlan: planName => dispatch(PlansActions.choosePlan(planName)),
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
     fetchRoles: () => dispatch(RolesActions.fetchRoles()),
-    fetchStacks: () => dispatch(PlansActions.fetchStacks())
+    fetchStacks: () => dispatch(PlansActions.fetchStacks()),
+    runValidationStage: (uuid) => {
+      dispatch(ValidationsActions.runValidationStage(uuid));
+    }
   };
 }
 
