@@ -17,6 +17,12 @@ class TripleOApiService {
     }, additionalAttributes);
   }
 
+  getRoot() {
+    return when(request(this.defaultRequest({
+      url: TRIPLEOAPI_URL
+    })));
+  }
+
   /**
    * TripleO API: GET /v1/plans/
    * @returns {Promise} resolving with {array} of plans.

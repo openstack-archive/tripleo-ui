@@ -15,6 +15,13 @@ class ValidationsApiService {
       method: 'GET'
     }, additionalAttributes);
   }
+
+  getRoot() {
+    return when(request(this.defaultRequest({
+      url: VALIDATIONS_URL
+    })));
+  }
+
   /**
    * Validations API: GET /v1/validations/
    * @param {string} plan_id - optional, specify to fetch validations with results
