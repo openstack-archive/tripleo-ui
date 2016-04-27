@@ -18,6 +18,14 @@ class IronicApiService {
     }, additionalAttributes);
   }
 
+  getRoot() {
+    return when(request(this.defaultRequest(
+      {
+        url: getServiceUrl('ironic')
+      }
+    )));
+  }
+
   /**
    * Ironic API: GET /v1/nodes
    * @returns {array} of nodes.
