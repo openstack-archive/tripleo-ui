@@ -22,6 +22,13 @@ class HeatApiService {
     }, additionalAttributes);
   }
 
+  getRoot() {
+    return when(this.request({
+      url: HEAT_API_URL.match(/^https?:\/\/[^\/]+/)[0],
+      crossOrigin: true
+    }));
+  }
+
   getStacks() {
     return when(this.request(this.defaultRequest({
       url: `${HEAT_API_URL}/${getTenantId()}/stacks`
