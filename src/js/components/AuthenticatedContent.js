@@ -55,6 +55,8 @@ export default class AuthenticatedContent extends React.Component {
                     runValidationStage={this.props.runValidationStage}
                     runValidation={this.props.runValidation}
                     stopValidation={this.props.stopValidation}
+                    toggleValidationStageVisibility={this.props.toggleValidationStageVisibility}
+                    visible={this.props.visible}
                     validationStages={this.props.validationStages}/>
                 </Loader>
               </div>
@@ -76,10 +78,12 @@ AuthenticatedContent.propTypes = {
   runValidation: React.PropTypes.func.isRequired,
   runValidationStage: React.PropTypes.func.isRequired,
   stopValidation: React.PropTypes.func.isRequired,
+  toggleValidationStageVisibility: React.PropTypes.func.isRequired,
   user: ImmutablePropTypes.map,
   validationStages: ImmutablePropTypes.map.isRequired,
   validationStagesLoaded: React.PropTypes.bool.isRequired,
-  validationsStatusCounts: ImmutablePropTypes.record.isRequired
+  validationsStatusCounts: ImmutablePropTypes.record.isRequired,
+  visible: React.PropTypes.bool.isRequired
 };
 
 const mapDispatchToProps = dispatch => {
@@ -96,7 +100,10 @@ const mapDispatchToProps = dispatch => {
     stopValidation: (uuid) => {
       dispatch(ValidationsActions.stopValidation(uuid));
     },
-    logoutUser: () => dispatch(LoginActions.logoutUser())
+    logoutUser: () => dispatch(LoginActions.logoutUser()),
+    toggleValidationStageVisibility: (uuid) => {
+      dispatch(ValidationsActions.toggleValidationStageVisibility(uuid));
+    }
   };
 };
 
@@ -107,7 +114,8 @@ const mapStateToProps = state => {
     user: state.login.getIn(['keystoneAccess', 'user']),
     validationStages: getValidationStages(state),
     validationStagesLoaded: state.validations.get('loaded'),
-    validationsStatusCounts: getValidationsStatusCounts(state)
+    validationsStatusCounts: getValidationsStatusCounts(state),
+    visible: false
   };
 };
 

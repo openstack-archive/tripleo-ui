@@ -3,6 +3,7 @@ import { List, Map, Record } from 'immutable';
 export const ValidationStage = Record({
   description: '',
   name: '',
+  visible: false,
   stage: '',
   status: '',
   uuid: '',
