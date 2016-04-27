@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import request from 'reqwest';
 import when from 'when';
 
-import { AUTH_URL } from '../constants/KeystoneApiConstants';
+import  { AUTH_URL, KEYSTONE_BASE_URL } from '../constants/KeystoneApiConstants';
 
 class KeystoneApiService {
   defaultRequest(additionalAttributes) {
@@ -13,6 +13,13 @@ class KeystoneApiService {
       contentType: 'application/json',
       type: 'json'
     }, additionalAttributes);
+  }
+
+  getRoot() {
+    return when(request(this.defaultRequest({
+      method: 'GET',
+      url: KEYSTONE_BASE_URL
+    })));
   }
 
   authenticateUser(username, password) {
