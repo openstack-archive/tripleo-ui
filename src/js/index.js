@@ -108,6 +108,7 @@ TempStorage.initialized.then(() => {
           </Route>
         </Route>
         <Route path="login" component={Login}/>
+        <Route path="status" component={ApiStatus}/>
       </Route>
     </Route>
   );

@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 
 import FormErrorList from './ui/forms/FormErrorList';
 import LoginInput from './ui/forms/LoginInput';
+import StickyFooter from './ui/StickyFooter';
 import LoginActions from '../actions/LoginActions';
 import NotificationsToaster from './notifications/NotificationsToaster';
 
@@ -102,6 +103,7 @@ class Login extends React.Component {
           </div>
         </div>
         <NotificationsToaster />
+        <StickyFooter />
       </div>
     );
   }

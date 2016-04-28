@@ -4,7 +4,7 @@ import React from 'react';
 import { Map } from 'immutable';
 
 import ApiStatusActions from '../../actions/ApiStatusActions';
-import ApiStatusContent from './ApiStatusContent';
+import Status from './Status';
 import { isLoggedIn } from '../../selectors/login';
 
 class ApiStatus extends React.Component {
@@ -20,7 +20,7 @@ class ApiStatus extends React.Component {
   }
 
   render() {
-    return <ApiStatusContent items={this.props.items}/>;
+    return <Status items={this.props.items}/>;
   }
 }
 
