@@ -18,6 +18,7 @@ import EnvironmentConfiguration from
 import { getCurrentStackDeploymentProgress } from './selectors/stacks';
 import ListPlans from './components/plan/ListPlans';
 import Login from './components/Login';
+import Status from './components/Status';
 import LoginActions from './actions/LoginActions';
 import MaintenanceNodesTabPane from './components/nodes/MaintenanceNodesTabPane';
 import NewPlan from './components/plan/NewPlan';
@@ -85,6 +86,8 @@ TempStorage.initialized.then(() => {
                    component={NodesAssignment}
                    onEnter={checkRunningDeployment}/>
           </Route>
+
+          <Route path="status" component={Status}/>
 
           <Redirect from="nodes" to="nodes/registered"/>
           <Route path="nodes" component={Nodes}>

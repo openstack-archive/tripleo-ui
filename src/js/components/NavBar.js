@@ -30,6 +30,11 @@ export default class NavBar extends React.Component {
         <div className="navbar-collapse collapse" id="tripleo-navbar-collapse">
           <ul className="nav navbar-nav navbar-utility">
             <li>
+              <Link to="/status">
+                <span className="pficon pficon-info"></span>
+              </Link>
+            </li>
+            <li>
               <a>
                 <span className="pficon pficon-user"></span>
                 {this.props.user.get('username')}
