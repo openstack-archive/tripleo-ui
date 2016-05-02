@@ -20,7 +20,7 @@ export default class ValidationsList extends React.Component {
                          runValidationStage={this.props.runValidationStage}
                          runValidation={this.props.runValidation}
                          stopValidation={this.props.stopValidation}
-                         visible={this.props.visible}
+                         visible={stage.visible}
                          toggleValidationStageVisibility={
                            this.props.toggleValidationStageVisibility
                          }
@@ -46,6 +46,5 @@ ValidationsList.propTypes = {
   runValidationStage: React.PropTypes.func.isRequired,
   stopValidation: React.PropTypes.func.isRequired,
   toggleValidationStageVisibility: React.PropTypes.func.isRequired,
-  validationStages: ImmutablePropTypes.map.isRequired,
-  visible: React.PropTypes.bool.isRequired
+  validationStages: ImmutablePropTypes.map.isRequired
 };

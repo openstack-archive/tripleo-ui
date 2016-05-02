@@ -19,6 +19,7 @@ describe(' validations selectors', () => {
         1: new ValidationStage({
           description: '',
           name: 'testStage',
+          visible: false,
           stage: '',
           status: 'new',
           uuid: 1,
@@ -51,6 +52,7 @@ describe(' validations selectors', () => {
       1: new ValidationStage({
         description: '',
         name: 'testStage',
+        visible: false,
         stage: '',
         status: 'new',
         uuid: 1,

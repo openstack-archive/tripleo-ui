@@ -56,7 +56,6 @@ export default class AuthenticatedContent extends React.Component {
                     runValidation={this.props.runValidation}
                     stopValidation={this.props.stopValidation}
                     toggleValidationStageVisibility={this.props.toggleValidationStageVisibility}
-                    visible={this.props.visible}
                     validationStages={this.props.validationStages}/>
                 </Loader>
               </div>
@@ -82,8 +81,7 @@ AuthenticatedContent.propTypes = {
   user: ImmutablePropTypes.map,
   validationStages: ImmutablePropTypes.map.isRequired,
   validationStagesLoaded: React.PropTypes.bool.isRequired,
-  validationsStatusCounts: ImmutablePropTypes.record.isRequired,
-  visible: React.PropTypes.bool.isRequired
+  validationsStatusCounts: ImmutablePropTypes.record.isRequired
 };
 
 const mapDispatchToProps = dispatch => {
@@ -114,8 +112,7 @@ const mapStateToProps = state => {
     user: state.login.getIn(['keystoneAccess', 'user']),
     validationStages: getValidationStages(state),
     validationStagesLoaded: state.validations.get('loaded'),
-    validationsStatusCounts: getValidationsStatusCounts(state),
-    visible: false
+    validationsStatusCounts: getValidationsStatusCounts(state)
   };
 };
 

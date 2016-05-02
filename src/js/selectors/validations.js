@@ -28,3 +28,16 @@ export const getValidationsStatusCounts = createSelector(
     return new ValidationsStatusCounts(validations.countBy(validation => validation.status));
   }
 );
+
+export const getValidationStageByName = (validationStages, name) => {
+  return validationStages.find((stage) => stage.get('stage') === name);
+};
+
+export const getValidationStageUuidByName = (validationStages, name) => {
+  const validation = getValidationStageByName(validationStages, name);
+  if (validation) {
+    return validation.get('uuid');
+  } else {
+    return validation;
+  }
+};

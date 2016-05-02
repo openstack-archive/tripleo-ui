@@ -23,6 +23,7 @@ import RolesActions from '../../actions/RolesActions';
 import TripleOApiService from '../../services/TripleOApiService';
 import TripleOApiErrorHandler from '../../services/TripleOApiErrorHandler';
 import ValidationsActions from '../../actions/ValidationsActions';
+import { getValidationStageUuidByName } from '../../selectors/validations';
 
 class DeploymentPlan extends React.Component {
   constructor() {
@@ -68,23 +69,23 @@ class DeploymentPlan extends React.Component {
     );
   }
 
-  getValidationStageUuidByName(name) {
-    return this.props.validationStages.find((stage) => stage.get('stage') === name).get('uuid');
-  }
-
   runNetworkValidations(e) {
     e.preventDefault();
-    this.props.runValidationStage(this.getValidationStageUuidByName('network-validation'));
+    const validationStageUuid = getValidationStageUuidByName(
+      this.props.validationStages, 'network-validation');
+    this.props.runValidationStage(validationStageUuid);
   }
 
   runHardwareValidations(e) {
     e.preventDefault();
-    this.props.runValidationStage(this.getValidationStageUuidByName('discovery'));
+    this.props.runValidationStage(
+      getValidationStageUuidByName(this.props.validationStages, 'discovery'));
   }
 
   runPostDeploymentValidations(e) {
     e.preventDefault();
-    this.props.runValidationStage(this.getValidationStageUuidByName('post-deployment'));
+    this.props.runValidationStage(
+      getValidationStageUuidByName(this.props.validationStages, 'post-deployment'));
   }
 
   render() {
@@ -96,7 +97,8 @@ class DeploymentPlan extends React.Component {
       </Link>,
       <p>
         At this point you
-        should <a href onClick={this.runNetworkValidations.bind(this)}>run Network Validations</a>.
+        should <a className="link"
+                 onClick={this.runNetworkValidations.bind(this)}>run Network Validations</a>.
       </p>
     ];
 
@@ -171,7 +173,7 @@ class DeploymentPlan extends React.Component {
                          isFetchingNodes={this.props.isFetchingNodes}
                          loaded={this.props.rolesLoaded}/>
                   <p>
-                    At this point you should run the <a href
+                    At this point you should run the <a className="link"
                     onClick={this.runHardwareValidations.bind(this)}>Hardware
                     Validations</a>.
                   </p>
@@ -180,7 +182,7 @@ class DeploymentPlan extends React.Component {
                   {this.renderDeployStep()}
                   <div style={{clear: 'both'}}>
                     <p>
-                      At this point you should run <a href
+                      At this point you should run <a className="link"
                        onClick={this.runPostDeploymentValidations.bind(this)}>
                       the Post Deployment Validations</a>.
                     </p>
@@ -224,7 +226,7 @@ DeploymentPlan.propTypes = {
   route: React.PropTypes.object,
   runValidationStage: React.PropTypes.func,
   unassignedIntrospectedNodes: ImmutablePropTypes.map,
-  validationStages: React.PropTypes.array
+  validationStages: ImmutablePropTypes.map
 };
 
 export function mapStateToProps(state) {
@@ -244,7 +246,7 @@ export function mapStateToProps(state) {
     roles: state.roles.get('roles'),
     rolesLoaded: state.roles.get('loaded'),
     unassignedIntrospectedNodes: getUnassignedIntrospectedNodes(state),
-    validationStages: state.validations ? state.validations.get('validationStages', {}) : []
+    validationStages: state.validations.get('validationStages')
   };
 }
 

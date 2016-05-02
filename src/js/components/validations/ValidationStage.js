@@ -1,4 +1,3 @@
-import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ClassNames from 'classnames';
 import React from 'react';
@@ -51,12 +50,12 @@ export default class ValidationStage extends React.Component {
   render() {
     let titleClass = ClassNames({
       link: true,
-      collapsed: !this.props.visible.getIn(['validationStages', this.props.uuid, 'visible'])
+      collapsed: !this.props.visible
     });
 
     let contentClass = ClassNames({
       'panel-collapse collapse' : true,
-      'in' : this.props.visible.getIn(['validationStages', this.props.uuid, 'visible'])
+      'in' : this.props.visible
     });
 
     let validations = this.props.validations.map(validation => {
@@ -109,11 +108,3 @@ ValidationStage.propTypes = {
   validations: ImmutablePropTypes.list.isRequired,
   visible: React.PropTypes.bool.isRequired
 };
-
-const mapStateToProps = state => {
-  return {
-    visible: state.validations
-  };
-};
-
-export default connect(mapStateToProps)(ValidationStage);

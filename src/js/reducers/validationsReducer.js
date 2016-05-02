@@ -1,4 +1,4 @@
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map, List } from 'immutable';
 
 import ValidationsConstants from '../constants/ValidationsConstants';
 import { Validation, ValidationResult, ValidationStage } from '../immutableRecords/validations';
@@ -19,14 +19,17 @@ export default function validationsReducer(state = initialState, action) {
   }
 
   case ValidationsConstants.FETCH_VALIDATION_STAGES_SUCCESS: {
-    const { validationStages, validations, validationResults } = action.payload.entities;
+    const validations = fromJS(action.payload.entities.validations) || Map();
+    const validationStages = fromJS(action.payload.entities.validationStages) || Map();
+    const validationResults = fromJS(action.payload.entities.validationResults) || Map();
 
-    return state.set('validationStages', validationStages ? fromJS(validationStages)
-                  .map(stage => new ValidationStage(stage)) : Map())
-                .set('validations', validations ? fromJS(validations)
-                  .map(validation => new Validation(validation)) : Map())
-                .set('validationResults', validationResults ? fromJS(validationResults)
-                  .map(result => new ValidationResult(result)) : Map())
+    return state.set('validationStages', validationStages
+                  .map(stage => new ValidationStage(stage.set('visible',
+                    state.getIn(['validationStages', stage.uuid, 'visible'], false)))))
+                .set('validations', validations
+                  .map(validation => new Validation(validation)))
+                .set('validationResults', validationResults
+                  .map(result => new ValidationResult(result)))
                 .set('isFetching', false)
                 .set('loaded', true);
   }
@@ -38,18 +41,17 @@ export default function validationsReducer(state = initialState, action) {
   case ValidationsConstants.UPDATE_STAGE_STATUS: {
     let validationIds = state.getIn(
       ['validationStages', action.payload.uuid, 'validations'],
-      []);
+      List([]));
+
     let validations = state.get('validations');
 
-    let runningValidations = validationIds.reduce((r, validationId) => {
-      return r.setIn([validationId, 'status'], 'running');
+    let updatedValidations = validationIds.reduce((r, validationId) => {
+      return r.setIn([validationId, 'status'], action.payload.status);
     }, validations);
 
-    let withRunningValidations = state.set('validations', runningValidations);
-
-    return withRunningValidations.setIn(
+    return state.setIn(
       ['validationStages', action.payload.uuid, 'status'],
-      action.payload.status);
+      action.payload.status).set('validations', updatedValidations);
   }
 
   case ValidationsConstants.UPDATE_VALIDATION_STATUS: {
