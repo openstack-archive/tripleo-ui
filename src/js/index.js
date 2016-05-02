@@ -11,8 +11,8 @@ import App from './components/App';
 import AuthenticatedContent from './components/AuthenticatedContent';
 import DeletePlan from './components/plan/DeletePlan';
 import IntrospectedNodesTabPane from './components/nodes/IntrospectedNodesTabPane';
-import DeploymentConfiguration from './components/deployment-plan/DeploymentConfiguration';
-import DeploymentPlan from './components/deployment-plan/DeploymentPlan';
+import DeploymentConfiguration from './components/deployment_plan/DeploymentConfiguration';
+import DeploymentPlan from './components/deployment_plan/DeploymentPlan';
 import EditPlan from './components/plan/EditPlan';
 import EnvironmentConfiguration from
   './components/environment_configuration/EnvironmentConfiguration.js';
@@ -23,7 +23,7 @@ import LoginActions from './actions/LoginActions';
 import MaintenanceNodesTabPane from './components/nodes/MaintenanceNodesTabPane';
 import NewPlan from './components/plan/NewPlan';
 import Nodes from './components/nodes/Nodes';
-import NodesAssignment from './components/deployment-plan/NodesAssignment';
+import NodesAssignment from './components/deployment_plan/NodesAssignment';
 import NotificationActions from './actions/NotificationActions';
 import Parameters from './components/parameters/Parameters.js';
 import Plans from './components/plan/Plans.js';
@@ -64,17 +64,17 @@ TempStorage.initialized.then(() => {
       }));
       // TODO(flfuchs): Redirect to deployment status modal instead of DeploymentPlan
       // page (in separate patch).
-      replaceState(null, '/deployment-plan/');
+      replaceState(null, '/deployment_plan/');
     }
   }
 
   let routes = (
     <Route>
-      <Redirect from="/" to="/deployment-plan"/>
+      <Redirect from="/" to="/deployment_plan"/>
       <Route path="/" component={App}>
         <Route component={AuthenticatedContent} onEnter={checkAuth}>
 
-          <Route path="deployment-plan" component={DeploymentPlan}>
+          <Route path="deployment_plan" component={DeploymentPlan}>
             <Redirect from="configuration" to="configuration/environment"/>
             <Route path="configuration"
                    component={DeploymentConfiguration}

@@ -102,7 +102,7 @@ Parameters.propTypes = {
 };
 
 Parameters.defaultProps = {
-  parentPath: '/deployment-plan'
+  parentPath: '/deployment_plan'
 };
 
 function mapStateToProps(state) {
