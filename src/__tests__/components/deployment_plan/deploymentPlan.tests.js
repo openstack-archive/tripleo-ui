@@ -1,7 +1,7 @@
 import { List, Map } from 'immutable';
 
 import { InitialPlanState } from '../../../js/immutableRecords/plans';
-import { mapStateToProps } from '../../../js/components/deployment-plan/DeploymentPlan.js';
+import { mapStateToProps } from '../../../js/components/deployment_plan/DeploymentPlan.js';
 
 describe('DeploymentPlan mapStateToProps', () => {
   describe('hasPlans flag', () => {
