@@ -1,11 +1,14 @@
 import React from 'react';
+import ClassNames from 'classnames';
 
 export default class DeploymentStep extends React.Component {
 
   render() {
-    let links = !this.props.disabled ? this.props.links : null;
+    let stepClass = ClassNames({
+      disabled: this.props.disabled
+    });
     return (
-      <li>
+      <li className={stepClass}>
         <h3>
           <span>{this.props.title}</span>
         </h3>
@@ -13,7 +16,7 @@ export default class DeploymentStep extends React.Component {
           <div className="col-sm-12">
             <div className="deployment-step-subtitle">
               <span>{this.props.subTitle}</span>
-              {links}
+              {this.props.links}
             </div>
           </div>
           <div className="col-sm-12">
