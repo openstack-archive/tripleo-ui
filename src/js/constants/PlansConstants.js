@@ -14,8 +14,5 @@ export default keyMirror({
   CREATING_PLAN: null,
   PLAN_CREATED: null,
   UPDATING_PLAN: null,
-  PLAN_UPDATED: null,
-  FETCH_STACK_PENDING: null,
-  FETCH_STACK_SUCCESS: null,
-  FETCH_STACK_FAILED: null
+  PLAN_UPDATED: null
 });

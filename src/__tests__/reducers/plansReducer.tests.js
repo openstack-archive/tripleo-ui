@@ -2,8 +2,7 @@ import matchers from 'jasmine-immutable-matchers';
 import { normalize, arrayOf } from 'normalizr';
 import { List, Map } from 'immutable';
 
-import { InitialPlanState, Stack } from '../../js/immutableRecords/plans';
-import { Plan } from '../../js/immutableRecords/plans';
+import { InitialPlanState, Plan } from '../../js/immutableRecords/plans';
 import PlansActions from '../../js/actions/PlansActions';
 import plansReducer from '../../js/reducers/plansReducer';
 import { planSchema } from '../../js/normalizrSchemas/plans';
@@ -24,14 +23,6 @@ describe('plansReducer state', () => {
 
     it('`isFetchingPlans` is false', () => {
       expect(state.get('isFetchingPlans')).toBe(false);
-    });
-
-    it('`conflict` is undefined', () => {
-      expect(state.get('conflict')).not.toBeDefined();
-    });
-
-    it('`currentPlanName` is undefined', () => {
-      expect(state.get('currentPlanName')).not.toBeDefined();
     });
 
     it('`all` is empty', () => {
@@ -63,24 +54,6 @@ describe('plansReducer state', () => {
 
     it('sets isCreatingPlan to `false`', () => {
       expect(state.isCreatingPlan).toBe(false);
-    });
-  });
-
-  describe('PLAN_CHOSEN', () => {
-    let state;
-
-    beforeEach(() => {
-      state = plansReducer(
-        Map({
-          currentPlanName: undefined,
-          all: List.of(...['overcloud', 'another-cloud'])
-        }),
-        PlansActions.planChosen('another-cloud')
-      );
-    });
-
-    it('sets the current planName', () => {
-      expect(state.get('currentPlanName')).toEqual('another-cloud');
     });
   });
 
@@ -184,60 +157,6 @@ describe('plansReducer state', () => {
       );
       let plan = newState.getIn(['all', 'somecloud']);
       expect(plan.get('transition')).toBe(false);
-    });
-  });
-
-  describe('Stack status', () => {
-    describe('fetchStacksPending', () => {
-      it('sets isFetchingStacks to true', () => {
-        expect(plansReducer(undefined, PlansActions.fetchStacksPending()).isFetchingStacks)
-          .toBe(true);
-      });
-    });
-
-    describe('fetchStacksSuccess', () => {
-      let state;
-
-      beforeEach(() => {
-        state = plansReducer(
-          new InitialPlanState({ isFetchingStacks: true }),
-          PlansActions.fetchStacksSuccess([
-            { stack_name: 'overcloud', stack_status: 'CREATE_COMPLETE' }
-          ])
-        );
-      });
-
-      it('sets isFetchingStacks to false', () => {
-        expect(state.isFetchingStacks).toBe(false);
-      });
-
-      it('sets stacks in state', () => {
-        expect(state.stacks).toEqualImmutable(Map({
-          overcloud: new Stack({
-            stack_name: 'overcloud',
-            stack_status: 'CREATE_COMPLETE'
-          })
-        }));
-      });
-    });
-
-    describe('fetchStacksFailed', () => {
-      let state;
-
-      beforeEach(() => {
-        state = plansReducer(
-          new InitialPlanState({ isFetchingStacks: true }),
-          PlansActions.fetchStacksFailed()
-        );
-      });
-
-      it('sets isFetchingStacks to false', () => {
-        expect(state.isFetchingStacks).toBe(false);
-      });
-
-      it('sets stacks in state to an empty Map', () => {
-        expect(state.stacks).toEqualImmutable(Map());
-      });
     });
   });
 });

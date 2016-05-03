@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
+import CurrentPlanActions from '../../actions/CurrentPlanActions';
 import DataTable from '../ui/tables/DataTable';
 import { DataTableCell, DataTableHeaderCell } from '../ui/tables/DataTableCells';
 import DataTableColumn from '../ui/tables/DataTableColumn';
@@ -80,7 +81,7 @@ ListPlans.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    currentPlanName: state.plans.get('currentPlanName'),
+    currentPlanName: state.currentPlan.currentPlanName,
     conflict: state.plans.get('conflict'),
     plans: state.plans.get('all')
   };
@@ -92,7 +93,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(PlansActions.fetchPlans());
     },
     choosePlan: planName => {
-      dispatch(PlansActions.choosePlan(planName));
+      dispatch(CurrentPlanActions.choosePlan(planName));
     }
   };
 }

@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import currentPlanReducer from './currentPlanReducer';
 import environmentConfigurationReducer from './environmentConfigurationReducer';
 import loginReducer from './loginReducer';
 import nodesReducer from './nodesReducer';
@@ -7,9 +8,11 @@ import parametersReducer from './parametersReducer';
 import plansReducer from './plansReducer';
 import registerNodesReducer from './registerNodesReducer';
 import rolesReducer from './rolesReducer';
+import stacksReducer from './stacksReducer';
 import validationsReducer from './validationsReducer';
 
 const appReducer = combineReducers({
+  currentPlan: currentPlanReducer,
   environmentConfiguration: environmentConfigurationReducer,
   login: loginReducer,
   nodes: nodesReducer,
@@ -18,6 +21,7 @@ const appReducer = combineReducers({
   plans: plansReducer,
   registerNodes: registerNodesReducer,
   roles: rolesReducer,
+  stacks: stacksReducer,
   validations: validationsReducer
 });
 
