@@ -162,7 +162,7 @@ EnvironmentConfiguration.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    currentPlanName: state.plans.get('currentPlanName'),
+    currentPlanName: state.currentPlan.currentPlanName,
     environmentConfigurationTopics: getTopicsTree(state),
     formErrors: state.environmentConfiguration.getIn(['form', 'formErrors']),
     formFieldErrors: state.environmentConfiguration.getIn(['form', 'formFieldErrors']),

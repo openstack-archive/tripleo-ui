@@ -1,7 +1,6 @@
 import when from 'when';
 
 import * as utils from '../../js/services/utils';
-import HeatApiService from '../../js/services/HeatApiService';
 import PlansActions from '../../js/actions/PlansActions';
 import TripleOApiService from '../../js/services/TripleOApiService';
 
@@ -11,12 +10,6 @@ import TripleOApiService from '../../js/services/TripleOApiService';
 let createResolvingPromise = (data) => {
   return () => {
     return when.resolve(data);
-  };
-};
-
-let createRejectingPromise = (errorMessage) => {
-  return () => {
-    return when.reject(Error(errorMessage));
   };
 };
 
@@ -179,55 +172,4 @@ describe('PlansActions', () => {
     });
 
   });
-
-  describe('fetchStacks (success)', () => {
-    const serviceResponse = {
-      stacks: [{ stack_name: 'overcloud', stack_status: 'CREATE_COMPLETE' }]
-    };
-
-    beforeEach(done => {
-      spyOn(HeatApiService, 'getStacks').and.callFake(createResolvingPromise(serviceResponse));
-      spyOn(PlansActions, 'fetchStacksPending');
-      spyOn(PlansActions, 'fetchStacksSuccess');
-      spyOn(PlansActions, 'fetchStacksFailed');
-      PlansActions.fetchStacks()(() => {}, () => {});
-      setTimeout(() => { done(); }, 1);
-    });
-
-    it('dispatches fetchStacksPending', () => {
-      expect(PlansActions.fetchStacksPending).toHaveBeenCalled();
-    });
-
-    it('does not dispatch fetchStacksFailed', () => {
-      expect(PlansActions.fetchStacksFailed).not.toHaveBeenCalled();
-    });
-
-    it('dispatches fetchStacksSuccess', () => {
-      expect(PlansActions.fetchStacksSuccess).toHaveBeenCalledWith(serviceResponse.stacks);
-    });
-  });
-
-  describe('fetchStacks (failed)', () => {
-    beforeEach(done => {
-      spyOn(HeatApiService, 'getStacks').and.callFake(createRejectingPromise('failed'));
-      spyOn(PlansActions, 'fetchStacksPending');
-      spyOn(PlansActions, 'fetchStacksSuccess');
-      spyOn(PlansActions, 'fetchStacksFailed');
-      PlansActions.fetchStacks()(() => {}, () => {});
-      setTimeout(() => { done(); }, 1);
-    });
-
-    it('dispatches fetchStacksPending', () => {
-      expect(PlansActions.fetchStacksPending).toHaveBeenCalled();
-    });
-
-    it('does not dispatch fetchStacksSuccess', () => {
-      expect(PlansActions.fetchStacksSuccess).not.toHaveBeenCalled();
-    });
-
-    it('dispatches fetchStacksFailed', () => {
-      expect(PlansActions.fetchStacksFailed).toHaveBeenCalled();
-    });
-  });
-
 });
