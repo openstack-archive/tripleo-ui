@@ -2,8 +2,7 @@ import { Map } from 'immutable';
 
 import { InitialPlanState,
          Plan,
-         PlanFile,
-         Stack } from '../immutableRecords/plans';
+         PlanFile } from '../immutableRecords/plans';
 import PlansConstants from '../constants/PlansConstants';
 
 const initialState = new InitialPlanState;
@@ -44,14 +43,6 @@ export default function plansReducer(state = initialState, action) {
             .set('all', Map(planData));
   }
 
-  case PlansConstants.PLAN_CHOSEN:
-    return state.set('currentPlanName', action.payload);
-
-  case PlansConstants.PLAN_DETECTED:
-    return state
-            .set('currentPlanName', action.payload.currentPlanName)
-            .set('conflict', action.payload.conflict);
-
   case PlansConstants.DELETING_PLAN: {
     return state.setIn(['all', action.payload, 'transition'], 'deleting');
   }
@@ -75,21 +66,6 @@ export default function plansReducer(state = initialState, action) {
   case PlansConstants.PLAN_UPDATED:
     return state
             .set('transition', false);
-
-  case PlansConstants.FETCH_STACK_PENDING:
-    return state.set('isFetchingStacks', true);
-
-  case PlansConstants.FETCH_STACK_SUCCESS:
-    return state
-            .set('isFetchingStacks', false)
-            .set('stacks', Map(action.payload.reduce((obj, val) => {
-              obj[val.stack_name] = Stack(val);
-              return obj;
-            }, {})));
-  case PlansConstants.FETCH_STACK_FAILED:
-    return state
-            .set('isFetchingStacks', false)
-            .set('stacks', Map());
 
   default:
     return state;

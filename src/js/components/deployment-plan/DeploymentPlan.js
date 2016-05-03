@@ -3,11 +3,12 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React from 'react';
 
-import { getAllPlansButCurrent,
-         getCurrentStack,
-         getCurrentStackDeploymentProgress } from '../../selectors/plans';
+import { getAllPlansButCurrent } from '../../selectors/plans';
+import { getCurrentStack,
+         getCurrentStackDeploymentProgress } from '../../selectors/stacks';
 import { getIntrospectedNodes, getUnassignedIntrospectedNodes } from '../../selectors/nodes';
 import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
+import CurrentPlanActions from '../../actions/CurrentPlanActions';
 import DeploymentConfigurationSummary from './DeploymentConfigurationSummary';
 import DeploymentStatus from './DeploymentStatus';
 import DeploymentStep from './DeploymentStep';
@@ -17,7 +18,7 @@ import Loader from '../ui/Loader';
 import NodesActions from '../../actions/NodesActions';
 import NoPlans from './NoPlans';
 import NotificationActions from '../../actions/NotificationActions';
-import PlansActions from '../../actions/PlansActions';
+import StacksActions from '../../actions/StacksActions';
 import Roles from './Roles';
 import RolesActions from '../../actions/RolesActions';
 import TripleOApiService from '../../services/TripleOApiService';
@@ -191,7 +192,7 @@ DeploymentPlan.propTypes = {
 
 export function mapStateToProps(state) {
   return {
-    currentPlanName: state.plans.get('currentPlanName'),
+    currentPlanName: state.currentPlan.currentPlanName,
     currentStack: getCurrentStack(state),
     currentStackDeploymentProgress: getCurrentStackDeploymentProgress(state),
     environmentConfigurationLoaded: state.environmentConfiguration.loaded,
@@ -211,13 +212,13 @@ export function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    choosePlan: planName => dispatch(PlansActions.choosePlan(planName)),
+    choosePlan: planName => dispatch(CurrentPlanActions.choosePlan(planName)),
     fetchEnvironmentConfiguration: (planName, parentPath) => {
       dispatch(EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName, parentPath));
     },
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
     fetchRoles: () => dispatch(RolesActions.fetchRoles()),
-    fetchStacks: () => dispatch(PlansActions.fetchStacks())
+    fetchStacks: () => dispatch(StacksActions.fetchStacks())
   };
 }
 
