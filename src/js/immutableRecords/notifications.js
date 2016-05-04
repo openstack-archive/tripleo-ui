@@ -1,11 +1,11 @@
 import { Record } from 'immutable';
 
-export const Notification = Record({
+export const Notification = new Record({
   id: undefined,
   title: '',
   message: '',
   type: 'error',
   viewed: false,
-  dismissable: true,
+  dismissable: false,
   timestamp: undefined
 });
