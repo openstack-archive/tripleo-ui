@@ -9,19 +9,15 @@ import { ValidationsStatusCounts } from '../../immutableRecords/validations';
 export default class ValidationStage extends React.Component {
   constructor() {
     super();
-    this.state = {
-      isOpen: false
-    };
   }
 
   toggleOpen(e) {
     e.preventDefault();
-    var nowOpen = !this.state.isOpen;
-    this.setState({isOpen: nowOpen});
+    this.props.toggleValidationStageVisibility(this.props.uuid);
   }
 
   runStage(e) {
-    e.preventDefault(),
+    e.preventDefault();
     this.props.runValidationStage(this.props.uuid);
   }
 
@@ -54,12 +50,12 @@ export default class ValidationStage extends React.Component {
   render() {
     let titleClass = ClassNames({
       link: true,
-      collapsed: !this.state.isOpen
+      collapsed: !this.props.visible
     });
 
     let contentClass = ClassNames({
       'panel-collapse collapse' : true,
-      'in' : this.state.isOpen
+      'in' : this.props.visible
     });
 
     let validations = this.props.validations.map(validation => {
@@ -107,6 +103,8 @@ ValidationStage.propTypes = {
   runValidationStage: React.PropTypes.func.isRequired,
   status: React.PropTypes.string.isRequired,
   stopValidation: React.PropTypes.func.isRequired,
+  toggleValidationStageVisibility: React.PropTypes.func.isRequired,
   uuid: React.PropTypes.string.isRequired,
-  validations: ImmutablePropTypes.list.isRequired
+  validations: ImmutablePropTypes.list.isRequired,
+  visible: React.PropTypes.bool.isRequired
 };

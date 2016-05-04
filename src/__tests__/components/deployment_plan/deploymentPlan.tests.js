@@ -20,7 +20,8 @@ describe('DeploymentPlan mapStateToProps', () => {
             isFetching: false,
             all: Map()
           }),
-          environmentConfiguration: new EnvironmentConfigurationState()
+          environmentConfiguration: new EnvironmentConfigurationState(),
+          validations: Map()
         }
       );
       expect(props.hasPlans).toBe(false);
@@ -38,7 +39,8 @@ describe('DeploymentPlan mapStateToProps', () => {
             isFetching: false,
             all: Map()
           }),
-          environmentConfiguration: new EnvironmentConfigurationState()
+          environmentConfiguration: new EnvironmentConfigurationState(),
+          validations: Map()
         }
       );
       expect(props.hasPlans).toBe(true);

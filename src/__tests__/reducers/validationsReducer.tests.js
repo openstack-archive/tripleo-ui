@@ -25,6 +25,7 @@ describe('validationsReducer', () => {
       1: new ValidationStage({
         description: '',
         name: 'testStage',
+        visible: false,
         stage: '',
         status: 'new',
         uuid: 1,
@@ -71,6 +72,7 @@ describe('validationsReducer', () => {
           validationStages: {
             1: {
               name: 'testStage',
+              visible: false,
               uuid: 1,
               status: 'new',
               validations: [1]
