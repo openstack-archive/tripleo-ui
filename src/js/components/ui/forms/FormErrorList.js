@@ -11,6 +11,7 @@ export default class FormErrorList extends React.Component {
                       title={error.title}
                       message={error.message}
                       dismissable={false}
+                      persistent
                       type={error.type}/>
       );
     });
