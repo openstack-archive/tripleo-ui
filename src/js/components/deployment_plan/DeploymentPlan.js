@@ -55,6 +55,17 @@ class DeploymentPlan extends React.Component {
     });
   }
 
+  notifyThingy() {
+    let notifType = ~~(Math.random()*2) ? 'success' : 'warning';
+    let notifMessage = 'This is a test notification';
+
+    this.props.notify({
+      title: 'Test Notification',
+      message: notifMessage + ' ' + (new Date(Date.now())).toString(),
+      type: notifType
+    });
+  }
+
   renderDeployStep() {
     return !this.props.currentStack ? (
       <div className="actions pull-left">
@@ -194,6 +205,10 @@ class DeploymentPlan extends React.Component {
             </div>
           )}
           {children}
+          <a className={'link btn btn-primary btn-lg'}
+             onClick={this.notifyThingy}>
+            <span className="fa fa-bell"/> Success
+          </a>
         </Loader>
       </div>
     );
@@ -220,6 +235,7 @@ DeploymentPlan.propTypes = {
   isFetchingPlans: React.PropTypes.bool,
   isFetchingRoles: React.PropTypes.bool,
   notify: React.PropTypes.func,
+  notifyThingy: React.PropTypes.func,
   roles: ImmutablePropTypes.map,
   rolesLoaded: React.PropTypes.bool,
   route: React.PropTypes.object,
