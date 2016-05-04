@@ -25,6 +25,9 @@ import TripleOApiService from '../../services/TripleOApiService';
 import TripleOApiErrorHandler from '../../services/TripleOApiErrorHandler';
 import ValidationsActions from '../../actions/ValidationsActions';
 import { getValidationStageUuidByName } from '../../selectors/validations';
+//temporary
+import store from '../../store';
+
 
 class DeploymentPlan extends React.Component {
   constructor() {
@@ -53,6 +56,17 @@ class DeploymentPlan extends React.Component {
         NotificationActions.notify(error);
       });
     });
+  }
+
+  notifyThingy() {
+    let notifType = ~~(Math.random()*2) ? 'success' : 'warning';
+    let notifMessage = 'This is a test notification';
+
+    store.dispatch(NotificationActions.notify({
+      title: 'Test Notification',
+      message: notifMessage + ' ' + (new Date(Date.now())).toString(),
+      type: notifType
+    }));
   }
 
   renderDeployStep() {
@@ -197,6 +211,10 @@ class DeploymentPlan extends React.Component {
             </div>
           )}
           {children}
+          <a className={'link btn btn-primary btn-lg'}
+             onClick={this.notifyThingy}>
+            <span className="fa fa-bell"/> Success
+          </a>
         </Loader>
       </div>
     );
@@ -222,6 +240,7 @@ DeploymentPlan.propTypes = {
   isFetchingNodes: React.PropTypes.bool,
   isFetchingPlans: React.PropTypes.bool,
   isFetchingRoles: React.PropTypes.bool,
+  notifyThingy: React.PropTypes.func,
   roles: ImmutablePropTypes.map,
   rolesLoaded: React.PropTypes.bool,
   route: React.PropTypes.object,
