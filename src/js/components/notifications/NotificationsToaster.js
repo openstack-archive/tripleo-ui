@@ -71,7 +71,7 @@ export default class NotificationsToaster extends React.Component {
   startTimer() {
     // Clear any previous timers
     this.clearTimer();
-    this.setState({timeout: setTimeout(this.toasterTimeout.bind(this), 8000)});
+    this.setState({timeout: setTimeout(this.toasterTimeout.bind(this), 89000)});
   }
 
   clearTimer() {
@@ -93,12 +93,11 @@ export default class NotificationsToaster extends React.Component {
 
   render() {
     return this.state.toasterNotification ? (
-      <div className="notification-toaster col-lg-5 col-md-6 col-sm-8 col-xs-12">
+      <div className="toast-pf-max-width toast-pf-top-right">
         <Notification
           title={this.state.toasterNotification.title}
           message={this.state.toasterNotification.message}
           type={this.state.toasterNotification.type}
-          dismissable
           removeNotification={this.closeNotification.bind(this)}
           onMouseEnter={this.notificationHover.bind(this, true)}
           onMouseLeave={this.notificationHover.bind(this, false)}/>
