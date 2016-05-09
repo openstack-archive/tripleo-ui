@@ -4,22 +4,23 @@ const nodes = state => state.nodes.get('all');
 
 export const getRegisteredNodes = createSelector(
   nodes, (nodes) => {
-    return nodes.filter( node => node.get('provision_state') === 'available' &&
-                                 !node.get('provision_updated_at') ||
-                                 node.get('provision_state') === 'manageable' );
+    return nodes.filterNot( node => node.get('provision_state') === 'active' ||
+                                    node.get('maintenance') );
   }
 );
 
 export const getIntrospectedNodes = createSelector(
   nodes, (nodes) => {
-    return nodes.filter( node => node.get('provision_state') === 'available' &&
-                                 !!node.get('provision_updated_at') );
+    return nodes.filter( node => node.getIn(['properties', 'memory_mb']) &&
+                                 node.getIn('properties', 'cpu_arch') &&
+                                 node.getIn('properties', 'cpus') &&
+                                 node.getIn('properties', 'local_gb') );
   }
 );
 
-export const getProvisionedNodes = createSelector(
+export const getDeployedNodes = createSelector(
   nodes, (nodes) => {
-    return nodes.filter( node => node.get('instance_uuid') );
+    return nodes.filter( node => node.get('provision_state') === 'active' );
   }
 );
 

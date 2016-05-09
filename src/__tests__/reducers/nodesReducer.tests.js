@@ -15,7 +15,7 @@ describe('nodesReducer', () => {
     allFilter: '',
     registeredFilter: '',
     introspectedFilter: '',
-    provisionedFilter: '',
+    deployedFilter: '',
     maintenanceFilter: '',
     all: Map()
   });
@@ -26,7 +26,7 @@ describe('nodesReducer', () => {
     allFilter: '',
     registeredFilter: '',
     introspectedFilter: '',
-    provisionedFilter: '',
+    deployedFilter: '',
     maintenanceFilter: '',
     all: Map({
       uuid1: Map({
@@ -44,7 +44,7 @@ describe('nodesReducer', () => {
     allFilter: '',
     registeredFilter: '',
     introspectedFilter: '',
-    provisionedFilter: '',
+    deployedFilter: '',
     maintenanceFilter: '',
     all: Map({
       uuid1: Map({
