@@ -94,8 +94,7 @@ class DeploymentPlan extends React.Component {
               component="span"
               inline>
         There are <strong>{this.props.unassignedIntrospectedNodes.size}</strong> of <strong>
-        {this.props.introspectedNodes.size}</strong> Introspected
-        Nodes available to assign
+        {this.props.introspectedNodes.size}</strong> Nodes available to assign
       </Loader>
     ];
 

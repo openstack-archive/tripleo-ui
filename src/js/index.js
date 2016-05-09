@@ -10,7 +10,6 @@ import history from './history';
 import App from './components/App';
 import AuthenticatedContent from './components/AuthenticatedContent';
 import DeletePlan from './components/plan/DeletePlan';
-import IntrospectedNodesTabPane from './components/nodes/IntrospectedNodesTabPane';
 import DeploymentConfiguration from './components/deployment_plan/DeploymentConfiguration';
 import DeploymentPlan from './components/deployment_plan/DeploymentPlan';
 import EditPlan from './components/plan/EditPlan';
@@ -27,7 +26,7 @@ import NodesAssignment from './components/deployment_plan/NodesAssignment';
 import NotificationActions from './actions/NotificationActions';
 import Parameters from './components/parameters/Parameters.js';
 import Plans from './components/plan/Plans.js';
-import ProvisionedNodesTabPane from './components/nodes/ProvisionedNodesTabPane';
+import DeployedNodesTabPane from './components/nodes/DeployedNodesTabPane';
 import RegisterNodesDialog from './components/nodes/RegisterNodesDialog';
 import RegisteredNodesTabPane from './components/nodes/RegisteredNodesTabPane';
 import TempStorage from './services/TempStorage.js';
@@ -92,8 +91,7 @@ TempStorage.initialized.then(() => {
             <Route path="registered" component={RegisteredNodesTabPane}>
               <Route path="register" component={RegisterNodesDialog}/>
             </Route>
-            <Route path="introspected" component={IntrospectedNodesTabPane}/>
-            <Route path="provisioned" component={ProvisionedNodesTabPane}/>
+          <Route path="deployed" component={DeployedNodesTabPane}/>
             <Route path="maintenance" component={MaintenanceNodesTabPane}/>
           </Route>
 

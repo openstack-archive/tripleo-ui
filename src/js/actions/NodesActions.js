@@ -60,7 +60,7 @@ export default {
   introspectNodes() {
     return (dispatch, getState) => {
       dispatch(this.startOperation());
-      MistralApiService.runWorkflow('tripleo.baremetal.bulk_introspect')
+      MistralApiService.runWorkflow('tripleo.baremetal.v1.bulk_introspect')
       .then((response) => {
         if(response.state === 'ERROR') {
           dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
@@ -84,7 +84,7 @@ export default {
       .then((response) => {
         if(response.state === 'RUNNING') {
           dispatch(this.fetchNodes());
-          setTimeout(() => dispatch(this.pollForIntrospectionWorkflow(workflowExecutionId)), 7000);
+          setTimeout(() => dispatch(this.pollForIntrospectionWorkflow(workflowExecutionId)), 5000);
         } else if(response.state === 'ERROR') {
           dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
           dispatch(this.finishOperation());

@@ -9,7 +9,7 @@ import NodesActions from '../../actions/NodesActions';
 import RolesActions from '../../actions/RolesActions';
 import { getRegisteredNodes,
          getIntrospectedNodes,
-         getProvisionedNodes,
+         getDeployedNodes,
          getMaintenanceNodes } from '../../selectors/nodes';
 
 class Nodes extends React.Component {
@@ -49,11 +49,8 @@ class Nodes extends React.Component {
             <NavTab to="/nodes/registered">
               Registered<span className="badge">{this.props.nodes.get('registered').size}</span>
             </NavTab>
-            <NavTab to="/nodes/introspected">
-              Introspected<span className="badge">{this.props.nodes.get('introspected').size}</span>
-            </NavTab>
-            <NavTab to="/nodes/provisioned">
-              Provisioned<span className="badge">{this.props.nodes.get('provisioned').size}</span>
+            <NavTab to="/nodes/deployed">
+              Deployed<span className="badge">{this.props.nodes.get('deployed').size}</span>
             </NavTab>
             <NavTab to="/nodes/maintenance">
               Maintenance<span className="badge">{this.props.nodes.get('maintenance').size}</span>
@@ -84,7 +81,7 @@ function mapStateToProps(state) {
       Map({
         registered: getRegisteredNodes(state),
         introspected: getIntrospectedNodes(state),
-        provisioned: getProvisionedNodes(state),
+        deployed: getDeployedNodes(state),
         maintenance: getMaintenanceNodes(state)
       })
     )

@@ -8,7 +8,7 @@ const initialState = Map({
   allFilter: '',
   registeredFilter: '',
   introspectedFilter: '',
-  provisionedFilter: '',
+  deployedFilter: '',
   maintenanceFilter: '',
   all: Map()
 });

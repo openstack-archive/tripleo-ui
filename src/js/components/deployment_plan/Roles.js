@@ -33,7 +33,7 @@ export default class Roles extends React.Component {
                     fetchNodes={this.props.fetchNodes}
                     assignedNodesCount={getAssignedNodes(this.props.introspectedNodes,
                                                          role.name).size}
-                    availableNodesCount={this.props.introspectedNodes.size}/>
+                    availableNodesCount={this.props.unassignedIntrospectedNodes.size}/>
         </div>
       );
     });

@@ -10,6 +10,7 @@ import { getIntrospectedNodes,
          getUnassignedIntrospectedNodes,
          getAssignedNodes } from '../../selectors/nodes';
 import FormErrorList from '../ui/forms/FormErrorList';
+import Modal from '../ui/Modal';
 import NodesActions from '../../actions/NodesActions';
 import NodesTable from '../nodes/NodesTable';
 
@@ -94,47 +95,40 @@ export default class NodesAssignment extends React.Component {
                             .sortBy(node => node.get('uuid'));
 
     return (
-      <div>
-        <div className="modal modal-routed in" role="dialog">
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              <Formsy.Form ref="nodesAssignmentForm"
-                           role="form"
-                           className="form"
-                           onSubmit={this.handleSubmit.bind(this)}
-                           onValid={this.canSubmit.bind(this)}
-                           onInvalid={this.disableButton.bind(this)}>
-                <div className="modal-header">
-                  <Link to="/deployment-plan"
-                        type="button"
-                        className="close">
-                    <span aria-hidden="true" className="pficon pficon-close"/>
-                  </Link>
-                  <h4 className="modal-title">
-                    Assign Nodes to {role ? role.title : roleName} Role
-                  </h4>
-                </div>
-
-                <div className="modal-body">
-                  <FormErrorList errors={this.props.formErrors.toJS()}/>
-                  <NodesTable nodes={nodesToAssign}
-                              roles={this.props.roles}
-                              isFetchingNodes={this.props.isFetchingNodes}
-                              dataOperationInProgress={this.props.nodesOperationInProgress}
-                              tableActions={this.getTableActions.bind(this)}/>
-                </div>
-
-                <div className="modal-footer">
-                  <Link to="/deployment-plan" type="button" className="btn btn-default" >
-                    Done
-                  </Link>
-                </div>
-              </Formsy.Form>
-            </div>
+      <Modal dialogClasses="modal-xl">
+        <Formsy.Form ref="nodesAssignmentForm"
+                     role="form"
+                     className="form"
+                     onSubmit={this.handleSubmit.bind(this)}
+                     onValid={this.canSubmit.bind(this)}
+                     onInvalid={this.disableButton.bind(this)}>
+          <div className="modal-header">
+            <Link to="/deployment-plan"
+                  type="button"
+                  className="close">
+              <span aria-hidden="true" className="pficon pficon-close"/>
+            </Link>
+            <h4 className="modal-title">
+              Assign Nodes to {role ? role.title : roleName} Role
+            </h4>
           </div>
-        </div>
-        <div className="modal-backdrop in"></div>
-      </div>
+
+          <div className="modal-body">
+            <FormErrorList errors={this.props.formErrors.toJS()}/>
+            <NodesTable nodes={nodesToAssign}
+                        roles={this.props.roles}
+                        isFetchingNodes={this.props.isFetchingNodes}
+                        dataOperationInProgress={this.props.nodesOperationInProgress}
+                        tableActions={this.getTableActions.bind(this)}/>
+          </div>
+
+          <div className="modal-footer">
+            <Link to="/deployment-plan" type="button" className="btn btn-default" >
+              Done
+            </Link>
+          </div>
+        </Formsy.Form>
+      </Modal>
     );
   }
 }
