@@ -62,8 +62,11 @@ export default class NodesTable extends React.Component {
         filterString={this.state.filterString}>
         <DataTableColumn
           key="select"
-          header={<DataTableHeaderCell key="select"/>}
-          cell={<DataTableCheckBoxCell data={filteredData} field="uuid"/>}/>
+          header={<DataTableHeaderCell key="select" className="shrink"/>}
+          cell={<NodesTableCheckBoxCell data={filteredData}
+                                        nodesInProgress={this.props.nodesInProgress}
+                                        field="uuid"
+                                        className="shrink"/>}/>
         <DataTableColumn
           key="uuid"
           header={<DataTableHeaderCell key="uuid">UUID</DataTableHeaderCell>}
@@ -103,7 +106,25 @@ export default class NodesTable extends React.Component {
 NodesTable.propTypes = {
   isFetchingNodes: React.PropTypes.bool.isRequired,
   nodes: ImmutablePropTypes.map.isRequired,
+  nodesInProgress: ImmutablePropTypes.set.isRequired,
   roles: ImmutablePropTypes.map.isRequired
+};
+
+export class NodesTableCheckBoxCell extends React.Component {
+  render() {
+    const nodeId = _.result(this.props.data[this.props.rowIndex], this.props.field);
+    return (
+      <DataTableCheckBoxCell
+        {...this.props}
+        operationInProgress={this.props.nodesInProgress.includes(nodeId)}/>
+    );
+  }
+}
+NodesTableCheckBoxCell.propTypes = {
+  data: React.PropTypes.array.isRequired,
+  field: React.PropTypes.string.isRequired,
+  nodesInProgress: ImmutablePropTypes.set.isRequired,
+  rowIndex: React.PropTypes.number
 };
 
 export class NodesTableRoleCell extends React.Component {

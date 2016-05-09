@@ -28,28 +28,16 @@ describe('Nodes Actions', () => {
 
   it('creates action to notify that nodes operation started', () => {
     const expectedAction = {
-      type: NodesConstants.START_NODES_OPERATION
+      type: NodesConstants.START_NODES_OPERATION,
+      payload: mockGetNodesResponse
     };
     expect(NodesActions.startOperation(mockGetNodesResponse)).toEqual(expectedAction);
   });
 
   it('creates action to notify that nodes operation finished', () => {
     const expectedAction = {
-      type: NodesConstants.FINISH_NODES_OPERATION
-    };
-    expect(NodesActions.finishOperation(mockGetNodesResponse)).toEqual(expectedAction);
-  });
-
-  it('creates action to notify that nodes operation started', () => {
-    const expectedAction = {
-      type: NodesConstants.START_NODES_OPERATION
-    };
-    expect(NodesActions.startOperation(mockGetNodesResponse)).toEqual(expectedAction);
-  });
-
-  it('creates action to notify that nodes operation finished', () => {
-    const expectedAction = {
-      type: NodesConstants.FINISH_NODES_OPERATION
+      type: NodesConstants.FINISH_NODES_OPERATION,
+      payload: mockGetNodesResponse
     };
     expect(NodesActions.finishOperation(mockGetNodesResponse)).toEqual(expectedAction);
   });

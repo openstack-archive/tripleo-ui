@@ -11,15 +11,17 @@ import NotificationActions from './NotificationActions';
 import { nodeSchema } from '../normalizrSchemas/nodes';
 
 export default {
-  startOperation(workflowId) {
+  startOperation(nodeIds) {
     return {
-      type: NodesConstants.START_NODES_OPERATION
+      type: NodesConstants.START_NODES_OPERATION,
+      payload: nodeIds
     };
   },
 
-  finishOperation() {
+  finishOperation(nodeIds) {
     return {
-      type: NodesConstants.FINISH_NODES_OPERATION
+      type: NodesConstants.FINISH_NODES_OPERATION,
+      payload: nodeIds
     };
   },
 
@@ -57,39 +59,40 @@ export default {
     };
   },
 
-  introspectNodes() {
+  introspectNodes(nodeIds) {
     return (dispatch, getState) => {
-      dispatch(this.startOperation());
+      dispatch(this.startOperation(nodeIds));
       MistralApiService.runWorkflow('tripleo.baremetal.v1.bulk_introspect')
       .then((response) => {
         if(response.state === 'ERROR') {
           dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
-          dispatch(this.finishOperation());
+          dispatch(this.finishOperation(nodeIds));
         } else {
-          dispatch(this.pollForIntrospectionWorkflow(response.id));
+          dispatch(this.pollForIntrospectionWorkflow(response.id, nodeIds));
         }
       }).catch((error) => {
         let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
-        dispatch(this.finishOperation());
+        dispatch(this.finishOperation(nodeIds));
       });
     };
   },
 
-  pollForIntrospectionWorkflow(workflowExecutionId) {
+  pollForIntrospectionWorkflow(workflowExecutionId, nodeIds) {
     return (dispatch, getState) => {
       MistralApiService.getWorkflowExecution(workflowExecutionId)
       .then((response) => {
         if(response.state === 'RUNNING') {
           dispatch(this.fetchNodes());
-          setTimeout(() => dispatch(this.pollForIntrospectionWorkflow(workflowExecutionId)), 5000);
+          setTimeout(() => dispatch(this.pollForIntrospectionWorkflow(workflowExecutionId,
+                                    nodeIds)), 5000);
         } else if(response.state === 'ERROR') {
           dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
-          dispatch(this.finishOperation());
+          dispatch(this.finishOperation(nodeIds));
         } else {
-          dispatch(this.finishOperation());
+          dispatch(this.finishOperation(nodeIds));
           dispatch(NotificationActions.notify({ type: 'success',
                                        title: 'Introspection finished',
                                        message: 'Nodes Introspection successfully finished' }));
@@ -99,7 +102,7 @@ export default {
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
-        dispatch(this.finishOperation());
+        dispatch(this.finishOperation(nodeIds));
       });
     };
   },

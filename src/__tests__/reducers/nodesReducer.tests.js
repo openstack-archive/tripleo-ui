@@ -1,5 +1,5 @@
 import matchers from 'jasmine-immutable-matchers';
-import { Map } from 'immutable';
+import { Map, Set } from 'immutable';
 
 import NodesConstants from '../../js/constants/NodesConstants';
 import nodesReducer from '../../js/reducers/nodesReducer';
@@ -11,7 +11,7 @@ describe('nodesReducer', () => {
 
   const initialState = Map({
     isFetching: false,
-    dataOperationInProgress: false,
+    nodesInProgress: Set(),
     allFilter: '',
     registeredFilter: '',
     introspectedFilter: '',
@@ -22,7 +22,7 @@ describe('nodesReducer', () => {
 
   const updatedState = Map({
     isFetching: false,
-    dataOperationInProgress: false,
+    nodesInProgress: Set(),
     allFilter: '',
     registeredFilter: '',
     introspectedFilter: '',
@@ -40,7 +40,7 @@ describe('nodesReducer', () => {
 
   const updatedNodeState = Map({
     isFetching: false,
-    dataOperationInProgress: false,
+    nodesInProgress: Set(),
     allFilter: '',
     registeredFilter: '',
     introspectedFilter: '',
@@ -69,7 +69,7 @@ describe('nodesReducer', () => {
       payload: 'uuid1'
     };
     const newState = nodesReducer(initialState, action);
-    expect(newState.get('dataOperationInProgress')).toEqual(true);
+    expect(newState.get('nodesInProgress')).toEqualImmutable(Set(['uuid1']));
   });
 
   it('should handle UPDATE_NODE_SUCCESS', () => {
@@ -86,7 +86,7 @@ describe('nodesReducer', () => {
     expect(newState.get('all')).toEqualImmutable(
       updatedNodeState.get('all')
     );
-    expect(newState.get('dataOperationInProgress')).toEqual(false);
+    expect(newState.get('nodesInProgress')).toEqualImmutable(Set());
   });
 
   it('should handle UPDATE_NODE_FAILED', () => {
@@ -96,6 +96,6 @@ describe('nodesReducer', () => {
     };
     const newState = nodesReducer(updatedState, action);
     expect(newState).toEqualImmutable(updatedState);
-    expect(newState.get('dataOperationInProgress')).toEqual(false);
+    expect(newState.get('nodesInProgress')).toEqualImmutable(Set());
   });
 });

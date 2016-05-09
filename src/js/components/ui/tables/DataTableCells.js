@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import React from 'react';
 
 import TableCheckBox from '../forms/TableCheckBox';
+import Loader from '../Loader';
 
 /**
 * Default table header cell class
@@ -59,15 +60,21 @@ export class DataTableCheckBoxCell extends React.Component {
     let value = _.result(this.props.data[this.props.rowIndex], this.props.field);
     return (
       <DataTableCell {...this.props}>
-        <TableCheckBox name={value}
-                       id={value}
-                       value={false}/>
+        <Loader loaded={!this.props.operationInProgress} component="span" inline>
+          <TableCheckBox name={value} id={value} value={false} disabled={this.props.disabled}/>
+        </Loader>
       </DataTableCell>
     );
   }
 }
 DataTableCheckBoxCell.propTypes = {
   data: React.PropTypes.array.isRequired,
+  disabled: React.PropTypes.bool.isRequired,
   field: React.PropTypes.string.isRequired,
+  operationInProgress: React.PropTypes.bool.isRequired,
   rowIndex: React.PropTypes.number
+};
+DataTableCheckBoxCell.defaultProps = {
+  disabled: false,
+  operationInProgress: true
 };

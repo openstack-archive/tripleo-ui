@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 
 const nodes = state => state.nodes.get('all');
+const nodesInProgress = state => state.nodes.get('nodesInProgress');
 
 export const getRegisteredNodes = createSelector(
   nodes, (nodes) => {
@@ -35,6 +36,15 @@ export const getUnassignedIntrospectedNodes = createSelector(
     return introspectedNodes.filterNot(
       node => node.getIn(['properties', 'capabilities']).match(/.*profile:(\w+)/)
     );
+  }
+);
+
+/*
+ * booleam, returns true if there are any nodes with operation in progress
+ */
+export const getNodesOperationInProgress = createSelector(
+  nodesInProgress, (nodesInProgress) => {
+    return !nodesInProgress.isEmpty();
   }
 );
 
