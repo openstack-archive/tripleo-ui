@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import { Map } from 'immutable';
+import { Map, Set } from 'immutable';
 
 import NodesTable from '../../../js/components/nodes/NodesTable';
 import { NodesTableRoleCell } from '../../../js/components/nodes/NodesTable';
@@ -50,7 +50,10 @@ describe('NodesTable component', () => {
   let nodesTableVdom, nodesTableInstance;
   beforeEach(() => {
     let shallowRenderer = TestUtils.createRenderer();
-    shallowRenderer.render(<NodesTable nodes={nodes} roles={roles} isFetchingNodes={false}/>);
+    shallowRenderer.render(<NodesTable nodes={nodes}
+                                       roles={roles}
+                                       nodesInProgress={Set()}
+                                       isFetchingNodes={false}/>);
     nodesTableVdom = shallowRenderer.getRenderOutput();
     nodesTableInstance = shallowRenderer._instance._instance;
   });

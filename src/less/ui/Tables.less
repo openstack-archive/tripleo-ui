@@ -13,6 +13,17 @@ table.table {
   td.no-results {
     padding-top: 12px;
   }
+
+  // Optional classes to keep table cell width minimum/maximum
+  // http://stackoverflow.com/questions/8230777/how-do-i-set-the-table-cell-widths-to-minimum-except-last-column
+  td.shrink {
+    width: 1%;
+    white-space: nowrap;
+  }
+  td.expand {
+    width: 99%;
+    white-space: nowrap;
+  }
 }
 
 .dataTables_actions {

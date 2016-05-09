@@ -1,13 +1,16 @@
 import * as _ from 'lodash';
+import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Formsy from 'formsy-react';
 
+import { getRegisteredNodes, getNodesOperationInProgress } from '../../selectors/nodes';
 import FormErrorList from '../ui/forms/FormErrorList';
+import NodesActions from '../../actions/NodesActions';
 import NodesTable from './NodesTable';
 
-export default class RegisteredNodesTabPane extends React.Component {
+class RegisteredNodesTabPane extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -40,12 +43,11 @@ export default class RegisteredNodesTabPane extends React.Component {
   }
 
   getTableActions() {
-    const dataOperationInProgress = this.props.nodes.get('dataOperationInProgress');
     return (
       <div className="btn-group">
         <button className="btn btn-primary"
                 type="submit"
-                disabled={!this.state.canSubmit || dataOperationInProgress}>
+                disabled={!this.state.canSubmit || this.props.nodesOperationInProgress}>
           Introspect Nodes
         </button>
       </div>
@@ -53,18 +55,10 @@ export default class RegisteredNodesTabPane extends React.Component {
   }
 
   handleSubmit(formData, resetForm, invalidateForm) {
-    // const data = this._convertFormData(formData);
-    // const formFields = Object.keys(this.refs.registeredNodesTableForm.inputs);
     this.disableButton();
-    this.props.introspectNodes();
+    const nodeIds = _.keys(_.pickBy(formData, value => !!value));
+    this.props.introspectNodes(nodeIds);
     resetForm();
-    // TODO(jtomasek): use this when Introspection workflow uses provided nodes selection
-    // this.props.introspectNodes(
-    //   this.props.currentPlanName,
-    //   data,
-    //   formFields,
-    //   this.props.parentPath
-    // );
   }
 
   render() {
@@ -77,10 +71,11 @@ export default class RegisteredNodesTabPane extends React.Component {
                      onValid={this.canSubmit.bind(this)}
                      onInvalid={this.disableButton.bind(this)}>
           <FormErrorList errors={this.props.formErrors.toJS()}/>
-          <NodesTable nodes={this.props.nodes.get('registered')}
+          <NodesTable nodes={this.props.registeredNodes}
                       roles={this.props.roles}
-                      dataOperationInProgress={this.props.nodes.get('dataOperationInProgress')}
-                      isFetchingNodes={this.props.nodes.get('isFetching')}
+                      dataOperationInProgress={this.props.nodesOperationInProgress}
+                      nodesInProgress={this.props.nodesInProgress}
+                      isFetchingNodes={this.props.isFetchingNodes}
                       tableActions={this.getTableActions.bind(this)}/>
         </Formsy.Form>
         {this.props.children}
@@ -92,11 +87,32 @@ RegisteredNodesTabPane.propTypes = {
   children: React.PropTypes.node,
   formErrors: ImmutablePropTypes.list,
   formFieldErrors: ImmutablePropTypes.map,
-  introspectNodes: React.PropTypes.func,
-  nodes: ImmutablePropTypes.map,
+  introspectNodes: React.PropTypes.func.isRequired,
+  isFetchingNodes: React.PropTypes.bool.isRequired,
+  nodesInProgress: ImmutablePropTypes.set,
+  nodesOperationInProgress: React.PropTypes.bool.isRequired,
+  registeredNodes: ImmutablePropTypes.map,
   roles: ImmutablePropTypes.map
 };
 RegisteredNodesTabPane.defaultProps = {
   formErrors: List(),
   formFieldErrors: Map()
 };
+
+function mapStateToProps(state) {
+  return {
+    roles: state.roles.get('roles'),
+    registeredNodes: getRegisteredNodes(state),
+    nodesInProgress: state.nodes.get('nodesInProgress'),
+    nodesOperationInProgress: getNodesOperationInProgress(state),
+    isFetchingNodes: state.nodes.get('isFetching')
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    introspectNodes: nodeIds => dispatch(NodesActions.introspectNodes(nodeIds))
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisteredNodesTabPane);

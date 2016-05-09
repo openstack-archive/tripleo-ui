@@ -8,6 +8,7 @@ import { List, Map } from 'immutable';
 
 import { getIntrospectedNodes,
          getUnassignedIntrospectedNodes,
+         getNodesOperationInProgress,
          getAssignedNodes } from '../../selectors/nodes';
 import FormErrorList from '../ui/forms/FormErrorList';
 import Modal from '../ui/Modal';
@@ -119,6 +120,7 @@ export default class NodesAssignment extends React.Component {
                         roles={this.props.roles}
                         isFetchingNodes={this.props.isFetchingNodes}
                         dataOperationInProgress={this.props.nodesOperationInProgress}
+                        nodesInProgress={this.props.nodesInProgress}
                         tableActions={this.getTableActions.bind(this)}/>
           </div>
 
@@ -138,6 +140,7 @@ NodesAssignment.propTypes = {
   formFieldErrors: ImmutablePropTypes.map.isRequired,
   introspectedNodes: ImmutablePropTypes.map,
   isFetchingNodes: React.PropTypes.bool,
+  nodesInProgress: ImmutablePropTypes.set,
   nodesOperationInProgress: React.PropTypes.bool,
   params: React.PropTypes.object.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
@@ -153,7 +156,8 @@ function mapStateToProps(state) {
   return {
     introspectedNodes: getIntrospectedNodes(state),
     isFetchingNodes: state.nodes.get('isFetching'),
-    nodesOperationInProgress: state.nodes.get('dataOperationInProgress'),
+    nodesInProgress: state.nodes.get('nodesInProgress'),
+    nodesOperationInProgress: getNodesOperationInProgress(state),
     roles: state.roles.get('roles'),
     unassignedIntrospectedNodes: getUnassignedIntrospectedNodes(state)
   };

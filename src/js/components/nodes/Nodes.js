@@ -24,10 +24,6 @@ class Nodes extends React.Component {
     this.props.dispatch(RolesActions.fetchRoles());
   }
 
-  introspectNodes() {
-    this.props.dispatch(NodesActions.introspectNodes());
-  }
-
   render() {
     return (
       <div className="row">
@@ -57,10 +53,7 @@ class Nodes extends React.Component {
             </NavTab>
           </ul>
           <div className="tab-pane">
-            {React.cloneElement(this.props.children,
-                                { nodes: this.props.nodes,
-                                  roles: this.props.roles,
-                                  introspectNodes: this.introspectNodes.bind(this) })}
+            {this.props.children}
           </div>
         </div>
       </div>
@@ -70,13 +63,11 @@ class Nodes extends React.Component {
 Nodes.propTypes = {
   children: React.PropTypes.node.isRequired,
   dispatch: React.PropTypes.func.isRequired,
-  nodes: ImmutablePropTypes.map.isRequired,
-  roles: ImmutablePropTypes.map
+  nodes: ImmutablePropTypes.map.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    roles: state.roles.get('roles'),
     nodes: state.nodes.merge(
       Map({
         registered: getRegisteredNodes(state),

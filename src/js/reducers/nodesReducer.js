@@ -1,10 +1,10 @@
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map, Set } from 'immutable';
 
 import NodesConstants from '../constants/NodesConstants';
 
 const initialState = Map({
   isFetching: false,
-  dataOperationInProgress: false,
+  nodesInProgress: Set(),
   allFilter: '',
   registeredFilter: '',
   introspectedFilter: '',
@@ -25,20 +25,25 @@ export default function nodesReducer(state = initialState, action) {
             .set('isFetching', false);
 
   case NodesConstants.START_NODES_OPERATION:
-    return state.set('dataOperationInProgress', true);
+    return state.update('nodesInProgress',
+                        nodesInProgress => nodesInProgress.union(action.payload));
 
   case NodesConstants.FINISH_NODES_OPERATION:
-    return state.set('dataOperationInProgress', false);
+    return state.update('nodesInProgress',
+                        nodesInProgress => nodesInProgress.subtract(action.payload));
 
   case NodesConstants.UPDATE_NODE_PENDING:
-    return state.set('dataOperationInProgress', true);
+    return state.update('nodesInProgress',
+                        nodesInProgress => nodesInProgress.add(action.payload));
 
   case NodesConstants.UPDATE_NODE_FAILED:
-    return state.set('dataOperationInProgress', false);
+    return state.update('nodesInProgress',
+                        nodesInProgress => nodesInProgress.remove(action.payload));
 
   case NodesConstants.UPDATE_NODE_SUCCESS:
     return state.setIn(['all', action.payload.uuid], fromJS(action.payload))
-                .set('dataOperationInProgress', false);
+                .update('nodesInProgress',
+                        nodesInProgress => nodesInProgress.remove(action.payload.uuid));
 
   default:
     return state;

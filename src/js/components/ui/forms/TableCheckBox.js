@@ -12,6 +12,7 @@ class TableCheckBox extends React.Component {
              name={this.props.name}
              ref={this.props.id}
              id={this.props.id}
+             disabled={this.props.disabled}
              onChange={this.changeValue.bind(this)}
              checked={!!this.props.getValue()}
              value={this.props.getValue()}/>
@@ -19,6 +20,7 @@ class TableCheckBox extends React.Component {
   }
 }
 TableCheckBox.propTypes = {
+  disabled: React.PropTypes.bool.isRequired,
   getValue: React.PropTypes.func,
   id: React.PropTypes.string.isRequired,
   name: React.PropTypes.string.isRequired,
@@ -26,6 +28,7 @@ TableCheckBox.propTypes = {
   type: React.PropTypes.string
 };
 TableCheckBox.defaultProps = {
+  disabled: false,
   type: 'checkbox'
 };
 export default Formsy.HOC(TableCheckBox);
