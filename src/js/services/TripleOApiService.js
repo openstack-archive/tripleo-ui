@@ -125,15 +125,30 @@ class TripleOApiService {
   /**
    * TripleO API: POST /v1/plans
    */
-  createPlan(name, files) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans`,
-      data: JSON.stringify({
-        name: name,
-        files: files
-      }),
-      method: 'POST'
-    })));
+  createPlan(name, files, isTarball) {
+    if(isTarball === true) {
+      let formData = new FormData();
+      formData.append('archive', files);
+      formData.append('name', name);
+      return when(request(this.defaultRequest({
+        url: `${TRIPLEOAPI_URL}/plans`,
+        contentType: 'multipart/form-data',
+        data: formData,
+        type: undefined,
+        processData: false,
+        method: 'POST'
+      })));
+    }
+    else {
+      return when(request(this.defaultRequest({
+        url: `${TRIPLEOAPI_URL}/plans`,
+        data: JSON.stringify({
+          name: name,
+          files: files
+        }),
+        method: 'POST'
+      })));
+    }
   }
 
   /**
