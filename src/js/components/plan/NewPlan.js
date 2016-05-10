@@ -29,16 +29,22 @@ class NewPlan extends React.Component {
 
   onFormSubmit(formData, resetForm, invalidateForm) {
     let planFiles = {};
-    this.state.selectedFiles.map(item => {
-      planFiles[item.name] = {};
-      planFiles[item.name].contents = item.content;
-      // TODO(jtomasek): user can identify capabilities-map in the list of files
-      // (dropdown select or sth)
-      if(item.name.match('^capabilities[-|_]map\.yaml$')) {
-        planFiles[item.name].meta = { 'file-type': 'capabilities-map' };
-      }
-    });
-    this.props.createPlan(formData.planName, planFiles);
+    if(this.state.selectedFiles.length === 1
+       && this.state.selectedFiles[0].name.match(/(\.tgz|\.tar\.gz|\.gz)$/)) {
+      this.props.createPlan(formData.planName, this.state.selectedFiles[0].file, true);
+    }
+    else {
+      this.state.selectedFiles.map(item => {
+        planFiles[item.name] = {};
+        planFiles[item.name].contents = item.content;
+        // TODO(jtomasek): user can identify capabilities-map in the list of files
+        // (dropdown select or sth)
+        if(item.name.match('^capabilities[-|_]map\.yaml$')) {
+          planFiles[item.name].meta = { 'file-type': 'capabilities-map' };
+        }
+      });
+      this.props.createPlan(formData.planName, planFiles);
+    }
   }
 
   onFormValid() {
@@ -92,8 +98,8 @@ NewPlan.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createPlan: (planName, files) => {
-      dispatch(PlansActions.createPlan(planName, files));
+    createPlan: (planName, files, isTarball) => {
+      dispatch(PlansActions.createPlan(planName, files, isTarball));
     }
   };
 }

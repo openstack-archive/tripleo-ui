@@ -181,12 +181,13 @@ export default {
     };
   },
 
-  createPlan(planName, planFiles) {
+  createPlan(planName, planFiles, isTarball) {
     return dispatch => {
       dispatch(this.creatingPlan());
       TripleOApiService.createPlan(
         planName,
-        planFiles
+        planFiles,
+        isTarball
       ).then(result => {
         dispatch(this.planCreated(planName));
         dispatch(this.fetchPlans());
