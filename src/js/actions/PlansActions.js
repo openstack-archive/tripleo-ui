@@ -2,9 +2,12 @@ import { normalize, arrayOf } from 'normalizr';
 
 import CurrentPlanActions from '../actions/CurrentPlanActions';
 import history from '../history';
+import MistralApiService from '../services/MistralApiService';
+import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NotificationActions from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
 import { planSchema } from '../normalizrSchemas/plans';
+import SwiftApiService from '../services/SwiftApiService';
 import TripleOApiService from '../services/TripleOApiService';
 import TripleOApiErrorHandler from '../services/TripleOApiErrorHandler';
 
@@ -123,10 +126,7 @@ export default {
   createPlan(planName, planFiles) {
     return dispatch => {
       dispatch(this.creatingPlan());
-      TripleOApiService.createPlan(
-        planName,
-        planFiles
-      ).then(result => {
+      TripleOApiService.createPlan(planName, planFiles).then(result => {
         dispatch(this.planCreated(planName));
         dispatch(this.fetchPlans());
         history.pushState(null, '/plans/list');
@@ -141,6 +141,64 @@ export default {
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
+      });
+    };
+  },
+
+  createPlanFromTarball(planName, file) {
+    return (dispatch) => {
+      dispatch(this.creatingPlan());
+      SwiftApiService.uploadTarball(planName, file).then((result) => {
+        MistralApiService.runWorkflow('tripleo.plan_management.v1.create_deployment_plan',
+                                      { container: planName }).then((result) => {
+          if(response.state === 'ERROR') {
+            dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
+          }
+          else {
+            dispatch(this.pollForPlanCreationWorkflow(planName, response.id));
+          }
+        }).catch((error) => {
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach((error) => {
+            dispatch(NotificationActions.notify(error));
+          });
+        });
+      }).catch((error) => {
+        let errorHandler = new SwiftApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+      });
+    }
+  },
+
+  pollForPlanCreationWorkflow(planName, workflowExecutionId) {
+    return (dispatch, getState) => {
+      MistralApiService.getWorkflowExecution(workflowExecutionId)
+      .then((response) => {
+        if(response.state === 'RUNNING') {
+          setTimeout(() => {
+            dispatch(this.pollForPlanCreationWorkflow(planName, workflowExecutionId))
+          }, 5000);
+        }
+        else if(response.state === 'ERROR') {
+          dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
+        }
+        else {
+          dispatch(this.planCreated(planName));
+          dispatch(this.fetchPlans());
+          dispatch(NotificationActions.notify({
+            type: 'success',
+            title: 'Plan was created',
+            message: `The plan ${planName} was successfully created`
+          }));
+        }
+      }).catch((error) => {
+        let errorHandler = new MistralApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+        dispatch(this.finishOperation());
       });
     };
   },
