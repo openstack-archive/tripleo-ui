@@ -51,7 +51,7 @@ class PlanFormTab extends React.Component {
                                           - or _"
                          required />
         <PlanFileInput name="planFiles"
-                       title="Upload Files"
+                       title="Plan Files"
                        inputColumnClasses="col-sm-7"
                        labelColumnClasses="col-sm-3"
                        multiple
