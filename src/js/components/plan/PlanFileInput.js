@@ -6,21 +6,46 @@ class PlanFileInput extends React.Component {
   constructor() {
     super();
     this.state = {
-      progress: 0
+      progress: 0,
+      uploadType: 'folder'
     };
   }
 
   componentDidMount() {
-    // Attributes not in react's whitelist need to be added after mounting.
-    this.refs[this.props.name].setAttribute('webkitdirectory', 'webkitdirectory');
+    this.setUploadType();
   }
 
-  processFiles(event) {
+  componentDidUpdate() {
+    this.setInputAttributes(this.state.uploadType);
+  }
+
+  setUploadType() {
+    if(this.refs['checkbox-folder'].checked === true) {
+      this.setState({ uploadType: 'folder' });
+    }
+    else {
+      this.setState({ uploadType: 'tarball' });
+    }
+  }
+
+  setInputAttributes(uploadType) {
+    if(uploadType === 'folder') {
+      // Attributes not in react's whitelist need to be added after mounting.
+      this.refs[this.props.name].setAttribute('webkitdirectory', 'webkitdirectory');
+      this.refs[this.props.name].setAttribute('multiple', 'multiple');
+    }
+    else {
+      this.refs[this.props.name].removeAttribute('webkitdirectory');
+      this.refs[this.props.name].removeAttribute('multiple');
+    }
+  }
+
+  processFolderFiles(inputFiles) {
     let files = [];
     let processedFilesCount = 0;
-    for(let i=0, l=event.target.files.length; i<l; i++) {
+    for(let i=0, l=inputFiles.length; i<l; i++) {
       let reader = new FileReader();
-      let file = event.target.files[i];
+      let file = inputFiles[i];
       reader.onload = (f => {
         return e => {
           if(file.name.match(/(\.yaml|\.json|\.pp|\.sh)$/)) {
@@ -41,6 +66,19 @@ class PlanFileInput extends React.Component {
         };
       })(file);
       reader.readAsText(file);
+    }
+  }
+
+  processTarball(file) {
+    this.props.setValue([{ name: file.name, file: file }]);
+  }
+
+  processFiles(event) {
+    if(this.state.uploadType === 'folder') {
+      this.processFolderFiles.bind(this)(event.target.files);
+    }
+    else {
+      this.processTarball.bind(this)(event.target.files[0]);
     }
   }
 
@@ -78,6 +116,28 @@ class PlanFileInput extends React.Component {
       <div className={divClasses}>
         <label htmlFor={this.props.name}
                className={`${this.props.labelColumnClasses} control-label`}>
+          Upload Type
+        </label>
+        <div className={this.props.inputColumnClasses}>
+          <label className="radio-inline" htmlFor="checkbox-tarball">
+            <input type="radio"
+                   id="checkbox-tarball"
+                   name="uploadType"
+                   value="tarball"
+                   onChange={this.setUploadType.bind(this)}
+                   defaultChecked/> Tar Archive (tar.gz)
+          </label>
+          <label className="radio-inline" htmlFor="checkbox-folder">
+            <input ref="checkbox-folder"
+                   type="radio"
+                   id="checkbox-folder"
+                   name="uploadType"
+                   onChange={this.setUploadType.bind(this)}
+                   value="folder"/> Local Folder
+          </label>
+        </div>
+        <label htmlFor={this.props.name}
+               className={`${this.props.labelColumnClasses} control-label`}>
           {this.props.title}
         </label>
         <div className={this.props.inputColumnClasses}>
@@ -85,8 +145,7 @@ class PlanFileInput extends React.Component {
                  name={this.props.name}
                  ref={this.props.name}
                  id={this.props.name}
-                 onChange={this.processFiles.bind(this)}
-                 multiple/>
+                 onChange={this.processFiles.bind(this)}/>
           {this.renderProgress()}
           {this.renderErrorMessage()}
           {this.renderDescription()}
