@@ -2,9 +2,13 @@ import { normalize, arrayOf } from 'normalizr';
 
 import CurrentPlanActions from '../actions/CurrentPlanActions';
 import { browserHistory } from 'react-router';
+import MistralApiService from '../services/MistralApiService';
+import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NotificationActions from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
 import { planSchema } from '../normalizrSchemas/plans';
+import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
+import SwiftApiService from '../services/SwiftApiService';
 import TripleOApiService from '../services/TripleOApiService';
 import TripleOApiErrorHandler from '../services/TripleOApiErrorHandler';
 
@@ -108,26 +112,29 @@ export default {
     };
   },
 
-  creatingPlan() {
+  createPlanPending() {
     return {
-      type: PlansConstants.CREATING_PLAN
+      type: PlansConstants.CREATE_PLAN_PENDING
     };
   },
 
-  planCreated() {
+  createPlanSuccess() {
     return {
-      type: PlansConstants.PLAN_CREATED
+      type: PlansConstants.CREATE_PLAN_SUCCESS
+    };
+  },
+
+  createPlanFailed() {
+    return {
+      type: PlansConstants.CREATE_PLAN_FAILED
     };
   },
 
   createPlan(planName, planFiles) {
     return dispatch => {
-      dispatch(this.creatingPlan());
-      TripleOApiService.createPlan(
-        planName,
-        planFiles
-      ).then(result => {
-        dispatch(this.planCreated(planName));
+      dispatch(this.createPlanPending());
+      TripleOApiService.createPlan(planName, planFiles).then(result => {
+        dispatch(this.createPlanSuccess(planName));
         dispatch(this.fetchPlans());
         browserHistory.push('/plans/list');
         dispatch(NotificationActions.notify({
@@ -138,9 +145,80 @@ export default {
       }).catch(error => {
         console.error('Error in PlansActions.createPlan', error); //eslint-disable-line no-console
         let errorHandler = new TripleOApiErrorHandler(error);
+        // TODO(flfuchs) Set errors as form errors instead showing a notification.
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
+        dispatch(this.createPlanFailed());
+      });
+    };
+  },
+
+  createPlanFromTarball(planName, file) {
+    return (dispatch) => {
+      dispatch(this.createPlanPending());
+      SwiftApiService.uploadTarball(planName, file).then((response) => {
+        MistralApiService.runWorkflow(
+          'tripleo.plan_management.v1.create_deployment_plan',
+          { container: planName }
+        ).then((response) => {
+          if(response.state === 'ERROR') {
+            console.error('Error in PlansActions.createPlanFromTarball', response); //eslint-disable-line no-console
+            // TODO(flfuchs) Set errors as form errors instead showing a notification.
+            dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
+            dispatch(this.createPlanFailed());
+          }
+          else {
+            dispatch(this.pollForPlanCreationWorkflow(planName, response.id));
+          }
+        }).catch((error) => {
+          let errorHandler = new MistralApiErrorHandler(error);
+          // TODO(flfuchs) Set errors as form errors instead showing a notification.
+          errorHandler.errors.forEach((error) => {
+            dispatch(NotificationActions.notify(error));
+          });
+          dispatch(this.createPlanFailed());
+        });
+      }).catch((error) => {
+        console.error('Error in PlansActions.createPlanFromTarball', error); //eslint-disable-line no-console
+        let errorHandler = new SwiftApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          // TODO(flfuchs) Set errors as form errors instead showing a notification.
+          dispatch(NotificationActions.notify(error));
+        });
+        dispatch(this.createPlanFailed());
+      });
+    };
+  },
+
+  pollForPlanCreationWorkflow(planName, workflowExecutionId) {
+    return (dispatch, getState) => {
+      MistralApiService.getWorkflowExecution(workflowExecutionId)
+      .then((response) => {
+        if(response.state === 'RUNNING') {
+          setTimeout(() => {
+            dispatch(this.pollForPlanCreationWorkflow(planName, workflowExecutionId));
+          }, 5000);
+        }
+        else if(response.state === 'ERROR') {
+          dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
+        }
+        else {
+          dispatch(this.createPlanSuccess(planName));
+          dispatch(this.fetchPlans());
+          dispatch(NotificationActions.notify({
+            type: 'success',
+            title: 'Plan was created',
+            message: `The plan ${planName} was successfully created`
+          }));
+          browserHistory.push('/plans/list');
+        }
+      }).catch((error) => {
+        let errorHandler = new MistralApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+        dispatch(this.finishOperation());
       });
     };
   },

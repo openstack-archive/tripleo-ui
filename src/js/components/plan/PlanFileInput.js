@@ -10,17 +10,24 @@ class PlanFileInput extends React.Component {
     };
   }
 
-  componentDidMount() {
-    // Attributes not in react's whitelist need to be added after mounting.
-    this.refs[this.props.name].setAttribute('webkitdirectory', 'webkitdirectory');
+  componentDidUpdate() {
+    if(this.props.uploadType === 'folder') {
+      // Attributes not in react's whitelist need to be added after mounting.
+      this.refs[this.props.name].setAttribute('webkitdirectory', 'webkitdirectory');
+      this.refs[this.props.name].setAttribute('multiple', 'multiple');
+    }
+    else {
+      this.refs[this.props.name].removeAttribute('webkitdirectory');
+      this.refs[this.props.name].removeAttribute('multiple');
+    }
   }
 
-  processFiles(event) {
+  processFolderFiles(inputFiles) {
     let files = [];
     let processedFilesCount = 0;
-    for(let i=0, l=event.target.files.length; i<l; i++) {
+    for(let i=0, l=inputFiles.length; i<l; i++) {
       let reader = new FileReader();
-      let file = event.target.files[i];
+      let file = inputFiles[i];
       reader.onload = (f => {
         return e => {
           if(file.name.match(/(\.yaml|\.json|\.pp|\.sh)$/)) {
@@ -41,6 +48,19 @@ class PlanFileInput extends React.Component {
         };
       })(file);
       reader.readAsText(file);
+    }
+  }
+
+  processTarball(file) {
+    this.props.setValue([{ name: file.name, file: file }]);
+  }
+
+  processFiles(event) {
+    if(this.props.uploadType === 'folder') {
+      this.processFolderFiles.bind(this)(event.target.files);
+    }
+    else {
+      this.processTarball.bind(this)(event.target.files[0]);
     }
   }
 
@@ -85,8 +105,7 @@ class PlanFileInput extends React.Component {
                  name={this.props.name}
                  ref={this.props.name}
                  id={this.props.name}
-                 onChange={this.processFiles.bind(this)}
-                 multiple/>
+                 onChange={this.processFiles.bind(this)}/>
           {this.renderProgress()}
           {this.renderErrorMessage()}
           {this.renderDescription()}
@@ -106,11 +125,13 @@ PlanFileInput.propTypes = {
   name: React.PropTypes.string.isRequired,
   setValue: React.PropTypes.func,
   showError: React.PropTypes.func,
-  title: React.PropTypes.string.isRequired
+  title: React.PropTypes.string.isRequired,
+  uploadType: React.PropTypes.string
 };
 PlanFileInput.defaultProps = {
   inputColumnClasses: 'col-sm-10',
-  labelColumnClasses: 'col-sm-2'
+  labelColumnClasses: 'col-sm-2',
+  uploadType: 'tarball'
 };
 
 export default Formsy.HOC(PlanFileInput);

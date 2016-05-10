@@ -17,13 +17,18 @@ class EditPlan extends React.Component {
       planName: undefined,
       selectedFiles: undefined,
       canSubmit: false,
-      formErrors: []
+      formErrors: [],
+      uploadType: 'tarball'
     };
   }
 
   componentDidMount() {
     this.state.planName = this.getNameFromUrl();
     this.props.fetchPlan(this.state.planName);
+  }
+
+  setUploadType(e) {
+    this.setState({ uploadType: e.target.value === 'folder' ? 'folder' : 'tarball' });
   }
 
   onPlanFilesChange(currentValues) {
@@ -85,7 +90,9 @@ class EditPlan extends React.Component {
           <PlanEditFormTabs currentTab={this.props.location.query.tab || 'editPlan'}
                             planFiles={planFiles}
                             selectedFiles={this.state.selectedFiles}
-                            planName={this.state.planName}/>
+                            planName={this.state.planName}
+                            setUploadType={this.setUploadType.bind(this)}
+                            uploadType={this.state.uploadType}/>
         </div>
         <div className="modal-footer">
           <button disabled={!this.state.canSubmit}
