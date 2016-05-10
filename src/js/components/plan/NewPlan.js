@@ -16,8 +16,13 @@ class NewPlan extends React.Component {
       files: [],
       selectedFiles: undefined,
       canSubmit: false,
-      formErrors: []
+      formErrors: [],
+      uploadType: 'tarball'
     };
+  }
+
+  setUploadType(e) {
+    this.setState({ uploadType: e.target.value === 'folder' ? 'folder' : 'tarball' });
   }
 
   onPlanFilesChange(currentValues, isChanged) {
@@ -29,16 +34,22 @@ class NewPlan extends React.Component {
 
   onFormSubmit(formData, resetForm, invalidateForm) {
     let planFiles = {};
-    this.state.selectedFiles.map(item => {
-      planFiles[item.name] = {};
-      planFiles[item.name].contents = item.content;
-      // TODO(jtomasek): user can identify capabilities-map in the list of files
-      // (dropdown select or sth)
-      if(item.name.match('^capabilities[-|_]map\.yaml$')) {
-        planFiles[item.name].meta = { 'file-type': 'capabilities-map' };
-      }
-    });
-    this.props.createPlan(formData.planName, planFiles);
+    if(this.state.uploadType === 'folder') {
+      this.state.selectedFiles.map(item => {
+        planFiles[item.name] = {};
+        planFiles[item.name].contents = item.content;
+        // TODO(jtomasek): user can identify capabilities-map in the list of files
+        // (dropdown select or sth)
+        if(item.name.match('^capabilities[-|_]map\.yaml$')) {
+          planFiles[item.name].meta = { 'file-type': 'capabilities-map' };
+        }
+      });
+      this.props.createPlan(formData.planName, planFiles);
+    }
+    else {
+      let file = this.state.selectedFiles[0].file;
+      this.props.createPlanFromTarball(formData.planName, file);
+    }
   }
 
   onFormValid() {
@@ -70,7 +81,9 @@ class NewPlan extends React.Component {
           <div className="modal-body">
             <FormErrorList errors={this.state.formErrors}/>
             <PlanFormTabs currentTab={this.props.location.query.tab || 'newPlan'}
-                          selectedFiles={this.state.selectedFiles} />
+                          selectedFiles={this.state.selectedFiles}
+                          setUploadType={this.setUploadType.bind(this)}
+                          uploadType={this.state.uploadType}/>
           </div>
           <div className="modal-footer">
             <button disabled={!this.state.canSubmit}
@@ -87,6 +100,7 @@ class NewPlan extends React.Component {
 }
 NewPlan.propTypes = {
   createPlan: React.PropTypes.func,
+  createPlanFromTarball: React.PropTypes.func,
   location: React.PropTypes.object
 };
 
@@ -94,6 +108,9 @@ function mapDispatchToProps(dispatch) {
   return {
     createPlan: (planName, files) => {
       dispatch(PlansActions.createPlan(planName, files));
+    },
+    createPlanFromTarball: (planName, archiveContents) => {
+      dispatch(PlansActions.createPlanFromTarball(planName, archiveContents));
     }
   };
 }

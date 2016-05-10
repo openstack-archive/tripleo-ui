@@ -4,6 +4,7 @@ import HorizontalInput from '../ui/forms/HorizontalInput';
 import NavTab from '../ui/NavTab';
 import PlanFileInput from './PlanFileInput';
 import PlanFilesTab from './PlanFilesTab';
+import PlanUploadTypeRadios from './PlanUploadTypeRadios';
 
 export default class PlanFormTabs extends React.Component {
   setActiveTab(tabName) {
@@ -20,7 +21,9 @@ export default class PlanFormTabs extends React.Component {
           </NavTab>
         </ul>
         <div className="tab-content">
-          <PlanFormTab active={this.setActiveTab('newPlan')} />
+          <PlanFormTab active={this.setActiveTab('newPlan')}
+                       uploadType={this.props.uploadType}
+                       setUploadType={this.props.setUploadType}/>
           <PlanFilesTab active={this.setActiveTab('planFiles')}
                         selectedFiles={this.props.selectedFiles} />
         </div>
@@ -30,7 +33,9 @@ export default class PlanFormTabs extends React.Component {
 }
 PlanFormTabs.propTypes = {
   currentTab: React.PropTypes.string,
-  selectedFiles: React.PropTypes.array
+  selectedFiles: React.PropTypes.array,
+  setUploadType: React.PropTypes.func.isRequired,
+  uploadType: React.PropTypes.string.isRequired
 };
 PlanFormTabs.defaultProps = {
   currentTtab: 'newPlan',
@@ -38,6 +43,7 @@ PlanFormTabs.defaultProps = {
 };
 
 class PlanFormTab extends React.Component {
+
   render() {
     return (
       <div className={`tab-pane ${this.props.active}`}>
@@ -50,10 +56,16 @@ class PlanFormTab extends React.Component {
                          validationError="Please use only alphanumeric characters and
                                           - or _"
                          required />
+        <PlanUploadTypeRadios title="Upload Type"
+                              inputColumnClasses="col-sm-7"
+                              labelColumnClasses="col-sm-3"
+                              setUploadType={this.props.setUploadType}
+                              uploadType={this.props.uploadType}/>
         <PlanFileInput name="planFiles"
-                       title="Upload Files"
+                       title="Plan Files"
                        inputColumnClasses="col-sm-7"
                        labelColumnClasses="col-sm-3"
+                       uploadType={this.props.uploadType}
                        multiple
                        required/>
       </div>
@@ -61,5 +73,7 @@ class PlanFormTab extends React.Component {
   }
 }
 PlanFormTab.propTypes = {
-  active: React.PropTypes.string
+  active: React.PropTypes.string,
+  setUploadType: React.PropTypes.func.isRequired,
+  uploadType: React.PropTypes.string.isRequired
 };
