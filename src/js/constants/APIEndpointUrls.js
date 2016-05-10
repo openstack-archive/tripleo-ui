@@ -6,8 +6,10 @@ let keystoneUrl = appConfig.keystone_url || host + ':5000/v2.0';
 let tripleoApiUrl = appConfig.tripleo_api_url || host + ':8585/v1';
 let validationsUrl = appConfig.validations_url || host + ':5001/v1';
 let heatApiUrl = appConfig.heat_api_url || host + ':8004/v1';
+let swiftApiUrl = appConfig.swift_api_url || undefined;
 
 export const KEYSTONE_URL = keystoneUrl;
 export const TRIPLEOAPI_URL = tripleoApiUrl;
 export const VALIDATIONS_URL = validationsUrl;
 export const HEAT_API_URL = heatApiUrl;
+export const SWIFT_API_URL = swiftApiUrl;
