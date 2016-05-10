@@ -30,11 +30,11 @@ describe('plansReducer state', () => {
     });
   });
 
-  describe('CREATING_PLAN', () => {
+  describe('CREATE_PLAN_PENDING', () => {
     let state;
 
     beforeEach(() => {
-      state = plansReducer(new InitialPlanState, PlansActions.creatingPlan());
+      state = plansReducer(new InitialPlanState, PlansActions.createPlanPending());
     });
 
     it('sets isCreatingPlan to `true`', () => {
@@ -42,13 +42,13 @@ describe('plansReducer state', () => {
     });
   });
 
-  describe('PLAN_CREATED', () => {
+  describe('CREATE_PLAN_SUCCESS', () => {
     let state;
 
     beforeEach(() => {
       state = plansReducer(
         new InitialPlanState({ isCreatingPlan: true }),
-        PlansActions.planCreated()
+        PlansActions.createPlanSuccess()
       );
     });
 

@@ -11,8 +11,9 @@ export default keyMirror({
   PLAN_DETECTED: null,
   DELETING_PLAN: null,
   PLAN_DELETED: null,
-  CREATING_PLAN: null,
-  PLAN_CREATED: null,
   UPDATING_PLAN: null,
-  PLAN_UPDATED: null
+  PLAN_UPDATED: null,
+  CREATE_PLAN_PENDING: null,
+  CREATE_PLAN_SUCCESS: null,
+  CREATE_PLAN_FAILED: null
 });

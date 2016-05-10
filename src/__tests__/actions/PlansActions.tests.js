@@ -47,8 +47,8 @@ describe('PlansActions', () => {
 
   describe('createPlan', () => {
     beforeEach(done => {
-      spyOn(PlansActions, 'creatingPlan');
-      spyOn(PlansActions, 'planCreated');
+      spyOn(PlansActions, 'createPlanPending');
+      spyOn(PlansActions, 'createPlanSuccess');
       spyOn(PlansActions, 'fetchPlans');
       // Mock the service call.
       spyOn(TripleOApiService, 'createPlan').and.callFake(createResolvingPromise());
@@ -59,12 +59,12 @@ describe('PlansActions', () => {
       setTimeout(() => { done(); }, 1);
     });
 
-    it('dispatches creatingPlan', () => {
-      expect(PlansActions.creatingPlan).toHaveBeenCalled();
+    it('dispatches createPlanPending', () => {
+      expect(PlansActions.createPlanPending).toHaveBeenCalled();
     });
 
-    it('dispatches planCreated', () => {
-      expect(PlansActions.planCreated).toHaveBeenCalled();
+    it('dispatches createPlanSuccess', () => {
+      expect(PlansActions.createPlanSuccess).toHaveBeenCalled();
     });
 
     it('dispatches fetchPlans', () => {

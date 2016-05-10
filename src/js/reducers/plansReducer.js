@@ -51,11 +51,15 @@ export default function plansReducer(state = initialState, action) {
     return state.setIn(['all', action.payload, 'transition'], false);
   }
 
-  case PlansConstants.CREATING_PLAN:
+  case PlansConstants.CREATE_PLAN_PENDING:
     return state
             .set('isCreatingPlan', true);
 
-  case PlansConstants.PLAN_CREATED:
+  case PlansConstants.CREATE_PLAN_SUCCESS:
+    return state
+            .set('isCreatingPlan', false);
+
+  case PlansConstants.CREATE_PLAN_FAILED:
     return state
             .set('isCreatingPlan', false);
 
