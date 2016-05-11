@@ -4,6 +4,7 @@ import { NodeToRegister } from '../immutableRecords/nodes';
 import RegisterNodesConstants from '../constants/RegisterNodesConstants';
 
 const initialState = Map({
+  isRegistering: false,
   nodesToRegister: OrderedMap(),
   selectedNodeId: undefined
 });
@@ -33,6 +34,19 @@ export default function registerNodesReducer(state = initialState, action) {
   case RegisterNodesConstants.UPDATE_NODE: {
     return state.updateIn(['nodesToRegister', action.payload.id],
                           node => new NodeToRegister(fromJS(action.payload)));
+  }
+
+  case RegisterNodesConstants.REGISTER_NODES_PENDING: {
+    return state.set('isRegistering', true);
+  }
+
+  case RegisterNodesConstants.REGISTER_NODES_SUCCESS: {
+    return state.set('isRegistering', false)
+                .set('nodesToRegister', OrderedMap());
+  }
+
+  case RegisterNodesConstants.REGISTER_NODES_FAILED: {
+    return state.set('isRegistering', false);
   }
 
   default:

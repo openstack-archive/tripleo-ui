@@ -1,18 +1,20 @@
 .nav-arrows {
   > li {
     &.active {
-      &:after {
-        border: 10px solid transparent;
-        border-bottom-width: 20px;
-        border-left-color: @nav-pills-active-link-hover-bg;
-        border-right-width: 0;
-        border-top-width: 20px;
-        content: '';
-        height: 0;
-        position: absolute;
-        right: -10px;
-        top: 0;
-        width: 0;
+      @media (min-width: @grid-float-breakpoint) {
+        &:after {
+          border: 10px solid transparent;
+          border-bottom-width: 20px;
+          border-left-color: @nav-pills-active-link-hover-bg;
+          border-right-width: 0;
+          border-top-width: 20px;
+          content: '';
+          height: 0;
+          position: absolute;
+          right: -10px;
+          top: 0;
+          width: 0;
+        }
       }
       .tab-action, &:hover {
         color: #fff;

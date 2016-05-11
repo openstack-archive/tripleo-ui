@@ -2,6 +2,7 @@ import Formsy from 'formsy-react';
 import React from 'react';
 
 import HorizontalInput from '../ui/forms/HorizontalInput';
+import HorizontalArrayInput from '../ui/forms/HorizontalArrayInput';
 import HorizontalSelect from '../ui/forms/HorizontalSelect';
 import PXEAndSSHDriverFields from './driver_fields/PXEAndSSHDriverFields';
 import PXEAndIPMIToolDriverFields from './driver_fields/PXEAndIPMIToolDriverFields';
@@ -12,9 +13,10 @@ export default class RegisterNodeForm extends React.Component {
     this.driverOptions = ['pxe_ipmitool', 'pxe_ssh'];
 
     this.macAddressValidator = {
-      matchRegexp: /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/
+      matchRegexp:
+        /^([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}(,([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2})*$/
     };
-    this.macAddressValidatorMessage = 'Please enter a valid MAC Address';
+    this.macAddressValidatorMessage = 'Please enter a valid MAC Addresses';
   }
 
   onNodeFormValidSubmit(formData, resetForm, invalidateForm) {
@@ -65,6 +67,14 @@ export default class RegisterNodeForm extends React.Component {
                      onValid={this.onValid.bind(this)}
                      onInvalid={this.onInvalid.bind(this)}>
           <fieldset>
+            <legend>General</legend>
+            <HorizontalInput name="name"
+                             title="Name"
+                             inputColumnClasses="col-sm-7"
+                             labelColumnClasses="col-sm-5"
+                             value={this.props.selectedNode.name}/>
+          </fieldset>
+          <fieldset>
             <legend>Management</legend>
             <HorizontalSelect name="driver"
                               title="Driver"
@@ -76,14 +86,15 @@ export default class RegisterNodeForm extends React.Component {
           </fieldset>
           <fieldset>
             <legend>Networking</legend>
-            <HorizontalInput name="nicMacAddress"
-                             title="NIC MAC Address"
-                             inputColumnClasses="col-sm-7"
-                             labelColumnClasses="col-sm-5"
-                             value={this.props.selectedNode.nicMacAddress}
-                             validations={this.macAddressValidator}
-                             validationError={this.macAddressValidatorMessage}
-                             required/>
+            <HorizontalArrayInput name="nicMacAddresses"
+                                  title="NIC MAC Addresses"
+                                  inputColumnClasses="col-sm-7"
+                                  labelColumnClasses="col-sm-5"
+                                  value={this.props.selectedNode.nicMacAddresses.toArray()}
+                                  validations={this.macAddressValidator}
+                                  validationError={this.macAddressValidatorMessage}
+                                  description="Comma separated list of MAC Addresses"
+                                  required/>
           </fieldset>
         </Formsy.Form>
       </div>

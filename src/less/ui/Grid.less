@@ -1,8 +1,10 @@
 // Equal height columns in a row using flexbox
 // degrades gracefully to non-equal height columns
-.row-eq-height {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
+@media (min-width: @grid-float-breakpoint) {
+  .row-eq-height {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
 }

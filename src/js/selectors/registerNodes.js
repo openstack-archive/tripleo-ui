@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 
+import { IronicNode } from '../immutableRecords/nodes';
+
 const nodesToRegister = state => state.registerNodes.get('nodesToRegister');
 
 /**
@@ -9,5 +11,15 @@ const nodesToRegister = state => state.registerNodes.get('nodesToRegister');
 export const allNodesToRegisterAreValid = createSelector(
   nodesToRegister, (nodesToRegister) => {
     return nodesToRegister.every(node => node.valid) && !nodesToRegister.isEmpty();
+  }
+);
+
+/**
+ * Converts nodesToRegister to map of nodes comsumable by register workflow
+ * @return OrderedMap of IronicNodes
+ */
+export const getIronicNodesfromNodesToRegister = createSelector(
+  nodesToRegister, (nodesToRegister) => {
+    return nodesToRegister.map(node => new IronicNode(node));
   }
 );
