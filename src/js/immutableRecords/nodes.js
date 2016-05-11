@@ -1,9 +1,9 @@
-import { Map, Record } from 'immutable';
+import { List, Map, Record } from 'immutable';
 
 export const NodeToRegister = Record({
   id: undefined,
-  name: 'Undefined Node',
-  nicMacAddress: '',
+  name: '',
+  nicMacAddresses: List(),
   driver: 'pxe_ssh',
   driver_info: Map(),
   valid: false

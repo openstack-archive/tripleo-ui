@@ -16,7 +16,7 @@ describe('registerNodes selectors', () => {
         1: new NodeToRegister({
           id: 2,
           name: 'Undefined Node',
-          nicMacAddress: '',
+          nicMacAddresses: '',
           driver: 'pxe_ssh',
           driver_info: Map(),
           valid: false
@@ -24,7 +24,7 @@ describe('registerNodes selectors', () => {
         2: new NodeToRegister({
           id: 2,
           name: 'Undefined Node',
-          nicMacAddress: '',
+          nicMacAddresses: '',
           driver: 'pxe_ssh',
           driver_info: Map(),
           valid: false

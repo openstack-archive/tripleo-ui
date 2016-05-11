@@ -103,12 +103,15 @@
 
 // Dropdowns use backdrop same as Modals
 .dropdown {
-  z-index: 1050;
+  z-index: 1020;
 }
 
 // Sidebar
-.sidebar-header {
-  padding-bottom: 12px;
+.sidebar-pf {
+  background-color: @sidebar-pf-bg; // keep sidebar background for all screen sizes
+  .sidebar-header {
+    padding-bottom: 12px;
+  }
 }
 
 // logo

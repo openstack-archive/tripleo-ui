@@ -2,10 +2,14 @@ import ClassNames from 'classnames';
 import Formsy from 'formsy-react';
 import React from 'react';
 
-class HorizontalInput extends React.Component {
+class HorizontalArrayInput extends React.Component {
   changeValue(event) {
     event.stopPropagation(); // https://github.com/christianalfoni/formsy-react/issues/203
-    this.props.setValue(event.target.value);
+    this.props.setValue(event.target.value.split(','));
+  }
+
+  getValue() {
+    return this.props.getValue().toString();
   }
 
   renderErrorMessage() {
@@ -43,7 +47,7 @@ class HorizontalInput extends React.Component {
                  id={this.props.name}
                  className="form-control"
                  onChange={this.changeValue.bind(this)}
-                 value={this.props.getValue()}
+                 value={this.getValue()}
                  placeholder={this.props.placeholder}
                  min={this.props.min}
                  max={this.props.max}
@@ -55,7 +59,7 @@ class HorizontalInput extends React.Component {
     );
   }
 }
-HorizontalInput.propTypes = {
+HorizontalArrayInput.propTypes = {
   description: React.PropTypes.string,
   disabled: React.PropTypes.bool,
   getErrorMessage: React.PropTypes.func,
@@ -73,9 +77,9 @@ HorizontalInput.propTypes = {
   title: React.PropTypes.string.isRequired,
   type: React.PropTypes.string
 };
-HorizontalInput.defaultProps = {
+HorizontalArrayInput.defaultProps = {
   inputColumnClasses: 'col-sm-10',
   labelColumnClasses: 'col-sm-2',
   type: 'text'
 };
-export default Formsy.HOC(HorizontalInput);
+export default Formsy.HOC(HorizontalArrayInput);

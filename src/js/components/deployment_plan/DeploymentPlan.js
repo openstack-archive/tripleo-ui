@@ -42,7 +42,7 @@ class DeploymentPlan extends React.Component {
     TripleOApiService.deployPlan(this.props.currentPlanName).then((response) => {
       this.setState({ parameters: response.parameters });
       this.props.fetchStacks();
-      NotificationActions.notify({
+      this.props.notify({
         title: 'Deployment started',
         message: 'The Deployment has been successfully initiated',
         type: 'success'
@@ -50,7 +50,7 @@ class DeploymentPlan extends React.Component {
     }).catch((error) => {
       let errorHandler = new TripleOApiErrorHandler(error);
       errorHandler.errors.forEach((error) => {
-        NotificationActions.notify(error);
+        this.props.notify(error);
       });
     });
   }
@@ -221,6 +221,7 @@ DeploymentPlan.propTypes = {
   isFetchingNodes: React.PropTypes.bool,
   isFetchingPlans: React.PropTypes.bool,
   isFetchingRoles: React.PropTypes.bool,
+  notify: React.PropTypes.func,
   roles: ImmutablePropTypes.map,
   rolesLoaded: React.PropTypes.bool,
   route: React.PropTypes.object,
@@ -259,6 +260,7 @@ function mapDispatchToProps(dispatch) {
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
     fetchRoles: () => dispatch(RolesActions.fetchRoles()),
     fetchStacks: () => dispatch(StacksActions.fetchStacks()),
+    notify: notification => dispatch(NotificationActions.notify(notification)),
     runValidationStage: (uuid) => {
       dispatch(ValidationsActions.runValidationStage(uuid));
     }
