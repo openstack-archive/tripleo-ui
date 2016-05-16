@@ -6,14 +6,16 @@ import KeystoneApiErrorHandler from '../services/KeystoneApiErrorHandler';
 import KeystoneApiService from '../services/KeystoneApiService';
 import LoginConstants from '../constants/LoginConstants';
 import PlansActions from './PlansActions';
+import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 
 export default {
   authenticateUserViaToken(keystoneAuthTokenId, nextPath) {
-    return dispatch => {
+    return (dispatch, getState) => {
       dispatch(this.userAuthStarted());
       KeystoneApiService.authenticateUserViaToken(keystoneAuthTokenId).then((response) => {
         TempStorage.setItem('keystoneAuthTokenId', response.access.token.id);
         dispatch(this.userAuthSuccess(response.access));
+        ZaqarWebSocketService.init(getState, dispatch);
         history.pushState(null, nextPath);
         dispatch(PlansActions.fetchPlans());
       }).catch((error) => {
@@ -32,6 +34,7 @@ export default {
       KeystoneApiService.authenticateUser(formData.username, formData.password).then((response) => {
         TempStorage.setItem('keystoneAuthTokenId', response.access.token.id);
         dispatch(this.userAuthSuccess(response.access));
+        ZaqarWebSocketService.init(getState, dispatch);
         history.pushState(null, nextPath);
         dispatch(PlansActions.fetchPlans());
       }).catch((error) => {
@@ -70,6 +73,7 @@ export default {
     return dispatch => {
       history.pushState(null, '/login');
       TempStorage.removeItem('keystoneAuthTokenId');
+      ZaqarWebSocketService.close();
       dispatch(this.logoutUserSuccess());
     };
   },

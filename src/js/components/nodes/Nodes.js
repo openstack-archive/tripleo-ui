@@ -7,6 +7,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import NavTab from '../ui/NavTab';
 import NodesActions from '../../actions/NodesActions';
 import RolesActions from '../../actions/RolesActions';
+import ZaqarActions from '../../actions/ZaqarActions';
 import { getRegisteredNodes,
          getIntrospectedNodes,
          getDeployedNodes,
@@ -20,8 +21,9 @@ class Nodes extends React.Component {
 
   refreshResults(e) {
     e.preventDefault();
-    this.props.dispatch(NodesActions.fetchNodes());
-    this.props.dispatch(RolesActions.fetchRoles());
+    // this.props.dispatch(NodesActions.fetchNodes());
+    // this.props.dispatch(RolesActions.fetchRoles());
+    this.props.dispatch(ZaqarActions.sendZaqarMessage());
   }
 
   render() {

@@ -21,6 +21,7 @@
     "invariant": "~2.1.1",
     "keymirror": "~0.1.1",
     "lodash": "^4.0.0",
+    "node-uuid": "^1.4.7",
     "normalizr": "^2.0.0",
     "patternfly": "~2.10.0",
     "react": "~0.14.1",
