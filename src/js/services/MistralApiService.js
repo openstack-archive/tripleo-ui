@@ -70,7 +70,8 @@ class MistralApiService {
         url: getServiceUrl('mistral') + '/action_executions',
         data: JSON.stringify({
           name: actionName,
-          input: JSON.stringify(input)
+          input: JSON.stringify(input),
+          params: JSON.stringify({save_result: true})
         })
       }
     )));
