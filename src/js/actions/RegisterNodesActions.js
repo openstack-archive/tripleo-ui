@@ -37,8 +37,9 @@ export default {
   registerNodes(nodes, redirectPath) {
     return (dispatch, getState) => {
       dispatch(this.registerNodesPending(nodes));
-      MistralApiService.runWorkflow('tripleo.baremetal.v1.bulk_register',
-                                    { nodes: nodes.toList().toJS()})
+      MistralApiService.runWorkflow('tripleo.baremetal.v1.register',
+                                    { nodes_json: nodes.toList().toJS(),
+                                      service_host: '192.0.2.1' })
       .then((response) => {
         if(response.state === 'ERROR') {
           dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
