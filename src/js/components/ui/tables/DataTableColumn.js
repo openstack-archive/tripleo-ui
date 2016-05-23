@@ -9,6 +9,5 @@ export default class DataTableColumn extends React.Component {
 }
 DataTableColumn.propTypes = {
   cell: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
-  header: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
-  key: React.PropTypes.string
+  header: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func])
 };

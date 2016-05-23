@@ -3,8 +3,9 @@ import { Link } from 'react-router';
 
 export default class NavTab extends Link {
   render() {
-    let history = this.context.history;
-    let isActive = history.isActive(this.props.to, this.props.query, this.props.onlyActiveOnIndex);
+    let router = this.context.router;
+    let isActive = router.isActive({ pathname: this.props.to, query: this.props.query },
+                                   this.props.onlyActiveOnIndex);
     let className = isActive ? 'active' : '';
     let link = (
       <Link {...this.props}/>
@@ -21,5 +22,5 @@ NavTab.defaultProps = {
   onlyActiveOnIndex: false
 };
 NavTab.contextTypes = {
-  history: React.PropTypes.object
+  router: React.PropTypes.object
 };
