@@ -43,7 +43,7 @@ class HorizontalInput extends React.Component {
                  id={this.props.name}
                  className="form-control"
                  onChange={this.changeValue.bind(this)}
-                 value={this.props.getValue()}
+                 value={this.props.getValue() || ''}
                  placeholder={this.props.placeholder}
                  min={this.props.min}
                  max={this.props.max}
