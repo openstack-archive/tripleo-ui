@@ -93,7 +93,7 @@ class DeploymentPlan extends React.Component {
     const deploymentConfigLinks = [
       <Link className="btn btn-link"
             key="deploymentConfiguration"
-            to={'/deployment-plan/configuration'}>
+            to="/deployment-plan/configuration">
         Edit Configuration
       </Link>,
       <p key="networkValidationHint">
@@ -104,7 +104,7 @@ class DeploymentPlan extends React.Component {
     ];
 
     const registerAndAssignLinks = [
-      <Link className="btn btn-default" key="registerNodes" to={'/nodes/registered/register'}>
+      <Link className="btn btn-default" key="registerNodes" to="/nodes/registered/register">
         <span className="fa fa-plus"/> Register Nodes
       </Link>,
       <span key="space">&nbsp;</span>,

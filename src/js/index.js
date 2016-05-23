@@ -38,7 +38,7 @@ TempStorage.initialized.then(() => {
    * If user is not logged in, check if there is an auth token in TempStorage
    * If there is, try to login with this token, else redirect to Login
    */
-  function checkAuth(nextState, replaceState) {
+  function checkAuth(nextState, replace) {
     if (!store.getState().login.hasIn(['keystoneAccess','user'])) {
       const keystoneAuthTokenId = TempStorage.getItem('keystoneAuthTokenId');
       if (keystoneAuthTokenId) {
@@ -46,13 +46,13 @@ TempStorage.initialized.then(() => {
                          nextState.location.search || '/';
         store.dispatch(LoginActions.authenticateUserViaToken(keystoneAuthTokenId, nextPath));
       } else {
-        replaceState(null, '/login', { nextPath: nextState.location.pathname +
-                                                 nextState.location.search });
+        replace({ pathname: '/login',
+                  query: { nextPath: nextState.location.pathname + nextState.location.search } });
       }
     }
   }
 
-  function checkRunningDeployment(nextState, replaceState) {
+  function checkRunningDeployment(nextState, replace) {
     const state = store.getState();
     let currentPlanName = state.currentPlan.currentPlanName;
     if(getCurrentStackDeploymentProgress(state)) {
@@ -63,7 +63,7 @@ TempStorage.initialized.then(() => {
       }));
       // TODO(flfuchs): Redirect to deployment status modal instead of DeploymentPlan
       // page (in separate patch).
-      replaceState(null, '/deployment-plan/');
+      replace('/deployment-plan/');
     }
   }
 
