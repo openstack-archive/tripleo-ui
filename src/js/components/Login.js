@@ -16,9 +16,12 @@ class Login extends React.Component {
       canSubmit: false
     };
   }
-
   componentWillMount() {
     ReactDOM.findDOMNode(document.documentElement).className = 'login-pf';
+  }
+
+  componentDidMount() {
+
   }
 
   componentDidUpdate() {
@@ -74,7 +77,9 @@ class Login extends React.Component {
                             placeholder="Username"
                             title="Username"
                             validationError="Username is required"
-                            required/>
+                            required
+                            autoFocus
+                />
                 <LoginInput type="password"
                             name="password"
                             placeholder="Password"

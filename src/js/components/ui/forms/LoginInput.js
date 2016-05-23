@@ -27,7 +27,9 @@ class LoginInput extends React.Component {
                  id={this.props.name}
                  onChange={this.changeValue.bind(this)}
                  value={this.props.getValue()}
-                 placeholder={this.props.placeholder}/>
+                 placeholder={this.props.placeholder}
+                 autoFocus={this.props.autoFocus}
+          />
           {this.renderErrorMessage()}
         </div>
       </div>
@@ -35,6 +37,7 @@ class LoginInput extends React.Component {
   }
 }
 LoginInput.propTypes = {
+  autoFocus: React.PropTypes.bool,
   getErrorMessage: React.PropTypes.func,
   getValue: React.PropTypes.func,
   name: React.PropTypes.string.isRequired,
@@ -44,6 +47,7 @@ LoginInput.propTypes = {
   type: React.PropTypes.string
 };
 LoginInput.defaultProps = {
+  autoFocus: false,
   type: 'text'
 };
 export default Formsy.HOC(LoginInput);
