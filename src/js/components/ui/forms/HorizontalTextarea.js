@@ -43,7 +43,7 @@ class HorizontalTextarea extends React.Component {
                     rows={this.props.rows}
                     className="form-control"
                     onChange={this.changeValue.bind(this)}
-                    value={this.props.getValue()}
+                    value={this.props.getValue() || ''}
                     placeholder={this.props.placeholder}
                     disabled={this.props.disabled} />
           {this.renderErrorMessage()}
