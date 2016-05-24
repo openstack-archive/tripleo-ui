@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { IntlProvider } from 'react-intl';
 import { Router, Route, Redirect } from 'react-router';
-import history from './history';
+import { browserHistory } from 'react-router';
 
 import App from './components/App';
 import AuthenticatedContent from './components/AuthenticatedContent';
@@ -112,7 +112,7 @@ TempStorage.initialized.then(() => {
   ReactDOM.render(
     <Provider store={store}>
       <IntlProvider locale="en">
-        <Router history={history}>{routes}</Router>
+        <Router history={browserHistory}>{routes}</Router>
       </IntlProvider>
     </Provider>,
     document.getElementById('react-app-index')

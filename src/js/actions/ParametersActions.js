@@ -1,4 +1,4 @@
-import history from '../history';
+import { browserHistory } from 'react-router';
 import NotificationActions from '../actions/NotificationActions';
 import ParametersConstants from '../constants/ParametersConstants';
 import TripleOApiService from '../services/TripleOApiService';
@@ -72,7 +72,7 @@ export default {
           message: 'The Deployment parameters have been successfully updated',
           type: 'success'
         }));
-        history.pushState(null, url);
+        browserHistory.push(url);
       }).catch(error => {
         let errorHandler = new TripleOApiErrorHandler(error, inputFieldNames);
         dispatch(this.updateParametersFailed(errorHandler.errors, errorHandler.formFieldErrors));

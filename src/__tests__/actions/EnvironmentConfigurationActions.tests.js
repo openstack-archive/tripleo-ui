@@ -2,7 +2,7 @@ import when from 'when';
 
 import * as utils from '../../js/services/utils';
 import EnvironmentConfigurationActions from '../../js/actions/EnvironmentConfigurationActions';
-import history from '../../js/history';
+import { browserHistory } from 'react-router';
 import TripleOApiService from '../../js/services/TripleOApiService';
 
 // Use this to mock asynchronous functions which return a promise.
@@ -42,7 +42,7 @@ describe('EnvironmentConfigurationActions', () => {
     beforeEach(done => {
       spyOn(EnvironmentConfigurationActions, 'updateEnvironmentConfigurationPending');
       spyOn(EnvironmentConfigurationActions, 'updateEnvironmentConfigurationSuccess');
-      spyOn(history, 'pushState');
+      spyOn(browserHistory, 'push');
       // Mock the service call.
       spyOn(TripleOApiService, 'updatePlanEnvironments').and.callFake(createResolvingPromise({
         environments: { topics: [] }
@@ -65,7 +65,7 @@ describe('EnvironmentConfigurationActions', () => {
     });
 
     it('redirects the page', () => {
-      expect(history.pushState).toHaveBeenCalledWith(null, '/redirect/url');
+      expect(browserHistory.push).toHaveBeenCalledWith('/redirect/url');
     });
   });
 });

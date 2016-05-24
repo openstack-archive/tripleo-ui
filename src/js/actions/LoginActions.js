@@ -1,4 +1,4 @@
-import history from '../history';
+import { browserHistory } from 'react-router';
 import { Map, fromJS } from 'immutable';
 
 import TempStorage from '../services/TempStorage.js';
@@ -8,19 +8,21 @@ import LoginConstants from '../constants/LoginConstants';
 import PlansActions from './PlansActions';
 
 export default {
+
+
   authenticateUserViaToken(keystoneAuthTokenId, nextPath) {
     return dispatch => {
       dispatch(this.userAuthStarted());
       KeystoneApiService.authenticateUserViaToken(keystoneAuthTokenId).then((response) => {
         TempStorage.setItem('keystoneAuthTokenId', response.access.token.id);
         dispatch(this.userAuthSuccess(response.access));
-        history.pushState(null, nextPath);
+        browserHistory.push(nextPath);
         dispatch(PlansActions.fetchPlans());
       }).catch((error) => {
         console.error('Error in LoginActions.authenticateUserViaToken', error); //eslint-disable-line no-console
         let errorHandler = new KeystoneApiErrorHandler(error);
         TempStorage.removeItem('keystoneAuthTokenId');
-        history.pushState(null, '/login', { nextPath: nextPath });
+        browserHistory.push({pathname: '/login', query: { nextPath: nextPath }});
         dispatch(this.userAuthFailure(errorHandler.errors));
       });
     };
@@ -32,7 +34,7 @@ export default {
       KeystoneApiService.authenticateUser(formData.username, formData.password).then((response) => {
         TempStorage.setItem('keystoneAuthTokenId', response.access.token.id);
         dispatch(this.userAuthSuccess(response.access));
-        history.pushState(null, nextPath);
+        browserHistory.push(nextPath);
         dispatch(PlansActions.fetchPlans());
       }).catch((error) => {
         console.error('Error in LoginActions.authenticateUser', error); //eslint-disable-line no-console
@@ -68,7 +70,7 @@ export default {
 
   logoutUser() {
     return dispatch => {
-      history.pushState(null, '/login');
+      browserHistory.push('/login');
       TempStorage.removeItem('keystoneAuthTokenId');
       dispatch(this.logoutUserSuccess());
     };

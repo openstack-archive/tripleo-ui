@@ -1,7 +1,7 @@
 import { normalize, arrayOf } from 'normalizr';
 
 import CurrentPlanActions from '../actions/CurrentPlanActions';
-import history from '../history';
+import { browserHistory } from 'react-router';
 import NotificationActions from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
 import { planSchema } from '../normalizrSchemas/plans';
@@ -92,7 +92,7 @@ export default {
       ).then(result => {
         dispatch(this.planUpdated(planName));
         dispatch(this.fetchPlans());
-        history.pushState(null, '/plans/list');
+        browserHistory.push('/plans/list');
         dispatch(NotificationActions.notify({
           title: 'Plan Updated',
           message: `The plan ${planName} was successfully updated.`,
@@ -129,7 +129,7 @@ export default {
       ).then(result => {
         dispatch(this.planCreated(planName));
         dispatch(this.fetchPlans());
-        history.pushState(null, '/plans/list');
+        browserHistory.push('/plans/list');
         dispatch(NotificationActions.notify({
           title: 'Plan Created',
           message: `The plan ${planName} was successfully created.`,
@@ -162,7 +162,7 @@ export default {
   deletePlan(planName) {
     return dispatch => {
       dispatch(this.deletingPlan(planName));
-      history.pushState(null, '/plans/list');
+      browserHistory.push('/plans/list');
       TripleOApiService.deletePlan(planName).then(response => {
         dispatch(this.planDeleted(planName));
         dispatch(this.fetchPlans());

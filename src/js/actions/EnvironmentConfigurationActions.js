@@ -1,7 +1,7 @@
 import { normalize, arrayOf } from 'normalizr';
 
 import EnvironmentConfigurationConstants from '../constants/EnvironmentConfigurationConstants';
-import history from '../history';
+import { browserHistory } from 'react-router';
 import NotificationActions from '../actions/NotificationActions';
 import TripleOApiService from '../services/TripleOApiService';
 import TripleOApiErrorHandler from '../services/TripleOApiErrorHandler';
@@ -18,7 +18,7 @@ export default {
       }).catch(error => {
         console.error('Error retrieving EnvironmentConfigurationActions.fetchEnvironment', //eslint-disable-line no-console
                       error.stack || error); //eslint-disable-line no-console
-        if(parentPath) { history.pushState(null, parentPath); }
+        if(parentPath) { browserHistory.push(parentPath); }
         dispatch(this.fetchEnvironmentConfigurationFailed());
         let errorHandler = new TripleOApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
@@ -53,7 +53,7 @@ export default {
       TripleOApiService.updatePlanEnvironments(planName, data).then((response) => {
         const entities = normalize(response.environments.topics, arrayOf(topicSchema)).entities;
         dispatch(this.updateEnvironmentConfigurationSuccess(entities));
-        history.pushState(null, parentPath);
+        browserHistory.push(parentPath);
         dispatch(NotificationActions.notify({
           title: 'Environment Configuration updated',
           message: 'The Environment Configuration has been successfully updated',
