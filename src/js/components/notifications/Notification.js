@@ -9,37 +9,36 @@ export default class Notification extends React.Component {
   }
 
   componentDidMount() {
-    //create a timer for the notification if it's not persistent
-    if (!this.props.persistent) {
+    //create a timer for the notification if it's timeoutable
+    if (this.props.timeoutable) {
       this._notificationTimer = new Timer(() => {
         this._hideNotification();
       }, 8000);
     }
   }
 
-  //hide the notification as long as it's not persistent
+  //hide the notification as long as it's timeoutable
   _hideNotification() {
-    if (this._notificationTimer && !this.props.persistent) {
+    if (this._notificationTimer && this.props.timeoutable) {
       this._notificationTimer.clear();
       this.props.removeNotification();
     }
   }
 
-  // handles the mouse hovering over a notification unless it's a persistent notification
+  // handles the mouse hovering over a timeoutable notification
   _handleMouseEnter() {
-    !this.props.persistent ? this._notificationTimer.pause() : null;
+    this.props.timeoutable ? this._notificationTimer.pause() : null;
   }
 
-  // handles the mouse leaving the hover over a notification unless it's a persistent notification
+  // handles the mouse leaving the hover over a timeoutable notification
   _handleMouseLeave() {
-    !this.props.persistent ? this._notificationTimer.resume() : null;
+    this.props.timeoutable ? this._notificationTimer.resume() : null;
   }
 
   render() {
     let classes = ClassNames({
-      'toast-pf': true,
+      'toast-pf alert pull-right': true,
       'alert': true,
-      'pull-right': !this.props.persistent,
       'alert-danger': this.props.type === 'error',
       'alert-warning': this.props.type === 'warning',
       'alert-success': this.props.type === 'success',
@@ -79,14 +78,13 @@ Notification.propTypes = {
   message: React.PropTypes.string.isRequired,
   onMouseEnter: React.PropTypes.func,
   onMouseLeave: React.PropTypes.func,
-  persistent: React.PropTypes.bool,
   removeNotification: React.PropTypes.func,
+  timeoutable: React.PropTypes.bool,
   title: React.PropTypes.string,
   type: React.PropTypes.string
 };
 
 Notification.defaultProps = {
   title: '',
-  type: 'error',
-  persistent: false
+  type: 'error'
 };

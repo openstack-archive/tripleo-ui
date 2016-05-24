@@ -19,6 +19,7 @@ export default class NotificationsToaster extends React.Component {
           message={notification.message}
           type={notification.type}
           dismissable={notification.dismissable}
+          timeoutable={notification.timeoutable}
           removeNotification={this.props.removeNotification.bind(this, notification.id)}/>
       );
     });
