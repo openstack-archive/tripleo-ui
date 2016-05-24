@@ -1,4 +1,5 @@
-import history from '../history';
+import { browserHistory } from 'react-router';
+
 import RegisterNodesConstants from '../constants/RegisterNodesConstants';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import MistralApiService from '../services/MistralApiService';
@@ -45,7 +46,7 @@ export default {
         } else {
           dispatch(NotificationActions.notify({ title: 'Success',
                                                 message: 'Nodes registration initiated'}));
-          history.pushState(null, redirectPath);
+          browserHistory.push(redirectPath);
           dispatch(this.registerNodesSuccess());
         }
       }).catch((error) => {
