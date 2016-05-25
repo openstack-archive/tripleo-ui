@@ -60,12 +60,10 @@ export default function plansReducer(state = initialState, action) {
             .set('isCreatingPlan', false);
 
   case PlansConstants.UPDATING_PLAN:
-    return state
-            .set('transition', 'updating');
+    return state.setIn(['all', action.payload, 'transition'], 'updating');
 
   case PlansConstants.PLAN_UPDATED:
-    return state
-            .set('transition', false);
+    return state.setIn(['all', action.payload, 'transition'], false);
 
   default:
     return state;
