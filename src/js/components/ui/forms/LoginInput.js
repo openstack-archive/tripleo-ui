@@ -1,16 +1,11 @@
 import Formsy from 'formsy-react';
 import React from 'react';
 
+import InputErrorMessage from './InputErrorMessage';
+
 class LoginInput extends React.Component {
   changeValue(event) {
     this.props.setValue(event.target.value);
-  }
-
-  renderErrorMessage() {
-    let errorMessage = this.props.getErrorMessage();
-    return errorMessage ? (
-      <span className="help-block">{errorMessage}</span>
-    ) : false;
   }
 
   render() {
@@ -29,7 +24,7 @@ class LoginInput extends React.Component {
                  value={this.props.getValue() || ''}
                  placeholder={this.props.placeholder}
                  autoFocus={this.props.autoFocus}/>
-          {this.renderErrorMessage()}
+          <InputErrorMessage getErrorMessage={this.props.getErrorMessage} />
         </div>
       </div>
     );

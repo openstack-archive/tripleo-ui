@@ -1,24 +1,13 @@
 import Formsy from 'formsy-react';
 import React from 'react';
 
+import InputDescription from './InputDescription';
+import InputErrorMessage from './InputErrorMessage';
+
 class HorizontalSelect extends React.Component {
   changeValue(event) {
     event.stopPropagation();
     this.props.setValue(event.target.value);
-  }
-
-  renderErrorMessage() {
-    let errorMessage = this.props.getErrorMessage();
-    return errorMessage ? (
-      <span className="help-block">{errorMessage}</span>
-    ) : false;
-  }
-
-  renderDescription() {
-    let description = this.props.description;
-    return description ? (
-      <small className="help-block">{description}</small>
-    ) : false;
   }
 
   render() {
@@ -43,8 +32,8 @@ class HorizontalSelect extends React.Component {
                   value={this.props.getValue()}>
             {options}
            </select>
-          {this.renderErrorMessage()}
-          {this.renderDescription()}
+          <InputErrorMessage getErrorMessage={this.props.getErrorMessage} />
+          <InputDescription description={this.props.description} />
         </div>
       </div>
     );

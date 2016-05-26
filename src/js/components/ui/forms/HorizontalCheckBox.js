@@ -2,23 +2,12 @@ import ClassNames from 'classnames';
 import Formsy from 'formsy-react';
 import React from 'react';
 
+import InputDescription from './InputDescription';
+import InputErrorMessage from './InputErrorMessage';
+
 class HorizontalCheckBox extends React.Component {
   changeValue(event) {
     this.props.setValue(event.target.checked);
-  }
-
-  renderErrorMessage() {
-    let errorMessage = this.props.getErrorMessage();
-    return errorMessage ? (
-      <span className="help-block">{errorMessage}</span>
-    ) : false;
-  }
-
-  renderDescription() {
-    let description = this.props.description;
-    return description ? (
-      <small>{description}</small>
-    ) : false;
   }
 
   render() {
@@ -44,8 +33,8 @@ class HorizontalCheckBox extends React.Component {
                      onChange={this.changeValue.bind(this)}
                      checked={!!this.props.getValue()}
                      value={this.props.getValue()}/>
-              {this.renderDescription()}
-              {this.renderErrorMessage()}
+              <InputErrorMessage getErrorMessage={this.props.getErrorMessage} />
+              <InputDescription description={this.props.description} />
             </label>
           </div>
         </div>

@@ -2,23 +2,12 @@ import ClassNames from 'classnames';
 import Formsy from 'formsy-react';
 import React from 'react';
 
+import InputDescription from './InputDescription';
+import InputErrorMessage from './InputErrorMessage';
+
 class GenericInput extends React.Component {
   changeValue(event) {
     this.props.setValue(event.target.value);
-  }
-
-  renderErrorMessage() {
-    let errorMessage = this.props.getErrorMessage();
-    return errorMessage ? (
-      <span className="help-block">{errorMessage}</span>
-    ) : false;
-  }
-
-  renderDescription() {
-    let description = this.props.description;
-    return description ? (
-      <small className="help-block">{description}</small>
-    ) : false;
   }
 
   render() {
@@ -41,8 +30,8 @@ class GenericInput extends React.Component {
                value={this.props.getValue()}
                placeholder={this.props.placeholder}
                disabled={this.props.disabled} />
-        {this.renderErrorMessage()}
-        {this.renderDescription()}
+        <InputErrorMessage getErrorMessage={this.props.getErrorMessage} />
+        <InputDescription description={this.props.description} />
       </div>
     );
   }
