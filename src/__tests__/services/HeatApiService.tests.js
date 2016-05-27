@@ -1,6 +1,7 @@
 import when from 'when';
 
-import HeatApiService from '../../js/services/HeatApiService.js';
+import * as utils from '../../js/services/utils';
+import HeatApiService from '../../js/services/HeatApiService';
 
 describe('HeatApiService', () => {
 
@@ -12,6 +13,7 @@ describe('HeatApiService', () => {
     let result;
 
     beforeEach(done => {
+      spyOn(utils, 'getServiceUrl').and.returnValue('example.com');
       spyOn(HeatApiService, 'request').and.returnValue(when.resolve(apiResponse));
       HeatApiService.getStacks().then(res => {
         result = res;

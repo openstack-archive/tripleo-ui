@@ -1,8 +1,9 @@
 import BaseHttpRequestErrorHandler from '../components/utils/BaseHttpRequestErrorHandler';
 
-export default class ValidationsApiErrorHandler extends BaseHttpRequestErrorHandler {
+export default class SwiftApiErrorHandler extends BaseHttpRequestErrorHandler {
   _generateErrors(errorObj) {
     let errors = [];
+    let error;
     if(!errorObj.constructor === XMLHttpRequest) {
       errors.push({
         title: 'Error',
@@ -14,18 +15,29 @@ export default class ValidationsApiErrorHandler extends BaseHttpRequestErrorHand
     case 0:
       errors.push({
         title: 'Connection Error',
-        message: 'Connection to Validations API is not available'
+        message: 'Connection to Swift is not available'
       });
       break;
-    case 401: {
-      let error = JSON.parse(errorObj.responseText).error;
+    case 401:
+      error = JSON.parse(errorObj.responseText).error;
       errors.push({
         title: 'Unauthorized',
         message: error.message
       });
       break;
-    }
+    case 404:
+      error = JSON.parse(errorObj.responseText).error;
+      errors.push({
+        title: 'Not found',
+        message: error.message
+      });
+      break;
     default:
+      error = JSON.parse(errorObj.responseText).error;
+      errors.push({
+        title: 'Swift API',
+        message: error.message
+      });
       break;
     }
     return errors;

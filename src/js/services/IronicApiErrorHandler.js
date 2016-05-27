@@ -1,10 +1,17 @@
 import BaseHttpRequestErrorHandler from '../components/utils/BaseHttpRequestErrorHandler';
 
 export default class IronicApiErrorHandler extends BaseHttpRequestErrorHandler {
-  _generateErrors(xmlHttpRequestError) {
+  _generateErrors(errorObj) {
     let errors = [];
     let error;
-    switch(xmlHttpRequestError.status) {
+    if(!errorObj.constructor === XMLHttpRequest) {
+      errors.push({
+        title: 'Error',
+        message: error
+      });
+      return errors;
+    }
+    switch(errorObj.status) {
     case 0:
       errors.push({
         title: 'Connection Error',
@@ -12,18 +19,18 @@ export default class IronicApiErrorHandler extends BaseHttpRequestErrorHandler {
       });
       break;
     case 401:
-      error = xmlHttpRequestError.responseText;
+      error = errorObj.responseText;
       errors.push({
         title: 'Unauthorized',
         message: error
       });
       break;
     default:
-      error = xmlHttpRequestError.responseText;
-      status = xmlHttpRequestError.status;
+      error = errorObj.responseText;
+      status = errorObj.status;
       errors.push({
         title: `Error ${status}`,
-        message: error
+        message: errorObj
       });
       break;
     }

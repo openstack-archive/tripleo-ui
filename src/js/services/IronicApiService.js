@@ -23,11 +23,14 @@ class IronicApiService {
    * @returns {array} of nodes.
    */
   getNodes() {
-    return when(request(this.defaultRequest(
-      {
-        url: getServiceUrl('ironic') + '/nodes'
-      }
-    )));
+    try {
+      return when(request(this.defaultRequest(
+        {
+          url: getServiceUrl('ironic') + '/nodes'
+        }
+      )));
+    }
+    catch(error) { when.reject(error); }
   }
 
   /**

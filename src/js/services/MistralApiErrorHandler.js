@@ -1,10 +1,17 @@
 import BaseHttpRequestErrorHandler from '../components/utils/BaseHttpRequestErrorHandler';
 
 export default class MistralApiErrorHandler extends BaseHttpRequestErrorHandler {
-  _generateErrors(xmlHttpRequestError) {
+  _generateErrors(errorObj) {
     let errors = [];
     let error;
-    switch(xmlHttpRequestError.status) {
+    if(!errorObj.constructor === XMLHttpRequest) {
+      errors.push({
+        title: 'Error',
+        message: error
+      });
+      return errors;
+    }
+    switch(errorObj.status) {
     case 0:
       errors.push({
         title: 'Connection Error',
@@ -12,16 +19,16 @@ export default class MistralApiErrorHandler extends BaseHttpRequestErrorHandler 
       });
       break;
     case 401:
-      error = JSON.parse(xmlHttpRequestError.responseText).error;
+      error = JSON.parse(errorObj.responseText).error;
       errors.push({
         title: 'Unauthorized',
         message: error.message
       });
       break;
     default:
-      error = JSON.parse(xmlHttpRequestError.responseText);
+      error = JSON.parse(errorObj.responseText);
       errors.push({
-        title: xmlHttpRequestError.statusText,
+        title: errorObj.statusText,
         message: error.faultstring
       });
       break;
