@@ -2,8 +2,7 @@ import * as _ from 'lodash';
 import request from 'reqwest';
 import when from 'when';
 
-import { getAuthTokenId } from '../services/utils';
-import { SWIFT_API_URL } from '../constants/APIEndpointUrls';
+import { getAuthTokenId, getServiceUrl } from '../services/utils';
 
 class SwiftApiService {
 
@@ -16,7 +15,7 @@ class SwiftApiService {
 
   uploadTarball(planName, file) {
     return when(request(this.defaultRequest({
-      url: `${SWIFT_API_URL}/${planName}?extract-archive=tar.gz`,
+      url: `${getServiceUrl('swift')}/${planName}?extract-archive=tar.gz`,
       method: 'PUT',
       contentType: 'application/x-www-form-urlencoded',
       processData: false,

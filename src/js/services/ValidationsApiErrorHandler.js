@@ -1,9 +1,16 @@
 import BaseHttpRequestErrorHandler from '../components/utils/BaseHttpRequestErrorHandler';
 
 export default class ValidationsApiErrorHandler extends BaseHttpRequestErrorHandler {
-  _generateErrors(xmlHttpRequestError) {
+  _generateErrors(errorObj) {
     let errors = [];
-    switch(xmlHttpRequestError.status) {
+    if(!errorObj.constructor === XMLHttpRequest) {
+      errors.push({
+        title: 'Error',
+        message: error
+      });
+      return errors;
+    }
+    switch(errorObj.status) {
     case 0:
       errors.push({
         title: 'Connection Error',
@@ -11,7 +18,7 @@ export default class ValidationsApiErrorHandler extends BaseHttpRequestErrorHand
       });
       break;
     case 401: {
-      let error = JSON.parse(xmlHttpRequestError.responseText).error;
+      let error = JSON.parse(errorObj.responseText).error;
       errors.push({
         title: 'Unauthorized',
         message: error.message
