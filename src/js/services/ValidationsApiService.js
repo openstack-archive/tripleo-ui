@@ -2,8 +2,7 @@ import * as _ from 'lodash';
 import request from 'reqwest';
 import when from 'when';
 
-import { getAuthTokenId } from '../services/utils';
-import { VALIDATIONS_URL } from '../constants/APIEndpointUrls';
+import { getAuthTokenId, getServiceUrl } from '../services/utils';
 
 class ValidationsApiService {
   defaultRequest(additionalAttributes) {
@@ -23,7 +22,7 @@ class ValidationsApiService {
    */
   getValidations(planId) {
     return when(request(this.defaultRequest({
-      url: `${VALIDATIONS_URL}/validations/`,
+      url: `${getServiceUrl('validations')}/validations/`,
       data: { plan_id: planId }
     })));
   }
@@ -36,7 +35,7 @@ class ValidationsApiService {
    */
   getValidation(validationId, planId) {
     return when(request(this.defaultRequest({
-      url: `${VALIDATIONS_URL}/validations/${validationId}/`,
+      url: `${getServiceUrl('validations')}/validations/${validationId}/`,
       data: { plan_id: planId }
     })));
   }
@@ -47,7 +46,7 @@ class ValidationsApiService {
   runValidation(validationId, planId) {
     return when(request(this.defaultRequest({
       method: 'PUT',
-      url: `${VALIDATIONS_URL}/validations/${validationId}/run`,
+      url: `${getServiceUrl('validations')}/validations/${validationId}/run`,
       data: { plan_id: planId }
     })));
   }
@@ -58,7 +57,7 @@ class ValidationsApiService {
   stopValidation(validationId, planId) {
     return when(request(this.defaultRequest({
       method: 'PUT',
-      url: `${VALIDATIONS_URL}/validations/${validationId}/stop`,
+      url: `${getServiceUrl('validations')}/validations/${validationId}/stop`,
       data: { plan_id: planId }
     })));
   }
@@ -70,10 +69,15 @@ class ValidationsApiService {
    * @returns {array} of Stages.
    */
   getStages(planId) {
-    return when(request(this.defaultRequest({
-      url: `${VALIDATIONS_URL}/stages/`,
-      data: { plan_id: planId }
-    })));
+    try {
+      return when(request(this.defaultRequest({
+        url: `${getServiceUrl('validations')}/stages/`,
+        data: { plan_id: planId }
+      })));
+    }
+    catch(error) {
+      return when.reject(error);
+    }
   }
 
   /**
@@ -82,7 +86,7 @@ class ValidationsApiService {
    */
   getStage(stageId, planId) {
     return when(request(this.defaultRequest({
-      url: `${VALIDATIONS_URL}/stages/${stageId}/`,
+      url: `${getServiceUrl('validations')}/stages/${stageId}/`,
       data: { plan_id: planId }
     })));
   }
@@ -93,7 +97,7 @@ class ValidationsApiService {
   runStage(stageId, planId) {
     return when(request(this.defaultRequest({
       method: 'PUT',
-      url: `${VALIDATIONS_URL}/stages/${stageId}/run`,
+      url: `${getServiceUrl('validations')}/stages/${stageId}/run`,
       data: { plan_id: planId }
     })));
   }
@@ -104,7 +108,7 @@ class ValidationsApiService {
    */
   getResults(planId) {
     return when(request(this.defaultRequest({
-      url: `${VALIDATIONS_URL}/results/`,
+      url: `${getServiceUrl('validations')}/results/`,
       data: { plan_id: planId }
     })));
   }
@@ -115,7 +119,7 @@ class ValidationsApiService {
    */
   getResult(resultId) {
     return when(request(this.defaultRequest(
-      { url: `${VALIDATIONS_URL}/results/${resultId}/` }
+      { url: `${getServiceUrl('validations')}/results/${resultId}/` }
     )));
   }
 }
