@@ -1,7 +1,7 @@
 import uuid from 'node-uuid';
 
 import { getAuthTokenId, getTenantId } from './utils';
-import { ZAQAR_WEBSOCKET_URL, ZAQAR_DEFAULT_QUEUE } from '../constants/APIEndpointUrls';
+import { ZAQAR_WEBSOCKET_URL, ZAQAR_DEFAULT_QUEUE } from '../constants/ZaqarConstants';
 import ZaqarActions from '../actions/ZaqarActions';
 import NotificationActions from '../actions/NotificationActions';
 
