@@ -3,7 +3,7 @@ import request from 'reqwest';
 import when from 'when';
 
 import { getAuthTokenId } from '../services/utils';
-import { TRIPLEOAPI_URL } from '../constants/APIEndpointUrls';
+import { getServiceUrl } from '../services/utils';
 
 class TripleOApiService {
 
@@ -23,7 +23,7 @@ class TripleOApiService {
    */
   getPlans() {
     return when(request(this.defaultRequest({
-      url: TRIPLEOAPI_URL + '/plans'
+      url: getServiceUrl('tripleo') + '/plans'
     })));
   }
 
@@ -33,7 +33,7 @@ class TripleOApiService {
    */
   getPlan(planName) {
     return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}`
+      url: `${getServiceUrl('tripleo')}/plans/${planName}`
     })));
   }
 
@@ -43,7 +43,7 @@ class TripleOApiService {
    */
   getPlanEnvironments(planName) {
     return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/environments`
+      url: `${getServiceUrl('tripleo')}/plans/${planName}/environments`
     })));
   }
 
@@ -54,7 +54,7 @@ class TripleOApiService {
    */
   updatePlanEnvironments(planName, data) {
     return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/environments?delete`,
+      url: `${getServiceUrl('tripleo')}/plans/${planName}/environments?delete`,
       method: 'PATCH',
       data: JSON.stringify(data)
     })));
@@ -66,7 +66,7 @@ class TripleOApiService {
    */
   getPlanParameters(planName) {
     return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/parameters`
+      url: `${getServiceUrl('tripleo')}/plans/${planName}/parameters`
     })));
   }
 
@@ -76,7 +76,7 @@ class TripleOApiService {
    */
   updatePlanParameters(planName, data) {
     return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/parameters`,
+      url: `${getServiceUrl('tripleo')}/plans/${planName}/parameters`,
       method: 'PATCH',
       data: JSON.stringify(data)
     })));
@@ -88,7 +88,7 @@ class TripleOApiService {
    */
   getPlanResourceTypes(planName) {
     return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/resource_types`
+      url: `${getServiceUrl('tripleo')}/plans/${planName}/resource_types`
     })));
   }
 
@@ -98,7 +98,7 @@ class TripleOApiService {
    */
   getPlanRoles(planName) {
     return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/roles`
+      url: `${getServiceUrl('tripleo')}/plans/${planName}/roles`
     })));
   }
 
@@ -108,7 +108,7 @@ class TripleOApiService {
    */
   validatePlan(planName) {
     return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/validate`
+      url: `${getServiceUrl('tripleo')}/plans/${planName}/validate`
     })));
   }
 
@@ -117,7 +117,7 @@ class TripleOApiService {
    */
   deployPlan(planName) {
     return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/deploy`,
+      url: `${getServiceUrl('tripleo')}/plans/${planName}/deploy`,
       method: 'PUT'
     })));
   }
@@ -127,7 +127,7 @@ class TripleOApiService {
    */
   createPlan(name, files) {
     return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans`,
+      url: `${getServiceUrl('tripleo')}/plans`,
       data: JSON.stringify({
         name: name,
         files: files
@@ -141,7 +141,7 @@ class TripleOApiService {
    */
   updatePlan(name, files) {
     return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${name}`,
+      url: `${getServiceUrl('tripleo')}/plans/${name}`,
       data: JSON.stringify({
         files: files
       }),
@@ -154,7 +154,7 @@ class TripleOApiService {
    */
   deletePlan(name) {
     return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${name}`,
+      url: `${getServiceUrl('tripleo')}/plans/${name}`,
       method: 'DELETE'
     })));
   }
