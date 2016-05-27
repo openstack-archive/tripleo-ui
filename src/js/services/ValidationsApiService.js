@@ -2,8 +2,9 @@ import * as _ from 'lodash';
 import request from 'reqwest';
 import when from 'when';
 
-import { getAuthTokenId } from '../services/utils';
-import { VALIDATIONS_URL } from '../constants/APIEndpointUrls';
+import { getAuthTokenId, getServiceUrl } from '../services/utils';
+
+const VALIDATIONS_URL = getServiceUrl('validations');
 
 class ValidationsApiService {
   defaultRequest(additionalAttributes) {

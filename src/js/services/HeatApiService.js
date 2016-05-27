@@ -2,9 +2,7 @@ import * as _ from 'lodash';
 import request from 'reqwest';
 import when from 'when';
 
-import { getAuthTokenId } from '../services/utils';
-import { getTenantId } from '../services/utils';
-import { HEAT_API_URL } from '../constants/APIEndpointUrls';
+import { getAuthTokenId, getServiceUrl } from '../services/utils';
 
 class HeatApiService {
 
@@ -24,7 +22,7 @@ class HeatApiService {
 
   getStacks() {
     return when(this.request(this.defaultRequest({
-      url: `${HEAT_API_URL}/${getTenantId()}/stacks`
+      url: `${getServiceUrl('heat')}/stacks`
     })));
   }
 
