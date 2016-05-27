@@ -2,19 +2,22 @@ import * as _ from 'lodash';
 import request from 'reqwest';
 import when from 'when';
 
-import { getAuthTokenId } from '../services/utils';
-import { TRIPLEOAPI_URL } from '../constants/APIEndpointUrls';
+import { getAuthTokenId, getServiceUrl } from '../services/utils';
 
 class TripleOApiService {
 
-  defaultRequest(additionalAttributes) {
-    return _.merge({
-      headers: { 'X-Auth-Token': getAuthTokenId() },
-      crossOrigin: true,
-      contentType: 'application/json',
-      type: 'json',
-      method: 'GET'
-    }, additionalAttributes);
+  defaultRequest(path, additionalAttributes) {
+    return when.try(getServiceUrl, 'tripleo').then((serviceUrl) => {
+      let requestAttributes = _.merge({
+        url: `${serviceUrl}${path}`,
+        headers: { 'X-Auth-Token': getAuthTokenId() },
+        crossOrigin: true,
+        contentType: 'application/json',
+        type: 'json',
+        method: 'GET'
+      }, additionalAttributes);
+      return when(request(requestAttributes));
+    });
   }
 
   /**
@@ -22,9 +25,7 @@ class TripleOApiService {
    * @returns {Promise} resolving with {array} of plans.
    */
   getPlans() {
-    return when(request(this.defaultRequest({
-      url: TRIPLEOAPI_URL + '/plans'
-    })));
+    return this.defaultRequest('/plans');
   }
 
   /**
@@ -32,9 +33,7 @@ class TripleOApiService {
    * @returns plan.
    */
   getPlan(planName) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}`
-    })));
+    return this.defaultRequest(`/plans/${planName}`);
   }
 
   /**
@@ -42,9 +41,7 @@ class TripleOApiService {
    * @returns Plan's environments mapping.
    */
   getPlanEnvironments(planName) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/environments`
-    })));
+    return this.defaultRequest(`/plans/${planName}/environments`);
   }
 
   /**
@@ -53,11 +50,10 @@ class TripleOApiService {
    * @returns Plan's environments mapping.
    */
   updatePlanEnvironments(planName, data) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/environments?delete`,
+    return this.defaultRequest(`/plans/${planName}/environments?delete`, {
       method: 'PATCH',
       data: JSON.stringify(data)
-    })));
+    });
   }
 
   /**
@@ -65,9 +61,7 @@ class TripleOApiService {
    * @returns Plan's parameters.
    */
   getPlanParameters(planName) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/parameters`
-    })));
+    return this.defaultRequest(`/plans/${planName}/parameters`);
   }
 
   /**
@@ -75,11 +69,10 @@ class TripleOApiService {
    * @returns Plan's parameters.
    */
   updatePlanParameters(planName, data) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/parameters`,
+    return this.defaultRequest(`/plans/${planName}/parameters`, {
       method: 'PATCH',
       data: JSON.stringify(data)
-    })));
+    });
   }
 
   /**
@@ -87,9 +80,7 @@ class TripleOApiService {
    * @returns Plan's resource registry.
    */
   getPlanResourceTypes(planName) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/resource_types`
-    })));
+    return this.defaultRequest(`/plans/${planName}/resource_types`);
   }
 
   /**
@@ -97,9 +88,7 @@ class TripleOApiService {
    * @returns Plan's roles mapping.
    */
   getPlanRoles(planName) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/roles`
-    })));
+    return this.defaultRequest(`/plans/${planName}/roles`);
   }
 
   /**
@@ -107,56 +96,50 @@ class TripleOApiService {
    * @returns Plan's validation results.
    */
   validatePlan(planName) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/validate`
-    })));
+    return this.defaultRequest(`/plans/${planName}/validate`);
   }
 
   /**
    * TripleO API: PUT /v1/plans/<planName>/deploy
    */
   deployPlan(planName) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/deploy`,
+    return this.defaultRequest(`/plans/${planName}/deploy`, {
       method: 'PUT'
-    })));
+    });
   }
 
   /**
    * TripleO API: POST /v1/plans
    */
   createPlan(name, files) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans`,
+    return this.defaultRequest('/plans', {
       data: JSON.stringify({
         name: name,
         files: files
       }),
       method: 'POST'
-    })));
+    });
   }
 
   /**
    * TripleO API: PATCH /v1/plans/<name>
    */
   updatePlan(name, files) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${name}`,
+    return this.defaultRequest(`/plans/${name}`, {
       data: JSON.stringify({
         files: files
       }),
       method: 'PATCH'
-    })));
+    });
   }
 
   /**
    * TripleO API: DELETE /v1/plans/<name>
    */
   deletePlan(name) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${name}`,
+    return this.defaultRequest(`/plans/${name}`, {
       method: 'DELETE'
-    })));
+    });
   }
 }
 
