@@ -5,16 +5,18 @@ import when from 'when';
 import { getServiceUrl, getAuthTokenId } from './utils';
 
 class MistralApiService {
-  defaultRequest(additionalAttributes) {
-    return _.merge({
-      headers: {
-        'X-Auth-Token': getAuthTokenId()
-      },
-      crossOrigin: true,
-      contentType: 'application/json',
-      type: 'json',
-      method: 'GET'
-    }, additionalAttributes);
+  defaultRequest(path, additionalAttributes) {
+    return when.try(getServiceUrl, 'mistral').then((serviceUrl) => {
+      let requestAttributes = _.merge({
+        url: `${serviceUrl}${path}`,
+        headers: { 'X-Auth-Token': getAuthTokenId() },
+        crossOrigin: true,
+        contentType: 'application/json',
+        type: 'json',
+        method: 'GET'
+      }, additionalAttributes);
+      return when(request(requestAttributes));
+    });
   }
 
   /**
@@ -25,11 +27,7 @@ class MistralApiService {
    * @return {object} Execution.
    */
   getWorkflowExecution(executionId) {
-    return when(request(this.defaultRequest(
-      {
-        url: getServiceUrl('mistral') + '/executions/' + executionId
-      }
-    )));
+    return this.defaultRequest('/executions/' + executionId);
   }
 
   /**
@@ -42,16 +40,13 @@ class MistralApiService {
    * @return {object} Execution.
    */
   runWorkflow(workflowName, input = {}) {
-    return when(request(this.defaultRequest(
-      {
-        method: 'POST',
-        url: getServiceUrl('mistral') + '/executions',
-        data: JSON.stringify({
-          workflow_name: workflowName,
-          input: JSON.stringify(input)
-        })
-      }
-    )));
+    return this.defaultRequest('/executions', {
+      method: 'POST',
+      data: JSON.stringify({
+        workflow_name: workflowName,
+        input: JSON.stringify(input)
+      })
+    });
   }
 
   /**
@@ -64,17 +59,14 @@ class MistralApiService {
    * @return {object} Action Execution.
    */
   runAction(actionName, input = {}) {
-    return when(request(this.defaultRequest(
-      {
-        method: 'POST',
-        url: getServiceUrl('mistral') + '/action_executions',
-        data: JSON.stringify({
-          name: actionName,
-          input: JSON.stringify(input),
-          params: JSON.stringify({save_result: true})
-        })
-      }
-    )));
+    return this.defaultRequest('/action_executions', {
+      method: 'POST',
+      data: JSON.stringify({
+        name: actionName,
+        input: JSON.stringify(input),
+        params: JSON.stringify({save_result: true})
+      })
+    });
   }
 }
 

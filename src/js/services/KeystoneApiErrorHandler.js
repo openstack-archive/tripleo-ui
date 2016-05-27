@@ -1,9 +1,17 @@
 import BaseHttpRequestErrorHandler from '../components/utils/BaseHttpRequestErrorHandler';
 
 export default class KeystoneApiErrorHandler extends BaseHttpRequestErrorHandler {
-  _generateErrors(xmlHttpRequestError) {
+  _generateErrors(errorObj) {
     let errors = [];
-    switch(xmlHttpRequestError.status) {
+    // A weak check to find out if it's not an xhr object.
+    if(!errorObj.status && errorObj.message) {
+      errors.push({
+        title: 'Error',
+        message: errorObj.message
+      });
+      return errors;
+    }
+    switch(errorObj.status) {
     case 0:
       errors.push({
         title: 'Connection Error',
@@ -11,7 +19,7 @@ export default class KeystoneApiErrorHandler extends BaseHttpRequestErrorHandler
       });
       break;
     case 401: {
-      let error = JSON.parse(xmlHttpRequestError.responseText).error;
+      let error = JSON.parse(errorObj.responseText).error;
       errors.push({
         title: 'Unauthorized',
         message: error.message

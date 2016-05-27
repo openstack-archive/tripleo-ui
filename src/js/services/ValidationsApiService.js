@@ -2,18 +2,21 @@ import * as _ from 'lodash';
 import request from 'reqwest';
 import when from 'when';
 
-import { getAuthTokenId } from '../services/utils';
-import { VALIDATIONS_URL } from '../constants/APIEndpointUrls';
+import { getAuthTokenId, getServiceUrl } from '../services/utils';
 
 class ValidationsApiService {
-  defaultRequest(additionalAttributes) {
-    return _.merge({
-      headers: { 'X-Auth-Token': getAuthTokenId() },
-      crossOrigin: true,
-      contentType: 'application/json',
-      type: 'json',
-      method: 'GET'
-    }, additionalAttributes);
+  defaultRequest(path, additionalAttributes) {
+    return when.try(getServiceUrl, 'validations').then((serviceUrl) => {
+      let requestAttributes = _.merge({
+        url: `${serviceUrl}${path}`,
+        headers: { 'X-Auth-Token': getAuthTokenId() },
+        crossOrigin: true,
+        contentType: 'application/json',
+        type: 'json',
+        method: 'GET'
+      }, additionalAttributes);
+      return when(request(requestAttributes));
+    });
   }
   /**
    * Validations API: GET /v1/validations/
@@ -22,10 +25,9 @@ class ValidationsApiService {
    * @returns {array} of validations.
    */
   getValidations(planId) {
-    return when(request(this.defaultRequest({
-      url: `${VALIDATIONS_URL}/validations/`,
+    return this.defaultRequest('/validations/', {
       data: { plan_id: planId }
-    })));
+    });
   }
 
   /**
@@ -35,32 +37,29 @@ class ValidationsApiService {
    * @returns validation.
    */
   getValidation(validationId, planId) {
-    return when(request(this.defaultRequest({
-      url: `${VALIDATIONS_URL}/validations/${validationId}/`,
+    return this.defaultRequest(`/validations/${validationId}/`, {
       data: { plan_id: planId }
-    })));
+    });
   }
 
   /**
    * Validations API: PUT /v1/validations/<validation_id>/run
    */
   runValidation(validationId, planId) {
-    return when(request(this.defaultRequest({
+    return this.defaultRequest(`/validations/${validationId}/run`, {
       method: 'PUT',
-      url: `${VALIDATIONS_URL}/validations/${validationId}/run`,
       data: { plan_id: planId }
-    })));
+    });
   }
 
   /**
    * Validations API: PUT /v1/validations/<validation_id>/stop
    */
   stopValidation(validationId, planId) {
-    return when(request(this.defaultRequest({
+    return this.defaultRequest(`/validations/${validationId}/stop`, {
       method: 'PUT',
-      url: `${VALIDATIONS_URL}/validations/${validationId}/stop`,
       data: { plan_id: planId }
-    })));
+    });
   }
 
   /**
@@ -70,10 +69,9 @@ class ValidationsApiService {
    * @returns {array} of Stages.
    */
   getStages(planId) {
-    return when(request(this.defaultRequest({
-      url: `${VALIDATIONS_URL}/stages/`,
+    return this.defaultRequest('/stages/', {
       data: { plan_id: planId }
-    })));
+    });
   }
 
   /**
@@ -81,21 +79,19 @@ class ValidationsApiService {
    * @returns Stage.
    */
   getStage(stageId, planId) {
-    return when(request(this.defaultRequest({
-      url: `${VALIDATIONS_URL}/stages/${stageId}/`,
+    return this.defaultRequest(`/stages/${stageId}/`, {
       data: { plan_id: planId }
-    })));
+    });
   }
 
   /**
    * Validations API: PUT /v1/stages/<stage_id>/run
    */
   runStage(stageId, planId) {
-    return when(request(this.defaultRequest({
+    return this.defaultRequest(`/stages/${stageId}/run`, {
       method: 'PUT',
-      url: `${VALIDATIONS_URL}/stages/${stageId}/run`,
       data: { plan_id: planId }
-    })));
+    });
   }
 
   /**
@@ -103,10 +99,9 @@ class ValidationsApiService {
    * @returns array of validation results
    */
   getResults(planId) {
-    return when(request(this.defaultRequest({
-      url: `${VALIDATIONS_URL}/results/`,
+    return this.defaultRequest('/results/', {
       data: { plan_id: planId }
-    })));
+    });
   }
 
   /**
@@ -114,9 +109,7 @@ class ValidationsApiService {
    * @returns validation result
    */
   getResult(resultId) {
-    return when(request(this.defaultRequest(
-      { url: `${VALIDATIONS_URL}/results/${resultId}/` }
-    )));
+    return this.defaultRequest(`/results/${resultId}/`);
   }
 }
 
