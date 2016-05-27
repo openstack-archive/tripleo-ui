@@ -5,17 +5,21 @@ import when from 'when';
 import { getServiceUrl, getAuthTokenId } from './utils';
 
 class IronicApiService {
-  defaultRequest(additionalAttributes) {
-    return _.merge({
-      headers: {
-        'X-Auth-Token': getAuthTokenId(),
-        'X-OpenStack-Ironic-API-Version': '1.14'
-      },
-      crossOrigin: true,
-      contentType: 'application/json',
-      type: 'json',
-      method: 'GET'
-    }, additionalAttributes);
+  defaultRequest(path, additionalAttributes) {
+    return when.try(getServiceUrl, 'ironic').then((serviceUrl) => {
+      let requestAttributes = _.merge({
+        url: `${serviceUrl}${path}`,
+        headers: {
+          'X-Auth-Token': getAuthTokenId(),
+          'X-OpenStack-Ironic-API-Version': '1.14'
+        },
+        crossOrigin: true,
+        contentType: 'application/json',
+        type: 'json',
+        method: 'GET'
+      }, additionalAttributes);
+      return when(request(requestAttributes));
+    });
   }
 
   /**
@@ -23,11 +27,7 @@ class IronicApiService {
    * @returns {array} of nodes.
    */
   getNodes() {
-    return when(request(this.defaultRequest(
-      {
-        url: getServiceUrl('ironic') + '/nodes'
-      }
-    )));
+    return this.defaultRequest('/nodes');
   }
 
   /**
@@ -35,21 +35,14 @@ class IronicApiService {
    * @returns node object.
    */
   getNode(nodeId) {
-    return when(request(this.defaultRequest(
-      {
-        url: getServiceUrl('ironic') + '/nodes/' + nodeId
-      }
-    )));
+    return this.defaultRequest('/nodes/' + nodeId);
   }
 
   patchNode(nodePatch) {
-    return when(request(this.defaultRequest(
-      {
-        method: 'PATCH',
-        url: getServiceUrl('ironic') + '/nodes/' + nodePatch.uuid,
-        data: JSON.stringify(nodePatch.patches)
-      }
-    )));
+    return this.defaultRequest('/nodes/' + nodePatch.uuid, {
+      method: 'PATCH',
+      data: JSON.stringify(nodePatch.patches)
+    });
   }
 
 }

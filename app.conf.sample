@@ -1,8 +1,17 @@
 [app]
-# keystone_url = http://192.0.2.1:5000/v2.0
-# tripleo_api_url = http://192.0.2.1:8585/v1
-# validations_url = http://192.0.2.1:5001/v1
-# heat_api_url = http://192.0.2.1:8004/v1
+# Service URLs. Use to override service endpoints exposed
+# through Keystone's serviceCatalog. If keystone is not set
+# its URL will assumed to be: <UI_HOST>:5000/v2.0
+#
+# keystone = http://192.0.2.1:5000/v2.0
+# tripleo = http://192.0.2.1:8585/v1
+# validations = http://192.0.2.1:5001/v1
+# heat = http://192.0.2.1:8004/v1/%(tenant_id)s
+# ironic = http://192.0.2.1:6385
+# mistral = http://192.0.2.1:8989/v2
+# swift = http://192.0.2.1:8080/v1/AUTH_%(tenant_id)s
+# zaqar_websocket_url = ws://192.0.2.1:9000
+# zaqar_default_queue = tripleo
 
 [service]
 # debug = False

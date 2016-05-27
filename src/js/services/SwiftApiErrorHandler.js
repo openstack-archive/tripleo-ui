@@ -1,6 +1,6 @@
 import BaseHttpRequestErrorHandler from '../components/utils/BaseHttpRequestErrorHandler';
 
-export default class IronicApiErrorHandler extends BaseHttpRequestErrorHandler {
+export default class SwiftApiErrorHandler extends BaseHttpRequestErrorHandler {
   _generateErrors(errorObj) {
     let errors = [];
     let error;
@@ -16,31 +16,31 @@ export default class IronicApiErrorHandler extends BaseHttpRequestErrorHandler {
     case 0:
       errors.push({
         title: 'Connection Error',
-        message: 'Connection to Ironic is not available'
+        message: 'Connection to Swift is not available'
       });
       break;
     case 401:
-      error = errorObj.responseText;
+      error = JSON.parse(errorObj.responseText).error;
       errors.push({
         title: 'Unauthorized',
-        message: error
+        message: error.message
+      });
+      break;
+    case 404:
+      error = JSON.parse(errorObj.responseText).error;
+      errors.push({
+        title: 'Not found',
+        message: error.message
       });
       break;
     default:
-      error = errorObj.responseText;
-      status = errorObj.status;
+      error = JSON.parse(errorObj.responseText).error;
       errors.push({
-        title: `Error ${status}`,
-        message: errorObj
+        title: 'Swift API',
+        message: error.message
       });
       break;
     }
     return errors;
-  }
-
-  // TODO(jtomasek): remove this, I am leaving this here just for example reasons
-  // this function should be implemented by form related subclass.
-  _generateFormFieldErrors() {
-    return {};
   }
 }
