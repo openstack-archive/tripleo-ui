@@ -19,9 +19,10 @@ export default {
     };
   },
 
-  notificationsViewed() {
+  notificationViewed(notificationId) {
     return {
-      type: NotificationConstants.NOTIFICATIONS_VIEWED
+      type: NotificationConstants.NOTIFICATION_VIEWED,
+      payload: notificationId
     };
   }
 };

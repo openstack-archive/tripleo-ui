@@ -9,37 +9,37 @@ export default class Notification extends React.Component {
   }
 
   componentDidMount() {
-    //create a timer for the notification if it's not persistent
-    if (!this.props.persistent) {
+    //create a timer for the notification if it's timeoutable
+    if (this.props.timeoutable) {
       this._notificationTimer = new Timer(() => {
         this._hideNotification();
       }, 8000);
     }
   }
 
-  //hide the notification as long as it's not persistent
+  componentWillUpdate(nextProps) {
+    // For timeoutable Notifications, handle the Timer pausing based on timerPaused prop
+    if (this.props.timeoutable) {
+      if (this.props.timerPaused === false && nextProps.timerPaused === true) {
+        this._notificationTimer.pause();
+      } else if (this.props.timerPaused === true && nextProps.timerPaused === false) {
+        this._notificationTimer.resume();
+      }
+    }
+  }
+
+  // hide the notification as long as it's timeoutable
   _hideNotification() {
-    if (this._notificationTimer && !this.props.persistent) {
+    if (this.props.timeoutable) {
       this._notificationTimer.clear();
       this.props.removeNotification();
     }
   }
 
-  // handles the mouse hovering over a notification unless it's a persistent notification
-  _handleMouseEnter() {
-    !this.props.persistent ? this._notificationTimer.pause() : null;
-  }
-
-  // handles the mouse leaving the hover over a notification unless it's a persistent notification
-  _handleMouseLeave() {
-    !this.props.persistent ? this._notificationTimer.resume() : null;
-  }
-
   render() {
     let classes = ClassNames({
-      'toast-pf': true,
+      'toast-pf alert pull-right': true,
       'alert': true,
-      'pull-right': !this.props.persistent,
       'alert-danger': this.props.type === 'error',
       'alert-warning': this.props.type === 'warning',
       'alert-success': this.props.type === 'success',
@@ -55,20 +55,19 @@ export default class Notification extends React.Component {
     });
 
     return (
-      <div className={classes}
-           role="alert"
-           onMouseEnter={this._handleMouseEnter.bind(this)}
-           onMouseLeave={this._handleMouseLeave.bind(this)}>
-        <span className={iconClass} aria-hidden="true"></span>
-        {this.props.dismissable ?
-          <button type="button"
-                  className="close"
-                  aria-label="Close"
-                  onClick={this._hideNotification.bind(this)}>
-            <span className="pficon pficon-close" aria-hidden="true"></span>
-          </button> : false}
-        <strong>{this.props.title}</strong>
-        <p>{this.props.message}</p>
+      <div className="clearfix">
+        <div className={classes} role="alert">
+          <span className={iconClass} aria-hidden="true"></span>
+          {this.props.dismissable ?
+            <button type="button"
+                    className="close"
+                    aria-label="Close"
+                    onClick={this._hideNotification.bind(this)}>
+              <span className="pficon pficon-close" aria-hidden="true"></span>
+            </button> : false}
+          <strong>{this.props.title}</strong>
+          <p>{this.props.message}</p>
+        </div>
       </div>
     );
   }
@@ -77,16 +76,14 @@ export default class Notification extends React.Component {
 Notification.propTypes = {
   dismissable: React.PropTypes.bool.isRequired,
   message: React.PropTypes.string.isRequired,
-  onMouseEnter: React.PropTypes.func,
-  onMouseLeave: React.PropTypes.func,
-  persistent: React.PropTypes.bool,
   removeNotification: React.PropTypes.func,
-  title: React.PropTypes.string,
-  type: React.PropTypes.string
+  timeoutable: React.PropTypes.bool.isRequired,
+  timerPaused: React.PropTypes.bool,
+  title: React.PropTypes.string.isRequired,
+  type: React.PropTypes.string.isRequired
 };
 
 Notification.defaultProps = {
   title: '',
-  type: 'error',
-  persistent: false
+  type: 'error'
 };

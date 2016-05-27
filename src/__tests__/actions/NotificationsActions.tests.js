@@ -40,10 +40,11 @@ describe('Notification actions', () => {
     expect(NotificationActions.removeNotification(123)).toEqual(expectedAction);
   });
 
-  it('should create an action to mark notifications as viewed', () => {
+  it('should create an action to mark notification as viewed', () => {
     const expectedAction = {
-      type: NotificationConstants.NOTIFICATIONS_VIEWED
+      type: NotificationConstants.NOTIFICATION_VIEWED,
+      payload: 123
     };
-    expect(NotificationActions.notificationsViewed()).toEqual(expectedAction);
+    expect(NotificationActions.notificationViewed(123)).toEqual(expectedAction);
   });
 });

@@ -53,9 +53,10 @@ describe('notificationsReducer', () => {
     );
   });
 
-  it('should handle NOTIFICATIONS_VIEWED', () => {
+  it('should handle NOTIFICATION_VIEWED', () => {
     const action = {
-      type: NotificationConstants.NOTIFICATIONS_VIEWED
+      type: NotificationConstants.NOTIFICATION_VIEWED,
+      payload: 'someId'
     };
     const testState = Map({
       all: Map({

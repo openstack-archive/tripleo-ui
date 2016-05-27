@@ -4,10 +4,24 @@ import React from 'react';
 
 import Notification from './Notification';
 import NotificationActions from '../../actions/NotificationActions';
+import { getNonViewedNotifications } from '../../selectors/notifications';
 
 export default class NotificationsToaster extends React.Component {
   constructor() {
     super();
+    this.state = {
+      isHovered: false
+    };
+  }
+
+  // handles the mouse hovering over a Toaster
+  _handleMouseEnter() {
+    this.setState({ isHovered: true });
+  }
+
+  // handles the mouse leaving the hover over a Toaster
+  _handleMouseLeave() {
+    this.setState({ isHovered: false });
   }
 
   renderNotifications(){
@@ -19,6 +33,8 @@ export default class NotificationsToaster extends React.Component {
           message={notification.message}
           type={notification.type}
           dismissable={notification.dismissable}
+          timeoutable={notification.timeoutable}
+          timerPaused={this.state.isHovered}
           removeNotification={this.props.removeNotification.bind(this, notification.id)}/>
       );
     });
@@ -26,7 +42,9 @@ export default class NotificationsToaster extends React.Component {
 
   render() {
     return  (
-      <div className="toast-pf-max-width toast-pf-top-right">
+      <div className="toast-pf-max-width toast-pf-top-right"
+           onMouseEnter={this._handleMouseEnter.bind(this)}
+           onMouseLeave={this._handleMouseLeave.bind(this)}>
         {this.renderNotifications()}
       </div>
     );
@@ -39,15 +57,13 @@ NotificationsToaster.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    notifications: state.notifications.get('all').sortBy(n => n.timestamp)
-    //TODO: write a selector for visible notifications
-    //notifications: getVisibileNotifications(state).sortBy(n => n.timestamp)
+    notifications: getNonViewedNotifications(state).sortBy(n => n.timestamp)
   };
 }
 function mapDispatchToProps(dispatch) {
   return {
     removeNotification: notificationId =>
-      dispatch(NotificationActions.removeNotification(notificationId))
+      dispatch(NotificationActions.notificationViewed(notificationId))
   };
 }
 

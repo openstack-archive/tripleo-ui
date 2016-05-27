@@ -7,5 +7,6 @@ export const Notification = Record({
   type: 'error',
   viewed: false,
   dismissable: true,
+  timeoutable: true,
   timestamp: undefined
 });
