@@ -2,8 +2,7 @@ import * as _ from 'lodash';
 import request from 'reqwest';
 import when from 'when';
 
-import { getAuthTokenId } from '../services/utils';
-import { TRIPLEOAPI_URL } from '../constants/APIEndpointUrls';
+import { getAuthTokenId, getServiceUrl } from '../services/utils';
 
 class TripleOApiService {
 
@@ -22,9 +21,11 @@ class TripleOApiService {
    * @returns {Promise} resolving with {array} of plans.
    */
   getPlans() {
-    return when(request(this.defaultRequest({
-      url: TRIPLEOAPI_URL + '/plans'
-    })));
+    return when.try(getServiceUrl, 'tripleo').then((url) => {
+      return when(request(this.defaultRequest({
+        url: `${url}/plans`
+      })));
+    });
   }
 
   /**
@@ -32,9 +33,11 @@ class TripleOApiService {
    * @returns plan.
    */
   getPlan(planName) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}`
-    })));
+    return when.try(getServiceUrl, 'tripleo').then((url) => {
+      return when(request(this.defaultRequest({
+        url: `${url}/plans/${planName}`
+      })));
+    });
   }
 
   /**
@@ -42,9 +45,11 @@ class TripleOApiService {
    * @returns Plan's environments mapping.
    */
   getPlanEnvironments(planName) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/environments`
-    })));
+    return when.try(getServiceUrl, 'tripleo').then((url) => {
+      return when(request(this.defaultRequest({
+        url: `${url}/plans/${planName}/environments`
+      })));
+    });
   }
 
   /**
@@ -53,11 +58,13 @@ class TripleOApiService {
    * @returns Plan's environments mapping.
    */
   updatePlanEnvironments(planName, data) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/environments?delete`,
-      method: 'PATCH',
-      data: JSON.stringify(data)
-    })));
+    return when.try(getServiceUrl, 'tripleo').then((url) => {
+      return when(request(this.defaultRequest({
+        url: `${url}/plans/${planName}/environments?delete`,
+        method: 'PATCH',
+        data: JSON.stringify(data)
+      })));
+    });
   }
 
   /**
@@ -65,9 +72,11 @@ class TripleOApiService {
    * @returns Plan's parameters.
    */
   getPlanParameters(planName) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/parameters`
-    })));
+    return when.try(getServiceUrl, 'tripleo').then((url) => {
+      return when(request(this.defaultRequest({
+        url: `${url}/plans/${planName}/parameters`
+      })));
+    });
   }
 
   /**
@@ -75,11 +84,13 @@ class TripleOApiService {
    * @returns Plan's parameters.
    */
   updatePlanParameters(planName, data) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/parameters`,
-      method: 'PATCH',
-      data: JSON.stringify(data)
-    })));
+    return when.try(getServiceUrl, 'tripleo').then((url) => {
+      return when(request(this.defaultRequest({
+        url: `${url}/plans/${planName}/parameters`,
+        method: 'PATCH',
+        data: JSON.stringify(data)
+      })));
+    });
   }
 
   /**
@@ -87,9 +98,11 @@ class TripleOApiService {
    * @returns Plan's resource registry.
    */
   getPlanResourceTypes(planName) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/resource_types`
-    })));
+    return when.try(getServiceUrl, 'tripleo').then((url) => {
+      return when(request(this.defaultRequest({
+        url: `${url}/plans/${planName}/resource_types`
+      })));
+    });
   }
 
   /**
@@ -97,9 +110,11 @@ class TripleOApiService {
    * @returns Plan's roles mapping.
    */
   getPlanRoles(planName) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/roles`
-    })));
+    return when.try(getServiceUrl, 'tripleo').then((url) => {
+      return when(request(this.defaultRequest({
+        url: `${url}/plans/${planName}/roles`
+      })));
+    });
   }
 
   /**
@@ -107,56 +122,66 @@ class TripleOApiService {
    * @returns Plan's validation results.
    */
   validatePlan(planName) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/validate`
-    })));
+    return when.try(getServiceUrl, 'tripleo').then((url) => {
+      return when(request(this.defaultRequest({
+        url: `${url}/plans/${planName}/validate`
+      })));
+    });
   }
 
   /**
    * TripleO API: PUT /v1/plans/<planName>/deploy
    */
   deployPlan(planName) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${planName}/deploy`,
-      method: 'PUT'
-    })));
+    return when.try(getServiceUrl, 'tripleo').then((url) => {
+      return when(request(this.defaultRequest({
+        url: `${url}/plans/${planName}/deploy`,
+        method: 'PUT'
+      })));
+    });
   }
 
   /**
    * TripleO API: POST /v1/plans
    */
   createPlan(name, files) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans`,
-      data: JSON.stringify({
-        name: name,
-        files: files
-      }),
-      method: 'POST'
-    })));
+    return when.try(getServiceUrl, 'tripleo').then((url) => {
+      return when(request(this.defaultRequest({
+        url: `${url}/plans`,
+        data: JSON.stringify({
+          name: name,
+          files: files
+        }),
+        method: 'POST'
+      })));
+    });
   }
 
   /**
    * TripleO API: PATCH /v1/plans/<name>
    */
   updatePlan(name, files) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${name}`,
-      data: JSON.stringify({
-        files: files
-      }),
-      method: 'PATCH'
-    })));
+    return when.try(getServiceUrl, 'tripleo').then((url) => {
+      return when(request(this.defaultRequest({
+        url: `${url}/plans/${name}`,
+        data: JSON.stringify({
+          files: files
+        }),
+        method: 'PATCH'
+      })));
+    });
   }
 
   /**
    * TripleO API: DELETE /v1/plans/<name>
    */
   deletePlan(name) {
-    return when(request(this.defaultRequest({
-      url: `${TRIPLEOAPI_URL}/plans/${name}`,
-      method: 'DELETE'
-    })));
+    return when.try(getServiceUrl, 'tripleo').then((url) => {
+      return when(request(this.defaultRequest({
+        url: `${url}/plans/${name}`,
+        method: 'DELETE'
+      })));
+    });
   }
 }
 
