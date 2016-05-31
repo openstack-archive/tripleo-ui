@@ -24,7 +24,7 @@ export default class NodesTable extends React.Component {
   renderNoNodesFound() {
     return (
       <tr>
-        <td className="no-results" colSpan="9">
+        <td className="no-results" colSpan="10">
           <Loader loaded={!this.props.isFetchingNodes}
                   height={40}
                   content="Loading Nodes...">
@@ -71,6 +71,10 @@ export default class NodesTable extends React.Component {
           key="uuid"
           header={<DataTableHeaderCell key="uuid">UUID</DataTableHeaderCell>}
           cell={<DataTableDataFieldCell data={filteredData} field="uuid"/>}/>
+        <DataTableColumn
+          key="name"
+          header={<DataTableHeaderCell key="name">Name</DataTableHeaderCell>}
+          cell={<DataTableDataFieldCell data={filteredData} field="name"/>}/>
         <DataTableColumn
           key="role"
           header={<DataTableHeaderCell key="role">Role</DataTableHeaderCell>}
@@ -129,7 +133,9 @@ NodesTableCheckBoxCell.propTypes = {
 
 export class NodesTableRoleCell extends React.Component {
   getAssignedRoleTitle() {
-    const fieldValue = _.result(this.props.data[this.props.rowIndex], 'properties.capabilities');
+    const fieldValue = _.result(this.props.data[this.props.rowIndex],
+                                'properties.capabilities',
+                                '');
     const capabilitiesMatch = fieldValue.match(/.*profile:(\w+)/);
     if(capabilitiesMatch && Array.isArray(capabilitiesMatch) && capabilitiesMatch.length > 1) {
       const role = this.props.roles.get(capabilitiesMatch[1]);

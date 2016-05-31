@@ -84,6 +84,7 @@ Notification.propTypes = {
 };
 
 Notification.defaultProps = {
+  message: '',
   title: '',
   type: 'error'
 };
