@@ -34,7 +34,7 @@ export const getMaintenanceNodes = createSelector(
 export const getUnassignedIntrospectedNodes = createSelector(
   getIntrospectedNodes, (introspectedNodes) => {
     return introspectedNodes.filterNot(
-      node => node.getIn(['properties', 'capabilities']).match(/.*profile:(\w+)/)
+      node => node.getIn(['properties', 'capabilities'], '').match(/.*profile:(\w+)/)
     );
   }
 );
@@ -50,6 +50,6 @@ export const getNodesOperationInProgress = createSelector(
 
 export const getAssignedNodes = (introspectedNodes, roleName) => {
   return introspectedNodes.filter(
-    node => node.getIn(['properties', 'capabilities']).includes(`profile:${roleName}`)
+    node => node.getIn(['properties', 'capabilities'], '').includes(`profile:${roleName}`)
   );
 };
