@@ -8,7 +8,7 @@ import InputErrorMessage from './InputErrorMessage';
 class HorizontalInput extends React.Component {
   changeValue(event) {
     event.stopPropagation(); // https://github.com/christianalfoni/formsy-react/issues/203
-    this.props.setValue(event.target.value);
+    this.props.setValue(event.target.value === '' ? undefined : event.target.value);
   }
 
   render() {
