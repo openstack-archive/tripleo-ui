@@ -15,14 +15,14 @@ export default {
     return (dispatch, getState) => {
       switch (true) {
 
-      case (_.includes(['authenticate',
-                        'subscription_create'], message.request.action)):
+      case (message.request &&
+            _.includes(['authenticate', 'subscription_create'], message.request.action)):
         dispatch(NotificationActions.notify({ type: 'success',
                                               title: 'Zaqar',
                                               message: message.body.message }));
         break;
 
-      case (message.request.action === 'queue_create'):
+      case (message.request && message.request.action === 'queue_create'):
         dispatch(NotificationActions.notify({ type: 'success',
                                               title: 'Zaqar',
                                               message: message.body }));
@@ -31,7 +31,7 @@ export default {
       default:
         dispatch(NotificationActions.notify({ type: 'success',
                                               title: 'Zaqar',
-                                              message: message.body }));
+                                              message: JSON.stringify(message.body) }));
       }
     };
   }
