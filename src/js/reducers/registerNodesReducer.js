@@ -41,8 +41,7 @@ export default function registerNodesReducer(state = initialState, action) {
   }
 
   case RegisterNodesConstants.REGISTER_NODES_SUCCESS: {
-    return state.set('isRegistering', false)
-                .set('nodesToRegister', OrderedMap());
+    return initialState;
   }
 
   case RegisterNodesConstants.REGISTER_NODES_FAILED: {

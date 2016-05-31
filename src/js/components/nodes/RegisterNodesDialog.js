@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
+import { fromJS } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ClassNames from 'classnames';
 import { Link } from 'react-router';
-import { Map, List } from 'immutable';
 import React from 'react';
 import shortid from 'shortid';
 
@@ -26,27 +26,8 @@ class RegisterNodesDialog extends React.Component {
   addNodesFromInstackenvJSON(fileContents) {
     let nodes = JSON.parse(fileContents).nodes;
     nodes.forEach(node => {
-      switch(node.pm_type) {
-      case 'pxe_ssh':
-        this.addNode(new NodeToRegister({
-          id: shortid.generate(),
-          name: node.name,
-          driver: node.pm_type,
-          nicMacAddresses: List(node.mac),
-          driver_info: Map({
-            ssh_virt_type: 'virsh',
-            ssh_address: node.pm_addr,
-            ssh_user: node.pm_user,
-            ssh_key_contents: node.pm_password
-          })
-        }));
-        break;
-      case 'pxe_ipmitool':
-        this.addNode();
-        break;
-      default:
-        break;
-      }
+      node.id = shortid.generate();
+      this.addNode(new NodeToRegister(fromJS(node)));
     });
   }
 
@@ -102,10 +83,7 @@ class RegisterNodesDialog extends React.Component {
   }
 
   renderNode(node, index) {
-    // TODO(jtomasek): fix the name setting here
-    let nodeName = node.name ||
-                   node.driver_info.get('ssh_address') ||
-                   'Undefined Node';
+    let nodeName = node.name || node.pm_addr || 'Undefined Node';
     let validationIconClasses = ClassNames({
       'pficon': true,
       'pficon-error-circle-o': !node.valid
@@ -148,6 +126,7 @@ class RegisterNodesDialog extends React.Component {
   }
 
   render() {
+    console.log(this.props.ironicNodes.toJS());
     return (
       <Modal dialogClasses="modal-xl">
         <div className="modal-header">
