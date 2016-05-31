@@ -98,4 +98,21 @@ describe('nodesReducer', () => {
     expect(newState).toEqualImmutable(updatedState);
     expect(newState.get('nodesInProgress')).toEqualImmutable(Set());
   });
+
+  it('should handle ADD_NODES action', () => {
+    const registeredNodes = {
+      uuid1: {
+        uuid: 'uuid1'
+      },
+      uuid2: {
+        uuid: 'uuid2'
+      }
+    };
+    const action = {
+      type: NodesConstants.ADD_NODES,
+      payload: registeredNodes
+    };
+    const newState = nodesReducer(initialState, action);
+    expect(newState).toEqualImmutable(updatedState);
+  });
 });

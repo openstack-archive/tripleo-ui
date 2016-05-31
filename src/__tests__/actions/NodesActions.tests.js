@@ -69,6 +69,24 @@ describe('Nodes Actions', () => {
     };
     expect(NodesActions.updateNodeFailed('someNodeId')).toEqual(expectedAction);
   });
+
+  it('should create an action to add Nodes', () => {
+    const registeredNodes = {
+      uuid1: {
+        uuid: 'uuid1',
+        name: 'node1'
+      },
+      uuid2: {
+        uuid: 'uuid2',
+        name: 'node2'
+      }
+    };
+    const expectedAction = {
+      type: NodesConstants.ADD_NODES,
+      payload: registeredNodes
+    };
+    expect(NodesActions.addNodes(registeredNodes)).toEqual(expectedAction);
+  });
 });
 
 // Use this to mock asynchronous functions which return a promise.
