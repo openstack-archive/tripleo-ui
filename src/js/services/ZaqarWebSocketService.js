@@ -29,6 +29,7 @@ export default {
     };
 
     this.socket.onmessage = (evt) => {
+      console.log(evt.data);
       dispatch(ZaqarActions.messageReceived(JSON.parse(evt.data)));
     };
   },

@@ -1,4 +1,4 @@
-import { Map, OrderedMap } from 'immutable';
+import { List, Map, OrderedMap } from 'immutable';
 import matchers from 'jasmine-immutable-matchers';
 
 import * as selectors from '../../js/selectors/registerNodes';
@@ -16,17 +16,15 @@ describe('registerNodes selectors', () => {
         1: new NodeToRegister({
           id: 2,
           name: 'Undefined Node',
-          nicMacAddresses: '',
-          driver: 'pxe_ssh',
-          driver_info: Map(),
+          mac: List(),
+          pm_type: 'pxe_ssh',
           valid: false
         }),
         2: new NodeToRegister({
           id: 2,
           name: 'Undefined Node',
-          nicMacAddresses: '',
-          driver: 'pxe_ssh',
-          driver_info: Map(),
+          mac: List(),
+          pm_type: 'pxe_ssh',
           valid: false
         })
       })
