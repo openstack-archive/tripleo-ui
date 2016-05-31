@@ -1,17 +1,30 @@
-import { List, Map, Record } from 'immutable';
+import { List, Record } from 'immutable';
 
 export const NodeToRegister = Record({
-  id: undefined,
-  name: '',
-  nicMacAddresses: List(),
-  driver: 'pxe_ssh',
-  driver_info: Map(),
+  uuid: undefined,
+  name: undefined,
+  mac: List(),
+  pm_type: 'pxe_ssh',
+  pm_user: undefined,
+  pm_addr: undefined,
+  pm_password: undefined,
+  arch: undefined,
+  cpu: undefined,
+  memory: undefined,
+  disk: undefined,
   valid: false
 });
 
 export const IronicNode = Record({
-  name: '',
-  nicMacAddresses: List(),
-  driver: 'pxe_ssh',
-  driver_info: Map()
+  uuid: undefined,
+  name: undefined,
+  mac: List(),
+  pm_type: 'pxe_ssh',
+  pm_user: undefined,
+  pm_addr: undefined,
+  pm_password: undefined,
+  arch: undefined,
+  cpu: undefined,
+  memory: undefined,
+  disk: undefined
 });

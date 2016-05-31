@@ -2,6 +2,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
 import HorizontalInput from '../../ui/forms/HorizontalInput';
+import HorizontalTextarea from '../../ui/forms/HorizontalTextarea';
 
 export default class PXEAndIPMIToolDriverFields extends React.Component {
   constructor(props) {
@@ -23,18 +24,32 @@ export default class PXEAndIPMIToolDriverFields extends React.Component {
   render() {
     return (
       <div>
-        <HorizontalInput name="driver_info.ipmi_address"
-                         title="IPMI IP Address"
+        <HorizontalInput name="pm_addr"
+                         title="SSH IP Address"
                          inputColumnClasses="col-sm-7"
                          labelColumnClasses="col-sm-5"
-                         value={this.props.driver_info.get('ipmi_address')}
+                         value={this.props.node.pm_addr}
                          validations={this.ipValidator}
                          validationError={this.ipValidatorMessage}
                          required />
+        <HorizontalInput name="pm_user"
+                         title="SSH User"
+                         inputColumnClasses="col-sm-7"
+                         labelColumnClasses="col-sm-5"
+                         value={this.props.node.pm_user}
+                         validations={this.sshUserValidator}
+                         validationError={this.sshUserValidationMessage}
+                         required />
+        <HorizontalTextarea name="pm_password"
+                            title="SSH Key"
+                            inputColumnClasses="col-sm-7"
+                            labelColumnClasses="col-sm-5"
+                            value={this.props.node.pm_password}
+                            required />
       </div>
     );
   }
 }
 PXEAndIPMIToolDriverFields.propTypes = {
-  driver_info: ImmutablePropTypes.map.isRequired
+  node: ImmutablePropTypes.record.isRequired
 };

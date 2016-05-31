@@ -37,7 +37,7 @@ export default class FormErrorList extends React.Component {
       return null;
     } else {
       return (
-        <div className="toast-pf alert alert-danger" role="alert">
+        <div className="toast-pf form-error-list alert alert-danger" role="alert">
           <span className="pficon pficon-error-circle-o" aria-hidden="true"></span>
           {this.renderErrors()}
         </div>

@@ -1,9 +1,13 @@
 import { browserHistory } from 'react-router';
+import { normalize, arrayOf } from 'normalizr';
+import { Map } from 'immutable';
 
 import RegisterNodesConstants from '../constants/RegisterNodesConstants';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import MistralApiService from '../services/MistralApiService';
 import NotificationActions from './NotificationActions';
+import NodesActions from './NodesActions';
+import { nodeSchema } from '../normalizrSchemas/nodes';
 
 export default {
   addNode(node) {
@@ -34,47 +38,72 @@ export default {
     };
   },
 
-  registerNodes(nodes, redirectPath) {
+  startNodesRegistration(nodes, redirectPath) {
     return (dispatch, getState) => {
-      dispatch(this.registerNodesPending(nodes));
-      MistralApiService.runWorkflow('tripleo.baremetal.v1.bulk_register',
-                                    { nodes: nodes.toList().toJS()})
+      dispatch(this.startNodesRegistrationPending(nodes));
+      MistralApiService.runWorkflow('tripleo.baremetal.v1.register',
+                                    { nodes_json: nodes.toList().toJS(),
+                                      service_host: '192.0.2.1' })
       .then((response) => {
         if(response.state === 'ERROR') {
-          dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
-          dispatch(this.registerNodesFailed());
+          const errors = [{ title: 'Nodes Registration Failed', message: response.state_info }];
+          dispatch(this.startNodesRegistrationFailed(errors));
         } else {
-          dispatch(NotificationActions.notify({ title: 'Success',
-                                                message: 'Nodes registration initiated'}));
           browserHistory.push(redirectPath);
-          dispatch(this.registerNodesSuccess());
+          dispatch(this.startNodesRegistrationSuccess());
         }
       }).catch((error) => {
         let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
-        });
-        dispatch(this.registerNodesFailed());
+        dispatch(this.startNodesRegistrationFailed(errorHandler.errors));
       });
     };
   },
 
-  registerNodesPending(nodes) {
+  startNodesRegistrationPending(nodes) {
     return {
-      type: RegisterNodesConstants.REGISTER_NODES_PENDING,
+      type: RegisterNodesConstants.START_NODES_REGISTRATION_PENDING,
       payload: nodes
     };
   },
 
-  registerNodesSuccess() {
+  startNodesRegistrationSuccess() {
     return {
-      type: RegisterNodesConstants.REGISTER_NODES_SUCCESS
+      type: RegisterNodesConstants.START_NODES_REGISTRATION_SUCCESS
     };
   },
 
-  registerNodesFailed() {
+  startNodesRegistrationFailed(errors) {
     return {
-      type: RegisterNodesConstants.REGISTER_NODES_FAILED
+      type: RegisterNodesConstants.START_NODES_REGISTRATION_FAILED,
+      payload: errors
+    };
+  },
+
+  registerNodesSuccess(messagePayload) {
+    return (dispatch, getState) => {
+      dispatch(NotificationActions.notify({
+        type: 'success',
+        title: 'Nodes Registration Complete',
+        message: 'The nodes were successfully registered'
+      }));
+      const registeredNodes = normalize(messagePayload.registered_nodes,
+                                        arrayOf(nodeSchema)).entities.nodes || Map();
+      dispatch(NodesActions.addNodes(registeredNodes));
+    };
+  },
+
+  registerNodesFailed(messagePayload) {
+    return (dispatch, getState) => {
+      const registeredNodes = normalize(messagePayload.registered_nodes,
+                                        arrayOf(nodeSchema)).entities.nodes || Map();
+      const errors = [{
+        title: 'Nodes Registration Failed',
+        message: JSON.stringify(messagePayload.message)
+      }];
+      // const failedNodes =
+      browserHistory.push('/nodes/registered/register');
+      dispatch(NodesActions.addNodes(registeredNodes));
+      dispatch(this.startNodesRegistrationFailed(errors));
     };
   }
 };
