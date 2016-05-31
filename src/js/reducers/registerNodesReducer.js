@@ -36,16 +36,15 @@ export default function registerNodesReducer(state = initialState, action) {
                           node => new NodeToRegister(fromJS(action.payload)));
   }
 
-  case RegisterNodesConstants.REGISTER_NODES_PENDING: {
+  case RegisterNodesConstants.START_NODES_REGISTRATION_PENDING: {
     return state.set('isRegistering', true);
   }
 
-  case RegisterNodesConstants.REGISTER_NODES_SUCCESS: {
-    return state.set('isRegistering', false)
-                .set('nodesToRegister', OrderedMap());
+  case RegisterNodesConstants.START_NODES_REGISTRATION_SUCCESS: {
+    return initialState;
   }
 
-  case RegisterNodesConstants.REGISTER_NODES_FAILED: {
+  case RegisterNodesConstants.START_NODES_REGISTRATION_FAILED: {
     return state.set('isRegistering', false);
   }
 
