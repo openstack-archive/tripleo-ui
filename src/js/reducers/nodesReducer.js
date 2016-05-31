@@ -45,6 +45,9 @@ export default function nodesReducer(state = initialState, action) {
                 .update('nodesInProgress',
                         nodesInProgress => nodesInProgress.remove(action.payload.uuid));
 
+  case NodesConstants.ADD_NODES:
+    return state.update('all', all => all.merge(fromJS(action.payload)));
+
   default:
     return state;
 
