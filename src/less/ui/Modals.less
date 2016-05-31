@@ -38,6 +38,13 @@
     border-bottom: 1px solid @modal-header-border-color ;
   }
 
+  .modal-form-error-list {
+    &:extend(.modal-header, .modal .modal-header);
+    .toast-pf.form-error-list {
+      margin-bottom: 0;
+    }
+  }
+
   .modal-footer {
     margin-top: 0px;
     background-color: #f8f8f8;

@@ -1,15 +1,16 @@
 import { connect } from 'react-redux';
+import { fromJS } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ClassNames from 'classnames';
 import { Link } from 'react-router';
-import { Map, List } from 'immutable';
 import React from 'react';
-import shortid from 'shortid';
+import uuid from 'node-uuid';
 
 import BlankSlate from '../ui/BlankSlate';
 import { allNodesToRegisterAreValid,
          getIronicNodesfromNodesToRegister } from '../../selectors/registerNodes';
 import { NodeToRegister } from '../../immutableRecords/nodes';
+import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import Loader from '../ui/Loader';
 import NotificationActions from '../../actions/NotificationActions';
 import RegisterNodesActions from '../../actions/RegisterNodesActions';
@@ -26,27 +27,8 @@ class RegisterNodesDialog extends React.Component {
   addNodesFromInstackenvJSON(fileContents) {
     let nodes = JSON.parse(fileContents).nodes;
     nodes.forEach(node => {
-      switch(node.pm_type) {
-      case 'pxe_ssh':
-        this.addNode(new NodeToRegister({
-          id: shortid.generate(),
-          name: node.name,
-          driver: node.pm_type,
-          nicMacAddresses: List(node.mac),
-          driver_info: Map({
-            ssh_virt_type: 'virsh',
-            ssh_address: node.pm_addr,
-            ssh_user: node.pm_user,
-            ssh_key_contents: node.pm_password
-          })
-        }));
-        break;
-      case 'pxe_ipmitool':
-        this.addNode();
-        break;
-      default:
-        break;
-      }
+      node.uuid = uuid.v4();
+      this.addNode(new NodeToRegister(fromJS(node)));
     });
   }
 
@@ -86,36 +68,34 @@ class RegisterNodesDialog extends React.Component {
     this.addNode();
   }
 
-  addNode(newNode=new NodeToRegister({id: shortid.generate()})) {
+  addNode(newNode=new NodeToRegister({uuid: uuid.v4()})) {
     this.props.addNode(newNode);
-    this.props.selectNode(newNode.id);
+    this.props.selectNode(newNode.uuid);
   }
 
-  removeNode(id, e) {
+  removeNode(uuid, e) {
     e.preventDefault();
     e.stopPropagation();
-    this.props.removeNode(id);
+    this.props.removeNode(uuid);
   }
 
-  selectNode(id) {
-    this.props.selectNode(id);
+  selectNode(uuid) {
+    this.props.selectNode(uuid);
   }
 
   renderNode(node, index) {
-    // TODO(jtomasek): fix the name setting here
-    let nodeName = node.name ||
-                   node.driver_info.get('ssh_address') ||
-                   'Undefined Node';
+    let nodeName = node.name || node.pm_addr || 'Undefined Node';
     let validationIconClasses = ClassNames({
       'pficon': true,
       'pficon-error-circle-o': !node.valid
     });
 
     return (
-      <Tab key={index} isActive={node.id === this.props.selectedNodeId}>
-        <a className="link" onClick={this.selectNode.bind(this, node.id)}>
+      <Tab key={index} isActive={node.uuid === this.props.selectedNodeId}>
+        <a className="link" onClick={this.selectNode.bind(this, node.uuid)}>
           <span className={validationIconClasses}/> {nodeName}
-          <span className="tab-action fa fa-trash-o" onClick={this.removeNode.bind(this, node.id)}/>
+          <span className="tab-action fa fa-trash-o"
+                onClick={this.removeNode.bind(this, node.uuid)}/>
         </a>
       </Tab>);
   }
@@ -131,8 +111,8 @@ class RegisterNodesDialog extends React.Component {
     if (this.props.selectedNodeId) {
       return this.props.nodesToRegister.toList().map((node) => {
         return (
-          <TabPane key={node.id}
-                   isActive={this.props.selectedNodeId === node.id}
+          <TabPane key={node.uuid}
+                   isActive={this.props.selectedNodeId === node.uuid}
                    renderOnlyActive>
             <RegisterNodeForm selectedNode={node} onUpdateNode={this.onNodeChange.bind(this)}/>
           </TabPane>
@@ -158,47 +138,49 @@ class RegisterNodesDialog extends React.Component {
           </Link>
           <h4 className="modal-title">Register Nodes</h4>
         </div>
-        <div className="container-fluid">
-          <div className="row row-eq-height">
-            <div className="col-sm-4 col-lg-3 sidebar-pf sidebar-pf-left">
-              <div className="nav-stacked-actions">
-                <button className="btn btn-default"
-                        type="button"
-                        onClick={this.onAddNewClick.bind(this)}>
-                  <span className="fa fa-plus"/> Add New
-                </button>
-                &nbsp; or &nbsp;
-                <button className="btn btn-default"
-                        onClick={this.selectFile.bind(this)}
-                        type="button">
-                  <span className="fa fa-upload"/> Upload From File
-                </button>
-                <form ref="regNodesUploadFileForm">
-                  <input style={{display: 'none'}}
-                         ref="regNodesUploadFileInput"
-                         id="regNodesUploadFileInput"
-                         type="file" accept="text/csv,text/json"
-                         onChange={this.uploadFromFile.bind(this)}/>
-                 </form>
+        <Loader loaded={!this.props.isRegistering}
+                size="lg"
+                content="Registering Nodes..."
+                height={220}>
+          <ModalFormErrorList errors={this.props.registrationErrors.toJS()}/>
+          <div className="container-fluid">
+            <div className="row row-eq-height">
+              <div className="col-sm-4 col-lg-3 sidebar-pf sidebar-pf-left">
+                <div className="nav-stacked-actions">
+                  <button className="btn btn-default"
+                          type="button"
+                          onClick={this.onAddNewClick.bind(this)}>
+                    <span className="fa fa-plus"/> Add New
+                  </button>
+                  &nbsp; or &nbsp;
+                  <button className="btn btn-default"
+                          onClick={this.selectFile.bind(this)}
+                          type="button">
+                    <span className="fa fa-upload"/> Upload From File
+                  </button>
+                  <form ref="regNodesUploadFileForm">
+                    <input style={{display: 'none'}}
+                           ref="regNodesUploadFileInput"
+                           id="regNodesUploadFileInput"
+                           type="file" accept="text/csv,text/json"
+                           onChange={this.uploadFromFile.bind(this)}/>
+                   </form>
+                </div>
+                <ul className="nav nav-pills nav-stacked nav-arrows">
+                  {this.renderNodeTabs().reverse()}
+                </ul>
               </div>
-              <ul className="nav nav-pills nav-stacked nav-arrows">
-                {this.renderNodeTabs().reverse()}
-              </ul>
-            </div>
-            <div className="col-sm-8 col-lg-9">
-              <div className="tab-content">
-                <Loader loaded={!this.props.isRegistering}
-                        size="lg"
-                        content="Registering Nodes..."
-                        height={220}>
+              <div className="col-sm-8 col-lg-9">
+                <div className="tab-content">
                   {this.renderTabPanes()}
-                </Loader>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </Loader>
         <div className="modal-footer">
           <Link to="/nodes/registered"
+                onClick={() => this.props.cancelNodesRegistration()}
                 type="button"
                 className="btn btn-default">Cancel</Link>
           <button disabled={!this.props.canSubmit}
@@ -216,11 +198,13 @@ class RegisterNodesDialog extends React.Component {
 RegisterNodesDialog.propTypes = {
   addNode: React.PropTypes.func.isRequired,
   canSubmit: React.PropTypes.bool.isRequired,
+  cancelNodesRegistration: React.PropTypes.func.isRequired,
   ironicNodes: ImmutablePropTypes.map.isRequired,
   isRegistering: React.PropTypes.bool.isRequired,
   nodesToRegister: ImmutablePropTypes.map.isRequired,
   notify: React.PropTypes.func.isRequired,
   registerNodes: React.PropTypes.func.isRequired,
+  registrationErrors: ImmutablePropTypes.list.isRequired,
   removeNode: React.PropTypes.func.isRequired,
   selectNode: React.PropTypes.func.isRequired,
   selectedNodeId: React.PropTypes.string,
@@ -232,6 +216,7 @@ function mapStateToProps(state) {
     canSubmit: allNodesToRegisterAreValid(state) && !state.registerNodes.get('isRegistering'),
     isRegistering: state.registerNodes.get('isRegistering'),
     nodesToRegister: state.registerNodes.get('nodesToRegister'),
+    registrationErrors: state.registerNodes.get('registrationErrors'),
     selectedNodeId: state.registerNodes.get('selectedNodeId'),
     ironicNodes: getIronicNodesfromNodesToRegister(state)
   };
@@ -240,9 +225,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     addNode: node => dispatch(RegisterNodesActions.addNode(node)),
+    cancelNodesRegistration: () => dispatch(RegisterNodesActions.cancelNodesRegistration()),
     selectNode: nodeId => dispatch(RegisterNodesActions.selectNode(nodeId)),
     registerNodes: (nodes, redirectPath) => {
-      dispatch(RegisterNodesActions.registerNodes(nodes, redirectPath));
+      dispatch(RegisterNodesActions.startNodesRegistration(nodes, redirectPath));
     },
     removeNode: nodeId => dispatch(RegisterNodesActions.removeNode(nodeId)),
     updateNode: node => dispatch(RegisterNodesActions.updateNode(node)),

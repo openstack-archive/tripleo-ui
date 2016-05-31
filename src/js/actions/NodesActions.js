@@ -142,6 +142,13 @@ export default {
       type: NodesConstants.UPDATE_NODE_SUCCESS,
       payload: node
     };
+  },
+
+  addNodes(nodes) {
+    return {
+      type: NodesConstants.ADD_NODES,
+      payload: nodes
+    };
   }
 
 };
