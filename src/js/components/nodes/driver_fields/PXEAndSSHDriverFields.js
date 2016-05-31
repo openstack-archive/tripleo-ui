@@ -2,7 +2,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
 import HorizontalInput from '../../ui/forms/HorizontalInput';
-import HorizontalSelect from '../../ui/forms/HorizontalSelect';
 import HorizontalTextarea from '../../ui/forms/HorizontalTextarea';
 
 export default class PXEAndSSHDriverFields extends React.Component {
@@ -25,38 +24,32 @@ export default class PXEAndSSHDriverFields extends React.Component {
   render() {
     return (
       <div>
-        <HorizontalSelect name="driver_info.ssh_virt_type"
-                          title="SSH Virt Type"
-                          inputColumnClasses="col-sm-7"
-                          labelColumnClasses="col-sm-5"
-                          value={this.props.driver_info.get('ssh_virt_type')}
-                          options={['vbox', 'virsh', 'vmware', 'parallels', 'xenserver']} />
-        <HorizontalInput name="driver_info.ssh_address"
+        <HorizontalInput name="pm_addr"
                          title="SSH IP Address"
                          inputColumnClasses="col-sm-7"
                          labelColumnClasses="col-sm-5"
-                         value={this.props.driver_info.get('ssh_address')}
+                         value={this.props.node.pm_addr}
                          validations={this.ipValidator}
                          validationError={this.ipValidatorMessage}
                          required />
-        <HorizontalInput name="driver_info.ssh_user"
+        <HorizontalInput name="pm_user"
                          title="SSH User"
                          inputColumnClasses="col-sm-7"
                          labelColumnClasses="col-sm-5"
-                         value={this.props.driver_info.get('ssh_user')}
+                         value={this.props.node.pm_user}
                          validations={this.sshUserValidator}
                          validationError={this.sshUserValidationMessage}
                          required />
-        <HorizontalTextarea name="driver_info.ssh_key_contents"
-                         title="SSH Key"
-                         inputColumnClasses="col-sm-7"
-                         labelColumnClasses="col-sm-5"
-                         value={this.props.driver_info.get('ssh_key_contents')}
-                         required />
+        <HorizontalTextarea name="pm_password"
+                            title="SSH Key"
+                            inputColumnClasses="col-sm-7"
+                            labelColumnClasses="col-sm-5"
+                            value={this.props.node.pm_password}
+                            required />
       </div>
     );
   }
 }
 PXEAndSSHDriverFields.propTypes = {
-  driver_info: ImmutablePropTypes.map.isRequired
+  node: ImmutablePropTypes.record.isRequired
 };

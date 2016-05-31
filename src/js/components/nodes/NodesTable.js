@@ -129,7 +129,9 @@ NodesTableCheckBoxCell.propTypes = {
 
 export class NodesTableRoleCell extends React.Component {
   getAssignedRoleTitle() {
-    const fieldValue = _.result(this.props.data[this.props.rowIndex], 'properties.capabilities');
+    const fieldValue = _.result(this.props.data[this.props.rowIndex],
+                                'properties.capabilities',
+                                '');
     const capabilitiesMatch = fieldValue.match(/.*profile:(\w+)/);
     if(capabilitiesMatch && Array.isArray(capabilitiesMatch) && capabilitiesMatch.length > 1) {
       const role = this.props.roles.get(capabilitiesMatch[1]);
