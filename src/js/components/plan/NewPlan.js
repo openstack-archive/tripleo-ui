@@ -7,6 +7,7 @@ import FormErrorList from '../ui/forms/FormErrorList';
 import PlansActions from '../../actions/PlansActions';
 import PlanFormTabs from './PlanFormTabs';
 import Modal from '../ui/Modal';
+import Loader from '../ui/Loader';
 
 class NewPlan extends React.Component {
 
@@ -67,11 +68,19 @@ class NewPlan extends React.Component {
             </Link>
             <h4 className="modal-title">Create New Plan</h4>
           </div>
-          <div className="modal-body">
-            <FormErrorList errors={this.state.formErrors}/>
-            <PlanFormTabs currentTab={this.props.location.query.tab || 'newPlan'}
-                          selectedFiles={this.state.selectedFiles} />
-          </div>
+
+          <Loader loaded={!this.props.isCreatingPlan}
+                  size="lg"
+                  content="Creating plan...">
+
+            <div className="modal-body">
+              <FormErrorList errors={this.state.formErrors}/>
+              <PlanFormTabs currentTab={this.props.location.query.tab || 'newPlan'}
+                            selectedFiles={this.state.selectedFiles} />
+            </div>
+
+          </Loader>
+
           <div className="modal-footer">
             <button disabled={!this.state.canSubmit}
                     className="btn btn-primary"
@@ -87,8 +96,15 @@ class NewPlan extends React.Component {
 }
 NewPlan.propTypes = {
   createPlan: React.PropTypes.func,
+  isCreatingPlan: React.PropTypes.bool,
   location: React.PropTypes.object
 };
+
+function mapStateToProps(state) {
+  return {
+    isCreatingPlan: state.plans.isCreatingPlan
+  };
+}
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -98,4 +114,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(null, mapDispatchToProps)(NewPlan);
+export default connect(mapStateToProps, mapDispatchToProps)(NewPlan);
