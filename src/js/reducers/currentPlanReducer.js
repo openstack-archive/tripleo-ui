@@ -14,6 +14,12 @@ export default function currentPlanReducer(state = initialState, action) {
             .set('currentPlanName', action.payload.currentPlanName)
             .set('conflict', action.payload.conflict);
 
+  case PlansConstants.CREATING_PLAN:
+    return state.set('isPlanCreateInProgress', true);
+
+  case PlansConstants.PLAN_CREATED:
+    return state.set('isPlanCreateInProgress', false);
+
   default:
     return state;
 

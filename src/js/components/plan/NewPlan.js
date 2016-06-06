@@ -7,6 +7,7 @@ import FormErrorList from '../ui/forms/FormErrorList';
 import PlansActions from '../../actions/PlansActions';
 import PlanFormTabs from './PlanFormTabs';
 import Modal from '../ui/Modal';
+import Loader from '../ui/Loader';
 
 class NewPlan extends React.Component {
 
@@ -49,6 +50,15 @@ class NewPlan extends React.Component {
     this.setState({canSubmit: false});
   }
 
+  renderCreateProgress() {
+    return (
+      <Loader loaded={!this.props.isPlanCreateInProgress}
+        className="validation-icon"
+        size="sm"
+        inline />
+    );
+  }
+
   render () {
     return (
       <Modal dialogClasses="modal-lg">
@@ -73,6 +83,7 @@ class NewPlan extends React.Component {
                           selectedFiles={this.state.selectedFiles} />
           </div>
           <div className="modal-footer">
+            {this.renderCreateProgress()}
             <button disabled={!this.state.canSubmit}
                     className="btn btn-primary"
                     type="submit">
@@ -87,8 +98,15 @@ class NewPlan extends React.Component {
 }
 NewPlan.propTypes = {
   createPlan: React.PropTypes.func,
+  isPlanCreateInProgress: React.PropTypes.bool,
   location: React.PropTypes.object
 };
+
+function mapStateToProps(state) {
+  return {
+    isPlanCreateInProgress: state.currentPlan.get('isPlanCreateInProgress')
+  };
+}
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -98,4 +116,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(null, mapDispatchToProps)(NewPlan);
+export default connect(mapStateToProps, mapDispatchToProps)(NewPlan);
