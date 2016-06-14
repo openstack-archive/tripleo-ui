@@ -1,3 +1,4 @@
+import NodesActions from './NodesActions';
 import RegisterNodesActions from './RegisterNodesActions';
 
 export default {
@@ -7,6 +8,10 @@ export default {
 
       case ( message.body.type === 'tripleo.baremetal.v1.register_or_update'):
         dispatch(RegisterNodesActions.nodesRegistrationFinished(message.body.payload));
+        break;
+
+      case ( message.body.type === 'tripleo.baremetal.v1.introspect'):
+        dispatch(NodesActions.nodesIntrospectionFinished(message.body.payload));
         break;
 
       default:

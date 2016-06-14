@@ -1,7 +1,9 @@
 import when from 'when';
 
 import IronicApiService from '../../js/services/IronicApiService';
+import MistralApiService from '../../js/services/MistralApiService';
 import NodesActions from '../../js/actions/NodesActions';
+import NotificationActions from '../../js/actions/NotificationActions';
 import NodesConstants from '../../js/constants/NodesConstants';
 import * as utils from '../../js/services/utils';
 
@@ -123,6 +125,84 @@ describe('Asynchronous Nodes Actions', () => {
 
   it('dispatches receiveNodes', () => {
     expect(NodesActions.receiveNodes).toHaveBeenCalledWith({ 0:{ uuid: 0 }});
+  });
+});
+
+describe('Asynchronous Introspect Nodes Action', () => {
+  beforeEach(done => {
+    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
+    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
+    spyOn(NodesActions, 'startOperation');
+    // Mock the service call.
+    spyOn(MistralApiService, 'runWorkflow').and.callFake(
+      createResolvingPromise({ state: 'RUNNING' })
+    );
+
+    const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
+    // Call the action creator and the resulting action.
+    // In this case, dispatch and getState are just empty placeHolders.
+    NodesActions.startNodesIntrospection(nodeIds)(() => {}, () => {});
+    // Call `done` with a minimal timeout.
+    setTimeout(() => { done(); }, 1);
+  });
+
+  it('dispatches startOperation', () => {
+    const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
+    expect(MistralApiService.runWorkflow).toHaveBeenCalledWith('tripleo.baremetal.v1.introspect',
+                                                               { node_uuids: nodeIds });
+    expect(NodesActions.startOperation).toHaveBeenCalledWith(nodeIds);
+  });
+});
+
+describe('nodesIntrospectionFinished', () => {
+  beforeEach(() => {
+    spyOn(NodesActions, 'finishOperation');
+    spyOn(NodesActions, 'fetchNodes');
+    spyOn(NotificationActions, 'notify');
+  });
+
+  it('handles successful nodes introspection', () => {
+    const messagePayload = {
+      status: 'SUCCESS',
+      message: 'Nodes Introspection was successful',
+      introspected_nodes: {
+        '598612eb-f21b-435e-a868-7bb74e576cc2': { finished: true, error: null }
+      },
+      execution_id: '622eb415-a522-4016-b5f6-6e9e0b3f687a',
+      queue_name: 'tripleo',
+      ttl: 3600
+    };
+
+    NodesActions.nodesIntrospectionFinished(messagePayload)(() => {}, () => {});
+
+    expect(NodesActions.fetchNodes).toHaveBeenCalled();
+    expect(NotificationActions.notify).toHaveBeenCalled();
+  });
+
+  it('handles failed nodes introspection', () => {
+    const messagePayload = {
+      status: 'FAILED',
+      message: 'Nodes Introspection failed',
+      introspected_nodes: {
+        '598612eb-f21b-435e-a868-7bb74e576cc2': {
+          finished: true, error: 'Some error occurred on this node'
+        }
+      },
+      execution_id: '622eb415-a522-4016-b5f6-6e9e0b3f687a',
+      queue_name: 'tripleo',
+      ttl: 3600
+    };
+
+    NodesActions.nodesIntrospectionFinished(messagePayload)(() => {}, () => {});
+
+    expect(NodesActions.fetchNodes).toHaveBeenCalled();
+    expect(NotificationActions.notify).toHaveBeenCalledWith(
+      {
+        type: 'error',
+        title: 'Nodes Introspection failed',
+        message: '598612eb-f21b-435e-a868-7bb74e576cc2: Some error occurred on this node'
+      }
+    );
   });
 });
 

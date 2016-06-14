@@ -111,7 +111,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    introspectNodes: nodeIds => dispatch(NodesActions.introspectNodes(nodeIds))
+    introspectNodes: nodeIds => dispatch(NodesActions.startNodesIntrospection(nodeIds))
   };
 }
 
