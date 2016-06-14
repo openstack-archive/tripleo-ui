@@ -1,5 +1,5 @@
 import { normalize, arrayOf } from 'normalizr';
-import { Map } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 import when from 'when';
 
 import IronicApiErrorHandler from '../services/IronicApiErrorHandler';
@@ -59,16 +59,15 @@ export default {
     };
   },
 
-  introspectNodes(nodeIds) {
+  startNodesIntrospection(nodeIds) {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
-      MistralApiService.runWorkflow('tripleo.baremetal.v1.bulk_introspect')
+      MistralApiService.runWorkflow('tripleo.baremetal.v1.introspect',
+                                    { node_uuids: nodeIds })
       .then((response) => {
         if(response.state === 'ERROR') {
           dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
           dispatch(this.finishOperation(nodeIds));
-        } else {
-          dispatch(this.pollForIntrospectionWorkflow(response.id, nodeIds));
         }
       }).catch((error) => {
         let errorHandler = new MistralApiErrorHandler(error);
@@ -80,30 +79,36 @@ export default {
     };
   },
 
-  pollForIntrospectionWorkflow(workflowExecutionId, nodeIds) {
+  nodesIntrospectionFinished(messagePayload) {
     return (dispatch, getState) => {
-      MistralApiService.getWorkflowExecution(workflowExecutionId)
-      .then((response) => {
-        if(response.state === 'RUNNING') {
-          dispatch(this.fetchNodes());
-          setTimeout(() => dispatch(this.pollForIntrospectionWorkflow(workflowExecutionId,
-                                    nodeIds)), 5000);
-        } else if(response.state === 'ERROR') {
-          dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
-          dispatch(this.finishOperation(nodeIds));
-        } else {
-          dispatch(this.finishOperation(nodeIds));
-          dispatch(NotificationActions.notify({ type: 'success',
-                                       title: 'Introspection finished',
-                                       message: 'Nodes Introspection successfully finished' }));
-        }
-      }).catch((error) => {
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
-        });
-        dispatch(this.finishOperation(nodeIds));
-      });
+      const payload = fromJS(messagePayload);
+      const nodeIds = payload.get('introspected_nodes').keys();
+      dispatch(this.finishOperation(nodeIds));
+      dispatch(this.fetchNodes());
+
+      switch(messagePayload.status) {
+      case 'SUCCESS': {
+        dispatch(NotificationActions.notify({
+          type: 'success',
+          title: 'Nodes Introspection Complete',
+          message: 'Selected nodes were successfully introspected'
+        }));
+        break;
+      }
+      case 'FAILED': {
+        const nodeErrors = payload.get('introspected_nodes').reduce((nodeErrors, value, key) => {
+          return nodeErrors.push(`${key}: ${value.get('error')}`);
+        }, List());
+        dispatch(NotificationActions.notify({
+          type: 'error',
+          title: payload.get('message'),
+          message: nodeErrors.toArray().join(', ')
+        }));
+        break;
+      }
+      default:
+        break;
+      }
     };
   },
 
