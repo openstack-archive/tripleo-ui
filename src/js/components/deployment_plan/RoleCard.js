@@ -24,8 +24,9 @@ export default class RoleCard extends React.Component {
         <div className="card-pf-footer">
           <p>
             <Link to={`/deployment-plan/${this.props.name}/assignNodes`}
-                  className="card-pf-link-with-icon">
-              <span className="pficon pficon-add-circle-o"></span>Assign Nodes
+                  className={'card-pf-link-with-icon ' +
+                             (this.props.availableNodesCount ? '' : 'disabled')} >
+              <span className="pficon pficon-add-circle-o" />Assign Nodes
             </Link>
           </p>
         </div>
