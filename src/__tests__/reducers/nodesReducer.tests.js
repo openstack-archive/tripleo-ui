@@ -99,6 +99,26 @@ describe('nodesReducer', () => {
     expect(newState.get('nodesInProgress')).toEqualImmutable(Set());
   });
 
+  it('should handle DELETE_NODE_SUCCESS', () => {
+    const action = {
+      type: NodesConstants.DELETE_NODE_SUCCESS,
+      payload: 'uuid1'
+    };
+    const newState = nodesReducer(updatedState, action);
+    expect(newState.get('all').size).toEqual(1);
+    expect(newState.get('nodesInProgress')).toEqualImmutable(Set());
+  });
+
+  it('should handle DELETE_NODE_FAILED', () => {
+    const action = {
+      type: NodesConstants.UPDATE_NODE_FAILED,
+      payload: 'uuid1'
+    };
+    const newState = nodesReducer(updatedState, action);
+    expect(newState).toEqualImmutable(updatedState);
+    expect(newState.get('nodesInProgress')).toEqualImmutable(Set());
+  });
+
   it('should handle ADD_NODES action', () => {
     const registeredNodes = {
       uuid1: {

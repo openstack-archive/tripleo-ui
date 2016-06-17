@@ -239,3 +239,26 @@ describe('Update Node thunk action', () => {
     expect(NodesActions.updateNodeSuccess).toHaveBeenCalledWith({ uuid: 'someId' });
   });
 });
+
+describe('Delete Nodes thunk action', () => {
+  const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
+
+  beforeEach(done => {
+    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
+    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
+    spyOn(NodesActions, 'startOperation');
+    spyOn(NodesActions, 'deleteNodeSuccess');
+    // Mock the service call.
+    spyOn(IronicApiService, 'deleteNode').and.callFake(createResolvingPromise());
+
+
+    NodesActions.deleteNodes(nodeIds)(() => {}, () => {});
+    // Call `done` with a minimal timeout.
+    setTimeout(() => { done(); }, 1);
+  });
+
+  it('successfully deletes a set of nodes', () => {
+    expect(NodesActions.startOperation).toHaveBeenCalledWith(nodeIds);
+    expect(NodesActions.deleteNodeSuccess).toHaveBeenCalledWith(nodeIds[0]);
+  });
+});
