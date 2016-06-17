@@ -8,5 +8,7 @@ export default keyMirror({
   UPDATE_NODE_PENDING: null,
   UPDATE_NODE_SUCCESS: null,
   UPDATE_NODE_FAILED: null,
+  DELETE_NODE_SUCCESS: null,
+  DELETE_NODE_FAILED: null,
   ADD_NODES: null
 });

@@ -52,6 +52,15 @@ class IronicApiService {
     )));
   }
 
+  deleteNode(nodeId) {
+    return when(request(this.defaultRequest(
+      {
+        method: 'DELETE',
+        url: getServiceUrl('ironic') + '/nodes/' + nodeId
+      }
+    )));
+  }
+
 }
 
 export default new IronicApiService();
