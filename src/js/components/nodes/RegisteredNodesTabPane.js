@@ -6,6 +6,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Formsy from 'formsy-react';
 
 import { getRegisteredNodes, getNodesOperationInProgress } from '../../selectors/nodes';
+import ConfirmationModal from '../ui/ConfirmationModal';
 import FormErrorList from '../ui/forms/FormErrorList';
 import NodesActions from '../../actions/NodesActions';
 import NodesTable from './NodesTable';
@@ -14,7 +15,9 @@ class RegisteredNodesTabPane extends React.Component {
   constructor() {
     super();
     this.state = {
-      canSubmit: false
+      canSubmit: false,
+      showDeleteModal: false,
+      submitType: 'introspect'
     };
   }
 
@@ -46,18 +49,45 @@ class RegisteredNodesTabPane extends React.Component {
     return (
       <div className="btn-group">
         <button className="btn btn-primary"
-                type="submit"
+                type="button"
+                name="introspect"
+                onClick={this.multipleSubmit.bind(this)}
                 disabled={!this.state.canSubmit || this.props.nodesOperationInProgress}>
           Introspect Nodes
+        </button>
+        <button className="btn btn-danger"
+                type="button"
+                name="delete"
+                onClick={() => this.setState({ showDeleteModal: true })}
+                disabled={!this.state.canSubmit || this.props.nodesOperationInProgress}>
+          Delete Nodes
         </button>
       </div>
     );
   }
 
+  multipleSubmit(e) {
+    this.setState({
+      submitType: e.target.name
+    }, this.refs.registeredNodesTableForm.submit);
+  }
+
   handleSubmit(formData, resetForm, invalidateForm) {
     this.disableButton();
     const nodeIds = _.keys(_.pickBy(formData, value => !!value));
-    this.props.introspectNodes(nodeIds);
+
+    switch (this.state.submitType) {
+    case ('introspect'):
+      this.props.introspectNodes(nodeIds);
+      break;
+    case ('delete'):
+      this.setState({ showDeleteModal: false });
+      this.props.deleteNodes(nodeIds);
+      break;
+    default:
+      break;
+    }
+
     resetForm();
   }
 
@@ -77,6 +107,13 @@ class RegisteredNodesTabPane extends React.Component {
                       nodesInProgress={this.props.nodesInProgress}
                       isFetchingNodes={this.props.isFetchingNodes}
                       tableActions={this.getTableActions.bind(this)}/>
+          <ConfirmationModal show={this.state.showDeleteModal}
+                             title="Delete Nodes"
+                             question="Are you sure you want to delete selected Nodes?"
+                             iconClass="pficon pficon-delete"
+                             confirmActionName="delete"
+                             onConfirm={this.multipleSubmit.bind(this)}
+                             onCancel={() => this.setState({ showDeleteModal: false })}/>
         </Formsy.Form>
         {this.props.children}
       </div>
@@ -85,6 +122,7 @@ class RegisteredNodesTabPane extends React.Component {
 }
 RegisteredNodesTabPane.propTypes = {
   children: React.PropTypes.node,
+  deleteNodes: React.PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list,
   formFieldErrors: ImmutablePropTypes.map,
   introspectNodes: React.PropTypes.func.isRequired,
@@ -111,6 +149,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    deleteNodes: nodeIds => dispatch(NodesActions.deleteNodes(nodeIds)),
     introspectNodes: nodeIds => dispatch(NodesActions.startNodesIntrospection(nodeIds))
   };
 }

@@ -25,6 +25,13 @@ export default {
     };
   },
 
+  addNodes(nodes) {
+    return {
+      type: NodesConstants.ADD_NODES,
+      payload: nodes
+    };
+  },
+
   requestNodes() {
     return {
       type: NodesConstants.REQUEST_NODES
@@ -149,11 +156,35 @@ export default {
     };
   },
 
-  addNodes(nodes) {
+  deleteNodes(nodeIds) {
+    return (dispatch, getState) => {
+      dispatch(this.startOperation(nodeIds));
+      nodeIds.map((nodeId) => {
+        IronicApiService.deleteNode(nodeId).then(response => {
+          dispatch(this.deleteNodeSuccess(nodeId));
+        }).catch(error => {
+          dispatch(this.deleteNodeFailed(nodeId));
+          console.error('Error in NodesActions.DeleteNodes', error.stack || error); //eslint-disable-line no-console
+          let errorHandler = new IronicApiErrorHandler(error);
+          errorHandler.errors.forEach((error) => {
+            dispatch(NotificationActions.notify(error));
+          });
+        });
+      });
+    };
+  },
+
+  deleteNodeSuccess(nodeId) {
     return {
-      type: NodesConstants.ADD_NODES,
-      payload: nodes
+      type: NodesConstants.DELETE_NODE_SUCCESS,
+      payload: nodeId
+    };
+  },
+
+  deleteNodeFailed(nodeId) {
+    return {
+      type: NodesConstants.DELETE_NODE_FAILED,
+      payload: nodeId
     };
   }
-
 };

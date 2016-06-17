@@ -19,7 +19,7 @@ describe('EnvironmentConfiguration component', () => {
 
   xit('should render a modal with form', () => {
     let modal = EnvConfVdom.props.children[0];
-    expect(modal.props.className).toEqual('modal modal-routed in');
+    expect(modal.props.className).toEqual('modal modal-visible');
     expect(modal.props.children.props.className).toEqual('modal-dialog modal-lg');
     expect(modal.props.children.props.children.props.className).toEqual('modal-content');
     let form = modal.props.children.props.children.props.children;

@@ -21,7 +21,7 @@ export default {
         browserHistory.push(nextPath);
         dispatch(PlansActions.fetchPlans());
       }).catch((error) => {
-        console.error('Error in LoginActions.authenticateUserViaToken', error); //eslint-disable-line no-console
+        console.error('Error in LoginActions.authenticateUserViaToken', error.stack || error); //eslint-disable-line no-console
         let errorHandler = new KeystoneApiErrorHandler(error);
         TempStorage.removeItem('keystoneAuthTokenId');
         browserHistory.push({pathname: '/login', query: { nextPath: nextPath }});

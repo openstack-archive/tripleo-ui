@@ -13,8 +13,8 @@ export default class Modal extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="modal modal-routed in" role="dialog">
+      <div style={{display: this.props.show ? 'block' : 'none'}}>
+        <div className="modal modal-visible" role="dialog">
           <div className={`modal-dialog ${this.props.dialogClasses}`}>
             <div className="modal-content">
               {this.props.children}
@@ -29,10 +29,11 @@ export default class Modal extends React.Component {
 
 Modal.propTypes = {
   children: React.PropTypes.node,
-  dialogClasses: React.PropTypes.string.isRequired
+  dialogClasses: React.PropTypes.string.isRequired,
+  show: React.PropTypes.bool.isRequired
 };
 
 Modal.defaultProps = {
-  dialogClasses: ''
+  dialogClasses: '',
+  show: true
 };
-
