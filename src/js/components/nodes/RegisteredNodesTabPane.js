@@ -46,12 +46,19 @@ class RegisteredNodesTabPane extends React.Component {
   getTableActions() {
     return (
       <div className="btn-group">
-        <button className="btn btn-primary"
+        <button className="btn btn-default"
                 type="button"
                 name="introspect"
                 onClick={this.multipleSubmit.bind(this)}
                 disabled={!this.state.canSubmit || this.props.nodesOperationInProgress}>
           Introspect Nodes
+        </button>
+        <button className="btn btn-default"
+                type="button"
+                name="provide"
+                onClick={this.multipleSubmit.bind(this)}
+                disabled={!this.state.canSubmit || this.props.nodesOperationInProgress}>
+          Provide Nodes
         </button>
         <button className="btn btn-danger"
                 type="button"
@@ -77,6 +84,9 @@ class RegisteredNodesTabPane extends React.Component {
     switch (this.state.submitType) {
     case ('introspect'):
       this.props.introspectNodes(nodeIds);
+      break;
+    case ('provide'):
+      this.props.provideNodes(nodeIds);
       break;
     case ('delete'):
       this.props.deleteNodes(nodeIds);
@@ -119,6 +129,7 @@ RegisteredNodesTabPane.propTypes = {
   isFetchingNodes: React.PropTypes.bool.isRequired,
   nodesInProgress: ImmutablePropTypes.set,
   nodesOperationInProgress: React.PropTypes.bool.isRequired,
+  provideNodes: React.PropTypes.func.isRequired,
   registeredNodes: ImmutablePropTypes.map,
   roles: ImmutablePropTypes.map
 };
@@ -140,7 +151,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     deleteNodes: nodeIds => dispatch(NodesActions.deleteNodes(nodeIds)),
-    introspectNodes: nodeIds => dispatch(NodesActions.startNodesIntrospection(nodeIds))
+    introspectNodes: nodeIds => dispatch(NodesActions.startNodesIntrospection(nodeIds)),
+    provideNodes: nodeIds => dispatch(NodesActions.startProvideNodes(nodeIds))
   };
 }
 

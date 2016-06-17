@@ -119,6 +119,55 @@ export default {
     };
   },
 
+  startProvideNodes(nodeIds) {
+    return (dispatch, getState) => {
+      dispatch(this.startOperation(nodeIds));
+      MistralApiService.runWorkflow('tripleo.baremetal.v1.provide',
+                                    { node_uuids: nodeIds })
+      .then((response) => {
+        if(response.state === 'ERROR') {
+          dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
+          dispatch(this.finishOperation(nodeIds));
+        }
+      }).catch((error) => {
+        let errorHandler = new MistralApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+        dispatch(this.finishOperation(nodeIds));
+      });
+    };
+  },
+
+  provideNodesFinished(messagePayload) {
+    return (dispatch, getState) => {
+      const nodeIds = messagePayload.execution.input.node_uuids;
+      dispatch(this.finishOperation(nodeIds));
+      dispatch(this.fetchNodes());
+
+      switch(messagePayload.status) {
+      case 'SUCCESS': {
+        dispatch(NotificationActions.notify({
+          type: 'success',
+          title: 'Nodes are available',
+          message: messagePayload.message
+        }));
+        break;
+      }
+      case 'FAILED': {
+        dispatch(NotificationActions.notify({
+          type: 'error',
+          title: 'Error',
+          message: messagePayload.message
+        }));
+        break;
+      }
+      default:
+        break;
+      }
+    };
+  },
+
   updateNode(nodePatch) {
     return (dispatch, getState) => {
       dispatch(this.updateNodePending(nodePatch.uuid));

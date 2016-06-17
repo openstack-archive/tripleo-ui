@@ -206,6 +206,71 @@ describe('nodesIntrospectionFinished', () => {
   });
 });
 
+describe('startProvideNodes Action', () => {
+  const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
+
+  beforeEach(done => {
+    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
+    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
+    spyOn(NodesActions, 'startOperation');
+    // Mock the service call.
+    spyOn(MistralApiService, 'runWorkflow').and.callFake(
+      createResolvingPromise({ state: 'RUNNING' })
+    );
+
+    NodesActions.startProvideNodes(nodeIds)(() => {}, () => {});
+    setTimeout(() => { done(); }, 1);
+  });
+
+  it('dispatches startOperation', () => {
+    expect(MistralApiService.runWorkflow).toHaveBeenCalledWith('tripleo.baremetal.v1.provide',
+                                                               { node_uuids: nodeIds });
+    expect(NodesActions.startOperation).toHaveBeenCalledWith(nodeIds);
+  });
+});
+
+describe('provideNodesFinished', () => {
+  beforeEach(() => {
+    spyOn(NodesActions, 'finishOperation');
+    spyOn(NodesActions, 'fetchNodes');
+    spyOn(NotificationActions, 'notify');
+  });
+
+  it('handles success', () => {
+    const messagePayload = {
+      status: 'SUCCESS',
+      message: 'Nodes were succesfully made available',
+      execution: { input: { node_uuids: [] }}
+    };
+
+    NodesActions.provideNodesFinished(messagePayload)(() => {}, () => {});
+
+    expect(NodesActions.finishOperation).toHaveBeenCalled();
+    expect(NodesActions.fetchNodes).toHaveBeenCalled();
+    expect(NotificationActions.notify).toHaveBeenCalled();
+  });
+
+  it('handles failure', () => {
+    const messagePayload = {
+      status: 'FAILED',
+      message: 'Failed to set nodes to available.',
+      execution: { input: { node_uuids: [] }}
+    };
+
+    NodesActions.provideNodesFinished(messagePayload)(() => {}, () => {});
+
+    expect(NodesActions.finishOperation).toHaveBeenCalled();
+    expect(NodesActions.fetchNodes).toHaveBeenCalled();
+    expect(NotificationActions.notify).toHaveBeenCalledWith(
+      {
+        type: 'error',
+        title: 'Error',
+        message: 'Failed to set nodes to available.'
+      }
+    );
+  });
+});
+
 describe('Update Node thunk action', () => {
   beforeEach(done => {
     spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');

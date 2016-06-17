@@ -14,6 +14,10 @@ export default {
         dispatch(NodesActions.nodesIntrospectionFinished(message.body.payload));
         break;
 
+      case ( message.body.type === 'tripleo.baremetal.v1.provide'):
+        dispatch(NodesActions.provideNodesFinished(message.body.payload));
+        break;
+
       default:
         break;
       }
