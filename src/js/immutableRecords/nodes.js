@@ -26,5 +26,6 @@ export const IronicNode = Record({
   arch: undefined,
   cpu: undefined,
   memory: undefined,
-  disk: undefined
+  disk: undefined,
+  capabilities: 'boot_option:local'
 });
