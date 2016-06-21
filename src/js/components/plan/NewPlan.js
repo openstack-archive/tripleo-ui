@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React from 'react';
 
-import FormErrorList from '../ui/forms/FormErrorList';
+import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import PlansActions from '../../actions/PlansActions';
 import PlanFormTabs from './PlanFormTabs';
 import Modal from '../ui/Modal';
@@ -17,7 +18,6 @@ class NewPlan extends React.Component {
       files: [],
       selectedFiles: undefined,
       canSubmit: false,
-      formErrors: [],
       uploadType: 'tarball'
     };
   }
@@ -74,23 +74,23 @@ class NewPlan extends React.Component {
           <div className="modal-header">
             <Link to="/plans/list"
                   type="button"
+                  onClick={() => this.props.cancelCreatePlan()}
                   className="close">
               <span aria-hidden="true" className="pficon pficon-close"/>
             </Link>
             <h4 className="modal-title">Create New Plan</h4>
           </div>
-
-          <div className="modal-body">
-            <Loader loaded={!this.props.isCreatingPlan}
-                    size="lg"
-                    content="Creating plan...">
-              <FormErrorList errors={this.state.formErrors}/>
-              <PlanFormTabs currentTab={this.props.location.query.tab || 'newPlan'}
-                            selectedFiles={this.state.selectedFiles}
-                            setUploadType={this.setUploadType.bind(this)}
-                            uploadType={this.state.uploadType}/>
-            </Loader>
-          </div>
+          <Loader loaded={!this.props.isCreatingPlan}
+                  size="lg"
+                  content="Creating plan...">
+            <ModalFormErrorList errors={this.props.planFormErrors.toJS()}/>
+            <div className="modal-body">
+                <PlanFormTabs currentTab={this.props.location.query.tab || 'newPlan'}
+                              selectedFiles={this.state.selectedFiles}
+                              setUploadType={this.setUploadType.bind(this)}
+                              uploadType={this.state.uploadType}/>
+            </div>
+          </Loader>
 
 
           <div className="modal-footer">
@@ -99,7 +99,10 @@ class NewPlan extends React.Component {
                     type="submit">
               Upload Files and Create Plan
             </button>
-            <Link to="/plans/list" type="button" className="btn btn-default" >Cancel</Link>
+            <Link to="/plans/list"
+                  type="button"
+                  onClick={() => this.props.cancelCreatePlan()}
+                  className="btn btn-default">Cancel</Link>
           </div>
         </Formsy.Form>
       </Modal>
@@ -107,20 +110,26 @@ class NewPlan extends React.Component {
   }
 }
 NewPlan.propTypes = {
+  cancelCreatePlan: React.PropTypes.func,
   createPlan: React.PropTypes.func,
   createPlanFromTarball: React.PropTypes.func,
   isCreatingPlan: React.PropTypes.bool,
-  location: React.PropTypes.object
+  location: React.PropTypes.object,
+  planFormErrors: ImmutablePropTypes.list
 };
 
 function mapStateToProps(state) {
   return {
-    isCreatingPlan: state.plans.isCreatingPlan
+    isCreatingPlan: state.plans.isCreatingPlan,
+    planFormErrors: state.plans.planFormErrors
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    cancelCreatePlan: () => {
+      dispatch(PlansActions.cancelCreatePlan());
+    },
     createPlan: (planName, files) => {
       dispatch(PlansActions.createPlan(planName, files));
     },
