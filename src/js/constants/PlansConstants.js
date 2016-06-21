@@ -13,6 +13,7 @@ export default keyMirror({
   PLAN_DELETED: null,
   UPDATING_PLAN: null,
   PLAN_UPDATED: null,
+  CANCEL_CREATE_PLAN: null,
   CREATE_PLAN_PENDING: null,
   CREATE_PLAN_SUCCESS: null,
   CREATE_PLAN_FAILED: null,

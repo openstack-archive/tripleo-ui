@@ -113,6 +113,12 @@ export default {
     };
   },
 
+  cancelCreatePlan () {
+    return {
+      type: PlansConstants.CANCEL_CREATE_PLAN
+    };
+  },
+
   createPlanPending() {
     return {
       type: PlansConstants.CREATE_PLAN_PENDING
@@ -125,9 +131,10 @@ export default {
     };
   },
 
-  createPlanFailed() {
+  createPlanFailed(errors) {
     return {
-      type: PlansConstants.CREATE_PLAN_FAILED
+      type: PlansConstants.CREATE_PLAN_FAILED,
+      payload: errors
     };
   },
 
@@ -146,11 +153,7 @@ export default {
       }).catch(error => {
         console.error('Error in PlansActions.createPlan', error); //eslint-disable-line no-console
         let errorHandler = new TripleOApiErrorHandler(error);
-        // TODO(flfuchs) Set errors as form errors instead showing a notification.
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
-        });
-        dispatch(this.createPlanFailed());
+        dispatch(this.createPlanFailed(errorHandler.errors));
       });
     };
   },
@@ -165,29 +168,19 @@ export default {
         ).then((response) => {
           if(response.state === 'ERROR') {
             console.error('Error in PlansActions.createPlanFromTarball', response); //eslint-disable-line no-console
-            // TODO(flfuchs) Set errors as form errors instead showing a notification.
-            dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
-            dispatch(this.createPlanFailed());
+            dispatch(this.createPlanFailed([{ title: 'Error', message: response.state_info }]));
           }
           else {
             dispatch(this.pollForPlanCreationWorkflow(planName, response.id));
           }
         }).catch((error) => {
           let errorHandler = new MistralApiErrorHandler(error);
-          // TODO(flfuchs) Set errors as form errors instead showing a notification.
-          errorHandler.errors.forEach((error) => {
-            dispatch(NotificationActions.notify(error));
-          });
-          dispatch(this.createPlanFailed());
+          dispatch(this.createPlanFailed(errorHandler.errors));
         });
       }).catch((error) => {
         console.error('Error in PlansActions.createPlanFromTarball', error); //eslint-disable-line no-console
         let errorHandler = new SwiftApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          // TODO(flfuchs) Set errors as form errors instead showing a notification.
-          dispatch(NotificationActions.notify(error));
-        });
-        dispatch(this.createPlanFailed());
+        dispatch(this.createPlanFailed(errorHandler.errors));
       });
     };
   },
@@ -202,7 +195,7 @@ export default {
           }, 5000);
         }
         else if(response.state === 'ERROR') {
-          dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
+          dispatch(this.createPlanFailed([{ title: 'Error', message: response.state_info }]));
         }
         else {
           dispatch(this.createPlanSuccess(planName));
@@ -216,9 +209,7 @@ export default {
         }
       }).catch((error) => {
         let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
-        });
+        dispatch(this.createPlanFailed(errorHandler.errors));
         dispatch(this.finishOperation());
       });
     };
