@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React from 'react';
 
-import FormErrorList from '../ui/forms/FormErrorList';
+import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import PlansActions from '../../actions/PlansActions';
 import PlanFormTabs from './PlanFormTabs';
 import Modal from '../ui/Modal';
@@ -84,7 +85,7 @@ class NewPlan extends React.Component {
             <Loader loaded={!this.props.isCreatingPlan}
                     size="lg"
                     content="Creating plan...">
-              <FormErrorList errors={this.state.formErrors}/>
+              <ModalFormErrorList errors={this.props.planFormErrors.toJS()}/>
               <PlanFormTabs currentTab={this.props.location.query.tab || 'newPlan'}
                             selectedFiles={this.state.selectedFiles}
                             setUploadType={this.setUploadType.bind(this)}
@@ -110,12 +111,14 @@ NewPlan.propTypes = {
   createPlan: React.PropTypes.func,
   createPlanFromTarball: React.PropTypes.func,
   isCreatingPlan: React.PropTypes.bool,
-  location: React.PropTypes.object
+  location: React.PropTypes.object,
+  planFormErrors: ImmutablePropTypes.list
 };
 
 function mapStateToProps(state) {
   return {
-    isCreatingPlan: state.plans.isCreatingPlan
+    isCreatingPlan: state.plans.isCreatingPlan,
+    planFormErrors: state.plans.planFormErrors
   };
 }
 

@@ -1,4 +1,4 @@
-import { Map, Record } from 'immutable';
+import { List, Map, Record } from 'immutable';
 
 /**
  * The transition property is either false or one of the following strings:
@@ -20,5 +20,6 @@ export const PlanFile = Record({
 export const InitialPlanState = Record({
   isFetchingPlans: false,
   isCreatingPlan: false,
+  planFormErrors: List(),
   all: Map()
 });
