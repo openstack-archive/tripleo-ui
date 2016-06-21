@@ -1,4 +1,4 @@
-import { Map } from 'immutable';
+import { List, Map } from 'immutable';
 
 import { InitialPlanState,
          Plan,
@@ -54,7 +54,8 @@ export default function plansReducer(state = initialState, action) {
 
   case PlansConstants.CREATE_PLAN_PENDING:
     return state
-            .set('isCreatingPlan', true);
+            .set('isCreatingPlan', true)
+            .set('planFormErrors', List());
 
   case PlansConstants.CREATE_PLAN_SUCCESS:
     return state
@@ -62,13 +63,17 @@ export default function plansReducer(state = initialState, action) {
 
   case PlansConstants.CREATE_PLAN_FAILED:
     return state
-            .set('isCreatingPlan', false);
+            .set('isCreatingPlan', false)
+            .set('planFormErrors', List(action.payload));
 
   case PlansConstants.UPDATING_PLAN:
     return state.setIn(['all', action.payload, 'transition'], 'updating');
 
   case PlansConstants.PLAN_UPDATED:
     return state.setIn(['all', action.payload, 'transition'], false);
+
+  case PlansConstants.CANCEL_CREATE_PLAN:
+    return state.set('planFormErrors', List());
 
   default:
     return state;
