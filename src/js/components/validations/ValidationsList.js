@@ -1,41 +1,42 @@
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import ClassNames from 'classnames';
 import React from 'react';
 
-import { getValidationStages, getValidationsStatusCounts } from '../../selectors/validations';
 import BlankSlate from '../ui/BlankSlate';
 import Loader from '../ui/Loader';
 import ValidationsActions from '../../actions/ValidationsActions';
-import ValidationStage from './ValidationStage';
+import Validation from './Validation';
+import { getValidationsWithResults } from '../../selectors/validations';
 
 class ValidationsList extends React.Component {
   componentDidMount() {
-    this.props.fetchValidationStages();
+    this.props.fetchValidations();
+  }
+
+  renderValidations() {
+    if (this.props.validations.isEmpty()) {
+      return (
+        <BlankSlate iconClass="pficon pficon-flag"
+                    title="No Validations"
+                    message="There are no validations at this time." />
+      );
+    } else {
+      return this.props.validations.toList().map(validation => {
+        return (
+          <Validation key={validation.id}
+                      name={validation.name}
+                      status="new"
+                      groups={validation.groups}
+                      runValidation={this.props.runValidation}
+                      stopValidation={this.props.stopValidation}
+                      description={validation.description}
+                      id={validation.id} />
+        );
+      });
+    }
   }
 
   render () {
-    const classes = ClassNames({
-      'panel-group validation-stages-container col-sm-12': true
-    });
-
-    const stages = this.props.validationStages.toList().map(stage => {
-      return (
-        <ValidationStage key={stage.uuid}
-                         validations={stage.validations}
-                         name={stage.name}
-                         status={stage.status}
-                         runValidationStage={this.props.runValidationStage}
-                         runValidation={this.props.runValidation}
-                         stopValidation={this.props.stopValidation}
-                         visible={stage.visible}
-                         toggleValidationStageVisibility={
-                           this.props.toggleValidationStageVisibility
-                         }
-                         uuid={stage.uuid}/>
-      );
-    });
-
     return (
       <div className="col-sm-12 col-lg-3 sidebar-pf sidebar-pf-right">
         <div className="sidebar-header
@@ -43,27 +44,24 @@ class ValidationsList extends React.Component {
                         sidebar-header-bleed-right">
           <div className="actions pull-right">
             <Loader key="rolesLoader"
-                    loaded={!(this.props.validationStagesLoaded &&
-                              this.props.isFetchingValidationStages)}
+                    loaded={!(this.props.validationsLoaded &&
+                              this.props.isFetchingValidations)}
                     content="Loading Validations..."
                     inline>
               <a className="link refresh"
-                 onClick={this.props.fetchValidationStages.bind(this)}>
+                 onClick={this.props.fetchValidations.bind(this)}>
                 <span className="pficon pficon-refresh"></span> Refresh
               </a>
             </Loader>
           </div>
           <h2 className="h4">Validations</h2>
         </div>
-        <Loader loaded={this.props.validationStagesLoaded}
+        <Loader loaded={this.props.validationsLoaded}
                 content="Loading Validations..."
                 height={80}>
           <div className="row">
-            <div className={classes}>
-              {this.props.validationStages.isEmpty() ?
-                <BlankSlate iconClass="pficon pficon-flag"
-                            title="No Validations"
-                            message="There are no validations at this time." /> : stages}
+            <div className="list-group list-view-pf">
+              {this.renderValidations()}
             </div>
           </div>
         </Loader>
@@ -73,32 +71,26 @@ class ValidationsList extends React.Component {
 }
 
 ValidationsList.propTypes = {
-  fetchValidationStages: React.PropTypes.func.isRequired,
-  isAuthenticating: React.PropTypes.bool.isRequired,
-  isFetchingValidationStages: React.PropTypes.bool.isRequired,
+  fetchValidations: React.PropTypes.func.isRequired,
+  isFetchingValidations: React.PropTypes.bool.isRequired,
   runValidation: React.PropTypes.func.isRequired,
-  runValidationStage: React.PropTypes.func.isRequired,
+  runValidationGroup: React.PropTypes.func.isRequired,
   stopValidation: React.PropTypes.func.isRequired,
-  toggleValidationStageVisibility: React.PropTypes.func.isRequired,
-  validationStages: ImmutablePropTypes.map.isRequired,
-  validationStagesLoaded: React.PropTypes.bool.isRequired,
-  validationsStatusCounts: ImmutablePropTypes.record.isRequired
+  validations: ImmutablePropTypes.map.isRequired,
+  validationsLoaded: React.PropTypes.bool.isRequired
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchValidationStages: () => {
-      dispatch(ValidationsActions.fetchValidationStages());
+    fetchValidations: () => dispatch(ValidationsActions.fetchValidations()),
+    runValidationGroup: (group) => {
+      dispatch(ValidationsActions.runValidationGroup(group));
     },
-    fetchValidationGroups: () => dispatch(ValidationsActions.fetchValidationGroups()),
-    runValidationStage: (uuid) => {
-      dispatch(ValidationsActions.runValidationStage(uuid));
+    runValidation: (id) => {
+      dispatch(ValidationsActions.runValidation(id));
     },
-    runValidation: (uuid) => {
-      dispatch(ValidationsActions.runValidation(uuid));
-    },
-    stopValidation: (uuid) => {
-      dispatch(ValidationsActions.stopValidation(uuid));
+    stopValidation: (id) => {
+      dispatch(ValidationsActions.stopValidation(id));
     },
     toggleValidationStageVisibility: (uuid) => {
       dispatch(ValidationsActions.toggleValidationStageVisibility(uuid));
@@ -108,11 +100,9 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
   return {
-    isAuthenticating: state.login.get('isAuthenticating'),
-    isFetchingValidationStages: state.validations.get('isFetching'),
-    validationStages: getValidationStages(state),
-    validationStagesLoaded: state.validations.get('loaded'),
-    validationsStatusCounts: getValidationsStatusCounts(state)
+    isFetchingValidations: state.validations.get('isFetching'),
+    validations: getValidationsWithResults(state),
+    validationsLoaded: state.validations.get('validationsLoaded')
   };
 };
 

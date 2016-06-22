@@ -1,119 +1,60 @@
-.validations-indicator {
-  &:focus {
-    outline: none;
-  }
-  .status-indicator {
-    color: #000;
-    &:focus {
-      background-color: transparent;
-    }
-  }
-  .validations-icon.pficon, .validations-icon.fa {
-    &:before {
-      color: #fff;
-    }
-  }
-}
+// Mostly reseting the media query specific styling for List View since it is applicable only when
+// List View is used on a element hat spans full viewport width and breaks styling when used in a
+// sidebar. In general Flexbox should not be used with media queries.
+// https://scotch.io/tutorials/a-visual-guide-to-css3-flexbox-properties
 
-.validation-stages-container {
-  margin-bottom: 0;
-  margin-top: -20px;
-}
-
-.validation-stage-panel-heading {
-  .panel-title {
-    float: left;
-    font-size: 12px;
-    line-height: @line-height-base;
-    padding-top: @padding-base-vertical;
-    padding-bottom: @padding-base-vertical;
+.list-group-item.validation {
+  @media(min-width: @screen-md-min) {
+    align-items: flex-start;
   }
 
-  .states {
-    display: inline-block;
-    margin-right: 15px;
-    vertical-align: middle;
+  .list-view-pf-actions {
+    margin: 15px 0 15px 15px;
   }
+  .list-view-pf-main-info {
+    padding: 15px 0;
 
-  .status-container {
-    display: inline-block;
-    margin-left: 10px;
-
-    .badge {
-      color: #fff;
-      &.unread {
-        background-color: @gray-darker;
-      }
-      &.running {
-        background-color: @gray-darker;
-      }
-      &.error {
-        background-color: @brand-danger;
-      }
-      &.warning {
-        background-color: @brand-warning;
-      }
-      &.available {
-        background-color: @brand-info;
-      }
-      &.success {
-        background-color: @brand-success;
-      }
-    }
-  }
-}
-
-.validation {
-  border-bottom: solid 1px @card-pf-border-color;
-  border-right: solid 1px @card-pf-border-color;
-  display: block;
-  padding: 15px;
-  position: relative;
-
-  .validation-content {
-    position: relative;
-    width: 100%;
-
-    .validation-icon {
-      font-size: 18px;
-      position: absolute;
-
-      &.pficon-flag {
-        color: @brand-primary;
-      }
-      &.pficon-ok:before {
-        color: @brand-success;
-      }
+    @media(min-width: @screen-md-min) {
+      align-items: flex-start;
     }
 
-    .validation-info-container {
-      display: block;
-      margin-left: 25px;
-      margin-right: 65px;
-      position: relative;
+    .list-view-pf-body {
+      @media (min-width: @screen-md-min) {
+        display: table-cell;
+      }
 
-      .validation-message {
-        display: block;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+      .list-view-pf-description {
+        @media (min-width: @screen-md-min) {
+          float: none;
+          width: auto;
+        }
 
-        &.no-message {
-          visibility: hidden;
+        .list-group-item-heading {
+          font-size: 13px;
+          margin-right: 0;
+        }
+        .list-group-item-text {
+          @media (min-width: @screen-md-min) {
+            margin: 0 0 10px 0;
+          }
+
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          margin-right: 0;
         }
       }
+      .list-view-pf-additional-info {
+        @media (min-width: @screen-md-min) {
+          width: auto;
+        }
 
-      .details-link {
-        &.no-details {
-          visibility: hidden;
+        .list-view-pf-additional-info-item {
+          small {
+            font-size: 80%;
+          }
         }
       }
-    }
-
-    .validation-action-button-container {
-      position: absolute;
-      right: 0;
-      top: 0;
     }
   }
 }

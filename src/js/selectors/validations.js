@@ -1,43 +1,36 @@
 import { createSelector } from 'reselect';
 
-import { ValidationsStatusCounts } from '../immutableRecords/validations';
+import { currentPlanNameSelector } from './plans';
 
-const validationStages = (state) => state.validations.get('validationStages');
 const validations = (state) => state.validations.get('validations');
-const validationResults = (state) => state.validations.get('validationResults');
+const executions = (state) => state.executions.get('executions');
 
 /**
- * Returns Map of Validation Stages with nested Validations and their Lates Result
+ * Filter workflow executions only to validations and current plan
  */
-export const getValidationStages = createSelector(
-  [validationStages, validations, validationResults],
-  (stages, validations, results) => {
-    return stages.map(stage => {
-      return stage.update('validations', vals => {
-        return vals.map(validation => validations.get(validation));
-      });
+export const getValidationExecutionsForCurrentPlan = createSelector(
+  [executions, currentPlanNameSelector], (executions, currentPlanName) => {
+    return executions.filter(execution =>
+      execution.get('workflow_name') === 'tripleo.validations.v1.run_and_notify' &&
+      execution.getIn(['input', 'plan']) === currentPlanName);
+  }
+);
+
+/**
+ * Adds map of validation results to each validation
+ */
+export const getValidationsWithResults = createSelector(
+  [validations, getValidationExecutionsForCurrentPlan], (validations, results) => {
+    return validations.map(validation => {
+      return validation.set('results', getValidationResults(validation.id, results));
     });
   }
 );
 
 /**
- * Returns Status Counts across all validations - instance of ValidationsStatusCounts Record
+ * Helper function to get a validation results by validation name and order them by updated_at
  */
-export const getValidationsStatusCounts = createSelector(
-  validations, (validations) => {
-    return new ValidationsStatusCounts(validations.countBy(validation => validation.status));
-  }
-);
-
-export const getValidationStageByName = (validationStages, name) => {
-  return validationStages.find((stage) => stage.get('stage') === name);
-};
-
-export const getValidationStageUuidByName = (validationStages, name) => {
-  const validation = getValidationStageByName(validationStages, name);
-  if (validation) {
-    return validation.get('uuid');
-  } else {
-    return validation;
-  }
+const getValidationResults = (validationId, results) => {
+  return results.filter(result => result.getIn(['input', 'validation_name']) === validationId)
+                .sortBy(result => result.get('updated_at'));
 };
