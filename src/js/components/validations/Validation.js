@@ -1,8 +1,7 @@
-import * as _ from 'lodash';
+import { includes } from 'lodash';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import ClassNames from 'classnames';
 import React from 'react';
-
-import Loader from '../ui/Loader';
 
 export default class Validation extends React.Component {
   viewDetails (e) {
@@ -10,64 +9,39 @@ export default class Validation extends React.Component {
     // TODO: Show the details
   }
 
-  getActionButton() {
-    if (_.includes(['new', 'success', 'error', 'failed'], this.props.status)) {
+  renderValidationGroups() {
+    return this.props.groups.map(group => {
       return (
-        <button className="btn btn-default btn-xs pull-right"
-                onClick={() => this.props.runValidation(this.props.uuid)}>
-          Run Now
-        </button>
+        <div key={group} className="list-view-pf-additional-info-item">
+          <small>
+            <span className="label label-default">{group}</span>
+          </small>
+        </div>
       );
-    } else if (this.props.status === 'running' ) {
-      return (
-        <button className="btn btn-danger btn-xs pull-right"
-                onClick={() => this.props.stopValidation(this.props.uuid)}>
-          Stop
-        </button>
-      );
-    } else {
-      return false;
-    }
-  }
-
-  renderValidationStatus(status) {
-    const statusIconClass = ClassNames({
-      'validation-icon' : true,
-      'pficon pficon-error-circle-o': _.includes(['error', 'failed'], status),
-      'pficon pficon-ok':             status === 'success',
-      'pficon pficon-flag':           status === 'new'
     });
-    return (
-      <Loader loaded={status != 'running'}
-              className="validation-icon"
-              size="sm"
-              inline>
-        <span className={statusIconClass}></span>
-      </Loader>
-    );
   }
 
   render() {
-    let messageClass = ClassNames({
-      'validation-message' : true,
-      'no-message' : !this.props.description
-    });
-    // Make sure there is text when there is no description so vertical spacing remains consistent
-    let message = this.props.description || 'Not Available';
-
     return (
-      <div className="col-sm-12 validation">
-        <div className="validation-content">
-          {this.renderValidationStatus(this.props.status)}
-          <div className="validation-info-container">
-              <span>{this.props.name}</span>
-              <span className={messageClass}>{message}</span>
-              <a className="link details-link" onClick={this.viewDetails.bind(this)}>
-                View Details
-              </a>
+      <div className="list-group-item list-view-pf-stacked validation">
+        <div className="list-view-pf-main-info">
+          <div className="list-view-pf-left">
+            <ValidationStatusIcon status={this.props.status}
+                                  runValidation={this.props.runValidation}
+                                  stopValidation={this.props.stopValidation}/>
           </div>
-          <div className="validation-action-button-container">
-            {this.getActionButton()}
+          <div className="list-view-pf-body">
+            <div className="list-view-pf-description">
+              <div className="list-group-item-heading">
+                <span title={this.props.name}>{this.props.name}</span>
+              </div>
+              <div className="list-group-item-text">
+                <small title={this.props.description}>{this.props.description}</small>
+              </div>
+            </div>
+            <div className="list-view-pf-additional-info">
+              {this.renderValidationGroups()}
+            </div>
           </div>
         </div>
       </div>
@@ -77,9 +51,48 @@ export default class Validation extends React.Component {
 
 Validation.propTypes = {
   description: React.PropTypes.string,
+  groups: ImmutablePropTypes.list.isRequired,
+  id: React.PropTypes.string.isRequired,
   name: React.PropTypes.string.isRequired,
+  results: ImmutablePropTypes.map.isRequired,
   runValidation: React.PropTypes.func.isRequired,
-  status: React.PropTypes.string.isRequired,
-  stopValidation: React.PropTypes.func.isRequired,
-  uuid: React.PropTypes.string.isRequired
+  status: React.PropTypes.string,
+  stopValidation: React.PropTypes.func.isRequired
+};
+
+
+const ValidationStatusIcon = ({ status, runValidation, stopValidation }) => {
+  const statusIconClass = ClassNames({
+    'list-view-pf-icon-md' :              true,
+    'running fa fa-stop-circle':          status === 'running',
+    'pficon pficon-error-circle-o front': status === 'failed',
+    'pficon pficon-ok front':             status === 'success',
+    'fa fa-play-circle':                  status === 'new'
+  });
+
+  switch (true) {
+  case (includes(['new', 'running'], status)):
+    return (
+      <a className="link"
+         onClick={status === 'running' ? stopValidation : runValidation}>
+        <span className={statusIconClass}/>
+      </a>
+    );
+  case (includes(['success', 'failed'], status)):
+    return (
+      <a className="link flip-container" onClick={runValidation}>
+        <div className="flipper">
+          <span className={statusIconClass}/>
+          <span className="list-view-pf-icon-md fa fa-play-circle back"/>
+        </div>
+      </a>
+    );
+  default:
+    return <span className="list-view-pf-icon-md pficon pficon-help"/>;
+  }
+};
+ValidationStatusIcon.propTypes = {
+  runValidation: React.PropTypes.func.isRequired,
+  status: React.PropTypes.string,
+  stopValidation: React.PropTypes.func.isRequired
 };

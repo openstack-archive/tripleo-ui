@@ -20,6 +20,17 @@ class MistralApiService {
   }
 
   /**
+   * Gets a Workflow executions
+   * Mistral API: GET /v2/executions
+   * @param {string} mistralUrl - Mistral API service base url
+   * @param {string} authTokenId - keystone authentication token ID
+   * @return {array} of Executions.
+   */
+  getWorkflowExecutions() {
+    return this.defaultRequest('/executions');
+  }
+
+  /**
    * Gets a Workflow execution
    * Mistral API: GET /v2/executions/:execution_id
    * @param {string} mistralUrl - Mistral API service base url
