@@ -12,11 +12,10 @@ export const ValidationStage = Record({
 
 export const Validation = Record({
   description: '',
-  latest_result: undefined,
-  name: '',
-  status: '',
-  results: List(),
-  uuid: ''
+  groups: List(),
+  id: '',
+  metadata: '',
+  name: ''
 });
 
 export const ValidationResult = Record({

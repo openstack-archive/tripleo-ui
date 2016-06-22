@@ -1,21 +1,26 @@
 import { normalize, arrayOf } from 'normalizr';
 
+import MistralApiService from '../services/MistralApiService';
 import NotificationActions from './NotificationActions';
 import ValidationsApiService from '../services/ValidationsApiService';
 import ValidationsApiErrorHandler from '../services/ValidationsApiErrorHandler';
 import ValidationsConstants from '../constants/ValidationsConstants';
-import { validationStageSchema } from '../normalizrSchemas/validations';
+import { validationSchema } from '../normalizrSchemas/validations';
 
 export default {
-  fetchValidationStages() {
+  fetchValidations() {
     return (dispatch, getState) => {
-      dispatch(this.fetchValidationStagesPending());
-      ValidationsApiService.getStages().then((response) => {
-        response = normalize(response, arrayOf(validationStageSchema));
-        dispatch(this.fetchValidationStagesSuccess(response));
+      dispatch(this.fetchValidationsPending());
+      MistralApiService.runAction('tripleo.list_validations').then((response) => {
+
+        const actionResult = JSON.parse(response.output).result;
+        const validations = normalize(actionResult,
+                                      arrayOf(validationSchema)).entities.validations || {};
+        console.log(validations);
+        dispatch(this.fetchValidationsSuccess(validations));
       }).catch((error) => {
-        console.error('Error in ValidationActions.fetchValidationStages', error.stack || error); //eslint-disable-line no-console
-        dispatch(this.fetchValidationStagesFailed());
+        console.error('Error in ValidationActions.fetchValidations', error.stack || error); //eslint-disable-line no-console
+        dispatch(this.fetchValidationsFailed());
         let errorHandler = new ValidationsApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -24,22 +29,39 @@ export default {
     };
   },
 
-  fetchValidationStagesPending() {
+  // fetchValidationStages() {
+  //   return (dispatch, getState) => {
+  //     dispatch(this.fetchValidationStagesPending());
+  //     ValidationsApiService.getStages().then((response) => {
+  //       response = normalize(response, arrayOf(validationStageSchema));
+  //       dispatch(this.fetchValidationStagesSuccess(response));
+  //     }).catch((error) => {
+  //       console.error('Error in ValidationActions.fetchValidationStages', error.stack || error); //eslint-disable-line no-console
+  //       dispatch(this.fetchValidationStagesFailed());
+  //       let errorHandler = new ValidationsApiErrorHandler(error);
+  //       errorHandler.errors.forEach((error) => {
+  //         dispatch(NotificationActions.notify(error));
+  //       });
+  //     });
+  //   };
+  // },
+
+  fetchValidationsPending() {
     return {
-      type: ValidationsConstants.FETCH_VALIDATION_STAGES_PENDING
+      type: ValidationsConstants.FETCH_VALIDATIONS_PENDING
     };
   },
 
-  fetchValidationStagesSuccess(stages) {
+  fetchValidationsSuccess(validations) {
     return {
-      type: ValidationsConstants.FETCH_VALIDATION_STAGES_SUCCESS,
-      payload: stages
+      type: ValidationsConstants.FETCH_VALIDATIONS_SUCCESS,
+      payload: validations
     };
   },
 
-  fetchValidationStagesFailed() {
+  fetchValidationsFailed() {
     return {
-      type: ValidationsConstants.FETCH_VALIDATION_STAGES_FAILED
+      type: ValidationsConstants.FETCH_VALIDATIONS_FAILED
     };
   },
 
