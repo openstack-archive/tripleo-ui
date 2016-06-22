@@ -43,6 +43,7 @@ export default class Loader extends React.Component {
       'spinner-xs': this.props.size === 'xs' || !this.props.size && this.props.inline,
       'spinner-sm': this.props.size === 'sm',
       'spinner-lg': this.props.size === 'lg',
+      'spinner-xl': this.props.size === 'xl',
       'spinner-inline': this.props.inline,
       'spinner-inverse': this.props.inverse
     });
@@ -72,7 +73,7 @@ Loader.propTypes = {
   inline: React.PropTypes.bool,
   inverse: React.PropTypes.bool,
   loaded: React.PropTypes.bool,
-  size: React.PropTypes.oneOf(['xs', 'sm', 'lg'])
+  size: React.PropTypes.oneOf(['xs', 'sm', 'lg', 'xl'])
 };
 Loader.defaultProps = {
   component: 'div',
