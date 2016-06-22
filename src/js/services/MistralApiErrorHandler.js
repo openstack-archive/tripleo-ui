@@ -27,10 +27,9 @@ export default class MistralApiErrorHandler extends BaseHttpRequestErrorHandler 
       });
       break;
     default:
-      error = JSON.parse(errorObj.responseText);
       errors.push({
         title: errorObj.statusText,
-        message: error.faultstring
+        message: errorObj.responseText
       });
       break;
     }

@@ -7,10 +7,12 @@ import LoginActions from '../actions/LoginActions';
 import PlansActions from '../actions/PlansActions';
 import NavBar from './NavBar';
 import ValidationsList from './validations/ValidationsList';
+import WorkflowExecutionsActions from '../actions/WorkflowExecutionsActions';
 
 export default class AuthenticatedContent extends React.Component {
   componentDidMount() {
     this.props.fetchPlans();
+    this.props.fetchWorkflowExecutions();
   }
 
   render() {
@@ -38,6 +40,7 @@ AuthenticatedContent.propTypes = {
   currentPlanName: React.PropTypes.string,
   dispatch: React.PropTypes.func,
   fetchPlans: React.PropTypes.func,
+  fetchWorkflowExecutions: React.PropTypes.func,
   logoutUser: React.PropTypes.func.isRequired,
   noPlans: React.PropTypes.bool,
   plansLoaded: React.PropTypes.bool,
@@ -47,7 +50,8 @@ AuthenticatedContent.propTypes = {
 const mapDispatchToProps = dispatch => {
   return {
     logoutUser: () => dispatch(LoginActions.logoutUser()),
-    fetchPlans: () => dispatch(PlansActions.fetchPlans())
+    fetchPlans: () => dispatch(PlansActions.fetchPlans()),
+    fetchWorkflowExecutions: () => dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions())
   };
 };
 
