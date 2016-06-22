@@ -1,11 +1,10 @@
-import { List, Map } from 'immutable';
+import { List, Map, OrderedMap } from 'immutable';
 import matchers from 'jasmine-immutable-matchers';
 
 import * as selectors from '../../js/selectors/validations';
-import { Validation,
-         ValidationStage,
-         ValidationResult,
-         ValidationsStatusCounts } from '../../js/immutableRecords/validations';
+import { Validation } from '../../js/immutableRecords/validations';
+import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
+import { WorkflowExecution } from '../../js/immutableRecords/workflowExecutions';
 
 describe(' validations selectors', () => {
   beforeEach(() => {
@@ -13,72 +12,100 @@ describe(' validations selectors', () => {
   });
 
   const state = {
+    currentPlan: new CurrentPlanState({
+      conflict: undefined,
+      currentPlanName: 'overcloud'
+    }),
     validations: Map({
+      validationsLoaded: true,
       isFetching: false,
-      validationStages:  Map({
-        1: new ValidationStage({
-          description: '',
-          name: 'testStage',
-          visible: false,
-          stage: '',
-          status: 'new',
-          uuid: 1,
-          validations: List(['1'])
-        })
-      }),
       validations: Map({
-        1: new Validation({
+        '512e': new Validation({
           description: '',
-          latest_result: undefined,
-          name: 'testValidation',
-          status: 'running',
-          results: List([1]),
-          uuid: 1
-        })
-      }),
-      validationResults: Map({
-        1: new ValidationResult({
-          date: undefined,
-          detailed_description: Map(),
+          groups: List(['pre-deployment']),
+          id: '512e',
+          metadata: Map(),
+          name: 'Advanced Format 512e Support',
+          results: Map(),
           status: undefined,
-          uuid: 1
+          stateInfo: undefined
+        }),
+        'check-network-gateway': new Validation({
+          description: '',
+          groups: List(['pre-deployment']),
+          id: 'check-network-gateway',
+          metadata: Map(),
+          name: 'Check network_gateway on the provisioning network',
+          results: Map(),
+          status: undefined,
+          stateInfo: undefined
+        })
+      })
+    }),
+    executions: Map({
+      executionsLoaded: true,
+      isFetchingExecutions: false,
+      executions: OrderedMap({
+        '1a': new WorkflowExecution({
+          description: '',
+          id: '1a',
+          input: Map({
+            validation_name: 'check-network-gateway',
+            queue_name: 'tripleo',
+            plan: 'overcloud'
+          }),
+          output: Map({
+            stderr: '',
+            plan: 'overcloud',
+            stdout: '',
+            validation_name: 'check-network-gateway',
+            status: 'FAILED',
+            queue_name: 'tripleo'
+          }),
+          params: Map({}),
+          state: 'SUCCESS',
+          state_info: null,
+          updated_at: 1468905005000,
+          workflow_name: 'tripleo.validations.v1.run_validation'
+        }),
+        '2a': new WorkflowExecution({
+          description: '',
+          id: '2a',
+          input: Map({
+            validation_name: 'check-network-gateway',
+            queue_name: 'tripleo',
+            plan: 'overcloud'
+          }),
+          output: Map({
+            stderr: '',
+            plan: 'overcloud',
+            stdout: '',
+            validation_name: 'check-network-gateway',
+            status: 'SUCCESS',
+            queue_name: 'tripleo'
+          }),
+          params: Map({}),
+          state: 'SUCCESS',
+          state_info: null,
+          updated_at: 1468905005001,
+          workflow_name: 'tripleo.validations.v1.run_validation'
         })
       })
     })
   };
 
-  it('provides selector to get nested tree of Validation Stages and Validations', () => {
-    expect(selectors.getValidationStages(state)).toEqualImmutable(Map({
-      1: new ValidationStage({
-        description: '',
-        name: 'testStage',
-        visible: false,
-        stage: '',
-        status: 'new',
-        uuid: 1,
-        validations: List([
-          new Validation({
-            description: '',
-            latest_result: undefined,
-            name: 'testValidation',
-            status: 'running',
-            results: List([1]),
-            uuid: 1
-          })
-        ])
-      })
-    }));
+  xit('provides selector to get validation executions for current plan', () => {
+    expect(selectors.getValidationExecutionsForCurrentPlan(state).size).toEqual(2);
+    expect(selectors.getValidationExecutionsForCurrentPlan(state))
+      .toEqualImmutable(state.executions.get('executions'));
   });
 
-  it('provides selector to get validation status counts map', () => {
-    expect(selectors.getValidationsStatusCounts(state)).toEqualImmutable(
-      new ValidationsStatusCounts({
-        new: 0,
-        running: 1,
-        success: 0,
-        error: 0,
-        failed: 0
-      })
-    );
+  xit('provides selector to get validation combined with its results', () => {
+    const validationsWithResults = selectors.getValidationsWithResults(state);
+    expect(validationsWithResults.size).toEqual(2);
+    expect(validationsWithResults.get('512e').results.size).toEqual(0);
+    expect(validationsWithResults.get('512e').status).toEqual('new');
+    expect(validationsWithResults.get('check-network-gateway').results.size).toEqual(2);
+    expect(validationsWithResults.get('check-network-gateway').status).toEqual('success');
   });
 });
