@@ -10,10 +10,12 @@ import registerNodesReducer from './registerNodesReducer';
 import rolesReducer from './rolesReducer';
 import stacksReducer from './stacksReducer';
 import validationsReducer from './validationsReducer';
+import workflowExecutionsReducer from './workflowExecutionsReducer';
 
 const appReducer = combineReducers({
   currentPlan: currentPlanReducer,
   environmentConfiguration: environmentConfigurationReducer,
+  executions: workflowExecutionsReducer,
   login: loginReducer,
   nodes: nodesReducer,
   notifications: notificationsReducer,

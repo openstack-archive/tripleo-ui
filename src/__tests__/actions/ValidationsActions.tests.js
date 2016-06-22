@@ -2,48 +2,43 @@ import ValidationsActions from '../../js/actions/ValidationsActions';
 import ValidationsConstants from '../../js/constants/ValidationsConstants';
 
 describe('Validations actions', () => {
-  it('should create an action for pending Validation Stages request', () => {
+  it('should create an action for pending Validations request', () => {
     const expectedAction = {
-      type: ValidationsConstants.FETCH_VALIDATION_STAGES_PENDING
+      type: ValidationsConstants.FETCH_VALIDATIONS_PENDING
     };
-    expect(ValidationsActions.fetchValidationStagesPending()).toEqual(expectedAction);
+    expect(ValidationsActions.fetchValidationsPending()).toEqual(expectedAction);
   });
 
-  it('should create an action for successful Validation Stages retrieval', () => {
-    const normalizedStagesResponse = {
-      entities: {
-        1: 'first stage',
-        2: 'second stage'
+  it('should create an action for successful Validations retrieval', () => {
+    const normalizedValidations = {
+      '512e': {
+        description: '',
+        metadata: {},
+        id: '512e',
+        groups: [ 'pre-deployment' ],
+        name: 'Advanced Format 512e Support'
       },
-      result: [1, 2]
+      'check-network-gateway': {
+        description: '',
+        metadata: {},
+        id: 'check-network-gateway',
+        groups: [ 'pre-deployment' ],
+        name: 'Check network_gateway on the provisioning network'
+      }
     };
     const expectedAction = {
-      type: ValidationsConstants.FETCH_VALIDATION_STAGES_SUCCESS,
-      payload: normalizedStagesResponse
+      type: ValidationsConstants.FETCH_VALIDATIONS_SUCCESS,
+      payload: normalizedValidations
     };
-    expect(ValidationsActions.fetchValidationStagesSuccess(normalizedStagesResponse))
+    expect(ValidationsActions.fetchValidationsSuccess(normalizedValidations))
       .toEqual(expectedAction);
   });
 
-  it('should create an action to update Validation Stage status', () => {
+  it('should create an action for failed Validations request', () => {
     const expectedAction = {
-      type: ValidationsConstants.UPDATE_STAGE_STATUS,
-      payload: {
-        uuid: 1,
-        status: 'running'
-      }
+      type: ValidationsConstants.FETCH_VALIDATIONS_FAILED
     };
-    expect(ValidationsActions.updateValidationStageStatus(1, 'running')).toEqual(expectedAction);
+    expect(ValidationsActions.fetchValidationsFailed()).toEqual(expectedAction);
   });
 
-  it('should create an action to update Validation status', () => {
-    const expectedAction = {
-      type: ValidationsConstants.UPDATE_VALIDATION_STATUS,
-      payload: {
-        uuid: 1,
-        status: 'failed'
-      }
-    };
-    expect(ValidationsActions.updateValidationStatus(1, 'failed')).toEqual(expectedAction);
-  });
 });
