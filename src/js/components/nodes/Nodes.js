@@ -55,6 +55,19 @@ class Nodes extends React.Component {
           <div className="tab-pane">
             {this.props.children}
           </div>
+          <div className="panel panel-info">
+            <div className="panel-heading">
+              <h3 className="panel-title">
+                <span className="pficon pficon-help"></span> Nodes
+              </h3>
+            </div>
+            <div className="panel-body">
+              <p>To register Nodes specified in instackenv.json run</p>
+              <pre>openstack baremetal import --json ~/instackenv.json</pre>
+              <p>To introspect registered Nodes run</p>
+              <pre>openstack baremetal introspection bulk start</pre>
+            </div>
+          </div>
         </div>
       </div>
     );
