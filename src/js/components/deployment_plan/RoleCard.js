@@ -1,8 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router';
+import Link from '../ui/Link';
 
 export default class RoleCard extends React.Component {
   render() {
+    let disabled = !this.props.availableNodesCount && !this.props.assignedNodesCount;
+
     return (
       <div className={`card-pf card-pf-accented role-card ${this.props.name}`}>
         <h2 className="card-pf-title">
@@ -23,12 +25,10 @@ export default class RoleCard extends React.Component {
         </div>
         <div className="card-pf-footer">
           <p>
-            <Link to={`/deployment-plan/${this.props.name}/assignNodes`}
-                  onClick={(e) => this.props.availableNodesCount
-                  || this.props.assignedNodesCount ? null : e.preventDefault()}
-                  className={'card-pf-link-with-icon ' +
-                             (this.props.availableNodesCount
-                             || this.props.assignedNodesCount ? '' : 'disabled')} >
+            <Link
+              disabled={disabled}
+              to={`/deployment-plan/${this.props.name}/assignNodes`}
+              className="card-pf-link-with-icon">
               <span className="pficon pficon-add-circle-o" />Assign Nodes
             </Link>
           </p>
