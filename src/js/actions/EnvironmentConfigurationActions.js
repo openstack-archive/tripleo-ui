@@ -13,7 +13,8 @@ export default {
     return dispatch => {
       dispatch(this.fetchEnvironmentConfigurationPending());
       TripleOApiService.getPlanEnvironments(planName).then((response) => {
-        const entities = normalize(response.environments.topics, arrayOf(topicSchema)).entities;
+        const entities = normalize(response.environments.topics || [],
+                                   arrayOf(topicSchema)).entities;
         dispatch(this.fetchEnvironmentConfigurationSuccess(entities));
       }).catch(error => {
         console.error('Error retrieving EnvironmentConfigurationActions.fetchEnvironment', //eslint-disable-line no-console
