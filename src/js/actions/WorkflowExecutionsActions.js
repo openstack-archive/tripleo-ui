@@ -42,5 +42,19 @@ export default {
     return {
       type: WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_FAILED
     };
+  },
+
+  addWorkflowExecution(execution) {
+    return {
+      type: WorkflowExecutionsConstants.ADD_WORKFLOW_EXECUTION,
+      payload: execution
+    };
+  },
+
+  addWorkflowExecutionFromMessage(messagePayload) {
+    return {
+      type: WorkflowExecutionsConstants.ADD_WORKFLOW_EXECUTION_FROM_MESSAGE,
+      payload: messagePayload
+    };
   }
 };

@@ -4,9 +4,25 @@ import ClassNames from 'classnames';
 import React from 'react';
 
 export default class Validation extends React.Component {
-  viewDetails (e) {
-    e.preventDefault();
-    // TODO: Show the details
+  constructor() {
+    super();
+    this.state = { isPending: false };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ isPending: false });
+  }
+
+  triggerValidationAction() {
+    this.setState({ isPending: true });
+    switch (this.props.status) {
+    case ('running'):
+      this.props.stopValidation();
+      break;
+    default:
+      this.props.runValidation();
+      break;
+    }
   }
 
   renderValidationGroups() {
@@ -26,8 +42,8 @@ export default class Validation extends React.Component {
       <div className="list-group-item list-view-pf-stacked validation">
         <div className="list-view-pf-main-info">
           <div className="list-view-pf-left">
-            <ValidationStatusIcon status={this.props.status}
-                                  runValidation={this.props.runValidation}
+            <ValidationStatusIcon status={this.state.isPending ? 'running' : this.props.status}
+                                  triggerValidationAction={this.triggerValidationAction.bind(this)}
                                   stopValidation={this.props.stopValidation}/>
           </div>
           <div className="list-view-pf-body">
@@ -61,7 +77,7 @@ Validation.propTypes = {
 };
 
 
-const ValidationStatusIcon = ({ status, runValidation, stopValidation }) => {
+const ValidationStatusIcon = ({ status, triggerValidationAction }) => {
   const statusIconClass = ClassNames({
     'list-view-pf-icon-md' :              true,
     'running fa fa-stop-circle':          status === 'running',
@@ -74,13 +90,13 @@ const ValidationStatusIcon = ({ status, runValidation, stopValidation }) => {
   case (includes(['new', 'running'], status)):
     return (
       <a className="link"
-         onClick={status === 'running' ? stopValidation : runValidation}>
+         onClick={triggerValidationAction}>
         <span className={statusIconClass}/>
       </a>
     );
   case (includes(['success', 'failed'], status)):
     return (
-      <a className="link flip-container" onClick={runValidation}>
+      <a className="link flip-container" onClick={triggerValidationAction}>
         <div className="flipper">
           <span className={statusIconClass}/>
           <span className="list-view-pf-icon-md fa fa-play-circle back"/>
@@ -92,7 +108,6 @@ const ValidationStatusIcon = ({ status, runValidation, stopValidation }) => {
   }
 };
 ValidationStatusIcon.propTypes = {
-  runValidation: React.PropTypes.func.isRequired,
   status: React.PropTypes.string,
-  stopValidation: React.PropTypes.func.isRequired
+  triggerValidationAction: React.PropTypes.func.isRequired
 };
