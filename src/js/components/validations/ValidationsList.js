@@ -20,24 +20,27 @@ class ValidationsList extends React.Component {
   }
 
   renderValidations() {
-    if (this.props.validations.isEmpty()) {
+    const { validations, currentPlanName } = this.props;
+    
+    if (validations.isEmpty()) {
       return (
         <BlankSlate iconClass="pficon pficon-flag"
                     title="No Validations"
                     message="There are no validations at this time." />
       );
     } else {
-      return this.props.validations.toList().map(validation => {
+      return validations.toList().map(validation => {
         return (
-          <Validation key={validation.id}
-                      name={validation.name}
-                      results={validation.results}
-                      status={validation.status}
-                      groups={validation.groups}
-                      runValidation={this.props.runValidation.bind(this, validation.id)}
-                      stopValidation={this.props.stopValidation.bind(this, validation.id)}
-                      description={validation.description}
-                      id={validation.id} />
+          <Validation
+            key={validation.id}
+            name={validation.name}
+            results={validation.results}
+            status={validation.status}
+            groups={validation.groups}
+            runValidation={this.props.runValidation.bind(this, validation.id, currentPlanName)}
+            stopValidation={this.props.stopValidation.bind(this, validation.id, currentPlanName)}
+            description={validation.description}
+            id={validation.id} />
         );
       });
     }
@@ -78,6 +81,7 @@ class ValidationsList extends React.Component {
 }
 
 ValidationsList.propTypes = {
+  currentPlanName: React.PropTypes.string,
   fetchValidations: React.PropTypes.func.isRequired,
   fetchWorkflowExecutions: React.PropTypes.func.isRequired,
   isFetchingValidations: React.PropTypes.bool.isRequired,
@@ -91,8 +95,8 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchValidations: () => dispatch(ValidationsActions.fetchValidations()),
     fetchWorkflowExecutions: () => dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
-    runValidation: (id) => {
-      dispatch(ValidationsActions.runValidation(id));
+    runValidation: (id, currentPlanName) => {
+      dispatch(ValidationsActions.runValidation(id, currentPlanName));
     },
     stopValidation: (id) => {
       dispatch(ValidationsActions.stopValidation(id));
@@ -104,7 +108,8 @@ const mapStateToProps = state => {
   return {
     isFetchingValidations: state.validations.get('isFetching'),
     validations: getValidationsWithResults(state),
-    validationsLoaded: state.validations.get('validationsLoaded')
+    validationsLoaded: state.validations.get('validationsLoaded'),
+    currentPlanName: state.currentPlan.currentPlanName
   };
 };
 
