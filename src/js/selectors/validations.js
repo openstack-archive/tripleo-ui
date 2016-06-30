@@ -11,7 +11,7 @@ const executions = (state) => state.executions.get('executions');
 export const getValidationExecutionsForCurrentPlan = createSelector(
   [executions, currentPlanNameSelector], (executions, currentPlanName) => {
     return executions.filter(execution =>
-      execution.get('workflow_name') === 'tripleo.validations.v1.run_and_notify' &&
+      execution.get('workflow_name') === 'tripleo.validations.v1.run_validation' &&
       execution.getIn(['input', 'plan']) === currentPlanName);
   }
 );
@@ -30,11 +30,10 @@ export const getValidationsWithResults = createSelector(
 );
 
 /**
- * Helper function to get a validation results by validation name and order them by updated_at
+ * Helper function to get a validation results by validation name
  */
 const getValidationResults = (validationId, results) => {
-  return results.filter(result => result.getIn(['input', 'validation_name']) === validationId)
-                .sortBy(result => result.get('updated_at'));
+  return results.filter(result => result.getIn(['input', 'validation_name']) === validationId);
 };
 
 /**
@@ -44,13 +43,13 @@ const getValidationStatus = (validationResults) => {
   switch (true) {
   case (validationResults.isEmpty()):
     return 'new';
-  case (validationResults.first().get('state') === 'RUNNING'):
+  case (validationResults.last().state === 'RUNNING'):
     return 'running';
-  case (!!validationResults.first()):
+  case (validationResults.last().state === 'SUCCESS'):
     return 'success';
-  // case (!!validationResults.first()):
-  //   return 'failed';
+  case (validationResults.last().state === 'FAILED'):
+    return 'failed';
   default:
-    return 'new';
+    return 'error';
   }
 };

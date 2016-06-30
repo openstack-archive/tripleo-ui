@@ -94,13 +94,13 @@ describe(' validations selectors', () => {
     })
   };
 
-  xit('provides selector to get validation executions for current plan', () => {
+  it('provides selector to get validation executions for current plan', () => {
     expect(selectors.getValidationExecutionsForCurrentPlan(state).size).toEqual(2);
     expect(selectors.getValidationExecutionsForCurrentPlan(state))
       .toEqualImmutable(state.executions.get('executions'));
   });
 
-  xit('provides selector to get validation combined with its results', () => {
+  it('provides selector to get validation combined with its results', () => {
     const validationsWithResults = selectors.getValidationsWithResults(state);
     expect(validationsWithResults.size).toEqual(2);
     expect(validationsWithResults.get('512e').results.size).toEqual(0);

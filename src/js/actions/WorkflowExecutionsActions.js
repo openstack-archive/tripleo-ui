@@ -1,9 +1,4 @@
 import { normalize, arrayOf } from 'normalizr';
-// import { fromJS, List, Map } from 'immutable';
-// import when from 'when';
-
-// import IronicApiErrorHandler from '../services/IronicApiErrorHandler';
-// import IronicApiService from '../services/IronicApiService';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import WorkflowExecutionsConstants from '../constants/WorkflowExecutionsConstants';
@@ -45,6 +40,20 @@ export default {
   fetchWorkflowExecutionsFailed() {
     return {
       type: WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_FAILED
+    };
+  },
+
+  addWorkflowExecution(execution) {
+    return {
+      type: WorkflowExecutionsConstants.ADD_WORKFLOW_EXECUTION,
+      payload: execution
+    };
+  },
+
+  addWorkflowExecutionFromMessage(messagePayload) {
+    return {
+      type: WorkflowExecutionsConstants.ADD_WORKFLOW_EXECUTION_FROM_MESSAGE,
+      payload: messagePayload
     };
   }
 };

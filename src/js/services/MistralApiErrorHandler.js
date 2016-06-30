@@ -26,6 +26,14 @@ export default class MistralApiErrorHandler extends BaseHttpRequestErrorHandler 
         message: error.message
       });
       break;
+    case 400: {
+      let error = JSON.parse(errorObj.responseText).faultstring;
+      errors.push({
+        title: 'Bad Request',
+        message: error
+      });
+      break;
+    }
     default:
       errors.push({
         title: errorObj.statusText,
