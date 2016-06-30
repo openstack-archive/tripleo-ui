@@ -8,6 +8,6 @@ export const WorkflowExecution = Record({
   params: Map(),
   state: undefined,
   state_info: undefined,
-  updated_at: Date.now(),
+  updated_at: undefined,
   workflow_name: undefined
 });
