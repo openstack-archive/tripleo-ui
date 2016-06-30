@@ -1,10 +1,13 @@
 import { normalize, arrayOf } from 'normalizr';
+import { fromJS } from 'immutable';
 
 import MistralApiService from '../services/MistralApiService';
 import NotificationActions from './NotificationActions';
+import WorkflowExecutionsActions from './WorkflowExecutionsActions';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import ValidationsConstants from '../constants/ValidationsConstants';
 import { validationSchema } from '../normalizrSchemas/validations';
+import { WorkflowExecution } from '../immutableRecords/workflowExecutions';
 
 export default {
   fetchValidations() {
@@ -44,47 +47,37 @@ export default {
     return {
       type: ValidationsConstants.FETCH_VALIDATIONS_FAILED
     };
-  }
+  },
 
-  // runValidation(uuid) {
-  //   return dispatch => {
-  //     dispatch(this.updateValidationStatus(uuid, 'running'));
-  //     ValidationsApiService.runValidation(uuid).then((response) => {
-  //       console.log(response); //eslint-disable-line no-console
-  //     }).catch((error) => {
-  //       console.error('Error in ValidationActions.runValidaton', error.stack); //eslint-disable-line no-console
-  //       let errorHandler = new ValidationsApiErrorHandler(error);
-  //       errorHandler.errors.forEach((error) => {
-  //         dispatch(NotificationActions.notify(error));
-  //       });
-  //       dispatch(this.updateValidationStatus(uuid, 'error'));
-  //     });
-  //   };
-  // },
-  //
-  // stopValidation(uuid) {
-  //   return dispatch => {
-  //     dispatch(this.updateValidationStatus(uuid, 'failed'));
-  //     ValidationsApiService.stopValidation(uuid).then((response) => {
-  //       console.log(response); //eslint-disable-line no-console
-  //     }).catch((error) => {
-  //       console.error('Error in ValidationActions.stopValidation', error.stack); //eslint-disable-line no-console
-  //       let errorHandler = new ValidationsApiErrorHandler(error);
-  //       errorHandler.errors.forEach((error) => {
-  //         dispatch(NotificationActions.notify(error));
-  //       });
-  //       dispatch(this.updateValidationStatus(uuid, 'error'));
-  //     });
-  //   };
-  // },
-  //
-  // updateValidationStatus(uuid, status) {
-  //   return {
-  //     type: ValidationsConstants.UPDATE_VALIDATION_STATUS,
-  //     payload: {
-  //       uuid,
-  //       status
-  //     }
-  //   };
-  // }
+  runValidation(id, currentPlanName) {
+    return (dispatch, getState) => {
+      MistralApiService.runWorkflow('tripleo.validations.v1.run_validation',
+                                    { validation_name: id,
+                                      plan: currentPlanName })
+      .then((response) => {
+        if(response.state === 'ERROR') {
+          dispatch(NotificationActions.notify({ title: 'Error running Validation',
+                                                message: response.state_info }));
+          dispatch(WorkflowExecutionsActions.addWorkflowExecution(response));
+        } else {
+          dispatch(WorkflowExecutionsActions.addWorkflowExecution(response));
+        }
+      }).catch((error) => {
+        let errorHandler = new MistralApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+      });
+    };
+  },
+
+  runValidationMessage(messagePayload) {
+    return (dispatch, getState) => {
+      const execution = new WorkflowExecution(fromJS(messagePayload.execution))
+                          .set('workflow_name', 'tripleo.validations.v1.run_validation')
+                          .set('state', messagePayload.status)
+                          .set('output', fromJS({...messagePayload}).delete('execution'));
+      dispatch(WorkflowExecutionsActions.addWorkflowExecutionFromMessage(execution));
+    };
+  }
 };
