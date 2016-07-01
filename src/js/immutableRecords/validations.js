@@ -7,5 +7,6 @@ export const Validation = Record({
   metadata: undefined,
   name: undefined,
   results: Map(),
-  status: undefined
+  status: undefined,
+  stateInfo: undefined
 });
