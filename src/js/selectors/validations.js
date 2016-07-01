@@ -24,7 +24,8 @@ export const getValidationsWithResults = createSelector(
     return validations.map(validation => {
       const validationResults = getValidationResults(validation.id, results);
       return validation.set('results', validationResults)
-                       .set('status', getValidationStatus(validationResults));
+                       .set('status', getValidationStatus(validationResults))
+                       .set('stateInfo', getValidationStateInfo(validationResults));
     });
   }
 );
@@ -47,9 +48,12 @@ const getValidationStatus = (validationResults) => {
     return 'running';
   case (validationResults.last().state === 'SUCCESS'):
     return 'success';
-  case (validationResults.last().state === 'FAILED'):
+  case (validationResults.last().state === 'ERROR'):
     return 'failed';
   default:
     return 'error';
   }
 };
+
+const getValidationStateInfo = validationResults =>
+  validationResults.last() ? validationResults.last().state_info : undefined;
