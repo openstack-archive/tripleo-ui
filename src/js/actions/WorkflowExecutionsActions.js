@@ -51,10 +51,35 @@ export default {
     };
   },
 
-  addWorkflowExecutionFromMessage(messagePayload) {
+  addWorkflowExecutionFromMessage(execution) {
     return {
       type: WorkflowExecutionsConstants.ADD_WORKFLOW_EXECUTION_FROM_MESSAGE,
-      payload: messagePayload
+      payload: execution
+    };
+  },
+
+  updateWorkflowExecution(id, patch) {
+    return (dispatch, getState) => {
+      dispatch(this.updateWorkflowExecutionPending(id, patch));
+      MistralApiService.updateWorkflowExecution(id, patch)
+      .then((response) => {
+        dispatch(this.addWorkflowExecution(response));
+      }).catch((error) => {
+        let errorHandler = new MistralApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+      });
+    };
+  },
+
+  updateWorkflowExecutionPending(id, patch) {
+    return {
+      type: WorkflowExecutionsConstants.UPDATE_WORKFLOW_EXECUTION_PENDING,
+      payload: {
+        id,
+        patch
+      }
     };
   }
 };
