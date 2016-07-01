@@ -47,7 +47,7 @@ const getValidationStatus = (validationResults) => {
     return 'running';
   case (validationResults.last().state === 'SUCCESS'):
     return 'success';
-  case (validationResults.last().state === 'FAILED'):
+  case (validationResults.last().state === 'ERROR'):
     return 'failed';
   default:
     return 'error';

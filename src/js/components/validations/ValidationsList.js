@@ -21,12 +21,12 @@ class ValidationsList extends React.Component {
 
   renderValidations() {
     const { validations, currentPlanName } = this.props;
-    
+
     if (validations.isEmpty()) {
       return (
         <BlankSlate iconClass="pficon pficon-flag"
                     title="No Validations"
-                    message="There are no validations at this time." />
+                    message="There are no validations at this time."/>
       );
     } else {
       return validations.toList().map(validation => {
@@ -38,7 +38,7 @@ class ValidationsList extends React.Component {
             status={validation.status}
             groups={validation.groups}
             runValidation={this.props.runValidation.bind(this, validation.id, currentPlanName)}
-            stopValidation={this.props.stopValidation.bind(this, validation.id, currentPlanName)}
+            stopValidation={this.props.stopValidation.bind(this)}
             description={validation.description}
             id={validation.id} />
         );
@@ -98,8 +98,11 @@ const mapDispatchToProps = dispatch => {
     runValidation: (id, currentPlanName) => {
       dispatch(ValidationsActions.runValidation(id, currentPlanName));
     },
-    stopValidation: (id) => {
-      dispatch(ValidationsActions.stopValidation(id));
+    stopValidation: (executionId) => {
+      dispatch(WorkflowExecutionsActions.updateWorkflowExecution(
+        executionId,
+        { state: 'ERROR',
+          state_info: 'Stopped by user' }));
     }
   };
 };

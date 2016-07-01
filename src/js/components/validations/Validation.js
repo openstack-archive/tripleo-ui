@@ -13,11 +13,19 @@ export default class Validation extends React.Component {
     this.setState({ isPending: false });
   }
 
+  /**
+   * Decide which validation action to run, if validation is pending (waits for execution to be
+   * started) no action can be run
+   */
   triggerValidationAction() {
     this.setState({ isPending: true });
-    switch (this.props.status) {
-    case ('running'):
-      this.props.stopValidation();
+    const { status } = this.props;
+
+    switch (true) {
+    case (this.state.isPending):
+      break;
+    case (status === 'running'):
+      this.props.stopValidation(this.props.results.last().id);
       break;
     default:
       this.props.runValidation();
@@ -42,9 +50,9 @@ export default class Validation extends React.Component {
       <div className="list-group-item list-view-pf-stacked validation">
         <div className="list-view-pf-main-info">
           <div className="list-view-pf-left">
-            <ValidationStatusIcon status={this.state.isPending ? 'running' : this.props.status}
-                                  triggerValidationAction={this.triggerValidationAction.bind(this)}
-                                  stopValidation={this.props.stopValidation}/>
+            <ValidationStatusIcon
+              status={this.state.isPending ? 'running' : this.props.status}
+              triggerValidationAction={this.triggerValidationAction.bind(this)}/>
           </div>
           <div className="list-view-pf-body">
             <div className="list-view-pf-description">
@@ -90,13 +98,16 @@ const ValidationStatusIcon = ({ status, triggerValidationAction }) => {
   case (includes(['new', 'running'], status)):
     return (
       <a className="link"
+         title={status}
          onClick={triggerValidationAction}>
         <span className={statusIconClass}/>
       </a>
     );
   case (includes(['success', 'failed'], status)):
     return (
-      <a className="link flip-container" onClick={triggerValidationAction}>
+      <a className="link flip-container"
+         title={status}
+         onClick={triggerValidationAction}>
         <div className="flipper">
           <span className={statusIconClass}/>
           <span className="list-view-pf-icon-md fa fa-play-circle back"/>

@@ -38,6 +38,9 @@ export default function workflowExecutionsReducer(state = initialState, action) 
     return state.update('executions',
                         executions => executions.set(action.payload.id, action.payload));
 
+  case WorkflowExecutionsConstants.UPDATE_WORKFLOW_EXECUTION_PENDING:
+    return state.mergeIn(['executions', action.payload.id], fromJS(action.payload.patch));
+
   default:
     return state;
 
