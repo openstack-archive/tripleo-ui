@@ -14,13 +14,12 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.fetchValidationsPending());
       MistralApiService.runAction('tripleo.list_validations').then((response) => {
-
         const actionResult = JSON.parse(response.output).result;
         const validations = normalize(actionResult,
                                       arrayOf(validationSchema)).entities.validations || {};
         dispatch(this.fetchValidationsSuccess(validations));
       }).catch((error) => {
-        console.error('Error in ValidationActions.fetchValidations', error.stack || error); //eslint-disable-line no-console
+        console.error('Error in ValidationsActions.fetchValidations', error.stack || error); //eslint-disable-line no-console
         dispatch(this.fetchValidationsFailed());
         let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
