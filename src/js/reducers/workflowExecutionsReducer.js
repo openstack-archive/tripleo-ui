@@ -5,7 +5,7 @@ import { WorkflowExecution } from '../immutableRecords/workflowExecutions';
 
 const initialState = Map({
   executionsLoaded: false,
-  isFetchingExecutions: false,
+  isFetching: false,
   executions: OrderedMap()
 });
 
@@ -13,7 +13,7 @@ export default function workflowExecutionsReducer(state = initialState, action) 
   switch(action.type) {
 
   case WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_PENDING:
-    return state.set('isFetchingExecutions', true);
+    return state.set('isFetching', true);
 
   case WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_SUCCESS: {
     const executions = fromJS(action.payload)
@@ -37,6 +37,9 @@ export default function workflowExecutionsReducer(state = initialState, action) 
   case WorkflowExecutionsConstants.ADD_WORKFLOW_EXECUTION_FROM_MESSAGE:
     return state.update('executions',
                         executions => executions.set(action.payload.id, action.payload));
+
+  case WorkflowExecutionsConstants.UPDATE_WORKFLOW_EXECUTION_PENDING:
+    return state.mergeIn(['executions', action.payload.id], fromJS(action.payload.patch));
 
   default:
     return state;
