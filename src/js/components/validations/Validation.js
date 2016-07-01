@@ -13,11 +13,18 @@ export default class Validation extends React.Component {
     this.setState({ isPending: false });
   }
 
+  /**
+   * Decide which validation action to run, if validation is pending (waits for execution to be
+   * started) no action can be run
+   */
   triggerValidationAction() {
     this.setState({ isPending: true });
-    switch (this.props.status) {
-    case ('running'):
-      this.props.stopValidation();
+
+    switch (true) {
+    case (this.state.isPending):
+      break;
+    case (this.props.status === 'running'):
+      this.props.stopValidation(this.props.results.last().id);
       break;
     default:
       this.props.runValidation();
@@ -42,9 +49,9 @@ export default class Validation extends React.Component {
       <div className="list-group-item list-view-pf-stacked validation">
         <div className="list-view-pf-main-info">
           <div className="list-view-pf-left">
-            <ValidationStatusIcon status={this.state.isPending ? 'running' : this.props.status}
-                                  triggerValidationAction={this.triggerValidationAction.bind(this)}
-                                  stopValidation={this.props.stopValidation}/>
+            <ValidationStatusIcon
+              status={this.state.isPending ? 'running' : this.props.status}
+              triggerValidationAction={this.triggerValidationAction.bind(this)}/>
           </div>
           <div className="list-view-pf-body">
             <div className="list-view-pf-description">
@@ -83,11 +90,14 @@ const ValidationStatusIcon = ({ status, triggerValidationAction }) => {
     'running fa fa-stop-circle':          status === 'running',
     'pficon pficon-error-circle-o front': status === 'failed',
     'pficon pficon-ok front':             status === 'success',
-    'fa fa-play-circle':                  status === 'new'
+    'fa fa-play-circle':                  includes(['new', 'paused'], status),
+    'pficon pficon-help':                 status === 'error'
   });
 
+  const runValidationIconClass = 'list-view-pf-icon-md fa fa-play-circle back';
+
   switch (true) {
-  case (includes(['new', 'running'], status)):
+  case (includes(['new', 'running', 'paused'], status)):
     return (
       <a className="link"
          onClick={triggerValidationAction}>
@@ -96,15 +106,24 @@ const ValidationStatusIcon = ({ status, triggerValidationAction }) => {
     );
   case (includes(['success', 'failed'], status)):
     return (
-      <a className="link flip-container" onClick={triggerValidationAction}>
+      <a className="link flip-container"
+         onClick={triggerValidationAction}>
         <div className="flipper">
           <span className={statusIconClass}/>
-          <span className="list-view-pf-icon-md fa fa-play-circle back"/>
+          <span className={runValidationIconClass}/>
         </div>
       </a>
     );
   default:
-    return <span className="list-view-pf-icon-md pficon pficon-help"/>;
+    return (
+      <a className="link flip-container"
+         onClick={triggerValidationAction}>
+        <div className="flipper">
+          <span className={statusIconClass}/>
+          <span className={runValidationIconClass}/>
+        </div>
+      </a>
+    );
   }
 };
 ValidationStatusIcon.propTypes = {

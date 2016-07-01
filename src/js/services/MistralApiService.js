@@ -42,6 +42,19 @@ class MistralApiService {
   }
 
   /**
+   * Deletes a Workflow execution
+   * Mistral API: DELETE /v2/executions/:execution_id
+   * @param {executionId} Execution ID
+   * @param {patch} Partial execution objects carrying the changes
+   */
+  updateWorkflowExecution(executionId, patch) {
+    return this.defaultRequest('/executions/' + executionId, {
+      method: 'PUT',
+      data: JSON.stringify(patch)
+    });
+  }
+
+  /**
    * Starts a new Workflow execution
    * Mistral API: POST /v2/executions
    * @param {string} mistralUrl - Mistral API service base url
