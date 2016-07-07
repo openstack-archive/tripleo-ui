@@ -8,7 +8,8 @@ import { Map, Record } from 'immutable';
 export const Plan = Record({
   name: '',
   transition: false,
-  files: Map()
+  files: Map(),
+  isRequestingPlanDeploy: false
 });
 
 export const PlanFile = Record({
