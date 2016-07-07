@@ -15,5 +15,8 @@ export default keyMirror({
   PLAN_UPDATED: null,
   CREATE_PLAN_PENDING: null,
   CREATE_PLAN_SUCCESS: null,
-  CREATE_PLAN_FAILED: null
+  CREATE_PLAN_FAILED: null,
+  DEPLOY_PLAN_SUCCESS: null,
+  DEPLOY_PLAN_PENDING: null,
+  DEPLOY_PLAN_FAILED: null
 });

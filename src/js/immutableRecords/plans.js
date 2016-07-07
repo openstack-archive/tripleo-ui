@@ -20,5 +20,6 @@ export const PlanFile = Record({
 export const InitialPlanState = Record({
   isFetchingPlans: false,
   isCreatingPlan: false,
+  isRequestingPlanDeploy: false,
   all: Map()
 });

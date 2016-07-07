@@ -18,11 +18,10 @@ import Loader from '../ui/Loader';
 import NodesActions from '../../actions/NodesActions';
 import NoPlans from './NoPlans';
 import NotificationActions from '../../actions/NotificationActions';
+import PlanActions from '../../actions/PlansActions';
 import StacksActions from '../../actions/StacksActions';
 import Roles from './Roles';
 import RolesActions from '../../actions/RolesActions';
-import TripleOApiService from '../../services/TripleOApiService';
-import TripleOApiErrorHandler from '../../services/TripleOApiErrorHandler';
 import ValidationsActions from '../../actions/ValidationsActions';
 import { getValidationStageUuidByName } from '../../selectors/validations';
 
@@ -39,35 +38,40 @@ class DeploymentPlan extends React.Component {
   }
 
   handleDeploy() {
-    TripleOApiService.deployPlan(this.props.currentPlanName).then((response) => {
-      this.setState({ parameters: response.parameters });
-      this.props.fetchStacks();
-      this.props.notify({
-        title: 'Deployment started',
-        message: 'The Deployment has been successfully initiated',
-        type: 'success'
-      });
-    }).catch((error) => {
-      let errorHandler = new TripleOApiErrorHandler(error);
-      errorHandler.errors.forEach((error) => {
-        this.props.notify(error);
-      });
-    });
+    this.props.deployPlan(this.props.currentPlanName);
   }
 
   renderDeployStep() {
-    return !this.props.currentStack ? (
-      <div className="actions pull-left">
+    if (this.props.isRequestingPlanDeploy) {
+      return (
+        <div className="actions pull-left">
+          <a className={'link btn btn-primary btn-lg disabled'}>
+            <span className="fa fa-send"/> Verify and Deploy
+          </a>
+          <p>
+            <span className={'spinner spinner-xs spinner-inline'}></span>
+            Requesting a deploy...
+          </p>
+        </div>
+      );
+
+    } else if(!this.props.currentStack) {
+      return (
+        <div className="actions pull-left">
         <a className={'link btn btn-primary btn-lg ' +
                       (this.state.readyToDeploy ? '' : 'disabled')}
            onClick={this.handleDeploy.bind(this)}>
           <span className="fa fa-send"/> Verify and Deploy
         </a>
-      </div>
-    ) : (
-      <DeploymentStatus stack={this.props.currentStack}
-                        fetchStacks={this.props.fetchStacks}/>
-    );
+        </div>
+      );
+    } else {
+      return (
+        <DeploymentStatus stack={this.props.currentStack}
+                          fetchStacks={this.props.fetchStacks}/>
+      );
+    }
+
   }
 
   runNetworkValidations(e) {
@@ -207,6 +211,7 @@ DeploymentPlan.propTypes = {
   currentPlanName: React.PropTypes.string,
   currentStack: ImmutablePropTypes.record,
   currentStackDeploymentProgress: React.PropTypes.bool,
+  deployPlan: React.PropTypes.func,
   environmentConfigurationLoaded: React.PropTypes.bool,
   environmentConfigurationSummary: React.PropTypes.string,
   fetchEnvironmentConfiguration: React.PropTypes.func,
@@ -220,6 +225,7 @@ DeploymentPlan.propTypes = {
   isFetchingNodes: React.PropTypes.bool,
   isFetchingPlans: React.PropTypes.bool,
   isFetchingRoles: React.PropTypes.bool,
+  isRequestingPlanDeploy: React.PropTypes.bool,
   notify: React.PropTypes.func,
   roles: ImmutablePropTypes.map,
   rolesLoaded: React.PropTypes.bool,
@@ -243,6 +249,7 @@ export function mapStateToProps(state) {
     hasPlans: !state.plans.get('all').isEmpty(),
     inactivePlans: getAllPlansButCurrent(state),
     introspectedNodes: getIntrospectedNodes(state),
+    isRequestingPlanDeploy: state.plans.get('isRequestingPlanDeploy'),
     roles: state.roles.get('roles'),
     rolesLoaded: state.roles.get('loaded'),
     unassignedIntrospectedNodes: getUnassignedIntrospectedNodes(state),
@@ -253,6 +260,7 @@ export function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     choosePlan: planName => dispatch(CurrentPlanActions.choosePlan(planName)),
+    deployPlan: planName => dispatch(PlanActions.deployPlan(planName)),
     fetchEnvironmentConfiguration: (planName, parentPath) => {
       dispatch(EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName, parentPath));
     },

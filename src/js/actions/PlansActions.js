@@ -7,6 +7,7 @@ import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NotificationActions from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
 import { planSchema } from '../normalizrSchemas/plans';
+import StackActions from '../actions/StacksActions';
 import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
 import TripleOApiService from '../services/TripleOApiService';
@@ -252,6 +253,47 @@ export default {
       }).catch(error => {
         console.error('Error retrieving plan TripleOApiService.deletePlan', error); //eslint-disable-line no-console
         dispatch(this.planDeleted(planName));
+        let errorHandler = new TripleOApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+      });
+    };
+  },
+
+  deployPlanPending() {
+    return {
+      type: PlansConstants.DEPLOY_PLAN_PENDING
+    };
+  },
+
+  deployPlanSuccess(data) {
+    return {
+      type: PlansConstants.DEPLOY_PLAN_SUCCESS,
+      paylod: data
+    };
+  },
+
+  deployPlanFailed(error) {
+    return {
+      type: PlansConstants.DEPLOY_PLAN_FAILED,
+      payload: error
+    };
+  },
+
+  deployPlan(planName) {
+    return dispatch => {
+      dispatch(this.deployPlanPending(planName));
+      TripleOApiService.deployPlan(planName).then((response) => {
+        dispatch(this.deployPlanSuccess(response));
+        dispatch(StackActions.fetchStacks());
+        dispatch(NotificationActions.notify({
+          title: 'Deployment started',
+          message: 'The Deployment has been successfully initiated',
+          type: 'success'
+        }));
+      }).catch(error => {
+        dispatch(this.deployPlanFailed(error));
         let errorHandler = new TripleOApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));

@@ -69,6 +69,15 @@ export default function plansReducer(state = initialState, action) {
   case PlansConstants.PLAN_UPDATED:
     return state.setIn(['all', action.payload, 'transition'], false);
 
+  case PlansConstants.DEPLOY_PLAN_PENDING:
+    return state.set('isRequestingPlanDeploy', true);
+
+  case PlansConstants.DEPLOY_PLAN_SUCCESS:
+    return state.set('isRequestingPlanDeploy', false);
+
+  case PlansConstants.DEPLOY_PLAN_FAILED:
+    return state.set('isRequestingPlanDeploy', false);
+
   default:
     return state;
 
