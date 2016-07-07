@@ -14,6 +14,15 @@ export default function currentPlanReducer(state = initialState, action) {
             .set('currentPlanName', action.payload.currentPlanName)
             .set('conflict', action.payload.conflict);
 
+  case PlansConstants.START_DEPLOYMENT_PENDING:
+    return state.set('isRequestingPlanDeploy', true);
+
+  case PlansConstants.START_DEPLOYMENT_SUCCESS:
+    return state.set('isRequestingPlanDeploy', false);
+
+  case PlansConstants.START_DEPLOYMENT_FAILED:
+    return state.set('isRequestingPlanDeploy', false);
+
   default:
     return state;
 
