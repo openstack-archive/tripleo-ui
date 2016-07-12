@@ -33,6 +33,8 @@ import RegisteredNodesTabPane from './components/nodes/RegisteredNodesTabPane';
 import TempStorage from './services/TempStorage.js';
 import store from './store';
 
+import '../less/base.less';
+
 TempStorage.initialized.then(() => {
   /**
    * @function checkAuth
