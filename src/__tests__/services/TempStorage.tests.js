@@ -1,5 +1,5 @@
 import TempStorage from '../../js/services/TempStorage.js';
-const WORKER_URL = '/js/tripleo_ui_tempstorage_worker.js';
+import TempStorageWorker from '../../js/workers/TempStorageWorker';
 
 describe('TempStorage', () => {
   describe('.getItem', () => {
@@ -22,7 +22,7 @@ describe('TempStorage', () => {
     let worker;
 
     if(window && window.SharedWorker) {
-      worker = new window.SharedWorker(WORKER_URL);
+      worker = new TempStorageWorker();
       worker.port.start();
     }
 
