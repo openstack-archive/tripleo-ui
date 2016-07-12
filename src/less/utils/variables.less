@@ -1,11 +1,14 @@
 
 // Override any Bootstrap variables or add custom ones here
 
-@icon-font-path: "../fonts";
-@fa-font-path: "../fonts";
+@font-path: "../dist/fonts";
+@fa-font-path: "../../../dist/fonts";
+@icon-font-path: "../../../dist/fonts/";
+@img-path: "../dist/img";
+
+// remove this when https://github.com/patternfly/patternfly/pull/363 is resolved
+@navbar-pf-alt-bg-img: url("../../../node_modules/patternfly/dist/img/bg-navbar-pf-alt.svg");
 
 @header-height:       86px;
 
 @login-bg-color:      #f1f1f1;
-@img-bg-login:        "bg-login.png";
-@img-bg-login-2:      "bg-login-2.png";
