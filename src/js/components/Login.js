@@ -9,6 +9,9 @@ import LoginInput from './ui/forms/LoginInput';
 import LoginActions from '../actions/LoginActions';
 import NotificationsToaster from './notifications/NotificationsToaster';
 
+import LogoSvg from '../../img/logo.svg';
+import TripleoOwlSvg from '../../img/tripleo-owl.svg';
+
 class Login extends React.Component {
   constructor() {
     super();
@@ -52,13 +55,13 @@ class Login extends React.Component {
     return (
       <div>
         <span id="badge">
-          <img src="/img/logo.svg" alt="TripleO"></img>
+          <img src={LogoSvg} alt="TripleO"></img>
         </span>
         <div className="container">
           <div className="row">
             <div className="col-sm-12">
               <div id="brand">
-                <img src="/img/tripleo-owl.svg" alt="TripleO"></img>
+                <img src={TripleoOwlSvg} alt="TripleO"></img>
               </div>
             </div>
             <div className="col-sm-7 col-md-6 col-lg-5 login">
