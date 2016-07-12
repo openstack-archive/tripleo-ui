@@ -69,7 +69,7 @@ tripleo_ui_virt_config:
       export npm_config_prefix=`pwd`/node_install;
       curl -L https://www.npmjs.com/install.sh | sh;
       $npm_config_prefix/bin/npm install;
-      $npm_config_prefix/bin/npm test;
+      $npm_config_prefix/bin/npm run test:single;
       $npm_config_prefix/bin/npm run lint;
   archive:
       - ../logs/venv-testrun.log
