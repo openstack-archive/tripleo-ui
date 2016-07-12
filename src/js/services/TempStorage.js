@@ -1,6 +1,8 @@
 import when from 'when';
 
-const WORKER_URL = '/js/tripleo_ui_tempstorage_worker.js';
+import TempStorageWorker from '../workers/TempStorageWorker';
+
+// const WORKER_URL = '/js/tripleo_ui_tempstorage_worker.js';
 
 class TempStorage {
 
@@ -15,7 +17,8 @@ class TempStorage {
 
   _createWorkerInstance() {
     if(window && window.SharedWorker) {
-      this.worker = new window.SharedWorker(WORKER_URL);
+      // this.worker = new window.SharedWorker(WORKER_URL);
+      this.worker = new TempStorageWorker();
       this.worker.port.start();
     }
   }

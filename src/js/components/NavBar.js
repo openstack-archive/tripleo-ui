@@ -4,6 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import NavTab from './ui/NavTab';
 
+import TripleoOwlSvg from '../../img/tripleo-owl.svg';
 
 export default class NavBar extends React.Component {
   logout(e) {
@@ -24,7 +25,7 @@ export default class NavBar extends React.Component {
             <span className="icon-bar"></span>
           </button>
           <Link className="navbar-brand" to="/">
-              <img src="/img/tripleo-owl.svg" alt="TripleO"></img>
+            <img src={TripleoOwlSvg} alt="TripleO"></img>
           </Link>
         </div>
         <div className="navbar-collapse collapse" id="tripleo-navbar-collapse">

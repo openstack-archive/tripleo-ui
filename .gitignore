@@ -1,10 +1,7 @@
 node_modules
-dist/tripleo_ui_config.js
-dist/js
-dist/css
-dist/fonts
-dist/img
-dist/.module-cache
+dist
+!dist/index.html
+!dist/tripleo_ui_config.js.sample
 tests_results.xml
 .DS_Store
 .idea
