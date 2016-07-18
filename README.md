@@ -37,7 +37,8 @@ export UNDERCLOUD_IP=192.0.2.1
 sudo iptables -t nat -A OUTPUT -d $UNDERCLOUD_IP -j DNAT --to-destination 127.0.0.1
 ```
 
-Copy app.conf.sample to app.conf and uncomment the lines setting keystone_url, tripleo_api_url and validations_url.
+Copy dist/tripleo_ui_config.js.sample to dist/tripleo_ui_config.js, uncomment the lines for keystone, tripleo, validations and zaqar_websocket_url, and add the urls where these services can be accessed.
+You can set values for the other services as well to override the values coming from the keystone serviceCatalog.
 
 Setup ssh tunnel for OpenStack API Services
 
