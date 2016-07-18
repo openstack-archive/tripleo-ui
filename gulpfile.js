@@ -3,7 +3,6 @@ var gulp = require('gulp');
 
 var browserSync = require('browser-sync');
 var historyApiFallback = require('connect-history-api-fallback');
-var ini = require('ini');
 var less = require('gulp-less');
 // var rename = require('gulp-rename');
 var shell = require('gulp-shell');
@@ -19,7 +18,7 @@ gulp.task('webpack-app', ['webpack-tempstorage-worker'], function() {
     .pipe(browserSync.stream());
 });
 
-gulp.task('serve', ['config-create', 'webpack-app', 'less', 'fonts', 'images'], function(){
+gulp.task('serve', ['webpack-app', 'less', 'fonts', 'images'], function(){
   browserSync.init({
     open: false,
     server: {
@@ -62,25 +61,6 @@ gulp.task('webpack-tempstorage-worker', function() {
   return gulp.src('./src/js/workers/TempStorageWorker.js')
     .pipe(webpack(tempStorageWorkerConfig))
     .pipe(gulp.dest('./dist/js'));
-});
-
-gulp.task('config-create', function() {
-  try {
-    fs.mkdirSync(__dirname + '/dist/js');
-  }
-  catch(err) {};
-  try {
-    var config = ini.parse(fs.readFileSync('./app.conf', 'utf-8'));
-    config.app = config.app || {};
-    var json = JSON.stringify(config.app);
-  }
-  catch (err) {
-    var json = '{}';
-  };
-  fs.writeFileSync(
-    './dist/js/tripleo_ui_config.js',
-    'window.tripleOUiConfig = ' + json + ';'
-  );
 });
 
 // Start test server, run tests once, then quit.
