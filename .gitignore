@@ -1,5 +1,5 @@
-app.conf
 node_modules
+dist/tripleo_ui_config.js
 dist/js
 dist/css
 dist/fonts
