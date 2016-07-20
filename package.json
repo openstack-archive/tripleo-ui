@@ -62,12 +62,11 @@
     "es6-promise": "~3.2.1"
   },
   "scripts": {
-    "test": "karma start --single-run",
-    "test:watch": "karma start",
+    "build": "webpack",
     "lint": "eslint src",
     "start": "webpack-dev-server --progress",
-    "prepublish": "sh packaging/prepublish.sh",
-    "build": "webpack"
+    "test": "karma start --single-run",
+    "test:watch": "karma start"
   },
   "repository": {
     "type": "git",
