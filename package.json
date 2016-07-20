@@ -61,11 +61,12 @@
     "webpack-dev-server": "~1.14.1"
   },
   "scripts": {
-    "test": "karma start --single-run",
-    "test:watch": "karma start",
+    "build": "webpack",
     "lint": "eslint src",
     "start": "webpack-dev-server --progress",
-    "build": "webpack"
+    "prepublish": "sh scripts/prepublish.sh",
+    "test": "karma start --single-run",
+    "test:watch": "karma start"
   },
   "repository": {
     "type": "git",
