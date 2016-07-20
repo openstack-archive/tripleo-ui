@@ -65,6 +65,8 @@
     "phantomjs-prebuilt": "~2.1.7"
   },
   "scripts": {
+    "build": "echo build",
+    "prepublish": "./scripts/prepublish.sh",
     "test": "karma start --single-run",
     "lint": "eslint src"
   },
