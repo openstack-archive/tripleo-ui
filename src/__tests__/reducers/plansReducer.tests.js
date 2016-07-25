@@ -1,11 +1,9 @@
 import matchers from 'jasmine-immutable-matchers';
-import { normalize, arrayOf } from 'normalizr';
 import { List, Map } from 'immutable';
 
 import { InitialPlanState, Plan } from '../../js/immutableRecords/plans';
 import PlansActions from '../../js/actions/PlansActions';
 import plansReducer from '../../js/reducers/plansReducer';
-import { planSchema } from '../../js/normalizrSchemas/plans';
 
 
 describe('plansReducer state', () => {
@@ -81,10 +79,10 @@ describe('plansReducer state', () => {
           isFetchingPlans: true,
           all: List()
         }),
-        PlansActions.receivePlans(normalize([
-          { name: 'overcloud' },
-          { name: 'another-cloud' }
-        ], arrayOf(planSchema)))
+        PlansActions.receivePlans([
+          'overcloud',
+          'another-cloud'
+        ])
       );
     });
 
