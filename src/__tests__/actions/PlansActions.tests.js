@@ -2,6 +2,7 @@ import when from 'when';
 
 import * as utils from '../../js/services/utils';
 import PlansActions from '../../js/actions/PlansActions';
+import MistralApiService from '../../js/services/MistralApiService';
 import TripleOApiService from '../../js/services/TripleOApiService';
 
 
@@ -99,19 +100,18 @@ describe('PlansActions', () => {
     });
   });
 
-  describe('fetchPlans', () => {
-    let apiResponse = {
-      plans: [
-        { name: 'overcloud' },
-        { name: 'another-cloud' }
-      ]
-    };
+  let apiResponse = {
+    output: '{ "result": [ "overcloud", "another-cloud" ] }'
+  };
 
+  describe('fetchPlans', () => {
     beforeEach(done => {
       spyOn(PlansActions, 'requestPlans');
       spyOn(PlansActions, 'receivePlans');
+      spyOn(MistralApiService, 'runAction').and.callFake(
+        createResolvingPromise(apiResponse)
+      );
       // Mock the service call.
-      spyOn(TripleOApiService, 'getPlans').and.callFake(createResolvingPromise(apiResponse));
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
       PlansActions.fetchPlans()(() => {}, () => {});
@@ -124,17 +124,9 @@ describe('PlansActions', () => {
     });
 
     it('dispatches receivePlans', () => {
-      let expected = {
-        result: ['overcloud', 'another-cloud'],
-        entities: {
-          plan: {
-            'overcloud': { name: 'overcloud' },
-            'another-cloud': { name: 'another-cloud' }
-          }
-        }
-      };
-      expect(PlansActions.receivePlans).toHaveBeenCalledWith(expected);
+      expect(PlansActions.receivePlans).toHaveBeenCalledWith([ 'overcloud', 'another-cloud' ]);
     });
+
   });
 
   describe('fetchPlan', () => {

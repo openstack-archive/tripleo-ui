@@ -1,12 +1,9 @@
-import { normalize, arrayOf } from 'normalizr';
-
 import CurrentPlanActions from '../actions/CurrentPlanActions';
 import { browserHistory } from 'react-router';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NotificationActions from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
-import { planSchema } from '../normalizrSchemas/plans';
 import StackActions from '../actions/StacksActions';
 import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
@@ -30,15 +27,12 @@ export default {
   fetchPlans() {
     return dispatch => {
       dispatch(this.requestPlans());
-      TripleOApiService.getPlans().then(response => {
-        let normalizedData = normalize(response.plans, arrayOf(planSchema));
-        dispatch(this.receivePlans(normalizedData));
-        dispatch(CurrentPlanActions.detectPlan(normalizedData));
-      }).catch(error => {
-        console.error('Error retrieving plans PlansActions.fetchPlans', error.stack || error); //eslint-disable-line no-console
-        dispatch(this.receivePlans(normalize([], arrayOf(planSchema))));
-        dispatch(CurrentPlanActions.detectPlan(normalize([], arrayOf(planSchema))));
-        let errorHandler = new TripleOApiErrorHandler(error);
+      MistralApiService.runAction('tripleo.list_plans').then((response) => {
+        let plans = JSON.parse(response.output).result || [];
+        dispatch(this.receivePlans(plans));
+        dispatch(CurrentPlanActions.detectPlan(plans));
+      }).catch((error) => {
+        let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
