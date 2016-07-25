@@ -1,12 +1,9 @@
-import { normalize, arrayOf } from 'normalizr';
-
 import CurrentPlanActions from '../actions/CurrentPlanActions';
 import { browserHistory } from 'react-router';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NotificationActions from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
-import { planSchema } from '../normalizrSchemas/plans';
 import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
 import TripleOApiService from '../services/TripleOApiService';
@@ -26,18 +23,40 @@ export default {
     };
   },
 
+  fetchPlansFinished(messagePayload) {
+    return dispatch => {
+      switch(messagePayload.status) {
+      case 'SUCCESS':
+        dispatch(this.receivePlans(messagePayload.message));
+        dispatch(CurrentPlanActions.detectPlan(messagePayload.message));
+        break;
+      case 'FAILED':
+        dispatch(NotificationActions.notify({
+          type: 'error',
+          title: 'Error',
+          message: messagePayload.message
+        }));
+        break;
+      default:
+        break;
+      }
+    };
+  },
+
   fetchPlans() {
     return dispatch => {
       dispatch(this.requestPlans());
-      TripleOApiService.getPlans().then(response => {
-        let normalizedData = normalize(response.plans, arrayOf(planSchema));
-        dispatch(this.receivePlans(normalizedData));
-        dispatch(CurrentPlanActions.detectPlan(normalizedData));
-      }).catch(error => {
-        console.error('Error retrieving plans PlansActions.fetchPlans', error.stack || error); //eslint-disable-line no-console
-        dispatch(this.receivePlans(normalize([], arrayOf(planSchema))));
-        dispatch(CurrentPlanActions.detectPlan(normalize([], arrayOf(planSchema))));
-        let errorHandler = new TripleOApiErrorHandler(error);
+      MistralApiService.runWorkflow(
+        'tripleo.plan_management.v1.list_deployment_plans'
+      ).then((response) => {
+        if(response.state === 'ERROR') {
+          console.error('Error in PlansActions.list_deployment_plans', response); //eslint-disable-line no-console
+          // TODO(flfuchs) Set errors as form errors instead showing a notification.
+          dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
+        }
+      }).catch((error) => {
+        let errorHandler = new MistralApiErrorHandler(error);
+        // TODO(flfuchs) Set errors as form errors instead showing a notification.
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });

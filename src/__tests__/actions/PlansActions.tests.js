@@ -2,6 +2,7 @@ import when from 'when';
 
 import * as utils from '../../js/services/utils';
 import PlansActions from '../../js/actions/PlansActions';
+import MistralApiService from '../../js/services/MistralApiService';
 import TripleOApiService from '../../js/services/TripleOApiService';
 
 
@@ -100,18 +101,13 @@ describe('PlansActions', () => {
   });
 
   describe('fetchPlans', () => {
-    let apiResponse = {
-      plans: [
-        { name: 'overcloud' },
-        { name: 'another-cloud' }
-      ]
-    };
-
     beforeEach(done => {
       spyOn(PlansActions, 'requestPlans');
       spyOn(PlansActions, 'receivePlans');
+      spyOn(MistralApiService, 'runWorkflow').and.callFake(
+        createResolvingPromise({ state: 'SUCCESS' })
+      );
       // Mock the service call.
-      spyOn(TripleOApiService, 'getPlans').and.callFake(createResolvingPromise(apiResponse));
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
       PlansActions.fetchPlans()(() => {}, () => {});
@@ -123,17 +119,24 @@ describe('PlansActions', () => {
       expect(PlansActions.requestPlans).toHaveBeenCalled();
     });
 
+    it('does not dispatch receivePlans', () => {
+      expect(PlansActions.receivePlans).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('fetchPlansFinished', () => {
+    let webSocketPayload = {
+      status: 'SUCCESS',
+      message: [ 'overcloud', 'another-cloud' ]
+    };
+
+    beforeEach(() => {
+      spyOn(PlansActions, 'receivePlans');
+      PlansActions.fetchPlansFinished(webSocketPayload)(() => {});
+    });
+
     it('dispatches receivePlans', () => {
-      let expected = {
-        result: ['overcloud', 'another-cloud'],
-        entities: {
-          plan: {
-            'overcloud': { name: 'overcloud' },
-            'another-cloud': { name: 'another-cloud' }
-          }
-        }
-      };
-      expect(PlansActions.receivePlans).toHaveBeenCalledWith(expected);
+      expect(PlansActions.receivePlans).toHaveBeenCalledWith(webSocketPayload.message);
     });
   });
 
