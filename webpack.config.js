@@ -1,3 +1,5 @@
+require('es6-promise').polyfill();
+
 module.exports = {
   devtool: 'source-map',
   entry: __dirname + '/src/js/index.js',
