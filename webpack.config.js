@@ -80,6 +80,11 @@ module.exports = {
       {
         test: /\.less$/,
         loader: 'style!css!less?sourceMap'
+      },
+
+      {
+        loader: __dirname + '/src/js/loaders/version.js',
+        test: /src\/js\/index.js$/
       }
     ]
   },
