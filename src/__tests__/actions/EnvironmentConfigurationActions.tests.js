@@ -3,7 +3,7 @@ import when from 'when';
 import * as utils from '../../js/services/utils';
 import EnvironmentConfigurationActions from '../../js/actions/EnvironmentConfigurationActions';
 import { browserHistory } from 'react-router';
-import TripleOApiService from '../../js/services/TripleOApiService';
+import MistralApiService from '../../js/services/MistralApiService';
 
 // Use this to mock asynchronous functions which return a promise.
 // The promise will immediately resolve with `data`.
@@ -22,8 +22,13 @@ describe('EnvironmentConfigurationActions', () => {
     beforeEach(done => {
       spyOn(EnvironmentConfigurationActions, 'fetchEnvironmentConfigurationSuccess');
       // Mock the service call.
-      spyOn(TripleOApiService, 'getPlanEnvironments').and.callFake(createResolvingPromise({
-        environments: { topics: [] }
+      spyOn(MistralApiService, 'runAction').and.callFake(createResolvingPromise({
+        output: `{\"result\": {\"Basic Configuration\": {\"environment_groups\": [{\"description\":
+                 \"Enable basic configuration required for OpenStack Deployment\", \"environments\":
+                 [{\"enabled\": true, \"description\": null, \"file\":
+                 \"overcloud-resource-registry-puppet.yaml\", \"title\":
+                 \"Default Configuration\"}], \"title\": null}], \"description\": null,
+                 \"title\": \"Basic Configuration\"}}}`
       }));
       EnvironmentConfigurationActions.fetchEnvironmentConfiguration(
         'overcloud')(() => {}, () => {}
@@ -44,8 +49,11 @@ describe('EnvironmentConfigurationActions', () => {
       spyOn(EnvironmentConfigurationActions, 'updateEnvironmentConfigurationSuccess');
       spyOn(browserHistory, 'push');
       // Mock the service call.
-      spyOn(TripleOApiService, 'updatePlanEnvironments').and.callFake(createResolvingPromise({
-        environments: { topics: [] }
+      spyOn(MistralApiService, 'runAction').and.callFake(createResolvingPromise({
+        output: `{\"result\": {\"template\": \"overcloud.yaml\", \"environments\": [{\"path\":
+                 \"overcloud-resource-registry-puppet.yaml\"}, {\"path\":
+                 \"environments/puppet-pacemaker.yaml\"}, {\"path\":
+                 \"environments/network-isolation.yaml\"}]}}`
       }));
       EnvironmentConfigurationActions.updateEnvironmentConfiguration(
         'overcloud', {}, {}, '/redirect/url')(() => {}, () => {}

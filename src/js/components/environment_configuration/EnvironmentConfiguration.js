@@ -7,14 +7,13 @@ import React from 'react';
 
 import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentConfigurationTopic from './EnvironmentConfigurationTopic';
-import FormErrorList from '../ui/forms/FormErrorList';
+import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import { getTopicsTree } from '../../selectors/environmentConfiguration';
 import Loader from '../ui/Loader';
 import Tab from '../ui/Tab';
 import TabPane from '../ui/TabPane';
 
 class EnvironmentConfiguration extends React.Component {
-
   constructor() {
     super();
     this.state = {
@@ -112,10 +111,10 @@ class EnvironmentConfiguration extends React.Component {
                    onSubmit={this.handleSubmit.bind(this)}
                    onValid={this.enableButton.bind(this)}
                    onInvalid={this.disableButton.bind(this)}>
-        <div className="container-fluid">
-          <Loader height={60}
-                  loaded={!this.props.isFetching}>
-            <FormErrorList errors={this.props.formErrors.toJS()}/>
+        <Loader height={60}
+                loaded={!this.props.isFetching}>
+          <ModalFormErrorList errors={this.props.formErrors.toJS()}/>
+          <div className="container-fluid">
             <div className="row row-eq-height">
               <div className="col-sm-4 sidebar-pf sidebar-pf-left">
                 <ul className="nav nav-pills nav-stacked nav-arrows">
@@ -128,8 +127,8 @@ class EnvironmentConfiguration extends React.Component {
                 </div>
               </div>
             </div>
-          </Loader>
-        </div>
+          </div>
+        </Loader>
 
         <div className="modal-footer">
           <button type="submit" disabled={!this.state.canSubmit}
