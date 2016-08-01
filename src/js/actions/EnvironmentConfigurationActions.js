@@ -2,9 +2,9 @@ import { normalize, arrayOf } from 'normalizr';
 
 import EnvironmentConfigurationConstants from '../constants/EnvironmentConfigurationConstants';
 import { browserHistory } from 'react-router';
+import MistralApiService from '../services/MistralApiService';
 import NotificationActions from '../actions/NotificationActions';
-import TripleOApiService from '../services/TripleOApiService';
-import TripleOApiErrorHandler from '../services/TripleOApiErrorHandler';
+import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import { topicSchema } from '../normalizrSchemas/environmentConfiguration';
 
 export default {
@@ -12,15 +12,17 @@ export default {
   fetchEnvironmentConfiguration(planName, parentPath) {
     return dispatch => {
       dispatch(this.fetchEnvironmentConfigurationPending());
-      TripleOApiService.getPlanEnvironments(planName).then((response) => {
-        const entities = normalize(response.environments.topics, arrayOf(topicSchema)).entities;
+      MistralApiService.runAction('tripleo.get_capabilities', { container: planName })
+      .then(response => {
+        const entities = normalize(JSON.parse(response.output).result,
+                         arrayOf(topicSchema)).entities || {};
         dispatch(this.fetchEnvironmentConfigurationSuccess(entities));
       }).catch(error => {
         console.error('Error retrieving EnvironmentConfigurationActions.fetchEnvironment', //eslint-disable-line no-console
                       error.stack || error); //eslint-disable-line no-console
         if(parentPath) { browserHistory.push(parentPath); }
         dispatch(this.fetchEnvironmentConfigurationFailed());
-        let errorHandler = new TripleOApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -50,10 +52,12 @@ export default {
   updateEnvironmentConfiguration(planName, data, formFields, parentPath) {
     return dispatch => {
       dispatch(this.updateEnvironmentConfigurationPending());
-      TripleOApiService.updatePlanEnvironments(planName, data).then((response) => {
-        const entities = normalize(response.environments.topics, arrayOf(topicSchema)).entities;
-        dispatch(this.updateEnvironmentConfigurationSuccess(entities));
-        if(parentPath) { browserHistory.push(parentPath); }
+      MistralApiService.runAction('tripleo.update_capabilities',
+                                  { environments: data, container: planName })
+      .then(response => {
+        const enabledEnvs = JSON.parse(response.output).result.environments.map(env => env.path);
+        dispatch(this.updateEnvironmentConfigurationSuccess(enabledEnvs));
+        if (parentPath) { browserHistory.push(parentPath); }
         dispatch(NotificationActions.notify({
           title: 'Environment Configuration updated',
           message: 'The Environment Configuration has been successfully updated',
@@ -62,7 +66,7 @@ export default {
       }).catch((error) => {
         console.error('Error in EnvironmentConfigurationActions.updateEnvironment', //eslint-disable-line no-console
                       error.stack || error);
-        let errorHandler = new TripleOApiErrorHandler(error, formFields);
+        let errorHandler = new MistralApiErrorHandler(error, formFields);
         dispatch(this.updateEnvironmentConfigurationFailed(errorHandler.errors,
                                                            errorHandler.formFieldErrors));
       });
@@ -76,10 +80,10 @@ export default {
     };
   },
 
-  updateEnvironmentConfigurationSuccess(entities) {
+  updateEnvironmentConfigurationSuccess(enabledEnvironments) {
     return {
       type: EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS,
-      payload: entities
+      payload: enabledEnvironments
     };
   },
 

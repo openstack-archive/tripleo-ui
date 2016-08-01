@@ -32,15 +32,12 @@ export default function environmentConfigurationReducer(state = initialState, ac
     return state.set('isFetching', true);
 
   case EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS: {
-    const topics = action.payload.topics || Map();
-    const environmentGroups = action.payload.environmentGroups || Map();
-    const environments = action.payload.environments || Map();
-    return state
-        .set('loaded', false)
-        .set('isFetching', false)
-        .set('topics', fromJS(topics))
-        .set('environmentGroups', fromJS(environmentGroups))
-        .set('environments', fromJS(environments));
+    const enabledEnvs = fromJS(action.payload);
+    const updatedEnvs = state.environments.map(environment => {
+      return environment.set('enabled', enabledEnvs.includes(environment.get('file')));
+    });
+    return state.set('environments', updatedEnvs)
+                .set('isFetching', false);
   }
 
   case EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_FAILED:
