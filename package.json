@@ -66,6 +66,7 @@
     "test:watch": "karma start",
     "lint": "eslint src",
     "start": "webpack-dev-server --progress",
+    "prepublish": "sh packaging/prepublish.sh",
     "build": "webpack"
   },
   "repository": {
