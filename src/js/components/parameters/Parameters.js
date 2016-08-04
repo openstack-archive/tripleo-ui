@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 import React from 'react';
 
 import Loader from '../ui/Loader';
+import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import ParametersActions from '../../actions/ParametersActions';
 import ParameterTree from './ParameterTree';
 
@@ -72,8 +73,8 @@ class Parameters extends React.Component {
 
         <Loader height={60}
                 loaded={!this.props.isPending}>
-          <ParameterTree parameters={this.props.parameters}
-                         formErrors={this.props.formErrors.toJS()}/>
+          <ModalFormErrorList errors={this.props.formErrors.toJS()}/>
+          <ParameterTree parameters={this.props.parameters}/>
         </Loader>
 
         <div className="modal-footer">

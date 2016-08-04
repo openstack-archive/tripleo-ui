@@ -3,6 +3,8 @@ import NotificationActions from '../actions/NotificationActions';
 import ParametersConstants from '../constants/ParametersConstants';
 import TripleOApiService from '../services/TripleOApiService';
 import TripleOApiErrorHandler from '../services/TripleOApiErrorHandler';
+import MistralApiService from '../services/MistralApiService';
+import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 
 export default {
   fetchParametersPending() {
@@ -27,11 +29,15 @@ export default {
   fetchParameters(planName) {
     return dispatch => {
       dispatch(this.fetchParametersPending());
-      TripleOApiService.getPlanParameters(planName).then(response => {
-        dispatch(this.fetchParametersSuccess(response.parameters));
+      // TripleOApiService.getPlanParameters(planName).then(response => {
+      MistralApiService.runAction('tripleo.get_parameters', { container: planName })
+      .then(response => {
+        const parameters = JSON.parse(response.output).result;
+        console.log(parameters);
+        dispatch(this.fetchParametersSuccess(parameters));
       }).catch(error => {
         dispatch(this.fetchParametersFailed());
-        let errorHandler = new TripleOApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
