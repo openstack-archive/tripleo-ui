@@ -1,6 +1,5 @@
 import React from 'react';
 
-import FormErrorList from '../ui/forms/FormErrorList';
 import ResourceGroupTab from './ResourceGroupTab';
 import ParametersTabPane from './ParametersTabPane';
 
@@ -34,7 +33,6 @@ export default class ParameterTree extends React.Component {
             </div>
           </div>
           <div className="col-sm-8">
-            <FormErrorList errors={this.props.formErrors}/>
             <ParametersTabPane name="RootParameters"
                                activeTab={this.state.activeTab}
                                nestedParameters={this.props.parameters.get(
@@ -47,10 +45,5 @@ export default class ParameterTree extends React.Component {
   }
 }
 ParameterTree.propTypes = {
-  formErrors: React.PropTypes.array,
   parameters: React.PropTypes.object
-};
-
-ParameterTree.defaultProps = {
-  formErrors: []
 };
