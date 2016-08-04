@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 import React from 'react';
 
 import Loader from '../ui/Loader';
+import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import ParametersActions from '../../actions/ParametersActions';
 import ParameterTree from './ParameterTree';
 
@@ -72,8 +73,8 @@ class Parameters extends React.Component {
 
         <Loader height={60}
                 loaded={!this.props.isPending}>
-          <ParameterTree parameters={this.props.parameters}
-                         formErrors={this.props.formErrors.toJS()}/>
+          <ModalFormErrorList errors={this.props.formErrors.toJS()}/>
+          {/* <ParameterTree parameterTree={this.props.parameterTree}/> */}
         </Loader>
 
         <div className="modal-footer">
@@ -96,7 +97,7 @@ Parameters.propTypes = {
   formFieldErrors: ImmutablePropTypes.map,
   history: React.PropTypes.object,
   isPending: React.PropTypes.bool,
-  parameters: ImmutablePropTypes.map,
+  parameterTree: ImmutablePropTypes.map,
   parentPath: React.PropTypes.string.isRequired,
   updateParameters: React.PropTypes.func
 };
@@ -111,7 +112,7 @@ function mapStateToProps(state) {
     formErrors: state.parameters.form.get('formErrors'),
     formFieldErrors: state.parameters.form.get('formFieldErrors'),
     isPending: state.parameters.isPending,
-    parameters: state.parameters.parameters
+    parameterTree: state.parameters.parameterTree
   };
 }
 

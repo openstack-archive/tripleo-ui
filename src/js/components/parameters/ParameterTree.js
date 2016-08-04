@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FormErrorList from '../ui/forms/FormErrorList';
+import ResourceGroupList from './ResourceGroupList';
 import ResourceGroupTab from './ResourceGroupTab';
 import ParametersTabPane from './ParametersTabPane';
 
@@ -8,7 +8,7 @@ export default class ParameterTree extends React.Component {
   constructor() {
     super();
     this.state = {
-      activeTab: 'RootParameters'
+      activeTab: 'General'
     };
   }
 
@@ -23,23 +23,36 @@ export default class ParameterTree extends React.Component {
           <div className="col-sm-4 sidebar-pf sidebar-pf-left">
             <div className="treeview">
               <ul className="list-group">
-                <ResourceGroupTab name="RootParameters"
-                                  description={this.props.parameters.get('Description')}
+                <ResourceGroupTab key="general"
+                                  name="General"
+                                  description="General Parameters"
                                   level={0}
-                                  nestedParameters={this.props.parameters.get(
-                                    'NestedParameters').toJS()}
                                   activateTab={this.activateTab.bind(this)}
                                   activeTab={this.state.activeTab}/>
+                {/*<ResourceGroupTab key="roles"
+                                  name="General Parameters"
+                                  description=""
+                                  level={0}
+                                  nestedGroups={this.props.parameterTree.get(
+                                    'NestedParameters').toJS()}
+                                  activateTab={this.activateTab.bind(this)}
+                                  activeTab={this.state.activeTab}/>*/}
+                {/*{this.props.parameterTree.get('roles') ? (
+                  <ResourceGroupList level={0}
+                                     nestedGroups={this.props.parameterTree.get('roles')}
+                                     expanded
+                                     activeTab={this.state.activeTab}
+                                     activateTab={this.activateTab}/>
+                ) : null}*/}
               </ul>
             </div>
           </div>
           <div className="col-sm-8">
-            <FormErrorList errors={this.props.formErrors}/>
-            <ParametersTabPane name="RootParameters"
+            <ParametersTabPane name="General"
                                activeTab={this.state.activeTab}
-                               nestedParameters={this.props.parameters.get(
-                                'NestedParameters').toJS()}
-                               parameters={this.props.parameters.get('Parameters').toJS()}/>
+                              // nestedParameters={this.props.parameters.get(
+                              //  'NestedParameters').toJS()}
+                               parameters={this.props.parameterTree.get('general').toJS()}/>
           </div>
         </div>
       </div>
@@ -47,10 +60,5 @@ export default class ParameterTree extends React.Component {
   }
 }
 ParameterTree.propTypes = {
-  formErrors: React.PropTypes.array,
-  parameters: React.PropTypes.object
-};
-
-ParameterTree.defaultProps = {
-  formErrors: []
+  parameterTree: React.PropTypes.object
 };
