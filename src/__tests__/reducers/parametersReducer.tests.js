@@ -1,47 +1,48 @@
 import matchers from 'jasmine-immutable-matchers';
 import { List, Map } from 'immutable';
 
-import { Parameter,
-         ParametersDefaultState } from '../../js/immutableRecords/parameters';
+import { ParametersDefaultState } from '../../js/immutableRecords/parameters';
 import ParametersConstants from '../../js/constants/ParametersConstants';
 import parametersReducer from '../../js/reducers/parametersReducer';
 
 const parametersPayload = {
-  Description: 'lorem ipsum',
-  Parameters: {
-    AdminPassword: {
-      Default: 'pwd',
-      Description: 'The password for the keystone admin account',
-      Label: 'AdminPassword',
-      NoEcho: 'true',
-      Type: 'String'
-    }
-  },
-  NestedParameters: {
-    AllNodesExtraConfig: {
-      Description: 'Noop extra config for allnodes extra cluster config',
-      Type: 'OS::TripleO::AllNodesExtraConfig',
-      Parameters: {
-        blockstorage_servers: {
-          Description: '',
-          Label: 'blockstorage_servers',
-          NoEcho: 'false',
-          Type: 'Json'
+  resourceTree: {
+    Description: 'lorem ipsum',
+    Parameters: {
+      AdminPassword: {
+        Default: 'pwd',
+        Description: 'The password for the keystone admin account',
+        Label: 'AdminPassword',
+        NoEcho: 'true',
+        Type: 'String'
+      }
+    },
+    NestedParameters: {
+      AllNodesExtraConfig: {
+        Description: 'Noop extra config for allnodes extra cluster config',
+        Type: 'OS::TripleO::AllNodesExtraConfig',
+        Parameters: {
+          blockstorage_servers: {
+            Description: '',
+            Label: 'blockstorage_servers',
+            NoEcho: 'false',
+            Type: 'Json'
+          }
         }
       }
     }
-  }
+  },
+  mistralParameters: {}
 };
 
 const parametersExpectedState = Map({
   Description: 'lorem ipsum',
   NestedParameters: Map({
-    AllNodesExtraConfig: new Parameter({
+    AllNodesExtraConfig: Map({
       Description: 'Noop extra config for allnodes extra cluster config',
-      Name: 'AllNodesExtraConfig',
       Parameters: Map({
-        blockstorage_servers: new Parameter({
-          Name: 'blockstorage_servers',
+        blockstorage_servers: Map({
+          Description: '',
           Label: 'blockstorage_servers',
           NoEcho: 'false',
           Type: 'Json'
@@ -51,11 +52,10 @@ const parametersExpectedState = Map({
     })
   }),
   Parameters: Map({
-    AdminPassword: new Parameter({
+    AdminPassword: Map({
       Default: 'pwd',
       Description: 'The password for the keystone admin account',
       Label: 'AdminPassword',
-      Name: 'AdminPassword',
       NoEcho: 'true',
       Type: 'String'
     })
@@ -77,16 +77,12 @@ describe('parametersReducer', () => {
       state = parametersReducer(ParametersDefaultState({
         isPending: false,
         form: Map({ formErrors: List.of('lorem ipsum'), formFieldErrors: Map({ field: 'foo' })}),
-        parameters: Map({ description: 'lorem ipsum' })
+        resourceTree: Map({ description: 'lorem ipsum' })
       }), action);
     });
 
     it('sets isPending to `true`', () => {
       expect(state.isPending).toBe(true);
-    });
-
-    it('resets parameters', () => {
-      expect(state.parameters).toEqualImmutable(Map());
     });
 
     it('resets form', () => {
@@ -122,8 +118,8 @@ describe('parametersReducer', () => {
       }));
     });
 
-    it('sets parameter records', () => {
-      expect(state.parameters).toEqualImmutable(parametersExpectedState);
+    it('sets resourceTree', () => {
+      expect(state.resourceTree).toEqualImmutable(parametersExpectedState);
     });
   });
 
@@ -175,8 +171,7 @@ describe('parametersReducer', () => {
   describe('UPDATE_PARAMETERS_SUCCESS', () => {
     let state;
     const action = {
-      type: ParametersConstants.UPDATE_PARAMETERS_SUCCESS,
-      payload: parametersPayload
+      type: ParametersConstants.UPDATE_PARAMETERS_SUCCESS
     };
 
     beforeEach(() => {
@@ -195,10 +190,6 @@ describe('parametersReducer', () => {
         formErrors: List(),
         formFieldErrors: Map()
       }));
-    });
-
-    it('sets parameter records', () => {
-      expect(state.parameters).toEqualImmutable(parametersExpectedState);
     });
   });
 });
