@@ -1,8 +1,12 @@
 import { browserHistory } from 'react-router';
+// import { normalize } from 'normalizr';
+
 import NotificationActions from '../actions/NotificationActions';
 import ParametersConstants from '../constants/ParametersConstants';
-import TripleOApiService from '../services/TripleOApiService';
-import TripleOApiErrorHandler from '../services/TripleOApiErrorHandler';
+import MistralApiService from '../services/MistralApiService';
+import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
+// import { processTree } from '../services/parametersParser';
+// import { resourceGroupSchema } from '../normalizrSchemas/parameters';
 
 export default {
   fetchParametersPending() {
@@ -11,10 +15,10 @@ export default {
     };
   },
 
-  fetchParametersSuccess(parameters) {
+  fetchParametersSuccess(entities) {
     return {
       type: ParametersConstants.FETCH_PARAMETERS_SUCCESS,
-      payload: parameters
+      payload: entities
     };
   },
 
@@ -27,17 +31,25 @@ export default {
   fetchParameters(planName) {
     return dispatch => {
       dispatch(this.fetchParametersPending());
-      TripleOApiService.getPlanParameters(planName).then(response => {
-        dispatch(this.fetchParametersSuccess(response.parameters));
+      // TripleOApiService.getPlanParameters(planName).then(response => {
+      MistralApiService.runAction('tripleo.get_parameters', { container: planName })
+      .then(response => {
+        // const rootResourceGroup = processTree(JSON.parse(response.output).result).toJS();
+        // const entities = normalize(rootResourceGroup, resourceGroupSchema).entities || {};
+        const resourceTree = JSON.parse(response.output).result;
+        const mistralParameters = {};
+        dispatch(this.fetchParametersSuccess({ resourceTree, mistralParameters }));
       }).catch(error => {
         dispatch(this.fetchParametersFailed());
-        let errorHandler = new TripleOApiErrorHandler(error);
+        console.error('Error in ParametersActions.fetchParameters', error.stack || error); //eslint-disable-line no-console
+        let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
       });
     };
   },
+
 
   updateParametersPending() {
     return {
@@ -65,7 +77,11 @@ export default {
   updateParameters(planName, data, inputFieldNames, url) {
     return dispatch => {
       dispatch(this.updateParametersPending());
-      TripleOApiService.updatePlanParameters(planName, data).then(response => {
+      // TripleOApiService.updatePlanParameters(planName, data).then(response => {
+      const dataa = {CloudName: 'overcloud122'};
+      MistralApiService.runAction('tripleo.update_parameters',
+                                  { container: planName, parameters: dataa })
+      .then(response => {
         dispatch(this.updateParametersSuccess(response.parameters));
         dispatch(NotificationActions.notify({
           title: 'Parameters updated',
@@ -74,7 +90,7 @@ export default {
         }));
         browserHistory.push(url);
       }).catch(error => {
-        let errorHandler = new TripleOApiErrorHandler(error, inputFieldNames);
+        let errorHandler = new MistralApiErrorHandler(error, inputFieldNames);
         dispatch(this.updateParametersFailed(errorHandler.errors, errorHandler.formFieldErrors));
       });
     };

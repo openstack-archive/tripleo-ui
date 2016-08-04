@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import ClassNames from 'classnames';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
 import ResourceGroupList from './ResourceGroupList';
@@ -33,17 +34,18 @@ export default class ResourceGroupTab extends React.Component {
   }
 
   render() {
+    const { nestedGroups } = this.props;
     let expandSpanClasses = ClassNames({
       'icon': true,
-      'expand-icon fa': this.props.nestedParameters,
-      'fa-angle-down': this.state.expanded && this.props.nestedParameters,
-      'fa-angle-right': !this.state.expanded && this.props.nestedParameters
+      'expand-icon fa': nestedGroups,
+      'fa-angle-down': this.state.expanded && nestedGroups,
+      'fa-angle-right': !this.state.expanded && nestedGroups
     });
 
     let directorySpanClasses = ClassNames({
       'icon node-icon fa': true,
-      'fa-folder': this.props.nestedParameters,
-      'fa-file-o': !this.props.nestedParameters
+      'fa-folder': nestedGroups,
+      'fa-file-o': !nestedGroups
     });
 
     return (
@@ -59,9 +61,9 @@ export default class ResourceGroupTab extends React.Component {
             {this.props.name}
           </span>
         </li>
-        {this.props.nestedParameters ? (
+        {nestedGroups ? (
           <ResourceGroupList level={this.props.level+1}
-                             nestedParameters={this.props.nestedParameters}
+                             nestedGroups={nestedGroups}
                              expanded={this.state.expanded}
                              activeTab={this.props.activeTab}
                              activateTab={this.props.activateTab}/>
@@ -73,8 +75,12 @@ export default class ResourceGroupTab extends React.Component {
 ResourceGroupTab.propTypes = {
   activateTab: React.PropTypes.func,
   activeTab: React.PropTypes.string,
-  description: React.PropTypes.string,
-  level: React.PropTypes.number,
+  description: React.PropTypes.string.isRequired,
+  level: React.PropTypes.number.isRequired,
   name: React.PropTypes.string,
-  nestedParameters: React.PropTypes.object
+  nestedGroups: ImmutablePropTypes.map
+};
+ResourceGroupTab.defaultProps = {
+  description: '',
+  level: 0
 };
