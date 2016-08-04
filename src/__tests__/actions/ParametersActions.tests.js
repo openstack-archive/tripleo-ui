@@ -3,7 +3,7 @@ import when from 'when';
 import * as utils from '../../js/services/utils';
 import ParametersActions from '../../js/actions/ParametersActions';
 import ParametersConstants from '../../js/constants/ParametersConstants';
-import TripleOApiService from '../../js/services/TripleOApiService';
+import MistralApiService from '../../js/services/MistralApiService';
 
 
 // Use this to mock asynchronous functions which return a promise.
@@ -44,11 +44,12 @@ describe('ParametersActions', () => {
 
   describe('fetchParameters (success)', () => {
     let responseBody = {
-      parameters: {
-        Description: 'lorem ipsum',
-        Parameters: {},
-        NestedParameters: {}
-      }
+      output: `{
+        "result": {
+          "heat_resource_tree": {},
+          "mistral_environment_parameters": {}
+        }
+      }`
     };
 
     beforeEach(done => {
@@ -56,17 +57,18 @@ describe('ParametersActions', () => {
       spyOn(ParametersActions, 'fetchParametersSuccess');
       spyOn(ParametersActions, 'fetchParametersFailed');
       // Mock the service call.
-      spyOn(TripleOApiService, 'getPlanParameters')
+      spyOn(MistralApiService, 'runAction')
         .and.callFake(createResolvingPromise(responseBody));
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
-      ParametersActions.fetchParameters('overcloud', [ 'field1', 'field2' ])(() => {}, () => {});
+      ParametersActions.fetchParameters('overcloud')(() => {}, () => {});
       // Call done with a minimal timeout.
       setTimeout(() => { done(); }, 1);
     });
 
-    it('calls the TripleO API', () => {
-      expect(TripleOApiService.getPlanParameters).toHaveBeenCalledWith('overcloud');
+    it('calls the Mistral API', () => {
+      expect(MistralApiService.runAction).toHaveBeenCalledWith('tripleo.get_parameters',
+                                                               { container: 'overcloud' });
     });
 
     it('dispatches fetchParametersPending', () => {
@@ -75,7 +77,7 @@ describe('ParametersActions', () => {
 
     it('dispatches fetchParametersSuccess', () => {
       expect(ParametersActions.fetchParametersSuccess)
-        .toHaveBeenCalledWith(responseBody.parameters);
+        .toHaveBeenCalledWith({ resourceTree: {}, mistralParameters: {} });
     });
 
     it('does not dispatch fetchParametersFailed', () => {
@@ -94,7 +96,7 @@ describe('ParametersActions', () => {
       spyOn(ParametersActions, 'updateParametersSuccess');
       spyOn(ParametersActions, 'updateParametersFailed');
       // Mock the service call.
-      spyOn(TripleOApiService, 'updatePlanParameters')
+      spyOn(MistralApiService, 'runAction')
         .and.callFake(createRejectingPromise(error));
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
@@ -103,9 +105,13 @@ describe('ParametersActions', () => {
       setTimeout(() => { done(); }, 1);
     });
 
-    it('calls the TripleO API', () => {
-      expect(TripleOApiService.updatePlanParameters).toHaveBeenCalledWith(
-        'overcloud', { foo: 'bar' }
+    it('calls the Mistral API', () => {
+      expect(MistralApiService.runAction).toHaveBeenCalledWith(
+        'tripleo.update_parameters',
+        {
+          container: 'overcloud',
+          parameters: { foo: 'bar' }
+        }
       );
     });
 
@@ -118,9 +124,7 @@ describe('ParametersActions', () => {
     });
 
     it('dispatches fetchParametersFailed', () => {
-      expect(ParametersActions.updateParametersFailed).toHaveBeenCalledWith(
-        [ { title: 'Unauthorized', message: 'Unauthorized'} ], {}
-      );
+      expect(ParametersActions.updateParametersFailed).toHaveBeenCalled();
     });
   });
 

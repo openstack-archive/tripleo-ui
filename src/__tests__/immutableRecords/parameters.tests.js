@@ -10,28 +10,27 @@ describe('parameter immutable records', () => {
   });
 
   it('ParametersDefaultState', () => {
-    let state = ParametersDefaultState();
+    let state = new ParametersDefaultState();
     expect(state).toEqualImmutable(Map({
       isPending: true,
       form: Map({
         formErrors: List(),
         formFieldErrors: Map()
       }),
-      parameters: Map()
+      mistralParameters: Map(),
+      resourceTree: Map()
     }));
   });
 
   it('Parameter', () => {
-    let state = Parameter();
+    let state = new Parameter();
     expect(state).toEqualImmutable(Map({
       Default: undefined,
-      Description: '',
+      Description: undefined,
       Label: undefined,
-      Name: '',
+      Name: undefined,
       NoEcho: undefined,
-      Parameters: undefined,
-      NestedParameters: undefined,
-      Type: ''
+      Type: 'String'
     }));
   });
 });
