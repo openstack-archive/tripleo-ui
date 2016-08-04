@@ -1,4 +1,4 @@
-import { List, Map } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 
 import ParametersConstants from '../constants/ParametersConstants';
 import { Parameter,
@@ -12,23 +12,20 @@ export default function parametersReducer(state = initialState, action) {
   case ParametersConstants.FETCH_PARAMETERS_PENDING:
     return state
             .set('isPending', true)
-            .set('form', Map({ formErrors: List(), formFieldErrors: Map() }))
-            .set('parameters', Map());
+            .set('form', Map({ formErrors: List(), formFieldErrors: Map() }));
 
   case ParametersConstants.FETCH_PARAMETERS_SUCCESS: {
-    let nestedParams = deepAddParameterRecords(action.payload.NestedParameters);
-    let params = deepAddParameterRecords(action.payload.Parameters);
+    // let nestedParams = deepAddParameterRecords(action.payload.NestedParameters);
+    // let params = deepAddParameterRecords(action.payload.Parameters);
+    const { resourceTree, mistralParameters } = action.payload;
     return state
             .set('isPending', false)
             .set('form', Map({
               formErrors: List(),
               formFieldErrors: Map()
             }))
-            .set('parameters', Map({
-              Description: action.payload.Description,
-              NestedParameters: nestedParams,
-              Parameters: params
-            }));
+            .set('resourceTree', fromJS(resourceTree))
+            .set('mistralParameters', fromJS(mistralParameters) || Map());
   }
 
   case ParametersConstants.FETCH_PARAMETERS_FAILED:
@@ -49,7 +46,7 @@ export default function parametersReducer(state = initialState, action) {
               formErrors: List(),
               formFieldErrors: Map()
             }))
-            .set('parameters', Map({
+            .set('parameterTree', Map({
               Description: action.payload.Description,
               NestedParameters: deepAddParameterRecords(action.payload.NestedParameters),
               Parameters: deepAddParameterRecords(action.payload.Parameters)

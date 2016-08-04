@@ -6,16 +6,15 @@ export const ParametersDefaultState = Record({
     formErrors: List(),
     formFieldErrors: Map()
   }),
-  parameters: Map()
+  resourceTree: Map(),
+  mistralParameters: Map()
 });
 
 export const Parameter = Record({
   Default: undefined,
-  Description: '',
+  Description: undefined,
   Label: undefined,
-  Name: '',
+  Name: undefined,
   NoEcho: undefined,
-  Parameters: undefined,
-  NestedParameters: undefined,
-  Type: ''
+  Type: 'String'
 });
