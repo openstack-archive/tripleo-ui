@@ -3,11 +3,14 @@ import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
+import { fromJS, is } from 'immutable';
 import React from 'react';
 
 import Loader from '../ui/Loader';
+import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import ParametersActions from '../../actions/ParametersActions';
-import ParameterTree from './ParameterTree';
+import ParameterInputList from './ParameterInputList';
+import { getRootParameters } from '../../selectors/parameters';
 
 class Parameters extends React.Component {
   constructor() {
@@ -33,15 +36,27 @@ class Parameters extends React.Component {
     this.setState({ canSubmit: false });
   }
 
+
+  /**
+  * Filter out non updated parameters, so only parameters which have been actually changed
+  * get sent to updateparameters
+  */
+  _filterFormData(formData) {
+    return fromJS(formData).filterNot((parameter, key) => {
+      return is(this.props.parameters.get(key).Default, parameter);
+    }).toJS();
+  }
+
   /**
   * Json parameter values are sent as string, this method parses those back to object
+  * also, parameters with undefined value are set to null
   */
-  _jsonParseformData(formData) {
+  _jsonParseFormData(formData) {
     return _.mapValues(formData, (value) => {
       try {
         return JSON.parse(value);
       } catch(e) {
-        return value;
+        return value === undefined ? null : value;
       }
     });
   }
@@ -55,7 +70,7 @@ class Parameters extends React.Component {
 
     this.props.updateParameters(
       this.props.currentPlanName,
-      this._jsonParseformData(formData),
+      this._filterFormData(this._jsonParseFormData(formData)),
       Object.keys(this.refs.parameterConfigurationForm.inputs),
       this.props.parentPath
     );
@@ -70,11 +85,18 @@ class Parameters extends React.Component {
                    onValid={this.enableButton.bind(this)}
                    onInvalid={this.disableButton.bind(this)}>
 
-        <Loader height={60}
-                loaded={!this.props.isPending}>
-          <ParameterTree parameters={this.props.parameters}
-                         formErrors={this.props.formErrors.toJS()}/>
-        </Loader>
+        <div className="modal-body">
+          <Loader height={60}
+                  loaded={!this.props.isPending}>
+            <div className="tab-content">
+              <div className="tab-pane active">
+                <ModalFormErrorList errors={this.props.formErrors.toJS()}/>
+                <ParameterInputList parameters={this.props.parameters}
+                               mistralParameters={this.props.mistralParameters}/>
+              </div>
+            </div>
+          </Loader>
+        </div>
 
         <div className="modal-footer">
           <button type="submit" disabled={!this.state.canSubmit}
@@ -96,6 +118,7 @@ Parameters.propTypes = {
   formFieldErrors: ImmutablePropTypes.map,
   history: React.PropTypes.object,
   isPending: React.PropTypes.bool,
+  mistralParameters: ImmutablePropTypes.map.isRequired,
   parameters: ImmutablePropTypes.map,
   parentPath: React.PropTypes.string.isRequired,
   updateParameters: React.PropTypes.func
@@ -111,7 +134,8 @@ function mapStateToProps(state) {
     formErrors: state.parameters.form.get('formErrors'),
     formFieldErrors: state.parameters.form.get('formFieldErrors'),
     isPending: state.parameters.isPending,
-    parameters: state.parameters.parameters
+    mistralParameters: state.parameters.mistralParameters,
+    parameters: getRootParameters(state)
   };
 }
 

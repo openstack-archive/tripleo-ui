@@ -11,6 +11,14 @@ class HorizontalInput extends React.Component {
     this.props.setValue(event.target.value === '' ? undefined : event.target.value);
   }
 
+  // https://github.com/christianalfoni/formsy-react/issues/332
+  getValue() {
+    if(this.props.getValue() || this.props.getValue() === 0) {
+      return this.props.getValue();
+    }
+    return '';
+  }
+
   render() {
     let divClasses = ClassNames({
       'form-group': true,
@@ -32,7 +40,7 @@ class HorizontalInput extends React.Component {
                  id={this.props.name}
                  className="form-control"
                  onChange={this.changeValue.bind(this)}
-                 value={this.props.getValue() || ''}
+                 value={this.getValue()}
                  placeholder={this.props.placeholder}
                  min={this.props.min}
                  max={this.props.max}
