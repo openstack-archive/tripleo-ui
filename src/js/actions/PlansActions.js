@@ -7,6 +7,7 @@ import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NotificationActions from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
 import { planSchema } from '../normalizrSchemas/plans';
+import StackActions from '../actions/StacksActions';
 import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
 import TripleOApiService from '../services/TripleOApiService';
@@ -252,6 +253,54 @@ export default {
       }).catch(error => {
         console.error('Error retrieving plan TripleOApiService.deletePlan', error); //eslint-disable-line no-console
         dispatch(this.planDeleted(planName));
+        let errorHandler = new TripleOApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+      });
+    };
+  },
+
+  deployPlanPending(planName) {
+    return {
+      type: PlansConstants.START_DEPLOYMENT_PENDING,
+      payload: planName
+    };
+  },
+
+  deployPlanSuccess(planName, data) {
+    return {
+      type: PlansConstants.START_DEPLOYMENT_SUCCESS,
+      paylod: {
+        data,
+        planName
+      }
+    };
+  },
+
+  deployPlanFailed(planName, error) {
+    return {
+      type: PlansConstants.START_DEPLOYMENT_FAILED,
+      payload: {
+        error,
+        planName
+      }
+    };
+  },
+
+  deployPlan(planName) {
+    return dispatch => {
+      dispatch(this.deployPlanPending(planName));
+      TripleOApiService.deployPlan(planName).then((response) => {
+        dispatch(this.deployPlanSuccess(planName, response));
+        dispatch(StackActions.fetchStacks());
+        dispatch(NotificationActions.notify({
+          title: 'Deployment started',
+          message: 'The Deployment has been successfully initiated',
+          type: 'success'
+        }));
+      }).catch(error => {
+        dispatch(this.deployPlanFailed(planName, error));
         let errorHandler = new TripleOApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));

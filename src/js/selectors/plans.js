@@ -1,7 +1,12 @@
 import { createSelector } from 'reselect';
 
 const plansSelector = state => state.plans.get('all');
-export const currentPlanNameSelector = state => state.currentPlan.currentPlanName;
+export const currentPlanNameSelector = state => state.currentPlan.get('currentPlanName');
+export const getCurrentPlan = createSelector(
+  plansSelector,
+  currentPlanNameSelector,
+  (plans, currentPlanName) => plans.get(currentPlanName)
+);
 
 /**
  * Returns a Map o all plans except for the selected one
