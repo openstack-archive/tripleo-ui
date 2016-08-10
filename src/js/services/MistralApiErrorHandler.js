@@ -20,10 +20,10 @@ export default class MistralApiErrorHandler extends BaseHttpRequestErrorHandler 
       });
       break;
     case 401:
-      error = JSON.parse(errorObj.responseText).error;
+      error = JSON.parse(errorObj.responseText);
       errors.push({
-        title: 'Unauthorized',
-        message: error.message
+        title: error.title,
+        message: error.description
       });
       break;
     default:
