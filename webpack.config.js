@@ -1,7 +1,7 @@
 require('es6-promise').polyfill(); // https://github.com/webpack/css-loader/issues/144
 
 module.exports = {
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
   entry: __dirname + '/src/js/index.js',
   output: {
     path: __dirname + '/dist',
