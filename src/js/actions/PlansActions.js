@@ -209,36 +209,42 @@ export default {
     };
   },
 
-  deletingPlan(planName) {
+  deletePlanPending(planName) {
     return {
-      type: PlansConstants.DELETING_PLAN,
+      type: PlansConstants.DELETE_PLAN_PENDING,
       payload: planName
     };
   },
 
-  planDeleted(planName) {
+  deletePlanSuccess(planName) {
     return {
-      type: PlansConstants.PLAN_DELETED,
+      type: PlansConstants.DELETE_PLAN_SUCCESS,
+      payload: planName
+    };
+  },
+
+  deletePlanFailed(planName) {
+    return {
+      type: PlansConstants.DELETE_PLAN_FAILED,
       payload: planName
     };
   },
 
   deletePlan(planName) {
     return dispatch => {
-      dispatch(this.deletingPlan(planName));
+      dispatch(this.deletePlanPending(planName));
       browserHistory.push('/plans/list');
-      TripleOApiService.deletePlan(planName).then(response => {
-        dispatch(this.planDeleted(planName));
-        dispatch(this.fetchPlans());
+      MistralApiService.runAction('tripleo.delete_plan', { container: planName }).then(response => {
+        dispatch(this.deletePlanSuccess(planName));
         dispatch(NotificationActions.notify({
           title: 'Plan Deleted',
           message: `The plan ${planName} was successfully deleted.`,
           type: 'success'
         }));
       }).catch(error => {
-        console.error('Error retrieving plan TripleOApiService.deletePlan', error); //eslint-disable-line no-console
+        console.error('Error deleting plan MistralApiService.runAction', error); //eslint-disable-line no-console
         dispatch(this.planDeleted(planName));
-        let errorHandler = new TripleOApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
