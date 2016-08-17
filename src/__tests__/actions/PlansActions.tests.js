@@ -1,8 +1,8 @@
 import when from 'when';
 
 import * as utils from '../../js/services/utils';
-import PlansActions from '../../js/actions/PlansActions';
 import MistralApiService from '../../js/services/MistralApiService';
+import PlansActions from '../../js/actions/PlansActions';
 import TripleOApiService from '../../js/services/TripleOApiService';
 
 
@@ -79,7 +79,7 @@ describe('PlansActions', () => {
       spyOn(PlansActions, 'planDeleted');
       spyOn(PlansActions, 'fetchPlans');
       // Mock the service call.
-      spyOn(TripleOApiService, 'deletePlan').and.callFake(createResolvingPromise());
+      spyOn(MistralApiService, 'runAction').and.callFake(createResolvingPromise());
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
       PlansActions.deletePlan('somecloud')(() => {}, () => {});

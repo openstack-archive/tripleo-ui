@@ -227,7 +227,7 @@ export default {
     return dispatch => {
       dispatch(this.deletingPlan(planName));
       browserHistory.push('/plans/list');
-      TripleOApiService.deletePlan(planName).then(response => {
+      MistralApiService.runAction('tripleo.delete_plan', { container: planName }).then(response => {
         dispatch(this.planDeleted(planName));
         dispatch(this.fetchPlans());
         dispatch(NotificationActions.notify({
@@ -236,9 +236,9 @@ export default {
           type: 'success'
         }));
       }).catch(error => {
-        console.error('Error retrieving plan TripleOApiService.deletePlan', error); //eslint-disable-line no-console
+        console.error('Error deleting plan MistralApiService.runAction', error); //eslint-disable-line no-console
         dispatch(this.planDeleted(planName));
-        let errorHandler = new TripleOApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
