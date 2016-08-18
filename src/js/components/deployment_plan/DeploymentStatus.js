@@ -3,10 +3,12 @@ import React from 'react';
 
 const statusMessages = {
   CREATE_IN_PROGRESS: 'Deployment in progress.',
+  CREATE_SUCCESS: 'Deployment succeeded.',
   CREATE_FAILED: 'The deployment failed.',
   DELETE_IN_PROGRESS: 'Deletion in progress.',
   UPDATE_IN_PROGRESS: 'Update in progress.',
-  UPDATE_FAILED: 'The update failed.'
+  UPDATE_FAILED: 'The update failed.',
+  UPDATE_SUCCESS: 'The update succeeded.'
 };
 
 export default class DeploymentStatus extends React.Component {
@@ -14,39 +16,56 @@ export default class DeploymentStatus extends React.Component {
   constructor() {
     super();
     this.state = {
-      intervalId: undefined
+      intervalId: undefined,
+      progressBarWidth: '0%'
+
     };
   }
 
   componentWillMount() {
     let intervalId = setInterval(() => {
       this.props.fetchStacks();
+      this.props.fetchResources(this.props.stack.stack_name, this.props.stack.id);
     }, 5000);
     this.setState({ intervalId: intervalId });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let all = nextProps.stack.resources.size;
+    if(all > 0) {
+      let complete = nextProps.stack.resources.filter((item) => {
+        return item.get('resource_status') === 'CREATE_COMPLETE';
+      }).size;
+      this.setState({ progressBarWidth: Math.ceil(complete / all * 100) + '%' });
+    }
   }
 
   componentWillUnmount() {
     clearInterval(this.state.intervalId);
   }
 
-  renderProgress(stack) {
+  renderProgress(stack, state) {
     let msg = statusMessages[stack.stack_status];
+
+    let progressBar = stack.stack_status === 'CREATE_IN_PROGRESS' ? (
+      <div className="progress progress-label-top-right">
+        <div className="progress-bar"
+              role="progressbar"
+              aria-valuenow="50"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              style={{ width: state.progressBarWidth }}>
+          <span>{state.progressBarWidth}</span>
+        </div>
+      </div>
+    ) : null;
 
     return (
       <div>
         <div className="progress-description">
           <div className="spinner spinner-xs spinner-inline"></div> <strong>{msg}</strong>
         </div>
-        <div className="progress progress-label-top-right">
-          <div className="progress-bar"
-               role="progressbar"
-               aria-valuenow="50"
-               aria-valuemin="0"
-               aria-valuemax="100"
-               style={{ width: '42.7%'}}>
-            <span>50%</span>
-          </div>
-        </div>
+        {progressBar}
       </div>
     );
   }
@@ -69,7 +88,7 @@ export default class DeploymentStatus extends React.Component {
     let failed = !!this.props.stack.stack_status.match(/FAILED/);
 
     if(progress) {
-      return this.renderProgress(this.props.stack);
+      return this.renderProgress(this.props.stack, this.state);
     }
     else {
       return this.renderResult(this.props.stack, failed);
@@ -78,6 +97,7 @@ export default class DeploymentStatus extends React.Component {
 }
 
 DeploymentStatus.propTypes = {
+  fetchResources: React.PropTypes.func.isRequired,
   fetchStacks: React.PropTypes.func.isRequired,
   stack: ImmutablePropTypes.record.isRequired
 };
