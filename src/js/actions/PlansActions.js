@@ -12,8 +12,6 @@ import { planFileSchema } from '../normalizrSchemas/plans';
 import StackActions from '../actions/StacksActions';
 import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
-import TripleOApiService from '../services/TripleOApiService';
-import TripleOApiErrorHandler from '../services/TripleOApiErrorHandler';
 
 export default {
   requestPlans() {
@@ -373,22 +371,32 @@ export default {
     };
   },
 
-  deployPlanSuccess(planName, data) {
+  deployPlanSuccess(planName) {
     return {
       type: PlansConstants.START_DEPLOYMENT_SUCCESS,
-      paylod: {
-        data,
-        planName
-      }
+      payload: planName
     };
   },
 
-  deployPlanFailed(planName, error) {
+  deployPlanFailed(planName) {
     return {
       type: PlansConstants.START_DEPLOYMENT_FAILED,
-      payload: {
-        error,
-        planName
+      payload: planName
+    };
+  },
+
+  deployPlanFinished(payload) {
+    return (dispatch) => {
+      if(payload.status === 'FAILED') {
+        dispatch(this.deployPlanFailed(payload.execution.input.container));
+        dispatch(NotificationActions.notify({
+          title: 'Deployment failed',
+          message: payload.message,
+          type: 'error'
+        }));
+      }
+      else {
+        dispatch(this.deployPlanFailed(payload.execution.input.container));
       }
     };
   },
@@ -396,17 +404,14 @@ export default {
   deployPlan(planName) {
     return dispatch => {
       dispatch(this.deployPlanPending(planName));
-      TripleOApiService.deployPlan(planName).then((response) => {
-        dispatch(this.deployPlanSuccess(planName, response));
+      MistralApiService.runWorkflow(
+        'tripleo.deployment.v1.deploy_plan',
+        { container: planName, timeout: 240
+      }).then((response) => {
         dispatch(StackActions.fetchStacks());
-        dispatch(NotificationActions.notify({
-          title: 'Deployment started',
-          message: 'The Deployment has been successfully initiated',
-          type: 'success'
-        }));
       }).catch(error => {
-        dispatch(this.deployPlanFailed(planName, error));
-        let errorHandler = new TripleOApiErrorHandler(error);
+        dispatch(this.deployPlanFailed(planName));
+        let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
