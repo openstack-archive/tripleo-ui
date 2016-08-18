@@ -291,7 +291,8 @@ export default {
   deployPlan(planName) {
     return dispatch => {
       dispatch(this.deployPlanPending(planName));
-      TripleOApiService.deployPlan(planName).then((response) => {
+      MistralApiService.runAction('tripleo.deploy', { container: planName, timeout: 240 })
+      .then((response) => {
         dispatch(this.deployPlanSuccess(planName, response));
         dispatch(StackActions.fetchStacks());
         dispatch(NotificationActions.notify({
@@ -301,7 +302,7 @@ export default {
         }));
       }).catch(error => {
         dispatch(this.deployPlanFailed(planName, error));
-        let errorHandler = new TripleOApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
