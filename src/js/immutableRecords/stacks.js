@@ -7,6 +7,8 @@ export const StacksState = Record({
 });
 
 export const Stack = Record({
+  id: '',
+  resources: Map(),
   stack_name: '',
   stack_status: ''
 });
