@@ -1,4 +1,4 @@
-import { Map } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
 import { Stack, StacksState } from '../immutableRecords/stacks';
 import StacksConstants from '../constants/StacksConstants';
@@ -19,11 +19,19 @@ export default function stacksReducer(state = initialState, action) {
               obj[val.stack_name] = Stack(val);
               return obj;
             }, {})));
+
   case StacksConstants.FETCH_STACKS_FAILED:
     return state
             .set('isLoaded', true)
             .set('isFetching', false)
             .set('stacks', Map());
+
+  case StacksConstants.FETCH_RESOURCES_SUCCESS:
+    if (state.stacks.get(action.payload.stackName)) {
+      return state.setIn(['stacks', action.payload.stackName, 'resources'],
+                        fromJS(action.payload.resources));
+    }
+    return state;
 
   default:
     return state;

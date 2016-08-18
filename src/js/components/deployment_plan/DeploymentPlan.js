@@ -79,6 +79,7 @@ class DeploymentPlan extends React.Component {
                 <DeployStep currentPlan={this.props.currentPlan}
                             currentStack={this.props.currentStack}
                             deployPlan={this.props.deployPlan}
+                            fetchResources={this.props.fetchResources}
                             fetchStacks={this.props.fetchStacks}/>
               </DeploymentPlanStep>
             </ol>
@@ -106,6 +107,7 @@ DeploymentPlan.propTypes = {
   environmentConfigurationSummary: React.PropTypes.string,
   fetchEnvironmentConfiguration: React.PropTypes.func,
   fetchNodes: React.PropTypes.func,
+  fetchResources: React.PropTypes.func,
   fetchRoles: React.PropTypes.func,
   fetchStacks: React.PropTypes.func,
   hasPlans: React.PropTypes.bool,
@@ -151,6 +153,9 @@ function mapDispatchToProps(dispatch) {
     },
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
     fetchRoles: () => dispatch(RolesActions.fetchRoles()),
+    fetchResources: (name, id) => {
+      dispatch(StacksActions.fetchResources(name, id));
+    },
     fetchStacks: () => dispatch(StacksActions.fetchStacks()),
     notify: notification => dispatch(NotificationActions.notify(notification)),
     runValidationStage: (uuid) => {
