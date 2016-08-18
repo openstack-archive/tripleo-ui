@@ -30,6 +30,11 @@ export default {
         break;
       }
 
+      case ('tripleo.deployment.v1.deploy_plan'): {
+        dispatch(PlansActions.deployPlanFinished(payload));
+        break;
+      }
+
       default:
         break;
       }
