@@ -58,23 +58,32 @@ export default function plansReducer(state = initialState, action) {
 
   case PlansConstants.CREATE_PLAN_PENDING:
     return state
-            .set('isCreatingPlan', true)
+            .set('isTransitioningPlan', true)
             .set('planFormErrors', List());
 
   case PlansConstants.CREATE_PLAN_SUCCESS:
     return state
-            .set('isCreatingPlan', false);
+            .set('isTransitioningPlan', false);
 
   case PlansConstants.CREATE_PLAN_FAILED:
     return state
-            .set('isCreatingPlan', false)
+            .set('isTransitioningPlan', false)
             .set('planFormErrors', List(action.payload));
 
-  case PlansConstants.UPDATING_PLAN:
-    return state.setIn(['all', action.payload, 'transition'], 'updating');
+  case PlansConstants.UPDATE_PLAN_PENDING:
+    return state
+            .setIn(['all', action.payload, 'transition'], 'updating')
+            .set('isTransitioningPlan', true);
 
-  case PlansConstants.PLAN_UPDATED:
-    return state.setIn(['all', action.payload, 'transition'], false);
+  case PlansConstants.UPDATE_PLAN_SUCCESS:
+    return state
+            .setIn(['all', action.payload, 'transition'], false)
+            .set('isTransitioningPlan', false);
+
+  case PlansConstants.UPDATE_PLAN_FAILED:
+    return state
+            .setIn(['all', action.payload, 'transition'], false)
+            .set('isTransitioningPlan', false);
 
   case PlansConstants.START_DEPLOYMENT_PENDING:
     return state.setIn(['all', action.payload, 'isRequestingPlanDeploy'], true);

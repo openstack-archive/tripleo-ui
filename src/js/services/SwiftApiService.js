@@ -11,10 +11,34 @@ class SwiftApiService {
       let requestAttributes = _.merge({
         url: `${serviceUrl}${path}`,
         crossOrigin: true,
-        method: 'GET'
+        method: 'GET',
+        headers: {
+          'X-Auth-Token': getAuthTokenId()
+        }
       }, additionalAttributes);
       return when(request(requestAttributes));
     });
+  }
+
+  createContainer(container) {
+    return this.defaultRequest(`/${container}`, {
+      method: 'PUT',
+      headers: {
+        'X-Auth-Token': getAuthTokenId(),
+        'x-container-meta-usage-tripleo': 'plan'
+      }
+    });
+  }
+
+  createObject(container, objectName, data) {
+    return this.defaultRequest(`/${container}/${objectName}`, {
+      method: 'PUT',
+      data: data
+    });
+
+  }
+
+  deleteContainer(name) {
   }
 
   uploadTarball(planName, file) {

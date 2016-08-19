@@ -1,3 +1,6 @@
+import { fromJS } from 'immutable';
+import when from 'when';
+
 import CurrentPlanActions from '../actions/CurrentPlanActions';
 import { browserHistory } from 'react-router';
 import MistralApiService from '../services/MistralApiService';
@@ -68,41 +71,67 @@ export default {
     };
   },
 
-  updatingPlan(planName) {
+  updatePlanPending(planName) {
     return {
-      type: PlansConstants.UPDATING_PLAN,
+      type: PlansConstants.UPDATE_PLAN_PENDING,
       payload: planName
     };
   },
 
-  planUpdated(planName) {
+  updatePlanSuccess(planName) {
     return {
-      type: PlansConstants.PLAN_UPDATED,
+      type: PlansConstants.UPDATE_PLAN_SUCCESS,
+      payload: planName
+    };
+  },
+
+  updatePlanFailed(planName) {
+    return {
+      type: PlansConstants.UPDATE_PLAN_FAILED,
       payload: planName
     };
   },
 
   updatePlan(planName, planFiles) {
     return dispatch => {
-      dispatch(this.updatingPlan(planName));
-      TripleOApiService.updatePlan(
-        planName,
-        planFiles
-      ).then(result => {
-        dispatch(this.planUpdated(planName));
-        dispatch(this.fetchPlans());
+      dispatch(this.updatePlanPending(planName));
+      this._uploadFilesToContainer(planName, fromJS(planFiles), dispatch).then(() => {
+        dispatch(this.updatePlanSuccess(planName));
         browserHistory.push('/plans/list');
         dispatch(NotificationActions.notify({
           title: 'Plan Updated',
           message: `The plan ${planName} was successfully updated.`,
           type: 'success'
         }));
-      }).catch(error => {
-        console.error('Error in PlansActions.updatePlan', error); //eslint-disable-line no-console
-        let errorHandler = new TripleOApiErrorHandler(error);
+        dispatch(this.fetchPlans());
+      }).catch((errors) => {
+        errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+        dispatch(this.updatePlanFailed(planName));
+      });
+    };
+  },
+
+  updatePlanFromTarball(planName, file) {
+    return (dispatch) => {
+      dispatch(this.updatePlanPending(planName));
+      SwiftApiService.uploadTarball(planName, file).then((response) => {
+        dispatch(this.updatePlanSuccess(planName));
+        browserHistory.push('/plans/list');
+        dispatch(NotificationActions.notify({
+          title: 'Plan Updated',
+          message: `The plan ${planName} was successfully updated.`,
+          type: 'success'
+        }));
+        dispatch(this.fetchPlans());
+      }).catch((error) => {
+        console.error('Error in PlansActions.updatePlanFromTarball', error); //eslint-disable-line no-console
+        let errorHandler = new SwiftApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
+        dispatch(this.updatePlanFailed(planName));
       });
     };
   },
@@ -132,23 +161,102 @@ export default {
     };
   },
 
+  /*
+   * Uploads a number of files to a container.
+   * Returns a promise which gets resolved when all files are uploaded
+   * or rejected if >= 1 objects fail.
+   * @container: String
+   * @files: Immutable Map
+   */
+  _uploadFilesToContainer(container, files, dispatch) {
+    let uploadedFiles = 0;
+    return when.promise((resolve, reject) => {
+      files.forEach((value, key) => {
+        SwiftApiService.createObject(container, key, value.get('contents')).then((response) => {
+          // On success increase nr of uploaded files.
+          // If this is the last file in the map, resolve the promise.
+          if(uploadedFiles === files.size - 1) {
+            resolve();
+          }
+          uploadedFiles += 1;
+        }).catch((error) => {
+          // Reject the promise on the first file that fails.
+          console.error('Error in PlansActions.createPlan', error); //eslint-disable-line no-console
+          let errorHandler = new SwiftApiErrorHandler(error);
+          reject(errorHandler.errors);
+        });
+      });
+    });
+  },
+
   createPlan(planName, planFiles) {
-    return dispatch => {
+    return (dispatch, getState) => {
       dispatch(this.createPlanPending());
-      TripleOApiService.createPlan(planName, planFiles).then(result => {
-        dispatch(this.createPlanSuccess(planName));
+      SwiftApiService.createContainer(planName).then((response) => {
+        // Upload all files to container first.
+        this._uploadFilesToContainer(planName, fromJS(planFiles), dispatch).then(() => {
+
+          // Once all files are uploaded, start plan creation workflow.
+          MistralApiService.runWorkflow(
+            'tripleo.plan_management.v1.create_deployment_plan',
+            { container: planName }
+          ).then((response) => {
+            if(response.state === 'ERROR') {
+              console.error('Error in PlansActions.createPlan', response); //eslint-disable-line no-console
+              dispatch(NotificationActions.notify({
+                title: 'Error',
+                message: response.state_info
+              }));
+              dispatch(this.createPlanFailed());
+            }
+          }).catch((error) => {
+            console.error('Error in PlansActions.createPlan', error); //eslint-disable-line no-console
+            let errorHandler = new MistralApiErrorHandler(error);
+            errorHandler.errors.forEach((error) => {
+              dispatch(NotificationActions.notify(error));
+            });
+            dispatch(this.createPlanFailed());
+          });
+
+        }).catch((errors) => {
+          // If the file upload fails, just notify the user
+          errors.forEach((error) => {
+            dispatch(NotificationActions.notify(error));
+          });
+          dispatch(this.createPlanFailed());
+        });
+
+      }).catch((error) => {
+        console.error('Error in PlansActions.createPlan', error); //eslint-disable-line no-console
+        let errorHandler = new SwiftApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+        dispatch(this.createPlanFailed());
+      });
+    };
+  },
+
+  createPlanFinished(payload) {
+    return (dispatch) => {
+      if(payload.status === 'SUCCESS') {
+        dispatch(this.createPlanSuccess());
+        dispatch(NotificationActions.notify({
+          type: 'success',
+          title: 'Plan was created',
+          message: `The plan ${payload.execution.input.container} was successfully created`
+        }));
         dispatch(this.fetchPlans());
         browserHistory.push('/plans/list');
+      }
+      else {
+        dispatch(this.createPlanFailed());
         dispatch(NotificationActions.notify({
-          title: 'Plan Created',
-          message: `The plan ${planName} was successfully created.`,
-          type: 'success'
+          type: 'error',
+          title: 'Plan creation error',
+          message: payload.message
         }));
-      }).catch(error => {
-        console.error('Error in PlansActions.createPlan', error); //eslint-disable-line no-console
-        let errorHandler = new TripleOApiErrorHandler(error);
-        dispatch(this.createPlanFailed(errorHandler.errors));
-      });
+      }
     };
   },
 

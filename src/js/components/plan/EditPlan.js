@@ -4,10 +4,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React from 'react';
 
-import FormErrorList from '../ui/forms/FormErrorList';
+import ModalFormErrorList from '../ui/forms/FormErrorList';
 import PlanEditFormTabs from './PlanEditFormTabs';
 import PlansActions from '../../actions/PlansActions';
 import Modal from '../ui/Modal';
+import Loader from '../ui/Loader';
 
 class EditPlan extends React.Component {
 
@@ -17,14 +18,12 @@ class EditPlan extends React.Component {
       planName: undefined,
       selectedFiles: undefined,
       canSubmit: false,
-      formErrors: [],
       uploadType: 'tarball'
     };
   }
 
   componentDidMount() {
     this.state.planName = this.getNameFromUrl();
-    this.props.fetchPlan(this.state.planName);
   }
 
   setUploadType(e) {
@@ -39,16 +38,17 @@ class EditPlan extends React.Component {
 
   onFormSubmit(form) {
     let planFiles = {};
-    this.state.selectedFiles.map(item => {
-      planFiles[item.name] = {};
-      planFiles[item.name].contents = item.content;
-      // TODO(jtomasek): user can identify capabilities-map in the list of files
-      // (dropdown select or sth)
-      if(item.name.match('^capabilities[-|_]map\.yaml$')) {
-        planFiles[item.name].meta = { 'file-type': 'capabilities-map' };
-      }
-    });
-    this.props.updatePlan(this.state.planName, planFiles);
+    if(this.state.uploadType === 'folder') {
+      this.state.selectedFiles.map(item => {
+        planFiles[item.name] = {};
+        planFiles[item.name].contents = item.content;
+      });
+      this.props.updatePlan(this.state.planName, planFiles);
+    }
+    else {
+      let file = this.state.selectedFiles[0].file;
+      this.props.updatePlanFromTarball(this.state.planName, file);
+    }
   }
 
   onFormValid() {
@@ -65,9 +65,6 @@ class EditPlan extends React.Component {
   }
 
   render() {
-    let plan = this.props.plans.filter(plan => plan.name === this.state.planName).first();
-    let planFiles = plan ? plan.files : undefined;
-
     return (
       <Modal dialogClasses="modal-lg">
         <Formsy.Form ref="EditPlanForm"
@@ -85,21 +82,28 @@ class EditPlan extends React.Component {
           </Link>
           <h4>Update {this.state.planName} Files</h4>
         </div>
-        <div className="modal-body">
-          <FormErrorList errors={this.state.formErrors}/>
-          <PlanEditFormTabs currentTab={this.props.location.query.tab || 'editPlan'}
-                            planFiles={planFiles}
-                            selectedFiles={this.state.selectedFiles}
-                            planName={this.state.planName}
-                            setUploadType={this.setUploadType.bind(this)}
-                            uploadType={this.state.uploadType}/>
-        </div>
+        <Loader loaded={!this.props.isTransitioningPlan}
+                size="lg"
+                height={60}
+                content="Updating plan...">
+          <ModalFormErrorList errors={this.props.planFormErrors.toJS()}/>
+          <div className="modal-body">
+            <PlanEditFormTabs currentTab={this.props.location.query.tab || 'editPlan'}
+                              selectedFiles={this.state.selectedFiles}
+                              planName={this.state.planName}
+                              setUploadType={this.setUploadType.bind(this)}
+                              uploadType={this.state.uploadType}/>
+          </div>
+        </Loader>
         <div className="modal-footer">
           <button disabled={!this.state.canSubmit}
-                  className="btn btn-primary btn-lg"
+                  className="btn btn-primary"
                   type="submit">
             Upload Files and Update Plan
           </button>
+          <Link to="/plans/list"
+                type="button"
+                className="btn btn-default">Cancel</Link>
         </div>
         </Formsy.Form>
       </Modal>
@@ -108,27 +112,31 @@ class EditPlan extends React.Component {
 }
 
 EditPlan.propTypes = {
-  fetchPlan: React.PropTypes.func,
   history: React.PropTypes.object,
+  isTransitioningPlan: React.PropTypes.bool,
   location: React.PropTypes.object,
   params: React.PropTypes.object,
+  planFormErrors: ImmutablePropTypes.list,
   plans: ImmutablePropTypes.map,
-  updatePlan: React.PropTypes.func
+  updatePlan: React.PropTypes.func,
+  updatePlanFromTarball: React.PropTypes.func
 };
 
 function mapStateToProps(state) {
   return {
+    isTransitioningPlan: state.plans.isTransitioningPlan,
+    planFormErrors: state.plans.planFormErrors,
     plans: state.plans.get('all')
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchPlan: planName => {
-      dispatch(PlansActions.fetchPlan(planName));
-    },
     updatePlan: (planName, files) => {
       dispatch(PlansActions.updatePlan(planName, files));
+    },
+    updatePlanFromTarball: (planName, files) => {
+      dispatch(PlansActions.updatePlanFromTarball(planName, files));
     }
   };
 }

@@ -21,7 +21,7 @@ export const PlanFile = Record({
 export const InitialPlanState = Record({
   isFetchingPlans: false,
   plansLoaded: false,
-  isCreatingPlan: false,
+  isTransitioningPlan: false,
   planFormErrors: List(),
   all: Map()
 });

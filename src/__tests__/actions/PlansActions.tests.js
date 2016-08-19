@@ -4,6 +4,7 @@ import * as utils from '../../js/services/utils';
 import MistralApiService from '../../js/services/MistralApiService';
 import PlansActions from '../../js/actions/PlansActions';
 import TripleOApiService from '../../js/services/TripleOApiService';
+import SwiftApiService from '../../js/services/SwiftApiService';
 
 
 // Use these to mock asynchronous functions which return a promise.
@@ -21,11 +22,11 @@ describe('PlansActions', () => {
 
   describe('updatePlan', () => {
     beforeEach(done => {
-      spyOn(PlansActions, 'updatingPlan');
-      spyOn(PlansActions, 'planUpdated');
+      spyOn(PlansActions, 'updatePlanPending');
+      spyOn(PlansActions, 'updatePlanSuccess');
       spyOn(PlansActions, 'fetchPlans');
       // Mock the service call.
-      spyOn(TripleOApiService, 'updatePlan').and.callFake(createResolvingPromise());
+      spyOn(PlansActions, '_uploadFilesToContainer').and.callFake(createResolvingPromise());
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
       PlansActions.updatePlan('somecloud', {})(() => {}, () => {});
@@ -33,12 +34,12 @@ describe('PlansActions', () => {
       setTimeout(() => { done(); }, 1);
     });
 
-    it('dispatches updatingPlan', () => {
-      expect(PlansActions.updatingPlan).toHaveBeenCalledWith('somecloud');
+    it('dispatches updatePlanPending', () => {
+      expect(PlansActions.updatePlanPending).toHaveBeenCalledWith('somecloud');
     });
 
-    it('dispatches planUpdated', () => {
-      expect(PlansActions.planUpdated).toHaveBeenCalledWith('somecloud');
+    it('dispatches updatePlanSuccess', () => {
+      expect(PlansActions.updatePlanSuccess).toHaveBeenCalledWith('somecloud');
     });
 
     it('dispatches fetchPlans', () => {
@@ -50,9 +51,11 @@ describe('PlansActions', () => {
     beforeEach(done => {
       spyOn(PlansActions, 'createPlanPending');
       spyOn(PlansActions, 'createPlanSuccess');
-      spyOn(PlansActions, 'fetchPlans');
       // Mock the service call.
-      spyOn(TripleOApiService, 'createPlan').and.callFake(createResolvingPromise());
+      spyOn(PlansActions, '_uploadFilesToContainer').and.callFake(createResolvingPromise());
+      spyOn(SwiftApiService, 'createContainer').and.callFake(createResolvingPromise());
+      spyOn(MistralApiService, 'runWorkflow')
+        .and.callFake(createResolvingPromise({ state: 'SUCCESS' }));
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
       PlansActions.createPlan('somecloud', {})(() => {}, () => {});
@@ -62,14 +65,6 @@ describe('PlansActions', () => {
 
     it('dispatches createPlanPending', () => {
       expect(PlansActions.createPlanPending).toHaveBeenCalled();
-    });
-
-    it('dispatches createPlanSuccess', () => {
-      expect(PlansActions.createPlanSuccess).toHaveBeenCalled();
-    });
-
-    it('dispatches fetchPlans', () => {
-      expect(PlansActions.fetchPlans).toHaveBeenCalled();
     });
   });
 
