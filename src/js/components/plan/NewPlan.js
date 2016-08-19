@@ -39,11 +39,6 @@ class NewPlan extends React.Component {
       this.state.selectedFiles.map(item => {
         planFiles[item.name] = {};
         planFiles[item.name].contents = item.content;
-        // TODO(jtomasek): user can identify capabilities-map in the list of files
-        // (dropdown select or sth)
-        if(item.name.match('^capabilities[-|_]map\.yaml$')) {
-          planFiles[item.name].meta = { 'file-type': 'capabilities-map' };
-        }
       });
       this.props.createPlan(formData.planName, planFiles);
     }
@@ -80,7 +75,7 @@ class NewPlan extends React.Component {
             </Link>
             <h4 className="modal-title">Create New Plan</h4>
           </div>
-          <Loader loaded={!this.props.isCreatingPlan}
+          <Loader loaded={!this.props.isTransitioningPlan}
                   size="lg"
                   content="Creating plan...">
             <ModalFormErrorList errors={this.props.planFormErrors.toJS()}/>
@@ -113,14 +108,14 @@ NewPlan.propTypes = {
   cancelCreatePlan: React.PropTypes.func,
   createPlan: React.PropTypes.func,
   createPlanFromTarball: React.PropTypes.func,
-  isCreatingPlan: React.PropTypes.bool,
+  isTransitioningPlan: React.PropTypes.bool,
   location: React.PropTypes.object,
   planFormErrors: ImmutablePropTypes.list
 };
 
 function mapStateToProps(state) {
   return {
-    isCreatingPlan: state.plans.isCreatingPlan,
+    isTransitioningPlan: state.plans.isTransitioningPlan,
     planFormErrors: state.plans.planFormErrors
   };
 }
