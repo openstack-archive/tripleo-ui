@@ -18,8 +18,8 @@ export default class Roles extends React.Component {
     }
   }
 
-  getAssignedNodes(introspectedNodes, roleName) {
-    return introspectedNodes.filter(
+  getAssignedNodes(availableNodes, roleName) {
+    return availableNodes.filter(
       node => node.getIn(['properties', 'capabilities']).includes(`profile:${roleName}`)
     );
   }
@@ -31,9 +31,9 @@ export default class Roles extends React.Component {
           <RoleCard name={role.name}
                     title={role.title}
                     fetchNodes={this.props.fetchNodes}
-                    assignedNodesCount={getAssignedNodes(this.props.introspectedNodes,
+                    assignedNodesCount={getAssignedNodes(this.props.availableNodes,
                                                          role.name).size}
-                    availableNodesCount={this.props.unassignedIntrospectedNodes.size}/>
+                    availableNodesCount={this.props.unassignedAvailableNodes.size}/>
         </div>
       );
     });
@@ -56,12 +56,12 @@ export default class Roles extends React.Component {
   }
 }
 Roles.propTypes = {
+  availableNodes: ImmutablePropTypes.map,
   fetchNodes: React.PropTypes.func.isRequired,
   fetchRoles: React.PropTypes.func.isRequired,
-  introspectedNodes: ImmutablePropTypes.map,
   isFetchingNodes: React.PropTypes.bool,
   isFetchingRoles: React.PropTypes.bool,
   loaded: React.PropTypes.bool.isRequired,
   roles: React.PropTypes.array.isRequired,
-  unassignedIntrospectedNodes: ImmutablePropTypes.map
+  unassignedAvailableNodes: ImmutablePropTypes.map
 };
