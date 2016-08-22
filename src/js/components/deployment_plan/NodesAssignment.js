@@ -6,8 +6,8 @@ import { Link } from 'react-router';
 import React from 'react';
 import { List, Map } from 'immutable';
 
-import { getIntrospectedNodes,
-         getUnassignedIntrospectedNodes,
+import { getAvailableNodes,
+         getUnassignedAvailableNodes,
          getNodesOperationInProgress,
          getAssignedNodes } from '../../selectors/nodes';
 import FormErrorList from '../ui/forms/FormErrorList';
@@ -154,12 +154,12 @@ NodesAssignment.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    introspectedNodes: getIntrospectedNodes(state),
+    introspectedNodes: getAvailableNodes(state),
     isFetchingNodes: state.nodes.get('isFetching'),
     nodesInProgress: state.nodes.get('nodesInProgress'),
     nodesOperationInProgress: getNodesOperationInProgress(state),
     roles: state.roles.get('roles'),
-    unassignedIntrospectedNodes: getUnassignedIntrospectedNodes(state)
+    unassignedIntrospectedNodes: getUnassignedAvailableNodes(state)
   };
 }
 

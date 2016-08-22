@@ -3,7 +3,7 @@ import Link from '../ui/Link';
 
 export default class RoleCard extends React.Component {
   render() {
-    let disabled = !this.props.availableNodesCount && !this.props.assignedNodesCount;
+    const disabled = !this.props.availableNodesCount && !this.props.assignedNodesCount;
 
     return (
       <div className={`card-pf card-pf-accented role-card ${this.props.name}`}>
@@ -16,10 +16,8 @@ export default class RoleCard extends React.Component {
               {this.props.assignedNodesCount}
             </span>
             <span className="card-pf-utilization-card-details-description">
-              <span className="card-pf-utilization-card-details-line-1">Nodes assigned</span>
-              <span className="card-pf-utilization-card-details-line-2">
-                of {this.props.availableNodesCount} available
-              </span>
+              <span className="card-pf-utilization-card-details-line-1">&nbsp;</span>
+              <span className="card-pf-utilization-card-details-line-2">Nodes assigned</span>
             </span>
           </p>
         </div>
