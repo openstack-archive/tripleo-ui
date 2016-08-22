@@ -10,13 +10,8 @@ export const getRegisteredNodes = createSelector(
   }
 );
 
-export const getIntrospectedNodes = createSelector(
-  nodes, (nodes) => {
-    return nodes.filter( node => node.getIn(['properties', 'memory_mb']) &&
-                                 node.getIn('properties', 'cpu_arch') &&
-                                 node.getIn('properties', 'cpus') &&
-                                 node.getIn('properties', 'local_gb') );
-  }
+export const getAvailableNodes = createSelector(
+  nodes, (nodes) => nodes.filter(node => node.get('provision_state') === 'available')
 );
 
 export const getDeployedNodes = createSelector(
@@ -31,9 +26,9 @@ export const getMaintenanceNodes = createSelector(
   }
 );
 
-export const getUnassignedIntrospectedNodes = createSelector(
-  getIntrospectedNodes, (introspectedNodes) => {
-    return introspectedNodes.filterNot(
+export const getUnassignedAvailableNodes = createSelector(
+  getAvailableNodes, (availableNodes) => {
+    return availableNodes.filterNot(
       node => node.getIn(['properties', 'capabilities'], '').match(/.*profile:(\w+)/)
     );
   }
@@ -48,8 +43,8 @@ export const getNodesOperationInProgress = createSelector(
   }
 );
 
-export const getAssignedNodes = (introspectedNodes, roleName) => {
-  return introspectedNodes.filter(
+export const getAssignedNodes = (availableNodes, roleName) => {
+  return availableNodes.filter(
     node => node.getIn(['properties', 'capabilities'], '').includes(`profile:${roleName}`)
   );
 };

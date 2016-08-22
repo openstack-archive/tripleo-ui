@@ -8,7 +8,7 @@ import NavTab from '../ui/NavTab';
 import NodesActions from '../../actions/NodesActions';
 import RolesActions from '../../actions/RolesActions';
 import { getRegisteredNodes,
-         getIntrospectedNodes,
+         getAvailableNodes,
          getDeployedNodes,
          getMaintenanceNodes } from '../../selectors/nodes';
 
@@ -71,7 +71,6 @@ function mapStateToProps(state) {
     nodes: state.nodes.merge(
       Map({
         registered: getRegisteredNodes(state),
-        introspected: getIntrospectedNodes(state),
         deployed: getDeployedNodes(state),
         maintenance: getMaintenanceNodes(state)
       })
