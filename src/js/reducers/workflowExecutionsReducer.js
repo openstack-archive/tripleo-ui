@@ -51,8 +51,8 @@ export default function workflowExecutionsReducer(state = initialState, action) 
  * Executions properties input, output and params are JSON strings, this function parses them into
  * objects
  */
-const parseExecutionAttrs = execution =>
-  execution.set('input', fromJS(JSON.parse(execution.get('input'))))
-           .set('output', fromJS(JSON.parse(execution.get('output'))))
-           .set('params', fromJS(JSON.parse(execution.get('params'))))
+const parseExecutionAttrs = execution => 
+  execution.set('input', fromJS(JSON.parse(execution.get('input', '{}'))))
+           .set('output', fromJS(JSON.parse(execution.get('output', '{}'))))
+           .set('params', fromJS(JSON.parse(execution.get('params', '{}'))))
            .set('updated_at', fromJS(Date.parse(execution.get('updated_at'))));
