@@ -9,7 +9,7 @@ import { topicSchema } from '../normalizrSchemas/environmentConfiguration';
 
 export default {
 
-  fetchEnvironmentConfiguration(planName, parentPath) {
+  fetchEnvironmentConfiguration(planName, redirectPath) {
     return dispatch => {
       dispatch(this.fetchEnvironmentConfigurationPending());
       MistralApiService.runAction('tripleo.get_capabilities', { container: planName })
@@ -20,7 +20,7 @@ export default {
       }).catch(error => {
         console.error('Error retrieving EnvironmentConfigurationActions.fetchEnvironment', //eslint-disable-line no-console
                       error.stack || error); //eslint-disable-line no-console
-        if(parentPath) { browserHistory.push(parentPath); }
+        if (redirectPath) { browserHistory.push(redirectPath); }
         dispatch(this.fetchEnvironmentConfigurationFailed());
         let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
@@ -49,7 +49,7 @@ export default {
     };
   },
 
-  updateEnvironmentConfiguration(planName, data, formFields, parentPath) {
+  updateEnvironmentConfiguration(planName, data, formFields, redirectPath) {
     return dispatch => {
       dispatch(this.updateEnvironmentConfigurationPending());
       MistralApiService.runAction('tripleo.update_capabilities',
@@ -57,7 +57,7 @@ export default {
       .then(response => {
         const enabledEnvs = JSON.parse(response.output).result.environments.map(env => env.path);
         dispatch(this.updateEnvironmentConfigurationSuccess(enabledEnvs));
-        if (parentPath) { browserHistory.push(parentPath); }
+        if (redirectPath) { browserHistory.push(redirectPath); }
         dispatch(NotificationActions.notify({
           title: 'Environment Configuration updated',
           message: 'The Environment Configuration has been successfully updated',

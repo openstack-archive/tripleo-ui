@@ -43,7 +43,7 @@ export default class EnvironmentGroup extends React.Component {
                            description={environment.get('description')}/>
         );
       });
-    } else {
+    } else if (environments.size === 1) {
       let environment = environments.first();
       let requiresEnvironments = environment.get('requires')
         ? environment.get('requires').toArray()
