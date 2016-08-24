@@ -21,7 +21,7 @@ class Parameters extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchParameters(this.props.currentPlanName);
+    this.props.fetchParameters(this.props.currentPlanName, this.props.parentPath);
   }
 
   componentDidUpdate() {
@@ -103,7 +103,7 @@ class Parameters extends React.Component {
                   className="btn btn-primary">
             Save Changes
           </button>
-          <Link to={this.props.parentPath} type="button" className="btn btn-default" >
+          <Link to="/deployment-plan" type="button" className="btn btn-default" >
             Cancel
           </Link>
         </div>
@@ -141,11 +141,12 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchParameters: currentPlanName => {
-      dispatch(ParametersActions.fetchParameters(currentPlanName));
+    fetchParameters: (currentPlanName, redirectPath) => {
+      dispatch(ParametersActions.fetchParameters(currentPlanName, redirectPath));
     },
-    updateParameters: (currentPlanName, data, inputFields, url) => {
-      dispatch(ParametersActions.updateParameters(currentPlanName, data, inputFields, url));
+    updateParameters: (currentPlanName, data, inputFields, redirectPath) => {
+      dispatch(ParametersActions.updateParameters(
+        currentPlanName, data, inputFields, redirectPath));
     }
   };
 }
