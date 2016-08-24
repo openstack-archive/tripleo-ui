@@ -25,7 +25,7 @@ export default {
     };
   },
 
-  fetchParameters(planName) {
+  fetchParameters(planName, parentPath) {
     return dispatch => {
       dispatch(this.fetchParametersPending());
       MistralApiService.runAction('tripleo.get_parameters', { container: planName })
@@ -35,6 +35,7 @@ export default {
         dispatch(this.fetchParametersSuccess({ resourceTree, mistralParameters }));
       }).catch(error => {
         dispatch(this.fetchParametersFailed());
+        if(parentPath) { browserHistory.push(parentPath); }
         console.error('Error in ParametersActions.fetchParameters', error.stack || error); //eslint-disable-line no-console
         let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {

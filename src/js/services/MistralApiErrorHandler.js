@@ -34,6 +34,12 @@ export default class MistralApiErrorHandler extends BaseHttpRequestErrorHandler 
       });
       break;
     }
+    case 'Action ERROR':
+      errors.push({
+        title: 'Failed to run Action',
+        message: errorObj.message
+      });
+      break;
     default:
       errors.push({
         title: errorObj.statusText,
