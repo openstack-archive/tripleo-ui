@@ -56,12 +56,11 @@ class EnvironmentConfiguration extends React.Component {
 
   handleSubmit(formData, resetForm, invalidateForm) {
     const data = this._convertFormData(formData);
-    const formFields = Object.keys(this.refs.environmentConfigurationForm.inputs);
     this.disableButton();
     this.props.updateEnvironmentConfiguration(
       this.props.currentPlanName,
       data,
-      formFields,
+      Object.keys(this.refs.environmentConfigurationForm.inputs),
       this.props.parentPath
     );
   }
@@ -174,10 +173,9 @@ function mapDispatchToProps(dispatch) {
     fetchEnvironmentConfiguration: planName => {
       dispatch(EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName));
     },
-    updateEnvironmentConfiguration: (planName, data, parentPath) => {
+    updateEnvironmentConfiguration: (planName, data, inputFields, parentPath) => {
       dispatch(EnvironmentConfigurationActions.updateEnvironmentConfiguration(
-        planName, data, parentPath
-      ));
+        planName, data, inputFields, parentPath));
     }
   };
 }

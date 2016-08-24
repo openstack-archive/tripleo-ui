@@ -89,6 +89,15 @@ class MistralApiService {
         name: actionName,
         input: input
       })
+    }).then((response) => {
+      if (response.state === 'SUCCESS') {
+        return when.resolve(response);
+      } else {
+        return when.reject({
+          status: 'Action ERROR',
+          message: JSON.parse(response.output).result
+        });
+      }
     });
   }
 }
