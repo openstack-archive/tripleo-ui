@@ -44,11 +44,15 @@ export default function plansReducer(state = initialState, action) {
             .set('all', Map(planData));
   }
 
-  case PlansConstants.DELETING_PLAN: {
+  case PlansConstants.DELETE_PLAN_PENDING: {
     return state.setIn(['all', action.payload, 'transition'], 'deleting');
   }
 
-  case PlansConstants.PLAN_DELETED: {
+  case PlansConstants.DELETE_PLAN_SUCCESS: {
+    return state.set('all', state.get('all').remove(action.payload));
+  }
+
+  case PlansConstants.DELETE_PLAN_FAILED: {
     return state.setIn(['all', action.payload, 'transition'], false);
   }
 

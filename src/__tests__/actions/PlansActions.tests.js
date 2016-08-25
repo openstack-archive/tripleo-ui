@@ -1,8 +1,8 @@
 import when from 'when';
 
 import * as utils from '../../js/services/utils';
-import PlansActions from '../../js/actions/PlansActions';
 import MistralApiService from '../../js/services/MistralApiService';
+import PlansActions from '../../js/actions/PlansActions';
 import TripleOApiService from '../../js/services/TripleOApiService';
 
 
@@ -75,11 +75,11 @@ describe('PlansActions', () => {
 
   describe('deletePlans', () => {
     beforeEach(done => {
-      spyOn(PlansActions, 'deletingPlan');
-      spyOn(PlansActions, 'planDeleted');
+      spyOn(PlansActions, 'deletePlanPending');
+      spyOn(PlansActions, 'deletePlanSuccess');
       spyOn(PlansActions, 'fetchPlans');
       // Mock the service call.
-      spyOn(TripleOApiService, 'deletePlan').and.callFake(createResolvingPromise());
+      spyOn(MistralApiService, 'runAction').and.callFake(createResolvingPromise());
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
       PlansActions.deletePlan('somecloud')(() => {}, () => {});
@@ -87,16 +87,16 @@ describe('PlansActions', () => {
       setTimeout(() => { done(); }, 1);
     });
 
-    it('dispatches deletingPlan', () => {
-      expect(PlansActions.deletingPlan).toHaveBeenCalledWith('somecloud');
+    it('dispatches deletePlanPending', () => {
+      expect(PlansActions.deletePlanPending).toHaveBeenCalledWith('somecloud');
     });
 
-    it('dispatches planDeleted', () => {
-      expect(PlansActions.planDeleted).toHaveBeenCalledWith('somecloud');
+    it('dispatches deletePlanSuccess', () => {
+      expect(PlansActions.deletePlanSuccess).toHaveBeenCalledWith('somecloud');
     });
 
     it('dispatches fetchPlans', () => {
-      expect(PlansActions.fetchPlans).toHaveBeenCalled();
+      expect(PlansActions.fetchPlans).not.toHaveBeenCalled();
     });
   });
 

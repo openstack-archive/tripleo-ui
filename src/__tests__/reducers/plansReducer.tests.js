@@ -139,19 +139,29 @@ describe('plansReducer state', () => {
     });
     let newState;
 
-    it('DELETING_PLAN sets `transition` in plan Record to `deleting`', () => {
+    it('DELETE_PLAN_PENDING sets `transition` in plan Record to `deleting`', () => {
       newState = plansReducer(
         state,
-        PlansActions.deletingPlan('somecloud')
+        PlansActions.deletePlanPending('somecloud')
       );
       let plan = newState.getIn(['all', 'somecloud']);
       expect(plan.get('transition')).toBe('deleting');
     });
 
-    it('PLAN_DELETED sets `transition` in plan Record to false', () => {
+    it('DELETE_PLAN_SUCCESS removes the plan Record', () => {
       newState = plansReducer(
         newState,
-        PlansActions.planDeleted('somecloud')
+        PlansActions.deletePlanSuccess('somecloud')
+      );
+      expect(newState.get('all')).toEqualImmutable(Map({
+        overcloud: new Plan({ name: 'overcloud' })
+      }));
+    });
+
+    it('DELETE_PLAN_FAILED sets `transition` in plan Record to false', () => {
+      newState = plansReducer(
+        newState,
+        PlansActions.deletePlanFailed('somecloud')
       );
       let plan = newState.getIn(['all', 'somecloud']);
       expect(plan.get('transition')).toBe(false);
