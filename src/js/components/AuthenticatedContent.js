@@ -9,7 +9,7 @@ import NavBar from './NavBar';
 import ValidationsList from './validations/ValidationsList';
 import WorkflowExecutionsActions from '../actions/WorkflowExecutionsActions';
 
-export default class AuthenticatedContent extends React.Component {
+class AuthenticatedContent extends React.Component {
   componentDidMount() {
     this.props.fetchPlans();
     this.props.fetchWorkflowExecutions();
