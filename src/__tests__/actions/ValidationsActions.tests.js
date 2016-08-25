@@ -73,7 +73,8 @@ describe('FetchValidations action', () => {
 
   it('dispatches appropriate actions and normalizes the response', () => {
     expect(ValidationsActions.fetchValidationsPending).toHaveBeenCalled();
-    expect(MistralApiService.runAction).toHaveBeenCalledWith('tripleo.list_validations');
+    expect(MistralApiService.runAction)
+      .toHaveBeenCalledWith('tripleo.validations.list_validations');
     expect(ValidationsActions.fetchValidationsSuccess).toHaveBeenCalled();
   });
 });

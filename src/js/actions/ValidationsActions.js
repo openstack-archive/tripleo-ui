@@ -13,7 +13,7 @@ export default {
   fetchValidations() {
     return (dispatch, getState) => {
       dispatch(this.fetchValidationsPending());
-      MistralApiService.runAction('tripleo.list_validations').then((response) => {
+      MistralApiService.runAction('tripleo.validations.list_validations').then((response) => {
         const actionResult = JSON.parse(response.output).result;
         const validations = normalize(actionResult,
                                       arrayOf(validationSchema)).entities.validations || {};
