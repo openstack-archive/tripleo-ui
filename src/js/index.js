@@ -85,7 +85,7 @@ TempStorage.initialized.then(() => {
                 <Route path="environment" component={EnvironmentConfiguration}/>
                 <Route path="parameters" component={Parameters}/>
               </Route>
-              <Route path=":roleName/assignNodes"
+              <Route path=":roleIdentifier/assign-nodes"
                      component={NodesAssignment}
                      onEnter={checkRunningDeployment}/>
             </Route>

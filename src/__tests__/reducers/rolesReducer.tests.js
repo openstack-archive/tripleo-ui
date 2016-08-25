@@ -21,9 +21,10 @@ describe('rolesReducer', () => {
     loaded: true,
     isFetching: false,
     roles: Map({
-      control: new Role({
+      controller: new Role({
         title: 'Controller',
-        name: 'control'
+        name: 'Controller',
+        identifier: 'controller'
       })
     })
   });
@@ -43,12 +44,7 @@ describe('rolesReducer', () => {
   it('should handle FETCH_ROLES_SUCCESS', () => {
     const action = {
       type: RolesConstants.FETCH_ROLES_SUCCESS,
-      payload: {
-        control: {
-          name: 'control',
-          title: 'Controller'
-        }
-      }
+      payload: ['Controller']
     };
     const newState = rolesReducer(initialState, action);
     expect(newState.get('roles')).toEqualImmutable(

@@ -43,8 +43,8 @@ export const getNodesOperationInProgress = createSelector(
   }
 );
 
-export const getAssignedNodes = (availableNodes, roleName) => {
+export const getAssignedNodes = (availableNodes, roleIdentifier) => {
   return availableNodes.filter(
-    node => node.getIn(['properties', 'capabilities'], '').includes(`profile:${roleName}`)
+    node => node.getIn(['properties', 'capabilities'], '').includes(`profile:${roleIdentifier}`)
   );
 };
