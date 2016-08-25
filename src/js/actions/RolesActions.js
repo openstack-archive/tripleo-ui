@@ -1,33 +1,27 @@
-import { normalize, arrayOf } from 'normalizr';
-import { Map } from 'immutable';
+// import { normalize, arrayOf } from 'normalizr';
 
-// import NotificationActions from './NotificationActions';
+import NotificationActions from './NotificationActions';
 import RolesConstants from '../constants/RolesConstants';
-import roles from '../mockData/roles';
-import { roleSchema } from '../normalizrSchemas/roles';
+// import { roleSchema } from '../normalizrSchemas/roles';
+import MistralApiService from '../services/MistralApiService';
+import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 
 export default {
-  fetchRoles() {
+  fetchRoles(planName) {
     return (dispatch, getState) => {
       dispatch(this.fetchRolesPending());
 
-      // TODO(jtomasek): Replace this with an actual action which fetches Roles from HEAT
-      // fake the reques/response delay
-      const normalizedRoles = normalize(roles, arrayOf(roleSchema)).entities.roles || Map();
-      setTimeout(() => dispatch(this.fetchRolesSuccess(normalizedRoles)), 500);
-
-      // TODO(jtomasek): Use this when roles are fetched from Heat
-      // HeatApiService.getRoles().then((response) => {
-      //   response = normalize(response, arrayOf(roleSchema));
-      //   dispatch(this.fetchRolesSuccess(response));
-      // }).catch((error) => {
-      //   console.error('Error in RolesAction.fetchRoles', error.stack || error); //eslint-disable-line no-console
-      //   dispatch(this.fetchRolesFailed());
-      //   let errorHandler = new HeatApiErrorHandler(error);
-      //   errorHandler.errors.forEach((error) => {
-      //     dispatch(NotificationActions.notify(error));
-      //   });
-      // });
+      MistralApiService.runAction('tripleo.list_roles', { container: planName })
+      .then((response) => {
+        dispatch(this.fetchRolesSuccess(JSON.parse(response.output).result));
+      }).catch((error) => {
+        console.error('Error in RolesAction.fetchRoles', error.stack || error); //eslint-disable-line no-console
+        dispatch(this.fetchRolesFailed());
+        let errorHandler = new MistralApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+      });
     };
   },
 

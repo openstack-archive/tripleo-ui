@@ -1,4 +1,5 @@
 import { fromJS, Map } from 'immutable';
+import { kebabCase, startCase } from 'lodash';
 
 import PlansConstants from '../constants/PlansConstants';
 import RolesConstants from '../constants/RolesConstants';
@@ -18,7 +19,12 @@ export default function rolesReducer(state = initialState, action) {
     return state.set('isFetching', true);
 
   case RolesConstants.FETCH_ROLES_SUCCESS: {
-    const roles = action.payload || {};
+    // Convert roles array into Map of Role records. This could get replaced by normalizing
+    // once the mistral getRoles action returns an array of objects
+    const roles = fromJS(action.payload)
+                    .reduce((result, role) => result.set(kebabCase(role),
+                                                         _createRole(role)), Map());
+
     return state.set('roles', fromJS(roles).map(role => new Role(role)))
                 .set('isFetching', false)
                 .set('loaded', true);
@@ -37,3 +43,11 @@ export default function rolesReducer(state = initialState, action) {
 
   }
 }
+
+const _createRole = (roleName) => {
+  return new Role({
+    name: roleName,
+    title: startCase(roleName),
+    identifier: kebabCase(roleName)
+  });
+};
