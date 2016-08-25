@@ -67,11 +67,11 @@ class NodesAssignment extends React.Component {
     this.disableButton();
     const nodesToUpdate = _.pickBy(formData, value => !!value);
     _.keys(nodesToUpdate).map(nodeId => {
-      const node = this.props.introspectedNodes.get(nodeId);
+      const node = this.props.availableNodes.get(nodeId);
       let value;
-      if(this.props.unassignedIntrospectedNodes.includes(node)) {
+      if(this.props.unassignedAvailableNodes.includes(node)) {
         value = node.getIn(['properties', 'capabilities']) +
-                `,profile:${this.props.params.roleName}`;
+                `,profile:${this.props.params.roleIdentifier}`;
       } else {
         value = node.getIn(['properties', 'capabilities']).replace(/,profile:(\w+)/, '');
       }
@@ -89,10 +89,10 @@ class NodesAssignment extends React.Component {
   }
 
   render() {
-    const { roleName } = this.props.params;
-    const role = this.props.roles.get(roleName);
-    const nodesToAssign = this.props.unassignedIntrospectedNodes
-                            .merge(getAssignedNodes(this.props.introspectedNodes, roleName))
+    const { roleIdentifier } = this.props.params;
+    const role = this.props.roles.get(roleIdentifier);
+    const nodesToAssign = this.props.unassignedAvailableNodes
+                            .merge(getAssignedNodes(this.props.availableNodes, role.identifier))
                             .sortBy(node => node.get('uuid'));
 
     return (
@@ -110,7 +110,7 @@ class NodesAssignment extends React.Component {
               <span aria-hidden="true" className="pficon pficon-close"/>
             </Link>
             <h4 className="modal-title">
-              Assign Nodes to {role ? role.title : roleName} Role
+              Assign Nodes to {role ? role.title : roleIdentifier} Role
             </h4>
           </div>
 
@@ -135,16 +135,16 @@ class NodesAssignment extends React.Component {
   }
 }
 NodesAssignment.propTypes = {
+  availableNodes: ImmutablePropTypes.map,
   fetchNodes: React.PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
-  introspectedNodes: ImmutablePropTypes.map,
   isFetchingNodes: React.PropTypes.bool,
   nodesInProgress: ImmutablePropTypes.set,
   nodesOperationInProgress: React.PropTypes.bool,
   params: React.PropTypes.object.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
-  unassignedIntrospectedNodes: ImmutablePropTypes.map,
+  unassignedAvailableNodes: ImmutablePropTypes.map,
   updateNode: React.PropTypes.func.isRequired
 };
 NodesAssignment.defaultProps = {
@@ -154,12 +154,12 @@ NodesAssignment.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    introspectedNodes: getAvailableNodes(state),
+    availableNodes: getAvailableNodes(state),
     isFetchingNodes: state.nodes.get('isFetching'),
     nodesInProgress: state.nodes.get('nodesInProgress'),
     nodesOperationInProgress: getNodesOperationInProgress(state),
     roles: state.roles.get('roles'),
-    unassignedIntrospectedNodes: getUnassignedAvailableNodes(state)
+    unassignedAvailableNodes: getUnassignedAvailableNodes(state)
   };
 }
 
