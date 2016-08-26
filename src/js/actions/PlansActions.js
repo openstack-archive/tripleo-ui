@@ -1,4 +1,5 @@
 import { fromJS } from 'immutable';
+import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
 
 import CurrentPlanActions from '../actions/CurrentPlanActions';
@@ -7,6 +8,7 @@ import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NotificationActions from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
+import { planFileSchema } from '../normalizrSchemas/plans';
 import StackActions from '../actions/StacksActions';
 import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
@@ -49,21 +51,25 @@ export default {
     };
   },
 
-  receivePlan(plan) {
+  receivePlan(planName, planFiles) {
     return {
       type: PlansConstants.RECEIVE_PLAN,
-      payload: plan
+      payload: {
+        planName: planName,
+        planFiles: planFiles
+      }
     };
   },
 
   fetchPlan(planName) {
     return dispatch => {
       dispatch(this.requestPlan());
-      TripleOApiService.getPlan(planName).then(response => {
-        dispatch(this.receivePlan(response.plan));
+      SwiftApiService.getContainer(planName).then(response => {
+        dispatch(this.receivePlan(planName,
+                                  normalize(response, arrayOf(planFileSchema)).entities.planFiles));
       }).catch(error => {
         console.error('Error retrieving plan PlansActions.fetchPlan', error); //eslint-disable-line no-console
-        let errorHandler = new TripleOApiErrorHandler(error);
+        let errorHandler = new SwiftApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });

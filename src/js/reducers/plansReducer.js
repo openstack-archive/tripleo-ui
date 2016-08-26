@@ -1,4 +1,4 @@
-import { List, Map } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 
 import { InitialPlanState,
          Plan,
@@ -14,19 +14,11 @@ export default function plansReducer(state = initialState, action) {
     return state;
 
   case PlansConstants.RECEIVE_PLAN: {
-    let filesMap = action.payload.files
-      ? filesMap = Map(action.payload.files)
-                      .map((item, key) => new PlanFile({
-                        name: key,
-                        contents: item.contents,
-                        meta: item.meta
-                      }))
-      : Map();
-    let newState = state
-            .updateIn(
-              ['all', action.payload.name],
-              new Plan({ name: action.payload.name }),
-              plan => plan.set('files', filesMap));
+    let filesMap = fromJS(
+      action.payload.planFiles).map(file => new PlanFile({ name: file.get('name') }));
+    let newState = state.updateIn(['all', action.payload.planName],
+                                  new Plan({ name: action.payload.planName }),
+                                  plan => plan.set('files', filesMap));
     return newState;
   }
 

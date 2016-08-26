@@ -15,7 +15,6 @@ class EditPlan extends React.Component {
   constructor() {
     super();
     this.state = {
-      planName: undefined,
       selectedFiles: undefined,
       canSubmit: false,
       uploadType: 'tarball'
@@ -23,7 +22,7 @@ class EditPlan extends React.Component {
   }
 
   componentDidMount() {
-    this.state.planName = this.getNameFromUrl();
+    this.props.fetchPlan(this.getNameFromUrl());
   }
 
   setUploadType(e) {
@@ -43,11 +42,11 @@ class EditPlan extends React.Component {
         planFiles[item.name] = {};
         planFiles[item.name].contents = item.content;
       });
-      this.props.updatePlan(this.state.planName, planFiles);
+      this.props.updatePlan(this.getNameFromUrl(), planFiles);
     }
     else {
       let file = this.state.selectedFiles[0].file;
-      this.props.updatePlanFromTarball(this.state.planName, file);
+      this.props.updatePlanFromTarball(this.getNameFromUrl(), file);
     }
   }
 
@@ -65,6 +64,9 @@ class EditPlan extends React.Component {
   }
 
   render() {
+    let plan = this.props.plans.filter(plan => plan.name === this.getNameFromUrl()).first();
+    let planFiles = plan ? plan.files : undefined;
+
     return (
       <Modal dialogClasses="modal-lg">
         <Formsy.Form ref="EditPlanForm"
@@ -80,7 +82,7 @@ class EditPlan extends React.Component {
                 className="close">
             <span aria-hidden="true" className="pficon pficon-close"/>
           </Link>
-          <h4>Update {this.state.planName} Files</h4>
+          <h4>Update {this.getNameFromUrl()} Files</h4>
         </div>
         <Loader loaded={!this.props.isTransitioningPlan}
                 size="lg"
@@ -89,7 +91,8 @@ class EditPlan extends React.Component {
           <div className="modal-body">
             <PlanEditFormTabs currentTab={this.props.location.query.tab || 'editPlan'}
                               selectedFiles={this.state.selectedFiles}
-                              planName={this.state.planName}
+                              planName={this.getNameFromUrl()}
+                              planFiles={planFiles}
                               setUploadType={this.setUploadType.bind(this)}
                               uploadType={this.state.uploadType}/>
           </div>
@@ -108,6 +111,7 @@ class EditPlan extends React.Component {
 }
 
 EditPlan.propTypes = {
+  fetchPlan: React.PropTypes.func,
   history: React.PropTypes.object,
   isTransitioningPlan: React.PropTypes.bool,
   location: React.PropTypes.object,
@@ -128,6 +132,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchPlan: (planName) => {
+      dispatch(PlansActions.fetchPlan(planName));
+    },
     updatePlan: (planName, files) => {
       dispatch(PlansActions.updatePlan(planName, files));
     },
