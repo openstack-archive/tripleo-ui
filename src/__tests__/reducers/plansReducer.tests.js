@@ -1,7 +1,7 @@
 import matchers from 'jasmine-immutable-matchers';
 import { List, Map } from 'immutable';
 
-import { InitialPlanState, Plan } from '../../js/immutableRecords/plans';
+import { InitialPlanState, Plan, PlanFile } from '../../js/immutableRecords/plans';
 import PlansActions from '../../js/actions/PlansActions';
 import plansReducer from '../../js/reducers/plansReducer';
 
@@ -104,24 +104,19 @@ describe('plansReducer state', () => {
             'overcloud': new Plan({name: 'overcloud' })
           })
         }),
-        PlansActions.receivePlan({
-          name: 'overcloud',
-          files: {
-            'capabilities_map.yaml': {
-              contents: 'foo',
-              meta: { 'file-type': 'capabilities-map' }
-            },
-            'foo.yaml': {
-              contents: 'bar'
-            }
-          }
+        PlansActions.receivePlan('overcloud', {
+          'capabilities_map.yaml': { name: 'capabilities_map.yaml' },
+          'foo.yaml': { name: 'foo.yaml' }
         })
       );
       plan = state.getIn(['all', 'overcloud']);
     });
 
     it('updates the plan records `files` attributes', () => {
-      expect(plan.get('files').size).toEqual(2);
+      expect(plan.get('files')).toEqualImmutable(Map({
+        'capabilities_map.yaml': new PlanFile({ name: 'capabilities_map.yaml' }),
+        'foo.yaml': new PlanFile({ name: 'foo.yaml' })
+      }));
     });
   });
 
