@@ -49,21 +49,24 @@ export default {
     };
   },
 
-  receivePlan(plan) {
+  receivePlan(planName, planFiles) {
     return {
       type: PlansConstants.RECEIVE_PLAN,
-      payload: plan
+      payload: {
+        planName: planName,
+        planFiles: planFiles
+      }
     };
   },
 
   fetchPlan(planName) {
     return dispatch => {
       dispatch(this.requestPlan());
-      TripleOApiService.getPlan(planName).then(response => {
-        dispatch(this.receivePlan(response.plan));
+      SwiftApiService.getContainer(planName).then(response => {
+        dispatch(this.receivePlan(planName, response));
       }).catch(error => {
         console.error('Error retrieving plan PlansActions.fetchPlan', error); //eslint-disable-line no-console
-        let errorHandler = new TripleOApiErrorHandler(error);
+        let errorHandler = new SwiftApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });

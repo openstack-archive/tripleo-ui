@@ -35,10 +35,12 @@ class SwiftApiService {
       method: 'PUT',
       data: data
     });
-
   }
 
-  deleteContainer(name) {
+  getContainer(container) {
+    return this.defaultRequest(`/${container}?format=json`, {
+      method: 'GET'
+    });
   }
 
   uploadTarball(planName, file) {
