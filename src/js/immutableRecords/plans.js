@@ -14,7 +14,6 @@ export const Plan = Record({
 
 export const PlanFile = Record({
   name: '',
-  contents: '',
   info: Map()
 });
 

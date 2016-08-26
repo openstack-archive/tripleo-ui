@@ -14,19 +14,13 @@ export default function plansReducer(state = initialState, action) {
     return state;
 
   case PlansConstants.RECEIVE_PLAN: {
-    let filesMap = action.payload.files
-      ? filesMap = Map(action.payload.files)
-                      .map((item, key) => new PlanFile({
-                        name: key,
-                        contents: item.contents,
-                        meta: item.meta
-                      }))
-      : Map();
-    let newState = state
-            .updateIn(
-              ['all', action.payload.name],
-              new Plan({ name: action.payload.name }),
-              plan => plan.set('files', filesMap));
+    let filesMap = {};
+    action.payload.planFiles.forEach((item) => {
+      filesMap[item.name] = new PlanFile({ name: item.name });
+    });
+    let newState = state.updateIn(['all', action.payload.planName],
+                                  new Plan({ name: action.payload.planName }),
+                                  plan => plan.set('files', Map(filesMap)));
     return newState;
   }
 

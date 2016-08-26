@@ -13,37 +13,25 @@ export default class FileList extends React.Component {
         files[file.name] = file;
       });
     }
+    console.log(planFiles);
     if(selectedFiles.length > 0) {
       selectedFiles.forEach(file => {
         let existing = files[file.name];
-        let info;
-        if(!existing) {
-          info = Map({
-            newFile: planFiles.isEmpty() ? false : true,
-            changed: false
-          });
-        }
-        else {
-          info = Map({
-            newFile: false,
-            changed: file.content !== existing.contents
-          });
-        }
+        let info = !existing
+          ? Map({ newFile: planFiles.isEmpty() ? false : true })
+          : Map({ newFile: false });
         files[file.name] = PlanFile({ name: file.name, info: info });
       });
     }
     return Map(files)
             .sort((fileA, fileB) => {
-              let [aName, aChangedOrNew] = [ fileA.name,
-                                             (fileA.getIn(['info', 'changed']) ||
-                                              fileA.getIn(['info', 'newFile'])) ];
-              let [bName, bChangedOrNew] = [ fileB.name,
-                                             (fileB.getIn(['info', 'changed']) ||
-                                              fileB.getIn(['info', 'newFile'])) ];
-              if(aChangedOrNew && !bChangedOrNew) {
+              let [aName, aNew] = [ fileA.name, fileA.getIn(['info', 'newFile']) ];
+              let [bName, bNew] = [ fileB.name, fileB.getIn(['info', 'newFile']) ];
+              console.log(aName, aNew, bName, bNew);
+              if(aNew && !bNew) {
                 return -1;
               }
-              else if(!aChangedOrNew && bChangedOrNew) {
+              else if(!aNew && bNew) {
                 return 1;
               }
               else {
@@ -59,10 +47,7 @@ export default class FileList extends React.Component {
     }
     let files = this.getMergedFiles(this.props.planFiles, this.props.selectedFiles).map(file => {
       let info = file.info.toJS() || {};
-      let classes = ClassNames({
-        'changed-plan-file': info.changed,
-        'new-plan-file': info.newFile
-      });
+      let classes = ClassNames({ 'new-plan-file': info.newFile });
       return (
         <tr key={file.name}>
           <td className={classes}>{file.name}</td>

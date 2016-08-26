@@ -24,6 +24,7 @@ class EditPlan extends React.Component {
 
   componentDidMount() {
     this.state.planName = this.getNameFromUrl();
+    this.props.fetchPlan(this.state.planName);
   }
 
   setUploadType(e) {
@@ -65,6 +66,10 @@ class EditPlan extends React.Component {
   }
 
   render() {
+    let plan = this.props.plans.filter(plan => plan.name === this.state.planName).first();
+    let planFiles = plan ? plan.files : undefined;
+
+    console.log(planFiles);
     return (
       <Modal dialogClasses="modal-lg">
         <Formsy.Form ref="EditPlanForm"
@@ -90,6 +95,7 @@ class EditPlan extends React.Component {
             <PlanEditFormTabs currentTab={this.props.location.query.tab || 'editPlan'}
                               selectedFiles={this.state.selectedFiles}
                               planName={this.state.planName}
+                              planFiles={planFiles}
                               setUploadType={this.setUploadType.bind(this)}
                               uploadType={this.state.uploadType}/>
           </div>
@@ -108,6 +114,7 @@ class EditPlan extends React.Component {
 }
 
 EditPlan.propTypes = {
+  fetchPlan: React.PropTypes.func,
   history: React.PropTypes.object,
   isTransitioningPlan: React.PropTypes.bool,
   location: React.PropTypes.object,
@@ -128,6 +135,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchPlan: (planName) => {
+      dispatch(PlansActions.fetchPlan(planName));
+    },
     updatePlan: (planName, files) => {
       dispatch(PlansActions.updatePlan(planName, files));
     },

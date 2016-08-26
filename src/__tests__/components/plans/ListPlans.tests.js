@@ -74,8 +74,8 @@ describe('FileList component', () => {
   it('adds classes and sorts files based on differences in selected files and planfiles', () => {
     let tableRows = getTableRows(
       Map({
-        'foo.yaml': new PlanFile({ name: 'foo.yaml', contents: 'foo' }),
-        'bar.yaml': new PlanFile({ name: 'bar.yaml', contents: 'bar' })
+        'foo.yaml': new PlanFile({ name: 'foo.yaml' }),
+        'bar.yaml': new PlanFile({ name: 'bar.yaml' })
       }),
       [
         { name: 'foo.yaml', content: 'foo' },
@@ -84,10 +84,10 @@ describe('FileList component', () => {
       ]
     );
     expect(tableRows[0].key).toBe('bar.yaml');
-    expect(tableRows[0].props.children.props.className).toBe('changed-plan-file');
-    expect(tableRows[1].key).toBe('foobar.yaml');
-    expect(tableRows[1].props.children.props.className).toBe('new-plan-file');
-    expect(tableRows[2].key).toBe('foo.yaml');
-    expect(tableRows[2].props.children.props.className).toBe('');
+    expect(tableRows[1].props.children.props.className).toBe('changed-plan-file');
+    expect(tableRows[2].key).toBe('foobar.yaml');
+    expect(tableRows[2].props.children.props.className).toBe('changed-plan-file');
+    expect(tableRows[1].key).toBe('foo.yaml');
+    expect(tableRows[0].props.children.props.className).toBe('');
   });
 });
