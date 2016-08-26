@@ -22,7 +22,6 @@ export default class PlanEditFormTabs extends React.Component {
   }
 
   render() {
-
     return (
       <div>
         <ul className="nav nav-tabs">
@@ -39,6 +38,7 @@ export default class PlanEditFormTabs extends React.Component {
                        uploadType={this.props.uploadType}
                        setUploadType={this.props.setUploadType}/>
           <PlanFilesTab active={this.setActiveTab('planFiles')}
+                        planFiles={this.props.planFiles}
                         selectedFiles={this.props.selectedFiles}/>
         </div>
       </div>
@@ -47,7 +47,7 @@ export default class PlanEditFormTabs extends React.Component {
 }
 PlanEditFormTabs.propTypes = {
   currentTab: React.PropTypes.string,
-  planFiles: ImmutablePropTypes.list,
+  planFiles: ImmutablePropTypes.map,
   planName: React.PropTypes.string,
   selectedFiles: React.PropTypes.array,
   setUploadType: React.PropTypes.func.isRequired,
