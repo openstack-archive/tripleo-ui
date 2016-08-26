@@ -3,7 +3,6 @@ import when from 'when';
 import * as utils from '../../js/services/utils';
 import MistralApiService from '../../js/services/MistralApiService';
 import PlansActions from '../../js/actions/PlansActions';
-import TripleOApiService from '../../js/services/TripleOApiService';
 import SwiftApiService from '../../js/services/SwiftApiService';
 
 
@@ -125,25 +124,13 @@ describe('PlansActions', () => {
   });
 
   describe('fetchPlan', () => {
-    let apiResponse = {
-      plan: {
-        name: 'overcloud',
-        files: {
-          'overcloud.yaml': {
-            contents: 'heat_template_version: 2015-04-30\n'
-          },
-          'capabilities_map.yaml': {
-            contents: 'root_template: overcloud.yaml\n',
-            meta: {
-              'file-type': 'capabilities-map'
-            }
-          }
-        }
-      }
-    };
+    let apiResponse = [
+      { name: 'overcloud.yaml' },
+      { name: 'capabilities_map.yaml' }
+    ];
 
     beforeEach(done => {
-      spyOn(TripleOApiService, 'getPlan').and.callFake(createResolvingPromise(apiResponse));
+      spyOn(SwiftApiService, 'getContainer').and.callFake(createResolvingPromise(apiResponse));
       spyOn(PlansActions, 'requestPlan');
       spyOn(PlansActions, 'receivePlan');
       PlansActions.fetchPlan('overcloud')(() => {}, () => {});
@@ -155,7 +142,10 @@ describe('PlansActions', () => {
     });
 
     it('dispatches receivePlan', () => {
-      expect(PlansActions.receivePlan).toHaveBeenCalledWith(apiResponse.plan);
+      expect(PlansActions.receivePlan).toHaveBeenCalledWith('overcloud', {
+        'overcloud.yaml': { name: 'overcloud.yaml' },
+        'capabilities_map.yaml': { name: 'capabilities_map.yaml' }
+      });
     });
 
   });
