@@ -6,7 +6,7 @@ import Notification from './Notification';
 import NotificationActions from '../../actions/NotificationActions';
 import { getNonViewedNotifications } from '../../selectors/notifications';
 
-export default class NotificationsToaster extends React.Component {
+class NotificationsToaster extends React.Component {
   constructor() {
     super();
     this.state = {

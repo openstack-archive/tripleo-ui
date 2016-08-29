@@ -15,7 +15,7 @@ import Modal from '../ui/Modal';
 import NodesActions from '../../actions/NodesActions';
 import NodesTable from '../nodes/NodesTable';
 
-export default class NodesAssignment extends React.Component {
+class NodesAssignment extends React.Component {
   constructor() {
     super();
     this.state = {
