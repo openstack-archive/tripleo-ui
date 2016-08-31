@@ -1,4 +1,5 @@
 import NodesActions from './NodesActions';
+import PlansActions from './PlansActions';
 import RegisterNodesActions from './RegisterNodesActions';
 import ValidationsActions from './ValidationsActions';
 
@@ -21,6 +22,11 @@ export default {
 
       case ('tripleo.validations.v1.run_validation'): {
         dispatch(ValidationsActions.runValidationMessage(payload));
+        break;
+      }
+
+      case ('tripleo.plan_management.v1.create_deployment_plan'): {
+        dispatch(PlansActions.createPlanFinished(payload));
         break;
       }
 

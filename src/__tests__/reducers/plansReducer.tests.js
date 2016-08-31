@@ -29,14 +29,9 @@ describe('plansReducer state', () => {
   });
 
   describe('CREATE_PLAN_PENDING', () => {
-    let state;
-
-    beforeEach(() => {
-      state = plansReducer(new InitialPlanState, PlansActions.createPlanPending());
-    });
-
-    it('sets isCreatingPlan to `true`', () => {
-      expect(state.isCreatingPlan).toBe(true);
+    it('sets isTransitioningPlan to `true`', () => {
+      let state = plansReducer(new InitialPlanState, PlansActions.createPlanPending());
+      expect(state.isTransitioningPlan).toBe(true);
     });
   });
 
@@ -45,13 +40,13 @@ describe('plansReducer state', () => {
 
     beforeEach(() => {
       state = plansReducer(
-        new InitialPlanState({ isCreatingPlan: true }),
+        new InitialPlanState({ isTransitioningPlan: true }),
         PlansActions.createPlanSuccess()
       );
     });
 
-    it('sets isCreatingPlan to `false`', () => {
-      expect(state.isCreatingPlan).toBe(false);
+    it('sets isTransitioningPlan to `false`', () => {
+      expect(state.isTransitioningPlan).toBe(false);
     });
   });
 
