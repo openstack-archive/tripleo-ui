@@ -57,7 +57,9 @@ export default class Loader extends React.Component {
         return this.renderDefaultLoader(classes);
       }
     }
-    return React.createElement(this.props.component, {}, this.props.children);
+    return React.createElement(this.props.component,
+                               this.props.componentProps,
+                               this.props.children);
   }
 }
 Loader.propTypes = {
@@ -67,6 +69,7 @@ Loader.propTypes = {
   ]),
   className: React.PropTypes.string,
   component: React.PropTypes.any, // Component to wrap children when loaded
+  componentProps: React.PropTypes.object,
   content: React.PropTypes.string,
   global: React.PropTypes.bool,
   height: React.PropTypes.number,
@@ -77,6 +80,7 @@ Loader.propTypes = {
 };
 Loader.defaultProps = {
   component: 'div',
+  componentProps: {},
   content: '',
   global: false,
   height: 10,
