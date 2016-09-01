@@ -1,8 +1,19 @@
+.fixed-container.validations {
+  // Validations column goes to the bottom of the page for medium and smaller screens
+  @media(max-width: @screen-md-max) {
+    position: relative;
+    top: 0;
+  }
+}
+.validation-list {
+  overflow-x: hidden;
+  margin-bottom: 0;
+}
+
 // Mostly reseting the media query specific styling for List View since it is applicable only when
 // List View is used on a element hat spans full viewport width and breaks styling when used in a
 // sidebar. In general Flexbox should not be used with media queries.
 // https://scotch.io/tutorials/a-visual-guide-to-css3-flexbox-properties
-
 .list-group-item.validation {
   @media(min-width: @screen-md-min) {
     align-items: flex-start;
