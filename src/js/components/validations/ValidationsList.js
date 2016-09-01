@@ -83,10 +83,11 @@ class ValidationsList extends React.Component {
 
   render () {
     return (
-      <div className="col-sm-12 col-lg-3 sidebar-pf sidebar-pf-right">
+      <div className="col-sm-12 col-lg-3 sidebar-pf sidebar-pf-right fixed-container validations">
         <div className="sidebar-header
                         sidebar-header-bleed-left
-                        sidebar-header-bleed-right">
+                        sidebar-header-bleed-right
+                        fixed-container-header">
           <div className="actions pull-right">
             <Loader loaded={!(this.props.validationsLoaded &&
                               this.props.isFetchingValidations)}
@@ -102,11 +103,10 @@ class ValidationsList extends React.Component {
         </div>
         <Loader loaded={this.props.validationsLoaded && this.props.executionsLoaded}
                 content="Loading Validations..."
+                componentProps={{ className: 'row fixed-container-body'}}
                 height={80}>
-          <div className="row">
-            <div className="list-group list-view-pf">
-              {this.renderValidations()}
-            </div>
+          <div className="list-group list-view-pf validation-list">
+            {this.renderValidations()}
           </div>
         </Loader>
         {this.rendervalidationDetail()}
