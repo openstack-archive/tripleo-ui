@@ -1,0 +1,51 @@
+// Component used to render a fixed container that spans to the viewport height just below the header
+.fixed-container {
+  z-index: 1000;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  top: @header-height;
+  display: flex;
+  flex-direction: column;
+
+  .fixed-container-header, .fixed-container-footer {
+    flex: 0;
+  }
+
+  .fixed-container-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y:auto;
+  }
+}
+
+// ModalPanel component
+.fixed-container.modal-panel-backdrop {
+  background: rgba(0, 0, 0, .5);
+}
+
+.fixed-container.modal-panel {
+  background: white;
+  left: 0;
+
+  @media(max-width: @screen-md-max) {
+    position: absolute;
+    top: 0;
+  }
+
+  .fixed-container-header {
+    .modal-panel-header {
+      background-color: #f8f8f8;
+      border-bottom: 1px solid #e5e5e5;
+    }
+  }
+  .fixed-container-footer {
+    .modal-panel-footer {
+      background-color: #f8f8f8;
+      border-top: 1px solid #e5e5e5;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+  }
+}
