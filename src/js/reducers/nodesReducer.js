@@ -24,6 +24,9 @@ export default function nodesReducer(state = initialState, action) {
             .set('all', fromJS(action.payload))
             .set('isFetching', false);
 
+  case NodesConstants.FETCH_NODE_MACS_SUCCESS:
+    return state.setIn(['all', action.payload.nodeUUID, 'macs'], fromJS(action.payload.macs));
+
   case NodesConstants.START_NODES_OPERATION:
     return state.update('nodesInProgress',
                         nodesInProgress => nodesInProgress.union(action.payload));

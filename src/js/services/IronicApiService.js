@@ -38,6 +38,10 @@ class IronicApiService {
     return this.defaultRequest('/nodes/' + nodeId);
   }
 
+  getNodePorts(nodeUUID) {
+    return this.defaultRequest(`/nodes/${nodeUUID}/ports`);
+  }
+
   patchNode(nodePatch) {
     return this.defaultRequest('/nodes/' + nodePatch.uuid, {
       method: 'PATCH',

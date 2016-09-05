@@ -105,6 +105,7 @@ describe('Asynchronous Nodes Actions', () => {
     spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
     spyOn(NodesActions, 'requestNodes');
     spyOn(NodesActions, 'receiveNodes');
+    spyOn(NodesActions, 'fetchNodesMACs');
     // Mock the service call.
     spyOn(IronicApiService, 'getNodes').and.callFake(
       createResolvingPromise({ nodes: [{ uuid: 0 }] })
@@ -125,6 +126,10 @@ describe('Asynchronous Nodes Actions', () => {
 
   it('dispatches receiveNodes', () => {
     expect(NodesActions.receiveNodes).toHaveBeenCalledWith({ 0:{ uuid: 0 }});
+  });
+
+  it('dispatches fetchNodesMACs', () => {
+    expect(NodesActions.fetchNodesMACs).toHaveBeenCalledWith({ 0:{ uuid: 0 }});
   });
 });
 

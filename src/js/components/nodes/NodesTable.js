@@ -69,8 +69,8 @@ export default class NodesTable extends React.Component {
                                         className="shrink"/>}/>
         <DataTableColumn
           key="uuid"
-          header={<DataTableHeaderCell key="uuid">UUID</DataTableHeaderCell>}
-          cell={<DataTableDataFieldCell data={filteredData} field="uuid"/>}/>
+          header={<DataTableHeaderCell key="macs">MAC Address(es)</DataTableHeaderCell>}
+          cell={<DataTableDataFieldCell data={filteredData} field="macs"/>}/>
         <DataTableColumn
           key="name"
           header={<DataTableHeaderCell key="name">Name</DataTableHeaderCell>}
