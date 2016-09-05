@@ -2,8 +2,9 @@ import { normalize, arrayOf } from 'normalizr';
 
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
-import WorkflowExecutionsConstants from '../constants/WorkflowExecutionsConstants';
 import NotificationActions from './NotificationActions';
+import ValidationsActions from './ValidationsActions';
+import WorkflowExecutionsConstants from '../constants/WorkflowExecutionsConstants';
 import { workflowExecutionSchema } from '../normalizrSchemas/workflowExecutions';
 
 export default {
@@ -15,6 +16,7 @@ export default {
         const executions = normalize(response.executions,
                                      arrayOf(workflowExecutionSchema)).entities.executions || {};
         dispatch(this.fetchWorkflowExecutionsSuccess(executions));
+        dispatch(ValidationsActions.fetchValidations());
       }).catch((error) => {
         let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {

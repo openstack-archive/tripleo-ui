@@ -2,6 +2,7 @@ import when from 'when';
 
 import MistralApiService from '../../js/services/MistralApiService';
 import WorkflowExecutionsActions from '../../js/actions/WorkflowExecutionsActions';
+import ValidationsActions from '../../js/actions/ValidationsActions';
 
 let createResolvingPromise = (data) => {
   return () => {
@@ -13,6 +14,7 @@ describe('fetchWorkflowExecutions action', () => {
   beforeEach(done => {
     spyOn(WorkflowExecutionsActions, 'fetchWorkflowExecutionsPending');
     spyOn(WorkflowExecutionsActions, 'fetchWorkflowExecutionsSuccess');
+    spyOn(ValidationsActions, 'fetchValidations');
 
     const response = {
       executions: [{
@@ -36,6 +38,7 @@ describe('fetchWorkflowExecutions action', () => {
     expect(WorkflowExecutionsActions.fetchWorkflowExecutionsPending).toHaveBeenCalled();
     expect(MistralApiService.getWorkflowExecutions).toHaveBeenCalled();
     expect(WorkflowExecutionsActions.fetchWorkflowExecutionsSuccess).toHaveBeenCalled();
+    expect(ValidationsActions.fetchValidations).toHaveBeenCalled();
   });
 });
 

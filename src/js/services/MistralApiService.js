@@ -27,7 +27,7 @@ class MistralApiService {
    * @return {array} of Executions.
    */
   getWorkflowExecutions() {
-    return this.defaultRequest('/executions');
+    return this.defaultRequest('/executions?include_output=true');
   }
 
   /**
