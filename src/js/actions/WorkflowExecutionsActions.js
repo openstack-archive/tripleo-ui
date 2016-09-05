@@ -2,8 +2,8 @@ import { normalize, arrayOf } from 'normalizr';
 
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
-import WorkflowExecutionsConstants from '../constants/WorkflowExecutionsConstants';
 import NotificationActions from './NotificationActions';
+import WorkflowExecutionsConstants from '../constants/WorkflowExecutionsConstants';
 import { workflowExecutionSchema } from '../normalizrSchemas/workflowExecutions';
 
 export default {
