@@ -1,5 +1,9 @@
 window.tripleOUiConfig = {
-  // Service URLs (defaults to UI host) 
+  // Service URLs (defaults to UI host)
+  // (When manually editing, make sure to also change the tenant ID for
+  // the relevant URLs. This can be found by e.g. running 'swift auth'
+  // on the CLI.)
+  //
   // "keystone": "http://192.0.2.1:5000/v2.0",
   // "heat": "http://192.0.2.1:8004/v1/cd2b924b90c24aefa0e79b384579482c",
   // "ironic": "http://192.0.2.1:6385",
