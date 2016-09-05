@@ -1,6 +1,15 @@
 window.tripleOUiConfig = {
-  // Service URLs (defaults to UI host) 
+  // Service URLs (defaults to UI host)
+  //
+  // A valid Keystone service URL is required. The other endpoints
+  // will then be obtained automatically from the Keystone catalog.
+  //
   // "keystone": "http://192.0.2.1:5000/v2.0",
+  //
+  // If you choose to overwrite other services URLs, make sure to also
+  // change the tenant ID suffix where relevant. This can be found by
+  // e.g. running 'openstack catalog show swift' on the CLI.
+  //
   // "heat": "http://192.0.2.1:8004/v1/cd2b924b90c24aefa0e79b384579482c",
   // "ironic": "http://192.0.2.1:6385",
   // "mistral": "http://192.0.2.1:8989/v2",
