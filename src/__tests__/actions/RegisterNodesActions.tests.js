@@ -8,6 +8,7 @@ import NodesActions from '../../js/actions/NodesActions';
 import NotificationActions from '../../js/actions/NotificationActions';
 import * as utils from '../../js/services/utils';
 import { IronicNode } from '../../js/immutableRecords/nodes';
+import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
 
 let createResolvingPromise = (data) => {
   return () => {
@@ -82,7 +83,13 @@ describe('nodesRegistrationFinished', () => {
     spyOn(RegisterNodesActions, 'nodesRegistrationSuccess');
     spyOn(browserHistory, 'push');
 
-    RegisterNodesActions.nodesRegistrationFinished(messagePayload)(() => {}, () => {});
+    RegisterNodesActions.nodesRegistrationFinished(messagePayload)(() => {}, () => {
+      return {
+        currentPlan: new CurrentPlanState({
+          currentPlanName: 'testplan'
+        })
+      };
+    });
 
     expect(NodesActions.addNodes).toHaveBeenCalledWith(normalizedRegisteredNodes);
     expect(NodesActions.fetchNodes).toHaveBeenCalledWith();
@@ -118,7 +125,13 @@ describe('nodesRegistrationFinished', () => {
     spyOn(RegisterNodesActions, 'nodesRegistrationFailed');
     spyOn(browserHistory, 'push');
 
-    RegisterNodesActions.nodesRegistrationFinished(messagePayload)(() => {}, () => {});
+    RegisterNodesActions.nodesRegistrationFinished(messagePayload)(() => {}, () => {
+      return {
+        currentPlan: new CurrentPlanState({
+          currentPlanName: 'testplan'
+        })
+      };
+    });
 
     expect(browserHistory.push).toHaveBeenCalledWith('/nodes/registered/register');
     expect(NodesActions.addNodes).toHaveBeenCalledWith(normalizedRegisteredNodes);

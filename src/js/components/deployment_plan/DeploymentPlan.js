@@ -23,30 +23,10 @@ import StacksActions from '../../actions/StacksActions';
 import { RolesStep } from './RolesStep';
 import RolesActions from '../../actions/RolesActions';
 import ValidationsActions from '../../actions/ValidationsActions';
-import { getValidationStageUuidByName } from '../../selectors/validations';
 
 class DeploymentPlan extends React.Component {
   componentDidMount() {
     this.props.fetchStacks();
-  }
-
-  runNetworkValidations(e) {
-    e.preventDefault();
-    const validationStageUuid = getValidationStageUuidByName(
-      this.props.validationStages, 'network-validation');
-    this.props.runValidationStage(validationStageUuid);
-  }
-
-  runHardwareValidations(e) {
-    e.preventDefault();
-    this.props.runValidationStage(
-      getValidationStageUuidByName(this.props.validationStages, 'pre-deployment'));
-  }
-
-  runPostDeploymentValidations(e) {
-    e.preventDefault();
-    this.props.runValidationStage(
-      getValidationStageUuidByName(this.props.validationStages, 'post-deployment'));
   }
 
   render() {
@@ -83,13 +63,6 @@ class DeploymentPlan extends React.Component {
                   planName={this.props.currentPlan.name}
                   isFetching={this.props.isFetchingEnvironmentConfiguration}
                   loaded={this.props.environmentConfigurationLoaded}/>
-                <p key="networkValidationHint">
-                  At this point you
-                  should <a className="link"
-                           onClick={this.runNetworkValidations.bind(this)}>
-                           run Network Validations
-                         </a>.
-                </p>
               </DeploymentPlanStep>
               <DeploymentPlanStep title="Configure Roles and Assign Nodes"
                                   disabled={this.props.currentStackDeploymentProgress}>
@@ -101,22 +74,12 @@ class DeploymentPlan extends React.Component {
                            roles={this.props.roles}
                            rolesLoaded={this.props.rolesLoaded}
                            unassignedAvailableNodes={this.props.unassignedAvailableNodes}/>
-                <p>
-                  At this point you should run the <a className="link"
-                  onClick={this.runHardwareValidations.bind(this)}>Hardware
-                  Validations</a>.
-                </p>
               </DeploymentPlanStep>
               <DeploymentPlanStep title="Deploy">
                 <DeployStep currentPlan={this.props.currentPlan}
                             currentStack={this.props.currentStack}
                             deployPlan={this.props.deployPlan}
                             fetchStacks={this.props.fetchStacks}/>
-                <p>
-                  At this point you should run <a className="link"
-                   onClick={this.runPostDeploymentValidations.bind(this)}>
-                  the Post Deployment Validations</a>.
-                </p>
               </DeploymentPlanStep>
             </ol>
           </div>
