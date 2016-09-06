@@ -1,5 +1,6 @@
 import NotificationActions from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
+import ValidationsActions from '../actions/ValidationsActions';
 
 export default {
   detectPlan(plans) {
@@ -53,6 +54,7 @@ export default {
       }));
       storePlan(planName);
       dispatch(this.planChosen(planName));
+      dispatch(ValidationsActions.runValidationGroups(['prep', 'pre-deployment'], planName));
     };
   },
 

@@ -8,6 +8,7 @@ import MistralApiService from '../services/MistralApiService';
 import NotificationActions from './NotificationActions';
 import NodesActions from './NodesActions';
 import { nodeSchema } from '../normalizrSchemas/nodes';
+import ValidationsActions from './ValidationsActions';
 
 export default {
   addNode(node) {
@@ -84,6 +85,10 @@ export default {
       dispatch(NodesActions.addNodes(registeredNodes));
       // TODO(jtomasek): This should not be needed when workflow returns up to date nodes
       dispatch(NodesActions.fetchNodes());
+
+      // run pre-introspection validations
+      dispatch(ValidationsActions.runValidationGroups(['pre-introspection'],
+                                                      getState().currentPlan.currentPlanName));
 
       switch(messagePayload.status) {
       case 'SUCCESS': {
