@@ -4,6 +4,7 @@ import * as utils from '../../js/services/utils';
 import ParametersActions from '../../js/actions/ParametersActions';
 import ParametersConstants from '../../js/constants/ParametersConstants';
 import MistralApiService from '../../js/services/MistralApiService';
+import MistralConstants from '../../js/constants/MistralConstants';
 
 
 // Use this to mock asynchronous functions which return a promise.
@@ -67,7 +68,7 @@ describe('ParametersActions', () => {
     });
 
     it('calls the Mistral API', () => {
-      expect(MistralApiService.runAction).toHaveBeenCalledWith('tripleo.parameters.get',
+      expect(MistralApiService.runAction).toHaveBeenCalledWith(MistralConstants.PARAMETERS_GET,
                                                                { container: 'overcloud' });
     });
 
@@ -107,7 +108,7 @@ describe('ParametersActions', () => {
 
     it('calls the Mistral API', () => {
       expect(MistralApiService.runAction).toHaveBeenCalledWith(
-        'tripleo.parameters.update',
+        MistralConstants.PARAMETERS_UPDATE,
         {
           container: 'overcloud',
           parameters: { foo: 'bar' }

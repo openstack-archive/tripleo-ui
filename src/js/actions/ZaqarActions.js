@@ -2,30 +2,31 @@ import NodesActions from './NodesActions';
 import PlansActions from './PlansActions';
 import RegisterNodesActions from './RegisterNodesActions';
 import ValidationsActions from './ValidationsActions';
+import MistralConstants from '../constants/MistralConstants';
 
 export default {
   messageReceived(message) {
     return (dispatch, getState) => {
       const { type, payload } = message.body;
       switch (type) {
-      case ('tripleo.baremetal.v1.register_or_update'):
+      case (MistralConstants.BAREMETAL_REGISTER_OR_UPDATE):
         dispatch(RegisterNodesActions.nodesRegistrationFinished(payload));
         break;
 
-      case ('tripleo.baremetal.v1.introspect'):
+      case (MistralConstants.BAREMETAL_INTROSPECT):
         dispatch(NodesActions.nodesIntrospectionFinished(payload));
         break;
 
-      case ('tripleo.baremetal.v1.provide'):
+      case (MistralConstants.BAREMETAL_PROVIDE):
         dispatch(NodesActions.provideNodesFinished(payload));
         break;
 
-      case ('tripleo.validations.v1.run_validation'): {
+      case (MistralConstants.VALIDATIONS_RUN): {
         dispatch(ValidationsActions.runValidationMessage(payload));
         break;
       }
 
-      case ('tripleo.plan_management.v1.create_deployment_plan'): {
+      case (MistralConstants.PLAN_CREATE): {
         dispatch(PlansActions.createPlanFinished(payload));
         break;
       }

@@ -6,6 +6,7 @@ import NodesActions from '../../js/actions/NodesActions';
 import NotificationActions from '../../js/actions/NotificationActions';
 import NodesConstants from '../../js/constants/NodesConstants';
 import * as utils from '../../js/services/utils';
+import MistralConstants from '../../js/constants/MistralConstants';
 
 const mockGetNodesResponse = [
   { uuid: 1 },
@@ -148,8 +149,8 @@ describe('Asynchronous Introspect Nodes Action', () => {
 
   it('dispatches startOperation', () => {
     const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
-    expect(MistralApiService.runWorkflow).toHaveBeenCalledWith('tripleo.baremetal.v1.introspect',
-                                                               { node_uuids: nodeIds });
+    expect(MistralApiService.runWorkflow).toHaveBeenCalledWith(
+      MistralConstants.BAREMETAL_INTROSPECT, { node_uuids: nodeIds });
     expect(NodesActions.startOperation).toHaveBeenCalledWith(nodeIds);
   });
 });
@@ -223,7 +224,7 @@ describe('startProvideNodes Action', () => {
   });
 
   it('dispatches startOperation', () => {
-    expect(MistralApiService.runWorkflow).toHaveBeenCalledWith('tripleo.baremetal.v1.provide',
+    expect(MistralApiService.runWorkflow).toHaveBeenCalledWith(MistralConstants.BAREMETAL_PROVIDE,
                                                                { node_uuids: nodeIds });
     expect(NodesActions.startOperation).toHaveBeenCalledWith(nodeIds);
   });

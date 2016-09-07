@@ -14,6 +14,7 @@ import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
 import TripleOApiService from '../services/TripleOApiService';
 import TripleOApiErrorHandler from '../services/TripleOApiErrorHandler';
+import MistralConstants from '../constants/MistralConstants';
 
 export default {
   requestPlans() {
@@ -32,7 +33,7 @@ export default {
   fetchPlans() {
     return dispatch => {
       dispatch(this.requestPlans());
-      MistralApiService.runAction('tripleo.plan.list').then((response) => {
+      MistralApiService.runAction(MistralConstants.PLAN_LIST).then((response) => {
         let plans = JSON.parse(response.output).result || [];
         dispatch(this.receivePlans(plans));
         dispatch(CurrentPlanActions.detectPlan(plans));
@@ -204,7 +205,7 @@ export default {
 
           // Once all files are uploaded, start plan creation workflow.
           MistralApiService.runWorkflow(
-            'tripleo.plan_management.v1.create_deployment_plan',
+            MistralConstants.PLAN_CREATE,
             { container: planName }
           ).then((response) => {
             if(response.state === 'ERROR') {
@@ -271,7 +272,7 @@ export default {
       dispatch(this.createPlanPending());
       SwiftApiService.uploadTarball(planName, file).then((response) => {
         MistralApiService.runWorkflow(
-          'tripleo.plan_management.v1.create_deployment_plan',
+          MistralConstants.PLAN_CREATE,
           { container: planName }
         ).then((response) => {
           if(response.state === 'ERROR') {
@@ -348,7 +349,8 @@ export default {
     return dispatch => {
       dispatch(this.deletePlanPending(planName));
       browserHistory.push('/plans/list');
-      MistralApiService.runAction('tripleo.plan.delete', { container: planName }).then(response => {
+      MistralApiService.runAction(MistralConstants.PLAN_DELETE, { container: planName }).
+      then(response => {
         dispatch(this.deletePlanSuccess(planName));
         dispatch(NotificationActions.notify({
           title: 'Plan Deleted',

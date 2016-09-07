@@ -7,6 +7,7 @@ import ValidationsConstants from '../../js/constants/ValidationsConstants';
 import WorkflowExecutionsActions from '../../js/actions/WorkflowExecutionsActions';
 import { WorkflowExecution } from '../../js/immutableRecords/workflowExecutions';
 import * as utils from '../../js/services/utils';
+import MistralConstants from '../../js/constants/MistralConstants';
 
 let createResolvingPromise = (data) => {
   return () => {
@@ -74,7 +75,7 @@ describe('FetchValidations action', () => {
   it('dispatches appropriate actions and normalizes the response', () => {
     expect(ValidationsActions.fetchValidationsPending).toHaveBeenCalled();
     expect(MistralApiService.runAction)
-      .toHaveBeenCalledWith('tripleo.validations.list_validations');
+      .toHaveBeenCalledWith(MistralConstants.VALIDATIONS_LIST);
     expect(ValidationsActions.fetchValidationsSuccess).toHaveBeenCalled();
   });
 });
@@ -90,7 +91,7 @@ describe('RunValidation action', () => {
       created_at: '2016-07-19 13:22:29.588140',
       description: '',
       state: 'RUNNING',
-      workflow_name: 'tripleo.validations.v1.run_validation',
+      workflow_name: MistralConstants.VALIDATIONS_RUN,
       task_execution_id: null,
       updated_at: '2016-07-19 13:22:29.592989',
       workflow_id: 'f8b280bb-5ba2-486b-9384-ddd79300d987',
@@ -111,7 +112,7 @@ describe('RunValidation action', () => {
 
   it('dispatches appropriate actions', () => {
     expect(MistralApiService.runWorkflow)
-      .toHaveBeenCalledWith('tripleo.validations.v1.run_validation',
+      .toHaveBeenCalledWith(MistralConstants.VALIDATIONS_RUN,
                             { validation_name: '512e',
                               plan: 'overcloud' });
   });
@@ -157,7 +158,7 @@ xdescribe('runValidationMessage action', () => {
       state: 'RUNNING',
       state_info: undefined,
       updated_at: undefined,
-      workflow_name: 'tripleo.validations.v1.run_validation'
+      workflow_name: MistralConstants.VALIDATIONS_RUN
     });
 
     ValidationsActions.runValidationMessage(messagePayload)(() => {}, () => {});

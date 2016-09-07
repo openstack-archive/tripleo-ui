@@ -6,13 +6,14 @@ import MistralApiService from '../services/MistralApiService';
 import NotificationActions from '../actions/NotificationActions';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import { topicSchema } from '../normalizrSchemas/environmentConfiguration';
+import MistralConstants from '../constants/MistralConstants';
 
 export default {
 
   fetchEnvironmentConfiguration(planName, redirectPath) {
     return dispatch => {
       dispatch(this.fetchEnvironmentConfigurationPending());
-      MistralApiService.runAction('tripleo.heat_capabilities.get', { container: planName })
+      MistralApiService.runAction(MistralConstants.CAPABILITIES_GET, { container: planName })
       .then(response => {
         const entities = normalize(JSON.parse(response.output).result,
                          arrayOf(topicSchema)).entities || {};
@@ -52,7 +53,7 @@ export default {
   updateEnvironmentConfiguration(planName, data, formFields, redirectPath) {
     return dispatch => {
       dispatch(this.updateEnvironmentConfigurationPending());
-      MistralApiService.runAction('tripleo.heat_capabilities.update',
+      MistralApiService.runAction(MistralConstants.CAPABILITIES_UPDATE,
                                   { environments: data, container: planName })
       .then(response => {
         const enabledEnvs = JSON.parse(response.output).result.environments.map(env => env.path);
