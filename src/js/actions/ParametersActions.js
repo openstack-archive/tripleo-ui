@@ -4,6 +4,7 @@ import NotificationActions from '../actions/NotificationActions';
 import ParametersConstants from '../constants/ParametersConstants';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
+import MistralConstants from '../constants/MistralConstants';
 
 export default {
   fetchParametersPending() {
@@ -28,7 +29,7 @@ export default {
   fetchParameters(planName, parentPath) {
     return dispatch => {
       dispatch(this.fetchParametersPending());
-      MistralApiService.runAction('tripleo.parameters.get', { container: planName })
+      MistralApiService.runAction(MistralConstants.PARAMETERS_GET, { container: planName })
       .then(response => {
         const resourceTree = JSON.parse(response.output).result.heat_resource_tree;
         const mistralParameters = JSON.parse(response.output).result.mistral_environment_parameters;
@@ -71,7 +72,7 @@ export default {
   updateParameters(planName, data, inputFieldNames, url) {
     return dispatch => {
       dispatch(this.updateParametersPending());
-      MistralApiService.runAction('tripleo.parameters.update',
+      MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE,
                                   { container: planName, parameters: data })
       .then(response => {
         dispatch(this.updateParametersSuccess());

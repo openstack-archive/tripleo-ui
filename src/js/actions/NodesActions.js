@@ -10,6 +10,7 @@ import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NodesConstants from '../constants/NodesConstants';
 import NotificationActions from './NotificationActions';
 import { nodeSchema } from '../normalizrSchemas/nodes';
+import MistralConstants from '../constants/MistralConstants';
 
 export default {
   startOperation(nodeIds) {
@@ -101,7 +102,7 @@ export default {
   startNodesIntrospection(nodeIds) {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
-      MistralApiService.runWorkflow('tripleo.baremetal.v1.introspect',
+      MistralApiService.runWorkflow(MistralConstants.BAREMETAL_INTROSPECT,
                                     { node_uuids: nodeIds })
       .then((response) => {
         if(response.state === 'ERROR') {
@@ -154,7 +155,7 @@ export default {
   startProvideNodes(nodeIds) {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
-      MistralApiService.runWorkflow('tripleo.baremetal.v1.provide',
+      MistralApiService.runWorkflow(MistralConstants.BAREMETAL_PROVIDE,
                                     { node_uuids: nodeIds })
       .then((response) => {
         if(response.state === 'ERROR') {
