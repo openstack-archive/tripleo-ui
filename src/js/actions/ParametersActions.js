@@ -54,7 +54,7 @@ export default {
 
   updateParametersSuccess() {
     return {
-      type: ParametersConstants.UPDATE_PARAMETERS_PENDING
+      type: ParametersConstants.UPDATE_PARAMETERS_SUCCESS
     };
   },
 
@@ -80,7 +80,7 @@ export default {
           message: 'The Deployment parameters have been successfully updated',
           type: 'success'
         }));
-        browserHistory.push(url);
+        if (url) { browserHistory.push(url); }
       }).catch(error => {
         let errorHandler = new MistralApiErrorHandler(error, inputFieldNames);
         dispatch(this.updateParametersFailed(errorHandler.errors, errorHandler.formFieldErrors));

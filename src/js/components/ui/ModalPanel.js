@@ -16,7 +16,7 @@ import { spring, Motion } from 'react-motion';
  *         <ModalPanelBackdrop />
  *         <ModalPanel>
  *           <ModalPanelHeader>
- *             <h2>Nodes</h2>
+ *             <h2 className="modal-title">Nodes</h2>
  *           </ModalPanelHeader>
  *           <ModalPanelBody>
  *             <div className="col-sm-12">

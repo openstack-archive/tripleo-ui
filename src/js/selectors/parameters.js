@@ -2,8 +2,9 @@ import { createSelector } from 'reselect';
 import { Map } from 'immutable';
 
 import { Parameter } from '../immutableRecords/parameters';
+import { getRole } from './roles';
 
-const parameterTree = (state) => state.parameters.get('resourceTree');
+const parameterTree = (state) => state.parameters.get('resourceTree', Map());
 
 export const getRootParameters = createSelector(
   [parameterTree], (parameterTree) => {
@@ -30,15 +31,33 @@ export const getRolesResourceTree = createSelector(
   }
 );
 
-export const getResourceTree = createSelector(
-  [parameterTree, getRootParameters, getRolesResourceTree],
-  (parameterTree, rootParameters, rolesResourceTree) => {
-    return Map({
-      rootParameters: rootParameters,
-      roles: rolesResourceTree
-    });
+// returns parameter tree for a specific role
+export const getRoleResourceTree = createSelector(
+  [getRolesResourceTree, getRole], (rolesResourceTree, role) => {
+    if (role) {
+      return rolesResourceTree.get(role.name, Map());
+    }
+    return Map();
   }
 );
+
+// returns a flat Map of all parameters
+export const getResourceTreeParameters = createSelector(
+  [parameterTree, getRootParameters], (parameterTree, rootParameters) => {
+    const nestedResources = parameterTree.get('NestedParameters', Map());
+    return _extractParameters(rootParameters, nestedResources);
+  }
+);
+
+// Recursively extracts Parameters from Nested Resources
+const _extractParameters = (allParameters, nestedResources) => {
+  return nestedResources.reduce((parameters, resource) => {
+    return _extractParameters(
+             parameters.merge(_convertToParameters(resource.get('Parameters', Map()))),
+             resource.get('NestedParameters', Map())
+           );
+  }, allParameters);
+};
 
 /**
  * Brings up network configuration parameters for a specific role
