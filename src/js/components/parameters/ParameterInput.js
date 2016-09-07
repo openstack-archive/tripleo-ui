@@ -1,5 +1,5 @@
 import React from 'react';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import HorizontalInput from '../ui/forms/HorizontalInput';
@@ -25,7 +25,16 @@ export default class ParameterInput extends React.Component {
         <HorizontalTextarea name={name}
                             title={label}
                             description={description}
-                            value={JSON.stringify(defaultValue.toJS())}
+                            value={defaultValue ? JSON.stringify(defaultValue.toJS()) : ''}
+                            labelColumnClasses="col-sm-4"
+                            inputColumnClasses="col-sm-8"/>
+      );
+    } else if (type.toLowerCase() === 'commadelimitedlist' && List.isList(defaultValue)) {
+      return (
+        <HorizontalTextarea name={name}
+                            title={label}
+                            description={description}
+                            value={defaultValue.toJS()}
                             labelColumnClasses="col-sm-4"
                             inputColumnClasses="col-sm-8"/>
       );
@@ -34,7 +43,7 @@ export default class ParameterInput extends React.Component {
         <HorizontalTextarea name={name}
                             title={label}
                             description={description}
-                            value={defaultValue.toJS()}
+                            value={defaultValue}
                             labelColumnClasses="col-sm-4"
                             inputColumnClasses="col-sm-8"/>
       );

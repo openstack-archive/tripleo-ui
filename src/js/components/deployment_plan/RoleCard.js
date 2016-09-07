@@ -9,6 +9,11 @@ export default class RoleCard extends React.Component {
       <div className={`card-pf card-pf-accented role-card ${this.props.identifier}`}>
         <h2 className="card-pf-title">
           {this.props.title}
+          <Link to={`deployment-plan/roles/${this.props.identifier}`}
+                className="link pull-right"
+                title="Edit Role parameters">
+            <span className="pficon pficon-edit"/>
+          </Link>
         </h2>
         <div className="card-pf-body">
           <p className="card-pf-utilization-details">
