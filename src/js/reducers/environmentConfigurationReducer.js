@@ -47,7 +47,7 @@ export default function environmentConfigurationReducer(state = initialState, ac
         .set('form', fromJS(action.payload));
 
   case PlansConstants.PLAN_CHOSEN:
-    return state.set('loaded', false);
+    return initialState;
 
   default:
     return state;
