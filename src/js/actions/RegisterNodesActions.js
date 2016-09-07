@@ -8,6 +8,7 @@ import MistralApiService from '../services/MistralApiService';
 import NotificationActions from './NotificationActions';
 import NodesActions from './NodesActions';
 import { nodeSchema } from '../normalizrSchemas/nodes';
+import MistralConstants from '../constants/MistralConstants';
 
 export default {
   addNode(node) {
@@ -41,7 +42,7 @@ export default {
   startNodesRegistration(nodes, redirectPath) {
     return (dispatch, getState) => {
       dispatch(this.startNodesRegistrationPending(nodes));
-      MistralApiService.runWorkflow('tripleo.baremetal.v1.register_or_update',
+      MistralApiService.runWorkflow(MistralConstants.BAREMETAL_REGISTER_OR_UPDATE,
                                     { nodes_json: nodes.toList().toJS() })
       .then((response) => {
         if(response.state === 'ERROR') {
