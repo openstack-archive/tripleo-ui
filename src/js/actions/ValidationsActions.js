@@ -78,5 +78,24 @@ export default {
                           .set('output', fromJS({...messagePayload}).delete('execution'));
       dispatch(WorkflowExecutionsActions.addWorkflowExecutionFromMessage(execution));
     };
+  },
+
+  runValidationGroups(groups, currentPlanName) {
+    return (dispatch, getState) => {
+      MistralApiService.runWorkflow('tripleo.validations.v1.run_groups',
+                                    { group_names: groups,
+                                      plan: currentPlanName })
+      .then((response) => {
+        if(response.state === 'ERROR') {
+          dispatch(NotificationActions.notify({ title: 'Error running Validation',
+                                                message: response.state_info }));
+        }
+      }).catch((error) => {
+        let errorHandler = new MistralApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+      });
+    };
   }
 };
