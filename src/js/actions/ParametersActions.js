@@ -28,7 +28,7 @@ export default {
   fetchParameters(planName, parentPath) {
     return dispatch => {
       dispatch(this.fetchParametersPending());
-      MistralApiService.runAction('tripleo.get_parameters', { container: planName })
+      MistralApiService.runAction('tripleo.parameters.get', { container: planName })
       .then(response => {
         const resourceTree = JSON.parse(response.output).result.heat_resource_tree;
         const mistralParameters = JSON.parse(response.output).result.mistral_environment_parameters;
@@ -71,7 +71,7 @@ export default {
   updateParameters(planName, data, inputFieldNames, url) {
     return dispatch => {
       dispatch(this.updateParametersPending());
-      MistralApiService.runAction('tripleo.update_parameters',
+      MistralApiService.runAction('tripleo.parameters.update',
                                   { container: planName, parameters: data })
       .then(response => {
         dispatch(this.updateParametersSuccess());

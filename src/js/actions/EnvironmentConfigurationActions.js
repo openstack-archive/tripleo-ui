@@ -12,7 +12,7 @@ export default {
   fetchEnvironmentConfiguration(planName, redirectPath) {
     return dispatch => {
       dispatch(this.fetchEnvironmentConfigurationPending());
-      MistralApiService.runAction('tripleo.get_capabilities', { container: planName })
+      MistralApiService.runAction('tripleo.heat_capabilities.get', { container: planName })
       .then(response => {
         const entities = normalize(JSON.parse(response.output).result,
                          arrayOf(topicSchema)).entities || {};
@@ -52,7 +52,7 @@ export default {
   updateEnvironmentConfiguration(planName, data, formFields, redirectPath) {
     return dispatch => {
       dispatch(this.updateEnvironmentConfigurationPending());
-      MistralApiService.runAction('tripleo.update_capabilities',
+      MistralApiService.runAction('tripleo.heat_capabilities.update',
                                   { environments: data, container: planName })
       .then(response => {
         const enabledEnvs = JSON.parse(response.output).result.environments.map(env => env.path);

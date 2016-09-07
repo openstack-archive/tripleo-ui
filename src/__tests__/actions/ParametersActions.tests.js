@@ -67,7 +67,7 @@ describe('ParametersActions', () => {
     });
 
     it('calls the Mistral API', () => {
-      expect(MistralApiService.runAction).toHaveBeenCalledWith('tripleo.get_parameters',
+      expect(MistralApiService.runAction).toHaveBeenCalledWith('tripleo.parameters.get',
                                                                { container: 'overcloud' });
     });
 
@@ -107,7 +107,7 @@ describe('ParametersActions', () => {
 
     it('calls the Mistral API', () => {
       expect(MistralApiService.runAction).toHaveBeenCalledWith(
-        'tripleo.update_parameters',
+        'tripleo.parameters.update',
         {
           container: 'overcloud',
           parameters: { foo: 'bar' }

@@ -32,7 +32,7 @@ export default {
   fetchPlans() {
     return dispatch => {
       dispatch(this.requestPlans());
-      MistralApiService.runAction('tripleo.list_plans').then((response) => {
+      MistralApiService.runAction('tripleo.plan.list').then((response) => {
         let plans = JSON.parse(response.output).result || [];
         dispatch(this.receivePlans(plans));
         dispatch(CurrentPlanActions.detectPlan(plans));
@@ -348,7 +348,7 @@ export default {
     return dispatch => {
       dispatch(this.deletePlanPending(planName));
       browserHistory.push('/plans/list');
-      MistralApiService.runAction('tripleo.delete_plan', { container: planName }).then(response => {
+      MistralApiService.runAction('tripleo.plan.delete', { container: planName }).then(response => {
         dispatch(this.deletePlanSuccess(planName));
         dispatch(NotificationActions.notify({
           title: 'Plan Deleted',
