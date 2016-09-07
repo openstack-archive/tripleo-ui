@@ -30,6 +30,9 @@ import Plans from './components/plan/Plans.js';
 import DeployedNodesTabPane from './components/nodes/DeployedNodesTabPane';
 import RegisterNodesDialog from './components/nodes/RegisterNodesDialog';
 import RegisteredNodesTabPane from './components/nodes/RegisteredNodesTabPane';
+import RoleDetail from './components/roles/RoleDetail';
+import RoleParameters from './components/roles/RoleParameters';
+import RoleServices from './components/roles/RoleServices';
 import TempStorage from './services/TempStorage.js';
 import store from './store';
 
@@ -88,6 +91,13 @@ TempStorage.initialized.then(() => {
               <Route path=":roleIdentifier/assign-nodes"
                      component={NodesAssignment}
                      onEnter={checkRunningDeployment}/>
+              <Redirect from="roles/:roleIdentifier" to="roles/:roleIdentifier/parameters"/>
+              <Route path="roles/:roleIdentifier"
+                     component={RoleDetail}
+                     onEnter={checkRunningDeployment}>
+                <Route path="parameters" component={RoleParameters}/>
+                <Route path="services" component={RoleServices}/>
+              </Route>
             </Route>
 
             <Redirect from="nodes" to="nodes/registered"/>
