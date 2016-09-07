@@ -32,4 +32,5 @@ export default class DeploymentConfiguration extends React.Component {
 DeploymentConfiguration.propTypes = {
   children: React.PropTypes.node,
   currentPlanName: React.PropTypes.string,
-  parentPath: React.PropTypes.string};
+  parentPath: React.PropTypes.string
+};
