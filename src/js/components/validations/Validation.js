@@ -1,7 +1,7 @@
-import { includes } from 'lodash';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import ClassNames from 'classnames';
 import React from 'react';
+
+import { ValidationStatusIcon } from './ValidationStatusIcon';
 
 export default class Validation extends React.Component {
   constructor() {
@@ -56,7 +56,9 @@ export default class Validation extends React.Component {
           <div className="list-view-pf-body">
             <div className="list-view-pf-description">
               <div className="list-group-item-heading">
-                <span title={this.props.name}>{this.props.name}</span>
+                <a className="link"
+                   onClick={() => this.props.showValidationDetail()}
+                   title={this.props.name}>{this.props.name}</a>
               </div>
               <div className="list-group-item-text">
                 <small title={this.props.description}>{this.props.description}</small>
@@ -79,54 +81,7 @@ Validation.propTypes = {
   name: React.PropTypes.string.isRequired,
   results: ImmutablePropTypes.map.isRequired,
   runValidation: React.PropTypes.func.isRequired,
+  showValidationDetail: React.PropTypes.func.isRequired,
   status: React.PropTypes.string,
   stopValidation: React.PropTypes.func.isRequired
-};
-
-
-const ValidationStatusIcon = ({ status, triggerValidationAction }) => {
-  const statusIconClass = ClassNames({
-    'list-view-pf-icon-md' :              true,
-    'running fa fa-stop-circle':          status === 'running',
-    'pficon pficon-error-circle-o front': status === 'failed',
-    'pficon pficon-ok front':             status === 'success',
-    'fa fa-play-circle':                  includes(['new', 'paused'], status),
-    'pficon pficon-help':                 status === 'error'
-  });
-
-  const runValidationIconClass = 'list-view-pf-icon-md fa fa-play-circle back';
-
-  switch (true) {
-  case (includes(['new', 'running', 'paused'], status)):
-    return (
-      <a className="link"
-         onClick={triggerValidationAction}>
-        <span className={statusIconClass}/>
-      </a>
-    );
-  case (includes(['success', 'failed'], status)):
-    return (
-      <a className="link flip-container"
-         onClick={triggerValidationAction}>
-        <div className="flipper">
-          <span className={statusIconClass}/>
-          <span className={runValidationIconClass}/>
-        </div>
-      </a>
-    );
-  default:
-    return (
-      <a className="link flip-container"
-         onClick={triggerValidationAction}>
-        <div className="flipper">
-          <span className={statusIconClass}/>
-          <span className={runValidationIconClass}/>
-        </div>
-      </a>
-    );
-  }
-};
-ValidationStatusIcon.propTypes = {
-  status: React.PropTypes.string,
-  triggerValidationAction: React.PropTypes.func.isRequired
 };

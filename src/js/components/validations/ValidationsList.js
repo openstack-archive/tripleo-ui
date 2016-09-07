@@ -6,10 +6,18 @@ import BlankSlate from '../ui/BlankSlate';
 import Loader from '../ui/Loader';
 import ValidationsActions from '../../actions/ValidationsActions';
 import Validation from './Validation';
+import ValidationDetail from './ValidationDetail';
 import WorkflowExecutionsActions from '../../actions/WorkflowExecutionsActions';
 import { getValidationsWithResults } from '../../selectors/validations';
 
 class ValidationsList extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      showDetail: null
+    };
+  }
+
   componentDidMount() {
     this.props.fetchValidations();
   }
@@ -17,6 +25,32 @@ class ValidationsList extends React.Component {
   refreshValidations() {
     this.props.fetchValidations();
     this.props.fetchWorkflowExecutions();
+  }
+
+  showValidationDetail(uuid) {
+    this.setState({ showDetail: uuid });
+  }
+
+  hideValidationDetail() {
+    this.setState({ showDetail: null });
+  }
+
+  rendervalidationDetail() {
+    if (this.state.showDetail) {
+      const validation = this.props.validations.get(this.state.showDetail);
+      return (
+        <ValidationDetail
+          description={validation.description}
+          groups={validation.groups}
+          hideValidationDetail={this.hideValidationDetail.bind(this)}
+          name={validation.name}
+          results={validation.results}
+          runValidation={this.props.runValidation.bind(this, validation.id,
+                                                       this.props.currentPlanName)}
+          status={validation.status}
+          stopValidation={this.props.stopValidation.bind(this)}/>
+      );
+    }
   }
 
   renderValidations() {
@@ -37,6 +71,7 @@ class ValidationsList extends React.Component {
             results={validation.results}
             status={validation.status}
             groups={validation.groups}
+            showValidationDetail={this.showValidationDetail.bind(this, validation.id)}
             runValidation={this.props.runValidation.bind(this, validation.id, currentPlanName)}
             stopValidation={this.props.stopValidation.bind(this)}
             description={validation.description}
@@ -53,8 +88,7 @@ class ValidationsList extends React.Component {
                         sidebar-header-bleed-left
                         sidebar-header-bleed-right">
           <div className="actions pull-right">
-            <Loader key="rolesLoader"
-                    loaded={!(this.props.validationsLoaded &&
+            <Loader loaded={!(this.props.validationsLoaded &&
                               this.props.isFetchingValidations)}
                     content="Loading Validations..."
                     inline>
@@ -75,6 +109,7 @@ class ValidationsList extends React.Component {
             </div>
           </div>
         </Loader>
+        {this.rendervalidationDetail()}
       </div>
     );
   }
