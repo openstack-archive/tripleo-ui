@@ -1,22 +1,32 @@
 export default [
   {
     name: 'control',
-    title: 'Controller'
+    title: 'Controller',
+    countParamName: 'ControllerCount',
+    flavorParamName: 'OvercloudControlFlavor'
   },
   {
     name: 'compute',
-    title: 'Compute'
+    title: 'Compute',
+    countParamName: 'ComputeCount',
+    flavorParamName: 'OvercloudComputeFlavor'
   },
   {
     name: 'blockStorage',
-    title: 'Block Storage'
+    title: 'Block Storage',
+    countParamName: 'BlockStorageCount',
+    flavorParamName: 'OvercloudBlockStorageFlavor'
   },
   {
     name: 'objectStorage',
-    title: 'Object Storage'
+    title: 'Object Storage',
+    countParamName: 'ObjectStorageCount',
+    flavorParamName: 'OvercloudSwiftStorageFlavor'
   },
   {
     name: 'cephStorage',
-    title: 'Ceph Storage'
+    title: 'Ceph Storage',
+    countParamName: 'CephStorageCount',
+    flavorParamName: 'OvercloudCephStorageFlavor'
   }
 ];

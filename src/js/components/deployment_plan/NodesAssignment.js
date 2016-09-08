@@ -14,6 +14,7 @@ import FormErrorList from '../ui/forms/FormErrorList';
 import Modal from '../ui/Modal';
 import NodesActions from '../../actions/NodesActions';
 import NodesTable from '../nodes/NodesTable';
+import ParametersActions from '../../actions/ParametersActions';
 
 class NodesAssignment extends React.Component {
   constructor() {
@@ -64,6 +65,7 @@ class NodesAssignment extends React.Component {
   }
 
   handleSubmit(formData, resetForm, invalidateForm) {
+    // TODO(akrivoka): This logic should be replaced by a Mistral workflow
     this.disableButton();
     const nodesToUpdate = _.pickBy(formData, value => !!value);
     _.keys(nodesToUpdate).map(nodeId => {
@@ -85,6 +87,24 @@ class NodesAssignment extends React.Component {
       };
       this.props.updateNode(nodePatch);
     });
+
+    // Set the count and flavor parameters
+    const { roleName } = this.props.params;
+    const role = this.props.roles.get(roleName);
+    const count = getAssignedNodes(this.props.introspectedNodes, role.name).size;
+    const data = {
+      [role.countParamName]: count,
+      [role.flavorParamName]: 'baremetal'
+    };
+
+    this.props.updateParameters(
+      this.props.currentPlanName,
+      data,
+      [],
+      this.props.location.pathname
+    );
+
+
     resetForm();
   }
 
@@ -135,17 +155,20 @@ class NodesAssignment extends React.Component {
   }
 }
 NodesAssignment.propTypes = {
+  currentPlanName: React.PropTypes.string,
   fetchNodes: React.PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
   introspectedNodes: ImmutablePropTypes.map,
   isFetchingNodes: React.PropTypes.bool,
+  location: React.PropTypes.object,
   nodesInProgress: ImmutablePropTypes.set,
   nodesOperationInProgress: React.PropTypes.bool,
   params: React.PropTypes.object.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
   unassignedIntrospectedNodes: ImmutablePropTypes.map,
-  updateNode: React.PropTypes.func.isRequired
+  updateNode: React.PropTypes.func.isRequired,
+  updateParameters: React.PropTypes.func.isRequired
 };
 NodesAssignment.defaultProps = {
   formErrors: List(),
@@ -166,7 +189,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
-    updateNode: (node) => dispatch(NodesActions.updateNode(node))
+    updateNode: (node) => dispatch(NodesActions.updateNode(node)),
+    updateParameters: (planName, data, inputFieldNames, url) => {
+      dispatch(ParametersActions.updateParameters(planName, data, inputFieldNames, url));
+    }
   };
 }
 
