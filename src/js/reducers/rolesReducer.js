@@ -22,7 +22,7 @@ export default function rolesReducer(state = initialState, action) {
     // Convert roles array into Map of Role records. This could get replaced by normalizing
     // once the mistral getRoles action returns an array of objects
     const roles = fromJS(action.payload)
-                    .reduce((result, role) => result.set(kebabCase(role),
+                    .reduce((result, role) => result.set(_getRoleIdentifier(role),
                                                          _createRole(role)), Map());
 
     return state.set('roles', fromJS(roles).map(role => new Role(role)))
@@ -48,6 +48,15 @@ const _createRole = (roleName) => {
   return new Role({
     name: roleName,
     title: startCase(roleName),
-    identifier: kebabCase(roleName)
+    identifier: _getRoleIdentifier(roleName)
   });
+};
+
+// TODO(jtomasek): Controller role name and tag don't follow naming concention
+// Rremove this after controller tag is renamed from control to controller
+const _getRoleIdentifier = roleName => {
+  if (roleName === 'Controller') {
+    return 'control';
+  }
+  return kebabCase(roleName);
 };
