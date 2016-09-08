@@ -16,12 +16,6 @@ import NodesActions from '../../actions/NodesActions';
 import NodesTable from '../nodes/NodesTable';
 
 class NodesAssignment extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      canSubmit: false
-    };
-  }
 
   componentDidMount() {
     this.props.fetchNodes();
@@ -29,22 +23,6 @@ class NodesAssignment extends React.Component {
 
   componentDidUpdate() {
     this.invalidateForm(this.props.formFieldErrors.toJS());
-  }
-
-  canSubmit() {
-    if(_.includes(_.values(this.refs.nodesAssignmentForm.getCurrentValues()), true)) {
-      this.enableButton();
-    } else {
-      this.disableButton();
-    }
-  }
-
-  enableButton() {
-    this.setState({ canSubmit: true });
-  }
-
-  disableButton() {
-    this.setState({ canSubmit: false });
   }
 
   invalidateForm(formFieldErrors) {
@@ -56,7 +34,7 @@ class NodesAssignment extends React.Component {
       <div className="btn-group">
         <button className="btn btn-primary"
                 type="submit"
-                disabled={!this.state.canSubmit || this.props.nodesOperationInProgress}>
+                disabled={this.props.nodesOperationInProgress}>
           Assign/Unassign Selected Nodes
         </button>
       </div>
@@ -64,27 +42,19 @@ class NodesAssignment extends React.Component {
   }
 
   handleSubmit(formData, resetForm, invalidateForm) {
-    this.disableButton();
-    const nodesToUpdate = _.pickBy(formData, value => !!value);
-    _.keys(nodesToUpdate).map(nodeId => {
-      const node = this.props.availableNodes.get(nodeId);
-      let value;
-      if(this.props.unassignedAvailableNodes.includes(node)) {
-        value = node.getIn(['properties', 'capabilities']) +
-                `,profile:${this.props.params.roleIdentifier}`;
+    let tagNodeIds = [];
+    let untagNodeIds = [];
+
+    _.each(formData, (v, k) => {
+      if (v) {
+        tagNodeIds.push(k);
       } else {
-        value = node.getIn(['properties', 'capabilities']).replace(/,profile:(\w+)/, '');
+        untagNodeIds.push(k);
       }
-      const nodePatch = {
-        uuid: nodeId,
-        patches: [{
-          op: 'replace',
-          path: '/properties/capabilities',
-          value: value
-        }]
-      };
-      this.props.updateNode(nodePatch);
     });
+
+    const role = this.props.params.roleIdentifier;
+    this.props.assignNodes(tagNodeIds, untagNodeIds, role);
     resetForm();
   }
 
@@ -92,7 +62,7 @@ class NodesAssignment extends React.Component {
     const { roleIdentifier } = this.props.params;
     const role = this.props.roles.get(roleIdentifier);
     const nodesToAssign = this.props.unassignedAvailableNodes
-                            .merge(getAssignedNodes(this.props.availableNodes, role.identifier))
+                            .merge(getAssignedNodes(this.props.availableNodes, roleIdentifier))
                             .sortBy(node => node.get('uuid'));
 
     return (
@@ -100,9 +70,7 @@ class NodesAssignment extends React.Component {
         <Formsy.Form ref="nodesAssignmentForm"
                      role="form"
                      className="form"
-                     onSubmit={this.handleSubmit.bind(this)}
-                     onValid={this.canSubmit.bind(this)}
-                     onInvalid={this.disableButton.bind(this)}>
+                     onSubmit={this.handleSubmit.bind(this)}>
           <div className="modal-header">
             <Link to="/deployment-plan"
                   type="button"
@@ -135,6 +103,7 @@ class NodesAssignment extends React.Component {
   }
 }
 NodesAssignment.propTypes = {
+  assignNodes: React.PropTypes.func.isRequired,
   availableNodes: ImmutablePropTypes.map,
   fetchNodes: React.PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list.isRequired,
@@ -144,8 +113,7 @@ NodesAssignment.propTypes = {
   nodesOperationInProgress: React.PropTypes.bool,
   params: React.PropTypes.object.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
-  unassignedAvailableNodes: ImmutablePropTypes.map,
-  updateNode: React.PropTypes.func.isRequired
+  unassignedAvailableNodes: ImmutablePropTypes.map
 };
 NodesAssignment.defaultProps = {
   formErrors: List(),
@@ -166,7 +134,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
-    updateNode: (node) => dispatch(NodesActions.updateNode(node))
+    assignNodes: (tagNodeIds, untagNodeIds, role) =>
+      dispatch(NodesActions.startNodesAssignment(tagNodeIds, untagNodeIds, role)
+    )
   };
 }
 

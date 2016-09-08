@@ -42,7 +42,7 @@ export default class NodesTable extends React.Component {
   }
 
   _filterData(filterString, data) {
-    let dataKeys = ['uuid'];
+    let dataKeys = ['name'];
     return filterString ? data.filter((row) => {
       let result = dataKeys.filter((dataKey) => {
         return row[dataKey].toLowerCase().includes(filterString.toLowerCase());
@@ -68,7 +68,7 @@ export default class NodesTable extends React.Component {
                                         field="uuid"
                                         className="shrink"/>}/>
         <DataTableColumn
-          key="uuid"
+          key="macs"
           header={<DataTableHeaderCell key="macs">MAC Address(es)</DataTableHeaderCell>}
           cell={<DataTableDataFieldCell data={filteredData} field="macs"/>}/>
         <DataTableColumn
