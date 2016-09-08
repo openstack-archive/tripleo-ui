@@ -11,6 +11,7 @@ export default {
   PLAN_DELETE: 'tripleo.plan.delete',
   PLAN_LIST: 'tripleo.plan.list',
   ROLE_LIST: 'tripleo.role.list',
+  TAG_NODES: 'tripleo.baremetal.v1.tag_nodes',
   VALIDATIONS_LIST: 'tripleo.validations.list_validations',
   VALIDATIONS_RUN: 'tripleo.validations.v1.run_validation',
   VALIDATIONS_RUN_GROUPS: 'tripleo.validations.v1.run_groups'
