@@ -268,5 +268,48 @@ export default {
       type: NodesConstants.DELETE_NODE_FAILED,
       payload: nodeId
     };
+  },
+
+  startNodesAssignment(tagNodeIds, untagNodeIds, role) {
+    const flatNodes = tagNodeIds.concat(untagNodeIds);
+    return (dispatch, getState) => {
+      dispatch(this.startOperation(flatNodes));
+      MistralApiService.runWorkflow('tripleo.baremetal.v1.tag_nodes',
+        { tag_node_uuids: tagNodeIds, untag_node_uuids: untagNodeIds, role: role })
+        .then((response) => {
+          if(response.state === 'ERROR') {
+            dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
+            dispatch(this.finishOperation(flatNodes));
+          }
+        }).catch((error) => {
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach((error) => {
+            dispatch(NotificationActions.notify(error));
+          });
+          dispatch(this.finishOperation(flatNodes));
+        });
+    };
+  },
+
+  nodesAssignmentFinished(messagePayload) {
+    return (dispatch, getState) => {
+      const nodeIds = messagePayload.execution.input.tag_node_uuids.concat(
+        messagePayload.execution.input.untag_node_uuids);
+      dispatch(this.finishOperation(nodeIds));
+      dispatch(this.fetchNodes());
+
+      switch(messagePayload.status) {
+      case 'FAILED': {
+        dispatch(NotificationActions.notify({
+          type: 'error',
+          title: 'Error',
+          message: messagePayload.message
+        }));
+        break;
+      }
+      default:
+        break;
+      }
+    };
   }
 };
