@@ -267,5 +267,25 @@ export default {
       type: NodesConstants.DELETE_NODE_FAILED,
       payload: nodeId
     };
+  },
+
+  tagNodes(nodeIds, role) {
+    return (dispatch, getState) => {
+      dispatch(this.startOperation(nodeIds));
+      MistralApiService.runWorkflow('tripleo.baremetal.v1.tag_nodes',
+        { node_uuids: nodeIds, role: role })
+        .then((response) => {
+          if(response.state === 'ERROR') {
+            dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
+            dispatch(this.finishOperation(nodeIds));
+          }
+        }).catch((error) => {
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach((error) => {
+            dispatch(NotificationActions.notify(error));
+          });
+          dispatch(this.finishOperation(nodeIds));
+        });
+    };
   }
 };
