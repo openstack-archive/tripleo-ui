@@ -8,7 +8,6 @@ import NavTab from '../ui/NavTab';
 import NodesActions from '../../actions/NodesActions';
 import RolesActions from '../../actions/RolesActions';
 import { getRegisteredNodes,
-         getAvailableNodes,
          getDeployedNodes,
          getMaintenanceNodes } from '../../selectors/nodes';
 
