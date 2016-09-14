@@ -6,25 +6,34 @@ ol.deployment-step-list {
 
   > li {
     list-style: none;
-    margin: 0 0 6px 20px;
-    padding: 4px 8px;
+    margin: 0 0 6px 25px;
+    padding: 4px 0 4px 12px;
     position: relative;
 
     &:before {
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      -webkit-box-sizing: border-box;
       content: counter(li);
       counter-increment: li;
-      font-size: 22px;
-      font-weight: bold;
-      left: -30px;
-      margin-right: 8px;
-      padding: 4px;
       position: absolute;
+      left: -25px;
+      top: 19px;
       text-align: center;
-      top: 8px;
-      width: 40px;
+      border-radius: 50%;
+      border: solid 2px @brand-primary;
+      color: white;
+      background-color: @brand-primary;
+      font-weight: 700;
+      height: 25px;
+      line-height: 21px;
+      width: 25px;
+    }
+
+    &:not(:last-child):after {
+      content: "";
+      border-left: 1px solid @color-pf-black-300;
+      height: 100%;
+      position: absolute;
+      left: -13px;
+      top: 44px;
     }
 
     &.disabled {
@@ -38,6 +47,12 @@ ol.deployment-step-list {
       left: 0px;
       cursor: default;
       pointer-events: none;
+
+      &:before {
+        color: @color-pf-black-400;
+        background-color: white;
+        border-color: @color-pf-black-400;
+      }
     }
 
   }
