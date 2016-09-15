@@ -30,5 +30,29 @@ export default {
         dispatch(this.fetchStacksFailed(error));
       });
     };
+  },
+
+  getOvercloudInfoFailed(error) {
+    return {
+      type: StacksConstants.GET_OVERCLOUD_INFO_FAILED,
+      payload: error
+    };
+  },
+
+  getOvercloudInfoSuccess(data) {
+    return {
+      type: StacksConstants.GET_OVERCLOUD_INFO_SUCCESS,
+      payload: data
+    };
+  },
+
+  getOvercloudInfo(stack) {
+    return dispatch => {
+      HeatApiService.getOvercloudInfo(stack).then(response => {
+        dispatch(this.getOvercloudInfoSuccess(response));
+      }).catch(error => {
+        dispatch(this.getOvercloudInfoFailed(error));
+      });
+    };
   }
 };
