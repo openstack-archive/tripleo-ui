@@ -4,7 +4,8 @@ import DeploymentStatus from './DeploymentStatus';
 
 import Loader from '../ui/Loader';
 
-export const DeployStep = ({ currentPlan, currentStack, deployPlan, fetchStacks }) => {
+export const DeployStep = ({ currentPlan, currentStack, deployPlan, fetchStacks,
+                             getOvercloudInfo, overcloud}) => {
   if (!currentStack) {
     return (
       <a className={`link btn btn-primary btn-lg
@@ -21,7 +22,10 @@ export const DeployStep = ({ currentPlan, currentStack, deployPlan, fetchStacks 
   } else {
     return (
       <DeploymentStatus stack={currentStack}
-                        fetchStacks={fetchStacks}/>
+                        fetchStacks={fetchStacks}
+                        getOvercloudInfo={getOvercloudInfo}
+                        overcloud={overcloud} />
+
     );
   }
 };
@@ -30,5 +34,7 @@ DeployStep.propTypes = {
   currentPlan: ImmutablePropTypes.record.isRequired,
   currentStack: ImmutablePropTypes.record,
   deployPlan: React.PropTypes.func.isRequired,
-  fetchStacks: React.PropTypes.func.isRequired
+  fetchStacks: React.PropTypes.func.isRequired,
+  getOvercloudInfo: React.PropTypes.func.isRequired,
+  overcloud: ImmutablePropTypes.map.isRequired
 };
