@@ -1,10 +1,12 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
+import DeploymentResult from './DeploymentResult';
 
 const statusMessages = {
   CREATE_IN_PROGRESS: 'Deployment in progress.',
   CREATE_SUCCESS: 'Deployment succeeded.',
   CREATE_FAILED: 'The deployment failed.',
+  CREATE_COMPLETE: 'The deployment succeeded.',
   DELETE_IN_PROGRESS: 'Deletion in progress.',
   UPDATE_IN_PROGRESS: 'Update in progress.',
   UPDATE_FAILED: 'The update failed.',
@@ -85,13 +87,18 @@ export default class DeploymentStatus extends React.Component {
 
   render() {
     let progress = !!this.props.stack.stack_status.match(/PROGRESS/);
-    let failed = !!this.props.stack.stack_status.match(/FAILED/);
 
-    if(progress) {
+    if (progress) {
       return this.renderProgress(this.props.stack, this.state);
-    }
-    else {
-      return this.renderResult(this.props.stack, failed);
+    } else {
+      // We have a result so let's stop polling.
+      clearInterval(this.state.intervalId);
+      return (
+        <DeploymentResult
+          getOvercloudInfo={this.props.getOvercloudInfo}
+          overcloud={this.props.overcloud}
+          stack={this.props.stack} />
+      );
     }
   }
 }
@@ -99,5 +106,7 @@ export default class DeploymentStatus extends React.Component {
 DeploymentStatus.propTypes = {
   fetchResources: React.PropTypes.func.isRequired,
   fetchStacks: React.PropTypes.func.isRequired,
+  getOvercloudInfo: React.PropTypes.func.isRequired,
+  overcloud: ImmutablePropTypes.map,
   stack: ImmutablePropTypes.record.isRequired
 };

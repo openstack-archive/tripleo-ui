@@ -24,3 +24,8 @@ export const getCurrentStackDeploymentProgress = createSelector(
     return stacks.get(currentPlanName, Stack({})).stack_status === 'CREATE_IN_PROGRESS';
   }
 );
+
+/**
+ * Returns the overcloud info map
+ */
+export const getOvercloudInfo = state => state.stacks.get('overcloud');

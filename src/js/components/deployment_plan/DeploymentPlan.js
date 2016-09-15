@@ -4,7 +4,8 @@ import React from 'react';
 
 import { getAllPlansButCurrent } from '../../selectors/plans';
 import { getCurrentStack,
-         getCurrentStackDeploymentProgress } from '../../selectors/stacks';
+         getCurrentStackDeploymentProgress,
+         getOvercloudInfo } from '../../selectors/stacks';
 import { getAvailableNodes, getUnassignedAvailableNodes } from '../../selectors/nodes';
 import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
 import { getCurrentPlan } from '../../selectors/plans';
@@ -80,7 +81,9 @@ class DeploymentPlan extends React.Component {
                             currentStack={this.props.currentStack}
                             deployPlan={this.props.deployPlan}
                             fetchResources={this.props.fetchResources}
-                            fetchStacks={this.props.fetchStacks}/>
+                            fetchStacks={this.props.fetchStacks}
+                            getOvercloudInfo={this.props.getOvercloudInfo}
+                            overcloud={this.props.overcloud} />
               </DeploymentPlanStep>
             </ol>
           </div>
@@ -110,12 +113,14 @@ DeploymentPlan.propTypes = {
   fetchResources: React.PropTypes.func,
   fetchRoles: React.PropTypes.func,
   fetchStacks: React.PropTypes.func,
+  getOvercloudInfo: React.PropTypes.func,
   hasPlans: React.PropTypes.bool,
   inactivePlans: ImmutablePropTypes.map,
   isFetchingEnvironmentConfiguration: React.PropTypes.bool,
   isFetchingNodes: React.PropTypes.bool,
   isFetchingRoles: React.PropTypes.bool,
   notify: React.PropTypes.func,
+  overcloud: ImmutablePropTypes.map,
   roles: ImmutablePropTypes.map,
   rolesLoaded: React.PropTypes.bool,
   route: React.PropTypes.object,
@@ -137,6 +142,7 @@ export function mapStateToProps(state) {
     hasPlans: !state.plans.get('all').isEmpty(),
     inactivePlans: getAllPlansButCurrent(state),
     availableNodes: getAvailableNodes(state),
+    overcloud: getOvercloudInfo(state),
     roles: state.roles.get('roles'),
     rolesLoaded: state.roles.get('loaded'),
     unassignedAvailableNodes: getUnassignedAvailableNodes(state),
@@ -157,6 +163,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(StacksActions.fetchResources(name, id));
     },
     fetchStacks: () => dispatch(StacksActions.fetchStacks()),
+    getOvercloudInfo: stack => dispatch(StacksActions.getOvercloudInfo(stack)),
     notify: notification => dispatch(NotificationActions.notify(notification)),
     runValidationStage: (uuid) => {
       dispatch(ValidationsActions.runValidationStage(uuid));
