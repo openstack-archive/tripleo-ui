@@ -23,11 +23,33 @@ export default function stacksReducer(state = initialState, action) {
             .set('isFetching', false)
             .set('stacks', Map());
 
+  case StacksConstants.FETCH_ENVIRONMENT_SUCCESS:
+    return state.setIn(
+      ['stacks', action.payload.stack.stack_name, 'environment'],
+      fromJS(action.payload.environment));
+
   case StacksConstants.FETCH_RESOURCES_SUCCESS:
     if (state.stacks.get(action.payload.stackName)) {
+      let existingResources = state.getIn(['stacks', action.payload.stackName, 'resources']);
+      let newResources = fromJS(action.payload.resources).reduce((resources, v, k) => {
+        if (resources.get(k)) {
+          return resources;
+        } else {
+          return resources.set(k, new StackResource(v));
+        }
+      }, existingResources);
       return state.setIn(
         ['stacks', action.payload.stackName, 'resources'],
-        fromJS(action.payload.resources).map(resource => new StackResource(resource))
+        newResources
+      );
+    }
+    return state;
+
+  case StacksConstants.FETCH_RESOURCE_SUCCESS:
+    if (state.stacks.get(action.payload.stack.stack_name)) {
+      return state.setIn(
+        ['stacks', action.payload.stack.stack_name, 'resources', action.payload.resourceName],
+        new StackResource(fromJS(action.payload.resource.resource))
       );
     }
     return state;

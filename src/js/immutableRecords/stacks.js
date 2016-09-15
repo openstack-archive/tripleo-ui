@@ -10,6 +10,7 @@ export const Stack = Record({
   creation_time: undefined,
   deletion_time: undefined,
   description: undefined,
+  environment: Map(),
   id: undefined,
   parent: undefined,
   resources: Map(),
@@ -23,7 +24,9 @@ export const Stack = Record({
 });
 
 export const StackResource = Record({
+  attributes: undefined,
   creation_time: undefined,
+  links: List(),
   logical_resource_id: undefined,
   physical_resource_id: undefined,
   required_by: List(),
