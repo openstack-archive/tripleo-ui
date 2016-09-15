@@ -33,6 +33,9 @@ export default function stacksReducer(state = initialState, action) {
     }
     return state;
 
+  case StacksConstants.GET_OVERCLOUD_INFO_SUCCESS:
+    return state.set('overcloud', Map(action.payload));
+
   default:
     return state;
 
