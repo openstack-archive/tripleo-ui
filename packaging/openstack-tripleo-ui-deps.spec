@@ -1,9 +1,9 @@
 %global sname openstack-tripleo-ui-deps
-%global commit 38664a13b4a74f9bcca3384f6ad4184a298db140
+%global commit 6741f26b0c3a2d603ee53621ab14f0aed3ed78a3
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           %{sname}
-Version:        1
+Version:        2
 Release:        2%{?dist}
 Summary:        Source dependencies for TripleO UI
 License:        ASL 2.0
@@ -71,5 +71,7 @@ cp -rf %{_builddir}/node_modules %{buildroot}/opt/%{name}/
 /opt/%{name}/node_modules/webpack*
 
 %changelog
+* Tue Sep 15 2016 Honza Pokorny <honza@redhat.com> 2-2
+- Adding new dependencies (react-motion, react-portal)
 * Tue Jul 26 2016 Honza Pokorny <honza@redhat.com> 1-2
 - First RPM

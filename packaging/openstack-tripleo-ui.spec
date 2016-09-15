@@ -1,11 +1,11 @@
 %global sname openstack-tripleo-ui
-%global commit 38664a13b4a74f9bcca3384f6ad4184a298db140
+%global commit 6741f26b0c3a2d603ee53621ab14f0aed3ed78a3
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global checkout .%{shortcommit}git
 
 Name:           %{sname}
-Version:        0.0.1
-Release:        0.1%{?checkout}%{?dist}
+Version:        1.0.1
+Release:        0.2%{?checkout}%{?dist}
 Summary:        TripleO UI --- GUI for the TripleO project
 License:        ASL 2.0
 URL:            http://tripleo.org
@@ -15,7 +15,7 @@ Source1:        tripleo-ui.conf
 
 BuildRequires:  nodejs
 BuildRequires:  git
-BuildRequires:  %{sname}-deps = 1
+BuildRequires:  %{sname}-deps = 2
 BuildArch:      noarch
 
 %description
@@ -42,5 +42,7 @@ cp -rf %{SOURCE1} %{buildroot}/etc/httpd/conf.d/%{sname}.conf
 %doc README.md
 
 %changelog
+* Tue Jul 26 2016 Honza Pokorny <honza@redhat.com> 1.0.1-0.2.6741f26git
+- Add new dependencies
 * Tue Jul 26 2016 Honza Pokorny <honza@redhat.com> 0.0.1-0.1.38664a1git
 - First RPM
