@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import { Stack } from '../immutableRecords/stacks';
 import { currentPlanNameSelector } from './plans';
 
-// const plansSelector = state => state.plans.get('all');
 const stacksSelector = state => state.stacks.get('stacks');
 
 /**
