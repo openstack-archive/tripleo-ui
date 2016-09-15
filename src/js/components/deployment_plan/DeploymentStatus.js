@@ -1,5 +1,6 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
+import DeploymentResult from './DeploymentResult';
 
 import { deploymentStatusMessages as statusMessages } from '../../constants/StacksConstants';
 
@@ -10,7 +11,6 @@ export default class DeploymentStatus extends React.Component {
     this.state = {
       intervalId: undefined,
       progressBarWidth: '0%'
-
     };
   }
 
@@ -62,35 +62,28 @@ export default class DeploymentStatus extends React.Component {
     );
   }
 
-  renderResult(stack, failed) {
-    let statusClass = failed ? 'alert alert-danger' : 'alert alert-success';
-    let iconClass = failed ? 'pficon pficon-error-circle-o' : 'pficon pficon-ok';
-    let msg = statusMessages[stack.stack_status];
-
-    return (
-      <div className={statusClass}>
-        <span className={iconClass}></span>
-        <strong>{msg}</strong>
-        <br/>
-        {stack.stack_status_reason}
-      </div>
-    );
-  }
-
   render() {
     let progress = !!this.props.stack.stack_status.match(/PROGRESS/);
-    let failed = !!this.props.stack.stack_status.match(/FAILED/);
 
-    if(progress) {
+    if (progress) {
       return this.renderProgress(this.props.stack, this.state);
-    }
-    else {
-      return this.renderResult(this.props.stack, failed);
+    } else {
+      // We have a result so let's stop polling.
+      clearInterval(this.state.intervalId);
+      return (
+        <DeploymentResult stack={this.props.stack}
+          fetchResources={this.props.fetchResources}
+          fetchResource={this.props.fetchResource}
+          fetchEnvironment={this.props.fetchEnvironment}
+        />
+      );
     }
   }
 }
 
 DeploymentStatus.propTypes = {
+  fetchEnvironment: React.PropTypes.func.isRequired,
+  fetchResource: React.PropTypes.func.isRequired,
   fetchResources: React.PropTypes.func.isRequired,
   fetchStacks: React.PropTypes.func.isRequired,
   stack: ImmutablePropTypes.record.isRequired
