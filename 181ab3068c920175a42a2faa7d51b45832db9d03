@@ -1,0 +1,9 @@
+Code-Review+2: Jiri Tomasek <jtomasek@redhat.com>
+Code-Review+2: Florian Fuchs <flfuchs@redhat.com>
+Workflow+1: Florian Fuchs <flfuchs@redhat.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Thu, 15 Sep 2016 05:23:50 +0000
+Reviewed-on: https://review.openstack.org/368152
+Project: openstack/tripleo-ui
+Branch: refs/heads/master
