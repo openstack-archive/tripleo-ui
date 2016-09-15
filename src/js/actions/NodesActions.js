@@ -1,6 +1,7 @@
 import { normalize, arrayOf } from 'normalizr';
 import { fromJS, List, Map } from 'immutable';
 import when from 'when';
+import { reduce } from 'lodash';
 
 import IronicApiErrorHandler from '../services/IronicApiErrorHandler';
 import IronicApiService from '../services/IronicApiService';
@@ -55,6 +56,7 @@ export default {
       }).then((nodes) => {
         const normalizedNodes = normalize(nodes, arrayOf(nodeSchema)).entities.nodes || Map();
         dispatch(this.receiveNodes(normalizedNodes));
+        dispatch(this.fetchNodesMACs(normalizedNodes));
       }).catch((error) => {
         dispatch(this.receiveNodes({}));
         console.error('Error in NodesActions.fetchNodes', error.stack || error); //eslint-disable-line no-console
@@ -63,6 +65,36 @@ export default {
           dispatch(NotificationActions.notify(error));
         });
       });
+    };
+  },
+
+  fetchNodesMACs(nodes) {
+    return dispatch => {
+      Object.keys(nodes).map(nodeUUID => {
+        IronicApiService.getNodePorts(nodeUUID).then(response => {
+          const macs = reduce(response.ports, (result, value, key) => {
+            result.push(value.address);
+            return result;
+          },[]).join(', ');
+          dispatch(this.fetchNodeMACsSuccess(nodeUUID, macs));
+        }).catch(error => {
+          console.error('Error in NodesActions.fetchNodesMACs', error.stack || error); //eslint-disable-line no-console
+          let errorHandler = new IronicApiErrorHandler(error);
+          errorHandler.errors.forEach((error) => {
+            dispatch(NotificationActions.notify(error));
+          });
+        });
+      });
+    };
+  },
+
+  fetchNodeMACsSuccess(nodeUUID, macs) {
+    return {
+      type: NodesConstants.FETCH_NODE_MACS_SUCCESS,
+      payload: {
+        nodeUUID: nodeUUID,
+        macs: macs
+      }
     };
   },
 

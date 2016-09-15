@@ -3,6 +3,7 @@ import keyMirror from 'keymirror';
 export default keyMirror({
   REQUEST_NODES: null,
   RECEIVE_NODES: null,
+  FETCH_NODE_MACS_SUCCESS: null,
   START_NODES_OPERATION: null,
   FINISH_NODES_OPERATION: null,
   UPDATE_NODE_PENDING: null,
