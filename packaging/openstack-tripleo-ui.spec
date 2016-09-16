@@ -4,7 +4,7 @@
 %global checkout .%{shortcommit}git
 
 Name:           %{sname}
-Version:        0.0.1
+Version:        1.0.1
 Release:        0.1%{?checkout}%{?dist}
 Summary:        TripleO UI --- GUI for the TripleO project
 License:        ASL 2.0
