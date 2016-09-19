@@ -1,7 +1,8 @@
 import uuid from 'node-uuid';
+import when from 'when';
 
-import { getAuthTokenId, getTenantId } from './utils';
-import { ZAQAR_WEBSOCKET_URL, ZAQAR_DEFAULT_QUEUE } from '../constants/ZaqarConstants';
+import { getAuthTokenId, getTenantId, getServiceUrl } from './utils';
+import { ZAQAR_DEFAULT_QUEUE } from '../constants/ZaqarConstants';
 import ZaqarActions from '../actions/ZaqarActions';
 import NotificationActions from '../actions/NotificationActions';
 
@@ -10,27 +11,28 @@ export default {
   clientID: null,
 
   init(getState, dispatch) {
-    // TODO(jtomasek): get the url from keystone endpoint list when it is included
-    this.socket = new WebSocket(ZAQAR_WEBSOCKET_URL);
-    this.clientID = uuid.v4();
-    this.socket.onopen = () => {
-      this.authenticate();
-      this.createQueue(ZAQAR_DEFAULT_QUEUE);
-      this.subscribe(ZAQAR_DEFAULT_QUEUE);
-    };
+    when.try(getServiceUrl, 'zaqar-websocket').then((serviceUrl) => {
+      this.socket = new WebSocket(serviceUrl);
+      this.clientID = uuid.v4();
+      this.socket.onopen = () => {
+        this.authenticate();
+        this.createQueue(ZAQAR_DEFAULT_QUEUE);
+        this.subscribe(ZAQAR_DEFAULT_QUEUE);
+      };
 
-    this.socket.onclose = function (evt) {};
+      this.socket.onclose = function (evt) {};
 
-    this.socket.onerror = function (error) {
-      console.error('Zaqar WebSocket encountered error: ', error.message, 'Closing Socket.'); // eslint-disable-line no-console
-      dispatch(NotificationActions.notify({ title: 'Zaqar WebSocket encountered Error',
-                                            message: error.message }));
-      this.close();
-    };
+      this.socket.onerror = function (error) {
+        console.error('Zaqar WebSocket encountered error: ', error.message, 'Closing Socket.'); // eslint-disable-line no-console
+        dispatch(NotificationActions.notify({ title: 'Zaqar WebSocket encountered Error',
+                                              message: error.message }));
+        this.close();
+      };
 
-    this.socket.onmessage = (evt) => {
-      dispatch(ZaqarActions.messageReceived(JSON.parse(evt.data)));
-    };
+      this.socket.onmessage = (evt) => {
+        dispatch(ZaqarActions.messageReceived(JSON.parse(evt.data)));
+      };
+    });
   },
 
   authenticate() {
