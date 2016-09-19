@@ -10,13 +10,11 @@
 
 ### Install and run Validations API service on Undercloud machine
 
-Use this guide to setup and run API on Undercloud machine:
-https://github.com/rthallisey/clapper/blob/master/ansible-tests/README.md
+If the Validations service was not installed automatically on your
+undercloud, you can set it up by using the following guide:
 
-### Install and run TripleO API service on Undercloud machine
+https://github.com/openstack/tripleo-common/blob/master/README.rst#validations
 
-Use this guide to setup and run API on Undercloud machine:
-https://github.com/openstack/tripleo-common/blob/master/README.rst
 
 ### Make Undercloud API services available when running app from laptop
 
