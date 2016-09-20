@@ -12,7 +12,8 @@ describe('parameter immutable records', () => {
   it('ParametersDefaultState', () => {
     let state = new ParametersDefaultState();
     expect(state).toEqualImmutable(Map({
-      isPending: true,
+      loaded: false,
+      isFetching: true,
       form: Map({
         formErrors: List(),
         formFieldErrors: Map()

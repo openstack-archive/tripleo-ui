@@ -1,7 +1,8 @@
 import { List, Map, Record } from 'immutable';
 
 export const ParametersDefaultState = Record({
-  isPending: true,
+  loaded: false,
+  isFetching: true,
   form: Map({
     formErrors: List(),
     formFieldErrors: Map()

@@ -75,14 +75,14 @@ describe('parametersReducer', () => {
 
     beforeEach(() => {
       state = parametersReducer(ParametersDefaultState({
-        isPending: false,
+        isFetching: false,
         form: Map({ formErrors: List.of('lorem ipsum'), formFieldErrors: Map({ field: 'foo' })}),
         resourceTree: Map({ description: 'lorem ipsum' })
       }), action);
     });
 
-    it('sets isPending to `true`', () => {
-      expect(state.isPending).toBe(true);
+    it('sets isFetching to `true`', () => {
+      expect(state.isFetching).toBe(true);
     });
 
     it('resets form', () => {
@@ -102,13 +102,13 @@ describe('parametersReducer', () => {
 
     beforeEach(() => {
       state = parametersReducer(ParametersDefaultState({
-        isPending: true,
+        isFetching: true,
         form: Map({ some: 'value' })
       }), action);
     });
 
-    it('sets isPending to `false`', () => {
-      expect(state.isPending).toBe(false);
+    it('sets isFetching to `false`', () => {
+      expect(state.isFetching).toBe(false);
     });
 
     it('resets form', () => {
@@ -135,12 +135,12 @@ describe('parametersReducer', () => {
 
     beforeEach(() => {
       state = parametersReducer(ParametersDefaultState({
-        isPending: true
+        isFetching: true
       }), action);
     });
 
-    it('sets `isPending` to false', () => {
-      expect(state.isPending).toBe(false);
+    it('sets `isFetching` to false', () => {
+      expect(state.isFetching).toBe(false);
     });
 
     it('sets errors in  `form`', () => {
@@ -159,12 +159,12 @@ describe('parametersReducer', () => {
 
     beforeEach(() => {
       state = parametersReducer(ParametersDefaultState({
-        isPending: false
+        isFetching: false
       }), action);
     });
 
-    it('sets `isPending` to true', () => {
-      expect(state.isPending).toBe(true);
+    it('sets `isFetching` to true', () => {
+      expect(state.isFetching).toBe(true);
     });
   });
 
@@ -176,13 +176,13 @@ describe('parametersReducer', () => {
 
     beforeEach(() => {
       state = parametersReducer(ParametersDefaultState({
-        isPending: true,
+        isFetching: true,
         form: Map({ some: 'value' })
       }), action);
     });
 
-    it('sets isPending to `false`', () => {
-      expect(state.isPending).toBe(false);
+    it('sets isFetching to `false`', () => {
+      expect(state.isFetching).toBe(false);
     });
 
     it('resets form', () => {
