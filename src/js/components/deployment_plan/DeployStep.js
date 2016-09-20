@@ -4,7 +4,11 @@ import DeploymentStatus from './DeploymentStatus';
 
 import Loader from '../ui/Loader';
 
-export const DeployStep = ({ currentPlan, currentStack, deployPlan, fetchStacks }) => {
+export const DeployStep = ({ currentPlan,
+                             currentStack,
+                             deployPlan,
+                             fetchResources,
+                             fetchStacks }) => {
   if (!currentStack) {
     return (
       <a className={`link btn btn-primary btn-lg
@@ -21,6 +25,7 @@ export const DeployStep = ({ currentPlan, currentStack, deployPlan, fetchStacks 
   } else {
     return (
       <DeploymentStatus stack={currentStack}
+                        fetchResources={fetchResources}
                         fetchStacks={fetchStacks}/>
     );
   }
@@ -30,5 +35,6 @@ DeployStep.propTypes = {
   currentPlan: ImmutablePropTypes.record.isRequired,
   currentStack: ImmutablePropTypes.record,
   deployPlan: React.PropTypes.func.isRequired,
+  fetchResources: React.PropTypes.func.isRequired,
   fetchStacks: React.PropTypes.func.isRequired
 };
