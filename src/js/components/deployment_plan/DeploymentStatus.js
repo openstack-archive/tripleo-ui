@@ -1,15 +1,7 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
-const statusMessages = {
-  CREATE_IN_PROGRESS: 'Deployment in progress.',
-  CREATE_SUCCESS: 'Deployment succeeded.',
-  CREATE_FAILED: 'The deployment failed.',
-  DELETE_IN_PROGRESS: 'Deletion in progress.',
-  UPDATE_IN_PROGRESS: 'Update in progress.',
-  UPDATE_FAILED: 'The update failed.',
-  UPDATE_SUCCESS: 'The update succeeded.'
-};
+import { deploymentStatusMessages as statusMessages } from '../../constants/StacksConstants';
 
 export default class DeploymentStatus extends React.Component {
 
@@ -25,7 +17,7 @@ export default class DeploymentStatus extends React.Component {
   componentWillMount() {
     let intervalId = setInterval(() => {
       this.props.fetchStacks();
-      this.props.fetchResources(this.props.stack.stack_name, this.props.stack.id);
+      this.props.fetchResources(this.props.stack);
     }, 5000);
     this.setState({ intervalId: intervalId });
   }
@@ -78,7 +70,8 @@ export default class DeploymentStatus extends React.Component {
     return (
       <div className={statusClass}>
         <span className={iconClass}></span>
-        {msg}
+        <strong>{msg}</strong>
+        {stack.stack_status_reason}
       </div>
     );
   }

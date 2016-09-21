@@ -46,9 +46,9 @@ describe('stacksReducer state', () => {
       beforeEach(() => {
         state = stacksReducer(
           new StacksState({ isFetching: true }),
-          StacksActions.fetchStacksSuccess([
-            { stack_name: 'overcloud', stack_status: 'CREATE_COMPLETE' }
-          ])
+          StacksActions.fetchStacksSuccess({
+            overcloud: { stack_name: 'overcloud', stack_status: 'CREATE_COMPLETE' }
+          })
         );
       });
 
@@ -63,8 +63,19 @@ describe('stacksReducer state', () => {
       it('sets stacks in state', () => {
         expect(state.stacks).toEqualImmutable(Map({
           overcloud: new Stack({
+            creation_time: undefined,
+            deletion_time: undefined,
+            description: undefined,
+            id: undefined,
+            parent: undefined,
+            resources: Map(),
             stack_name: 'overcloud',
-            stack_status: 'CREATE_COMPLETE'
+            stack_owner: undefined,
+            stack_status: 'CREATE_COMPLETE',
+            stack_status_reason: undefined,
+            stack_user_project_id: undefined,
+            tags: Map(),
+            updated_time: undefined
           })
         }));
       });
