@@ -31,7 +31,6 @@ class HeatApiService {
   getResources(stackName, stackId) {
     return this.defaultRequest(`/stacks/${stackName}/${stackId}/resources`);
   }
-
 }
 
 export default new HeatApiService();
