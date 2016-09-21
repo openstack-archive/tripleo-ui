@@ -21,6 +21,6 @@ export const getCurrentStack = createSelector(
 export const getCurrentStackDeploymentProgress = createSelector(
   [stacksSelector, currentPlanNameSelector],
   (stacks, currentPlanName) => {
-    return stacks.get(currentPlanName, Stack({})).stack_status === 'CREATE_IN_PROGRESS';
+    return stacks.get(currentPlanName, new Stack()).stack_status === 'CREATE_IN_PROGRESS';
   }
 );
