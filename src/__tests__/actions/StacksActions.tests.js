@@ -27,6 +27,9 @@ describe('StacksActions', () => {
     const serviceResponse = {
       stacks: [{ stack_name: 'overcloud', stack_status: 'CREATE_COMPLETE' }]
     };
+    const normalizedStacks = {
+      overcloud: { stack_name: 'overcloud', stack_status: 'CREATE_COMPLETE' }
+    };
 
     beforeEach(done => {
       spyOn(HeatApiService, 'getStacks').and.callFake(createResolvingPromise(serviceResponse));
@@ -46,7 +49,7 @@ describe('StacksActions', () => {
     });
 
     it('dispatches fetchStacksSuccess', () => {
-      expect(StacksActions.fetchStacksSuccess).toHaveBeenCalledWith(serviceResponse.stacks);
+      expect(StacksActions.fetchStacksSuccess).toHaveBeenCalledWith(normalizedStacks);
     });
   });
 
