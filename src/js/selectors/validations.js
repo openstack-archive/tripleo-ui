@@ -55,3 +55,24 @@ const getValidationStatus = (validationResults) => {
     return 'error';
   }
 };
+
+
+/**
+ * Selects pre deployment validations
+ */
+export const getPreDeploymentValidationsWithResults = createSelector(
+  getValidationsWithResults, validations => {
+    const preDeploymentValidationGroups = ['pre-deployment', 'pre', 'pre-introspection'];
+    return validations.filter(validation =>
+      !validation.groups.toSet().intersect(preDeploymentValidationGroups).isEmpty());
+  }
+);
+
+
+/**
+ * Provides aggregate counts of pre-deployment validations by their status
+ */
+export const getPreDeploymentValidationsStatusCounts = createSelector(
+  getPreDeploymentValidationsWithResults, validations =>
+    validations.countBy(validation => validation.status).toJS()
+);
