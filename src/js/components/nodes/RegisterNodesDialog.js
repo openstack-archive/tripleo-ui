@@ -121,8 +121,9 @@ class RegisterNodesDialog extends React.Component {
     } else {
       return (
         <BlankSlate iconClass="fa fa-cubes"
-                    title="No Nodes To Register"
-                    message="Add a node manually or upload nodes from a file." />
+                    title="No Nodes To Register">
+          <p>Add a node manually or upload nodes from a file.</p>            
+        </BlankSlate>
       );
     }
   }

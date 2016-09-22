@@ -9,19 +9,18 @@ export default class BlankSlate extends React.Component {
           <span className={this.props.iconClass}></span>
         </div>
         <h1>{this.props.title}</h1>
-        <p>{this.props.message}</p>
+        {this.props.children}
       </div>
     );
   }
 }
 
 BlankSlate.propTypes = {
+  children: React.PropTypes.node,
   iconClass: React.PropTypes.string,
-  message: React.PropTypes.string,
   title: React.PropTypes.string
 };
 BlankSlate.defaultProps = {
   iconClass: 'fa fa-ban',
-  message: '',
   title: ''
 };
