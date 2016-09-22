@@ -59,8 +59,9 @@ class ValidationsList extends React.Component {
     if (validations.isEmpty()) {
       return (
         <BlankSlate iconClass="pficon pficon-flag"
-                    title="No Validations"
-                    message="There are no validations at this time."/>
+                    title="No Validations">
+          <p>There are no validations at this time.</p>            
+        </BlankSlate>
       );
     } else {
       return validations.toList().map(validation => {
