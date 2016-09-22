@@ -16,7 +16,7 @@ window.tripleOUiConfig = {
   // "swift": "http://192.0.2.1:8080/v1/AUTH_cd2b924b90c24aefa0e79b384579482c",
   // "tripleo": "http://192.0.2.1:8585/v1",
   // "validations": "http://192.0.2.1:5001/v1",
-  // "zaqar_websocket_url": "ws://192.0.2.1:9000",
+  // "zaqar-websocket": "ws://192.0.2.1:9000",
 
   // Default websocket queue name
   // "zaqar_default_queue": "tripleo"
