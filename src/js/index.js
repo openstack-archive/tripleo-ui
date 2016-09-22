@@ -12,6 +12,7 @@ import AuthenticatedContent from './components/AuthenticatedContent';
 import UserAuthenticator from './components/UserAuthenticator';
 import DeletePlan from './components/plan/DeletePlan';
 import DeploymentConfiguration from './components/deployment_plan/DeploymentConfiguration';
+import DeploymentDetail from './components/deployment/DeploymentDetail';
 import DeploymentPlan from './components/deployment_plan/DeploymentPlan';
 import EditPlan from './components/plan/EditPlan';
 import EnvironmentConfiguration from
@@ -98,6 +99,8 @@ TempStorage.initialized.then(() => {
                 <Route path="parameters" component={RoleParameters}/>
                 <Route path="services" component={RoleServices}/>
               </Route>
+              <Route path="deployment-detail"
+                     component={DeploymentDetail}/>
             </Route>
 
             <Redirect from="nodes" to="nodes/registered"/>
