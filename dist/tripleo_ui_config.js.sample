@@ -20,4 +20,7 @@ window.tripleOUiConfig = {
 
   // Default websocket queue name
   // "zaqar_default_queue": "tripleo"
+
+  // Logging
+  // "loggers": ['console']
 };

@@ -5,6 +5,7 @@ import { getAuthTokenId, getTenantId, getServiceUrl } from './utils';
 import { ZAQAR_DEFAULT_QUEUE } from '../constants/ZaqarConstants';
 import ZaqarActions from '../actions/ZaqarActions';
 import NotificationActions from '../actions/NotificationActions';
+import logger from '../services/logger';
 
 export default {
   socket: null,
@@ -23,7 +24,7 @@ export default {
       this.socket.onclose = function (evt) {};
 
       this.socket.onerror = function (error) {
-        console.error('Zaqar WebSocket encountered error: ', error.message, 'Closing Socket.'); // eslint-disable-line no-console
+        logger.error('Zaqar WebSocket encountered error: ', error.message, 'Closing Socket.');
         dispatch(NotificationActions.notify({ title: 'Zaqar WebSocket encountered Error',
                                               message: error.message }));
         this.close();

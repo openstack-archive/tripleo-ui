@@ -11,6 +11,7 @@ import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import ParametersActions from '../../actions/ParametersActions';
 import ParameterInputList from './ParameterInputList';
 import { getRootParameters } from '../../selectors/parameters';
+import logger from '../../services/logger';
 
 class Parameters extends React.Component {
   constructor() {
@@ -56,6 +57,7 @@ class Parameters extends React.Component {
       try {
         return JSON.parse(value);
       } catch(e) {
+        logger.warn('Failed to parse json', e);
         return value === undefined ? null : value;
       }
     });

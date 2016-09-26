@@ -9,6 +9,7 @@ import ValidationsConstants from '../constants/ValidationsConstants';
 import { validationSchema } from '../normalizrSchemas/validations';
 import { WorkflowExecution } from '../immutableRecords/workflowExecutions';
 import MistralConstants from '../constants/MistralConstants';
+import logger from '../services/logger';
 
 export default {
   fetchValidations() {
@@ -20,7 +21,7 @@ export default {
                                       arrayOf(validationSchema)).entities.validations || {};
         dispatch(this.fetchValidationsSuccess(validations));
       }).catch((error) => {
-        console.error('Error in ValidationsActions.fetchValidations', error.stack || error); //eslint-disable-line no-console
+        logger.error('Error in ValidationsActions.fetchValidations', error.stack || error);
         dispatch(this.fetchValidationsFailed());
         let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
@@ -63,6 +64,7 @@ export default {
           dispatch(WorkflowExecutionsActions.addWorkflowExecution(response));
         }
       }).catch((error) => {
+        logger.error('Error in ValidationsActions.runValidation', error.stack || error);
         let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -92,6 +94,7 @@ export default {
                                                 message: response.state_info }));
         }
       }).catch((error) => {
+        logger.error('Error in ValidationsActions.runValidationGroups', error.stack || error);
         let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
