@@ -6,6 +6,7 @@ import KeystoneApiErrorHandler from '../services/KeystoneApiErrorHandler';
 import KeystoneApiService from '../services/KeystoneApiService';
 import LoginConstants from '../constants/LoginConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
+import logger from '../logger/logger';
 
 export default {
   authenticateUserViaToken(keystoneAuthTokenId, nextPath) {
@@ -17,7 +18,7 @@ export default {
         ZaqarWebSocketService.init(getState, dispatch);
         browserHistory.push(nextPath);
       }).catch((error) => {
-        console.error('Error in LoginActions.authenticateUserViaToken', error.stack || error); //eslint-disable-line no-console
+        logger.error('Error in LoginActions.authenticateUserViaToken', error.stack || error);
         let errorHandler = new KeystoneApiErrorHandler(error);
         TempStorage.removeItem('keystoneAuthTokenId');
         browserHistory.push({pathname: '/login', query: { nextPath: nextPath }});
@@ -35,7 +36,7 @@ export default {
         ZaqarWebSocketService.init(getState, dispatch);
         browserHistory.push(nextPath);
       }).catch((error) => {
-        console.error('Error in LoginActions.authenticateUser', error); //eslint-disable-line no-console
+        logger.error('Error in LoginActions.authenticateUser', error);
         let errorHandler = new KeystoneApiErrorHandler(error, formFields);
         dispatch(this.userAuthFailure(errorHandler.errors, errorHandler.formFieldErrors));
       });

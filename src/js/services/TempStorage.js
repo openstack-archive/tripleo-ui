@@ -1,6 +1,7 @@
 import when from 'when';
 
 import TempStorageWorker from '../workers/TempStorageWorker';
+import logger from '../logger/logger';
 
 class TempStorage {
 
@@ -52,6 +53,7 @@ class TempStorage {
     try {
       return JSON.parse(item);
     } catch(err) {
+      logger.error('Failed to getItem', err);
       return item;
     }
   }

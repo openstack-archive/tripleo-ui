@@ -5,6 +5,7 @@ import HeatApiService from '../services/HeatApiService';
 import NotificationActions from '../actions/NotificationActions';
 import StacksConstants from '../constants/StacksConstants';
 import { stackSchema, stackResourceSchema } from '../normalizrSchemas/stacks';
+import logger from '../logger/logger';
 
 export default {
   fetchStacksPending() {
@@ -33,7 +34,7 @@ export default {
         const stacks = normalize(response.stacks, arrayOf(stackSchema)).entities.stacks || {};
         dispatch(this.fetchStacksSuccess(stacks));
       }).catch(error => {
-        console.error('Error retrieving stacks StackActions.fetchStacks', error); //eslint-disable-line no-console
+        logger.error('Error retrieving stacks StackActions.fetchStacks', error);
         let errorHandler = new HeatApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -73,7 +74,7 @@ export default {
           stack.stack_name,
           normalize(response.resources, arrayOf(stackResourceSchema)).entities.stackResources));
       }).catch((error) => {
-        console.error('Error retrieving resources StackActions.fetchResources', error); //eslint-disable-line no-console
+        logger.error('Error retrieving resources StackActions.fetchResources', error);
         let errorHandler = new HeatApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -120,7 +121,7 @@ export default {
       HeatApiService.getResource(stack, resourceName).then((response) => {
         dispatch(this.fetchResourceSuccess(stack, resourceName, response));
       }).catch((error) => {
-        console.error('Error retrieving resource StackActions.fetchResource', error); //eslint-disable-line no-console
+        logger.error('Error retrieving resource StackActions.fetchResource', error);
         let errorHandler = new HeatApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -164,7 +165,7 @@ export default {
       HeatApiService.getEnvironment(stack).then((response) => {
         dispatch(this.fetchEnvironmentSuccess(stack, response));
       }).catch((error) => {
-        console.error('Error retrieving environment StackActions.fetchEnvironment', error); //eslint-disable-line no-console
+        logger.error('Error retrieving environment StackActions.fetchEnvironment', error);
         let errorHandler = new HeatApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));

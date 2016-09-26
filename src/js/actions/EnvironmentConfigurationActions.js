@@ -7,6 +7,7 @@ import NotificationActions from '../actions/NotificationActions';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import { topicSchema } from '../normalizrSchemas/environmentConfiguration';
 import MistralConstants from '../constants/MistralConstants';
+import logger from '../logger/logger';
 
 export default {
 
@@ -19,8 +20,8 @@ export default {
                          arrayOf(topicSchema)).entities || {};
         dispatch(this.fetchEnvironmentConfigurationSuccess(entities));
       }).catch(error => {
-        console.error('Error retrieving EnvironmentConfigurationActions.fetchEnvironment', //eslint-disable-line no-console
-                      error.stack || error); //eslint-disable-line no-console
+        logger.error('Error retrieving EnvironmentConfigurationActions.fetchEnvironment',
+                      error.stack || error);
         if (redirectPath) { browserHistory.push(redirectPath); }
         dispatch(this.fetchEnvironmentConfigurationFailed());
         let errorHandler = new MistralApiErrorHandler(error);
@@ -65,7 +66,7 @@ export default {
           type: 'success'
         }));
       }).catch((error) => {
-        console.error('Error in EnvironmentConfigurationActions.updateEnvironment', //eslint-disable-line no-console
+        logger.error('Error in EnvironmentConfigurationActions.updateEnvironment',
                       error.stack || error);
         let errorHandler = new MistralApiErrorHandler(error, formFields);
         dispatch(this.updateEnvironmentConfigurationFailed(errorHandler.errors,

@@ -4,6 +4,7 @@ import when from 'when';
 
 import CurrentPlanActions from '../actions/CurrentPlanActions';
 import { browserHistory } from 'react-router';
+import logger from '../logger/logger';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NotificationActions from '../actions/NotificationActions';
@@ -36,6 +37,7 @@ export default {
         dispatch(this.receivePlans(plans));
         dispatch(CurrentPlanActions.detectPlan(plans));
       }).catch((error) => {
+        logger.error('Error in PlansActions.fetchPlan', error);
         let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -67,7 +69,7 @@ export default {
         dispatch(this.receivePlan(planName,
                                   normalize(response, arrayOf(planFileSchema)).entities.planFiles));
       }).catch(error => {
-        console.error('Error retrieving plan PlansActions.fetchPlan', error); //eslint-disable-line no-console
+        logger.error('Error retrieving plan PlansActions.fetchPlan', error);
         let errorHandler = new SwiftApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -110,6 +112,7 @@ export default {
         }));
         dispatch(this.fetchPlans());
       }).catch((errors) => {
+        logger.error('Error in PlansActions.updatePlan', errors);
         errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -131,7 +134,7 @@ export default {
         }));
         dispatch(this.fetchPlans());
       }).catch((error) => {
-        console.error('Error in PlansActions.updatePlanFromTarball', error); //eslint-disable-line no-console
+        logger.error('Error in PlansActions.updatePlanFromTarball', error);
         let errorHandler = new SwiftApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -186,7 +189,7 @@ export default {
           uploadedFiles += 1;
         }).catch((error) => {
           // Reject the promise on the first file that fails.
-          console.error('Error in PlansActions.createPlan', error); //eslint-disable-line no-console
+          logger.error('Error in PlansActions.createPlan', error);
           let errorHandler = new SwiftApiErrorHandler(error);
           reject(errorHandler.errors);
         });
@@ -207,7 +210,7 @@ export default {
             { container: planName }
           ).then((response) => {
             if(response.state === 'ERROR') {
-              console.error('Error in PlansActions.createPlan', response); //eslint-disable-line no-console
+              logger.error('Error in PlansActions.createPlan', response);
               dispatch(NotificationActions.notify({
                 title: 'Error',
                 message: response.state_info
@@ -215,7 +218,7 @@ export default {
               dispatch(this.createPlanFailed());
             }
           }).catch((error) => {
-            console.error('Error in PlansActions.createPlan', error); //eslint-disable-line no-console
+            logger.error('Error in PlansActions.createPlan', error);
             let errorHandler = new MistralApiErrorHandler(error);
             errorHandler.errors.forEach((error) => {
               dispatch(NotificationActions.notify(error));
@@ -224,6 +227,7 @@ export default {
           });
 
         }).catch((errors) => {
+          logger.error('Error in PlansActions.createPlan', errors);
           // If the file upload fails, just notify the user
           errors.forEach((error) => {
             dispatch(NotificationActions.notify(error));
@@ -232,7 +236,7 @@ export default {
         });
 
       }).catch((error) => {
-        console.error('Error in PlansActions.createPlan', error); //eslint-disable-line no-console
+        logger.error('Error in PlansActions.createPlan', error);
         let errorHandler = new SwiftApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -274,18 +278,19 @@ export default {
           { container: planName }
         ).then((response) => {
           if(response.state === 'ERROR') {
-            console.error('Error in PlansActions.createPlanFromTarball', response); //eslint-disable-line no-console
+            logger.error('Error in PlansActions.createPlanFromTarball', response);
             dispatch(this.createPlanFailed([{ title: 'Error', message: response.state_info }]));
           }
           else {
             dispatch(this.pollForPlanCreationWorkflow(planName, response.id));
           }
         }).catch((error) => {
+          logger.error('Error in workflow in PlansActions.createPlanFromTarball', error);
           let errorHandler = new MistralApiErrorHandler(error);
           dispatch(this.createPlanFailed(errorHandler.errors));
         });
       }).catch((error) => {
-        console.error('Error in PlansActions.createPlanFromTarball', error); //eslint-disable-line no-console
+        logger.error('Error in Swift in PlansActions.createPlanFromTarball', error);
         let errorHandler = new SwiftApiErrorHandler(error);
         dispatch(this.createPlanFailed(errorHandler.errors));
       });
@@ -315,6 +320,7 @@ export default {
           browserHistory.push('/plans/list');
         }
       }).catch((error) => {
+        logger.error('Error in PlansActions.pollForPlanCreationWorkflow', error);
         let errorHandler = new MistralApiErrorHandler(error);
         dispatch(this.createPlanFailed(errorHandler.errors));
         dispatch(this.finishOperation());
@@ -356,7 +362,7 @@ export default {
             type: 'success'
           }));
         }).catch(error => {
-          console.error('Error deleting plan MistralApiService.runAction', error); //eslint-disable-line no-console
+          logger.error('Error deleting plan MistralApiService.runAction', error);
           dispatch(this.planDeleted(planName));
           let errorHandler = new MistralApiErrorHandler(error);
           errorHandler.errors.forEach((error) => {
