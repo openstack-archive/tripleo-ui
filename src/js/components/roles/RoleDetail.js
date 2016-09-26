@@ -17,6 +17,7 @@ import { ModalPanelBackdrop,
          ModalPanelFooter } from '../ui/ModalPanel';
 import NavTab from '../ui/NavTab';
 import ParametersActions from '../../actions/ParametersActions';
+import logger from '../../logger/logger';
 
 class RoleDetail extends React.Component {
   constructor() {
@@ -62,6 +63,7 @@ class RoleDetail extends React.Component {
       try {
         return JSON.parse(value);
       } catch(e) {
+        logger.warn('Failed to parse json', e);
         return value === undefined ? null : value;
       }
     });

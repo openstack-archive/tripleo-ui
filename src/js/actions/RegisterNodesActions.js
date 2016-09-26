@@ -10,6 +10,7 @@ import NodesActions from './NodesActions';
 import { nodeSchema } from '../normalizrSchemas/nodes';
 import ValidationsActions from './ValidationsActions';
 import MistralConstants from '../constants/MistralConstants';
+import logger from '../logger/logger';
 
 export default {
   addNode(node) {
@@ -53,6 +54,7 @@ export default {
           dispatch(this.startNodesRegistrationSuccess());
         }
       }).catch((error) => {
+        logger.error('Error in RegisterNodesActions.startNodesRegistration', error);
         let errorHandler = new MistralApiErrorHandler(error);
         dispatch(this.startNodesRegistrationFailed(errorHandler.errors));
       });
