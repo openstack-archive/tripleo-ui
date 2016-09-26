@@ -5,6 +5,7 @@ import HeatApiService from '../services/HeatApiService';
 import NotificationActions from '../actions/NotificationActions';
 import StacksConstants from '../constants/StacksConstants';
 import { stackResourceSchema } from '../normalizrSchemas/stacks';
+import logger from '../logger/logger';
 
 export default {
   fetchStacksPending() {
@@ -32,7 +33,7 @@ export default {
       HeatApiService.getStacks().then(response => {
         dispatch(this.fetchStacksSuccess(response.stacks));
       }).catch(error => {
-        console.error('Error retrieving stacks StackActions.fetchStacks', error); //eslint-disable-line no-console
+        logger.error('Error retrieving stacks StackActions.fetchStacks', error);
         let errorHandler = new HeatApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -72,7 +73,7 @@ export default {
           stackName,
           normalize(response.resources, arrayOf(stackResourceSchema)).entities.stackResources));
       }).catch((error) => {
-        console.error('Error retrieving resources StackActions.fetchResources', error); //eslint-disable-line no-console
+        logger.error('Error retrieving resources StackActions.fetchResources', error);
         let errorHandler = new HeatApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));

@@ -8,6 +8,7 @@ import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import ValidationsConstants from '../constants/ValidationsConstants';
 import { validationSchema } from '../normalizrSchemas/validations';
 import { WorkflowExecution } from '../immutableRecords/workflowExecutions';
+import logger from '../logger/logger';
 
 export default {
   fetchValidations() {
@@ -19,7 +20,7 @@ export default {
                                       arrayOf(validationSchema)).entities.validations || {};
         dispatch(this.fetchValidationsSuccess(validations));
       }).catch((error) => {
-        console.error('Error in ValidationsActions.fetchValidations', error.stack || error); //eslint-disable-line no-console
+        logger.error('Error in ValidationsActions.fetchValidations', error.stack || error);
         dispatch(this.fetchValidationsFailed());
         let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {

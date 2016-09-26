@@ -4,6 +4,7 @@ import NotificationActions from '../actions/NotificationActions';
 import ParametersConstants from '../constants/ParametersConstants';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
+import logger from '../logger/logger';
 
 export default {
   fetchParametersPending() {
@@ -36,7 +37,7 @@ export default {
       }).catch(error => {
         dispatch(this.fetchParametersFailed());
         if(parentPath) { browserHistory.push(parentPath); }
-        console.error('Error in ParametersActions.fetchParameters', error.stack || error); //eslint-disable-line no-console
+        logger.error('Error in ParametersActions.fetchParameters', error.stack || error);
         let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));

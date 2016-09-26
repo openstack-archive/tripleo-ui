@@ -2,6 +2,7 @@ import NotificationActions from './NotificationActions';
 import RolesConstants from '../constants/RolesConstants';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
+import logger from '../logger/logger';
 
 export default {
   fetchRoles(planName) {
@@ -12,7 +13,7 @@ export default {
       .then((response) => {
         dispatch(this.fetchRolesSuccess(JSON.parse(response.output).result));
       }).catch((error) => {
-        console.error('Error in RolesAction.fetchRoles', error.stack || error); //eslint-disable-line no-console
+        logger.error('Error in RolesAction.fetchRoles', error.stack || error);
         dispatch(this.fetchRolesFailed());
         let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {

@@ -10,6 +10,7 @@ import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NodesConstants from '../constants/NodesConstants';
 import NotificationActions from './NotificationActions';
 import { nodeSchema } from '../normalizrSchemas/nodes';
+import logger from '../logger/logger';
 
 export default {
   startOperation(nodeIds) {
@@ -59,7 +60,7 @@ export default {
         dispatch(this.fetchNodesMACs(normalizedNodes));
       }).catch((error) => {
         dispatch(this.receiveNodes({}));
-        console.error('Error in NodesActions.fetchNodes', error.stack || error); //eslint-disable-line no-console
+        logger.error('Error in NodesActions.fetchNodes', error.stack || error);
         let errorHandler = new IronicApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -78,7 +79,7 @@ export default {
           },[]).join(', ');
           dispatch(this.fetchNodeMACsSuccess(nodeUUID, macs));
         }).catch(error => {
-          console.error('Error in NodesActions.fetchNodesMACs', error.stack || error); //eslint-disable-line no-console
+          logger.error('Error in NodesActions.fetchNodesMACs', error.stack || error);
           let errorHandler = new IronicApiErrorHandler(error);
           errorHandler.errors.forEach((error) => {
             dispatch(NotificationActions.notify(error));
@@ -207,7 +208,7 @@ export default {
         dispatch(this.updateNodeSuccess(response));
       }).catch(error => {
         dispatch(this.updateNodeFailed(nodePatch.uuid));
-        console.error('Error in NodesActions.UpdateNode', error.stack || error); //eslint-disable-line no-console
+        logger.error('Error in NodesActions.UpdateNode', error.stack || error);
         let errorHandler = new IronicApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -245,7 +246,7 @@ export default {
           dispatch(this.deleteNodeSuccess(nodeId));
         }).catch(error => {
           dispatch(this.deleteNodeFailed(nodeId));
-          console.error('Error in NodesActions.DeleteNodes', error.stack || error); //eslint-disable-line no-console
+          logger.error('Error in NodesActions.DeleteNodes', error.stack || error);
           let errorHandler = new IronicApiErrorHandler(error);
           errorHandler.errors.forEach((error) => {
             dispatch(NotificationActions.notify(error));
