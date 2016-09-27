@@ -4,6 +4,7 @@ import { Map, OrderedMap } from 'immutable';
 import { WorkflowExecution } from '../../js/immutableRecords/workflowExecutions';
 import WorkflowExecutionsConstants from '../../js/constants/WorkflowExecutionsConstants';
 import workflowExecutionsReducer from '../../js/reducers/workflowExecutionsReducer';
+import MistralConstants from '../../js/constants/MistralConstants';
 
 describe('workflowExecutionsReducer', () => {
   beforeEach(() => {
@@ -36,7 +37,7 @@ describe('workflowExecutionsReducer', () => {
         task_execution_id: null,
         updated_at: NaN,
         workflow_id: 'f8b280bb-5ba2-486b-9384-ddd79300d987',
-        workflow_name: 'tripleo.validations.v1.run_validation'
+        workflow_name: MistralConstants.VALIDATIONS_RUN
       })
     })
   });
@@ -70,7 +71,7 @@ describe('workflowExecutionsReducer', () => {
           task_execution_id: null,
           updated_at: '2016-07-18 14:05:08',
           workflow_id: 'f8b280bb-5ba2-486b-9384-ddd79300d987',
-          workflow_name: 'tripleo.validations.v1.run_validation'
+          workflow_name: MistralConstants.VALIDATIONS_RUN
         }
       }
     };
@@ -103,7 +104,7 @@ describe('workflowExecutionsReducer', () => {
         task_execution_id: null,
         updated_at: '2016-07-18 14:05:08',
         workflow_id: 'f8b280bb-5ba2-486b-9384-ddd79300d987',
-        workflow_name: 'tripleo.validations.v1.run_validation'
+        workflow_name: MistralConstants.VALIDATIONS_RUN
       }
     };
     const newState = workflowExecutionsReducer(initialState, action);
@@ -129,7 +130,7 @@ describe('workflowExecutionsReducer', () => {
         task_execution_id: null,
         updated_at: NaN,
         workflow_id: 'f8b280bb-5ba2-486b-9384-ddd79300d987',
-        workflow_name: 'tripleo.validations.v1.run_validation'
+        workflow_name: MistralConstants.VALIDATIONS_RUN
       })
     };
     const newState = workflowExecutionsReducer(initialState, action);

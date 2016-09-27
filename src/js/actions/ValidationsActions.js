@@ -8,12 +8,13 @@ import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import ValidationsConstants from '../constants/ValidationsConstants';
 import { validationSchema } from '../normalizrSchemas/validations';
 import { WorkflowExecution } from '../immutableRecords/workflowExecutions';
+import MistralConstants from '../constants/MistralConstants';
 
 export default {
   fetchValidations() {
     return (dispatch, getState) => {
       dispatch(this.fetchValidationsPending());
-      MistralApiService.runAction('tripleo.validations.list_validations').then((response) => {
+      MistralApiService.runAction(MistralConstants.VALIDATIONS_LIST).then((response) => {
         const actionResult = JSON.parse(response.output).result;
         const validations = normalize(actionResult,
                                       arrayOf(validationSchema)).entities.validations || {};
@@ -50,7 +51,7 @@ export default {
 
   runValidation(id, currentPlanName) {
     return (dispatch, getState) => {
-      MistralApiService.runWorkflow('tripleo.validations.v1.run_validation',
+      MistralApiService.runWorkflow(MistralConstants.VALIDATIONS_RUN,
                                     { validation_name: id,
                                       plan: currentPlanName })
       .then((response) => {
@@ -73,7 +74,7 @@ export default {
   runValidationMessage(messagePayload) {
     return (dispatch, getState) => {
       const execution = new WorkflowExecution(fromJS(messagePayload.execution))
-                          .set('workflow_name', 'tripleo.validations.v1.run_validation')
+                          .set('workflow_name', MistralConstants.VALIDATIONS_RUN)
                           .set('state', messagePayload.status)
                           .set('output', fromJS({...messagePayload}).delete('execution'));
       dispatch(WorkflowExecutionsActions.addWorkflowExecutionFromMessage(execution));
@@ -82,7 +83,7 @@ export default {
 
   runValidationGroups(groups, currentPlanName) {
     return (dispatch, getState) => {
-      MistralApiService.runWorkflow('tripleo.validations.v1.run_groups',
+      MistralApiService.runWorkflow(MistralConstants.VALIDATIONS_RUN_GROUPS,
                                     { group_names: groups,
                                       plan: currentPlanName })
       .then((response) => {

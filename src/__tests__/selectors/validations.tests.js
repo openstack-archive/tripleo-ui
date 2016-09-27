@@ -5,6 +5,7 @@ import * as selectors from '../../js/selectors/validations';
 import { Validation } from '../../js/immutableRecords/validations';
 import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
 import { WorkflowExecution } from '../../js/immutableRecords/workflowExecutions';
+import MistralConstants from '../../js/constants/MistralConstants';
 
 describe(' validations selectors', () => {
   beforeEach(() => {
@@ -66,7 +67,7 @@ describe(' validations selectors', () => {
           state: 'SUCCESS',
           state_info: null,
           updated_at: 1468905005000,
-          workflow_name: 'tripleo.validations.v1.run_validation'
+          workflow_name: MistralConstants.VALIDATIONS_RUN
         }),
         '2a': new WorkflowExecution({
           description: '',
@@ -88,7 +89,7 @@ describe(' validations selectors', () => {
           state: 'SUCCESS',
           state_info: null,
           updated_at: 1468905005001,
-          workflow_name: 'tripleo.validations.v1.run_validation'
+          workflow_name: MistralConstants.VALIDATIONS_RUN
         })
       })
     })

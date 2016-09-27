@@ -12,6 +12,7 @@ import { planFileSchema } from '../normalizrSchemas/plans';
 import StackActions from '../actions/StacksActions';
 import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
+import MistralConstants from '../constants/MistralConstants';
 
 export default {
   requestPlans() {
@@ -30,7 +31,7 @@ export default {
   fetchPlans() {
     return dispatch => {
       dispatch(this.requestPlans());
-      MistralApiService.runAction('tripleo.plan.list').then((response) => {
+      MistralApiService.runAction(MistralConstants.PLAN_LIST).then((response) => {
         let plans = JSON.parse(response.output).result || [];
         dispatch(this.receivePlans(plans));
         dispatch(CurrentPlanActions.detectPlan(plans));
@@ -202,7 +203,7 @@ export default {
 
           // Once all files are uploaded, start plan creation workflow.
           MistralApiService.runWorkflow(
-            'tripleo.plan_management.v1.create_deployment_plan',
+            MistralConstants.PLAN_CREATE,
             { container: planName }
           ).then((response) => {
             if(response.state === 'ERROR') {
@@ -269,7 +270,7 @@ export default {
       dispatch(this.createPlanPending());
       SwiftApiService.uploadTarball(planName, file).then((response) => {
         MistralApiService.runWorkflow(
-          'tripleo.plan_management.v1.create_deployment_plan',
+          MistralConstants.PLAN_CREATE,
           { container: planName }
         ).then((response) => {
           if(response.state === 'ERROR') {
@@ -346,21 +347,22 @@ export default {
     return dispatch => {
       dispatch(this.deletePlanPending(planName));
       browserHistory.push('/plans/list');
-      MistralApiService.runAction('tripleo.plan.delete', { container: planName }).then(response => {
-        dispatch(this.deletePlanSuccess(planName));
-        dispatch(NotificationActions.notify({
-          title: 'Plan Deleted',
-          message: `The plan ${planName} was successfully deleted.`,
-          type: 'success'
-        }));
-      }).catch(error => {
-        console.error('Error deleting plan MistralApiService.runAction', error); //eslint-disable-line no-console
-        dispatch(this.planDeleted(planName));
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      MistralApiService.runAction(MistralConstants.PLAN_DELETE, { container: planName })
+        .then(response => {
+          dispatch(this.deletePlanSuccess(planName));
+          dispatch(NotificationActions.notify({
+            title: 'Plan Deleted',
+            message: `The plan ${planName} was successfully deleted.`,
+            type: 'success'
+          }));
+        }).catch(error => {
+          console.error('Error deleting plan MistralApiService.runAction', error); //eslint-disable-line no-console
+          dispatch(this.planDeleted(planName));
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach((error) => {
+            dispatch(NotificationActions.notify(error));
+          });
         });
-      });
     };
   },
 
@@ -406,7 +408,7 @@ export default {
     return dispatch => {
       dispatch(this.deployPlanPending(planName));
       MistralApiService.runWorkflow(
-        'tripleo.deployment.v1.deploy_plan',
+        MistralConstants.DEPLOYMENT_DEPLOY_PLAN,
         { container: planName, timeout: 240
       }).then((response) => {
         dispatch(StackActions.fetchStacks());

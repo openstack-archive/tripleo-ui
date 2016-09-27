@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 
 import { currentPlanNameSelector } from './plans';
+import MistralConstants from '../constants/MistralConstants';
 
 const validations = (state) => state.validations.get('validations');
 const executions = (state) => state.executions.get('executions');
@@ -11,7 +12,7 @@ const executions = (state) => state.executions.get('executions');
 export const getValidationExecutionsForCurrentPlan = createSelector(
   [executions, currentPlanNameSelector], (executions, currentPlanName) => {
     return executions.filter(execution =>
-      execution.get('workflow_name') === 'tripleo.validations.v1.run_validation' &&
+      execution.get('workflow_name') === MistralConstants.VALIDATIONS_RUN &&
       execution.getIn(['input', 'plan']) === currentPlanName);
   }
 );

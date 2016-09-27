@@ -2,13 +2,14 @@ import NotificationActions from './NotificationActions';
 import RolesConstants from '../constants/RolesConstants';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
+import MistralConstants from '../constants/MistralConstants';
 
 export default {
   fetchRoles(planName) {
     return (dispatch, getState) => {
       dispatch(this.fetchRolesPending());
 
-      MistralApiService.runAction('tripleo.role.list', { container: planName })
+      MistralApiService.runAction(MistralConstants.ROLE_LIST, { container: planName })
       .then((response) => {
         dispatch(this.fetchRolesSuccess(JSON.parse(response.output).result));
       }).catch((error) => {
