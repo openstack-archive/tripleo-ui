@@ -153,9 +153,7 @@ function mapDispatchToProps(dispatch) {
     },
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
     fetchRoles: () => dispatch(RolesActions.fetchRoles()),
-    fetchResources: (name, id) => {
-      dispatch(StacksActions.fetchResources(name, id));
-    },
+    fetchResources: (stack) => dispatch(StacksActions.fetchResources(stack)),
     fetchStacks: () => dispatch(StacksActions.fetchStacks()),
     notify: notification => dispatch(NotificationActions.notify(notification)),
     runValidationStage: (uuid) => {
