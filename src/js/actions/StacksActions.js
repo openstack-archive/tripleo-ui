@@ -68,7 +68,7 @@ export default {
   fetchResources(stack) {
     return (dispatch) => {
       dispatch(this.fetchResourcesPending());
-      HeatApiService.getResources(stack.stack_name, stack.id).then((response) => {
+      HeatApiService.getResources(stack).then((response) => {
         dispatch(this.fetchResourcesSuccess(
           stack.stack_name,
           normalize(response.resources, arrayOf(stackResourceSchema)).entities.stackResources));
@@ -79,6 +79,97 @@ export default {
           dispatch(NotificationActions.notify(error));
         });
         dispatch(this.fetchResourcesFailed(error));
+      });
+    };
+  },
+
+  fetchResourceSuccess(stack, resourceName, resource) {
+    return {
+      type: StacksConstants.FETCH_RESOURCE_SUCCESS,
+      payload: {
+        stack,
+        resourceName,
+        resource
+      }
+    };
+  },
+
+  fetchResourceFailed(stack, resourceName) {
+    return {
+      type: StacksConstants.FETCH_RESOURCE_FAILED,
+      payload: {
+        stack,
+        resourceName
+      }
+    };
+  },
+
+  fetchResourcePending(stack, resourceName) {
+    return {
+      type: StacksConstants.FETCH_RESOURCE_PENDING,
+      payload: {
+        stack,
+        resourceName
+      }
+    };
+  },
+
+  fetchResource(stack, resourceName) {
+    return (dispatch) => {
+      dispatch(this.fetchResourcePending(stack));
+      HeatApiService.getResource(stack, resourceName).then((response) => {
+        dispatch(this.fetchResourceSuccess(stack, resourceName, response));
+      }).catch((error) => {
+        console.error('Error retrieving resource StackActions.fetchResource', error); //eslint-disable-line no-console
+        let errorHandler = new HeatApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+        dispatch(this.fetchResourceFailed(error));
+      });
+    };
+  },
+
+  fetchEnvironmentSuccess(stack, environment) {
+    return {
+      type: StacksConstants.FETCH_ENVIRONMENT_SUCCESS,
+      payload: {
+        environment,
+        stack
+      }
+    };
+  },
+
+  fetchEnvironmentFailed(stack) {
+    return {
+      type: StacksConstants.FETCH_ENVIRONMENT_FAILED,
+      payload: {
+        stack
+      }
+    };
+  },
+
+  fetchEnvironmentPending(stack) {
+    return {
+      type: StacksConstants.FETCH_ENVIRONMENT_PENDING,
+      payload: {
+        stack
+      }
+    };
+  },
+
+  fetchEnvironment(stack) {
+    return (dispatch) => {
+      dispatch(this.fetchEnvironmentPending(stack));
+      HeatApiService.getEnvironment(stack).then((response) => {
+        dispatch(this.fetchEnvironmentSuccess(stack, response));
+      }).catch((error) => {
+        console.error('Error retrieving environment StackActions.fetchEnvironment', error); //eslint-disable-line no-console
+        let errorHandler = new HeatApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+        dispatch(this.fetchEnvironmentFailed(error));
       });
     };
   }

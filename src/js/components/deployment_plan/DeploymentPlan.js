@@ -79,8 +79,10 @@ class DeploymentPlan extends React.Component {
                 <DeployStep currentPlan={this.props.currentPlan}
                             currentStack={this.props.currentStack}
                             deployPlan={this.props.deployPlan}
+                            fetchEnvironment={this.props.fetchEnvironment}
                             fetchResources={this.props.fetchResources}
-                            fetchStacks={this.props.fetchStacks}/>
+                            fetchResource={this.props.fetchResource}
+                            fetchStacks={this.props.fetchStacks} />
               </DeploymentPlanStep>
             </ol>
           </div>
@@ -105,8 +107,10 @@ DeploymentPlan.propTypes = {
   deployPlan: React.PropTypes.func,
   environmentConfigurationLoaded: React.PropTypes.bool,
   environmentConfigurationSummary: React.PropTypes.string,
+  fetchEnvironment: React.PropTypes.func,
   fetchEnvironmentConfiguration: React.PropTypes.func,
   fetchNodes: React.PropTypes.func,
+  fetchResource: React.PropTypes.func,
   fetchResources: React.PropTypes.func,
   fetchRoles: React.PropTypes.func,
   fetchStacks: React.PropTypes.func,
@@ -148,12 +152,15 @@ function mapDispatchToProps(dispatch) {
   return {
     choosePlan: planName => dispatch(CurrentPlanActions.choosePlan(planName)),
     deployPlan: planName => dispatch(PlanActions.deployPlan(planName)),
+    fetchEnvironment: (stack) => dispatch(StacksActions.fetchEnvironment(stack)),
     fetchEnvironmentConfiguration: (planName, parentPath) => {
       dispatch(EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName, parentPath));
     },
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
     fetchRoles: () => dispatch(RolesActions.fetchRoles()),
     fetchResources: (stack) => dispatch(StacksActions.fetchResources(stack)),
+    fetchResource: (stack, resourceName) =>
+      dispatch(StacksActions.fetchResource(stack, resourceName)),
     fetchStacks: () => dispatch(StacksActions.fetchStacks()),
     notify: notification => dispatch(NotificationActions.notify(notification)),
     runValidationStage: (uuid) => {
