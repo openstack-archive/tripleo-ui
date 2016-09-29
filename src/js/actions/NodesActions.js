@@ -55,7 +55,7 @@ export default {
           return IronicApiService.getNode(node.uuid);
         }));
       }).then((nodes) => {
-        const normalizedNodes = normalize(nodes, arrayOf(nodeSchema)).entities.nodes || Map();
+        const normalizedNodes = normalize(nodes, arrayOf(nodeSchema)).entities.nodes || {};
         dispatch(this.receiveNodes(normalizedNodes));
         dispatch(this.fetchNodesMACs(normalizedNodes));
       }).catch((error) => {
