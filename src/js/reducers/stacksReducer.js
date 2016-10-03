@@ -23,27 +23,24 @@ export default function stacksReducer(state = initialState, action) {
             .set('isFetching', false)
             .set('stacks', Map());
 
+  case StacksConstants.FETCH_STACK_PENDING:
+    return state.set('isFetching', true);
+
+  case StacksConstants.FETCH_STACK_SUCCESS: {
+    const stack = new Stack(fromJS(action.payload))
+                    .update('resources', resources => resources
+                      .map(resource => new StackResource(resource)));
+    return state.set('isFetching', false)
+                .mergeDeepIn(['stacks', action.payload.stack_name], stack);
+  }
+
+  case StacksConstants.FETCH_STACK_FAILED:
+    return state.set('isFetching', false);
+
   case StacksConstants.FETCH_ENVIRONMENT_SUCCESS:
     return state.setIn(
       ['stacks', action.payload.stack.stack_name, 'environment'],
       fromJS(action.payload.environment));
-
-  case StacksConstants.FETCH_RESOURCES_SUCCESS:
-    if (state.stacks.get(action.payload.stackName)) {
-      let existingResources = state.getIn(['stacks', action.payload.stackName, 'resources']);
-      let newResources = fromJS(action.payload.resources).reduce((resources, v, k) => {
-        if (resources.get(k)) {
-          return resources;
-        } else {
-          return resources.set(k, new StackResource(v));
-        }
-      }, existingResources);
-      return state.setIn(
-        ['stacks', action.payload.stackName, 'resources'],
-        newResources
-      );
-    }
-    return state;
 
   case StacksConstants.FETCH_RESOURCE_SUCCESS:
     if (state.stacks.get(action.payload.stack.stack_name)) {
