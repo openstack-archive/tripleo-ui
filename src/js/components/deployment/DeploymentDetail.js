@@ -9,34 +9,36 @@ import { getEnvironmentConfigurationSummary } from '../../selectors/environmentC
 import { allPreDeploymentValidationsSuccessful } from '../../selectors/validations';
 import PlanActions from '../../actions/PlansActions';
 
-class DeploymentDetail extends React.Component {
-  render() {
-    if (!this.props.currentStack) {
-      return (
-        <DeploymentConfirmation
-          allValidationsSuccessful={this.props.allPreDeploymentValidationsSuccessful}
-          currentPlan={this.props.currentPlan}
-          deployPlan={this.props.deployPlan}
-          environmentSummary={this.props.environmentConfigurationSummary}/>
-      );
-    } else if (this.props.currentStack.stack_status.match(/PROGRESS/)) {
-      return (
-        // TODO(jtomasek): render component DeploymentProgress
-        null
-      );
-    } else if (this.props.currentStack.stack_status.match(/SUCCESS/)) {
-      return (
-        // TODO(jtomasek): render component DeploymentSuccess
-        null
-      );
-    } else {
-      return (
-        // TODO(jtomasek): render component DeploymentFailure
-        null
-      );
-    }
+const DeploymentDetail = ({ currentPlan,
+                            currentStack,
+                            deployPlan,
+                            environmentConfigurationSummary,
+                            allPreDeploymentValidationsSuccessful }) => {
+  if (!currentStack) {
+    return (
+      <DeploymentConfirmation
+        allValidationsSuccessful={allPreDeploymentValidationsSuccessful}
+        currentPlan={currentPlan}
+        deployPlan={deployPlan}
+        environmentSummary={environmentConfigurationSummary}/>
+    );
+  } else if (currentStack.stack_status.match(/PROGRESS/)) {
+    return (
+      // TODO(jtomasek): render component DeploymentProgress
+      null
+    );
+  } else if (currentStack.stack_status.match(/SUCCESS/)) {
+    return (
+      // TODO(jtomasek): render component DeploymentSuccess
+      null
+    );
+  } else {
+    return (
+      // TODO(jtomasek): render component DeploymentFailure
+      null
+    );
   }
-}
+};
 
 DeploymentDetail.propTypes = {
   allPreDeploymentValidationsSuccessful: React.PropTypes.bool.isRequired,
