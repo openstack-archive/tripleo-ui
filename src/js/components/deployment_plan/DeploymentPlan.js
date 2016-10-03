@@ -29,6 +29,23 @@ class DeploymentPlan extends React.Component {
     this.props.fetchStacks();
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.pollCurrentStack(nextProps.currentStack);
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.stackProgressTimeout);
+  }
+
+  pollCurrentStack(currentStack) {
+    if (currentStack) {
+      if (currentStack.stack_status.match(/PROGRESS/)) {
+        clearTimeout(this.stackProgressTimeout);
+        this.stackProgressTimeout = setTimeout(() => this.props.fetchStack(currentStack), 20000);
+      }
+    }
+  }
+
   render() {
     let children;
     // Render children only when current plan is already selected
@@ -76,13 +93,15 @@ class DeploymentPlan extends React.Component {
                            unassignedAvailableNodes={this.props.unassignedAvailableNodes}/>
               </DeploymentPlanStep>
               <DeploymentPlanStep title="Deploy">
-                <DeployStep currentPlan={this.props.currentPlan}
-                            currentStack={this.props.currentStack}
-                            deployPlan={this.props.deployPlan}
-                            fetchEnvironment={this.props.fetchEnvironment}
-                            fetchResources={this.props.fetchResources}
-                            fetchResource={this.props.fetchResource}
-                            fetchStacks={this.props.fetchStacks} />
+                <DeployStep
+                  currentPlan={this.props.currentPlan}
+                  currentStack={this.props.currentStack}
+                  deployPlan={this.props.deployPlan}
+                  fetchStack={this.props.fetchStack}
+                  fetchStackEnvironment={this.props.fetchStackEnvironment}
+                  fetchStackResource={this.props.fetchStackResource}
+                  runPostDeploymentValidations={
+                    this.props.runPostDeploymentValidations.bind(this.props.currentPlan.name)}/>
               </DeploymentPlanStep>
             </ol>
           </div>
@@ -107,12 +126,12 @@ DeploymentPlan.propTypes = {
   deployPlan: React.PropTypes.func,
   environmentConfigurationLoaded: React.PropTypes.bool,
   environmentConfigurationSummary: React.PropTypes.string,
-  fetchEnvironment: React.PropTypes.func,
   fetchEnvironmentConfiguration: React.PropTypes.func,
   fetchNodes: React.PropTypes.func,
-  fetchResource: React.PropTypes.func,
-  fetchResources: React.PropTypes.func,
   fetchRoles: React.PropTypes.func,
+  fetchStack: React.PropTypes.func.isRequired,
+  fetchStackEnvironment: React.PropTypes.func,
+  fetchStackResource: React.PropTypes.func,
   fetchStacks: React.PropTypes.func,
   hasPlans: React.PropTypes.bool,
   inactivePlans: ImmutablePropTypes.map,
@@ -123,9 +142,8 @@ DeploymentPlan.propTypes = {
   roles: ImmutablePropTypes.map,
   rolesLoaded: React.PropTypes.bool,
   route: React.PropTypes.object,
-  runValidationStage: React.PropTypes.func,
-  unassignedAvailableNodes: ImmutablePropTypes.map,
-  validationStages: ImmutablePropTypes.map
+  runPostDeploymentValidations: React.PropTypes.func.isRequired,
+  unassignedAvailableNodes: ImmutablePropTypes.map
 };
 
 export function mapStateToProps(state) {
@@ -143,8 +161,7 @@ export function mapStateToProps(state) {
     availableNodes: getAvailableNodes(state),
     roles: state.roles.get('roles'),
     rolesLoaded: state.roles.get('loaded'),
-    unassignedAvailableNodes: getUnassignedAvailableNodes(state),
-    validationStages: state.validations.get('validationStages')
+    unassignedAvailableNodes: getUnassignedAvailableNodes(state)
   };
 }
 
@@ -152,19 +169,19 @@ function mapDispatchToProps(dispatch) {
   return {
     choosePlan: planName => dispatch(CurrentPlanActions.choosePlan(planName)),
     deployPlan: planName => dispatch(PlanActions.deployPlan(planName)),
-    fetchEnvironment: (stack) => dispatch(StacksActions.fetchEnvironment(stack)),
+    fetchStackEnvironment: (stack) => dispatch(StacksActions.fetchEnvironment(stack)),
     fetchEnvironmentConfiguration: (planName, parentPath) => {
       dispatch(EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName, parentPath));
     },
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
     fetchRoles: () => dispatch(RolesActions.fetchRoles()),
-    fetchResources: (stack) => dispatch(StacksActions.fetchResources(stack)),
-    fetchResource: (stack, resourceName) =>
+    fetchStack: (stack) => dispatch(StacksActions.fetchStack(stack.stack_name, stack.id)),
+    fetchStackResource: (stack, resourceName) =>
       dispatch(StacksActions.fetchResource(stack, resourceName)),
     fetchStacks: () => dispatch(StacksActions.fetchStacks()),
     notify: notification => dispatch(NotificationActions.notify(notification)),
-    runValidationStage: (uuid) => {
-      dispatch(ValidationsActions.runValidationStage(uuid));
+    runPostDeploymentValidations: planName => {
+      dispatch(ValidationsActions.runValidationGroups(['post-deployment'], planName));
     }
   };
 }
