@@ -1,7 +1,7 @@
 import ClassNames from 'classnames';
 import React from 'react';
 
-export const InlineNotification = ({ children, title, type }) => {
+const InlineNotification = ({ children, title, type }) => {
   const notificationClasses = ClassNames({
     'alert': true,
     'alert-danger': type === 'error',
@@ -33,3 +33,5 @@ InlineNotification.propTypes = {
 InlineNotification.defaultProps = {
   type: 'error'
 };
+
+export default InlineNotification;
