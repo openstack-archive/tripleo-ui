@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import React from 'react';
 
 import BlankSlate from '../ui/BlankSlate';
-import { InlineNotification } from '../ui/InlineNotification';
+import InlineNotification from '../ui/InlineNotification';
 import Loader from '../ui/Loader';
 import { ModalPanelBackdrop,
          ModalPanel,
@@ -68,12 +68,9 @@ export default DeploymentConfirmation;
 export const ValidationsWarning = ({ allValidationsSuccessful }) => {
   if (!allValidationsSuccessful) {
     return (
-      <InlineNotification className="test"
-                          type="warning"
+      <InlineNotification type="warning"
                           title="Not all pre-deployment validations have passed">
-        <p>
-          It is highly recommended that you resolve all validation issues before continuing.
-        </p>
+        <p>It is highly recommended that you resolve all validation issues before continuing.</p>
       </InlineNotification>
     );
   }
