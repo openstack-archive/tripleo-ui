@@ -44,7 +44,9 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.startNodesRegistrationPending(nodes));
       MistralApiService.runWorkflow(MistralConstants.BAREMETAL_REGISTER_OR_UPDATE,
-                                    { nodes_json: nodes.toList().toJS() })
+                                    { nodes_json: nodes.toList().toJS(),
+                                      kernel_name: 'bm-deploy-kernel',
+                                      ramdisk_name: 'bm-deploy-ramdisk' })
       .then((response) => {
         if(response.state === 'ERROR') {
           const errors = [{ title: 'Nodes Registration Failed', message: response.state_info }];
