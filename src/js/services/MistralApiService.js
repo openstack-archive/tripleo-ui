@@ -87,7 +87,11 @@ class MistralApiService {
       method: 'POST',
       data: JSON.stringify({
         name: actionName,
-        input: input
+        input: input,
+        params: {
+          save_result: true,
+          run_sync: true
+        }
       })
     }).then((response) => {
       if (response.state === 'SUCCESS') {
