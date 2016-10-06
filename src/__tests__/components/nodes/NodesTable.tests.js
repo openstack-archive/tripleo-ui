@@ -17,18 +17,21 @@ const filterString = '1';
 let nodes = Map({
   1: {
     uuid: '1',
+    name: 'N1',
     properties: {
       capabilities: 'boot_option:local,profile:compute'
     }
   },
   2: {
     uuid: '2',
+    name: 'N2',
     properties: {
       capabilities: 'boot_option:local'
     }
   },
   3: {
     uuid: '3',
+    name: 'N3',
     properties: {
       capabilities: 'boot_option:local,profile:nonexistentRole'
     }
