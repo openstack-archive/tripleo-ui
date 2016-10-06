@@ -21,10 +21,10 @@ describe('rolesReducer', () => {
     loaded: true,
     isFetching: false,
     roles: Map({
-      controller: new Role({
+      control: new Role({
         title: 'Controller',
         name: 'Controller',
-        identifier: 'controller'
+        identifier: 'control'
       })
     })
   });

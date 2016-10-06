@@ -29,7 +29,7 @@ export const getMaintenanceNodes = createSelector(
 export const getUnassignedAvailableNodes = createSelector(
   getAvailableNodes, (availableNodes) => {
     return availableNodes.filterNot(
-      node => node.getIn(['properties', 'capabilities'], '').match(/.*profile:(\w+)/)
+      node => node.getIn(['properties', 'capabilities'], '').match(/.*profile:([\w\-]+)/)
     );
   }
 );
