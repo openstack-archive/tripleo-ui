@@ -70,7 +70,10 @@ Loader.propTypes = {
   className: React.PropTypes.string,
   component: React.PropTypes.any, // Component to wrap children when loaded
   componentProps: React.PropTypes.object,
-  content: React.PropTypes.string,
+  content: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.element
+  ]),
   global: React.PropTypes.bool,
   height: React.PropTypes.number,
   inline: React.PropTypes.bool,
