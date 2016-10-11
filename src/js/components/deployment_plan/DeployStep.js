@@ -8,9 +8,10 @@ import Link from '../ui/Link';
 import Loader from '../ui/Loader';
 import { stackStates } from '../../constants/StacksConstants';
 
-export const DeployStep = ({ currentPlan, currentStack, deployPlan, fetchStack, fetchStackResource,
-                             fetchStackEnvironment, runPostDeploymentValidations,
-                             stacksLoaded }) => {
+export const DeployStep = ({ currentPlan, currentStack, currentStackResources,
+                             currentStackResourcesLoaded, currentStackDeploymentProgress,
+                             deployPlan, fetchStackResource, fetchStackEnvironment,
+                             runPostDeploymentValidations, stacksLoaded }) => {
   if (!currentStack || currentStack.stack_status === stackStates.DELETE_COMPLETE) {
     return (
       <Loader loaded={stacksLoaded}>
@@ -29,11 +30,14 @@ export const DeployStep = ({ currentPlan, currentStack, deployPlan, fetchStack, 
   } else if (currentStack.stack_status.match(/PROGRESS/)) {
     return (
       <DeploymentProgress stack={currentStack}
-                          fetchStack={fetchStack} />
+                          deploymentProgress={currentStackDeploymentProgress}/>
     );
-  } else if (currentStack.stack_status.match(/COMPLETE/)) {
+    // CORRECT THIS STATUS TO COMPLETE
+  } else if (currentStack.stack_status.match(/FAILED/)) {
     return (
       <DeploymentSuccess stack={currentStack}
+                         stackResources={currentStackResources}
+                         stackResourcesLoaded={currentStackResourcesLoaded}
                          fetchStackResource={fetchStackResource}
                          fetchStackEnvironment={fetchStackEnvironment}
                          runPostDeploymentValidations={runPostDeploymentValidations}/>
@@ -48,8 +52,10 @@ export const DeployStep = ({ currentPlan, currentStack, deployPlan, fetchStack, 
 DeployStep.propTypes = {
   currentPlan: ImmutablePropTypes.record.isRequired,
   currentStack: ImmutablePropTypes.record,
+  currentStackDeploymentProgress: React.PropTypes.number.isRequired,
+  currentStackResources: ImmutablePropTypes.map,
+  currentStackResourcesLoaded: React.PropTypes.bool.isRequired,
   deployPlan: React.PropTypes.func.isRequired,
-  fetchStack: React.PropTypes.func.isRequired,
   fetchStackEnvironment: React.PropTypes.func.isRequired,
   fetchStackResource: React.PropTypes.func.isRequired,
   runPostDeploymentValidations: React.PropTypes.func.isRequired,

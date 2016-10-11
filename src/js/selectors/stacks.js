@@ -3,7 +3,8 @@ import { createSelector } from 'reselect';
 import { Stack } from '../immutableRecords/stacks';
 import { currentPlanNameSelector } from './plans';
 
-const stacksSelector = state => state.stacks.get('stacks');
+const stacksSelector = state => state.stacks.stacks;
+const stackResourcesSelector = state => state.stacks.resources;
 
 /**
  * Returns the stack associated with currentPlanName
@@ -17,9 +18,25 @@ export const getCurrentStack = createSelector(
  * Returns a flag for the deployment progress of the current plan
  * (true if the plan is currently being deployed, false it not).
  */
-export const getCurrentStackDeploymentProgress = createSelector(
+export const getCurrentStackDeploymentInProgress = createSelector(
   [stacksSelector, currentPlanNameSelector],
   (stacks, currentPlanName) => {
     return stacks.get(currentPlanName, new Stack()).stack_status === 'CREATE_IN_PROGRESS';
+  }
+);
+
+/**
+ * Returns calculated percentage of deployment progress
+ */
+export const getCurrentStackDeploymentProgress = createSelector(
+  [stackResourcesSelector], (resources) => {
+    let allResources = resources.size;
+    if(allResources > 0) {
+      let completeResources = resources.filter(r => {
+        return r.resource_status === 'CREATE_COMPLETE';
+      }).size;
+      return Math.ceil(completeResources / allResources * 100);
+    }
+    return 0;
   }
 );
