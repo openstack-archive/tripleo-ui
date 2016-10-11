@@ -55,6 +55,22 @@ DataTableDataFieldCell.propTypes = {
   rowIndex: React.PropTypes.number
 };
 
+export const DataTableDateFieldCell = (props) => {
+  //TODO(jtomasek): Update this component to parse date and format it using React Intl's
+  // FormatedDate
+  const value = _.result(props.data[props.rowIndex], props.field);
+  return (
+    <DataTableCell {...props}>
+      {value}
+    </DataTableCell>
+  );
+};
+DataTableDateFieldCell.propTypes = {
+  data: React.PropTypes.array.isRequired,
+  field: React.PropTypes.string.isRequired,
+  rowIndex: React.PropTypes.number
+};
+
 export class DataTableCheckBoxCell extends React.Component {
   render() {
     let value = _.result(this.props.data[this.props.rowIndex], this.props.field);

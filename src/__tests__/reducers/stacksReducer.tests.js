@@ -1,4 +1,4 @@
-import { Map } from 'immutable';
+import { Map, OrderedMap } from 'immutable';
 import matchers from 'jasmine-immutable-matchers';
 
 import { StacksState, Stack } from '../../js/immutableRecords/stacks';
@@ -68,7 +68,7 @@ describe('stacksReducer state', () => {
             description: undefined,
             id: undefined,
             parent: undefined,
-            resources: Map(),
+            resources: OrderedMap(),
             stack_name: 'overcloud',
             stack_owner: undefined,
             stack_status: 'CREATE_COMPLETE',

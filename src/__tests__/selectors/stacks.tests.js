@@ -1,7 +1,7 @@
 import { Map } from 'immutable';
 import matchers from 'jasmine-immutable-matchers';
 
-import { getCurrentStackDeploymentProgress,
+import { getCurrentStackDeploymentInProgress,
          getCurrentStack } from '../../js/selectors/stacks';
 import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
 import { Stack, StacksState } from '../../js/immutableRecords/stacks';
@@ -31,7 +31,7 @@ describe('stacks selectors', () => {
     });
   });
 
-  describe('getCurrentStackDeploymentProgress', () => {
+  describe('getCurrentStackDeploymentInProgress', () => {
     it('returns true if the current plan\'s deployment is in progress', () => {
       const state = {
         stacks: new StacksState({
@@ -44,7 +44,7 @@ describe('stacks selectors', () => {
           currentPlanName: 'overcloud'
         })
       };
-      expect(getCurrentStackDeploymentProgress(state)).toBe(true);
+      expect(getCurrentStackDeploymentInProgress(state)).toBe(true);
     });
 
     it('returns false if the current plan\'s deployment is not in progress', () => {
@@ -59,7 +59,7 @@ describe('stacks selectors', () => {
           currentplanname: 'overcloud'
         })
       };
-      expect(getCurrentStackDeploymentProgress(state)).toBe(false);
+      expect(getCurrentStackDeploymentInProgress(state)).toBe(false);
     });
 
     it('returns false if the current plan does not have an associated stack', () => {
@@ -73,7 +73,7 @@ describe('stacks selectors', () => {
           currentplanname: 'overcloud'
         })
       };
-      expect(getCurrentStackDeploymentProgress(state)).toBe(false);
+      expect(getCurrentStackDeploymentInProgress(state)).toBe(false);
     });
   });
 });
