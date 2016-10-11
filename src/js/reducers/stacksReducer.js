@@ -29,7 +29,8 @@ export default function stacksReducer(state = initialState, action) {
   case StacksConstants.FETCH_STACK_SUCCESS: {
     const stack = new Stack(fromJS(action.payload))
                     .update('resources', resources => resources
-                      .map(resource => new StackResource(resource)));
+                      .map(resource => new StackResource(resource))
+                      .sortBy(resource => resource.updated_time));
     return state.set('isFetching', false)
                 .mergeDeepIn(['stacks', action.payload.stack_name], stack);
   }
