@@ -8,13 +8,14 @@ import { getCurrentStack } from '../../selectors/stacks';
 import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
 import { allPreDeploymentValidationsSuccessful } from '../../selectors/validations';
 import PlanActions from '../../actions/PlansActions';
+import { stackStates } from '../../constants/StacksConstants';
 
 const DeploymentDetail = ({ currentPlan,
                             currentStack,
                             deployPlan,
                             environmentConfigurationSummary,
                             allPreDeploymentValidationsSuccessful }) => {
-  if (!currentStack) {
+  if (!currentStack || currentStack.stack_status === stackStates.DELETE_COMPLETE) {
     return (
       <DeploymentConfirmation
         allValidationsSuccessful={allPreDeploymentValidationsSuccessful}
@@ -27,7 +28,7 @@ const DeploymentDetail = ({ currentPlan,
       // TODO(jtomasek): render component DeploymentProgress
       null
     );
-  } else if (currentStack.stack_status.match(/SUCCESS/)) {
+  } else if (currentStack.stack_status.match(/COMPLETE/)) {
     return (
       // TODO(jtomasek): render component DeploymentSuccess
       null
