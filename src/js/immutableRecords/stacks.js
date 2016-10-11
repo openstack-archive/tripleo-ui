@@ -1,4 +1,4 @@
-import { List, Map, Record } from 'immutable';
+import { List, Map, OrderedMap, Record } from 'immutable';
 
 export const StacksState = Record({
   isLoaded: false,
@@ -13,7 +13,7 @@ export const Stack = Record({
   environment: Map(),
   id: undefined,
   parent: undefined,
-  resources: Map(),
+  resources: OrderedMap(),
   stack_name: undefined,
   stack_owner: undefined,
   stack_status: undefined,

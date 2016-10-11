@@ -1,13 +1,17 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
-import { Link } from 'react-router';
 
 import { deploymentStatusMessages as statusMessages,
          stackStates } from '../../constants/StacksConstants';
 import Loader from '../ui/Loader';
 import ProgressBar from '../ui/ProgressBar';
+import StackResourcesTable from './StackResourcesTable';
 
 export default class DeploymentProgress extends React.Component {
+  componentDidMount() {
+    this.props.fetchStack(this.props.stack);
+  }
+
   calculateProgress() {
     let allResources = this.props.stack.resources.size;
     if(allResources > 0) {
@@ -36,16 +40,14 @@ export default class DeploymentProgress extends React.Component {
     );
 
     return (
-      <div>
-        <p>
-          Deployment is currently in progress. <Link to="/deployment-plan/deployment-detail">
-            View detailed information
-          </Link>
-        </p>
+      <div className="col-sm-12">
         <div className="progress-description">
           <Loader loaded={false} content={statusMessage} inline/>
         </div>
         {this.renderProgressBar()}
+        <h2>Resources</h2>
+        <StackResourcesTable isFetchingResources={false}
+                             resources={this.props.stack.resources.reverse()}/>
       </div>
     );
   }
