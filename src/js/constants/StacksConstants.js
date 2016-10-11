@@ -17,22 +17,23 @@ export default keyMirror({
 
 export const stackStates = keyMirror({
   CREATE_IN_PROGRESS: null,
-  CREATE_SUCCESS: null,
+  CREATE_COMPLETE: null,
   CREATE_FAILED: null,
+  DELETE_COMPLETE: null,
   DELETE_IN_PROGRESS: null,
   DELETE_FAILED: null,
   UPDATE_IN_PROGRESS: null,
   UPDATE_FAILED: null,
-  UPDATE_SUCCESS: null
+  UPDATE_COMPLETE: null
 });
 
 export const deploymentStatusMessages = {
   CREATE_IN_PROGRESS: 'Deployment in progress',
-  CREATE_SUCCESS: 'Deployment succeeded',
+  CREATE_COMPLETE: 'Deployment succeeded',
   CREATE_FAILED: 'Deployment failed',
   DELETE_IN_PROGRESS: 'Deletion in progress',
   DELETE_FAILED: 'Deployment deletion failed',
   UPDATE_IN_PROGRESS: 'Update in progress',
   UPDATE_FAILED: 'Update failed',
-  UPDATE_SUCCESS: 'Update succeeded'
+  UPDATE_COMPLETE: 'Update succeeded'
 };
