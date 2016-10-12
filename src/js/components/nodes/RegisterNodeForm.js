@@ -18,7 +18,7 @@ export default class RegisterNodeForm extends React.Component {
     };
     this.macAddressValidatorMessage = 'Please enter a valid MAC Addresses';
     this.nodeNameValidations = {
-      matchRegexp: /^[A-Z0-9-._~]+$/,
+      matchRegexp: /^[A-Z0-9-._~]+$/i,
       maxLength: 255
     };
     this.nodeNameValidationErrors = {
