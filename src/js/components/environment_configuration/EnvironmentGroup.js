@@ -7,12 +7,17 @@ import GroupedCheckBox from '../ui/forms/GroupedCheckBox';
 export default class EnvironmentGroup extends React.Component {
   constructor(props) {
     super(props);
-    let firstCheckedEnvironment = props.environments
-                                    .filter(env => env.get('enabled') === true)
-                                    .first();
     this.state = {
-      checkedEnvironment: firstCheckedEnvironment ? firstCheckedEnvironment.file : null
+      checkedEnvironment: null
     };
+  }
+
+  componentWillMount() {
+    const firstCheckedEnvironment = this.props.environments
+                                      .filter(env => env.get('enabled') === true)
+                                      .first();
+    this.setState({ checkedEnvironment: firstCheckedEnvironment ?
+                                          firstCheckedEnvironment.get('file') : null });
   }
 
   onGroupedCheckBoxChange(checked, environmentFile) {
@@ -20,9 +25,9 @@ export default class EnvironmentGroup extends React.Component {
   }
 
   _generateInputs() {
-    let environments = this.props.environments;
+    const { environments } = this.props;
     if (environments.size > 1) {
-      return environments.toArray().map((environment, index) => {
+      return environments.toList().map((environment, index) => {
         let checkBoxValue = this.state.checkedEnvironment === environment.get('file')
           ? true
           : false;
@@ -38,7 +43,6 @@ export default class EnvironmentGroup extends React.Component {
                            validations={{requiresEnvironments: requiresEnvironments}}
                            validationError={`This environment requires
                                              '${requiresEnvironments}'`}
-                           checked={this.state.checkedEnvironment === environment.get('file')}
                            onChange={this.onGroupedCheckBoxChange.bind(this)}
                            description={environment.get('description')}/>
         );
