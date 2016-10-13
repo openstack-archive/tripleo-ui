@@ -255,12 +255,7 @@ export default {
         browserHistory.push('/plans/list');
       }
       else {
-        dispatch(this.createPlanFailed());
-        dispatch(NotificationActions.notify({
-          type: 'error',
-          title: 'Plan creation error',
-          message: payload.message
-        }));
+        dispatch(this.createPlanFailed([{ title: 'Error', message: payload.message }]));
       }
     };
   },
@@ -277,9 +272,6 @@ export default {
             console.error('Error in PlansActions.createPlanFromTarball', response); //eslint-disable-line no-console
             dispatch(this.createPlanFailed([{ title: 'Error', message: response.state_info }]));
           }
-          else {
-            dispatch(this.pollForPlanCreationWorkflow(planName, response.id));
-          }
         }).catch((error) => {
           let errorHandler = new MistralApiErrorHandler(error);
           dispatch(this.createPlanFailed(errorHandler.errors));
@@ -288,36 +280,6 @@ export default {
         console.error('Error in PlansActions.createPlanFromTarball', error); //eslint-disable-line no-console
         let errorHandler = new SwiftApiErrorHandler(error);
         dispatch(this.createPlanFailed(errorHandler.errors));
-      });
-    };
-  },
-
-  pollForPlanCreationWorkflow(planName, workflowExecutionId) {
-    return (dispatch, getState) => {
-      MistralApiService.getWorkflowExecution(workflowExecutionId)
-      .then((response) => {
-        if(response.state === 'RUNNING') {
-          setTimeout(() => {
-            dispatch(this.pollForPlanCreationWorkflow(planName, workflowExecutionId));
-          }, 5000);
-        }
-        else if(response.state === 'ERROR') {
-          dispatch(this.createPlanFailed([{ title: 'Error', message: response.state_info }]));
-        }
-        else {
-          dispatch(this.createPlanSuccess(planName));
-          dispatch(this.fetchPlans());
-          dispatch(NotificationActions.notify({
-            type: 'success',
-            title: 'Plan was created',
-            message: `The plan ${planName} was successfully created`
-          }));
-          browserHistory.push('/plans/list');
-        }
-      }).catch((error) => {
-        let errorHandler = new MistralApiErrorHandler(error);
-        dispatch(this.createPlanFailed(errorHandler.errors));
-        dispatch(this.finishOperation());
       });
     };
   },
