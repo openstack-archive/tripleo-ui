@@ -5,7 +5,7 @@ import EnvironmentGroup from './EnvironmentGroup';
 
 export default class EnvironmentConfigurationTopic extends React.Component {
   render() {
-    let environmentGroups = this.props.environmentGroups.toArray().map((envGroup, index) => {
+    let environmentGroups = this.props.environmentGroups.toList().map((envGroup, index) => {
       return (
         <EnvironmentGroup key={index}
                           title={envGroup.get('title')}
