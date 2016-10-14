@@ -21,6 +21,7 @@ import { ModalPanelBackdrop,
 import PlanActions from '../../actions/PlansActions';
 import { stackStates } from '../../constants/StacksConstants';
 import StacksActions from '../../actions/StacksActions';
+import ValidationsActions from '../../actions/ValidationsActions';
 
 class DeploymentDetail extends React.Component {
   renderStatus() {
@@ -33,6 +34,7 @@ class DeploymentDetail extends React.Component {
             deployPlan,
             environmentConfigurationSummary,
             fetchStackResources,
+            runPreDeploymentValidations,
             stacksLoaded } = this.props;
 
     if (!currentStack || currentStack.stack_status === stackStates.DELETE_COMPLETE) {
@@ -44,7 +46,8 @@ class DeploymentDetail extends React.Component {
             allValidationsSuccessful={allPreDeploymentValidationsSuccessful}
             currentPlan={currentPlan}
             deployPlan={deployPlan}
-            environmentSummary={environmentConfigurationSummary}/>
+            environmentSummary={environmentConfigurationSummary}
+            runPreDeploymentValidations={runPreDeploymentValidations}/>
         </Loader>
       );
     } else if (currentStack.stack_status.match(/PROGRESS/)) {
@@ -113,6 +116,7 @@ DeploymentDetail.propTypes = {
   deployPlan: React.PropTypes.func.isRequired,
   environmentConfigurationSummary: React.PropTypes.string,
   fetchStackResources: React.PropTypes.func.isRequired,
+  runPreDeploymentValidations: React.PropTypes.func.isRequired,
   stacksLoaded: React.PropTypes.bool.isRequired
 };
 
@@ -133,7 +137,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     deployPlan: planName => dispatch(PlanActions.deployPlan(planName)),
     fetchStackResources: (stack) =>
-      dispatch(StacksActions.fetchResources(stack.stack_name, stack.id))
+      dispatch(StacksActions.fetchResources(stack.stack_name, stack.id)),
+    runPreDeploymentValidations: planName =>
+      dispatch(ValidationsActions.runValidationGroups(['pre-deployment'], planName))
   };
 };
 
