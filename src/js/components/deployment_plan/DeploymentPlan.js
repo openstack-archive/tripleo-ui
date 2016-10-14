@@ -44,7 +44,7 @@ class DeploymentPlan extends React.Component {
         clearTimeout(this.stackProgressTimeout);
         this.stackProgressTimeout = setTimeout(() => {
           this.props.fetchStacks();
-          this.props.fetchStackResources();
+          this.props.fetchStackResources(currentStack);
         }, 20000);
       }
     }

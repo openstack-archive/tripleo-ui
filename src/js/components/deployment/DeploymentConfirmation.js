@@ -5,35 +5,39 @@ import BlankSlate from '../ui/BlankSlate';
 import InlineNotification from '../ui/InlineNotification';
 import Loader from '../ui/Loader';
 
-const DeploymentConfirmation = ({ allValidationsSuccessful,
-                                  currentPlan,
-                                  deployPlan,
-                                  environmentSummary }) => {
-  return (
-    <div className="col-sm-12 deployment-summary">
-      <BlankSlate iconClass="fa fa-cloud-upload"
-                  title={`Deploy Plan ${currentPlan.name}`}>
-        <p><strong>Summary:</strong> {environmentSummary}</p>
-        <ValidationsWarning allValidationsSuccessful={allValidationsSuccessful}/>
-        <p>
-          Are you sure you want to deploy this plan?
-        </p>
-        <DeployButton
-          disabled={currentPlan.isRequestingPlanDeploy}
-          deploy={deployPlan.bind(this, currentPlan.name)}
-          isRequestingPlanDeploy={currentPlan.isRequestingPlanDeploy}/>
-      </BlankSlate>
-    </div>
-  );
-};
+export default class DeploymentConfirmation extends React.Component {
+  componentDidMount() {
+    this.props.runPreDeploymentValidations(this.props.currentPlan.name);
+  }
+
+  render() {
+    const { allValidationsSuccessful, currentPlan, deployPlan, environmentSummary } = this.props;
+
+    return (
+      <div className="col-sm-12 deployment-summary">
+        <BlankSlate iconClass="fa fa-cloud-upload"
+                    title={`Deploy Plan ${currentPlan.name}`}>
+          <p><strong>Summary:</strong> {environmentSummary}</p>
+          <ValidationsWarning allValidationsSuccessful={allValidationsSuccessful}/>
+          <p>
+            Are you sure you want to deploy this plan?
+          </p>
+          <DeployButton
+            disabled={currentPlan.isRequestingPlanDeploy}
+            deploy={deployPlan.bind(this, currentPlan.name)}
+            isRequestingPlanDeploy={currentPlan.isRequestingPlanDeploy}/>
+        </BlankSlate>
+      </div>
+    );
+  }
+}
 DeploymentConfirmation.propTypes = {
   allValidationsSuccessful: React.PropTypes.bool.isRequired,
   currentPlan: ImmutablePropTypes.record.isRequired,
   deployPlan: React.PropTypes.func.isRequired,
-  environmentSummary: React.PropTypes.string.isRequired
+  environmentSummary: React.PropTypes.string.isRequired,
+  runPreDeploymentValidations: React.PropTypes.func.isRequired
 };
-export default DeploymentConfirmation;
-
 
 export const ValidationsWarning = ({ allValidationsSuccessful }) => {
   if (!allValidationsSuccessful) {
