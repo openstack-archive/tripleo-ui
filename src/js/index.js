@@ -17,7 +17,7 @@ import DeploymentPlan from './components/deployment_plan/DeploymentPlan';
 import EditPlan from './components/plan/EditPlan';
 import EnvironmentConfiguration from
   './components/environment_configuration/EnvironmentConfiguration.js';
-import { getCurrentStackDeploymentProgress } from './selectors/stacks';
+import { getCurrentStackDeploymentInProgress } from './selectors/stacks';
 import ListPlans from './components/plan/ListPlans';
 import Login from './components/Login';
 import LoginActions from './actions/LoginActions';
@@ -62,7 +62,7 @@ TempStorage.initialized.then(() => {
   function checkRunningDeployment(nextState, replace) {
     const state = store.getState();
     let currentPlanName = state.currentPlan.currentPlanName;
-    if(getCurrentStackDeploymentProgress(state)) {
+    if(getCurrentStackDeploymentInProgress(state)) {
       store.dispatch(NotificationActions.notify({
         title: 'Not allowed',
         message: `A deployment for the plan ${currentPlanName} is already in progress.`,
