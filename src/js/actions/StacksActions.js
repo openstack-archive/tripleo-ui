@@ -43,88 +43,75 @@ export default {
     };
   },
 
-  fetchStackPending() {
+  fetchResourcesPending() {
     return {
-      type: StacksConstants.FETCH_STACK_PENDING
+      type: StacksConstants.FETCH_RESOURCES_PENDING
     };
   },
 
-  fetchStackSuccess(stack) {
+  fetchResourcesSuccess(resources) {
     return {
-      type: StacksConstants.FETCH_STACK_SUCCESS,
-      payload: stack
+      type: StacksConstants.FETCH_RESOURCES_SUCCESS,
+      payload: resources
     };
   },
 
-  fetchStackFailed() {
+  fetchResourcesFailed() {
     return {
-      type: StacksConstants.FETCH_STACK_FAILED
+      type: StacksConstants.FETCH_RESOURCES_FAILED
     };
   },
 
-  fetchStack(stackName, stackId) {
+  fetchResources(stackName, stackId) {
     return (dispatch) => {
-      dispatch(this.fetchStackPending());
-      HeatApiService.getStack(stackName, stackId).then(({ stack }) => {
-        return HeatApiService.getResources(stack).then(({ resources }) => {
-          stack.resources = normalize(resources,
-                                      arrayOf(stackResourceSchema)).entities.stackResources || {};
-          dispatch(this.fetchStackSuccess(stack));
-        });
+      dispatch(this.fetchResourcesPending());
+      HeatApiService.getResources(stackName, stackId).then(({ resources }) => {
+        const res = normalize(resources,
+                              arrayOf(stackResourceSchema)).entities.stackResources || {};
+        dispatch(this.fetchResourcesSuccess(res));
       }).catch((error) => {
         console.error('Error retrieving resources StackActions.fetchResources', error); //eslint-disable-line no-console
         let errorHandler = new HeatApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
-        dispatch(this.fetchStackFailed(error));
+        dispatch(this.fetchResourcesFailed(error));
       });
     };
   },
 
-  fetchResourceSuccess(stack, resourceName, resource) {
+  fetchResourceSuccess(resource) {
     return {
       type: StacksConstants.FETCH_RESOURCE_SUCCESS,
-      payload: {
-        stack,
-        resourceName,
-        resource
-      }
+      payload: resource
     };
   },
 
-  fetchResourceFailed(stack, resourceName) {
+  fetchResourceFailed(resourceName) {
     return {
       type: StacksConstants.FETCH_RESOURCE_FAILED,
-      payload: {
-        stack,
-        resourceName
-      }
+      payload: resourceName
     };
   },
 
-  fetchResourcePending(stack, resourceName) {
+  fetchResourcePending() {
     return {
-      type: StacksConstants.FETCH_RESOURCE_PENDING,
-      payload: {
-        stack,
-        resourceName
-      }
+      type: StacksConstants.FETCH_RESOURCE_PENDING
     };
   },
 
   fetchResource(stack, resourceName) {
     return (dispatch) => {
-      dispatch(this.fetchResourcePending(stack));
-      HeatApiService.getResource(stack, resourceName).then((response) => {
-        dispatch(this.fetchResourceSuccess(stack, resourceName, response));
+      dispatch(this.fetchResourcePending());
+      HeatApiService.getResource(stack, resourceName).then(({ resource }) => {
+        dispatch(this.fetchResourceSuccess(resource));
       }).catch((error) => {
         console.error('Error retrieving resource StackActions.fetchResource', error); //eslint-disable-line no-console
         let errorHandler = new HeatApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
-        dispatch(this.fetchResourceFailed(error));
+        dispatch(this.fetchResourceFailed(resourceName));
       });
     };
   },
