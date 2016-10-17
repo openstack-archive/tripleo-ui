@@ -16,7 +16,7 @@ export default class DeploymentSuccess extends React.Component {
     ]);
 
     return (
-      <div className="col-sm-12">
+      <div className="col-sm-12 fixed-container-body-content">
         <InlineNotification type="success"
                             title={deploymentStatusMessages[this.props.stack.stack_status]}>
           <p>{this.props.stack.stack_status_reason}</p>
