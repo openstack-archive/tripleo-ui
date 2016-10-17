@@ -103,9 +103,11 @@ class DeploymentPlan extends React.Component {
                   currentStackResources={this.props.currentStackResources}
                   currentStackResourcesLoaded={this.props.currentStackResourcesLoaded}
                   currentStackDeploymentProgress={this.props.currentStackDeploymentProgress}
+                  deleteStack={this.props.deleteStack}
                   deployPlan={this.props.deployPlan}
                   fetchStackEnvironment={this.props.fetchStackEnvironment}
                   fetchStackResource={this.props.fetchStackResource}
+                  isRequestingStackDelete={this.props.isRequestingStackDelete}
                   runPostDeploymentValidations={
                     this.props.runPostDeploymentValidations.bind(this.props.currentPlan.name)}
                   stacksLoaded={this.props.stacksLoaded}/>
@@ -133,6 +135,7 @@ DeploymentPlan.propTypes = {
   currentStackDeploymentProgress: React.PropTypes.number.isRequired,
   currentStackResources: ImmutablePropTypes.map,
   currentStackResourcesLoaded: React.PropTypes.bool.isRequired,
+  deleteStack: React.PropTypes.func,
   deployPlan: React.PropTypes.func,
   environmentConfigurationLoaded: React.PropTypes.bool,
   environmentConfigurationSummary: React.PropTypes.string,
@@ -148,6 +151,7 @@ DeploymentPlan.propTypes = {
   isFetchingEnvironmentConfiguration: React.PropTypes.bool,
   isFetchingNodes: React.PropTypes.bool,
   isFetchingRoles: React.PropTypes.bool,
+  isRequestingStackDelete: React.PropTypes.bool,
   notify: React.PropTypes.func,
   roles: ImmutablePropTypes.map,
   rolesLoaded: React.PropTypes.bool,
@@ -170,6 +174,7 @@ export function mapStateToProps(state) {
     isFetchingEnvironmentConfiguration: state.environmentConfiguration.isFetching,
     isFetchingNodes: state.nodes.get('isFetching'),
     isFetchingRoles: state.roles.get('isFetching'),
+    isRequestingStackDelete: state.stacks.get('isRequestingStackDelete'),
     hasPlans: !state.plans.get('all').isEmpty(),
     inactivePlans: getAllPlansButCurrent(state),
     availableNodes: getAvailableNodes(state),
@@ -183,6 +188,9 @@ export function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     choosePlan: planName => dispatch(CurrentPlanActions.choosePlan(planName)),
+    deleteStack: (stackName, stackId) => {
+      dispatch(StacksActions.deleteStack(stackName, stackId));
+    },
     deployPlan: planName => dispatch(PlanActions.deployPlan(planName)),
     fetchStackEnvironment: (stack) => dispatch(StacksActions.fetchEnvironment(stack)),
     fetchEnvironmentConfiguration: (planName, parentPath) => {

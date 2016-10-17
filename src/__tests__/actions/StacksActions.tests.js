@@ -36,6 +36,7 @@ describe('StacksActions', () => {
       spyOn(StacksActions, 'fetchStacksPending');
       spyOn(StacksActions, 'fetchStacksSuccess');
       spyOn(StacksActions, 'fetchStacksFailed');
+      spyOn(StacksActions, '_hasStackDeletionStarted').and.returnValue(false);
       StacksActions.fetchStacks()(() => {}, () => {});
       setTimeout(() => { done(); }, 1);
     });
@@ -59,6 +60,7 @@ describe('StacksActions', () => {
       spyOn(StacksActions, 'fetchStacksPending');
       spyOn(StacksActions, 'fetchStacksSuccess');
       spyOn(StacksActions, 'fetchStacksFailed');
+      spyOn(StacksActions, '_hasStackDeletionStarted').and.returnValue(false);
       StacksActions.fetchStacks()(() => {}, () => {});
       setTimeout(() => { done(); }, 1);
     });

@@ -26,12 +26,23 @@ export default {
     };
   },
 
+  _hasStackDeletionStarted(stacks, state) {
+    // Checks if deletion of the stack has started with this fetch.
+    const currentPlanName = state.currentPlan.currentPlanName;
+    const stackStatus = (state => stacks[currentPlanName] || {})(state).stack_status;
+    return (stackStatus === 'DELETE_IN_PROGRESS'
+            && state.stacks.get('isRequestingStackDelete') === true) ? true : false;
+  },
+
   fetchStacks(planName) {
-    return dispatch => {
+    return (dispatch, getState) => {
       dispatch(this.fetchStacksPending());
       HeatApiService.getStacks().then(response => {
         const stacks = normalize(response.stacks, arrayOf(stackSchema)).entities.stacks || {};
         dispatch(this.fetchStacksSuccess(stacks));
+        if(this._hasStackDeletionStarted(stacks, getState())) {
+          dispatch(this.deleteStackSuccess());
+        }
       }).catch(error => {
         console.error('Error retrieving stacks StackActions.fetchStacks', error); //eslint-disable-line no-console
         let errorHandler = new HeatApiErrorHandler(error);
@@ -156,6 +167,44 @@ export default {
           dispatch(NotificationActions.notify(error));
         });
         dispatch(this.fetchEnvironmentFailed(error));
+      });
+    };
+  },
+
+  deleteStackSuccess() {
+    return {
+      type: StacksConstants.DELETE_STACK_SUCCESS
+    };
+  },
+
+  deleteStackFailed() {
+    return {
+      type: StacksConstants.DELETE_STACK_FAILED
+    };
+  },
+
+  deleteStackPending() {
+    return {
+      type: StacksConstants.DELETE_STACK_PENDING
+    };
+  },
+
+  /**
+   * Starts a delete request for a stack.
+   */
+  deleteStack(stack) {
+    return (dispatch) => {
+      dispatch(this.deleteStackPending());
+      HeatApiService.deleteStack(stack.stack_name, stack.id).then((response) => {
+        //dispatch(this.deleteStackSuccess());
+        dispatch(this.fetchStacks());
+      }).catch((error) => {
+        console.error('Error retrieving environment StackActions.fetchEnvironment', error); //eslint-disable-line no-console
+        let errorHandler = new HeatApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+        dispatch(this.deleteStackFailed());
       });
     };
   }

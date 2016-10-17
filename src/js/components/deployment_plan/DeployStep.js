@@ -10,8 +10,9 @@ import { stackStates } from '../../constants/StacksConstants';
 
 export const DeployStep = ({ currentPlan, currentStack, currentStackResources,
                              currentStackResourcesLoaded, currentStackDeploymentProgress,
-                             deployPlan, fetchStackResource, fetchStackEnvironment,
-                             runPostDeploymentValidations, stacksLoaded }) => {
+                             deleteStack, deployPlan, fetchStackResource, fetchStackEnvironment,
+                             isRequestingStackDelete, runPostDeploymentValidations,
+                             stacksLoaded }) => {
   if (!currentStack || currentStack.stack_status === stackStates.DELETE_COMPLETE) {
     return (
       <Loader loaded={stacksLoaded}>
@@ -30,6 +31,8 @@ export const DeployStep = ({ currentPlan, currentStack, currentStackResources,
   } else if (currentStack.stack_status.match(/PROGRESS/)) {
     return (
       <DeploymentProgress stack={currentStack}
+                          isRequestingStackDelete={isRequestingStackDelete}
+                          deleteStack={deleteStack}
                           deploymentProgress={currentStackDeploymentProgress}/>
     );
   } else if (currentStack.stack_status.match(/COMPLETE/)) {
@@ -37,13 +40,17 @@ export const DeployStep = ({ currentPlan, currentStack, currentStackResources,
       <DeploymentSuccess stack={currentStack}
                          stackResources={currentStackResources}
                          stackResourcesLoaded={currentStackResourcesLoaded}
+                         isRequestingStackDelete={isRequestingStackDelete}
+                         deleteStack={deleteStack}
                          fetchStackResource={fetchStackResource}
                          fetchStackEnvironment={fetchStackEnvironment}
                          runPostDeploymentValidations={runPostDeploymentValidations}/>
     );
   } else {
     return (
-      <DeploymentFailure stack={currentStack}/>
+      <DeploymentFailure deleteStack={deleteStack}
+                         isRequestingStackDelete={isRequestingStackDelete}
+                         stack={currentStack}/>
     );
   }
 };
@@ -54,9 +61,11 @@ DeployStep.propTypes = {
   currentStackDeploymentProgress: React.PropTypes.number.isRequired,
   currentStackResources: ImmutablePropTypes.map,
   currentStackResourcesLoaded: React.PropTypes.bool.isRequired,
+  deleteStack: React.PropTypes.func.isRequired,
   deployPlan: React.PropTypes.func.isRequired,
   fetchStackEnvironment: React.PropTypes.func.isRequired,
   fetchStackResource: React.PropTypes.func.isRequired,
+  isRequestingStackDelete: React.PropTypes.bool.isRequired,
   runPostDeploymentValidations: React.PropTypes.func.isRequired,
   stacksLoaded: React.PropTypes.bool.isRequired
 };

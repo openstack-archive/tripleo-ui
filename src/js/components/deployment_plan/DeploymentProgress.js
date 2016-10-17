@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 
 import { deploymentStatusMessages as statusMessages,
          stackStates } from '../../constants/StacksConstants';
+import DeleteStackButton from './DeleteStackButton';
 import Loader from '../ui/Loader';
 import ProgressBar from '../ui/ProgressBar';
 
@@ -23,6 +24,14 @@ export default class DeploymentProgress extends React.Component {
       <strong>{statusMessages[this.props.stack.stack_status]}</strong>
     );
 
+    const deleteButton = this.props.stack.stack_status !== stackStates.DELETE_IN_PROGRESS
+      ? (<DeleteStackButton content="Cancel Deployment"
+                            deleteStack={this.props.deleteStack}
+                            disabled={this.props.isRequestingStackDelete}
+                            loaded={!this.props.isRequestingStackDelete}
+                            loaderContent="Requesting Deletion of Deployment"
+                            stack={this.props.stack}/>) : null;
+
     return (
       <div>
         <p>
@@ -34,12 +43,15 @@ export default class DeploymentProgress extends React.Component {
           <Loader loaded={false} content={statusMessage} inline/>
         </div>
         {this.renderProgressBar()}
+        {deleteButton}
       </div>
     );
   }
 }
 
 DeploymentProgress.propTypes = {
+  deleteStack: React.PropTypes.func.isRequired,
   deploymentProgress: React.PropTypes.number.isRequired,
+  isRequestingStackDelete: React.PropTypes.bool.isRequired,
   stack: ImmutablePropTypes.record.isRequired
 };
