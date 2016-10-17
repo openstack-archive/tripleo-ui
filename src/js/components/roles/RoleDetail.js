@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import { fromJS, is } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { mapValues } from 'lodash';
+import { isObjectLike, mapValues } from 'lodash';
 import React from 'react';
 import { Link } from 'react-router';
 
@@ -17,7 +17,6 @@ import { ModalPanelBackdrop,
          ModalPanelFooter } from '../ui/ModalPanel';
 import NavTab from '../ui/NavTab';
 import ParametersActions from '../../actions/ParametersActions';
-import logger from '../../services/logger';
 
 class RoleDetail extends React.Component {
   constructor() {
@@ -55,15 +54,18 @@ class RoleDetail extends React.Component {
   }
 
   /**
-  * Json parameter values are sent as string, this method parses those back to object
-  * also, parameters with undefined value are set to null
+  * Json parameter values are sent as string, this function parses them and checks if they're object
+  * or array. Also, parameters with undefined value are set to null
   */
   _jsonParseFormData(formData) {
     return mapValues(formData, (value) => {
       try {
-        return JSON.parse(value);
+        const parsedValue = JSON.parse(value);
+        if (isObjectLike(parsedValue)) {
+          return parsedValue;
+        }
+        return value;
       } catch(e) {
-        logger.warn('Failed to parse json', e);
         return value === undefined ? null : value;
       }
     });
