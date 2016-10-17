@@ -92,6 +92,9 @@ class RoleDetail extends React.Component {
             <NavTab to={`/deployment-plan/roles/${this.props.params.roleIdentifier}/services`}>
               Services
             </NavTab>
+            <NavTab to={`/deployment-plan/roles/${this.props.params.roleIdentifier}/network-configuration`}>
+              Network Configuration
+            </NavTab>
           </ul>
           <ModalFormErrorList errors={this.props.formErrors.toJS()}/>
         </div>
@@ -123,6 +126,7 @@ class RoleDetail extends React.Component {
           {this.renderRoleTabs()}
           <ModalPanelBody>
             <Loader height={60}
+                    content="Loading parameters..."
                     loaded={dataLoaded}>
               {this.props.children}
             </Loader>
