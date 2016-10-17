@@ -1,5 +1,6 @@
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { Link } from 'react-router';
 
 import InlineNotification from '../ui/InlineNotification';
 import Loader from '../ui/Loader';
@@ -23,6 +24,18 @@ export default class DeploymentSuccess extends React.Component {
 
     // TODO(honza) add SSL
 
+    const deleteButtonText = this.props.isRequestingDelete
+      ? 'Requesting Deployment Deletion'
+      : 'Delete Deployment';
+
+    const deleteButton = (
+      <Link to="/deployment-plan/deployment-delete"
+            type="button"
+            className="link btn btn-primary btn-lg">
+        {deleteButtonText}
+      </Link>
+    );
+
     return (
       <div>
         <InlineNotification type="success"
@@ -37,6 +50,7 @@ export default class DeploymentSuccess extends React.Component {
             <li>Password: {password}</li>
           </ul>
         </Loader>
+        {deleteButton}
       </div>
     );
   }
@@ -45,6 +59,7 @@ export default class DeploymentSuccess extends React.Component {
 DeploymentSuccess.propTypes = {
   fetchStackEnvironment: React.PropTypes.func.isRequired,
   fetchStackResource: React.PropTypes.func.isRequired,
+  isRequestingDelete: React.PropTypes.bool,
   runPostDeploymentValidations: React.PropTypes.func.isRequired,
   stack: ImmutablePropTypes.record.isRequired,
   stackResources: ImmutablePropTypes.map.isRequired,

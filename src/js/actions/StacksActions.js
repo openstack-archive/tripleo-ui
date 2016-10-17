@@ -1,5 +1,6 @@
 import { normalize, arrayOf } from 'normalizr';
 
+import { browserHistory } from 'react-router';
 import HeatApiErrorHandler from '../services/HeatApiErrorHandler';
 import HeatApiService from '../services/HeatApiService';
 import NotificationActions from '../actions/NotificationActions';
@@ -156,6 +157,38 @@ export default {
           dispatch(NotificationActions.notify(error));
         });
         dispatch(this.fetchEnvironmentFailed(error));
+      });
+    };
+  },
+
+  deleteStackRequestFailed() {
+    return {
+      type: StacksConstants.DELETE_STACK_REQUEST_FAILED
+    };
+  },
+
+  deleteStackRequestPending() {
+    return {
+      type: StacksConstants.DELETE_STACK_REQUEST_PENDING
+    };
+  },
+
+  /**
+   * Starts a delete request for a stack.
+   */
+  deleteStack(stackName, stackId) {
+    return (dispatch) => {
+      dispatch(this.deleteStackRequestPending());
+      HeatApiService.deleteStack(stackName, stackId).then((response) => {
+        dispatch(this.fetchStacks());
+        browserHistory.push('/deployment-plan');
+      }).catch((error) => {
+        console.error('Error retrieving environment StackActions.fetchEnvironment', error); //eslint-disable-line no-console
+        let errorHandler = new HeatApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+        dispatch(this.deleteStackRequestFailed());
       });
     };
   }

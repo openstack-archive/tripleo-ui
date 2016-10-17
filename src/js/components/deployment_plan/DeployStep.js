@@ -11,7 +11,7 @@ import { stackStates } from '../../constants/StacksConstants';
 export const DeployStep = ({ currentPlan, currentStack, currentStackResources,
                              currentStackResourcesLoaded, currentStackDeploymentProgress,
                              deployPlan, fetchStackResource, fetchStackEnvironment,
-                             runPostDeploymentValidations, stacksLoaded }) => {
+                             isRequestingDelete, runPostDeploymentValidations, stacksLoaded }) => {
   if (!currentStack || currentStack.stack_status === stackStates.DELETE_COMPLETE) {
     return (
       <Loader loaded={stacksLoaded}>
@@ -30,6 +30,7 @@ export const DeployStep = ({ currentPlan, currentStack, currentStackResources,
   } else if (currentStack.stack_status.match(/PROGRESS/)) {
     return (
       <DeploymentProgress stack={currentStack}
+                          isRequestingDelete={isRequestingDelete}
                           deploymentProgress={currentStackDeploymentProgress}/>
     );
   } else if (currentStack.stack_status.match(/COMPLETE/)) {
@@ -37,6 +38,7 @@ export const DeployStep = ({ currentPlan, currentStack, currentStackResources,
       <DeploymentSuccess stack={currentStack}
                          stackResources={currentStackResources}
                          stackResourcesLoaded={currentStackResourcesLoaded}
+                         isRequestingDelete={isRequestingDelete}
                          fetchStackResource={fetchStackResource}
                          fetchStackEnvironment={fetchStackEnvironment}
                          runPostDeploymentValidations={runPostDeploymentValidations}/>
@@ -57,6 +59,7 @@ DeployStep.propTypes = {
   deployPlan: React.PropTypes.func.isRequired,
   fetchStackEnvironment: React.PropTypes.func.isRequired,
   fetchStackResource: React.PropTypes.func.isRequired,
+  isRequestingDelete: React.PropTypes.bool.isRequired,
   runPostDeploymentValidations: React.PropTypes.func.isRequired,
   stacksLoaded: React.PropTypes.bool.isRequired
 };

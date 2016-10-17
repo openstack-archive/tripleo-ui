@@ -106,6 +106,7 @@ class DeploymentPlan extends React.Component {
                   deployPlan={this.props.deployPlan}
                   fetchStackEnvironment={this.props.fetchStackEnvironment}
                   fetchStackResource={this.props.fetchStackResource}
+                  isRequestingDelete={this.props.isRequestingDelete}
                   runPostDeploymentValidations={
                     this.props.runPostDeploymentValidations.bind(this.props.currentPlan.name)}
                   stacksLoaded={this.props.stacksLoaded}/>
@@ -148,6 +149,7 @@ DeploymentPlan.propTypes = {
   isFetchingEnvironmentConfiguration: React.PropTypes.bool,
   isFetchingNodes: React.PropTypes.bool,
   isFetchingRoles: React.PropTypes.bool,
+  isRequestingDelete: React.PropTypes.bool,
   notify: React.PropTypes.func,
   roles: ImmutablePropTypes.map,
   rolesLoaded: React.PropTypes.bool,
@@ -170,6 +172,7 @@ export function mapStateToProps(state) {
     isFetchingEnvironmentConfiguration: state.environmentConfiguration.isFetching,
     isFetchingNodes: state.nodes.get('isFetching'),
     isFetchingRoles: state.roles.get('isFetching'),
+    isRequestingDelete: state.stacks.get('isRequestingDelete'),
     hasPlans: !state.plans.get('all').isEmpty(),
     inactivePlans: getAllPlansButCurrent(state),
     availableNodes: getAvailableNodes(state),

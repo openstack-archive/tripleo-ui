@@ -1,4 +1,5 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { List } from 'immutable';
 import React from 'react';
 import { Link } from 'react-router';
 
@@ -23,6 +24,24 @@ export default class DeploymentProgress extends React.Component {
       <strong>{statusMessages[this.props.stack.stack_status]}</strong>
     );
 
+    const deletableStates = new List([
+      stackStates.CREATE_IN_PROGRESS,
+      stackStates.CREATE_COMPLETE,
+      stackStates.CREATE_FAILED,
+      stackStates.DELETE_FAILED
+    ]);
+
+    const deleteButtonText = this.props.isRequestingDelete
+      ? 'Requesting Deployment Deletion'
+      : 'Cancel Deployment';
+
+    const deleteButton = deletableStates.includes(this.props.stack.stack_status)
+      ? (<Link to="/deployment-plan/deployment-delete"
+               type="button"
+               className="link btn btn-primary btn-lg">
+           {deleteButtonText}
+         </Link>) : null;
+
     return (
       <div>
         <p>
@@ -34,6 +53,7 @@ export default class DeploymentProgress extends React.Component {
           <Loader loaded={false} content={statusMessage} inline/>
         </div>
         {this.renderProgressBar()}
+        {deleteButton}
       </div>
     );
   }
@@ -41,5 +61,6 @@ export default class DeploymentProgress extends React.Component {
 
 DeploymentProgress.propTypes = {
   deploymentProgress: React.PropTypes.number.isRequired,
+  isRequestingDelete: React.PropTypes.bool.isRequired,
   stack: ImmutablePropTypes.record.isRequired
 };

@@ -1,6 +1,7 @@
 import { List, Map, OrderedMap, Record } from 'immutable';
 
 export const StacksState = Record({
+  isRequestingDelete: false,
   isLoaded: false,
   isFetching: false,
   isFetchingResources: false,

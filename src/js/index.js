@@ -13,6 +13,7 @@ import UserAuthenticator from './components/UserAuthenticator';
 import DeletePlan from './components/plan/DeletePlan';
 import DeploymentConfiguration from './components/deployment_plan/DeploymentConfiguration';
 import DeploymentDetail from './components/deployment/DeploymentDetail';
+import DeploymentDelete from './components/deployment_plan/DeploymentDelete';
 import DeploymentPlan from './components/deployment_plan/DeploymentPlan';
 import EditPlan from './components/plan/EditPlan';
 import EnvironmentConfiguration from
@@ -101,6 +102,8 @@ TempStorage.initialized.then(() => {
               </Route>
               <Route path="deployment-detail"
                      component={DeploymentDetail}/>
+              <Route path="deployment-delete"
+                     component={DeploymentDelete}/>
             </Route>
 
             <Redirect from="nodes" to="nodes/registered"/>

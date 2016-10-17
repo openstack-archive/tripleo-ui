@@ -16,6 +16,7 @@ export default function stacksReducer(state = initialState, action) {
     return state
             .set('isLoaded', true)
             .set('isFetching', false)
+            .set('isRequestingDelete', false)
             .set('stacks', fromJS(action.payload).map(stack => new Stack(stack)));
 
   case StacksConstants.FETCH_STACKS_FAILED:
@@ -47,9 +48,15 @@ export default function stacksReducer(state = initialState, action) {
     return state.set('resourcesLoaded', true)
                 .setIn(['resources', action.payload.resource_name],
                        new StackResource(fromJS(action.payload)));
-                       
+
   case PlansConstants.PLAN_CHOSEN:
     return initialState;
+
+  case PlansConstants.DELETE_STACK_REQUEST_FAILED:
+    return state.set('isRequestingDelete', false);
+
+  case PlansConstants.DELETE_STACK_REQUEST_PENDING:
+    return state.set('isRequestingDelete', true);
 
   default:
     return state;
