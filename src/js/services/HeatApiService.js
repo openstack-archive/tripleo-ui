@@ -44,6 +44,10 @@ class HeatApiService {
     return this.defaultRequest(`/stacks/${stack.stack_name}/${stack.id}/environment`);
   }
 
+  deleteStack(name, id) {
+    return this.defaultRequest(`/stacks/${name}/${id}`, { method: 'DELETE' });
+  }
+
 }
 
 export default new HeatApiService();

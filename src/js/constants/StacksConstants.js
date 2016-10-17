@@ -1,6 +1,9 @@
 import keyMirror from 'keymirror';
 
 export default keyMirror({
+  DELETE_STACK_PENDING: null,
+  DELETE_STACK_FAILED: null,
+  DELETE_STACK_SUCCESS: null,
   FETCH_ENVIRONMENT_SUCCESS: null,
   FETCH_ENVIRONMENT_PENDING: null,
   FETCH_ENVIRONMENT_FAILED: null,
