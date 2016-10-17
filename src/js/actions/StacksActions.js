@@ -28,7 +28,7 @@ export default {
   },
 
   fetchStacks(planName) {
-    return dispatch => {
+    return (dispatch, getState) => {
       dispatch(this.fetchStacksPending());
       HeatApiService.getStacks().then(response => {
         const stacks = normalize(response.stacks, arrayOf(stackSchema)).entities.stacks || {};
@@ -157,6 +157,45 @@ export default {
           dispatch(NotificationActions.notify(error));
         });
         dispatch(this.fetchEnvironmentFailed(error));
+      });
+    };
+  },
+
+  deleteStackSuccess(stackName) {
+    return {
+      type: StacksConstants.DELETE_STACK_SUCCESS,
+      payload: stackName
+    };
+  },
+
+  deleteStackFailed() {
+    return {
+      type: StacksConstants.DELETE_STACK_FAILED
+    };
+  },
+
+  deleteStackPending() {
+    return {
+      type: StacksConstants.DELETE_STACK_PENDING
+    };
+  },
+
+  /**
+   * Starts a delete request for a stack.
+   */
+  deleteStack(stack) {
+    return (dispatch) => {
+      dispatch(this.deleteStackPending());
+      HeatApiService.deleteStack(stack.stack_name, stack.id).then((response) => {
+        dispatch(this.deleteStackSuccess(stack.stack_name));
+        dispatch(this.fetchStacks());
+      }).catch((error) => {
+        logger.error('Error deleting stack StackActions.deleteStack', error);
+        let errorHandler = new HeatApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+        dispatch(this.deleteStackFailed());
       });
     };
   }
