@@ -48,6 +48,9 @@ class RoleServices extends React.Component {
         </div>
         <div className="col-sm-8">
           <ParameterInputList
+            emptyParametersMessage={this.state.selectedService ?
+                                    'There are currently no parameters to configure in this section'
+                                    : 'Please select service to configure'}
             parameters={this.props.roleResourceTree.getIn(['services',
                                                            this.state.selectedService,
                                                            'parameters'], Map())}
