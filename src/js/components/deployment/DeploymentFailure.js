@@ -12,7 +12,7 @@ export default class DeploymentSuccess extends React.Component {
 
   render() {
     return (
-      <div className="col-sm-12">
+      <div className="col-sm-12 fixed-container-body-content">
         <InlineNotification type="error"
                             title={deploymentStatusMessages[this.props.stack.stack_status]}>
           <p>{this.props.stack.stack_status_reason}</p>

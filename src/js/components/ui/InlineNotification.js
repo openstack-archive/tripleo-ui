@@ -27,7 +27,7 @@ const InlineNotification = ({ children, title, type }) => {
 
 InlineNotification.propTypes = {
   children: React.PropTypes.node,
-  title: React.PropTypes.string.isRequired,
+  title: React.PropTypes.string,
   type: React.PropTypes.oneOf(['error', 'warning', 'success', 'info']).isRequired
 };
 InlineNotification.defaultProps = {
