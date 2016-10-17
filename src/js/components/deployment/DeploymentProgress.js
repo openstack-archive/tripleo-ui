@@ -28,7 +28,7 @@ export default class DeploymentProgress extends React.Component {
     );
 
     return (
-      <div className="col-sm-12">
+      <div className="col-sm-12 fixed-container-body-content">
         <div className="progress-description">
           <Loader loaded={false} content={statusMessage} inline/>
         </div>

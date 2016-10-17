@@ -31,6 +31,7 @@ class DeploymentPlan extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (!nextProps.stacksLoaded) { this.props.fetchStacks(); }
     this.pollCurrentStack(nextProps.currentStack);
   }
 
