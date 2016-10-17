@@ -1,0 +1,9 @@
+Code-Review+2: Florian Fuchs <flfuchs@redhat.com>
+Code-Review+2: Jiri Tomasek <jtomasek@redhat.com>
+Workflow+1: Jiri Tomasek <jtomasek@redhat.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Mon, 17 Oct 2016 17:16:45 +0000
+Reviewed-on: https://review.openstack.org/387520
+Project: openstack/tripleo-ui
+Branch: refs/heads/stable/newton
