@@ -12,11 +12,12 @@ export default function stacksReducer(state = initialState, action) {
   case StacksConstants.FETCH_STACKS_PENDING:
     return state.set('isFetching', true);
 
-  case StacksConstants.FETCH_STACKS_SUCCESS:
+  case StacksConstants.FETCH_STACKS_SUCCESS: {
     return state
             .set('isLoaded', true)
             .set('isFetching', false)
             .set('stacks', fromJS(action.payload).map(stack => new Stack(stack)));
+  }
 
   case StacksConstants.FETCH_STACKS_FAILED:
     return state
@@ -47,9 +48,18 @@ export default function stacksReducer(state = initialState, action) {
     return state.set('resourcesLoaded', true)
                 .setIn(['resources', action.payload.resource_name],
                        new StackResource(fromJS(action.payload)));
-                       
+
   case PlansConstants.PLAN_CHOSEN:
     return initialState;
+
+  case StacksConstants.DELETE_STACK_SUCCESS:
+    return state.set('isRequestingStackDelete', false);
+
+  case StacksConstants.DELETE_STACK_FAILED:
+    return state.set('isRequestingStackDelete', false);
+
+  case StacksConstants.DELETE_STACK_PENDING:
+    return state.set('isRequestingStackDelete', true);
 
   default:
     return state;
