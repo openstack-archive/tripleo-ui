@@ -47,13 +47,13 @@ export default class ParameterInput extends React.Component {
                             labelColumnClasses="col-sm-4"
                             inputColumnClasses="col-sm-8"/>
       );
-    } else if(type.toLowerCase() === 'String' &&
+    } else if(type.toLowerCase() === 'string' &&
               /^.*(Key|Cert|Certificate)$/.test(name)) {
       return (
         <HorizontalTextarea name={name}
                             title={label}
                             description={description}
-                            value={defaultValue.toJS()}
+                            value={defaultValue}
                             labelColumnClasses="col-sm-4"
                             inputColumnClasses="col-sm-8"/>
       );
