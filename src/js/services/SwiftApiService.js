@@ -3,6 +3,7 @@ import request from 'reqwest';
 import when from 'when';
 
 import { getAuthTokenId, getServiceUrl } from '../services/utils';
+import logger from '../services/logger';
 
 class SwiftApiService {
 
@@ -65,6 +66,7 @@ class SwiftApiService {
       if(xhr.status === 0 && xhr.statusText === '' && xhr.timeout === 0) {
         return when.resolve(xhr);
       }
+      logger.error('Tarball upload failed', xhr);
       return when.reject(xhr);
     });
   }
