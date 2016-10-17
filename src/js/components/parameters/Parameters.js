@@ -1,7 +1,7 @@
-import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { isObjectLike, mapValues } from 'lodash';
 import { Link } from 'react-router';
 import { fromJS, is } from 'immutable';
 import React from 'react';
@@ -11,7 +11,6 @@ import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import ParametersActions from '../../actions/ParametersActions';
 import ParameterInputList from './ParameterInputList';
 import { getRootParameters } from '../../selectors/parameters';
-import logger from '../../services/logger';
 
 class Parameters extends React.Component {
   constructor() {
@@ -49,15 +48,18 @@ class Parameters extends React.Component {
   }
 
   /**
-  * Json parameter values are sent as string, this method parses those back to object
-  * also, parameters with undefined value are set to null
+  * Json parameter values are sent as string, this function parses them and checks if they're object
+  * or array. Also, parameters with undefined value are set to null
   */
   _jsonParseFormData(formData) {
-    return _.mapValues(formData, (value) => {
+    return mapValues(formData, (value) => {
       try {
-        return JSON.parse(value);
+        const parsedValue = JSON.parse(value);
+        if (isObjectLike(parsedValue)) {
+          return parsedValue;
+        }
+        return value;
       } catch(e) {
-        logger.warn('Failed to parse json', e);
         return value === undefined ? null : value;
       }
     });
