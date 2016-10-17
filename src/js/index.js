@@ -32,6 +32,7 @@ import DeployedNodesTabPane from './components/nodes/DeployedNodesTabPane';
 import RegisterNodesDialog from './components/nodes/RegisterNodesDialog';
 import RegisteredNodesTabPane from './components/nodes/RegisteredNodesTabPane';
 import RoleDetail from './components/roles/RoleDetail';
+import RoleNetworkConfig from './components/roles/RoleNetworkConfig';
 import RoleParameters from './components/roles/RoleParameters';
 import RoleServices from './components/roles/RoleServices';
 import TempStorage from './services/TempStorage.js';
@@ -98,6 +99,7 @@ TempStorage.initialized.then(() => {
                      onEnter={checkRunningDeployment}>
                 <Route path="parameters" component={RoleParameters}/>
                 <Route path="services" component={RoleServices}/>
+                <Route path="network-configuration" component={RoleNetworkConfig}/>
               </Route>
               <Route path="deployment-detail"
                      component={DeploymentDetail}/>
