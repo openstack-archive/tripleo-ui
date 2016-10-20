@@ -32,10 +32,10 @@ export default class DeploymentSuccess extends React.Component {
         </InlineNotification>
         <h4>Overcloud information:</h4>
         <Loader loaded={this.props.stackResourcesLoaded}
-                component="p"
                 content="Loading overcloud information...">
-          <ul>
-            <li>Overcloud IP address: <a href={`http://${ip}`}>http://{ip}</a></li>
+          <ul className="list">
+            <li>Overcloud IP address: {ip}</li>
+            <li>Username: admin</li>
             <li>Password: {password}</li>
           </ul>
         </Loader>
