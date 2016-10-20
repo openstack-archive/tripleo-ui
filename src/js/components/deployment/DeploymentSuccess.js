@@ -1,35 +1,21 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
-import Loader from '../ui/Loader';
 import { deploymentStatusMessages } from '../../constants/StacksConstants';
 import InlineNotification from '../ui/InlineNotification';
+import OvercloudInfo from './OvercloudInfo';
 
 export default class DeploymentSuccess extends React.Component {
   render() {
-    const ip = this.props.stackResources.getIn([
-      'PublicVirtualIP', 'attributes', 'ip_address'
-    ]);
-
-    const password = this.props.stack.getIn([
-      'environment', 'parameter_defaults', 'AdminPassword'
-    ]);
-
     return (
       <div className="col-sm-12 fixed-container-body-content">
         <InlineNotification type="success"
                             title={deploymentStatusMessages[this.props.stack.stack_status]}>
           <p>{this.props.stack.stack_status_reason}</p>
         </InlineNotification>
-        <h4>Overcloud information:</h4>
-        <Loader loaded={this.props.stackResourcesLoaded}
-                component="p"
-                content="Loading overcloud information...">
-          <ul>
-            <li>Overcloud IP address: <a href={`http://${ip}`}>http://{ip}</a></li>
-            <li>Password: {password}</li>
-          </ul>
-        </Loader>
+        <OvercloudInfo stackResourcesLoaded={this.props.stackResourcesLoaded}
+                       stack={this.props.stack}
+                       stackResources={this.props.stackResources}/>
       </div>
     );
   }
