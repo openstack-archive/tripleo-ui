@@ -2,16 +2,6 @@ import React from 'react';
 import Portal from 'react-portal';
 
 export default class Modal extends React.Component {
-  // add the modal-open class to the body of the page so scrollbars render properly.
-  componentWillMount() {
-    document.body.classList.add('modal-open');
-  }
-
-  // remove the modal-open class
-  componentWillUnmount() {
-    document.body.classList.remove('modal-open');
-  }
-
   render() {
     return (
       <Portal isOpened>
