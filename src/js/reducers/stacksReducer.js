@@ -16,7 +16,8 @@ export default function stacksReducer(state = initialState, action) {
     return state
             .set('isLoaded', true)
             .set('isFetching', false)
-            .set('stacks', fromJS(action.payload).map(stack => new Stack(stack)));
+            .set('stacks',
+                 state.stacks.mergeDeep(fromJS(action.payload).map(stack => new Stack(stack))));
   }
 
   case StacksConstants.FETCH_STACKS_FAILED:
@@ -32,8 +33,10 @@ export default function stacksReducer(state = initialState, action) {
     return state.set('isFetchingResources', false)
                 .set('resourcesLoaded', true)
                 .set('resources',
-                     fromJS(action.payload).map(resource => new StackResource(resource))
-                                           .sortBy(resource => resource.updated_time));
+                     state.resources.mergeDeep(
+                       fromJS(action.payload).map(resource => new StackResource(resource))
+                                             .sortBy(resource => resource.updated_time))
+                     );
   }
 
   case StacksConstants.FETCH_RESOURCES_FAILED:
