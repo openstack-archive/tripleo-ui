@@ -87,7 +87,12 @@ export const _getRoleServices = (heatParameters, roleKey) => {
            .map(service => Map({
              name: service.get('Type'),
              description: service.get('Description'),
-             parameters: _convertToParameters(service.get('Parameters', Map()))
+             parameters: _convertToParameters(
+                           _extractParameters(
+                             service.get('Parameters', Map()),
+                             service.get('NestedParameters', Map())
+                           )
+                         )
            }));
 };
 
