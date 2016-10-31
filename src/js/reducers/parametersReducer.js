@@ -1,5 +1,6 @@
 import { fromJS, List, Map } from 'immutable';
 
+import EnvironmentConfigurationConstants from '../constants/EnvironmentConfigurationConstants';
 import ParametersConstants from '../constants/ParametersConstants';
 import PlansConstants from '../constants/PlansConstants';
 import { ParametersDefaultState } from '../immutableRecords/parameters';
@@ -54,6 +55,9 @@ export default function parametersReducer(state = initialState, action) {
               formErrors: List.of(...action.payload.formErrors),
               formFieldErrors: Map(action.payload.formFieldErrors)
             }));
+
+  case EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS:
+    return state.set('loaded', false);
 
   case PlansConstants.PLAN_CHOSEN:
     return initialState;
