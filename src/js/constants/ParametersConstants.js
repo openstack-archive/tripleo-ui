@@ -8,3 +8,7 @@ export default keyMirror({
   UPDATE_PARAMETERS_SUCCESS: null,
   UPDATE_PARAMETERS_FAILED: null
 });
+
+// List of parameter names which are considered internal and should not be displayed by GUI
+// TODO(jtomasek): these should be ideally identified using ParameterGroup in THT
+export const internalParameters = ['DefaultPasswords', 'ServiceNetMap', 'EndpointMap'];
