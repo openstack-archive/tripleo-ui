@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { Map } from 'immutable';
 
+import { internalParameters } from '../constants/ParametersConstants';
 import { Parameter } from '../immutableRecords/parameters';
 import { getRole } from './roles';
 
@@ -88,12 +89,18 @@ export const _getRoleServices = (heatParameters, roleKey) => {
              name: service.get('Type'),
              description: service.get('Description'),
              parameters: _convertToParameters(service.get('Parameters', Map()))
-           }));
+           }))
+           .sortBy(s => s.get('name'));
 };
 
 /**
  * Converts parameters to immutable Parameter Records
+ * Filter out internalParameters which we don't want to display
+ * sort parameters by name
  */
 export const _convertToParameters = parameters => {
-  return parameters.map((parameter, key) => new Parameter(parameter).set('Name', key));
+  return parameters
+           .map((parameter, key) => new Parameter(parameter).set('Name', key))
+           .filterNot(parameter => internalParameters.includes(parameter.Name))
+           .sortBy(p => p.Name.toLowerCase());
 };
