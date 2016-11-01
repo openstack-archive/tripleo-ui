@@ -91,7 +91,7 @@ class Parameters extends React.Component {
 
         <div className="modal-body">
           <Loader height={60}
-                  loaded={!this.props.isFetching}>
+                  loaded={this.props.parametersLoaded}>
             <div className="tab-content">
               <div className="tab-pane active">
                 <ModalFormErrorList errors={this.props.formErrors.toJS()}/>
@@ -121,9 +121,9 @@ Parameters.propTypes = {
   formErrors: ImmutablePropTypes.list,
   formFieldErrors: ImmutablePropTypes.map,
   history: React.PropTypes.object,
-  isFetching: React.PropTypes.bool,
   mistralParameters: ImmutablePropTypes.map.isRequired,
   parameters: ImmutablePropTypes.map,
+  parametersLoaded: React.PropTypes.bool,
   parentPath: React.PropTypes.string.isRequired,
   updateParameters: React.PropTypes.func
 };
@@ -137,9 +137,9 @@ function mapStateToProps(state) {
     form: state.parameters.form,
     formErrors: state.parameters.form.get('formErrors'),
     formFieldErrors: state.parameters.form.get('formFieldErrors'),
-    isFetching: state.parameters.isFetching,
     mistralParameters: state.parameters.mistralParameters,
-    parameters: getRootParameters(state)
+    parameters: getRootParameters(state),
+    parametersLoaded: state.parameters.loaded
   };
 }
 
