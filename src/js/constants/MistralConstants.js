@@ -4,6 +4,7 @@ export default {
   BAREMETAL_REGISTER_OR_UPDATE: 'tripleo.baremetal.v1.register_or_update',
   CAPABILITIES_GET: 'tripleo.heat_capabilities.get',
   CAPABILITIES_UPDATE: 'tripleo.heat_capabilities.update',
+  CREATE_CONTAINER: 'tripleo.plan.create_container',
   DEPLOYMENT_DEPLOY_PLAN: 'tripleo.deployment.v1.deploy_plan',
   PARAMETERS_GET: 'tripleo.parameters.get',
   PARAMETERS_UPDATE: 'tripleo.parameters.update',

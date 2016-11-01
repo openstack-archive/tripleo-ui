@@ -26,6 +26,12 @@ export default class SwiftApiErrorHandler extends BaseHttpRequestErrorHandler {
         message: error.message
       });
       break;
+    case 403:
+      errors.push({
+        title: 'Forbidden',
+        message: errorObj.responseText
+      });
+      break;
     case 404:
       error = JSON.parse(errorObj.responseText).error;
       errors.push({
