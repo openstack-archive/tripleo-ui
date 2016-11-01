@@ -21,16 +21,6 @@ class SwiftApiService {
     });
   }
 
-  createContainer(container) {
-    return this.defaultRequest(`/${container}`, {
-      method: 'PUT',
-      headers: {
-        'X-Auth-Token': getAuthTokenId(),
-        'x-container-meta-usage-tripleo': 'plan'
-      }
-    });
-  }
-
   createObject(container, objectName, data) {
     return this.defaultRequest(`/${container}/${objectName}`, {
       method: 'PUT',
@@ -49,10 +39,6 @@ class SwiftApiService {
       method: 'PUT',
       contentType: 'application/x-www-form-urlencoded',
       processData: false,
-      headers: {
-        'X-Auth-Token': getAuthTokenId(),
-        'x-container-meta-usage-tripleo': 'plan'
-      },
       data: file
     }).then((response) => {
       return when.resolve(response);

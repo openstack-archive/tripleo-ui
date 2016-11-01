@@ -200,7 +200,9 @@ export default {
   createPlan(planName, planFiles) {
     return (dispatch, getState) => {
       dispatch(this.createPlanPending());
-      SwiftApiService.createContainer(planName).then((response) => {
+      MistralApiService.runAction('tripleo.plan.create_container', {
+        container: planName
+      }).then((response) => {
         // Upload all files to container first.
         this._uploadFilesToContainer(planName, fromJS(planFiles), dispatch).then(() => {
 
@@ -237,7 +239,7 @@ export default {
 
       }).catch((error) => {
         logger.error('Error in PlansActions.createPlan', error);
-        let errorHandler = new SwiftApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -267,25 +269,41 @@ export default {
   createPlanFromTarball(planName, file) {
     return (dispatch) => {
       dispatch(this.createPlanPending());
-      SwiftApiService.uploadTarball(planName, file).then((response) => {
-        MistralApiService.runWorkflow(
-          MistralConstants.PLAN_CREATE,
-          { container: planName }
-        ).then((response) => {
-          if(response.state === 'ERROR') {
-            logger.error('Error in PlansActions.createPlanFromTarball', response);
-            dispatch(this.createPlanFailed([{ title: 'Error', message: response.state_info }]));
-          }
+
+      MistralApiService.runAction('tripleo.plan.create_container', {
+        container: planName
+      }).then((response) => {
+
+
+        SwiftApiService.uploadTarball(planName, file).then((response) => {
+          MistralApiService.runWorkflow(
+            MistralConstants.PLAN_CREATE,
+            { container: planName }
+          ).then((response) => {
+            if(response.state === 'ERROR') {
+              logger.error('Error in PlansActions.createPlanFromTarball', response);
+              dispatch(this.createPlanFailed([{ title: 'Error', message: response.state_info }]));
+            }
+          }).catch((error) => {
+            logger.error('Error in workflow in PlansActions.createPlanFromTarball', error);
+            let errorHandler = new MistralApiErrorHandler(error);
+            dispatch(this.createPlanFailed(errorHandler.errors));
+          });
         }).catch((error) => {
-          logger.error('Error in workflow in PlansActions.createPlanFromTarball', error);
-          let errorHandler = new MistralApiErrorHandler(error);
+          logger.error('Error in Swift in PlansActions.createPlanFromTarball', error);
+          let errorHandler = new SwiftApiErrorHandler(error);
           dispatch(this.createPlanFailed(errorHandler.errors));
         });
+
       }).catch((error) => {
-        logger.error('Error in Swift in PlansActions.createPlanFromTarball', error);
-        let errorHandler = new SwiftApiErrorHandler(error);
-        dispatch(this.createPlanFailed(errorHandler.errors));
+        logger.error('Error in PlansActions.createPlan', error);
+        let errorHandler = new MistralApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+        dispatch(this.createPlanFailed());
       });
+
     };
   },
 
