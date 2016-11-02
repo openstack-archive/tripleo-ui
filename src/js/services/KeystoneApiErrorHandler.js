@@ -24,6 +24,7 @@ export default class KeystoneApiErrorHandler extends BaseHttpRequestErrorHandler
         title: 'Unauthorized',
         message: error.message
       });
+      this.logout();
       break;
     }
     default:

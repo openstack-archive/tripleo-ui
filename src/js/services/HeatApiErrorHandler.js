@@ -25,6 +25,7 @@ export default class HeatApiErrorHandler extends BaseHttpRequestErrorHandler {
         title: 'Unauthorized',
         message: error.message
       });
+      this.logout();
       break;
     case 404:
       error = JSON.parse(errorObj.responseText).error;

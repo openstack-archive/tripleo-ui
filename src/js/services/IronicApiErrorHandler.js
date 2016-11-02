@@ -25,6 +25,7 @@ export default class IronicApiErrorHandler extends BaseHttpRequestErrorHandler {
         title: 'Unauthorized',
         message: error
       });
+      this.logout();
       break;
     default:
       error = errorObj.responseText;

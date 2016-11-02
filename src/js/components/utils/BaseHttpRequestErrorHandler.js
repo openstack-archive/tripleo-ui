@@ -1,3 +1,6 @@
+import LoginActions from '../../actions/LoginActions';
+import store from '../../store';
+
 /**
  * @class
  * @classdesc Implements base for API and Form error handling
@@ -38,4 +41,9 @@ export default class BaseHttpRequestErrorHandler{
   get formFieldErrors() {
     return this._formFieldErrors;
   }
+
+  logout() {
+    return store.dispatch(LoginActions.logoutUser());
+  }
+
 }
