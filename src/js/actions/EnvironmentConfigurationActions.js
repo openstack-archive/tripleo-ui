@@ -24,7 +24,7 @@ export default {
                       error.stack || error);
         if (redirectPath) { browserHistory.push(redirectPath); }
         dispatch(this.fetchEnvironmentConfigurationFailed());
-        let errorHandler = new MistralApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -68,7 +68,7 @@ export default {
       }).catch((error) => {
         logger.error('Error in EnvironmentConfigurationActions.updateEnvironment',
                       error.stack || error);
-        let errorHandler = new MistralApiErrorHandler(error, formFields);
+        let errorHandler = new MistralApiErrorHandler(dispatch, error, formFields);
         dispatch(this.updateEnvironmentConfigurationFailed(errorHandler.errors,
                                                            errorHandler.formFieldErrors));
       });

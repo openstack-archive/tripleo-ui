@@ -19,7 +19,7 @@ export default {
         browserHistory.push(nextPath);
       }).catch((error) => {
         logger.error('Error in LoginActions.authenticateUserViaToken', error.stack || error);
-        let errorHandler = new KeystoneApiErrorHandler(error);
+        let errorHandler = new KeystoneApiErrorHandler(dispatch, error);
         TempStorage.removeItem('keystoneAuthTokenId');
         browserHistory.push({pathname: '/login', query: { nextPath: nextPath }});
         dispatch(this.userAuthFailure(errorHandler.errors));
@@ -37,7 +37,7 @@ export default {
         browserHistory.push(nextPath);
       }).catch((error) => {
         logger.error('Error in LoginActions.authenticateUser', error);
-        let errorHandler = new KeystoneApiErrorHandler(error, formFields);
+        let errorHandler = new KeystoneApiErrorHandler(dispatch, error, formFields);
         dispatch(this.userAuthFailure(errorHandler.errors, errorHandler.formFieldErrors));
       });
     };

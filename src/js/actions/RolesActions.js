@@ -16,7 +16,7 @@ export default {
       }).catch((error) => {
         logger.error('Error in RolesAction.fetchRoles', error.stack || error);
         dispatch(this.fetchRolesFailed());
-        let errorHandler = new MistralApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });

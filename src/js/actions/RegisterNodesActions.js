@@ -57,7 +57,7 @@ export default {
         }
       }).catch((error) => {
         logger.error('Error in RegisterNodesActions.startNodesRegistration', error);
-        let errorHandler = new MistralApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(dispatch, error);
         dispatch(this.startNodesRegistrationFailed(errorHandler.errors));
       });
     };
