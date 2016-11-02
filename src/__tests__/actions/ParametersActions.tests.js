@@ -116,15 +116,15 @@ describe('ParametersActions', () => {
       );
     });
 
-    it('dispatches fetchParametersPending', () => {
+    it('dispatches updateParametersPending', () => {
       expect(ParametersActions.updateParametersPending).toHaveBeenCalled();
     });
 
-    it('does not dispatch fetchParametersSuccess', () => {
+    it('does not dispatch updateParametersSuccess', () => {
       expect(ParametersActions.updateParametersSuccess).not.toHaveBeenCalled();
     });
 
-    it('dispatches fetchParametersFailed', () => {
+    it('dispatches updateParametersFailed', () => {
       expect(ParametersActions.updateParametersFailed).toHaveBeenCalled();
     });
   });

@@ -85,8 +85,11 @@ export default {
         if (url) { browserHistory.push(url); }
       }).catch(error => {
         logger.error('Error in ParametersActions.updateParameters', error);
+        dispatch(this.updateParametersFailed());
         let errorHandler = new MistralApiErrorHandler(error, inputFieldNames);
-        dispatch(this.updateParametersFailed(errorHandler.errors, errorHandler.formFieldErrors));
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
       });
     };
   }
