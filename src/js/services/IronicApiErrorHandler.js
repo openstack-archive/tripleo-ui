@@ -1,4 +1,6 @@
 import BaseHttpRequestErrorHandler from '../components/utils/BaseHttpRequestErrorHandler';
+import LoginActions from '../actions/LoginActions';
+import store from '../store';
 
 export default class IronicApiErrorHandler extends BaseHttpRequestErrorHandler {
   _generateErrors(errorObj) {
@@ -25,6 +27,7 @@ export default class IronicApiErrorHandler extends BaseHttpRequestErrorHandler {
         title: 'Unauthorized',
         message: error
       });
+      store.dispatch(LoginActions.logoutUser());
       break;
     default:
       error = errorObj.responseText;

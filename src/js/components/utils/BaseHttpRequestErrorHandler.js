@@ -38,4 +38,5 @@ export default class BaseHttpRequestErrorHandler{
   get formFieldErrors() {
     return this._formFieldErrors;
   }
+
 }

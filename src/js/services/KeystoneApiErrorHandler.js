@@ -1,4 +1,6 @@
 import BaseHttpRequestErrorHandler from '../components/utils/BaseHttpRequestErrorHandler';
+import LoginActions from '../actions/LoginActions';
+import store from '../store';
 
 export default class KeystoneApiErrorHandler extends BaseHttpRequestErrorHandler {
   _generateErrors(errorObj) {
@@ -24,6 +26,7 @@ export default class KeystoneApiErrorHandler extends BaseHttpRequestErrorHandler
         title: 'Unauthorized',
         message: error.message
       });
+      store.dispatch(LoginActions.logoutUser());
       break;
     }
     default:

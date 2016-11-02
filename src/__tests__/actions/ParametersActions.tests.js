@@ -124,9 +124,6 @@ describe('ParametersActions', () => {
       expect(ParametersActions.updateParametersSuccess).not.toHaveBeenCalled();
     });
 
-    it('dispatches fetchParametersFailed', () => {
-      expect(ParametersActions.updateParametersFailed).toHaveBeenCalled();
-    });
   });
 
   describe('updateParametersFailed', () => {
