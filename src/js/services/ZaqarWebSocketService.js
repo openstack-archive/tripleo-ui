@@ -69,6 +69,6 @@ export default {
   },
 
   close() {
-    this.socket.close();
+    this.socket ? this.socket.close() : null;
   }
 };

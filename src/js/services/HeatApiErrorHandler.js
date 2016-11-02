@@ -1,4 +1,6 @@
 import BaseHttpRequestErrorHandler from '../components/utils/BaseHttpRequestErrorHandler';
+import LoginActions from '../actions/LoginActions';
+import store from '../store';
 
 export default class HeatApiErrorHandler extends BaseHttpRequestErrorHandler {
   _generateErrors(errorObj) {
@@ -25,6 +27,7 @@ export default class HeatApiErrorHandler extends BaseHttpRequestErrorHandler {
         title: 'Unauthorized',
         message: error.message
       });
+      store.dispatch(LoginActions.logoutUser());
       break;
     case 404:
       error = JSON.parse(errorObj.responseText).error;
