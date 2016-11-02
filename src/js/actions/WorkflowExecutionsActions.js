@@ -19,7 +19,7 @@ export default {
       }).catch((error) => {
         logger.error('Error in WorkflowExecutionsActions.fetchWorkflowExecutions',
                      error);
-        let errorHandler = new MistralApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -70,7 +70,7 @@ export default {
       }).catch((error) => {
         logger.error('Error in WorkflowExecutionsActions.updateWorkflowExecution',
                      error);
-        let errorHandler = new MistralApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });

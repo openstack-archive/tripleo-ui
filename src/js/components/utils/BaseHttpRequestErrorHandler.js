@@ -1,9 +1,12 @@
+import LoginActions from '../../actions/LoginActions';
+
 /**
  * @class
  * @classdesc Implements base for API and Form error handling
  */
 export default class BaseHttpRequestErrorHandler{
-  constructor(xmlHttpRequestError, formInputFieldNames) {
+  constructor(dispatch, xmlHttpRequestError, formInputFieldNames) {
+    this.dispatch = dispatch;
     this.xmlHttpRequestError = xmlHttpRequestError;
     this.formInputFieldNames = formInputFieldNames || [];
     this._errors = this._generateErrors(this.xmlHttpRequestError);
@@ -38,4 +41,9 @@ export default class BaseHttpRequestErrorHandler{
   get formFieldErrors() {
     return this._formFieldErrors;
   }
+
+  logout() {
+    return this.dispatch(LoginActions.logoutUser());
+  }
+
 }

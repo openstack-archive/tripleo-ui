@@ -62,7 +62,7 @@ export default {
       }).catch((error) => {
         dispatch(this.receiveNodes({}));
         logger.error('Error in NodesActions.fetchNodes', error.stack || error);
-        let errorHandler = new IronicApiErrorHandler(error);
+        let errorHandler = new IronicApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -81,7 +81,7 @@ export default {
           dispatch(this.fetchNodeMACsSuccess(nodeUUID, macs));
         }).catch(error => {
           logger.error('Error in NodesActions.fetchNodesMACs', error.stack || error);
-          let errorHandler = new IronicApiErrorHandler(error);
+          let errorHandler = new IronicApiErrorHandler(dispatch, error);
           errorHandler.errors.forEach((error) => {
             dispatch(NotificationActions.notify(error));
           });
@@ -112,7 +112,7 @@ export default {
         }
       }).catch((error) => {
         logger.error('Error in NodesActions.startNodesIntrospection', error.stack || error);
-        let errorHandler = new MistralApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -166,7 +166,7 @@ export default {
         }
       }).catch((error) => {
         logger.error('Error in NodesActions.startProvideNodes', error.stack || error);
-        let errorHandler = new MistralApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -212,7 +212,7 @@ export default {
       }).catch(error => {
         dispatch(this.updateNodeFailed(nodePatch.uuid));
         logger.error('Error in NodesActions.UpdateNode', error.stack || error);
-        let errorHandler = new IronicApiErrorHandler(error);
+        let errorHandler = new IronicApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -250,7 +250,7 @@ export default {
         }).catch(error => {
           dispatch(this.deleteNodeFailed(nodeId));
           logger.error('Error in NodesActions.DeleteNodes', error.stack || error);
-          let errorHandler = new IronicApiErrorHandler(error);
+          let errorHandler = new IronicApiErrorHandler(dispatch, error);
           errorHandler.errors.forEach((error) => {
             dispatch(NotificationActions.notify(error));
           });
@@ -285,7 +285,7 @@ export default {
             dispatch(this.finishOperation(flatNodes));
           }
         }).catch((error) => {
-          let errorHandler = new MistralApiErrorHandler(error);
+          let errorHandler = new MistralApiErrorHandler(dispatch, error);
           errorHandler.errors.forEach((error) => {
             dispatch(NotificationActions.notify(error));
           });

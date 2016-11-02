@@ -38,7 +38,7 @@ export default {
         dispatch(CurrentPlanActions.detectPlan(plans));
       }).catch((error) => {
         logger.error('Error in PlansActions.fetchPlan', error);
-        let errorHandler = new MistralApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -70,7 +70,7 @@ export default {
                                   normalize(response, arrayOf(planFileSchema)).entities.planFiles));
       }).catch(error => {
         logger.error('Error retrieving plan PlansActions.fetchPlan', error);
-        let errorHandler = new SwiftApiErrorHandler(error);
+        let errorHandler = new SwiftApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -135,7 +135,7 @@ export default {
         dispatch(this.fetchPlans());
       }).catch((error) => {
         logger.error('Error in PlansActions.updatePlanFromTarball', error);
-        let errorHandler = new SwiftApiErrorHandler(error);
+        let errorHandler = new SwiftApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -190,7 +190,7 @@ export default {
         }).catch((error) => {
           // Reject the promise on the first file that fails.
           logger.error('Error in PlansActions.createPlan', error);
-          let errorHandler = new SwiftApiErrorHandler(error);
+          let errorHandler = new SwiftApiErrorHandler(dispatch, error);
           reject(errorHandler.errors);
         });
       });
@@ -219,7 +219,7 @@ export default {
             }
           }).catch((error) => {
             logger.error('Error in PlansActions.createPlan', error);
-            let errorHandler = new MistralApiErrorHandler(error);
+            let errorHandler = new MistralApiErrorHandler(dispatch, error);
             errorHandler.errors.forEach((error) => {
               dispatch(NotificationActions.notify(error));
             });
@@ -237,7 +237,7 @@ export default {
 
       }).catch((error) => {
         logger.error('Error in PlansActions.createPlan', error);
-        let errorHandler = new SwiftApiErrorHandler(error);
+        let errorHandler = new SwiftApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -278,12 +278,12 @@ export default {
           }
         }).catch((error) => {
           logger.error('Error in workflow in PlansActions.createPlanFromTarball', error);
-          let errorHandler = new MistralApiErrorHandler(error);
+          let errorHandler = new MistralApiErrorHandler(dispatch, error);
           dispatch(this.createPlanFailed(errorHandler.errors));
         });
       }).catch((error) => {
         logger.error('Error in Swift in PlansActions.createPlanFromTarball', error);
-        let errorHandler = new SwiftApiErrorHandler(error);
+        let errorHandler = new SwiftApiErrorHandler(dispatch, error);
         dispatch(this.createPlanFailed(errorHandler.errors));
       });
     };
@@ -325,7 +325,7 @@ export default {
         }).catch(error => {
           logger.error('Error deleting plan MistralApiService.runAction', error);
           dispatch(this.planDeleted(planName));
-          let errorHandler = new MistralApiErrorHandler(error);
+          let errorHandler = new MistralApiErrorHandler(dispatch, error);
           errorHandler.errors.forEach((error) => {
             dispatch(NotificationActions.notify(error));
           });
@@ -381,7 +381,7 @@ export default {
         dispatch(StackActions.fetchStacks());
       }).catch(error => {
         dispatch(this.deployPlanFailed(planName));
-        let errorHandler = new MistralApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });

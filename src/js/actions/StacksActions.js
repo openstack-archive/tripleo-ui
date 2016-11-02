@@ -35,7 +35,7 @@ export default {
         dispatch(this.fetchStacksSuccess(stacks));
       }).catch(error => {
         logger.error('Error retrieving stacks StackActions.fetchStacks', error);
-        let errorHandler = new HeatApiErrorHandler(error);
+        let errorHandler = new HeatApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -72,7 +72,7 @@ export default {
         dispatch(this.fetchResourcesSuccess(res));
       }).catch((error) => {
         logger.error('Error retrieving resources StackActions.fetchResources', error);
-        let errorHandler = new HeatApiErrorHandler(error);
+        let errorHandler = new HeatApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -108,7 +108,7 @@ export default {
         dispatch(this.fetchResourceSuccess(resource));
       }).catch((error) => {
         logger.error('Error retrieving resource StackActions.fetchResource', error);
-        let errorHandler = new HeatApiErrorHandler(error);
+        let errorHandler = new HeatApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -152,7 +152,7 @@ export default {
         dispatch(this.fetchEnvironmentSuccess(stack, response));
       }).catch((error) => {
         logger.error('Error retrieving environment StackActions.fetchEnvironment', error);
-        let errorHandler = new HeatApiErrorHandler(error);
+        let errorHandler = new HeatApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -190,7 +190,7 @@ export default {
         dispatch(this.deleteStackSuccess(stack.stack_name));
       }).catch((error) => {
         logger.error('Error deleting stack StackActions.deleteStack', error);
-        let errorHandler = new HeatApiErrorHandler(error);
+        let errorHandler = new HeatApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });

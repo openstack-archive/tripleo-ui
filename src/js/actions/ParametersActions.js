@@ -39,7 +39,7 @@ export default {
         dispatch(this.fetchParametersFailed());
         if(parentPath) { browserHistory.push(parentPath); }
         logger.error('Error in ParametersActions.fetchParameters', error.stack || error);
-        let errorHandler = new MistralApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -85,7 +85,7 @@ export default {
         if (url) { browserHistory.push(url); }
       }).catch(error => {
         logger.error('Error in ParametersActions.updateParameters', error);
-        let errorHandler = new MistralApiErrorHandler(error, inputFieldNames);
+        let errorHandler = new MistralApiErrorHandler(dispatch, error, inputFieldNames);
         dispatch(this.updateParametersFailed(errorHandler.errors, errorHandler.formFieldErrors));
       });
     };

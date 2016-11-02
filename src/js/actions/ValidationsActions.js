@@ -23,7 +23,7 @@ export default {
       }).catch((error) => {
         logger.error('Error in ValidationsActions.fetchValidations', error.stack || error);
         dispatch(this.fetchValidationsFailed());
-        let errorHandler = new MistralApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -65,7 +65,7 @@ export default {
         }
       }).catch((error) => {
         logger.error('Error in ValidationsActions.runValidation', error.stack || error);
-        let errorHandler = new MistralApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
@@ -95,7 +95,7 @@ export default {
         }
       }).catch((error) => {
         logger.error('Error in ValidationsActions.runValidationGroups', error.stack || error);
-        let errorHandler = new MistralApiErrorHandler(error);
+        let errorHandler = new MistralApiErrorHandler(dispatch, error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
