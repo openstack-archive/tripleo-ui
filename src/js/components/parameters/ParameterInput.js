@@ -26,6 +26,8 @@ export default class ParameterInput extends React.Component {
                             title={label}
                             description={description}
                             value={defaultValue ? JSON.stringify(defaultValue.toJS()) : ''}
+                            validations="isJson"
+                            validationError="Please enter a valid JSON string"
                             labelColumnClasses="col-sm-4"
                             inputColumnClasses="col-sm-8"/>
       );

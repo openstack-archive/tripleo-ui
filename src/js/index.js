@@ -18,6 +18,7 @@ import EditPlan from './components/plan/EditPlan';
 import EnvironmentConfiguration from
   './components/environment_configuration/EnvironmentConfiguration.js';
 import { getCurrentStackDeploymentInProgress } from './selectors/stacks';
+import initFormsy from './components/utils/Formsy';
 import ListPlans from './components/plan/ListPlans';
 import Login from './components/Login';
 import LoginActions from './actions/LoginActions';
@@ -128,6 +129,8 @@ TempStorage.initialized.then(() => {
       </Route>
     </Route>
   );
+
+  initFormsy();
 
   ReactDOM.render(
     <Provider store={store}>
