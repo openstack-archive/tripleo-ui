@@ -34,10 +34,6 @@ export default function workflowExecutionsReducer(state = initialState, action) 
                                          new WorkflowExecution(
                                            parseExecutionAttrs(fromJS(action.payload)))));
 
-  case WorkflowExecutionsConstants.ADD_WORKFLOW_EXECUTION_FROM_MESSAGE:
-    return state.update('executions',
-                        executions => executions.set(action.payload.id, action.payload));
-
   case WorkflowExecutionsConstants.UPDATE_WORKFLOW_EXECUTION_PENDING:
     return state.mergeIn(['executions', action.payload.id], fromJS(action.payload.patch));
 
@@ -51,7 +47,7 @@ export default function workflowExecutionsReducer(state = initialState, action) 
  * Executions properties input, output and params are JSON strings, this function parses them into
  * objects
  */
-const parseExecutionAttrs = execution => 
+const parseExecutionAttrs = execution =>
   execution.set('input', fromJS(JSON.parse(execution.get('input', '{}'))))
            .set('output', fromJS(JSON.parse(execution.get('output', '{}'))))
            .set('params', fromJS(JSON.parse(execution.get('params', '{}'))))
