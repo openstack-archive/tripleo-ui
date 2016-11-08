@@ -52,7 +52,7 @@ describe('PlansActions', () => {
       spyOn(PlansActions, 'createPlanSuccess');
       // Mock the service call.
       spyOn(PlansActions, '_uploadFilesToContainer').and.callFake(createResolvingPromise());
-      spyOn(SwiftApiService, 'createContainer').and.callFake(createResolvingPromise());
+      spyOn(MistralApiService, 'runAction').and.callFake(createResolvingPromise());
       spyOn(MistralApiService, 'runWorkflow')
         .and.callFake(createResolvingPromise({ state: 'SUCCESS' }));
       // Call the action creator and the resulting action.
