@@ -7,11 +7,12 @@ import HorizontalTextarea from '../../ui/forms/HorizontalTextarea';
 export default class DriverFields extends React.Component {
   constructor(props) {
     super(props);
-    this.ipValidator = {
-      matchRegexp: new RegExp('^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9]' +
-                              '[0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
-    };
-    this.ipValidatorMessage = 'Please enter a valid IPv4 Address';
+
+    let ip_regex = '^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9]' +
+                   '[0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
+    let fqdn_regex = '^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?$';
+    this.ipOrFqdnValidator = {matchRegexp: new RegExp(ip_regex + '|' + fqdn_regex)};
+    this.ipOrFqdnValidatorMessage = 'Please enter a valid IPv4 Address or a valid FQDN';
 
   }
   render() {
@@ -22,8 +23,8 @@ export default class DriverFields extends React.Component {
                          inputColumnClasses="col-sm-7"
                          labelColumnClasses="col-sm-5"
                          value={this.props.node.pm_addr}
-                         validations={this.ipValidator}
-                         validationError={this.ipValidatorMessage}
+                         validations={this.ipOrFqdnValidator}
+                         validationError={this.ipOrFqdnValidatorMessage}
                          required />
         <HorizontalInput name="pm_user"
                          title={this.props.user_title}
