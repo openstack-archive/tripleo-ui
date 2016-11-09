@@ -100,9 +100,24 @@ export default {
     };
   },
 
+  /*
+   * Poll fetchNodes until no node is in progress
+   */
+  pollNodeslistDuringProgress() {
+    return (dispatch, getState) => {
+      if(getState().nodes.get('nodesInProgress').size > 0) {
+        dispatch(this.fetchNodes());
+        setTimeout(() => {
+          dispatch(this.pollNodeslistDuringProgress());
+        }, 2000);
+      }
+    };
+  },
+
   startNodesIntrospection(nodeIds) {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
+      dispatch(this.pollNodeslistDuringProgress());
       MistralApiService.runWorkflow(MistralConstants.BAREMETAL_INTROSPECT,
                                     { node_uuids: nodeIds })
       .then((response) => {
@@ -157,6 +172,7 @@ export default {
   startProvideNodes(nodeIds) {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
+      dispatch(this.pollNodeslistDuringProgress());
       MistralApiService.runWorkflow(MistralConstants.BAREMETAL_PROVIDE,
                                     { node_uuids: nodeIds })
       .then((response) => {
@@ -244,6 +260,7 @@ export default {
   deleteNodes(nodeIds) {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
+      dispatch(this.pollNodeslistDuringProgress());
       nodeIds.map((nodeId) => {
         IronicApiService.deleteNode(nodeId).then(response => {
           dispatch(this.deleteNodeSuccess(nodeId));
@@ -277,6 +294,7 @@ export default {
     const flatNodes = tagNodeIds.concat(untagNodeIds);
     return (dispatch, getState) => {
       dispatch(this.startOperation(flatNodes));
+      dispatch(this.pollNodeslistDuringProgress());
       MistralApiService.runWorkflow('tripleo.baremetal.v1.tag_nodes',
         { tag_node_uuids: tagNodeIds, untag_node_uuids: untagNodeIds, role: role })
         .then((response) => {
