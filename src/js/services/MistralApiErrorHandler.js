@@ -1,4 +1,6 @@
 import BaseHttpRequestErrorHandler from '../components/utils/BaseHttpRequestErrorHandler';
+import LoginActions from '../actions/LoginActions';
+import store from '../store';
 
 export default class MistralApiErrorHandler extends BaseHttpRequestErrorHandler {
   _generateErrors(errorObj) {
@@ -25,6 +27,7 @@ export default class MistralApiErrorHandler extends BaseHttpRequestErrorHandler 
         title: error.title,
         message: error.description
       });
+      store.dispatch(LoginActions.logoutUser());
       break;
     case 400: {
       let error = JSON.parse(errorObj.responseText).faultstring;
@@ -39,6 +42,7 @@ export default class MistralApiErrorHandler extends BaseHttpRequestErrorHandler 
         title: 'Failed to run Action',
         message: errorObj.message
       });
+      store.dispatch(LoginActions.logoutUser());
       break;
     default:
       errors.push({
