@@ -277,7 +277,7 @@ export default {
     const flatNodes = tagNodeIds.concat(untagNodeIds);
     return (dispatch, getState) => {
       dispatch(this.startOperation(flatNodes));
-      MistralApiService.runWorkflow('tripleo.baremetal.v1.tag_nodes',
+      MistralApiService.runWorkflow(MistralConstants.TAG_NODES,
         { tag_node_uuids: tagNodeIds, untag_node_uuids: untagNodeIds, role: role })
         .then((response) => {
           if(response.state === 'ERROR') {
