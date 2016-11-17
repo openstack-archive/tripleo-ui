@@ -10,6 +10,7 @@ import { getAvailableNodes,
          getUnassignedAvailableNodes,
          getNodesOperationInProgress,
          getAssignedNodes } from '../../selectors/nodes';
+import { getCurrentPlan } from '../../selectors/plans';
 import FormErrorList from '../ui/forms/FormErrorList';
 import Modal from '../ui/Modal';
 import NodesActions from '../../actions/NodesActions';
@@ -56,7 +57,8 @@ class NodesAssignment extends React.Component {
     });
 
     const role = this.props.params.roleIdentifier;
-    this.props.assignNodes(tagNodeIds, untagNodeIds, role);
+    const planName = this.props.currentPlan.name;
+    this.props.assignNodes(tagNodeIds, untagNodeIds, role, planName);
     resetForm();
   }
 
@@ -107,6 +109,7 @@ class NodesAssignment extends React.Component {
 NodesAssignment.propTypes = {
   assignNodes: React.PropTypes.func.isRequired,
   availableNodes: ImmutablePropTypes.map,
+  currentPlan: ImmutablePropTypes.record,
   fetchNodes: React.PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
@@ -125,6 +128,7 @@ NodesAssignment.defaultProps = {
 function mapStateToProps(state) {
   return {
     availableNodes: getAvailableNodes(state),
+    currentPlan: getCurrentPlan(state),
     isFetchingNodes: state.nodes.get('isFetching'),
     nodesInProgress: state.nodes.get('nodesInProgress'),
     nodesOperationInProgress: getNodesOperationInProgress(state),
@@ -136,8 +140,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
-    assignNodes: (tagNodeIds, untagNodeIds, role) =>
-      dispatch(NodesActions.startNodesAssignment(tagNodeIds, untagNodeIds, role)
+    assignNodes: (tagNodeIds, untagNodeIds, role, planName) =>
+        dispatch(NodesActions.startNodesAssignment(tagNodeIds, untagNodeIds, role, planName)
     )
   };
 }
