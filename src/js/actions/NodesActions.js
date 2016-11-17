@@ -273,12 +273,12 @@ export default {
     };
   },
 
-  startNodesAssignment(tagNodeIds, untagNodeIds, role) {
+  startNodesAssignment(tagNodeIds, untagNodeIds, role, planName) {
     const flatNodes = tagNodeIds.concat(untagNodeIds);
     return (dispatch, getState) => {
       dispatch(this.startOperation(flatNodes));
       MistralApiService.runWorkflow('tripleo.baremetal.v1.tag_nodes',
-        { tag_node_uuids: tagNodeIds, untag_node_uuids: untagNodeIds, role: role })
+        { tag_node_uuids: tagNodeIds, untag_node_uuids: untagNodeIds, role: role, plan: planName })
         .then((response) => {
           if(response.state === 'ERROR') {
             dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
