@@ -19,7 +19,7 @@ window.tripleOUiConfig = {
   // "zaqar-websocket": "ws://192.0.2.1:9000",
 
   // Default websocket queue name
-  // "zaqar_default_queue": "tripleo"
+  // "zaqar_default_queue": "tripleo",
 
   // Logging
   // "loggers": ['console']
