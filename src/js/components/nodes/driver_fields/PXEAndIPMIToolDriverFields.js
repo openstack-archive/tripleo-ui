@@ -2,7 +2,7 @@ import React from 'react';
 
 import DriverFields from './DriverFields';
 
-export default class PXEAndSSHDriverFields extends React.Component {
+export default class PXEAndIPMIToolDriverFields extends React.Component {
   render() {
     return (
       <DriverFields {...this.props}
