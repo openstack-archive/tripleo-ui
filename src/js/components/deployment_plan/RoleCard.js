@@ -1,8 +1,23 @@
+import { defineMessages, injectIntl } from 'react-intl';
 import React from 'react';
+
 import Link from '../ui/Link';
 
-export default class RoleCard extends React.Component {
+const messages = defineMessages({
+  NodesAssigned: {
+    id: 'RoleCard.NodesAssigned',
+    defaultMessage: 'Nodes assigned'
+  },
+  AssignNodes: {
+    id: 'RoleCard.AssignNodes',
+    defaultMessage: 'Assign Nodes'
+  }
+});
+
+class RoleCard extends React.Component {
   render() {
+    const { formatMessage } = this.props.intl;
+
     const disabled = !this.props.availableNodesCount && !this.props.assignedNodesCount;
 
     return (
@@ -22,7 +37,9 @@ export default class RoleCard extends React.Component {
             </span>
             <span className="card-pf-utilization-card-details-description">
               <span className="card-pf-utilization-card-details-line-1">&nbsp;</span>
-              <span className="card-pf-utilization-card-details-line-2">Nodes assigned</span>
+              <span className="card-pf-utilization-card-details-line-2">
+                {formatMessage(messages.NodesAssigned)}
+              </span>
             </span>
           </p>
         </div>
@@ -32,7 +49,7 @@ export default class RoleCard extends React.Component {
               disabled={disabled}
               to={`/deployment-plan/${this.props.identifier}/assign-nodes`}
               className="card-pf-link-with-icon">
-              <span className="pficon pficon-add-circle-o" />Assign Nodes
+              <span className="pficon pficon-add-circle-o" />{formatMessage(messages.AssignNodes)}
             </Link>
           </p>
         </div>
@@ -44,6 +61,9 @@ RoleCard.propTypes = {
   assignedNodesCount: React.PropTypes.number.isRequired,
   availableNodesCount: React.PropTypes.number.isRequired,
   identifier: React.PropTypes.string.isRequired,
+  intl: React.PropTypes.object,
   name: React.PropTypes.string.isRequired,
   title: React.PropTypes.string.isRequired
 };
+
+export default injectIntl(RoleCard);
