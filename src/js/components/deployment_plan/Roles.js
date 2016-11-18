@@ -1,5 +1,6 @@
-import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import React from 'react';
 
 import { getAssignedNodes } from '../../selectors/nodes';
 import Loader from '../ui/Loader';
@@ -45,7 +46,9 @@ export default class Roles extends React.Component {
       <div className="panel panel-default roles-panel">
         <div className="panel-body">
           <Loader loaded={this.props.loaded}
-                  content="Loading Deployment Roles..."
+                  content={<FormattedMessage id="loading-deployment-roles"
+                                             defaultMessage="Loading Deployment Roles..."
+                                             description="Deployment roles Loader message"/>}
                   height={40}>
             <div className="row-cards-pf">
               {this.renderRoleCards()}

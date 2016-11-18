@@ -1,0 +1,22 @@
+[
+  {
+    "id": "cancel-deployment",
+    "description": "Cancel Deployment",
+    "defaultMessage": "Cancel Deployment"
+  },
+  {
+    "id": "requesting-deletion-of-deployment",
+    "description": "Requesting deletion loader",
+    "defaultMessage": "Requesting Deletion of Deployment"
+  },
+  {
+    "id": "deployment-is-currently-in-progress",
+    "description": "Deployment is currently in progress.",
+    "defaultMessage": "Deployment is currently in progress."
+  },
+  {
+    "id": "view-detailed-information",
+    "description": "View detailed information link",
+    "defaultMessage": "View detailed information"
+  }
+]

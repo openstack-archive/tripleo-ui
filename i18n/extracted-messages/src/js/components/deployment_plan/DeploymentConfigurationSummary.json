@@ -1,0 +1,7 @@
+[
+  {
+    "id": "loading-current-deployment-configuration",
+    "description": "Loader for current deployment configuration",
+    "defaultMessage": "Loading current Deployment Configuration..."
+  }
+]

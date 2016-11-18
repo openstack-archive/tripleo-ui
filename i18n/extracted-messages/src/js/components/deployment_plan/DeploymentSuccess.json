@@ -1,0 +1,12 @@
+[
+  {
+    "id": "delete-deployment",
+    "description": "Delete deployment button",
+    "defaultMessage": "Delete Deployment"
+  },
+  {
+    "id": "requesting-deletion-of-deployment",
+    "description": "Requesting Deletion Loader",
+    "defaultMessage": "Requesting Deletion of Deployment"
+  }
+]
