@@ -3,7 +3,6 @@ import 'babel-polyfill';
 import { Provider } from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { IntlProvider } from 'react-intl';
 import { Router, Route, Redirect } from 'react-router';
 import { browserHistory } from 'react-router';
 
@@ -18,6 +17,7 @@ import EditPlan from './components/plan/EditPlan';
 import EnvironmentConfiguration from
   './components/environment_configuration/EnvironmentConfiguration.js';
 import { getCurrentStackDeploymentInProgress } from './selectors/stacks';
+import I18NProvider from './components/i18n/I18NProvider';
 import initFormsy from './components/utils/Formsy';
 import ListPlans from './components/plan/ListPlans';
 import Login from './components/Login';
@@ -40,6 +40,7 @@ import TempStorage from './services/TempStorage.js';
 import store from './store';
 
 import '../less/base.less';
+
 
 TempStorage.initialized.then(() => {
   /**
@@ -134,9 +135,7 @@ TempStorage.initialized.then(() => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <IntlProvider locale="en">
-        <Router history={browserHistory}>{routes}</Router>
-      </IntlProvider>
+      <I18NProvider router={<Router history={browserHistory}>{routes}</Router>}/>
     </Provider>,
     document.getElementById('react-app-index')
   );

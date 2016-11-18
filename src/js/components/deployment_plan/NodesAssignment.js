@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
@@ -36,7 +37,10 @@ class NodesAssignment extends React.Component {
         <button className="btn btn-primary"
                 type="submit"
                 disabled={this.props.nodesOperationInProgress}>
-          Assign/Unassign Selected Nodes
+          <FormattedMessage id="assign-unassign-selected-nodes"
+                            defaultMessage="Assign/Unassign Selected Nodes"
+                            description="Assign/Unassign Selected Nodes"/>
+
         </button>
       </div>
     );
@@ -98,7 +102,7 @@ class NodesAssignment extends React.Component {
 
           <div className="modal-footer">
             <Link to="/deployment-plan" type="button" className="btn btn-default" >
-              Done
+              <FormattedMessage id="done" defaultMessage="Done" description="Done"/>
             </Link>
           </div>
         </Formsy.Form>

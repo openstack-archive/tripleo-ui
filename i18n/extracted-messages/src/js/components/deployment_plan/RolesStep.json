@@ -1,0 +1,7 @@
+[
+  {
+    "id": "loading-nodes",
+    "description": "Loading nodes loader message",
+    "defaultMessage": "Loading Nodes..."
+  }
+]

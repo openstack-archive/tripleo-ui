@@ -1,5 +1,6 @@
-import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router';
+import React from 'react';
 
 import NavTab from '../ui/NavTab';
 import Modal from '../ui/Modal';
@@ -14,12 +15,24 @@ export default class DeploymentConfiguration extends React.Component {
                 className="close">
             <span aria-hidden="true" className="pficon pficon-close"/>
           </Link>
-          <h4 className="modal-title">Deployment Configuration</h4>
+            <h4 className="modal-title">
+              <FormattedMessage id="deployment-configuration"
+                                defaultMessage="Deployment Configuration"
+                                description="Deployment Configuration"/>
+            </h4>
         </div>
 
         <ul className="nav nav-tabs">
-          <NavTab to="/deployment-plan/configuration/environment">Overall Settings</NavTab>
-          <NavTab to="/deployment-plan/configuration/parameters">Parameters</NavTab>
+          <NavTab to="/deployment-plan/configuration/environment">
+            <FormattedMessage id="overall-settings"
+                              defaultMessage="Overall Settings"
+                              description="Overall Settings"/>
+          </NavTab>
+          <NavTab to="/deployment-plan/configuration/parameters">
+            <FormattedMessage id="parameters"
+                              defaultMessage="Parameters"
+                              description="Parameters"/>
+          </NavTab>
         </ul>
 
         {React.cloneElement(this.props.children,

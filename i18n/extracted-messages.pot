@@ -1,0 +1,147 @@
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeleteStackButton.json
+#. [are-you-sure-you-want-to-delete-the-stack] - Stack deletion confirmation
+msgid "Are you sure you want to delete the stack?"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/RoleCard.json
+#. [assign-nodes] - Assign Nodes
+msgid "Assign Nodes"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/NodesAssignment.json
+#. [assign-unassign-selected-nodes] - Assign/Unassign Selected Nodes
+msgid "Assign/Unassign Selected Nodes"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentProgress.json
+#. [cancel-deployment] - Cancel Deployment
+msgid "Cancel Deployment"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentPlan.json
+#. [configure-roles-assign-nodes] - Deployment Plan Step 3 Header
+msgid "Configure Roles and Assign Nodes"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/NoPlans.json
+#. [create-new-plan] - Create New Plan
+msgid "Create New Plan"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeleteStackButton.json
+#. [delete-deployment] - Delete Deployment Button
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentFailure.json
+#. [delete-deployment] - Delete deployment button
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentSuccess.json
+#. [delete-deployment] - Delete deployment button
+msgid "Delete Deployment"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentPlan.json
+#. [deploy] - Deployment Plan Step 4 Header
+msgid "Deploy"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentConfiguration.json
+#. [deployment-configuration] - Deployment Configuration
+msgid "Deployment Configuration"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentProgress.json
+#. [deployment-is-currently-in-progress] - Deployment is currently in progress.
+msgid "Deployment is currently in progress."
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/NodesAssignment.json
+#. [done] - Done
+msgid "Done"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/ConfigurePlanStep.json
+#. [edit-configuration] - Edit Deployment Link
+msgid "Edit Configuration"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/Roles.json
+#. [loading-deployment-roles] - Deployment roles Loader message
+msgid "Loading Deployment Roles..."
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/RolesStep.json
+#. [loading-nodes] - Loading nodes loader message
+msgid "Loading Nodes..."
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentConfigurationSummary.json
+#. [loading-current-deployment-configuration] - Loader for current deployment configuration
+msgid "Loading current Deployment Configuration..."
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/PlansDropdown.json
+#. [manage-deployments] - Manage Deployments
+msgid "Manage Deployments"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/NoPlans.json
+#. [no-deployment-plans-available] - No Deployment Plans Available
+msgid "No Deployment Plans Available"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/RoleCard.json
+#. [nodes-assigned] - Nodes assigned label
+msgid "Nodes assigned"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentConfiguration.json
+#. [overall-settings] - Overall Settings
+msgid "Overall Settings"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentConfiguration.json
+#. [parameters] - Parameters
+msgid "Parameters"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentPlan.json
+#. [prepare-hardware] - Deployment Plan Step 1 Header
+msgid "Prepare Hardware"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/HardwareStep.json
+#. [register-nodes] - Register Nodes
+msgid "Register Nodes"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentFailure.json
+#. [requesting-deletion-of-deployment] - Requesting Deletion Loader
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentProgress.json
+#. [requesting-deletion-of-deployment] - Requesting deletion loader
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentSuccess.json
+#. [requesting-deletion-of-deployment] - Requesting Deletion Loader
+msgid "Requesting Deletion of Deployment"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/PlansDropdown.json
+#. [select-deployment] - Select Deployment
+msgid "Select Deployment"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentPlan.json
+#. [specify-deployment-configuration] - Deployment Plan Step 2 Header
+msgid "Specify Deployment Configuration"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/NoPlans.json
+#. [there-are-no-deployment-plans-available-please-create-one-first] - No plans available message.
+msgid "There are no Deployment Plans available. Please create one first."
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeployStep.json
+#. [validate-and-deploy] - Validate and Deploy
+msgid "Validate and Deploy"
+msgstr ""
+
+#: ./i18n/extracted-messages/src/js/components/deployment_plan/DeploymentProgress.json
+#. [view-detailed-information] - View detailed information link
+msgid "View detailed information"
+msgstr ""

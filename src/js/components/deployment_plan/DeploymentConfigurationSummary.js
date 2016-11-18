@@ -1,3 +1,4 @@
+import { FormattedMessage } from 'react-intl';
 import React from 'react';
 
 import Loader from '../ui/Loader';
@@ -18,7 +19,10 @@ export default class DeploymentConfigurationSummary extends React.Component {
   render() {
     return (
       <Loader loaded={this.props.loaded}
-              content="Loading current Deployment Configuration..."
+              content={<FormattedMessage
+                         id="loading-current-deployment-configuration"
+                         defaultMessage="Loading current Deployment Configuration..."
+                         description="Loader for current deployment configuration"/>}
               component="span"
               inline>
         <span>{this.props.summary}</span>
