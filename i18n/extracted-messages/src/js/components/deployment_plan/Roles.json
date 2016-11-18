@@ -1,0 +1,7 @@
+[
+  {
+    "id": "loading-deployment-roles",
+    "description": "Deployment roles Loader message",
+    "defaultMessage": "Loading Deployment Roles..."
+  }
+]

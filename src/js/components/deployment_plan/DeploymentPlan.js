@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
@@ -73,12 +74,18 @@ class DeploymentPlan extends React.Component {
               </h1>
             </div>
             <ol className="deployment-step-list">
-              <DeploymentPlanStep title="Prepare Hardware"
-                                  disabled={this.props.currentStackDeploymentInProgress}>
-                <HardwareStep />
-              </DeploymentPlanStep>
-              <DeploymentPlanStep title="Specify Deployment Configuration"
-                                  disabled={this.props.currentStackDeploymentInProgress}>
+            <DeploymentPlanStep title={<FormattedMessage
+                                         description="Deployment Plan Step 1 Header"
+                                         id="prepare-hardware"
+                                         defaultMessage="Prepare Hardware"/>}
+                                disabled={this.props.currentStackDeploymentInProgress}>
+              <HardwareStep />
+            </DeploymentPlanStep>
+            <DeploymentPlanStep title={<FormattedMessage
+                                         description="Deployment Plan Step 2 Header"
+                                         id="specify-deployment-configuration"
+                                         defaultMessage="Specify Deployment Configuration"/>}
+                                disabled={this.props.currentStackDeploymentInProgress}>
                 <ConfigurePlanStep
                   fetchEnvironmentConfiguration={this.props.fetchEnvironmentConfiguration}
                   summary={this.props.environmentConfigurationSummary}
@@ -86,7 +93,10 @@ class DeploymentPlan extends React.Component {
                   isFetching={this.props.isFetchingEnvironmentConfiguration}
                   loaded={this.props.environmentConfigurationLoaded}/>
               </DeploymentPlanStep>
-              <DeploymentPlanStep title="Configure Roles and Assign Nodes"
+            <DeploymentPlanStep title={<FormattedMessage
+                                         description="Deployment Plan Step 3 Header"
+                                         id="configure-roles-assign-nodes"
+                                         defaultMessage="Configure Roles and Assign Nodes"/>}
                                   disabled={this.props.currentStackDeploymentInProgress}>
                 <RolesStep availableNodes={this.props.availableNodes}
                            fetchNodes={this.props.fetchNodes}
@@ -97,7 +107,10 @@ class DeploymentPlan extends React.Component {
                            rolesLoaded={this.props.rolesLoaded}
                            unassignedAvailableNodes={this.props.unassignedAvailableNodes}/>
               </DeploymentPlanStep>
-              <DeploymentPlanStep title="Deploy">
+              <DeploymentPlanStep title={<FormattedMessage
+                                           description="Deployment Plan Step 4 Header"
+                                           id="deploy"
+                                           defaultMessage="Deploy"/>}>
                 <DeployStep
                   currentPlan={this.props.currentPlan}
                   currentStack={this.props.currentStack}

@@ -1,5 +1,6 @@
-import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import React from 'react';
 
 import DeleteStackButton from './DeleteStackButton';
 import { deploymentStatusMessages } from '../../constants/StacksConstants';
@@ -23,11 +24,16 @@ export default class DeploymentSuccess extends React.Component {
         <OvercloudInfo stackResourcesLoaded={this.props.stackResourcesLoaded}
                        stack={this.props.stack}
                        stackResources={this.props.stackResources}/>
-        <DeleteStackButton content="Delete Deployment"
+        <DeleteStackButton content={<FormattedMessage id="delete-deployment"
+                                                      description="Delete deployment button"
+                                                      defaultMessage="Delete Deployment"/>}
                            deleteStack={this.props.deleteStack}
                            disabled={this.props.isRequestingStackDelete}
                            loaded={!this.props.isRequestingStackDelete}
-                           loaderContent="Requesting Deletion of Deployment"
+                           loaderContent={<FormattedMessage
+                                            id="requesting-deletion-of-deployment"
+                                            description="Requesting Deletion Loader"
+                                            defaultMessage="Requesting Deletion of Deployment"/>}
                            stack={this.props.stack}/>
       </div>
     );

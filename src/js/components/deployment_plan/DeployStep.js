@@ -1,5 +1,6 @@
-import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import React from 'react';
 
 import DeploymentSuccess from './DeploymentSuccess';
 import DeploymentFailure from './DeploymentFailure';
@@ -23,7 +24,10 @@ export const DeployStep = ({ currentPlan, currentStack, currentStackResources,
                   content="Requesting a deploy..."
                   component="span"
                   inline>
-            <span className="fa fa-cloud-upload"/> Validate and Deploy
+            <span className="fa fa-cloud-upload"/> <FormattedMessage
+                                                     id="validate-and-deploy"
+                                                     defaultMessage="Validate and Deploy"
+                                                     description="Validate and Deploy"/>
           </Loader>
         </Link>
       </Loader>
