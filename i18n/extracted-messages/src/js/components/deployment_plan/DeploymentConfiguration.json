@@ -1,0 +1,17 @@
+[
+  {
+    "id": "deployment-configuration",
+    "description": "Deployment Configuration",
+    "defaultMessage": "Deployment Configuration"
+  },
+  {
+    "id": "overall-settings",
+    "description": "Overall Settings",
+    "defaultMessage": "Overall Settings"
+  },
+  {
+    "id": "parameters",
+    "description": "Parameters",
+    "defaultMessage": "Parameters"
+  }
+]

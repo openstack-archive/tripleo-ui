@@ -1,5 +1,6 @@
-import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import React from 'react';
 
 import Loader from '../ui/Loader';
 import Roles from './Roles';
@@ -16,7 +17,9 @@ export const RolesStep = ({ isFetchingNodes,
     <div>
       <p>
         <Loader loaded={!isFetchingNodes}
-                content="Loading Nodes..."
+                content={<FormattedMessage id="loading-nodes"
+                                           defaultMessage="Loading Nodes..."
+                                           description="Loading nodes loader message"/>}
                 component="span"
                 inline>
             <strong>{unassignedAvailableNodes.size}</strong> Nodes

@@ -1,0 +1,12 @@
+[
+  {
+    "id": "manage-deployments",
+    "description": "Manage Deployments",
+    "defaultMessage": "Manage Deployments"
+  },
+  {
+    "id": "select-deployment",
+    "description": "Select Deployment",
+    "defaultMessage": "Select Deployment"
+  }
+]

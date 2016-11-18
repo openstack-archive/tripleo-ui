@@ -1,0 +1,17 @@
+[
+  {
+    "id": "no-deployment-plans-available",
+    "description": "No Deployment Plans Available",
+    "defaultMessage": "No Deployment Plans Available"
+  },
+  {
+    "id": "there-are-no-deployment-plans-available-please-create-one-first",
+    "description": "No plans available message.",
+    "defaultMessage": "There are no Deployment Plans available. Please create one first."
+  },
+  {
+    "id": "create-new-plan",
+    "description": "Create New Plan",
+    "defaultMessage": "Create New Plan"
+  }
+]

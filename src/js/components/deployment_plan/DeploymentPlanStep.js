@@ -14,7 +14,10 @@ export const DeploymentPlanStep = ({ children, disabled, title }) => {
 DeploymentPlanStep.propTypes = {
   children: React.PropTypes.node,
   disabled: React.PropTypes.bool,
-  title: React.PropTypes.string.isRequired
+  title: React.PropTypes.oneOfType([
+    React.PropTypes.element,
+    React.PropTypes.string
+  ]).isRequired
 };
 
 DeploymentPlanStep.defaultProps = {
