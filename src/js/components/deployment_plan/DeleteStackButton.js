@@ -1,10 +1,22 @@
+import { defineMessages, injectIntl } from 'react-intl';
 import React from 'react';
 
 import ConfirmationModal from '../ui/ConfirmationModal';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Loader from '../ui/Loader';
 
-export default class DeleteStackButton extends React.Component {
+const messages = defineMessages({
+  deleteDeployment: {
+    id: 'DeleteStackButton.deleteDeployment',
+    defaultMessage: 'Delete Deployment'
+  },
+  deleteConfirmationQuestion: {
+    id: 'DeleteStackButton.deleteConfirmationQuestion',
+    defaultMessage: 'Are you sure you want to delete the stack?'
+  }
+});
+
+class DeleteStackButton extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -18,6 +30,8 @@ export default class DeleteStackButton extends React.Component {
   }
 
   render() {
+    const { formatMessage } = this.props.intl;
+
     return (
       <div>
         <button onClick={() => this.setState({ showDeleteModal: true })}
@@ -33,8 +47,8 @@ export default class DeleteStackButton extends React.Component {
           </Loader>
         </button>
         <ConfirmationModal show={this.state.showDeleteModal}
-                           title="Delete Deployment"
-                           question="Are you sure you want to delete the stack?"
+                           title={formatMessage(messages.deleteDeployment)}
+                           question={formatMessage(messages.deleteConfirmationQuestion)}
                            iconClass="pficon pficon-delete"
                            confirmActionName="delete"
                            onConfirm={this.confirmDelete.bind(this)}
@@ -46,13 +60,22 @@ export default class DeleteStackButton extends React.Component {
 
 DeleteStackButton.propTypes = {
   buttonIconClass: React.PropTypes.string.isRequired,
-  content: React.PropTypes.string.isRequired,
+  content: React.PropTypes.oneOfType([
+    React.PropTypes.element,
+    React.PropTypes.string
+  ]).isRequired,
   deleteStack: React.PropTypes.func.isRequired,
   disabled: React.PropTypes.bool.isRequired,
+  intl: React.PropTypes.object,
   loaded: React.PropTypes.bool.isRequired,
-  loaderContent: React.PropTypes.string.isRequired,
+  loaderContent: React.PropTypes.oneOfType([
+    React.PropTypes.element,
+    React.PropTypes.string
+  ]).isRequired,
   stack: ImmutablePropTypes.record.isRequired
 };
 DeleteStackButton.defaultProps = {
   buttonIconClass: 'pficon pficon-delete'
 };
+
+export default injectIntl(DeleteStackButton);

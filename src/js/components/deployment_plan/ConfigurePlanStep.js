@@ -1,15 +1,23 @@
-import React from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router';
+import React from 'react';
 
 import DeploymentConfigurationSummary from './DeploymentConfigurationSummary';
 
-export const ConfigurePlanStep = (props) => {
+const messages = defineMessages({
+  editConfigurationLink: {
+    id: 'ConfigurePlanStep.editConfigurationLink',
+    defaultMessage: 'Edit Configurations'
+  }
+});
+
+const ConfigurePlanStep = (props) => {
   return (
     <div>
       <DeploymentConfigurationSummary { ...props } />
       &nbsp;
       <Link to="/deployment-plan/configuration">
-        Edit Configuration
+        <FormattedMessage { ...messages.editConfigurationLink} />
       </Link>
     </div>
   );
@@ -21,3 +29,5 @@ ConfigurePlanStep.propTypes = {
   planName: React.PropTypes.string.isRequired,
   summary: React.PropTypes.string.isRequired
 };
+
+export default ConfigurePlanStep;

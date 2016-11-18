@@ -23,6 +23,7 @@ export default class ConfirmationModal extends React.Component {
           <button type="button"
                   className="close"
                   aria-label="Close"
+
                   onClick={this.props.onCancel}>
             <span aria-hidden="true" className="pficon pficon-close"/>
           </button>
@@ -59,7 +60,10 @@ ConfirmationModal.propTypes = {
   onConfirm: React.PropTypes.func.isRequired,
   question: React.PropTypes.string.isRequired,
   show: React.PropTypes.bool.isRequired,
-  title: React.PropTypes.string.isRequired
+  title: React.PropTypes.oneOfType([
+    React.PropTypes.element,
+    React.PropTypes.string
+  ]).isRequired
 };
 ConfirmationModal.defaultProps = {
   question: 'Are you sure?'
