@@ -10,7 +10,7 @@ import PXEAndIPMIToolDriverFields from './driver_fields/PXEAndIPMIToolDriverFiel
 export default class RegisterNodeForm extends React.Component {
   constructor(props) {
     super(props);
-    this.driverOptions = ['pxe_ipmitool', 'pxe_ssh'];
+    this.driverOptions = ['pxe_ipmitool', 'pxe_ssh', 'pxe_drac'];
 
     this.macAddressValidator = {
       matchRegexp:
