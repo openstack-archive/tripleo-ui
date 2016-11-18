@@ -1,5 +1,6 @@
-import React from 'react';
+import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import React from 'react';
 
 import DeploymentSuccess from './DeploymentSuccess';
 import DeploymentFailure from './DeploymentFailure';
@@ -8,11 +9,18 @@ import Link from '../ui/Link';
 import Loader from '../ui/Loader';
 import { stackStates } from '../../constants/StacksConstants';
 
-export const DeployStep = ({ currentPlan, currentStack, currentStackResources,
-                             currentStackResourcesLoaded, currentStackDeploymentProgress,
-                             deleteStack, deployPlan, fetchStackResource, fetchStackEnvironment,
-                             isRequestingStackDelete, runPostDeploymentValidations,
-                             stacksLoaded }) => {
+const messages = defineMessages({
+  ValidateAndDeploy: {
+    id: 'DeployStep.ValidateAndDeploy',
+    defaultMessage: 'Validate and Deploy'
+  }
+});
+
+const DeployStep = ({ currentPlan, currentStack, currentStackResources, currentStackResourcesLoaded,
+                      currentStackDeploymentProgress, deleteStack, deployPlan, fetchStackResource,
+                      intl, fetchStackEnvironment, isRequestingStackDelete,
+                      runPostDeploymentValidations, stacksLoaded }) => {
+
   if (!currentStack || currentStack.stack_status === stackStates.DELETE_COMPLETE) {
     return (
       <Loader loaded={stacksLoaded}>
@@ -23,7 +31,7 @@ export const DeployStep = ({ currentPlan, currentStack, currentStackResources,
                   content="Requesting a deploy..."
                   component="span"
                   inline>
-            <span className="fa fa-cloud-upload"/> Validate and Deploy
+        <span className="fa fa-cloud-upload"/> {intl.formatMessage(messages.ValidateAndDeploy)}
           </Loader>
         </Link>
       </Loader>
@@ -65,7 +73,10 @@ DeployStep.propTypes = {
   deployPlan: React.PropTypes.func.isRequired,
   fetchStackEnvironment: React.PropTypes.func.isRequired,
   fetchStackResource: React.PropTypes.func.isRequired,
+  intl: React.PropTypes.object,
   isRequestingStackDelete: React.PropTypes.bool.isRequired,
   runPostDeploymentValidations: React.PropTypes.func.isRequired,
   stacksLoaded: React.PropTypes.bool.isRequired
 };
+
+export default injectIntl(DeployStep);
