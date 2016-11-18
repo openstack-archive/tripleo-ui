@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
@@ -9,21 +10,43 @@ import { getCurrentStack,
 import { getAvailableNodes, getUnassignedAvailableNodes } from '../../selectors/nodes';
 import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
 import { getCurrentPlan } from '../../selectors/plans';
-import { ConfigurePlanStep } from './ConfigurePlanStep';
+import ConfigurePlanStep from './ConfigurePlanStep';
 import CurrentPlanActions from '../../actions/CurrentPlanActions';
 import { DeploymentPlanStep } from './DeploymentPlanStep';
-import { DeployStep } from './DeployStep';
+import DeployStep from './DeployStep';
 import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
-import { HardwareStep } from './HardwareStep';
+import HardwareStep from './HardwareStep';
 import PlansDropdown from './PlansDropdown';
 import NodesActions from '../../actions/NodesActions';
 import NoPlans from './NoPlans';
 import NotificationActions from '../../actions/NotificationActions';
 import PlanActions from '../../actions/PlansActions';
 import StacksActions from '../../actions/StacksActions';
-import { RolesStep } from './RolesStep';
+import RolesStep from './RolesStep';
 import RolesActions from '../../actions/RolesActions';
 import ValidationsActions from '../../actions/ValidationsActions';
+
+const messages = defineMessages({
+  HardwareStepHeader: {
+    id: 'DeploymentPlan.HardwareStepHeader',
+    defaultMessage: 'Prepare Hardware'
+  },
+  ConfigureRolesStepHeader: {
+    id: 'DeploymentPlan.ConfigureRolesStepHeader',
+
+    defaultMessage: 'Configure Roles and Assign Nodes'
+  },
+  DeploymentConfigurationStepHeader: {
+    id: 'DeploymentPlan.DeploymentConfigurationStepHeader',
+    defaultMessage: 'Specify Deployment Configuration'
+  },
+  DeployStepHeader: {
+    id: 'DeploymentPlan.DeployStepHeader',
+    defaultMessage: 'Deploy'
+  }
+
+
+});
 
 class DeploymentPlan extends React.Component {
   componentDidMount() {
@@ -52,6 +75,7 @@ class DeploymentPlan extends React.Component {
   }
 
   render() {
+    const { formatMessage } = this.props.intl;
     let children;
     const currentPlanName = this.props.hasPlans ? this.props.currentPlan.name : undefined;
 
@@ -75,21 +99,21 @@ class DeploymentPlan extends React.Component {
               </h1>
             </div>
             <ol className="deployment-step-list">
-              <DeploymentPlanStep title="Prepare Hardware"
-                                  disabled={this.props.currentStackDeploymentInProgress}>
-                <HardwareStep />
-              </DeploymentPlanStep>
-              <DeploymentPlanStep title="Specify Deployment Configuration"
-                                  disabled={this.props.currentStackDeploymentInProgress}>
+            <DeploymentPlanStep title={formatMessage(messages.HardwareStepHeader)}
+                                disabled={this.props.currentStackDeploymentInProgress}>
+              <HardwareStep />
+            </DeploymentPlanStep>
+            <DeploymentPlanStep title={formatMessage(messages.DeploymentConfigurationStepHeader)}
+                                disabled={this.props.currentStackDeploymentInProgress}>
                 <ConfigurePlanStep
                   fetchEnvironmentConfiguration={this.props.fetchEnvironmentConfiguration}
                   summary={this.props.environmentConfigurationSummary}
                   planName={currentPlanName}
                   isFetching={this.props.isFetchingEnvironmentConfiguration}
                   loaded={this.props.environmentConfigurationLoaded}/>
-              </DeploymentPlanStep>
-              <DeploymentPlanStep title="Configure Roles and Assign Nodes"
-                                  disabled={this.props.currentStackDeploymentInProgress}>
+            </DeploymentPlanStep>
+            <DeploymentPlanStep title={formatMessage(messages.DeploymentConfigurationStepHeader)}
+                                disabled={this.props.currentStackDeploymentInProgress}>
                 <RolesStep availableNodes={this.props.availableNodes}
                            fetchNodes={this.props.fetchNodes}
                            fetchRoles={this.props.fetchRoles.bind(this, currentPlanName)}
@@ -99,7 +123,7 @@ class DeploymentPlan extends React.Component {
                            rolesLoaded={this.props.rolesLoaded}
                            unassignedAvailableNodes={this.props.unassignedAvailableNodes}/>
               </DeploymentPlanStep>
-              <DeploymentPlanStep title="Deploy">
+            <DeploymentPlanStep title={formatMessage(messages.DeployStepHeader)}>
                 <DeployStep
                   currentPlan={this.props.currentPlan}
                   currentStack={this.props.currentStack}
@@ -151,6 +175,7 @@ DeploymentPlan.propTypes = {
   fetchStacks: React.PropTypes.func,
   hasPlans: React.PropTypes.bool,
   inactivePlans: ImmutablePropTypes.map,
+  intl: React.PropTypes.object,
   isFetchingEnvironmentConfiguration: React.PropTypes.bool,
   isFetchingNodes: React.PropTypes.bool,
   isFetchingRoles: React.PropTypes.bool,
@@ -213,4 +238,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DeploymentPlan);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(DeploymentPlan));
