@@ -1,11 +1,19 @@
-import React from 'react';
+import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import React from 'react';
 
 import { getAssignedNodes } from '../../selectors/nodes';
 import Loader from '../ui/Loader';
 import RoleCard from './RoleCard';
 
-export default class Roles extends React.Component {
+const messages = defineMessages({
+  LoadingDeploymentRoles: {
+    id: 'Roles.LoadingDeploymentRoles',
+    defaultMessage: 'Loading Deployment Roles...'
+  }
+});
+
+class Roles extends React.Component {
   componentDidMount() {
     this.props.fetchRoles();
     this.props.fetchNodes();
@@ -45,7 +53,7 @@ export default class Roles extends React.Component {
       <div className="panel panel-default roles-panel">
         <div className="panel-body">
           <Loader loaded={this.props.loaded}
-                  content="Loading Deployment Roles..."
+                  content={this.props.intl.formatMessage(messages.LoadingDeploymentRoles)}
                   height={40}>
             <div className="row-cards-pf">
               {this.renderRoleCards()}
@@ -60,9 +68,12 @@ Roles.propTypes = {
   availableNodes: ImmutablePropTypes.map,
   fetchNodes: React.PropTypes.func.isRequired,
   fetchRoles: React.PropTypes.func.isRequired,
+  intl: React.PropTypes.object,
   isFetchingNodes: React.PropTypes.bool,
   isFetchingRoles: React.PropTypes.bool,
   loaded: React.PropTypes.bool.isRequired,
   roles: React.PropTypes.array.isRequired,
   unassignedAvailableNodes: ImmutablePropTypes.map
 };
+
+export default injectIntl(Roles);

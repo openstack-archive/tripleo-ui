@@ -9,3 +9,4 @@ tripleo-ui-*.tar.gz
 .DS_Store
 .idea
 app.conf
+i18n/extracted-messages
