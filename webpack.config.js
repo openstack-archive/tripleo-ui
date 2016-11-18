@@ -85,6 +85,12 @@ module.exports = {
       {
         loader: __dirname + '/src/js/loaders/version.js',
         test: /src\/js\/index.js$/
+      },
+
+      // JSON
+      {
+        test: /\.json$/,
+        loader: 'json'
       }
     ]
   },

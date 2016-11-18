@@ -1,23 +1,45 @@
+import { defineMessages, injectIntl } from 'react-intl';
 import { Link } from 'react-router';
 import React from 'react';
 
-export default class NoPlans extends React.Component {
+const messages = defineMessages({
+  NoPlansAvailable: {
+    id: 'NoPlans.NoPlansAvailable',
+    defaultMessage: 'No Deployment Plans Available'
+  },
+  NoPlansAvailableMessage: {
+    id: 'NoPlans.NoPlansAvailableMessage',
+    defaultMessage: 'There are no Deployment Plans available. Please create one first.'
+  },
+  CreateNewPlan: {
+    id: 'NoPlans.CreateNewPlan',
+    defaultMessage: 'Create New Plan'
+  }
+});
+
+class NoPlans extends React.Component {
   render() {
     return (
       <div className="blank-slate-pf">
         <div className="blank-slate-pf-icon">
           <span className="fa fa-ban"></span>
         </div>
-        <h1>No Deployment Plans Available</h1>
-        <p>There are no Deployment Plans available. Please create one first.</p>
+        <h1>{this.props.intl.formatMessage(messages.NoPlansAvailable)}</h1>
+        <p>{this.props.intl.formatMessage(messages.NoPlansAvailableMessage)}</p>
         <div className="blank-slate-pf-main-action">
           <Link to="/plans/new"
                 query={{tab: 'newPlan'}}
                 className="btn btn-lg btn-primary">
-            <span className="fa fa-plus"/> Create New Plan
+            <span className="fa fa-plus"/> {this.props.intl.formatMessage(messages.CreateNewPlan)}
           </Link>
         </div>
       </div>
     );
   }
 }
+
+NoPlans.propTypes = {
+  intl: React.PropTypes.object
+};
+
+export default injectIntl(NoPlans);

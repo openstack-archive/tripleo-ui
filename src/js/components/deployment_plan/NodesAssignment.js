@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
+import { defineMessages, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
@@ -15,6 +16,17 @@ import FormErrorList from '../ui/forms/FormErrorList';
 import Modal from '../ui/Modal';
 import NodesActions from '../../actions/NodesActions';
 import NodesTable from '../nodes/NodesTable';
+
+const messages = defineMessages({
+  AssignUnassignNodes: {
+    id: 'NodesAssignment.AssignUnassignNodes',
+    defaultMessage: 'Assign/Unassign Selected Nodes'
+  },
+  Done: {
+    id: 'NodesAssignment.Done',
+    defaultMessage: 'Done'
+  }
+});
 
 class NodesAssignment extends React.Component {
 
@@ -36,7 +48,7 @@ class NodesAssignment extends React.Component {
         <button className="btn btn-primary"
                 type="submit"
                 disabled={this.props.nodesOperationInProgress}>
-          Assign/Unassign Selected Nodes
+          {this.props.intl.formatMessage(messages.AssignUnassignNodes)}
         </button>
       </div>
     );
@@ -98,7 +110,7 @@ class NodesAssignment extends React.Component {
 
           <div className="modal-footer">
             <Link to="/deployment-plan" type="button" className="btn btn-default" >
-              Done
+              {this.props.intl.formatMessage(messages.Done)}
             </Link>
           </div>
         </Formsy.Form>
@@ -113,6 +125,7 @@ NodesAssignment.propTypes = {
   fetchNodes: React.PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
+  intl: React.PropTypes.object,
   isFetchingNodes: React.PropTypes.bool,
   nodesInProgress: ImmutablePropTypes.set,
   nodesOperationInProgress: React.PropTypes.bool,
@@ -146,4 +159,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NodesAssignment);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(NodesAssignment));
