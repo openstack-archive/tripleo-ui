@@ -1,10 +1,22 @@
+import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
 import { Link } from 'react-router';
+import React from 'react';
 
 import DropdownItem from '../ui/dropdown/DropdownItem';
 import DropdownButton from '../ui/dropdown/DropdownButton';
 import Dropdown from '../ui/dropdown/Dropdown';
+
+const messages = defineMessages({
+  manageDeployments: {
+    id: 'PlansDropdown.manageDeployments',
+    defaultMessage: 'Manage Deployments'
+  },
+  selectDeployment: {
+    id: 'PlansDropdown.selectDeployment',
+    defaultMessage: 'Select Deployment'
+  }
+});
 
 export default class PlansDropdown extends React.Component {
   renderRecentPlans() {
@@ -21,15 +33,21 @@ export default class PlansDropdown extends React.Component {
   render() {
     if(this.props.plans.isEmpty()) {
       return (
-        <Link className="btn btn-link" to="/plans/list">Manage Deployments</Link>
+        <Link className="btn btn-link" to="/plans/list">
+          <FormattedMessage {...messages.manageDeployments}/>
+        </Link>
       );
     } else {
       return (
         <Dropdown>
-          <DropdownButton className="btn-link">Select Deployment</DropdownButton>
+          <DropdownButton className="btn-link">
+            <FormattedMessage {...messages.selectDeployment}/>
+          </DropdownButton>
           {this.renderRecentPlans()}
           <DropdownItem key="divider" divider/>
-          <DropdownItem key="plansLink" to="/plans/list">Manage Deployments</DropdownItem>
+          <DropdownItem key="plansLink" to="/plans/list">
+            <FormattedMessage {...messages.manageDeployments}/>
+          </DropdownItem>
         </Dropdown>
       );
     }

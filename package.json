@@ -71,7 +71,9 @@
     "lint": "eslint --max-warnings 0 src",
     "start": "webpack-dev-server --progress",
     "test": "karma start --single-run",
-    "test:watch": "karma start"
+    "test:watch": "karma start",
+    "json2pot": "rip json2pot ./i18n/extracted-messages/**/*.json -o ./messages.pot",
+    "po2json": "rip po2json"
   },
   "repository": {
     "type": "git",
