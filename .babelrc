@@ -1,3 +1,9 @@
 {
-  "presets": ["es2015", "stage-0", "react"]
+  "presets": ["es2015", "stage-0", "react"],
+  "plugins": [
+    ["react-intl", {
+      "messagesDir": "./i18n/extracted-messages/",
+      "enforceDescriptions": false
+    }]
+  ]
 }

@@ -1,22 +1,31 @@
-import React from 'react';
+import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import React from 'react';
 
 import Loader from '../ui/Loader';
 import Roles from './Roles';
 
-export const RolesStep = ({ isFetchingNodes,
+const messages = defineMessages({
+  LoadingNodes: {
+    id: 'RolesStep.LoadingNodes',
+    defaultMessage: 'Loading Nodes...'
+  }
+});
+
+const RolesStep = ({ isFetchingNodes,
                             availableNodes,
                             unassignedAvailableNodes,
                             roles,
                             fetchRoles,
                             fetchNodes,
+                            intl,
                             isFetchingRoles,
                             rolesLoaded }) => {
   return (
     <div>
       <p>
         <Loader loaded={!isFetchingNodes}
-                content="Loading Nodes..."
+                content={intl.formatMessage(messages.LoadingNodes)}
                 component="span"
                 inline>
             <strong>{unassignedAvailableNodes.size}</strong> Nodes
@@ -38,9 +47,12 @@ RolesStep.propTypes = {
   availableNodes: ImmutablePropTypes.map.isRequired,
   fetchNodes: React.PropTypes.func.isRequired,
   fetchRoles: React.PropTypes.func.isRequired,
+  intl: React.PropTypes.object,
   isFetchingNodes: React.PropTypes.bool.isRequired,
   isFetchingRoles: React.PropTypes.bool.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
   rolesLoaded: React.PropTypes.bool.isRequired,
   unassignedAvailableNodes: ImmutablePropTypes.map.isRequired
 };
+
+export default injectIntl(RolesStep);

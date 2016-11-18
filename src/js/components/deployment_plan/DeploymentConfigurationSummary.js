@@ -1,8 +1,16 @@
+import { defineMessages, injectIntl } from 'react-intl';
 import React from 'react';
 
 import Loader from '../ui/Loader';
 
-export default class DeploymentConfigurationSummary extends React.Component {
+const messages = defineMessages({
+  LoadingCurrentConfiguration: {
+    id: 'DeploymentConfigurationSummary.LoadingCurrentConfiguration',
+    defaultMessage: 'Loading current Deployment Configuration...'
+  }
+});
+
+class DeploymentConfigurationSummary extends React.Component {
   componentDidMount() {
     if(this.props.planName) {
       this.props.fetchEnvironmentConfiguration(this.props.planName);
@@ -16,9 +24,11 @@ export default class DeploymentConfigurationSummary extends React.Component {
   }
 
   render() {
+    const { formatMessage } = this.props.intl;
+
     return (
       <Loader loaded={this.props.loaded}
-              content="Loading current Deployment Configuration..."
+              content={formatMessage(messages.LoadingCurrentConfiguration)}
               component="span"
               inline>
         <span>{this.props.summary}</span>
@@ -28,8 +38,11 @@ export default class DeploymentConfigurationSummary extends React.Component {
 }
 DeploymentConfigurationSummary.propTypes = {
   fetchEnvironmentConfiguration: React.PropTypes.func.isRequired,
+  intl: React.PropTypes.object,
   isFetching: React.PropTypes.bool.isRequired,
   loaded: React.PropTypes.bool.isRequired,
   planName: React.PropTypes.string,
   summary: React.PropTypes.string.isRequired
 };
+
+export default injectIntl(DeploymentConfigurationSummary);

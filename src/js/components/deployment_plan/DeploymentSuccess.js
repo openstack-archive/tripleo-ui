@@ -1,12 +1,24 @@
-import React from 'react';
+import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import React from 'react';
 
 import DeleteStackButton from './DeleteStackButton';
 import { deploymentStatusMessages } from '../../constants/StacksConstants';
 import InlineNotification from '../ui/InlineNotification';
 import OvercloudInfo from '../deployment/OvercloudInfo';
 
-export default class DeploymentSuccess extends React.Component {
+const messages = defineMessages({
+  DeleteDeployment: {
+    id: 'DeploymentSuccess.DeleteDeployment',
+    defaultMessage: 'Delete Deployment'
+  },
+  RequestingDeletion: {
+    id: 'DeploymentSuccess.RequestingDeletion',
+    defaultMessage: 'Requesting Deletion of Deployment'
+  }
+});
+
+class DeploymentSuccess extends React.Component {
   componentDidMount() {
     this.props.fetchStackResource(this.props.stack, 'PublicVirtualIP');
     this.props.fetchStackEnvironment(this.props.stack);
@@ -14,6 +26,8 @@ export default class DeploymentSuccess extends React.Component {
   }
 
   render() {
+    const { formatMessage } = this.props.intl;
+
     return (
       <div>
         <InlineNotification type="success"
@@ -23,11 +37,11 @@ export default class DeploymentSuccess extends React.Component {
         <OvercloudInfo stackResourcesLoaded={this.props.stackResourcesLoaded}
                        stack={this.props.stack}
                        stackResources={this.props.stackResources}/>
-        <DeleteStackButton content="Delete Deployment"
+        <DeleteStackButton content={formatMessage(messages.DeleteDeployment)}
                            deleteStack={this.props.deleteStack}
                            disabled={this.props.isRequestingStackDelete}
                            loaded={!this.props.isRequestingStackDelete}
-                           loaderContent="Requesting Deletion of Deployment"
+                           loaderContent={formatMessage(messages.RequestingDeletion)}
                            stack={this.props.stack}/>
       </div>
     );
@@ -38,9 +52,12 @@ DeploymentSuccess.propTypes = {
   deleteStack: React.PropTypes.func.isRequired,
   fetchStackEnvironment: React.PropTypes.func.isRequired,
   fetchStackResource: React.PropTypes.func.isRequired,
+  intl: React.PropTypes.object,
   isRequestingStackDelete: React.PropTypes.bool,
   runPostDeploymentValidations: React.PropTypes.func.isRequired,
   stack: ImmutablePropTypes.record.isRequired,
   stackResources: ImmutablePropTypes.map.isRequired,
   stackResourcesLoaded: React.PropTypes.bool.isRequired
 };
+
+export default injectIntl(DeploymentSuccess);
