@@ -1,0 +1,12 @@
+[
+  {
+    "id": "nodes-assigned",
+    "description": "Nodes assigned label",
+    "defaultMessage": "Nodes assigned"
+  },
+  {
+    "id": "assign-nodes",
+    "description": "Assign Nodes",
+    "defaultMessage": "Assign Nodes"
+  }
+]

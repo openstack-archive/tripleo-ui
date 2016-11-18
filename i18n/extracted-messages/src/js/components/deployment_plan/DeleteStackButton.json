@@ -1,0 +1,12 @@
+[
+  {
+    "id": "delete-deployment",
+    "description": "Delete Deployment Button",
+    "defaultMessage": "Delete Deployment"
+  },
+  {
+    "id": "are-you-sure-you-want-to-delete-the-stack",
+    "description": "Stack deletion confirmation",
+    "defaultMessage": "Are you sure you want to delete the stack?"
+  }
+]

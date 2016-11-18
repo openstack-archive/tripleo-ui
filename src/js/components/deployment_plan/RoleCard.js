@@ -1,4 +1,6 @@
+import { FormattedMessage } from 'react-intl';
 import React from 'react';
+
 import Link from '../ui/Link';
 
 export default class RoleCard extends React.Component {
@@ -22,7 +24,11 @@ export default class RoleCard extends React.Component {
             </span>
             <span className="card-pf-utilization-card-details-description">
               <span className="card-pf-utilization-card-details-line-1">&nbsp;</span>
-              <span className="card-pf-utilization-card-details-line-2">Nodes assigned</span>
+              <span className="card-pf-utilization-card-details-line-2">
+                <FormattedMessage id="nodes-assigned"
+                                  defaultMessage="Nodes assigned"
+                                  description="Nodes assigned label"/>
+              </span>
             </span>
           </p>
         </div>
@@ -32,7 +38,10 @@ export default class RoleCard extends React.Component {
               disabled={disabled}
               to={`/deployment-plan/${this.props.identifier}/assign-nodes`}
               className="card-pf-link-with-icon">
-              <span className="pficon pficon-add-circle-o" />Assign Nodes
+              <span className="pficon pficon-add-circle-o" /><FormattedMessage
+                                                                id="assign-nodes"
+                                                                defaultMessage="Assign Nodes"
+                                                                description="Assign Nodes"/>
             </Link>
           </p>
         </div>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from 'react-intl';
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
@@ -17,11 +18,16 @@ export default class DeploymentFailure extends React.Component {
             More details</Link>
           </p>
         </InlineNotification>
-        <DeleteStackButton content="Delete Deployment"
+        <DeleteStackButton content={<FormattedMessage id="delete-deployment"
+                                                      description="Delete deployment button"
+                                                      defaultMessage="Delete Deployment"/>}
                            deleteStack={this.props.deleteStack}
                            disabled={this.props.isRequestingStackDelete}
                            loaded={!this.props.isRequestingStackDelete}
-                           loaderContent="Requesting Deletion of Deployment"
+                           loaderContent={<FormattedMessage
+                                            id="requesting-deletion-of-deployment"
+                                            description="Requesting Deletion Loader"
+                                            defaultMessage="Requesting Deletion of Deployment"/>}
                            stack={this.props.stack}/>
       </div>
     );

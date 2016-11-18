@@ -1,0 +1,22 @@
+[
+  {
+    "id": "prepare-hardware",
+    "description": "Deployment Plan Step 1 Header",
+    "defaultMessage": "Prepare Hardware"
+  },
+  {
+    "id": "specify-deployment-configuration",
+    "description": "Deployment Plan Step 2 Header",
+    "defaultMessage": "Specify Deployment Configuration"
+  },
+  {
+    "id": "configure-roles-assign-nodes",
+    "description": "Deployment Plan Step 3 Header",
+    "defaultMessage": "Configure Roles and Assign Nodes"
+  },
+  {
+    "id": "deploy",
+    "description": "Deployment Plan Step 4 Header",
+    "defaultMessage": "Deploy"
+  }
+]
