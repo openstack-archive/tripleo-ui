@@ -1,0 +1,12 @@
+[
+  {
+    "id": "assign-unassign-selected-nodes",
+    "description": "Assign/Unassign Selected Nodes",
+    "defaultMessage": "Assign/Unassign Selected Nodes"
+  },
+  {
+    "id": "done",
+    "description": "Done",
+    "defaultMessage": "Done"
+  }
+]

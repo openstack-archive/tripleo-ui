@@ -1,3 +1,4 @@
+import { FormattedMessage } from 'react-intl';
 import React from 'react';
 
 import ConfirmationModal from '../ui/ConfirmationModal';
@@ -33,8 +34,14 @@ export default class DeleteStackButton extends React.Component {
           </Loader>
         </button>
         <ConfirmationModal show={this.state.showDeleteModal}
-                           title="Delete Deployment"
-                           question="Are you sure you want to delete the stack?"
+                           title={<FormattedMessage description="Delete Deployment Button"
+                                                    id="delete-deployment"
+                                                    defaultMessage="Delete Deployment"/>}
+                           question={<FormattedMessage
+                                       id="are-you-sure-you-want-to-delete-the-stack"
+                                       description="Stack deletion confirmation"
+                                       defaultMessage="Are you sure you want to delete the stack?"
+                                     />}
                            iconClass="pficon pficon-delete"
                            confirmActionName="delete"
                            onConfirm={this.confirmDelete.bind(this)}
@@ -46,11 +53,17 @@ export default class DeleteStackButton extends React.Component {
 
 DeleteStackButton.propTypes = {
   buttonIconClass: React.PropTypes.string.isRequired,
-  content: React.PropTypes.string.isRequired,
+  content: React.PropTypes.oneOfType([
+    React.PropTypes.element,
+    React.PropTypes.string
+  ]).isRequired,
   deleteStack: React.PropTypes.func.isRequired,
   disabled: React.PropTypes.bool.isRequired,
   loaded: React.PropTypes.bool.isRequired,
-  loaderContent: React.PropTypes.string.isRequired,
+  loaderContent: React.PropTypes.oneOfType([
+    React.PropTypes.element,
+    React.PropTypes.string
+  ]).isRequired,
   stack: ImmutablePropTypes.record.isRequired
 };
 DeleteStackButton.defaultProps = {

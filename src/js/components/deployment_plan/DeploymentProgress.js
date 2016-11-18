@@ -1,6 +1,7 @@
+import { FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
 import { Link } from 'react-router';
+import React from 'react';
 
 import { deploymentStatusMessages as statusMessages,
          stackStates } from '../../constants/StacksConstants';
@@ -25,19 +26,29 @@ export default class DeploymentProgress extends React.Component {
     );
 
     const deleteButton = this.props.stack.stack_status !== stackStates.DELETE_IN_PROGRESS
-      ? (<DeleteStackButton content="Cancel Deployment"
+      ? (<DeleteStackButton content={<FormattedMessage id="cancel-deployment"
+                                                        description="Cancel Deployment"
+                                                        defaultMessage="Cancel Deployment"/>}
                             buttonIconClass="fa fa-ban"
                             deleteStack={this.props.deleteStack}
                             disabled={this.props.isRequestingStackDelete}
                             loaded={!this.props.isRequestingStackDelete}
-                            loaderContent="Requesting Deletion of Deployment"
+                            loaderContent={<FormattedMessage
+                                             id="requesting-deletion-of-deployment"
+                                             description="Requesting deletion loader"
+                                             defaultMessage="Requesting Deletion of Deployment"/>}
                             stack={this.props.stack}/>) : null;
 
     return (
       <div>
         <p>
-          Deployment is currently in progress. <Link to="/deployment-plan/deployment-detail">
-            View detailed information
+          <FormattedMessage id="deployment-is-currently-in-progress"
+                            defaultMessage="Deployment is currently in progress."
+                            description="Deployment is currently in progress."
+          /> <Link to="/deployment-plan/deployment-detail">
+            <FormattedMessage id="view-detailed-information"
+                              defaultMessage="View detailed information"
+                              description="View detailed information link"/>
           </Link>
         </p>
         <div className="progress-description">
