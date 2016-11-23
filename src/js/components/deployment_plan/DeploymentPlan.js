@@ -53,10 +53,12 @@ class DeploymentPlan extends React.Component {
 
   render() {
     let children;
+    const currentPlanName = this.props.currentPlan.name;
+
     // Render children only when current plan is already selected
-    if (this.props.children && this.props.currentPlan.name) {
+    if (this.props.children && currentPlanName) {
       children = React.cloneElement(this.props.children,
-                                    {currentPlanName: this.props.currentPlan.name,
+                                    {currentPlanName: currentPlanName,
                                      parentPath: '/' + this.props.route.path});
     }
 
@@ -66,8 +68,8 @@ class DeploymentPlan extends React.Component {
           <div className="col-sm-12">
             <div className="page-header page-header-bleed-right">
               <h1>
-                {this.props.currentPlan.name}
-                <PlansDropdown currentPlanName={this.props.currentPlan.name}
+                {currentPlanName}
+                <PlansDropdown currentPlanName={currentPlanName}
                                plans={this.props.inactivePlans}
                                choosePlan={this.props.choosePlan}/>
               </h1>
@@ -82,7 +84,7 @@ class DeploymentPlan extends React.Component {
                 <ConfigurePlanStep
                   fetchEnvironmentConfiguration={this.props.fetchEnvironmentConfiguration}
                   summary={this.props.environmentConfigurationSummary}
-                  planName={this.props.currentPlan.name}
+                  planName={currentPlanName}
                   isFetching={this.props.isFetchingEnvironmentConfiguration}
                   loaded={this.props.environmentConfigurationLoaded}/>
               </DeploymentPlanStep>
@@ -90,7 +92,7 @@ class DeploymentPlan extends React.Component {
                                   disabled={this.props.currentStackDeploymentInProgress}>
                 <RolesStep availableNodes={this.props.availableNodes}
                            fetchNodes={this.props.fetchNodes}
-                           fetchRoles={this.props.fetchRoles}
+                           fetchRoles={this.props.fetchRoles.bind(this, currentPlanName)}
                            isFetchingNodes={this.props.isFetchingNodes}
                            isFetchingRoles={this.props.isFetchingRoles}
                            roles={this.props.roles}
@@ -110,7 +112,7 @@ class DeploymentPlan extends React.Component {
                   fetchStackResource={this.props.fetchStackResource}
                   isRequestingStackDelete={this.props.isRequestingStackDelete}
                   runPostDeploymentValidations={
-                    this.props.runPostDeploymentValidations.bind(this.props.currentPlan.name)}
+                    this.props.runPostDeploymentValidations.bind(this, currentPlanName)}
                   stacksLoaded={this.props.stacksLoaded}/>
               </DeploymentPlanStep>
             </ol>
@@ -198,7 +200,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName, parentPath));
     },
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
-    fetchRoles: () => dispatch(RolesActions.fetchRoles()),
+    fetchRoles: planName => dispatch(RolesActions.fetchRoles(planName)),
     fetchStackResources: (stack) =>
       dispatch(StacksActions.fetchResources(stack.stack_name, stack.id)),
     fetchStackResource: (stack, resourceName) =>
