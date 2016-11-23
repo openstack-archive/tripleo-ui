@@ -54,8 +54,8 @@ class Parameters extends React.Component {
   * get sent to updateparameters
   */
   _filterFormData(formData) {
-    return fromJS(formData).filterNot((parameter, key) => {
-      return is(this.props.parameters.get(key).Default, parameter);
+    return fromJS(formData).filterNot((value, key) => {
+      return is(fromJS(this.props.parameters.get(key).default), value);
     }).toJS();
   }
 
@@ -95,27 +95,29 @@ class Parameters extends React.Component {
   render() {
     return (
       <Formsy.Form ref="parameterConfigurationForm"
-                   role="form"
-                   className="form form-horizontal"
-                   onSubmit={this.handleSubmit.bind(this)}
-                   onValid={this.enableButton.bind(this)}
-                   onInvalid={this.disableButton.bind(this)}>
+        role="form"
+        className="form form-horizontal"
+        onSubmit={this.handleSubmit.bind(this)}
+        onValid={this.enableButton.bind(this)}
+        onInvalid={this.disableButton.bind(this)}>
 
         <div className="modal-body">
           <Loader height={60}
-                  loaded={this.props.parametersLoaded}>
+            loaded={this.props.parametersLoaded}>
             <div className="tab-content">
               <div className="tab-pane active">
                 <ModalFormErrorList errors={this.props.formErrors.toJS()}/>
-                <ParameterInputList parameters={this.props.parameters}
-                               mistralParameters={this.props.mistralParameters}/>
+                <ParameterInputList
+                  parameters={this.props.parameters.toList()}
+                  mistralParameters={this.props.mistralParameters}/>
               </div>
             </div>
           </Loader>
         </div>
 
         <div className="modal-footer">
-          <button type="submit" disabled={!this.state.canSubmit}
+          <button type="submit"
+                  disabled={!this.state.canSubmit}
                   className="btn btn-primary">
             <FormattedMessage {...messages.saveChanges}/>
           </button>
@@ -134,7 +136,7 @@ Parameters.propTypes = {
   formFieldErrors: ImmutablePropTypes.map,
   history: React.PropTypes.object,
   mistralParameters: ImmutablePropTypes.map.isRequired,
-  parameters: ImmutablePropTypes.map,
+  parameters: ImmutablePropTypes.map.isRequired,
   parametersLoaded: React.PropTypes.bool,
   parentPath: React.PropTypes.string.isRequired,
   updateParameters: React.PropTypes.func
