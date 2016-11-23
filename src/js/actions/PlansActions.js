@@ -35,9 +35,9 @@ export default {
       MistralApiService.runAction(MistralConstants.PLAN_LIST).then((response) => {
         let plans = JSON.parse(response.output).result || [];
         dispatch(this.receivePlans(plans));
-        dispatch(CurrentPlanActions.detectPlan(plans));
+        dispatch(CurrentPlanActions.detectPlan());
       }).catch((error) => {
-        logger.error('Error in PlansActions.fetchPlan', error);
+        logger.error('Error in PlansActions.fetchPlans', error.stack || error);
         let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -69,7 +69,7 @@ export default {
         dispatch(this.receivePlan(planName,
                                   normalize(response, arrayOf(planFileSchema)).entities.planFiles));
       }).catch(error => {
-        logger.error('Error retrieving plan PlansActions.fetchPlan', error);
+        logger.error('Error retrieving plan PlansActions.fetchPlan', error.stack || error);
         let errorHandler = new SwiftApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -322,6 +322,7 @@ export default {
             message: `The plan ${planName} was successfully deleted.`,
             type: 'success'
           }));
+          dispatch(CurrentPlanActions.detectPlan());
         }).catch(error => {
           logger.error('Error deleting plan MistralApiService.runAction', error);
           dispatch(this.planDeleted(planName));
