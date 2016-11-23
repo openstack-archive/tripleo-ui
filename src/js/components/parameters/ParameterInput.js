@@ -1,7 +1,6 @@
 import { defineMessages, injectIntl } from 'react-intl';
 import React from 'react';
-import { Map, List } from 'immutable';
-import ImmutablePropTypes from 'react-immutable-proptypes';
+import { isObjectLike } from 'lodash';
 
 import HorizontalInput from '../ui/forms/HorizontalInput';
 import HorizontalTextarea from '../ui/forms/HorizontalTextarea';
@@ -28,23 +27,14 @@ class ParameterInput extends React.Component {
                               labelColumnClasses="col-sm-4"
                               inputColumnClasses="col-sm-8"/>
       );
-    } else if (type.toLowerCase() === 'json' || Map.isMap(defaultValue)) {
+    } else if (type.toLowerCase() === 'json' || isObjectLike(defaultValue)) {
       return (
         <HorizontalTextarea name={name}
                             title={label}
                             description={description}
-                            value={defaultValue ? JSON.stringify(defaultValue.toJS()) : ''}
+                            value={defaultValue ? JSON.stringify(defaultValue) : ''}
                             validations="isJson"
                             validationError={this.props.intl.formatMessage(messages.enterValidJson)}
-                            labelColumnClasses="col-sm-4"
-                            inputColumnClasses="col-sm-8"/>
-      );
-    } else if (type.toLowerCase() === 'commadelimitedlist' && List.isList(defaultValue)) {
-      return (
-        <HorizontalTextarea name={name}
-                            title={label}
-                            description={description}
-                            value={defaultValue.toJS()}
                             labelColumnClasses="col-sm-4"
                             inputColumnClasses="col-sm-8"/>
       );
@@ -103,12 +93,12 @@ class ParameterInput extends React.Component {
 
 ParameterInput.propTypes = {
   defaultValue: React.PropTypes.oneOfType([
-    ImmutablePropTypes.list,
-    ImmutablePropTypes.map,
+    React.PropTypes.object,
+    React.PropTypes.array,
     React.PropTypes.bool,
     React.PropTypes.number,
     React.PropTypes.string
-  ]).isRequired,
+  ]),
   description: React.PropTypes.string.isRequired,
   intl: React.PropTypes.object,
   label: React.PropTypes.string.isRequired,

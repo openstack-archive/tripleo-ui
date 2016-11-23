@@ -5,62 +5,44 @@ import { ParametersDefaultState } from '../../js/immutableRecords/parameters';
 import ParametersConstants from '../../js/constants/ParametersConstants';
 import parametersReducer from '../../js/reducers/parametersReducer';
 
-const parametersPayload = {
-  resourceTree: {
-    Description: 'lorem ipsum',
-    Parameters: {
-      AdminPassword: {
-        Default: 'pwd',
-        Description: 'The password for the keystone admin account',
-        Label: 'AdminPassword',
-        NoEcho: 'true',
-        Type: 'String'
-      }
-    },
-    NestedParameters: {
-      AllNodesExtraConfig: {
-        Description: 'Noop extra config for allnodes extra cluster config',
-        Type: 'OS::TripleO::AllNodesExtraConfig',
-        Parameters: {
-          blockstorage_servers: {
-            Description: '',
-            Label: 'blockstorage_servers',
-            NoEcho: 'false',
-            Type: 'Json'
-          }
-        }
-      }
+const parametersActionPayload = {
+  mistralParameters: {
+    parameter1: '1'
+  },
+  parameters: {
+    parameter1: {
+      default: '3PuRFRBdhHDD49Td4jHJYmD3n',
+      type: 'String',
+      noEcho: 'true',
+      description: 'The password for the glance service and db account',
+      label: 'GlancePassword',
+      name: 'GlancePassword'
     }
   },
-  mistralParameters: {}
+  resources: {
+    '1d0e0c81-2dc6-4b39-a9a7-9ef4fab65ecf': {
+      nestedParameters: [
+        'd1f30e6b-c835-49d8-a21e-2983bde15bab'
+      ],
+      type: 'OS::TripleO::Services::HeatEngine',
+      description: 'Openstack Heat Engine service configured with Puppet\n',
+      parameters: [
+        'DefaultPasswords',
+        'HeatWorkers',
+        'ServiceNetMap',
+        'HeatAuthEncryptionKey',
+        'HeatEngineLoggingSource',
+        'EndpointMap',
+        'HeatEnableDBPurge',
+        'HeatStackDomainAdminPassword',
+        'HeatPassword',
+        'MonitoringSubscriptionHeatEngine'
+      ],
+      name: '16',
+      id: '1d0e0c81-2dc6-4b39-a9a7-9ef4fab65ecf'
+    }
+  }
 };
-
-const parametersExpectedState = Map({
-  Description: 'lorem ipsum',
-  NestedParameters: Map({
-    AllNodesExtraConfig: Map({
-      Description: 'Noop extra config for allnodes extra cluster config',
-      Parameters: Map({
-        blockstorage_servers: Map({
-          Description: '',
-          Label: 'blockstorage_servers',
-          NoEcho: 'false',
-          Type: 'Json'
-        })
-      }),
-      Type: 'OS::TripleO::AllNodesExtraConfig'
-    })
-  }),
-  Parameters: Map({
-    AdminPassword: Map({
-      Default: 'pwd',
-      Description: 'The password for the keystone admin account',
-      Label: 'AdminPassword',
-      NoEcho: 'true',
-      Type: 'String'
-    })
-  })
-});
 
 describe('parametersReducer', () => {
   beforeEach(() => {
@@ -76,8 +58,7 @@ describe('parametersReducer', () => {
     beforeEach(() => {
       state = parametersReducer(ParametersDefaultState({
         isFetching: false,
-        form: Map({ formErrors: List.of('lorem ipsum'), formFieldErrors: Map({ field: 'foo' })}),
-        resourceTree: Map({ description: 'lorem ipsum' })
+        form: Map({ formErrors: List.of('lorem ipsum'), formFieldErrors: Map({ field: 'foo' })})
       }), action);
     });
 
@@ -97,7 +78,7 @@ describe('parametersReducer', () => {
     let state;
     const action = {
       type: ParametersConstants.FETCH_PARAMETERS_SUCCESS,
-      payload: parametersPayload
+      payload: parametersActionPayload
     };
 
     beforeEach(() => {
@@ -118,8 +99,18 @@ describe('parametersReducer', () => {
       }));
     });
 
-    it('sets resourceTree', () => {
-      expect(state.resourceTree).toEqualImmutable(parametersExpectedState);
+    it('sets parameters', () => {
+      expect(state.parameters.size).toEqual(1);
+      expect(state.parameters.getIn(['parameter1', 'default']))
+        .toEqual('3PuRFRBdhHDD49Td4jHJYmD3n');
+      expect(Map.isMap(state.parameters)).toBe(true);
+    });
+
+    it('sets resources', () => {
+      expect(state.resources.size).toEqual(1);
+      expect(state.resources.getIn(['1d0e0c81-2dc6-4b39-a9a7-9ef4fab65ecf', 'parameters']).size)
+        .toEqual(10);
+      expect(Map.isMap(state.resources)).toBe(true);
     });
   });
 

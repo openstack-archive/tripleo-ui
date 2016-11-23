@@ -7,7 +7,7 @@ import React from 'react';
 import { Link } from 'react-router';
 
 import { getRole } from '../../selectors/roles';
-import { getRoleResourceTree, getResourceTreeParameters } from '../../selectors/parameters';
+import { getRoleServices } from '../../selectors/parameters';
 import Loader from '../ui/Loader';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import { ModalPanelBackdrop,
@@ -48,8 +48,8 @@ class RoleDetail extends React.Component {
   * get sent to updateparameters
   */
   _filterFormData(formData) {
-    return fromJS(formData).filterNot((parameter, key) => {
-      return is(this.props.allParameters.get(key).Default, parameter);
+    return fromJS(formData).filterNot((value, key) => {
+      return is(fromJS(this.props.allParameters.get(key).default), value);
     }).toJS();
   }
 
@@ -168,10 +168,10 @@ function mapStateToProps(state, props) {
     currentPlanName: state.currentPlan.currentPlanName,
     formErrors: state.parameters.form.get('formErrors'),
     formFieldErrors: state.parameters.form.get('formFieldErrors'),
-    allParameters: getResourceTreeParameters(state),
+    allParameters: state.parameters.parameters,
     parametersLoaded: state.parameters.loaded,
     role: getRole(state, props.params.roleIdentifier),
-    roleResourceTree: getRoleResourceTree(state, props.params.roleIdentifier),
+    roleServices: getRoleServices(state, props.params.roleIdentifier),
     rolesLoaded: state.roles.get('loaded')
   };
 }

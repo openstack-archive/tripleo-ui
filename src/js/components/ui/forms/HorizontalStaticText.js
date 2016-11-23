@@ -7,7 +7,7 @@ export default class HorizontalStaticText extends React.Component {
         <label className={`${this.props.labelColumnClasses} control-label`}>
           {this.props.title}
         </label>
-        <div className={this.props.valueColumnClasses}>
+        <div className={this.props.inputColumnClasses}>
           <p className="form-control-static">{this.props.text}</p>
         </div>
       </div>
@@ -15,8 +15,8 @@ export default class HorizontalStaticText extends React.Component {
   }
 }
 HorizontalStaticText.propTypes = {
+  inputColumnClasses: React.PropTypes.string,
   labelColumnClasses: React.PropTypes.string,
   text: React.PropTypes.string,
-  title: React.PropTypes.string,
-  valueColumnClasses: React.PropTypes.string
+  title: React.PropTypes.string
 };
