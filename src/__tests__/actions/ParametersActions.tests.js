@@ -1,10 +1,12 @@
 import when from 'when';
+import uuid from 'node-uuid';
 
 import * as utils from '../../js/services/utils';
 import ParametersActions from '../../js/actions/ParametersActions';
 import ParametersConstants from '../../js/constants/ParametersConstants';
 import MistralApiService from '../../js/services/MistralApiService';
 import MistralConstants from '../../js/constants/MistralConstants';
+import { normalizeParameters } from '../../js/actions/ParametersActions';
 
 
 // Use this to mock asynchronous functions which return a promise.
@@ -57,6 +59,7 @@ describe('ParametersActions', () => {
       spyOn(ParametersActions, 'fetchParametersPending');
       spyOn(ParametersActions, 'fetchParametersSuccess');
       spyOn(ParametersActions, 'fetchParametersFailed');
+      spyOn(uuid, 'v4').and.returnValue('aaa');
       // Mock the service call.
       spyOn(MistralApiService, 'runAction')
         .and.callFake(createResolvingPromise(responseBody));
@@ -77,12 +80,77 @@ describe('ParametersActions', () => {
     });
 
     it('dispatches fetchParametersSuccess', () => {
+      let expectedResources = {
+        aaa: { id: 'aaa', name: 'Root' }
+      };
       expect(ParametersActions.fetchParametersSuccess)
-        .toHaveBeenCalledWith({ resourceTree: {}, mistralParameters: {} });
+        .toHaveBeenCalledWith({ parameters: undefined,
+                                resources: expectedResources,
+                                mistralParameters: {} });
     });
 
     it('does not dispatch fetchParametersFailed', () => {
       expect(ParametersActions.fetchParametersFailed).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('normalizeParameters', () => {
+    it('normalizes resourceTree', () => {
+      let resourceTree = {
+        Description: 'some description',
+        NestedParameters: {
+          CephStorage: {
+            Description: 'No description',
+            Parameters: {},
+            Type: 'OS::Heat::ResourceGroup'
+          }
+        },
+        Parameters: {
+          BlockStorageCount: {
+            Default: 0,
+            Description: 'Number of BlockStorage nodes to deploy',
+            Label: 'BlockStorageCount',
+            NoEcho: 'false',
+            Type: 'Number'
+          }
+        }
+      };
+      /*
+        {
+          resources: {
+            'randomUUID1': {
+              name: Root,
+              id: randomUUID1,
+              description: 'some description',
+              nestedParameters: ['randomUUID2'],
+              parameters: ['BlockStorageCount']
+            },
+            'randomUUID2': {
+              name: Root,
+              id: randomUUID1,
+              description: 'No description',
+              nestedParameters: [],
+              parameters: []
+              type: 'OS::Heat::ResourceGroup'
+            }
+          }
+          parameters: {
+            BlockStorageCount: {
+              name: 'BlockStorageCount'
+              default: 0,
+              description: 'Number of BlockStorage nodes to deploy',
+              label: 'BlockStorageCount',
+              noEcho: 'false',
+              type: 'Number'
+            }
+          }
+        }
+      */
+      let normalizedResult = normalizeParameters(resourceTree);
+      expect(Object.keys(normalizedResult)).toEqual(['resources', 'parameters']);
+      expect(Object.keys(normalizedResult.resources).length).toEqual(2);
+      expect(Object.keys(normalizedResult.parameters).length).toEqual(1);
+      expect(normalizedResult.parameters.BlockStorageCount.type).toEqual('Number');
     });
   });
 
