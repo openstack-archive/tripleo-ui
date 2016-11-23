@@ -3,7 +3,7 @@ import { fromJS, List, Map } from 'immutable';
 import EnvironmentConfigurationConstants from '../constants/EnvironmentConfigurationConstants';
 import ParametersConstants from '../constants/ParametersConstants';
 import PlansConstants from '../constants/PlansConstants';
-import { ParametersDefaultState } from '../immutableRecords/parameters';
+import { ParametersDefaultState, Resource, Parameter } from '../immutableRecords/parameters';
 
 const initialState = new ParametersDefaultState();
 
@@ -16,7 +16,7 @@ export default function parametersReducer(state = initialState, action) {
             .set('form', Map({ formErrors: List(), formFieldErrors: Map() }));
 
   case ParametersConstants.FETCH_PARAMETERS_SUCCESS: {
-    const { resourceTree, mistralParameters } = action.payload;
+    const { resources, parameters, mistralParameters } = action.payload;
     return state
             .set('loaded', true)
             .set('isFetching', false)
@@ -24,7 +24,8 @@ export default function parametersReducer(state = initialState, action) {
               formErrors: List(),
               formFieldErrors: Map()
             }))
-            .set('resourceTree', fromJS(resourceTree) || Map())
+            .set('resources', fromJS(resources).map(resource => new Resource(resource)))
+            .set('parameters', Map(parameters).map(parameter => new Parameter(parameter)))
             .set('mistralParameters', fromJS(mistralParameters) || Map());
   }
 
