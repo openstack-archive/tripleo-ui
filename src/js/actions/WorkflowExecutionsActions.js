@@ -54,13 +54,6 @@ export default {
     };
   },
 
-  addWorkflowExecutionFromMessage(execution) {
-    return {
-      type: WorkflowExecutionsConstants.ADD_WORKFLOW_EXECUTION_FROM_MESSAGE,
-      payload: execution
-    };
-  },
-
   updateWorkflowExecution(id, patch) {
     return (dispatch, getState) => {
       dispatch(this.updateWorkflowExecutionPending(id, patch));

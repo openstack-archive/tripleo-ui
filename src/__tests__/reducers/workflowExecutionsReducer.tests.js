@@ -111,32 +111,6 @@ describe('workflowExecutionsReducer', () => {
     expect(newState.get('executions')).toEqualImmutable(updatedState.get('executions'));
   });
 
-  it('should handle ADD_WORKFLOW_EXECUTION_FROM_MESSAGE', () => {
-    const action = {
-      type: WorkflowExecutionsConstants.ADD_WORKFLOW_EXECUTION_FROM_MESSAGE,
-      payload: new WorkflowExecution({
-        created_at: '2016-07-18 14:05:05',
-        description: '',
-        id: '1a',
-        input: Map({
-          validation_name: 'check-network-gateway',
-          queue_name: 'tripleo',
-          plan: 'plan'
-        }),
-        output: Map(),
-        params: Map(),
-        state: 'SUCCESS',
-        state_info: '',
-        task_execution_id: null,
-        updated_at: NaN,
-        workflow_id: 'f8b280bb-5ba2-486b-9384-ddd79300d987',
-        workflow_name: MistralConstants.VALIDATIONS_RUN
-      })
-    };
-    const newState = workflowExecutionsReducer(initialState, action);
-    expect(newState.get('executions')).toEqualImmutable(updatedState.get('executions'));
-  });
-
   it('should handle UPDATE_WORKFLOW_EXECUTION_PENDING', () => {
     const action = {
       type: WorkflowExecutionsConstants.UPDATE_WORKFLOW_EXECUTION_PENDING,

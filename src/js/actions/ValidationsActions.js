@@ -1,5 +1,4 @@
 import { normalize, arrayOf } from 'normalizr';
-import { fromJS } from 'immutable';
 
 import MistralApiService from '../services/MistralApiService';
 import NotificationActions from './NotificationActions';
@@ -7,7 +6,6 @@ import WorkflowExecutionsActions from './WorkflowExecutionsActions';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import ValidationsConstants from '../constants/ValidationsConstants';
 import { validationSchema } from '../normalizrSchemas/validations';
-import { WorkflowExecution } from '../immutableRecords/workflowExecutions';
 import MistralConstants from '../constants/MistralConstants';
 import logger from '../services/logger';
 
@@ -75,11 +73,19 @@ export default {
 
   runValidationMessage(messagePayload) {
     return (dispatch, getState) => {
-      const execution = new WorkflowExecution(fromJS(messagePayload.execution))
-                          .set('workflow_name', MistralConstants.VALIDATIONS_RUN)
-                          .set('state', messagePayload.status)
-                          .set('output', fromJS({...messagePayload}).delete('execution'));
-      dispatch(WorkflowExecutionsActions.addWorkflowExecutionFromMessage(execution));
+      // convert messagePayload to execution-like response
+      const execution = {
+        id: messagePayload.execution.id,
+        input: JSON.stringify(messagePayload.execution.input),
+        output: JSON.stringify({
+          status: messagePayload.status,
+          plan: messagePayload.plan,
+          validation_name: messagePayload.validation_name
+        }),
+        state: messagePayload.status,
+        workflow_name: MistralConstants.VALIDATIONS_RUN
+      };
+      dispatch(WorkflowExecutionsActions.addWorkflowExecution(execution));
     };
   },
 
