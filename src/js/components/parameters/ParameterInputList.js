@@ -6,30 +6,30 @@ import ParameterInput from './ParameterInput';
 
 export default class ParameterInputList extends React.Component {
   render() {
-    const parameters = this.props.parameters.toList().map(parameter => {
+    const parameters = this.props.parameters.map(parameter => {
       return (
-        <ParameterInput key={parameter.Name}
-                        name={parameter.Name}
-                        label={parameter.Label}
-                        description={parameter.Description}
-                        defaultValue={parameter.Default}
-                        value={parameter.Value}
-                        type={parameter.Type}/>
+        <ParameterInput key={parameter.name}
+                        name={parameter.name}
+                        label={parameter.label}
+                        description={parameter.description}
+                        defaultValue={parameter.default}
+                        value={parameter.value}
+                        type={parameter.type}/>
       );
     });
 
-    if (parameters.isEmpty()) {
+    if (parameters.length > 0) {
       return (
         <fieldset>
-          <InlineNotification type="info">
-            {this.props.emptyParametersMessage}
-          </InlineNotification>
+          {parameters}
         </fieldset>
       );
     } else {
       return (
         <fieldset>
-          {parameters}
+          <InlineNotification type="info">
+            {this.props.emptyParametersMessage}
+          </InlineNotification>
         </fieldset>
       );
     }
@@ -38,7 +38,7 @@ export default class ParameterInputList extends React.Component {
 ParameterInputList.propTypes = {
   emptyParametersMessage: React.PropTypes.string.isRequired,
   mistralParameters: ImmutablePropTypes.map.isRequired,
-  parameters: ImmutablePropTypes.map.isRequired
+  parameters: React.PropTypes.array.isRequired
 };
 ParameterInputList.defaultProps = {
   emptyParametersMessage: 'There are currently no parameters to configure in this section'
