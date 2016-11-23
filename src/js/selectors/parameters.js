@@ -1,111 +1,103 @@
 import { createSelector } from 'reselect';
-import { Map } from 'immutable';
+import { List } from 'immutable';
 
 import { internalParameters } from '../constants/ParametersConstants';
-import { Parameter } from '../immutableRecords/parameters';
+import { Resource } from '../immutableRecords/parameters';
 import { getRole } from './roles';
 
-const parameterTree = (state) => state.parameters.get('resourceTree', Map());
+const parameters = (state) => state.parameters.get('parameters').sortBy(p => p.name.toLowerCase());
+const resources = (state) => state.parameters.get('resources');
+const getResourceById = (state, resourceId) => state.parameters.resources.get(resourceId);
 
+/**
+ * Returns parameters excluding internal parameters
+ */
+export const getParametersExclInternal = createSelector(
+  [parameters], parameters =>
+    parameters.filterNot(p => internalParameters.includes(p.name))
+);
+
+/**
+ * Returns parameters defined in root template (overcloud.yaml)
+ */
 export const getRootParameters = createSelector(
-  [parameterTree], (parameterTree) => {
-    return _convertToParameters(parameterTree.get('Parameters', Map())).sortBy(p => p.Name);
-  }
+  [resources, parameters], (resources, parameters) =>
+    resources
+      .find(resource => resource.name === 'Root', null, new Resource())
+      .parameters.update(params => parameters.filter((p, k) => params.includes(k)))
 );
 
-export const getRolesResourceTree = createSelector(
-  [parameterTree], (parameterTree) => {
-    return (
-      parameterTree
-        .get('NestedParameters', Map())
-        .filter(resource => resource.get('Type') === 'OS::Heat::ResourceGroup')
-        .map((role, roleKey) => {
-          const roleNestedStack = role.getIn(['NestedParameters', '0'], Map());
-          return Map({
-            description: roleNestedStack.get('Description'),
-            parameters: _convertToParameters(roleNestedStack.get('Parameters', Map())),
-            services: _getRoleServices(parameterTree, roleKey),
-            networkConfiguration: _getRoleNetworkConfigParameters(roleNestedStack, roleKey)
-          });
-        })
-    );
-  }
+export const getRoleResource = createSelector(
+  [resources, getRole], (resources, role) =>
+    resources.find(resource => resource.type === `OS::TripleO::${role.name}`, null, new Resource())
 );
 
-// returns parameter tree for a specific role
-export const getRoleResourceTree = createSelector(
-  [getRolesResourceTree, getRole], (rolesResourceTree, role) => {
-    if (role) {
-      return rolesResourceTree.get(role.name, Map());
-    }
-    return Map();
-  }
+export const getRoleParameters = createSelector(
+  [resources, parameters, getRoleResource], (resources, parameters, roleResource) =>
+    roleResource.parameters.update(params => parameters.filter((p, k) => params.includes(k)))
 );
-
-// returns a flat Map of all parameters
-export const getResourceTreeParameters = createSelector(
-  [parameterTree, getRootParameters], (parameterTree, rootParameters) => {
-    const nestedResources = parameterTree.get('NestedParameters', Map());
-    return _extractParameters(rootParameters, nestedResources);
-  }
-);
-
-// Recursively extracts Parameters from Nested Resources
-const _extractParameters = (allParameters, nestedResources) => {
-  return nestedResources.reduce((parameters, resource) => {
-    return _extractParameters(
-             parameters.merge(_convertToParameters(resource.get('Parameters', Map()))),
-             resource.get('NestedParameters', Map())
-           );
-  }, allParameters);
-};
 
 /**
- * Brings up network configuration parameters for a specific role
+ * Returns map of Service resources for specific Role including map of parameters for each Service
  */
-export const _getRoleNetworkConfigParameters = (roleNestedStack, roleKey) => {
-  return roleNestedStack.get('NestedParameters', Map())
-           .filter(resource =>
-                   resource.get('Type') === `OS::TripleO::${roleKey}::Net::SoftwareConfig`)
-           .map(resource => Map({
-             description: resource.get('Description'),
-             parameters: _convertToParameters(resource.get('Parameters', Map()))
-           }));
-};
+export const getRoleServices = createSelector(
+  [resources, getParametersExclInternal, getRole], (resources, parameters, role) =>
+    resources
+      .find(resource => resource.name === `${role.name}ServiceChain`, null, new Resource())
+      .get('nestedParameters', List())
+      .map(r => resources.get(r))
+      .find(r => r.name === 'ServiceChain', null, new Resource())
+      .get('nestedParameters', List())
+      .update(nestedParameters => resources.filter((r, k) => nestedParameters.includes(k)))
+      .map(r => r
+        .update(resource => resource
+          .set('parameters',
+               _extractParameters(resource.parameters, resource.nestedParameters, resources)))
+        .update('parameters', params => parameters.filter((p, k) => params.includes(k))))
+      .sortBy(r => r.type)
+);
 
 /**
- * Brings parameters for services assigned to a role
+ * Brings up network configuration resource for a specific role
  */
-export const _getRoleServices = (heatParameters, roleKey) => {
-  return heatParameters.get('NestedParameters', Map())
-           // find resources named <RoleName>ServiceChain
-           .find((resource, resourceKey) => resourceKey === `${roleKey}ServiceChain`, Map())
-           // get Map of services (format is {0:service})
-           .getIn(['NestedParameters', 'ServiceChain', 'NestedParameters'], Map())
-           // convert the format of services to {Type:service}
-           .mapEntries(([serviceKey, service]) => [service.get('Type'), service])
-           // map the service to { name:..., description: ..., parameters: Map() }
-           .map(service => Map({
-             name: service.get('Type'),
-             description: service.get('Description'),
-             parameters: _convertToParameters(
-                           _extractParameters(
-                             service.get('Parameters', Map()),
-                             service.get('NestedParameters', Map())
-                           )
-                         )
-           }))
-           .sortBy(s => s.get('name'));
-};
+export const getRoleNetworkConfig = createSelector(
+  [resources, parameters, getRoleResource, getRole],
+  (resources, parameters, roleResource, role) =>
+    roleResource.nestedParameters
+      .map(r => resources.get(r))
+      .find(resource => resource.type === `OS::TripleO::${role.name}::Net::SoftwareConfig`,
+            null,
+            new Resource())
+      .update('parameters', params => parameters.filter((p, k) => params.includes(k)))
+);
 
 /**
- * Converts parameters to immutable Parameter Records
- * Filter out internalParameters which we don't want to display
- * sort parameters by name
+ * Get Parameter list for resource by Id
+ * (Can be used e.g. to fetch parameters for a service)
  */
-export const _convertToParameters = parameters => {
-  return parameters
-           .map((parameter, key) => new Parameter(parameter).set('Name', key))
-           .filterNot(parameter => internalParameters.includes(parameter.Name))
-           .sortBy(p => p.Name.toLowerCase());
+export const getResourceParameters = createSelector(
+  [parameters, getResourceById], (parameters, resource) =>
+    resource.parameters.update(params => parameters.filter((p, k) => params.includes(k)))
+);
+
+/**
+ * Get Parameter list for resource by Id including parameters from all nested resources
+ * (Can be used e.g. to fetch parameters for a service)
+ */
+export const getResourceParametersDeep = createSelector(
+  [resources, parameters, getResourceById], (resources, parameters, resource) =>
+    _extractParameters(resource.parameters, resource.nestedParameters, resources)
+      .update(params => parameters.filter((p, k) => params.includes(k)))
+);
+
+/**
+ * Recursively extracts Parameter names from a Resource and it's nested Resources
+ */
+const _extractParameters = (parameters, nestedResources, allResources) => {
+  return nestedResources.reduce((pars, res) => {
+    const resource = allResources.get(res);
+    return _extractParameters(pars.toSet().union(resource.parameters.toSet()).toList(),
+                              resource.nestedParameters,
+                              allResources);
+  }, parameters);
 };
