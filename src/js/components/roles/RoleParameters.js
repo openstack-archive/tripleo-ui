@@ -1,10 +1,9 @@
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Map } from 'immutable';
 import React from 'react';
 
 import ParameterInputList from '../parameters/ParameterInputList';
-import { getRoleResourceTree } from '../../selectors/parameters';
+import { getRoleParameters } from '../../selectors/parameters';
 import { getRole } from '../../selectors/roles';
 
 class RoleParameters extends React.Component {
@@ -12,7 +11,7 @@ class RoleParameters extends React.Component {
     return (
       <div className="col-sm-12">
         <ParameterInputList
-          parameters={this.props.parameters}
+          parameters={this.props.parameters.toArray()}
           mistralParameters={this.props.mistralParameters}/>
       </div>
     );
@@ -20,14 +19,14 @@ class RoleParameters extends React.Component {
 }
 RoleParameters.propTypes = {
   mistralParameters: ImmutablePropTypes.map.isRequired,
-  parameters: ImmutablePropTypes.map,
+  parameters: ImmutablePropTypes.map.isRequired,
   params: React.PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, props) {
   return {
     mistralParameters: state.parameters.mistralParameters,
-    parameters: getRoleResourceTree(state, props.params.roleIdentifier).get('parameters', Map()),
+    parameters: getRoleParameters(state, props.params.roleIdentifier),
     role: getRole(state, props.params.roleIdentifier)
   };
 }
