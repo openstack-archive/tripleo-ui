@@ -7,15 +7,26 @@ export const ParametersDefaultState = Record({
     formErrors: List(),
     formFieldErrors: Map()
   }),
-  resourceTree: Map(),
+  resources: Map(),
+  parameters: Map(),
   mistralParameters: Map()
 });
 
 export const Parameter = Record({
-  Default: undefined,
-  Description: undefined,
-  Label: undefined,
-  Name: undefined,
-  NoEcho: undefined,
-  Type: 'String'
+  default: undefined,
+  description: undefined,
+  label: undefined,
+  name: undefined,
+  noEcho: undefined,
+  type: 'string',
+  value: undefined
+});
+
+export const Resource = Record({
+  description: undefined,
+  id: undefined,
+  name: undefined,
+  nestedParameters: List(),
+  parameters: List(),
+  type: undefined
 });

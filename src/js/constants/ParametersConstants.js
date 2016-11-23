@@ -11,4 +11,4 @@ export default keyMirror({
 
 // List of parameter names which are considered internal and should not be displayed by GUI
 // TODO(jtomasek): these should be ideally identified using ParameterGroup in THT
-export const internalParameters = ['DefaultPasswords', 'EndpointMap'];
+export const internalParameters = ['DefaultPasswords', 'EndpointMap', 'ServiceNetMap'];
