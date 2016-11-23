@@ -36,7 +36,7 @@ export default {
         ZaqarWebSocketService.init(getState, dispatch);
         browserHistory.push(nextPath);
       }).catch((error) => {
-        logger.error('Error in LoginActions.authenticateUser', error);
+        logger.error('Error in LoginActions.authenticateUser', error.stack || error);
         let errorHandler = new KeystoneApiErrorHandler(error, formFields);
         dispatch(this.userAuthFailure(errorHandler.errors, errorHandler.formFieldErrors));
       });

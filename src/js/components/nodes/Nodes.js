@@ -14,13 +14,13 @@ import { getRegisteredNodes,
 class Nodes extends React.Component {
   componentDidMount() {
     this.props.dispatch(NodesActions.fetchNodes());
-    this.props.dispatch(RolesActions.fetchRoles());
+    this.props.dispatch(RolesActions.fetchRoles(this.props.currentPlanName));
   }
 
   refreshResults(e) {
     e.preventDefault();
     this.props.dispatch(NodesActions.fetchNodes());
-    this.props.dispatch(RolesActions.fetchRoles());
+    this.props.dispatch(RolesActions.fetchRoles(this.props.currentPlanName));
   }
 
   render() {
@@ -61,12 +61,14 @@ class Nodes extends React.Component {
 }
 Nodes.propTypes = {
   children: React.PropTypes.node.isRequired,
+  currentPlanName: React.PropTypes.string.isRequired,
   dispatch: React.PropTypes.func.isRequired,
   nodes: ImmutablePropTypes.map.isRequired
 };
 
 function mapStateToProps(state) {
   return {
+    currentPlanName: state.currentPlan.currentPlanName,
     nodes: state.nodes.merge(
       Map({
         registered: getRegisteredNodes(state),
