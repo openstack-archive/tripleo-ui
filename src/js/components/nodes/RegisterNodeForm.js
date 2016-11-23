@@ -6,11 +6,12 @@ import HorizontalArrayInput from '../ui/forms/HorizontalArrayInput';
 import HorizontalSelect from '../ui/forms/HorizontalSelect';
 import PXEAndSSHDriverFields from './driver_fields/PXEAndSSHDriverFields';
 import PXEAndIPMIToolDriverFields from './driver_fields/PXEAndIPMIToolDriverFields';
+import PXEAndDRACDriverFields from './driver_fields/PXEAndDRACDriverFields';
 
 export default class RegisterNodeForm extends React.Component {
   constructor(props) {
     super(props);
-    this.driverOptions = ['pxe_ipmitool', 'pxe_ssh'];
+    this.driverOptions = ['pxe_ipmitool', 'pxe_ssh', 'pxe_drac'];
 
     this.macAddressValidator = {
       matchRegexp:
@@ -54,6 +55,8 @@ export default class RegisterNodeForm extends React.Component {
     switch(this.props.selectedNode.pm_type) {
     case 'pxe_ipmitool':
       return <PXEAndIPMIToolDriverFields node={this.props.selectedNode}/>;
+    case 'pxe_drac':
+      return <PXEAndDRACDriverFields node={this.props.selectedNode}/>;
     default:
       return <PXEAndSSHDriverFields node={this.props.selectedNode}/>;
     }
