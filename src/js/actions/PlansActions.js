@@ -37,7 +37,7 @@ export default {
         dispatch(this.receivePlans(plans));
         dispatch(CurrentPlanActions.detectPlan(plans));
       }).catch((error) => {
-        logger.error('Error in PlansActions.fetchPlan', error);
+        logger.error('Error in PlansActions.fetchPlans', error.stack || error);
         let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -69,7 +69,7 @@ export default {
         dispatch(this.receivePlan(planName,
                                   normalize(response, arrayOf(planFileSchema)).entities.planFiles));
       }).catch(error => {
-        logger.error('Error retrieving plan PlansActions.fetchPlan', error);
+        logger.error('Error retrieving plan PlansActions.fetchPlan', error.stack || error);
         let errorHandler = new SwiftApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
@@ -329,7 +329,7 @@ export default {
   },
 
   deletePlan(planName) {
-    return dispatch => {
+    return (dispatch, getState) => {
       dispatch(this.deletePlanPending(planName));
       browserHistory.push('/plans/list');
       MistralApiService.runAction(MistralConstants.PLAN_DELETE, { container: planName })
@@ -340,6 +340,7 @@ export default {
             message: `The plan ${planName} was successfully deleted.`,
             type: 'success'
           }));
+          dispatch(CurrentPlanActions.detectPlan(getState().plans.all));
         }).catch(error => {
           logger.error('Error deleting plan MistralApiService.runAction', error);
           dispatch(this.planDeleted(planName));
