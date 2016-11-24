@@ -3,10 +3,10 @@ import PlansConstants from '../constants/PlansConstants';
 import ValidationsActions from '../actions/ValidationsActions';
 
 export default {
-  detectPlan(plans) {
+  detectPlan() {
     return (dispatch, getState) => {
       let state = getState();
-      let plans = state.plans.get('all').map(plan => plan.get('name'));
+      let plans = state.plans.all.map(plan => plan.get('name'));
       let conflict;
       let currentPlanName = state.currentPlan.get('currentPlanName');
       let previousPlan = currentPlanName || getStoredPlan();
