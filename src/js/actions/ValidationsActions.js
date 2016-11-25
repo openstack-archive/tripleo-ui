@@ -1,4 +1,5 @@
 import { normalize, arrayOf } from 'normalizr';
+import { omit } from 'lodash';
 
 import MistralApiService from '../services/MistralApiService';
 import NotificationActions from './NotificationActions';
@@ -77,11 +78,7 @@ export default {
       const execution = {
         id: messagePayload.execution.id,
         input: JSON.stringify(messagePayload.execution.input),
-        output: JSON.stringify({
-          status: messagePayload.status,
-          plan: messagePayload.plan,
-          validation_name: messagePayload.validation_name
-        }),
+        output: JSON.stringify(omit(messagePayload, 'execution')),
         state: messagePayload.status,
         workflow_name: MistralConstants.VALIDATIONS_RUN
       };
