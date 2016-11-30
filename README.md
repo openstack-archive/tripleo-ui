@@ -1,3 +1,10 @@
+Team and repository tags
+========================
+
+[![Team and repository tags](http://governance.openstack.org/badges/tripleo-ui.svg)](http://governance.openstack.org/reference/tags/index.html)
+
+<!-- Change things from this point on -->
+
 # Development environment setup
 
 Ideally, you should have one powerful machine ("virt host") on which you will install TripleO (the backend). For the development work on the TripleO UI, we recommend installing and configuring the UI directly on your workstation ("local machine") and then pointing it to the machine hosting the TripleO installation.
