@@ -1,9 +1,11 @@
 import { createSelector } from 'reselect';
+import { Map } from 'immutable';
 
 import { Stack } from '../immutableRecords/stacks';
 import { currentPlanNameSelector } from './plans';
 
 const stacksSelector = state => state.stacks.stacks;
+const overcloudPasswordsSelector = state => state.stacks.overcloudPasswords;
 const stackResourcesSelector = state => state.stacks.resources;
 
 /**
@@ -38,5 +40,25 @@ export const getCurrentStackDeploymentProgress = createSelector(
       return Math.ceil(completeResources / allResources * 100);
     }
     return 0;
+  }
+);
+
+/**
+  * Returns either a Map containing the overcloud information or
+  * false, if one of the values hasn't been fetched yet.
+  */
+export const getOvercloudInfo = createSelector(
+  [overcloudPasswordsSelector, currentPlanNameSelector, stackResourcesSelector],
+  (overcloudPasswords, currentPlanName, stackResources) => {
+    const adminPassword = overcloudPasswords.get(currentPlanName);
+    const ipAddress = stackResources ? stackResources.getIn(
+      ['PublicVirtualIP', 'attributes', 'ip_address']) : null;
+    if(adminPassword && ipAddress) {
+      return Map({
+        ipAddress: ipAddress,
+        adminPassword: adminPassword
+      });
+    }
+    return false;
   }
 );
