@@ -23,4 +23,7 @@ window.tripleOUiConfig = {
 
   // Logging
   // "loggers": ['console']
+
+  // Cookies
+  // "useSecureCookie": true
 };
