@@ -5,6 +5,7 @@ export const StacksState = Record({
   isLoaded: false,
   isFetching: false,
   isFetchingResources: false,
+  isFetchingEnvironment: false,
   resourcesLoaded: false,
   resources: OrderedMap(),
   stacks: Map()

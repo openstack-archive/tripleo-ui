@@ -28,21 +28,16 @@ const messages = defineMessages({
   }
 });
 
-const OvercloudInfo = ({ intl, stack, stackResources, stackResourcesLoaded }) => {
-  const ip = stackResources.getIn([
-    'PublicVirtualIP', 'attributes', 'ip_address'
-  ]);
-
-  const password = stack.getIn([
-    'environment', 'parameter_defaults', 'AdminPassword'
-  ]);
+const OvercloudInfo = ({ intl, overcloudInfo }) => {
+  const ip = overcloudInfo ? overcloudInfo.get('ipAddress') : null;
+  const password = overcloudInfo ? overcloudInfo.get('adminPassword') : null;
 
   // TODO(honza) add SSL
 
   return (
     <div>
       <h4><FormattedMessage {...messages.overcloudInformationHeader}/></h4>
-      <Loader loaded={stackResourcesLoaded}
+      <Loader loaded={!!overcloudInfo}
               content={intl.formatMessage(messages.loadingOvercloudInformation)}>
         <ul className="list">
           <li><FormattedMessage {...messages.overcloudIpAddress}/> {ip}</li>
@@ -56,9 +51,10 @@ const OvercloudInfo = ({ intl, stack, stackResources, stackResourcesLoaded }) =>
 };
 OvercloudInfo.propTypes = {
   intl: React.PropTypes.object,
-  stack: ImmutablePropTypes.record.isRequired,
-  stackResources: ImmutablePropTypes.map.isRequired,
-  stackResourcesLoaded: React.PropTypes.bool.isRequired
+  overcloudInfo: React.PropTypes.oneOfType([
+    React.PropTypes.bool,
+    ImmutablePropTypes.map
+  ]).isRequired
 };
 
 export default injectIntl(OvercloudInfo);
