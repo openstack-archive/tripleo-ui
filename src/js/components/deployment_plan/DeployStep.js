@@ -37,11 +37,10 @@ const messages = defineMessages({
   }
 });
 
-const DeployStep = ({
+export const DeployStep = ({
   currentPlan,
   currentStack,
   currentStackResources,
-  currentStackResourcesLoaded,
   currentStackDeploymentProgress,
   deleteStack,
   deployPlan,
@@ -49,6 +48,7 @@ const DeployStep = ({
   fetchStackEnvironment,
   intl,
   isRequestingStackDelete,
+  overcloudInfo,
   stacksLoaded
 }) => {
   if (
@@ -89,8 +89,8 @@ const DeployStep = ({
       <DeploymentSuccess
         stack={currentStack}
         stackResources={currentStackResources}
-        stackResourcesLoaded={currentStackResourcesLoaded}
         isRequestingStackDelete={isRequestingStackDelete}
+        overcloudInfo={overcloudInfo}
         deleteStack={deleteStack}
         fetchStackResource={fetchStackResource}
         fetchStackEnvironment={fetchStackEnvironment}
@@ -112,14 +112,14 @@ DeployStep.propTypes = {
   currentStack: ImmutablePropTypes.record,
   currentStackDeploymentProgress: PropTypes.number.isRequired,
   currentStackResources: ImmutablePropTypes.map,
-  currentStackResourcesLoaded: PropTypes.bool.isRequired,
-  deleteStack: PropTypes.func.isRequired,
-  deployPlan: PropTypes.func.isRequired,
-  fetchStackEnvironment: PropTypes.func.isRequired,
-  fetchStackResource: PropTypes.func.isRequired,
-  intl: PropTypes.object,
-  isRequestingStackDelete: PropTypes.bool.isRequired,
-  stacksLoaded: PropTypes.bool.isRequired
+  deleteStack: React.PropTypes.func.isRequired,
+  deployPlan: React.PropTypes.func.isRequired,
+  fetchStackEnvironment: React.PropTypes.func.isRequired,
+  fetchStackResource: React.PropTypes.func.isRequired,
+  intl: React.PropTypes.object,
+  isRequestingStackDelete: React.PropTypes.bool.isRequired,
+  overcloudInfo: ImmutablePropTypes.map.isRequired,
+  stacksLoaded: React.PropTypes.bool.isRequired
 };
 
 export default injectIntl(DeployStep);

@@ -17,12 +17,15 @@
 import { List, Map, OrderedMap, Record } from 'immutable';
 
 export const StacksState = Record({
+  currentStackEnvironment: Map(),
   isRequestingStackDelete: false,
   isLoaded: false,
   isFetching: false,
   isFetchingResources: false,
+  isFetchingEnvironment: false,
   resourcesLoaded: false,
   resources: OrderedMap(),
+  resourceDetails: Map(),
   stacks: Map()
 });
 
@@ -30,7 +33,6 @@ export const Stack = Record({
   creation_time: undefined,
   deletion_time: undefined,
   description: undefined,
-  environment: Map(),
   id: undefined,
   parent: undefined,
   stack_name: undefined,
