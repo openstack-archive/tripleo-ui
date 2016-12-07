@@ -24,6 +24,10 @@ describe('stacksReducer state', () => {
     it('`stacks` is empty', () => {
       expect(state.get('stacks').size).toEqual(0);
     });
+
+    it('`stacks` is empty', () => {
+      expect(state.get('isFetchingEnvironment')).toBe(false);
+    });
   });
 
   describe('Stack status', () => {
@@ -91,6 +95,71 @@ describe('stacksReducer state', () => {
 
       it('sets stacks in state to an empty Map', () => {
         expect(state.stacks).toEqual(Map());
+      });
+    });
+
+    describe('fetchEnvironmentPending', () => {
+      let state;
+
+      beforeEach(() => {
+        state = stacksReducer(
+          new StacksState({ isFetchingEnvironment: false }),
+          StacksActions.fetchEnvironmentPending()
+        );
+      });
+
+      it('sets isFetchingEnvironment to true', () => {
+        expect(state.isFetchingEnvironment).toBe(true);
+      });
+    });
+
+    describe('fetchEnvironmentFailed', () => {
+      let state;
+
+      beforeEach(() => {
+        state = stacksReducer(
+          new StacksState({ isFetchingEnvironment: true }),
+          StacksActions.fetchEnvironmentFailed()
+        );
+      });
+
+      it('sets isFetchingEnvironment to false', () => {
+        expect(state.isFetchingEnvironment).toBe(false);
+      });
+    });
+
+    describe('fetchEnvironmentSuccess', () => {
+      let state;
+
+      beforeEach(() => {
+        state = stacksReducer(
+          new StacksState({
+            isFetchingEnvironment: true,
+            stacks: Map({
+              overcloud: Stack({
+                environment: Map({})
+              }),
+              foocloud: Stack({
+                environment: Map({})
+              })
+            })
+          }),
+          StacksActions.fetchEnvironmentSuccess(
+            { stack_name: 'overcloud' },
+            { parameter_defaults: {} }
+          )
+        );
+      });
+
+      it('sets the environment for the correct stack', () => {
+        expect(state.getIn(['stacks', 'overcloud', 'environment'])).toEqual(Map({
+          parameter_defaults: Map({})
+        }));
+        expect(state.getIn(['stacks', 'foocloud', 'environment'])).toEqual(Map({}));
+      });
+
+      it('sets isFetchingEnvironment to false', () => {
+        expect(state.isFetchingEnvironment).toBe(false);
       });
     });
   });
