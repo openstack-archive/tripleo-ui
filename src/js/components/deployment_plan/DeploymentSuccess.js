@@ -20,7 +20,7 @@ export default class DeploymentSuccess extends React.Component {
                             title={deploymentStatusMessages[this.props.stack.stack_status]}>
           <p>{this.props.stack.stack_status_reason}</p>
         </InlineNotification>
-        <OvercloudInfo stackResourcesLoaded={this.props.stackResourcesLoaded}
+        <OvercloudInfo isLoadingOvercloudInfo={this.props.isLoadingOvercloudInfo}
                        stack={this.props.stack}
                        stackResources={this.props.stackResources}/>
         <DeleteStackButton content="Delete Deployment"
@@ -38,9 +38,9 @@ DeploymentSuccess.propTypes = {
   deleteStack: React.PropTypes.func.isRequired,
   fetchStackEnvironment: React.PropTypes.func.isRequired,
   fetchStackResource: React.PropTypes.func.isRequired,
+  isLoadingOvercloudInfo: React.PropTypes.bool,
   isRequestingStackDelete: React.PropTypes.bool,
   runPostDeploymentValidations: React.PropTypes.func.isRequired,
   stack: ImmutablePropTypes.record.isRequired,
-  stackResources: ImmutablePropTypes.map.isRequired,
-  stackResourcesLoaded: React.PropTypes.bool.isRequired
+  stackResources: ImmutablePropTypes.map.isRequired
 };

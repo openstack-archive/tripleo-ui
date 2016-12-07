@@ -5,7 +5,8 @@ import React from 'react';
 import { getAllPlansButCurrent } from '../../selectors/plans';
 import { getCurrentStack,
          getCurrentStackDeploymentProgress,
-         getCurrentStackDeploymentInProgress } from '../../selectors/stacks';
+         getCurrentStackDeploymentInProgress,
+         getIsLoadingOvercloudInfo } from '../../selectors/stacks';
 import { getAvailableNodes, getUnassignedAvailableNodes } from '../../selectors/nodes';
 import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
 import { getCurrentPlan } from '../../selectors/plans';
@@ -105,6 +106,7 @@ class DeploymentPlan extends React.Component {
                   currentStack={this.props.currentStack}
                   currentStackResources={this.props.currentStackResources}
                   currentStackResourcesLoaded={this.props.currentStackResourcesLoaded}
+                  isLoadingOvercloudInfo={this.props.isLoadingOvercloudInfo}
                   currentStackDeploymentProgress={this.props.currentStackDeploymentProgress}
                   deleteStack={this.props.deleteStack}
                   deployPlan={this.props.deployPlan}
@@ -154,6 +156,7 @@ DeploymentPlan.propTypes = {
   isFetchingEnvironmentConfiguration: React.PropTypes.bool,
   isFetchingNodes: React.PropTypes.bool,
   isFetchingRoles: React.PropTypes.bool,
+  isLoadingOvercloudInfo: React.PropTypes.bool,
   isRequestingStackDelete: React.PropTypes.bool,
   notify: React.PropTypes.func,
   roles: ImmutablePropTypes.map,
@@ -177,6 +180,7 @@ export function mapStateToProps(state) {
     isFetchingEnvironmentConfiguration: state.environmentConfiguration.isFetching,
     isFetchingNodes: state.nodes.get('isFetching'),
     isFetchingRoles: state.roles.get('isFetching'),
+    isLoadingOvercloudInfo: getIsLoadingOvercloudInfo(state),
     isRequestingStackDelete: state.stacks.get('isRequestingStackDelete'),
     hasPlans: !state.plans.get('all').isEmpty(),
     inactivePlans: getAllPlansButCurrent(state),

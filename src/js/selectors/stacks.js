@@ -40,3 +40,10 @@ export const getCurrentStackDeploymentProgress = createSelector(
     return 0;
   }
 );
+
+/**
+  * Returns
+  */
+export const getIsLoadingOvercloudInfo = createSelector([state => state.stacks], (stacks) => {
+  return (stacks.isFetchingEnvironment && !stacks.resourcesLoaded);
+});

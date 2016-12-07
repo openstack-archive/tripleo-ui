@@ -9,8 +9,8 @@ import Loader from '../ui/Loader';
 import { stackStates } from '../../constants/StacksConstants';
 
 export const DeployStep = ({ currentPlan, currentStack, currentStackResources,
-                             currentStackResourcesLoaded, currentStackDeploymentProgress,
-                             deleteStack, deployPlan, fetchStackResource, fetchStackEnvironment,
+                             currentStackDeploymentProgress, deleteStack, deployPlan,
+                             fetchStackResource, fetchStackEnvironment, isLoadingOvercloudInfo,
                              isRequestingStackDelete, runPostDeploymentValidations,
                              stacksLoaded }) => {
   if (!currentStack || currentStack.stack_status === stackStates.DELETE_COMPLETE) {
@@ -39,8 +39,8 @@ export const DeployStep = ({ currentPlan, currentStack, currentStackResources,
     return (
       <DeploymentSuccess stack={currentStack}
                          stackResources={currentStackResources}
-                         stackResourcesLoaded={currentStackResourcesLoaded}
                          isRequestingStackDelete={isRequestingStackDelete}
+                         isLoadingOvercloudInfo={isLoadingOvercloudInfo}
                          deleteStack={deleteStack}
                          fetchStackResource={fetchStackResource}
                          fetchStackEnvironment={fetchStackEnvironment}
@@ -60,11 +60,11 @@ DeployStep.propTypes = {
   currentStack: ImmutablePropTypes.record,
   currentStackDeploymentProgress: React.PropTypes.number.isRequired,
   currentStackResources: ImmutablePropTypes.map,
-  currentStackResourcesLoaded: React.PropTypes.bool.isRequired,
   deleteStack: React.PropTypes.func.isRequired,
   deployPlan: React.PropTypes.func.isRequired,
   fetchStackEnvironment: React.PropTypes.func.isRequired,
   fetchStackResource: React.PropTypes.func.isRequired,
+  isLoadingOvercloudInfo: React.PropTypes.bool.isRequired,
   isRequestingStackDelete: React.PropTypes.bool.isRequired,
   runPostDeploymentValidations: React.PropTypes.func.isRequired,
   stacksLoaded: React.PropTypes.bool.isRequired

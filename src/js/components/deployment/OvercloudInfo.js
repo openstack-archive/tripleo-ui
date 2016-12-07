@@ -3,7 +3,7 @@ import React from 'react';
 
 import Loader from '../ui/Loader';
 
-const OvercloudInfo = ({ stack, stackResources, stackResourcesLoaded }) => {
+const OvercloudInfo = ({ isLoadingOvercloudInfo, stack, stackResources }) => {
   const ip = stackResources.getIn([
     'PublicVirtualIP', 'attributes', 'ip_address'
   ]);
@@ -17,7 +17,7 @@ const OvercloudInfo = ({ stack, stackResources, stackResourcesLoaded }) => {
   return (
     <div>
       <h4>Overcloud information:</h4>
-      <Loader loaded={stackResourcesLoaded}
+      <Loader loaded={!isLoadingOvercloudInfo}
               content="Loading overcloud information...">
         <ul className="list">
           <li>Overcloud IP address: {ip}</li>
@@ -30,9 +30,9 @@ const OvercloudInfo = ({ stack, stackResources, stackResourcesLoaded }) => {
   );
 };
 OvercloudInfo.propTypes = {
+  isLoadingOvercloudInfo: React.PropTypes.bool.isRequired,
   stack: ImmutablePropTypes.record.isRequired,
-  stackResources: ImmutablePropTypes.map.isRequired,
-  stackResourcesLoaded: React.PropTypes.bool.isRequired
+  stackResources: ImmutablePropTypes.map.isRequired
 };
 
 export default OvercloudInfo;
