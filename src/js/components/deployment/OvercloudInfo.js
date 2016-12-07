@@ -3,21 +3,16 @@ import React from 'react';
 
 import Loader from '../ui/Loader';
 
-const OvercloudInfo = ({ stack, stackResources, stackResourcesLoaded }) => {
-  const ip = stackResources.getIn([
-    'PublicVirtualIP', 'attributes', 'ip_address'
-  ]);
-
-  const password = stack.getIn([
-    'environment', 'parameter_defaults', 'AdminPassword'
-  ]);
+const OvercloudInfo = ({ overcloudInfo }) => {
+  const ip = overcloudInfo ? overcloudInfo.get('ipAddress') : null;
+  const password = overcloudInfo ? overcloudInfo.get('adminPassword') : null;
 
   // TODO(honza) add SSL
 
   return (
     <div>
       <h4>Overcloud information:</h4>
-      <Loader loaded={stackResourcesLoaded}
+      <Loader loaded={!!overcloudInfo}
               content="Loading overcloud information...">
         <ul className="list">
           <li>Overcloud IP address: {ip}</li>
@@ -30,9 +25,10 @@ const OvercloudInfo = ({ stack, stackResources, stackResourcesLoaded }) => {
   );
 };
 OvercloudInfo.propTypes = {
-  stack: ImmutablePropTypes.record.isRequired,
-  stackResources: ImmutablePropTypes.map.isRequired,
-  stackResourcesLoaded: React.PropTypes.bool.isRequired
+  overcloudInfo: React.PropTypes.oneOfType([
+    React.PropTypes.bool,
+    ImmutablePropTypes.map
+  ]).isRequired
 };
 
 export default OvercloudInfo;
