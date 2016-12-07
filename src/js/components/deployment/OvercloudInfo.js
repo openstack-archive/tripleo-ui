@@ -44,23 +44,9 @@ const messages = defineMessages({
   }
 });
 
-const OvercloudInfo = ({
-  intl,
-  stack,
-  stackResources,
-  stackResourcesLoaded
-}) => {
-  const ip = stackResources.getIn([
-    'PublicVirtualIP',
-    'attributes',
-    'ip_address'
-  ]);
-
-  const password = stack.getIn([
-    'environment',
-    'parameter_defaults',
-    'AdminPassword'
-  ]);
+const OvercloudInfo = ({ intl, overcloudInfo }) => {
+  const ip = overcloudInfo ? overcloudInfo.get('ipAddress') : null;
+  const password = overcloudInfo ? overcloudInfo.get('adminPassword') : null;
 
   // TODO(honza) add SSL
 
@@ -68,7 +54,7 @@ const OvercloudInfo = ({
     <div>
       <h4><FormattedMessage {...messages.overcloudInformationHeader} /></h4>
       <Loader
-        loaded={stackResourcesLoaded}
+        loaded={!!(ip && password)}
         content={intl.formatMessage(messages.loadingOvercloudInformation)}
       >
         <ul className="list">
@@ -83,9 +69,7 @@ const OvercloudInfo = ({
 };
 OvercloudInfo.propTypes = {
   intl: PropTypes.object,
-  stack: ImmutablePropTypes.record.isRequired,
-  stackResources: ImmutablePropTypes.map.isRequired,
-  stackResourcesLoaded: PropTypes.bool.isRequired
+  overcloudInfo: ImmutablePropTypes.map.isRequired
 };
 
 export default injectIntl(OvercloudInfo);

@@ -15,12 +15,16 @@
  */
 
 import { createSelector } from 'reselect';
+import { Map } from 'immutable';
 
 import { Stack } from '../immutableRecords/stacks';
 import { currentPlanNameSelector } from './plans';
 
 const stacksSelector = state => state.stacks.stacks;
+const currentStackEnvironmentSelector = state =>
+  state.stacks.currentStackEnvironment;
 const stackResourcesSelector = state => state.stacks.resources;
+const stackResourceDetailsSelector = state => state.stacks.resourceDetails;
 
 /**
  * Returns the stack associated with currentPlanName
@@ -58,5 +62,28 @@ export const getCurrentStackDeploymentProgress = createSelector(
       return Math.ceil(completeResources / allResources * 100);
     }
     return 0;
+  }
+);
+
+/**
+  * Returns a Map containing the overcloud information.
+  */
+export const getOvercloudInfo = createSelector(
+  [
+    currentStackEnvironmentSelector,
+    currentPlanNameSelector,
+    stackResourceDetailsSelector
+  ],
+  (currentStackEnvironment, currentPlanName, stackResourceDetails) => {
+    const adminPassword = currentStackEnvironment.getIn([
+      'parameter_defaults',
+      'AdminPassword'
+    ]);
+    const ipAddress = stackResourceDetails.getIn([
+      'PublicVirtualIP',
+      'attributes',
+      'ip_address'
+    ]);
+    return Map({ ipAddress, adminPassword });
   }
 );
