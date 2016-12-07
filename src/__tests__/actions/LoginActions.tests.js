@@ -1,6 +1,6 @@
 import KeystoneApiService from '../../js/services/KeystoneApiService';
 import LoginActions from '../../js/actions/LoginActions';
-import TempStorage from '../../js/services/TempStorage.js';
+import cookie from '../../js/cookie';
 
 let mockKeystoneAccess = {
   token: {
@@ -19,17 +19,17 @@ describe('LoginActions', () => {
   });
 
   xit('creates action to login user with keystoneAccess response', () => {
-    spyOn(TempStorage, 'setItem');
+    spyOn(cookie, 'set');
     LoginActions.loginUser(mockKeystoneAccess);
-    expect(TempStorage.setItem).toHaveBeenCalledWith(
+    expect(cookie.set).toHaveBeenCalledWith(
       'keystoneAuthTokenId',
       mockKeystoneAccess.token.id
     );
   });
 
   xit('creates action to logout user', () => {
-    spyOn(TempStorage, 'removeItem');
+    spyOn(cookie, 'remove');
     LoginActions.logoutUser();
-    expect(TempStorage.removeItem).toHaveBeenCalled();
+    expect(cookie.remove).toHaveBeenCalled();
   });
 });
