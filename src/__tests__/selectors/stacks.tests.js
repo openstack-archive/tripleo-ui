@@ -14,16 +14,96 @@
  * under the License.
  */
 
-import { Map } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
 import {
   getCurrentStackDeploymentInProgress,
-  getCurrentStack
+  getCurrentStack,
+  getOvercloudInfo
 } from '../../js/selectors/stacks';
 import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
 import { Stack, StacksState } from '../../js/immutableRecords/stacks';
 
 describe('stacks selectors', () => {
+  describe('getOvercloudInfo', () => {
+    let state;
+    beforeEach(() => {
+      state = {
+        stacks: new StacksState({
+          resources: Map(),
+          resourceDetails: Map(),
+          stacks: Map({
+            overcloud: Stack({
+              stack_name: 'overcloud',
+              environment: Map()
+            }),
+            anothercloud: Stack({ stack_name: 'anothercloud' })
+          })
+        }),
+        currentStackEnvironment: Map(),
+        currentPlan: new CurrentPlanState({
+          currentPlanName: 'overcloud'
+        })
+      };
+    });
+
+    it('returns false if ip and admin pwd are not loaded', () => {
+      expect(getOvercloudInfo(state)).toEqual(
+        Map({
+          ipAddress: undefined,
+          adminPassword: undefined
+        })
+      );
+    });
+
+    it('returns false if ip is not loaded', () => {
+      state.stacks = state.stacks.set(
+        'currentStackEnvironment',
+        fromJS({
+          parameter_defaults: { AdminPassword: '12345' }
+        })
+      );
+      expect(getOvercloudInfo(state)).toEqual(
+        Map({
+          ipAddress: undefined,
+          adminPassword: '12345'
+        })
+      );
+    });
+
+    it('returns empty Map if admin pwd is not loaded', () => {
+      state.stacks = state.stacks.setIn(
+        ['resourceDetails', 'PublicVirtualIP', 'attributes', 'ip_address'],
+        '192.0.2.5'
+      );
+      expect(getOvercloudInfo(state)).toEqual(
+        Map({
+          ipAddress: '192.0.2.5',
+          adminPassword: undefined
+        })
+      );
+    });
+
+    it('returns a Map containing ip and pwd if both are loaded', () => {
+      state.stacks = state.stacks.set(
+        'currentStackEnvironment',
+        fromJS({
+          parameter_defaults: { AdminPassword: 'overcloudAdminPass' }
+        })
+      );
+      state.stacks = state.stacks.setIn(
+        ['resourceDetails', 'PublicVirtualIP', 'attributes', 'ip_address'],
+        '192.0.2.5'
+      );
+      expect(getOvercloudInfo(state)).toEqual(
+        Map({
+          ipAddress: '192.0.2.5',
+          adminPassword: 'overcloudAdminPass'
+        })
+      );
+    });
+  });
+
   describe('getCurrentStack()', () => {
     const state = {
       stacks: new StacksState({

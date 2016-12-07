@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { Map, OrderedMap } from 'immutable';
+import { fromJS, Map, OrderedMap } from 'immutable';
 
 import { StacksState, Stack } from '../../js/immutableRecords/stacks';
 import StacksActions from '../../js/actions/StacksActions';
@@ -38,6 +38,10 @@ describe('stacksReducer state', () => {
 
     it('`stacks` is empty', () => {
       expect(state.get('stacks').size).toEqual(0);
+    });
+
+    it('`stacks` is empty', () => {
+      expect(state.get('isFetchingEnvironment')).toBe(false);
     });
   });
 
@@ -113,6 +117,69 @@ describe('stacksReducer state', () => {
 
       it('sets stacks in state to an empty Map', () => {
         expect(state.stacks).toEqual(Map());
+      });
+    });
+
+    describe('fetchEnvironmentPending', () => {
+      let state;
+
+      beforeEach(() => {
+        state = stacksReducer(
+          new StacksState({ isFetchingEnvironment: false }),
+          StacksActions.fetchEnvironmentPending()
+        );
+      });
+
+      it('sets isFetchingEnvironment to true', () => {
+        expect(state.isFetchingEnvironment).toBe(true);
+      });
+    });
+
+    describe('fetchEnvironmentFailed', () => {
+      let state;
+
+      beforeEach(() => {
+        state = stacksReducer(
+          new StacksState({ isFetchingEnvironment: true }),
+          StacksActions.fetchEnvironmentFailed()
+        );
+      });
+
+      it('sets isFetchingEnvironment to false', () => {
+        expect(state.isFetchingEnvironment).toBe(false);
+      });
+    });
+
+    describe('fetchEnvironmentSuccess', () => {
+      let state;
+
+      beforeEach(() => {
+        state = stacksReducer(
+          new StacksState({
+            isFetchingEnvironment: true,
+            currentStackEnvironment: Map(),
+            stacks: Map({
+              overcloud: Stack(),
+              foocloud: Stack()
+            })
+          }),
+          StacksActions.fetchEnvironmentSuccess(
+            { stack_name: 'overcloud' },
+            { parameter_defaults: { AdminPassword: '12345' } }
+          )
+        );
+      });
+
+      it('sets the environment for the correct stack', () => {
+        expect(state.get('currentStackEnvironment')).toEqual(
+          fromJS({
+            parameter_defaults: { AdminPassword: '12345' }
+          })
+        );
+      });
+
+      it('sets isFetchingEnvironment to false', () => {
+        expect(state.isFetchingEnvironment).toBe(false);
       });
     });
   });

@@ -24,7 +24,8 @@ import { getAllPlansButCurrent } from '../../selectors/plans';
 import {
   getCurrentStack,
   getCurrentStackDeploymentProgress,
-  getCurrentStackDeploymentInProgress
+  getCurrentStackDeploymentInProgress,
+  getOvercloudInfo
 } from '../../selectors/stacks';
 import {
   getAvailableNodes,
@@ -254,9 +255,6 @@ class DeploymentPlan extends React.Component {
                     currentPlan={this.props.currentPlan}
                     currentStack={this.props.currentStack}
                     currentStackResources={this.props.currentStackResources}
-                    currentStackResourcesLoaded={
-                      this.props.currentStackResourcesLoaded
-                    }
                     currentStackDeploymentProgress={
                       this.props.currentStackDeploymentProgress
                     }
@@ -264,6 +262,7 @@ class DeploymentPlan extends React.Component {
                     deployPlan={this.props.deployPlan}
                     fetchStackEnvironment={this.props.fetchStackEnvironment}
                     fetchStackResource={this.props.fetchStackResource}
+                    overcloudInfo={this.props.overcloudInfo}
                     isRequestingStackDelete={this.props.isRequestingStackDelete}
                     stacksLoaded={this.props.stacksLoaded}
                   />
@@ -289,7 +288,6 @@ DeploymentPlan.propTypes = {
   currentStackDeploymentInProgress: PropTypes.bool,
   currentStackDeploymentProgress: PropTypes.number.isRequired,
   currentStackResources: ImmutablePropTypes.map,
-  currentStackResourcesLoaded: PropTypes.bool.isRequired,
   deleteStack: PropTypes.func,
   deployPlan: PropTypes.func,
   environmentConfigurationLoaded: PropTypes.bool,
@@ -312,6 +310,7 @@ DeploymentPlan.propTypes = {
   isRequestingStackDelete: PropTypes.bool,
   nodeCountParametersByRole: ImmutablePropTypes.map,
   notify: PropTypes.func,
+  overcloudInfo: ImmutablePropTypes.map.isRequired,
   roles: ImmutablePropTypes.map,
   rolesLoaded: PropTypes.bool,
   route: PropTypes.object,
@@ -328,7 +327,6 @@ export function mapStateToProps(state) {
     currentPlan: getCurrentPlan(state),
     currentStack: getCurrentStack(state),
     currentStackResources: state.stacks.resources,
-    currentStackResourcesLoaded: state.stacks.resourcesLoaded,
     currentStackDeploymentInProgress: getCurrentStackDeploymentInProgress(
       state
     ),
@@ -340,6 +338,7 @@ export function mapStateToProps(state) {
     isFetchingNodes: state.nodes.get('isFetching'),
     isFetchingParameters: state.parameters.isFetching,
     isFetchingRoles: state.roles.get('isFetching'),
+    overcloudInfo: getOvercloudInfo(state),
     isRequestingStackDelete: state.stacks.get('isRequestingStackDelete'),
     hasPlans: !state.plans.get('all').isEmpty(),
     inactivePlans: getAllPlansButCurrent(state),

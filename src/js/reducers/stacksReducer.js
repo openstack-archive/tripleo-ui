@@ -58,17 +58,25 @@ export default function stacksReducer(state = initialState, action) {
     case StacksConstants.FETCH_RESOURCES_FAILED:
       return state.set('isFetchingResources', false);
 
-    case StacksConstants.FETCH_STACK_ENVIRONMENT_SUCCESS:
-      return state.setIn(
-        ['stacks', action.payload.stack.stack_name, 'environment'],
-        fromJS(action.payload.environment)
-      );
+    case StacksConstants.FETCH_STACK_ENVIRONMENT_FAILED:
+      return state.set('isFetchingEnvironment', false);
+
+    case StacksConstants.FETCH_STACK_ENVIRONMENT_PENDING:
+      return state.set('isFetchingEnvironment', true);
+
+    case StacksConstants.FETCH_STACK_ENVIRONMENT_SUCCESS: {
+      let environment = fromJS(action.payload.environment);
+      return state
+        .set('currentStackEnvironment', environment)
+        .set('isFetchingEnvironment', false)
+        .set('environmentLoaded', true);
+    }
 
     case StacksConstants.FETCH_RESOURCE_SUCCESS:
       return state
         .set('resourcesLoaded', true)
         .setIn(
-          ['resources', action.payload.resource_name],
+          ['resourceDetails', action.payload.resource_name],
           new StackResource(fromJS(action.payload))
         );
 
