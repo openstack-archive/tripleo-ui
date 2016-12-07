@@ -20,13 +20,6 @@ module.exports = {
         loader: 'babel'
       },
 
-      // Shared Workers
-      {
-        test: /\.js$/,
-        include: /src\/js\/workers/,
-        loader: 'shared-worker!babel'
-      },
-
       // Images
       {
         test: /\.(png|jpg|gif)(\?v=\d+\.\d+\.\d+)?$/,
