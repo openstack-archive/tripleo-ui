@@ -20,5 +20,8 @@ window.tripleOUiConfig = {
   // "zaqar_default_queue": "tripleo",
 
   // Logging
-  // "loggers": ['console']
+  // "loggers": ['console'],
+
+  // Cookies
+  // "useSecureCookie": true
 };

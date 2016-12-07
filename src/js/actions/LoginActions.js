@@ -1,26 +1,26 @@
 import { browserHistory } from 'react-router';
 import { Map, fromJS } from 'immutable';
 
-import TempStorage from '../services/TempStorage.js';
 import KeystoneApiErrorHandler from '../services/KeystoneApiErrorHandler';
 import KeystoneApiService from '../services/KeystoneApiService';
 import LoginConstants from '../constants/LoginConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 import logger from '../services/logger';
+import cookie from '../cookie';
 
 export default {
   authenticateUserViaToken(keystoneAuthTokenId, nextPath) {
     return (dispatch, getState) => {
       dispatch(this.userAuthStarted());
       KeystoneApiService.authenticateUserViaToken(keystoneAuthTokenId).then((response) => {
-        TempStorage.setItem('keystoneAuthTokenId', response.access.token.id);
+        cookie.set('keystoneAuthTokenId', response.access.token.id);
         dispatch(this.userAuthSuccess(response.access));
         ZaqarWebSocketService.init(getState, dispatch);
         browserHistory.push(nextPath);
       }).catch((error) => {
         logger.error('Error in LoginActions.authenticateUserViaToken', error.stack || error);
         let errorHandler = new KeystoneApiErrorHandler(error);
-        TempStorage.removeItem('keystoneAuthTokenId');
+        cookie.remove('keystoneAuthTokenId');
         browserHistory.push({pathname: '/login', query: { nextPath: nextPath }});
         dispatch(this.userAuthFailure(errorHandler.errors));
       });
@@ -31,7 +31,7 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.userAuthStarted());
       KeystoneApiService.authenticateUser(formData.username, formData.password).then((response) => {
-        TempStorage.setItem('keystoneAuthTokenId', response.access.token.id);
+        cookie.set('keystoneAuthTokenId', response.access.token.id);
         dispatch(this.userAuthSuccess(response.access));
         ZaqarWebSocketService.init(getState, dispatch);
         browserHistory.push(nextPath);
@@ -70,7 +70,7 @@ export default {
   logoutUser() {
     return dispatch => {
       browserHistory.push('/login');
-      TempStorage.removeItem('keystoneAuthTokenId');
+      cookie.remove('keystoneAuthTokenId');
       ZaqarWebSocketService.close();
       dispatch(this.logoutUserSuccess());
     };
