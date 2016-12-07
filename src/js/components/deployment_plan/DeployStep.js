@@ -20,10 +20,11 @@ const messages = defineMessages({
   }
 });
 
-const DeployStep = ({ currentPlan, currentStack, currentStackResources, currentStackResourcesLoaded,
-                      currentStackDeploymentProgress, deleteStack, deployPlan, fetchStackResource,
-                      fetchStackEnvironment, intl, isRequestingStackDelete, stacksLoaded }) => {
-
+export const DeployStep = ({ currentPlan, currentStack, currentStackResources,
+                             currentStackDeploymentProgress, deleteStack, deployPlan,
+                             fetchStackResource, fetchStackEnvironment, intl,
+                             isRequestingStackDelete, overcloudInfo, runPostDeploymentValidations,
+                             stacksLoaded }) => {
   if (!currentStack || currentStack.stack_status === stackStates.DELETE_COMPLETE) {
     return (
       <Loader loaded={stacksLoaded}>
@@ -51,8 +52,8 @@ const DeployStep = ({ currentPlan, currentStack, currentStackResources, currentS
     return (
       <DeploymentSuccess stack={currentStack}
                          stackResources={currentStackResources}
-                         stackResourcesLoaded={currentStackResourcesLoaded}
                          isRequestingStackDelete={isRequestingStackDelete}
+                         overcloudInfo={overcloudInfo}
                          deleteStack={deleteStack}
                          fetchStackResource={fetchStackResource}
                          fetchStackEnvironment={fetchStackEnvironment} />
@@ -71,13 +72,17 @@ DeployStep.propTypes = {
   currentStack: ImmutablePropTypes.record,
   currentStackDeploymentProgress: React.PropTypes.number.isRequired,
   currentStackResources: ImmutablePropTypes.map,
-  currentStackResourcesLoaded: React.PropTypes.bool.isRequired,
   deleteStack: React.PropTypes.func.isRequired,
   deployPlan: React.PropTypes.func.isRequired,
   fetchStackEnvironment: React.PropTypes.func.isRequired,
   fetchStackResource: React.PropTypes.func.isRequired,
   intl: React.PropTypes.object,
   isRequestingStackDelete: React.PropTypes.bool.isRequired,
+  overcloudInfo: React.PropTypes.oneOfType([
+    React.PropTypes.bool,
+    ImmutablePropTypes.map
+  ]).isRequired,
+  runPostDeploymentValidations: React.PropTypes.func.isRequired,
   stacksLoaded: React.PropTypes.bool.isRequired
 };
 
