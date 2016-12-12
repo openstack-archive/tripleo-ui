@@ -189,7 +189,7 @@ describe('ParametersActions', () => {
     });
 
     it('does not dispatch updateParametersSuccess', () => {
-      expect(ParametersActions.updateParametersSuccess).not.toHaveBeenCalled();
+      expect(ParametersActions.updateParametersSuccess).not.toHaveBeenCalledWith({ foo: 'bar' });
     });
 
     it('dispatches updateParametersFailed', () => {
