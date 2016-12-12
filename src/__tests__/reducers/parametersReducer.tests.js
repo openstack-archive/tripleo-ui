@@ -1,7 +1,7 @@
 import matchers from 'jasmine-immutable-matchers';
 import { List, Map } from 'immutable';
 
-import { ParametersDefaultState } from '../../js/immutableRecords/parameters';
+import { ParametersDefaultState, Parameter } from '../../js/immutableRecords/parameters';
 import ParametersConstants from '../../js/constants/ParametersConstants';
 import parametersReducer from '../../js/reducers/parametersReducer';
 
@@ -162,13 +162,19 @@ describe('parametersReducer', () => {
   describe('UPDATE_PARAMETERS_SUCCESS', () => {
     let state;
     const action = {
-      type: ParametersConstants.UPDATE_PARAMETERS_SUCCESS
+      type: ParametersConstants.UPDATE_PARAMETERS_SUCCESS,
+      payload: { foo: 'bar' }
     };
 
     beforeEach(() => {
       state = parametersReducer(ParametersDefaultState({
         isFetching: true,
-        form: Map({ some: 'value' })
+        form: Map({ some: 'value' }),
+        parameters: Map({
+          foo: new Parameter({
+            name: 'foo'
+          })
+        })
       }), action);
     });
 
@@ -181,6 +187,10 @@ describe('parametersReducer', () => {
         formErrors: List(),
         formFieldErrors: Map()
       }));
+    });
+
+    it('updates parameters in state with new values', () => {
+      expect(state.parameters.get('foo').default).toEqual('bar');
     });
   });
 });
