@@ -58,9 +58,10 @@ export default {
     };
   },
 
-  updateParametersSuccess() {
+  updateParametersSuccess(updatedParameters) {
     return {
-      type: ParametersConstants.UPDATE_PARAMETERS_SUCCESS
+      type: ParametersConstants.UPDATE_PARAMETERS_SUCCESS,
+      payload: updatedParameters
     };
   },
 
@@ -80,7 +81,7 @@ export default {
       MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE,
                                   { container: planName, parameters: data })
       .then(response => {
-        dispatch(this.updateParametersSuccess());
+        dispatch(this.updateParametersSuccess(data));
         dispatch(NotificationActions.notify({
           title: 'Parameters updated',
           message: 'The Deployment parameters have been successfully updated',
