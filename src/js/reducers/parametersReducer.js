@@ -41,13 +41,20 @@ export default function parametersReducer(state = initialState, action) {
   case ParametersConstants.UPDATE_PARAMETERS_PENDING:
     return state.set('isFetching', true);
 
-  case ParametersConstants.UPDATE_PARAMETERS_SUCCESS:
+  case ParametersConstants.UPDATE_PARAMETERS_SUCCESS: {
+    const updatedParameters = action.payload;
     return state
             .set('isFetching', false)
             .set('form', Map({
               formErrors: List(),
               formFieldErrors: Map()
-            }));
+            }))
+            .update('parameters', parameters =>
+              parameters.map(parameter =>
+                Object.keys(updatedParameters).includes(parameter.name) ?
+                  parameter.set('default', updatedParameters[parameter.name]) :
+                  parameter ));
+  }
 
   case ParametersConstants.UPDATE_PARAMETERS_FAILED:
     return state
