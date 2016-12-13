@@ -1,8 +1,9 @@
-import { List, Map } from 'immutable';
+import { List, Map, OrderedMap } from 'immutable';
 import matchers from 'jasmine-immutable-matchers';
 
 import * as selectors from '../../js/selectors/environmentConfiguration';
-import { EnvironmentConfigurationState } from '../../js/immutableRecords/environmentConfiguration';
+import { Environment,
+         EnvironmentConfigurationState } from '../../js/immutableRecords/environmentConfiguration';
 
 describe('Environment Configuration selectors', () => {
   beforeEach(() => {
@@ -26,13 +27,13 @@ describe('Environment Configuration selectors', () => {
           environments: List(['environments/environment1.yaml','environments/environment2.yaml'])
         })
       }),
-      environments: Map({
-        'environments/environment1.yaml': Map({
+      environments: OrderedMap({
+        'environments/environment1.yaml': new Environment({
           file: 'environments/environment1.yaml',
           title: 'Environment1',
           enabled: true
         }),
-        'environments/environment2.yaml': Map({
+        'environments/environment2.yaml': new Environment({
           title: 'Environment2',
           file: 'environments/environment2.yaml',
           enabled: false
@@ -46,8 +47,8 @@ describe('Environment Configuration selectors', () => {
   };
 
   it('provides selector to get enabled environments', () => {
-    expect(selectors.getEnabledEnvironments(state)).toEqualImmutable(Map({
-      'environments/environment1.yaml': Map({
+    expect(selectors.getEnabledEnvironments(state)).toEqualImmutable(OrderedMap({
+      'environments/environment1.yaml': new Environment({
         file: 'environments/environment1.yaml',
         title: 'Environment1',
         enabled: true
@@ -68,18 +69,18 @@ describe('Environment Configuration selectors', () => {
           Map({
             title: 'Group1',
             description: 'Group1 description',
-            environments: List([
-              Map({
+            environments: OrderedMap({
+              'environments/environment1.yaml': new Environment({
                 file: 'environments/environment1.yaml',
                 title: 'Environment1',
                 enabled: true
               }),
-              Map({
+              'environments/environment2.yaml': new Environment({
                 title: 'Environment2',
                 file: 'environments/environment2.yaml',
                 enabled: false
               })
-            ])
+            })
           })
         ])
       })

@@ -37,7 +37,7 @@ export default class ParameterInputList extends React.Component {
 }
 ParameterInputList.propTypes = {
   emptyParametersMessage: React.PropTypes.string.isRequired,
-  mistralParameters: ImmutablePropTypes.map.isRequired,
+  mistralParameters: ImmutablePropTypes.map,
   parameters: React.PropTypes.array.isRequired
 };
 ParameterInputList.defaultProps = {
