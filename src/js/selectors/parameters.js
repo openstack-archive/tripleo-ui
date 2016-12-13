@@ -1,9 +1,10 @@
 import { createSelector } from 'reselect';
-import { List } from 'immutable';
+import { List, Set } from 'immutable';
 
 import { internalParameters } from '../constants/ParametersConstants';
 import { Resource } from '../immutableRecords/parameters';
 import { getRole } from './roles';
+import { getEnvironment } from './environmentConfiguration';
 
 const parameters = (state) => state.parameters.get('parameters').sortBy(p => p.name.toLowerCase());
 const resources = (state) => state.parameters.get('resources').sortBy(r => r.type);
@@ -68,6 +69,20 @@ export const getRoleNetworkConfig = createSelector(
             null,
             new Resource())
       .update('parameters', params => parameters.filter((p, k) => params.includes(k)))
+);
+
+
+export const getEnvironmentParameters = createSelector(
+  [getParametersExclInternal, resources, getEnvironment], (parameters, resources, environment) => {
+    return resources
+        // get list of resources from environment resource_registry
+        .filter(r => environment.resourceRegistry.keySeq().includes(r.type))
+        // collect parameter names from those resources
+        .reduce((result, resource) => result.union(resource.parameters), Set())
+        .toMap()
+        // convert list of parameter names to map of actual parameter records
+        .update(params => parameters.filter((p, k) => params.includes(k)));
+  }
 );
 
 /**

@@ -22,7 +22,7 @@ class ParameterInput extends React.Component {
     const { name, label, description, defaultValue, value, type } = this.props;
     if(value) {
       return (
-        <HorizontalStaticText text={value}
+        <HorizontalStaticText text={isObjectLike(value) ? JSON.stringify(value) : value}
                               title={label}
                               labelColumnClasses="col-sm-4"
                               inputColumnClasses="col-sm-8"/>
@@ -104,7 +104,13 @@ ParameterInput.propTypes = {
   label: React.PropTypes.string.isRequired,
   name: React.PropTypes.string.isRequired,
   type: React.PropTypes.string.isRequired,
-  value: React.PropTypes.string
+  value: React.PropTypes.oneOfType([
+    React.PropTypes.object,
+    React.PropTypes.array,
+    React.PropTypes.bool,
+    React.PropTypes.number,
+    React.PropTypes.string
+  ])
 };
 ParameterInput.defaultProps = {
   defaultValue: ''

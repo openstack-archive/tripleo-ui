@@ -11,3 +11,15 @@ export const EnvironmentConfigurationState = Record({
     formFieldErrors: Map()
   })
 });
+
+export const Environment = Record({
+  file: undefined,
+  title: undefined,
+  description: undefined,
+  enabled: false,
+  error: undefined,
+  isFetching: false,
+  requires: List(),
+  resourceRegistry: Map(),
+  parameterDefaults: Map()
+});
