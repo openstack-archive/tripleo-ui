@@ -35,7 +35,7 @@ class PortedModal extends React.Component {
     return (
       <div style={{display: 'block'}}>
         <div className="modal modal-visible" role="dialog">
-          <div className={`modal-dialog ${this.props.dialogClasses}`}>
+          <div className={`modal-dialog ${this.props.dialogClasses}`} id={this.props.id}>
             <div className="modal-content">
               {this.props.children}
             </div>
@@ -48,7 +48,8 @@ class PortedModal extends React.Component {
 }
 PortedModal.propTypes = {
   children: React.PropTypes.node,
-  dialogClasses: React.PropTypes.string.isRequired
+  dialogClasses: React.PropTypes.string.isRequired,
+  id: React.PropTypes.string
 };
 
 PortedModal.defaultProps = {

@@ -41,7 +41,8 @@ class ListPlans extends React.Component {
     return (
       <Link to="/plans/new"
             query={{tab: 'newPlan'}}
-            className="btn btn-primary">
+            className="btn btn-primary"
+            id="ListPlans__newPlanLink">
         <span className="fa fa-plus"/> Create New Plan
       </Link>
     );
@@ -55,7 +56,8 @@ class ListPlans extends React.Component {
         <DataTable data={plans}
                    rowsCount={plans.length}
                    noRowsRenderer={this.renderNoPlans.bind(this)}
-                   tableActions={this.renderTableActions}>
+                   tableActions={this.renderTableActions}
+                   id="ListPlans__plansTable">
           <DataTableColumn header={<DataTableHeaderCell key="name">Name</DataTableHeaderCell>}
                            cell={<PlanNameCell
                            data={plans}
@@ -114,11 +116,11 @@ class RowActionsCell extends React.Component {
           <Link key="edit"
                 to={`/plans/${plan.name}/edit`}
                 query={{tab: 'editPlan'}}
-                className="btn btn-xs btn-default">Edit</Link>
+                className="btn btn-xs btn-default ListPlans__editPlanButton">Edit</Link>
           &nbsp;
           <Link key="delete"
                 to={`/plans/${plan.name}/delete`}
-                className="btn btn-xs btn-danger">Delete</Link>
+                className="btn btn-xs btn-danger ListPlans__deletePlanButton">Delete</Link>
         </DataTableCell>
       );
     }
