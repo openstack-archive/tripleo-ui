@@ -41,7 +41,8 @@ class ListPlans extends React.Component {
     return (
       <Link to="/plans/new"
             query={{tab: 'newPlan'}}
-            className="btn btn-primary">
+            className="btn btn-primary"
+            id="plans_create_new_plan">
         <span className="fa fa-plus"/> Create New Plan
       </Link>
     );
@@ -55,7 +56,8 @@ class ListPlans extends React.Component {
         <DataTable data={plans}
                    rowsCount={plans.length}
                    noRowsRenderer={this.renderNoPlans.bind(this)}
-                   tableActions={this.renderTableActions}>
+                   tableActions={this.renderTableActions}
+                   id="plans_list_table">
           <DataTableColumn header={<DataTableHeaderCell key="name">Name</DataTableHeaderCell>}
                            cell={<PlanNameCell
                            data={plans}
@@ -114,11 +116,11 @@ class RowActionsCell extends React.Component {
           <Link key="edit"
                 to={`/plans/${plan.name}/edit`}
                 query={{tab: 'editPlan'}}
-                className="btn btn-xs btn-default">Edit</Link>
+                className="btn btn-xs btn-default plans_edit_plan">Edit</Link>
           &nbsp;
           <Link key="delete"
                 to={`/plans/${plan.name}/delete`}
-                className="btn btn-xs btn-danger">Delete</Link>
+                className="btn btn-xs btn-danger plans_delete_plan">Delete</Link>
         </DataTableCell>
       );
     }
@@ -138,9 +140,14 @@ export class PlanNameCell extends React.Component {
   getActiveIcon(planName) {
     if(planName === this.props.currentPlanName) {
       return (
-        <span className="pficon pficon-flag"></span>
+        <span className="pficon pficon-flag" id="plans_active_plan_flag"></span>
       );
     }
+    return false;
+  }
+
+  getActiveId(planName) {
+    if(planName === this.props.currentPlanName) { return ('plans_active_plan'); }
     return false;
   }
 
@@ -157,6 +164,7 @@ export class PlanNameCell extends React.Component {
       return (
         <DataTableCell {...this.props}>
           {this.getActiveIcon(plan.name)} <a href=""
+                                             id={this.getActiveId(plan.name)}
                                              onClick={this.onPlanClick.bind(this)}>{plan.name}</a>
         </DataTableCell>
       );

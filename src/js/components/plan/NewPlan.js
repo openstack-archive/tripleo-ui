@@ -58,7 +58,7 @@ class NewPlan extends React.Component {
 
   render () {
     return (
-      <Modal dialogClasses="modal-lg">
+      <Modal dialogClasses="modal-lg" id="plans_new_plan_modal">
         <Formsy.Form ref="NewPlanForm"
                      role="form"
                      className="form-horizontal"
