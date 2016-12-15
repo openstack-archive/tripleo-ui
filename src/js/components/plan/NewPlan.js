@@ -78,7 +78,7 @@ class NewPlan extends React.Component {
 
   render () {
     return (
-      <Modal dialogClasses="modal-lg">
+      <Modal dialogClasses="modal-lg" id="NewPlan__modal">
         <Formsy.Form ref="NewPlanForm"
                      role="form"
                      className="form-horizontal"
@@ -118,7 +118,8 @@ class NewPlan extends React.Component {
             <Link to="/plans/list"
                   type="button"
                   onClick={() => this.props.cancelCreatePlan()}
-                  className="btn btn-default">
+                  className="btn btn-default"
+                  id="NewPlan__cancelCreatePlanButton">
               <FormattedMessage {...messages.cancel}/>
             </Link>
           </div>

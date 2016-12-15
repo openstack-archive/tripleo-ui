@@ -80,6 +80,7 @@ class ListPlans extends React.Component {
       <Link to="/plans/new"
             query={{tab: 'newPlan'}}
             className="btn btn-primary">
+            id="ListPlans__newPlanLink">
         <span className="fa fa-plus"/>  <FormattedMessage {...messages.createNewPlan}/>
       </Link>
     );
@@ -95,7 +96,8 @@ class ListPlans extends React.Component {
         <DataTable data={plans}
                    rowsCount={plans.length}
                    noRowsRenderer={this.renderNoPlans.bind(this)}
-                   tableActions={this.renderTableActions}>
+                   tableActions={this.renderTableActions}
+                   id="ListPlans__plansTable">
           <DataTableColumn header={<DataTableHeaderCell key="name">
                                      <FormattedMessage {...messages.name}/>
                                    </DataTableHeaderCell>}
@@ -106,8 +108,9 @@ class ListPlans extends React.Component {
           <DataTableColumn header={<DataTableHeaderCell key="actions">
                                      <FormattedMessage {...messages.actions}/>
                                    </DataTableHeaderCell>}
-                           cell={<RowActionsCell className="actions text-right"
-                                                 data={plans}/>}/>
+                           cell={<RowActionsCell
+                           className="actions text-right"
+                           data={plans}/>}/>
         </DataTable>
         {this.props.children}
       </div>
@@ -164,7 +167,7 @@ class RowActionsCell extends React.Component {
           &nbsp;
           <Link key="delete"
                 to={`/plans/${plan.name}/delete`}
-                className="btn btn-xs btn-danger">
+                className="btn btn-xs btn-danger ListPlans__editPlanButton">
             <FormattedMessage {...messages.delete}/>
           </Link>
         </DataTableCell>
