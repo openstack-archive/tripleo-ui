@@ -77,7 +77,8 @@ export default class DataTable extends React.Component {
           </div>
         </div>
         <div className="table-responsive">
-          <table className="table table-stripped table-bordered datatable" role="grid">
+          <table className="table table-stripped table-bordered datatable"
+                 id={this.props.id} role="grid">
             <thead>
               <tr>
                 {headers}
@@ -100,6 +101,7 @@ DataTable.propTypes = {
   data: React.PropTypes.array.isRequired,
   dataOperationInProgress: React.PropTypes.bool.isRequired,
   filterString: React.PropTypes.string,
+  id: React.PropTypes.string,
   noRowsRenderer: React.PropTypes.func.isRequired,
   onFilter: React.PropTypes.func,
   rowsCount: React.PropTypes.number.isRequired,
