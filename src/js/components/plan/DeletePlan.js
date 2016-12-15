@@ -20,7 +20,7 @@ class DeletePlan extends React.Component {
 
   render () {
     return (
-      <Modal dialogClasses="modal-sm">
+      <Modal dialogClasses="modal-sm" id="DeletePlan__deletePlanModal">
         <div className="modal-header">
           <Link to="/plans/list"
                 type="button"
@@ -33,16 +33,23 @@ class DeletePlan extends React.Component {
         </div>
         <div className="modal-body">
           <p>
-            Are you sure you want to delete plan <strong>{this.getNameFromUrl()}</strong>?
+            Are you sure you want to delete plan
+            <strong><span id="DeletePlan__planName"> {this.getNameFromUrl()}</span></strong>?
           </p>
         </div>
         <div className="modal-footer">
           <button className="btn btn-danger"
                   onClick={this.onDeleteClick.bind(this)}
+                  id="DeletePlan__deletePlanModalButton"
                   type="submit">
             Delete Plan
           </button>
-          <Link to="/plans/list" type="button" className="btn btn-default" >Cancel</Link>
+          <Link to="/plans/list"
+                type="button"
+                className="btn btn-default"
+                id="DeletePlan__cancelDeletePlanModalButton">
+            Cancel
+          </Link>
         </div>
       </Modal>
     );
