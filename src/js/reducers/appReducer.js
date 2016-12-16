@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import currentPlanReducer from './currentPlanReducer';
 import environmentConfigurationReducer from './environmentConfigurationReducer';
+import i18nReducer from './i18nReducer';
 import loginReducer from './loginReducer';
 import nodesReducer from './nodesReducer';
 import notificationsReducer from './notificationsReducer';
@@ -16,6 +17,7 @@ const appReducer = combineReducers({
   currentPlan: currentPlanReducer,
   environmentConfiguration: environmentConfigurationReducer,
   executions: workflowExecutionsReducer,
+  i18n: i18nReducer,
   login: loginReducer,
   nodes: nodesReducer,
   notifications: notificationsReducer,
