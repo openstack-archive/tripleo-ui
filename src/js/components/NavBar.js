@@ -3,6 +3,10 @@ import { Link } from 'react-router';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import NavTab from './ui/NavTab';
+import Dropdown from './ui/dropdown/Dropdown';
+import DropdownButton from './ui/dropdown/DropdownButton';
+import DropdownToggle from './ui/dropdown/DropdownToggle';
+import DropdownItem from './ui/dropdown/DropdownItem';
 
 import TripleoOwlSvg from '../../img/tripleo-owl.svg';
 
@@ -36,6 +40,16 @@ export default class NavBar extends React.Component {
                 {this.props.user.get('username')}
               </a>
             </li>
+            <li>
+              <Dropdown>
+                <DropdownToggle>
+                  Language <b className="caret"></b>
+                </DropdownToggle>
+                <DropdownItem key="lang-en" onClick={this.props.chooseLanguage.bind(this, 'en')}>
+                  English
+                </DropdownItem>
+              </Dropdown>
+            </li>
             <li><a href="#" onClick={this.logout.bind(this)}>Logout</a></li>
           </ul>
           <ul className="nav navbar-nav navbar-primary">
@@ -48,6 +62,7 @@ export default class NavBar extends React.Component {
   }
 }
 NavBar.propTypes = {
+  chooseLanguage: React.PropTypes.func.isRequired,
   onLogout: React.PropTypes.func.isRequired,
   user: ImmutablePropTypes.map
 };
