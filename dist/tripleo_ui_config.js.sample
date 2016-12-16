@@ -15,6 +15,13 @@ window.tripleOUiConfig = {
   // Default websocket queue name
   // "zaqar_default_queue": "tripleo",
 
+  // Languages
+  // You can choose one or more of the following languages:
+  //   - "en" (default)
+  //
+  // If you choose more than one language, a language switcher will appear in the navigation bar.
+  // "languages": ["en"],
+
   // Logging
   // "loggers": ['console']
 };
