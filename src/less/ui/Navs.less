@@ -53,3 +53,25 @@
     content: "";
   }
 }
+
+// Nav dropdown menu icons
+.navbar-pf .navbar-utility .dropdown a.dropdown-toggle {
+    display: block;
+    padding: 11px 10px 9px 10px;
+    color: @navbar-pf-color;
+    text-decoration: none;
+    cursor: pointer;
+    border-left: 1px solid #2b2b2b;
+}
+.navbar-pf .navbar-utility .dropdown.open a.dropdown-toggle,
+.navbar-pf .navbar-utility .dropdown a.dropdown-toggle:hover,
+.navbar-pf .navbar-utility .dropdown a.dropdown-toggle:active {
+    background-color: #232323;
+    color: @navbar-pf-active-color;
+}
+.navbar-pf .navbar-utility div.dropdown > .dropdown-toggle .pficon,
+.navbar-pf .navbar-utility li.dropdown > .dropdown-toggle .pficon {
+  position: relative;
+  left: 0;
+  top: 0;
+}
