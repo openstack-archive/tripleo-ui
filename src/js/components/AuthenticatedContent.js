@@ -3,6 +3,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
 import Loader from './ui/Loader';
+import I18nActions from '../actions/I18nActions';
 import LoginActions from '../actions/LoginActions';
 import PlansActions from '../actions/PlansActions';
 import NavBar from './NavBar';
@@ -23,7 +24,8 @@ class AuthenticatedContent extends React.Component {
               global>
         <header>
           <NavBar user={this.props.user}
-                  onLogout={this.props.logoutUser.bind(this)}/>
+                  onLogout={this.props.logoutUser.bind(this)}
+                  chooseLanguage={this.props.chooseLanguage.bind(this)}/>
         </header>
         <div className="wrapper-fixed-body container-fluid">
           <div className="row">
@@ -37,6 +39,7 @@ class AuthenticatedContent extends React.Component {
 }
 AuthenticatedContent.propTypes = {
   children: React.PropTypes.node,
+  chooseLanguage: React.PropTypes.func.isRequired,
   currentPlanName: React.PropTypes.string,
   dispatch: React.PropTypes.func,
   fetchPlans: React.PropTypes.func,
@@ -49,6 +52,7 @@ AuthenticatedContent.propTypes = {
 
 const mapDispatchToProps = dispatch => {
   return {
+    chooseLanguage: (language) => dispatch(I18nActions.chooseLanguage(language)),
     logoutUser: () => dispatch(LoginActions.logoutUser()),
     fetchPlans: () => dispatch(PlansActions.fetchPlans()),
     fetchWorkflowExecutions: () => dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions())
