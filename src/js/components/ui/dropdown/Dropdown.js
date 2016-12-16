@@ -17,7 +17,8 @@ export default class Dropdown extends React.Component {
   render() {
     const children = React.Children.toArray(this.props.children);
 
-    const toggle = _.first(children, child => child.type.name === 'DropdownButton');
+    const toggle = _.first(children, child => _.includes(['DropdownButton', 'DropdownToggle'],
+                                                         child.type.name));
 
     const items = _.map(_.filter(children, child => child.type.name === 'DropdownItem'),
                         item => React.cloneElement(
@@ -25,8 +26,8 @@ export default class Dropdown extends React.Component {
 
     // Any other children are prepended to DropdownButton.
     // This can be used to add buttons to Dropdown button group
-    const otherChildren = _.reject(children, child => _.includes(['DropdownButton', 'DropdownItem'],
-                                                          child.type.name));
+    const otherChildren = _.reject(children, child => _.includes(
+      ['DropdownButton', 'DropdownToggle', 'DropdownItem'], child.type.name));
     const dropdownClasses = {
       open: this.state.isOpen
     };
