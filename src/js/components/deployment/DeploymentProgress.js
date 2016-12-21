@@ -1,3 +1,4 @@
+import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
@@ -6,6 +7,13 @@ import { deploymentStatusMessages as statusMessages,
 import Loader from '../ui/Loader';
 import ProgressBar from '../ui/ProgressBar';
 import StackResourcesTable from './StackResourcesTable';
+
+const messages = defineMessages({
+  resources: {
+    id: 'DeploymentSuccess.resources',
+    defaultMessage: 'Resources'
+  }
+});
 
 export default class DeploymentProgress extends React.Component {
   componentDidMount() {
@@ -33,7 +41,7 @@ export default class DeploymentProgress extends React.Component {
           <Loader loaded={false} content={statusMessage} inline/>
         </div>
         {this.renderProgressBar()}
-        <h2>Resources</h2>
+        <h2><FormattedMessage {...messages.resources}/></h2>
         <StackResourcesTable isFetchingResources={!this.props.stackResourcesLoaded}
                              resources={this.props.stackResources.reverse()}/>
       </div>
