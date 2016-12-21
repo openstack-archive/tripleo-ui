@@ -1,3 +1,4 @@
+import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
@@ -5,7 +6,14 @@ import { deploymentStatusMessages } from '../../constants/StacksConstants';
 import InlineNotification from '../ui/InlineNotification';
 import StackResourcesTable from './StackResourcesTable';
 
-export default class DeploymentSuccess extends React.Component {
+const messages = defineMessages({
+  resources: {
+    id: 'DeploymentFailure.resources',
+    defaultMessage: 'Resources'
+  }
+});
+
+export default class DeploymentFailure extends React.Component {
   componentDidMount() {
     this.props.fetchStackResources(this.props.stack);
   }
@@ -17,7 +25,7 @@ export default class DeploymentSuccess extends React.Component {
                             title={deploymentStatusMessages[this.props.stack.stack_status]}>
           <p>{this.props.stack.stack_status_reason}</p>
         </InlineNotification>
-        <h2>Resources</h2>
+        <h2><FormattedMessage {...messages.resources}/></h2>
         <StackResourcesTable isFetchingResources={!this.props.stackResourcesLoaded}
                              resources={this.props.stackResources.reverse()}/>
       </div>
@@ -25,7 +33,7 @@ export default class DeploymentSuccess extends React.Component {
   }
 }
 
-DeploymentSuccess.propTypes = {
+DeploymentFailure.propTypes = {
   fetchStackResources: React.PropTypes.func.isRequired,
   planName: React.PropTypes.string.isRequired,
   stack: ImmutablePropTypes.record.isRequired,

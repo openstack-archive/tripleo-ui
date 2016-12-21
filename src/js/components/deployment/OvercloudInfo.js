@@ -1,9 +1,34 @@
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
 import Loader from '../ui/Loader';
 
-const OvercloudInfo = ({ stack, stackResources, stackResourcesLoaded }) => {
+const messages = defineMessages({
+  loadingOvercloudInformation: {
+    id: 'OvercloudInfo.loadingOvercloudInformation',
+    defaultMessage: 'Loading overcloud information...'
+
+  },
+  overcloudInformationHeader: {
+    id: 'OvercloudInfo.overcloudInformationHeader',
+    defaultMessage: 'Overcloud information'
+  },
+  overcloudIpAddress: {
+    id: 'OvercloudInfo.overcloudIpAddress',
+    defaultMessage: 'Overcloud IP address'
+  },
+  password: {
+    id: 'OvercloudInfo.password',
+    defaultMessage: 'Password'
+  },
+  username: {
+    id: 'OvercloudInfo.username',
+    defaultMessage: 'Username'
+  }
+});
+
+const OvercloudInfo = ({ intl, stack, stackResources, stackResourcesLoaded }) => {
   const ip = stackResources.getIn([
     'PublicVirtualIP', 'attributes', 'ip_address'
   ]);
@@ -16,13 +41,13 @@ const OvercloudInfo = ({ stack, stackResources, stackResourcesLoaded }) => {
 
   return (
     <div>
-      <h4>Overcloud information:</h4>
+      <h4><FormattedMessage {...messages.overcloudInformationHeader}/>:</h4>
       <Loader loaded={stackResourcesLoaded}
-              content="Loading overcloud information...">
+              content={intl.formatMessage(messages.loadingOvercloudInformation)}>
         <ul className="list">
-          <li>Overcloud IP address: {ip}</li>
-          <li>Username: admin</li>
-          <li>Password: {password}</li>
+          <li><FormattedMessage {...messages.overcloudIpAddress}/>: {ip}</li>
+          <li><FormattedMessage {...messages.username}/>: admin</li>
+          <li><FormattedMessage {...messages.password}/>: {password}</li>
         </ul>
       </Loader>
       <br />
@@ -30,9 +55,10 @@ const OvercloudInfo = ({ stack, stackResources, stackResourcesLoaded }) => {
   );
 };
 OvercloudInfo.propTypes = {
+  intl: React.PropTypes.object,
   stack: ImmutablePropTypes.record.isRequired,
   stackResources: ImmutablePropTypes.map.isRequired,
   stackResourcesLoaded: React.PropTypes.bool.isRequired
 };
 
-export default OvercloudInfo;
+export default injectIntl(OvercloudInfo);
