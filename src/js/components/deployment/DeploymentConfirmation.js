@@ -1,11 +1,40 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 
 import BlankSlate from '../ui/BlankSlate';
 import InlineNotification from '../ui/InlineNotification';
 import Loader from '../ui/Loader';
 
-export default class DeploymentConfirmation extends React.Component {
+const messages = defineMessages({
+  deployButton: {
+    id: 'DeploymentConfirmation.deployButton',
+    defaultMessage: 'Deploy'
+  },
+  deploymentConfirmation: {
+    id: 'DeploymentConfirmation.deploymentConfirmation',
+    defaultMessage: 'Are you sure you want to deploy this plan?'
+  },
+  deploymentConfirmationHeader: {
+    id: 'DeploymentConfirmation.deploymentConfirmationHeader',
+    defaultMessage: 'Deploy Plan {planName}'
+  },
+  requestingDeploymentLoader: {
+    id: 'DeploymentConfirmation.requestingDeploymentLoader',
+    defaultMessage: 'Requesting a deployment...'
+  },
+  validationsWarningTitle: {
+    id: 'DeploymentConfirmation.validationsWarningTitle',
+    defaultMessage: 'Not all pre-deployment validations have passed'
+  },
+  validationsWarningMessage: {
+    id: 'DeploymentConfirmation.validationsWarningMessage',
+    defaultMessage: 'It is highly recommended that you resolve all validation issues before '
+                    + 'continuing.'
+  }
+});
+
+class DeploymentConfirmation extends React.Component {
   componentDidMount() {
     this.props.runPreDeploymentValidations(this.props.currentPlan.name);
   }
@@ -16,11 +45,12 @@ export default class DeploymentConfirmation extends React.Component {
     return (
       <div className="col-sm-12 deployment-summary">
         <BlankSlate iconClass="fa fa-cloud-upload"
-                    title={`Deploy Plan ${currentPlan.name}`}>
+                    title={this.props.intl.formatMessage(messages.deploymentConfirmationHeader,
+                                                         { planName: currentPlan.name })}>
           <p><strong>Summary:</strong> {environmentSummary}</p>
           <ValidationsWarning allValidationsSuccessful={allValidationsSuccessful}/>
           <p>
-            Are you sure you want to deploy this plan?
+            <FormattedMessage {...messages.deploymentConfirmation} />
           </p>
           <DeployButton
             disabled={currentPlan.isRequestingPlanDeploy}
@@ -36,42 +66,48 @@ DeploymentConfirmation.propTypes = {
   currentPlan: ImmutablePropTypes.record.isRequired,
   deployPlan: React.PropTypes.func.isRequired,
   environmentSummary: React.PropTypes.string.isRequired,
+  intl: React.PropTypes.object,
   runPreDeploymentValidations: React.PropTypes.func.isRequired
 };
 
-export const ValidationsWarning = ({ allValidationsSuccessful }) => {
+export default injectIntl(DeploymentConfirmation);
+
+export const ValidationsWarning = injectIntl(({ allValidationsSuccessful, intl }) => {
   if (!allValidationsSuccessful) {
     return (
       <InlineNotification type="warning"
-                          title="Not all pre-deployment validations have passed">
-        <p>It is highly recommended that you resolve all validation issues before continuing.</p>
+                          title={intl.formatMessage(messages.validationsWarningTitle)}>
+        <p>
+          <FormattedMessage {...messages.validationsWarningMessage} />
+        </p>
       </InlineNotification>
     );
   }
   return null;
-};
+});
 ValidationsWarning.propTypes = {
-  allValidationsSuccessful: React.PropTypes.bool.isRequired
+  allValidationsSuccessful: React.PropTypes.bool.isRequired,
+  intl: React.PropTypes.object
 };
 
-
-export const DeployButton = ({ deploy, disabled, isRequestingPlanDeploy }) => {
+export const DeployButton = injectIntl(({ deploy, disabled, intl, isRequestingPlanDeploy }) => {
   return (
     <button type="button"
             disabled={disabled}
             className="btn btn-lg btn-primary"
             onClick={() => deploy()}>
       <Loader loaded={!isRequestingPlanDeploy}
-              content="Requesting a deploy..."
+              content={intl.formatMessage(messages.requestingDeploymentLoader)}
               component="span"
               inline>
-        <span className="fa fa-cloud-upload"/> Deploy
+        <span className="fa fa-cloud-upload"/> <FormattedMessage {...messages.deployButton}/>
       </Loader>
     </button>
   );
-};
+});
 DeployButton.propTypes = {
   deploy: React.PropTypes.func.isRequired,
   disabled: React.PropTypes.bool.isRequired,
+  intl: React.PropTypes.object,
   isRequestingPlanDeploy: React.PropTypes.bool.isRequired
 };
