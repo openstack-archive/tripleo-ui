@@ -1,11 +1,21 @@
+import { defineMessages, injectIntl } from 'react-intl';
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import InlineNotification from '../ui/InlineNotification';
 import ParameterInput from './ParameterInput';
 
-export default class ParameterInputList extends React.Component {
+const messages = defineMessages({
+  noParameters: {
+    id: 'ParameterInputList.noParameters',
+    defaultMessage: 'There are currently no parameters to configure in this section'
+  }
+});
+
+class ParameterInputList extends React.Component {
   render() {
+    const emptyParametersMessage = this.props.emptyParametersMessage
+                                   || this.props.intl.formatMessage(messages.noParameters);
     const parameters = this.props.parameters.toList().map(parameter => {
       return (
         <ParameterInput key={parameter.Name}
@@ -22,7 +32,7 @@ export default class ParameterInputList extends React.Component {
       return (
         <fieldset>
           <InlineNotification type="info">
-            {this.props.emptyParametersMessage}
+            {emptyParametersMessage}
           </InlineNotification>
         </fieldset>
       );
@@ -36,10 +46,10 @@ export default class ParameterInputList extends React.Component {
   }
 }
 ParameterInputList.propTypes = {
-  emptyParametersMessage: React.PropTypes.string.isRequired,
+  emptyParametersMessage: React.PropTypes.string,
+  intl: React.PropTypes.object,
   mistralParameters: ImmutablePropTypes.map.isRequired,
   parameters: ImmutablePropTypes.map.isRequired
 };
-ParameterInputList.defaultProps = {
-  emptyParametersMessage: 'There are currently no parameters to configure in this section'
-};
+
+export default injectIntl(ParameterInputList);
