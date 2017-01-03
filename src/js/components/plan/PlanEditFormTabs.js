@@ -1,3 +1,4 @@
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { List } from 'immutable';
 import React from 'react';
@@ -7,6 +8,21 @@ import NavTab from '../ui/NavTab';
 import PlanFileInput from './PlanFileInput';
 import PlanFilesTab from './PlanFilesTab';
 import PlanUploadTypeRadios from './PlanUploadTypeRadios';
+
+const messages = defineMessages({
+  files: {
+    id: 'PlanEditFormTabs.files',
+    defaultMessage: 'Files'
+  },
+  updatePlan: {
+    id: 'PlanEditFormTabs.updatePlan',
+    defaultMessage: 'Update Plan'
+  },
+  uploadFiles: {
+    id: 'PlanEditFormTabs.uploadFiles',
+    defaultMessage: 'Upload Files'
+  }
+});
 
 export default class PlanEditFormTabs extends React.Component {
   setActiveTab(tabName) {
@@ -26,10 +42,11 @@ export default class PlanEditFormTabs extends React.Component {
       <div>
         <ul className="nav nav-tabs">
           <NavTab to={`/plans/${this.props.planName}/edit`}
-                  query={{tab: 'editPlan'}}>Update Plan</NavTab>
+                  query={{tab: 'editPlan'}}><FormattedMessage {...messages.updatePlan}/></NavTab>
           <NavTab to={`/plans/${this.props.planName}/edit`}
                   query={{tab: 'planFiles'}}>
-            Files <span className="badge">{this.getFileCount.bind(this)()}</span>
+            <FormattedMessage {...messages.files}/> <span className="badge">
+            {this.getFileCount.bind(this)()}</span>
           </NavTab>
         </ul>
         <div className="tab-content">
@@ -57,7 +74,7 @@ PlanEditFormTabs.defaultProps = {
   currentTtab: 'editPlan'
 };
 
-class PlanFormTab extends React.Component {
+class _PlanFormTab extends React.Component {
 
   render() {
     return (
@@ -72,7 +89,7 @@ class PlanFormTab extends React.Component {
                               setUploadType={this.props.setUploadType}
                               uploadType={this.props.uploadType}/>
         <PlanFileInput name="planFiles"
-                       title="Upload Files"
+                       title={this.props.intl.formatMessage(messages.uploadFiles)}
                        inputColumnClasses="col-sm-7"
                        labelColumnClasses="col-sm-3"
                        uploadType={this.props.uploadType}
@@ -82,9 +99,11 @@ class PlanFormTab extends React.Component {
     );
   }
 }
-PlanFormTab.propTypes = {
+_PlanFormTab.propTypes = {
   active: React.PropTypes.string,
+  intl: React.PropTypes.object,
   planName: React.PropTypes.string,
   setUploadType: React.PropTypes.func.isRequired,
   uploadType: React.PropTypes.string.isRequired
 };
+const PlanFormTab = injectIntl(_PlanFormTab);

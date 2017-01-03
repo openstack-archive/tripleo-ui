@@ -1,9 +1,29 @@
 import { connect } from 'react-redux';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import React from 'react';
 import { Link } from 'react-router';
 
 import PlansActions from '../../actions/PlansActions';
 import Modal from '../ui/Modal';
+
+const messages = defineMessages({
+  deletePlan: {
+    id: 'DeletePlan.deletePlan',
+    defaultMessage: 'Delete Plan'
+  },
+  deletePlanName: {
+    id: 'DeletePlan.deletePlanName',
+    defaultMessage: 'Delete {planName}'
+  },
+  deletePlanConfirmation: {
+    id: 'DeletePlan.deletePlanConfirmation',
+    defaultMessage: 'Are you sure you want to delete plan {planName}?'
+  },
+  cancel: {
+    id: 'DeletePlan.cancel',
+    defaultMessage: 'Cancel'
+  }
+});
 
 class DeletePlan extends React.Component {
   getNameFromUrl() {
@@ -28,21 +48,27 @@ class DeletePlan extends React.Component {
             <span aria-hidden="true" className="pficon pficon-close"/>
           </Link>
           <h4 className="modal-title">
-            <span className="pficon pficon-delete"></span> Delete {this.getNameFromUrl()}
+            <span className="pficon pficon-delete"></span> <FormattedMessage
+              {...messages.deletePlanName}
+              values={{planName: this.getNameFromUrl()}}
+            />
           </h4>
         </div>
         <div className="modal-body">
           <p>
-            Are you sure you want to delete plan <strong>{this.getNameFromUrl()}</strong>?
+            <FormattedMessage {...messages.deletePlanConfirmation}
+                              values={{ planName: <strong>{this.getNameFromUrl()}</strong>}}/>
           </p>
         </div>
         <div className="modal-footer">
           <button className="btn btn-danger"
                   onClick={this.onDeleteClick.bind(this)}
                   type="submit">
-            Delete Plan
+            <FormattedMessage {...messages.deletePlan}/>
           </button>
-          <Link to="/plans/list" type="button" className="btn btn-default" >Cancel</Link>
+          <Link to="/plans/list" type="button" className="btn btn-default" >
+            <FormattedMessage {...messages.cancel}/>
+          </Link>
         </div>
       </Modal>
     );
