@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
@@ -9,6 +10,25 @@ import PlansActions from '../../actions/PlansActions';
 import PlanFormTabs from './PlanFormTabs';
 import Modal from '../ui/Modal';
 import Loader from '../ui/Loader';
+
+const messages = defineMessages({
+  cancel: {
+    id: 'NewPlan.cancel',
+    defaultMessage: 'Cancel'
+  },
+  createNewPlan: {
+    id: 'NewPlan.createNewPlan',
+    defaultMessage: 'Create New Plan'
+  },
+  creatingPlanLoader: {
+    id: 'NewPlan.creatingPlanLoader',
+    defaultMessage: 'Creating plan...'
+  },
+  uploadAndCreate: {
+    id: 'NewPlan.uploadAndCreate',
+    defaultMessage: 'Upload Files and Create Plan'
+  }
+});
 
 class NewPlan extends React.Component {
 
@@ -73,11 +93,13 @@ class NewPlan extends React.Component {
                   className="close">
               <span aria-hidden="true" className="pficon pficon-close"/>
             </Link>
-            <h4 className="modal-title">Create New Plan</h4>
+              <h4 className="modal-title">
+                <FormattedMessage {...messages.createNewPlan}/>
+              </h4>
           </div>
           <Loader loaded={!this.props.isTransitioningPlan}
                   size="lg"
-                  content="Creating plan...">
+                  content={this.props.intl.formatMessage(messages.creatingPlanLoader)}>
             <ModalFormErrorList errors={this.props.planFormErrors.toJS()}/>
             <div className="modal-body">
                 <PlanFormTabs currentTab={this.props.location.query.tab || 'newPlan'}
@@ -87,17 +109,18 @@ class NewPlan extends React.Component {
             </div>
           </Loader>
 
-
           <div className="modal-footer">
             <button disabled={!this.state.canSubmit}
                     className="btn btn-primary"
                     type="submit">
-              Upload Files and Create Plan
+              <FormattedMessage {...messages.uploadAndCreate}/>
             </button>
             <Link to="/plans/list"
                   type="button"
                   onClick={() => this.props.cancelCreatePlan()}
-                  className="btn btn-default">Cancel</Link>
+                  className="btn btn-default">
+              <FormattedMessage {...messages.cancel}/>
+            </Link>
           </div>
         </Formsy.Form>
       </Modal>
@@ -108,6 +131,7 @@ NewPlan.propTypes = {
   cancelCreatePlan: React.PropTypes.func,
   createPlan: React.PropTypes.func,
   createPlanFromTarball: React.PropTypes.func,
+  intl: React.PropTypes.object,
   isTransitioningPlan: React.PropTypes.bool,
   location: React.PropTypes.object,
   planFormErrors: ImmutablePropTypes.list
@@ -134,4 +158,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewPlan);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(NewPlan));

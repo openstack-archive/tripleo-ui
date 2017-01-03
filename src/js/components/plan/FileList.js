@@ -1,8 +1,16 @@
 import ClassNames from 'classnames';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Map } from 'immutable';
 import { PlanFile } from '../../immutableRecords/plans';
 import React from 'react';
+
+const messages = defineMessages({
+  planFiles: {
+    id: 'FileList.planFiles',
+    defaultMessage: 'Plan Files'
+  }
+});
 
 export default class FileList extends React.Component {
 
@@ -55,7 +63,7 @@ export default class FileList extends React.Component {
     return (
       <div className="panel panel-default">
         <div className="panel-heading" role="tab" id="plan-files-list-panel">
-          <h4 className="panel-title">Plan Files</h4>
+          <h4 className="panel-title"><FormattedMessage {...messages.planFiles}/></h4>
         </div>
         <table className="table upload-files">
           <tbody>
