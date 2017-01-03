@@ -1,3 +1,4 @@
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import React from 'react';
 
 import HorizontalInput from '../ui/forms/HorizontalInput';
@@ -5,6 +6,37 @@ import NavTab from '../ui/NavTab';
 import PlanFileInput from './PlanFileInput';
 import PlanFilesTab from './PlanFilesTab';
 import PlanUploadTypeRadios from './PlanUploadTypeRadios';
+
+const messages = defineMessages({
+  addPlanName: {
+    id: 'PlanFormTabs.addPlanName',
+    defaultMessage: 'Add a Plan Name'
+  },
+  newPlan: {
+    id: 'PlanFormTabs.newPlan',
+    defaultMessage: 'New Plan'
+  },
+  files: {
+    id: 'PlanFormTabs.files',
+    defaultMessage: 'Files'
+  },
+  planFiles: {
+    id: 'PlanFormTabs.planFiles',
+    defaultMessage: 'Plan Files'
+  },
+  planName: {
+    id: 'PlanFormTabs.planName',
+    defaultMessage: 'Plan Name'
+  },
+  planNameValidationError: {
+    id: 'PlanFormTabs.planNameValidationError',
+    defaultMessage: 'Please use only alphanumeric characters and -'
+  },
+  uploadType: {
+    id: 'PlanFormTabs.uploadType',
+    defaultMessage: 'Upload Type'
+  }
+});
 
 export default class PlanFormTabs extends React.Component {
   setActiveTab(tabName) {
@@ -15,9 +47,12 @@ export default class PlanFormTabs extends React.Component {
     return (
       <div>
         <ul className="nav nav-tabs">
-          <NavTab to="/plans/new" query={{tab: 'newPlan'}}>New Plan</NavTab>
+          <NavTab to="/plans/new" query={{tab: 'newPlan'}}>
+            <FormattedMessage {...messages.newPlan}/>
+          </NavTab>
           <NavTab to="/plans/new" query={{tab: 'planFiles'}}>
-            Files <span className="badge">{this.props.selectedFiles.length}</span>
+            <FormattedMessage {...messages.files}/> <span className="badge">
+            {this.props.selectedFiles.length}</span>
           </NavTab>
         </ul>
         <div className="tab-content">
@@ -42,27 +77,26 @@ PlanFormTabs.defaultProps = {
   selectedFiles: []
 };
 
-class PlanFormTab extends React.Component {
-
+class _PlanFormTab extends React.Component {
   render() {
+    const { formatMessage } = this.props.intl;
     return (
       <div className={`tab-pane ${this.props.active}`}>
         <HorizontalInput name="planName"
-                         title="Plan Name"
+                         title={formatMessage(messages.planName)}
                          inputColumnClasses="col-sm-7"
                          labelColumnClasses="col-sm-3"
-                         placeholder="Add a Plan Name"
+                         placeholder={formatMessage(messages.addPlanName)}
                          validations={{matchRegexp: /^[A-Za-z0-9-]+$/}}
-                         validationError="Please use only alphanumeric characters and
-                                          -"
+                         validationError={formatMessage(messages.planNameValidationError)}
                          required />
-        <PlanUploadTypeRadios title="Upload Type"
+        <PlanUploadTypeRadios title={formatMessage(messages.uploadType)}
                               inputColumnClasses="col-sm-7"
                               labelColumnClasses="col-sm-3"
                               setUploadType={this.props.setUploadType}
                               uploadType={this.props.uploadType}/>
         <PlanFileInput name="planFiles"
-                       title="Plan Files"
+                       title={formatMessage(messages.planFiles)}
                        inputColumnClasses="col-sm-7"
                        labelColumnClasses="col-sm-3"
                        uploadType={this.props.uploadType}
@@ -72,8 +106,11 @@ class PlanFormTab extends React.Component {
     );
   }
 }
-PlanFormTab.propTypes = {
+_PlanFormTab.propTypes = {
   active: React.PropTypes.string,
+  intl: React.PropTypes.object,
   setUploadType: React.PropTypes.func.isRequired,
   uploadType: React.PropTypes.string.isRequired
 };
+
+const PlanFormTab = injectIntl(_PlanFormTab);
