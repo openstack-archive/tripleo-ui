@@ -16,9 +16,44 @@ Do these steps on the virt host.
 Follow the official docs to install and configure TripleO (follow the step up to and including the Undercloud installation):
 http://docs.openstack.org/developer/tripleo-docs/index.html
 
-Once the undercloud is installed, you will need to create a tunnel on your virt host, to make the services running on undercloud available to the UI:
+Once the undercloud is installed, you will need to create a tunnel on your virt host, to make the services running on undercloud available to the UI. The tunnel has the following format:
+
 ```
-ssh -N root@<undercloud_ip> -L 0.0.0.0:6385:192.0.2.1:6385 -L 0.0.0.0:5000:192.0.2.1:5000 -L 0.0.0.0:5001:192.0.2.1:5001 -L 0.0.0.0:8585:192.0.2.1:8585 -L 0.0.0.0:8004:192.0.2.1:8004 -L 0.0.0.0:8080:192.0.2.1:8080 -L 0.0.0.0:9000:192.0.2.1:9000 -L 0.0.0.0:8989:192.0.2.1:8989
+ssh -N root@<undercloud_ip> \
+  -L 0.0.0.0:<service_port>:<service_ip>:<service_port>
+  # Repeat the last line for each service.
+```
+
+If you installed the UI with SSL the `service_ip` is the value of `undercloud_public_ip` in undercloud.conf.
+The ports needed are: 13385, 13000, 13004, 13808, 9000, 13989 and 443.
+
+If you installed the UI **without** SSL the `service_ip` is the value of `network_gateway` in undercloud.conf
+The ports needed are: 6385, 5000, 8004, 8080, 9000, 8989 and 3000.
+
+Example (with SSL enabled):
+
+```
+ssh -N root@192.168.122.205 \
+  -L 0.0.0.0:13385:192.0.2.2:13385 \
+  -L 0.0.0.0:13000:192.0.2.2:13000 \
+  -L 0.0.0.0:13004:192.0.2.2:13004 \
+  -L 0.0.0.0:13808:192.0.2.2:13808 \
+  -L 0.0.0.0:9000:192.0.2.2:9000 \
+  -L 0.0.0.0:13989:192.0.2.2:13989 \
+  -L 0.0.0.0:443:192.0.2.2:443
+```
+
+Example (without SSL):
+
+```
+ssh -N root@192.168.122.205 \
+  -L 0.0.0.0:6385:192.0.2.1:6385 \
+  -L 0.0.0.0:5000:192.0.2.1:5000 \
+  -L 0.0.0.0:8004:192.0.2.1:8004 \
+  -L 0.0.0.0:8080:192.0.2.1:8080 \
+  -L 0.0.0.0:9000:192.0.2.1:9000 \
+  -L 0.0.0.0:8989:192.0.2.1:8989 \
+  -L 0.0.0.0:3000:192.0.2.1:3000
 ```
 
 ### Install Validations
