@@ -3,6 +3,7 @@ require('es6-promise').polyfill(); // https://github.com/webpack/css-loader/issu
 module.exports = {
   devtool: 'inline-source-map',
   entry: __dirname + '/src/js/index.js',
+  bail: true,
   output: {
     path: __dirname + '/dist',
     publicPath: '/',
