@@ -67,7 +67,7 @@
     "es6-promise": "~3.2.1"
   },
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --bail",
     "lint": "eslint --max-warnings 0 src",
     "start": "webpack-dev-server --progress",
     "test": "karma start --single-run",
