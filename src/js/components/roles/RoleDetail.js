@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import { fromJS, is } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -17,6 +18,33 @@ import { ModalPanelBackdrop,
          ModalPanelFooter } from '../ui/ModalPanel';
 import NavTab from '../ui/NavTab';
 import ParametersActions from '../../actions/ParametersActions';
+
+const messages = defineMessages({
+  networkConfiguration: {
+    id: 'RoleDetail.networkConfiguration',
+    defaultMessage: 'Network Configuration'
+  },
+  parameters: {
+    id: 'RoleDetail.parameters',
+    defaultMessage: 'Parameters'
+  },
+  role: {
+    id: 'RoleDetail.role',
+    defaultMessage: 'Role'
+  },
+  loadingParameters: {
+    id: 'RoleDetail.loadingParameters',
+    defaultMessage: 'Loading parameters...'
+  },
+  saveChanges: {
+    id: 'RoleDetail.saveChanges',
+    defaultMessage: 'Save Changes'
+  },
+  services: {
+    id: 'RoleDetail.services',
+    defaultMessage: 'Services'
+  }
+});
 
 class RoleDetail extends React.Component {
   constructor() {
@@ -91,14 +119,14 @@ class RoleDetail extends React.Component {
         <div className="row">
           <ul className="nav nav-tabs">
             <NavTab to={`/deployment-plan/roles/${this.props.params.roleIdentifier}/parameters`}>
-              Parameters
+              <FormattedMessage {...messages.parameters}/>
             </NavTab>
             <NavTab to={`/deployment-plan/roles/${this.props.params.roleIdentifier}/services`}>
-              Services
+              <FormattedMessage {...messages.services}/>
             </NavTab>
             <NavTab to={`/deployment-plan/roles/${this.props.params.roleIdentifier}`
                         + '/network-configuration'}>
-              Network Configuration
+              <FormattedMessage {...messages.networkConfiguration}/>
             </NavTab>
           </ul>
           <ModalFormErrorList errors={this.props.formErrors.toJS()}/>
@@ -131,7 +159,7 @@ class RoleDetail extends React.Component {
           {this.renderRoleTabs()}
           <ModalPanelBody>
             <Loader height={60}
-                    content="Loading parameters..."
+                    content={this.props.intl.formatMessage(messages.loadingParameters)}
                     loaded={dataLoaded}>
               {this.props.children}
             </Loader>
@@ -140,7 +168,7 @@ class RoleDetail extends React.Component {
             <ModalPanelFooter>
               <button type="submit" disabled={!this.state.canSubmit}
                       className="btn btn-primary">
-                Save Changes
+                <FormattedMessage {...messages.saveChanges}/>
               </button>
             </ModalPanelFooter>
             : null}
@@ -156,6 +184,7 @@ RoleDetail.propTypes = {
   fetchParameters: React.PropTypes.func,
   formErrors: ImmutablePropTypes.list,
   formFieldErrors: ImmutablePropTypes.map,
+  intl: React.PropTypes.object,
   parametersLoaded: React.PropTypes.bool.isRequired,
   params: React.PropTypes.object.isRequired,
   role: ImmutablePropTypes.record,
@@ -188,4 +217,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RoleDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(RoleDetail));
