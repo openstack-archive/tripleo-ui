@@ -20,12 +20,16 @@ export default function nodesReducer(state = initialState, action) {
     return state.set('isFetching', true);
 
   case NodesConstants.RECEIVE_NODES:
-    return state
-            .set('all', fromJS(action.payload))
-            .set('isFetching', false);
+    var nodes = action.payload.nodes;
+    var macs = action.payload.macs;
 
-  case NodesConstants.FETCH_NODE_MACS_SUCCESS:
-    return state.setIn(['all', action.payload.nodeUUID, 'macs'], fromJS(action.payload.macs));
+    macs.forEach(el => {
+      nodes[el.nodeUUID].macs = el.macs;
+    });
+
+    return state
+            .set('all', fromJS(nodes))
+            .set('isFetching', false);
 
   case NodesConstants.START_NODES_OPERATION:
     return state.update('nodesInProgress',

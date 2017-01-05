@@ -13,6 +13,13 @@ const mockGetNodesResponse = [
   { uuid: 2 }
 ];
 
+const mockReceiveNodesResponse = {
+  nodes: [
+    { uuid: 1 },
+    { uuid: 2 }],
+  macs: []
+};
+
 describe('Nodes Actions', () => {
   it('creates action to request nodes', () => {
     const expectedAction = {
@@ -24,9 +31,9 @@ describe('Nodes Actions', () => {
   it('creates action to receive nodes', () => {
     const expectedAction = {
       type: NodesConstants.RECEIVE_NODES,
-      payload: mockGetNodesResponse
+      payload: mockReceiveNodesResponse
     };
-    expect(NodesActions.receiveNodes(mockGetNodesResponse)).toEqual(expectedAction);
+    expect(NodesActions.receiveNodes(mockGetNodesResponse, [])).toEqual(expectedAction);
   });
 
   it('creates action to notify that nodes operation started', () => {
@@ -106,14 +113,16 @@ describe('Asynchronous Nodes Actions', () => {
     spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
     spyOn(NodesActions, 'requestNodes');
     spyOn(NodesActions, 'receiveNodes');
-    spyOn(NodesActions, 'fetchNodesMACs');
     // Mock the service call.
     spyOn(IronicApiService, 'getNodes').and.callFake(
-      createResolvingPromise({ nodes: [{ uuid: 0 }] })
+      createResolvingPromise({ nodes: [{ uuid: 'uuid' }] })
     );
     // Note that `getNode` is called multilpe times but always returns the same response
     // to keep the test simple.
-    spyOn(IronicApiService, 'getNode').and.callFake(createResolvingPromise({ uuid: 0 }));
+    spyOn(IronicApiService, 'getNode').and.callFake(createResolvingPromise({ uuid: 'uuid' }));
+    spyOn(IronicApiService, 'getNodePorts').and.callFake(createResolvingPromise({
+      ports: [{ address: 'mac' }]}));
+
     // Call the action creator and the resulting action.
     // In this case, dispatch and getState are just empty placeHolders.
     NodesActions.fetchNodes()(() => {}, () => {});
@@ -126,12 +135,13 @@ describe('Asynchronous Nodes Actions', () => {
   });
 
   it('dispatches receiveNodes', () => {
-    expect(NodesActions.receiveNodes).toHaveBeenCalledWith({ 0:{ uuid: 0 }});
+    expect(NodesActions.receiveNodes).toHaveBeenCalledWith({ uuid :{ uuid: 'uuid' }}, [{
+      nodeUUID: 'uuid',
+      macs: 'mac'
+    }]
+    );
   });
 
-  it('dispatches fetchNodesMACs', () => {
-    expect(NodesActions.fetchNodesMACs).toHaveBeenCalledWith({ 0:{ uuid: 0 }});
-  });
 });
 
 describe('Asynchronous Introspect Nodes Action', () => {

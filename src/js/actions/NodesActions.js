@@ -41,10 +41,13 @@ export default {
     };
   },
 
-  receiveNodes(nodes) {
+  receiveNodes(nodes, macs) {
     return {
       type: NodesConstants.RECEIVE_NODES,
-      payload: nodes
+      payload: {
+        nodes,
+        macs
+      }
     };
   },
 
@@ -57,46 +60,26 @@ export default {
         }));
       }).then((nodes) => {
         const normalizedNodes = normalize(nodes, arrayOf(nodeSchema)).entities.nodes || {};
-        dispatch(this.receiveNodes(normalizedNodes));
-        dispatch(this.fetchNodesMACs(normalizedNodes));
+        return when.map(Object.keys(normalizedNodes), nodeUUID => {
+          return IronicApiService.getNodePorts(nodeUUID).then(response => {
+            const macs = reduce(response.ports, (result, value) => {
+              result.push(value.address);
+              return result;
+            }, []).join(', ');
+            return {
+              nodeUUID,
+              macs
+            };
+          });
+        }).then(values => dispatch(this.receiveNodes(normalizedNodes, values)));
       }).catch((error) => {
-        dispatch(this.receiveNodes({}));
+        dispatch(this.requestNodes({}, {}));
         logger.error('Error in NodesActions.fetchNodes', error.stack || error);
         let errorHandler = new IronicApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));
         });
       });
-    };
-  },
-
-  fetchNodesMACs(nodes) {
-    return dispatch => {
-      Object.keys(nodes).map(nodeUUID => {
-        IronicApiService.getNodePorts(nodeUUID).then(response => {
-          const macs = reduce(response.ports, (result, value, key) => {
-            result.push(value.address);
-            return result;
-          },[]).join(', ');
-          dispatch(this.fetchNodeMACsSuccess(nodeUUID, macs));
-        }).catch(error => {
-          logger.error('Error in NodesActions.fetchNodesMACs', error.stack || error);
-          let errorHandler = new IronicApiErrorHandler(error);
-          errorHandler.errors.forEach((error) => {
-            dispatch(NotificationActions.notify(error));
-          });
-        });
-      });
-    };
-  },
-
-  fetchNodeMACsSuccess(nodeUUID, macs) {
-    return {
-      type: NodesConstants.FETCH_NODE_MACS_SUCCESS,
-      payload: {
-        nodeUUID: nodeUUID,
-        macs: macs
-      }
     };
   },
 
