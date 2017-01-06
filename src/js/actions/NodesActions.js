@@ -138,8 +138,7 @@ export default {
 
   nodesIntrospectionFinished(messagePayload) {
     return (dispatch, getState) => {
-      const payload = fromJS(messagePayload);
-      const nodeIds = payload.get('introspected_nodes').keys();
+      const nodeIds = messagePayload.execution.input.node_uuids;
       dispatch(this.finishOperation(nodeIds));
       dispatch(this.fetchNodes());
 
@@ -153,12 +152,13 @@ export default {
         break;
       }
       case 'FAILED': {
-        const nodeErrors = payload.get('introspected_nodes').reduce((nodeErrors, value, key) => {
-          return nodeErrors.push(`${key}: ${value.get('error')}`);
-        }, List());
+        const nodeErrors =
+          fromJS(messagePayload).get('introspected_nodes').reduce((nodeErrors, value, key) => {
+            return nodeErrors.push(`${key}: ${value.get('error')}`);
+          }, List());
         dispatch(NotificationActions.notify({
           type: 'error',
-          title: payload.get('message'),
+          title: messagePayload.message,
           message: nodeErrors.toArray().join(', ')
         }));
         break;
