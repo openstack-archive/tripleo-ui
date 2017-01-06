@@ -169,6 +169,11 @@ describe('nodesIntrospectionFinished', () => {
 
   it('handles successful nodes introspection', () => {
     const messagePayload = {
+      execution: {
+        input: {
+          node_uuids: ['598612eb-f21b-435e-a868-7bb74e576cc2']
+        }
+      },
       status: 'SUCCESS',
       message: 'Nodes Introspection was successful',
       introspected_nodes: {
@@ -187,13 +192,14 @@ describe('nodesIntrospectionFinished', () => {
 
   it('handles failed nodes introspection', () => {
     const messagePayload = {
-      status: 'FAILED',
-      message: 'Nodes Introspection failed',
-      introspected_nodes: {
-        '598612eb-f21b-435e-a868-7bb74e576cc2': {
-          finished: true, error: 'Some error occurred on this node'
+      execution: {
+        input: {
+          node_uuids: ['598612eb-f21b-435e-a868-7bb74e576cc2']
         }
       },
+      status: 'FAILED',
+      message: ['Nodes Introspection failed', 'Some error occurred during introspection'],
+      introspected_nodes: {},
       execution_id: '622eb415-a522-4016-b5f6-6e9e0b3f687a',
       queue_name: 'tripleo',
       ttl: 3600
@@ -205,8 +211,8 @@ describe('nodesIntrospectionFinished', () => {
     expect(NotificationActions.notify).toHaveBeenCalledWith(
       {
         type: 'error',
-        title: 'Nodes Introspection failed',
-        message: '598612eb-f21b-435e-a868-7bb74e576cc2: Some error occurred on this node'
+        title: 'Nodes Introspection Failed',
+        message: 'Nodes Introspection failed, Some error occurred during introspection'
       }
     );
   });
