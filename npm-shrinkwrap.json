@@ -1,6 +1,6 @@
 {
   "name": "tripleo-ui",
-  "version": "1.0.6",
+  "version": "2.0.1",
   "dependencies": {
     "babel-core": {
       "version": "6.14.0",
@@ -4217,6 +4217,23 @@
         "object-assign": {
           "version": "4.1.0",
           "from": "https://registry.npmjs.org/object-assign/-/object-assign-4.1.0.tgz",
+          "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-4.1.0.tgz"
+        }
+      }
+    },
+    "react-cookie": {
+      "version": "1.0.4",
+      "from": "react-cookie@latest",
+      "resolved": "https://registry.npmjs.org/react-cookie/-/react-cookie-1.0.4.tgz",
+      "dependencies": {
+        "cookie": {
+          "version": "0.3.1",
+          "from": "cookie@>=0.3.1 <0.4.0",
+          "resolved": "https://registry.npmjs.org/cookie/-/cookie-0.3.1.tgz"
+        },
+        "object-assign": {
+          "version": "4.1.0",
+          "from": "object-assign@>=4.1.0 <5.0.0",
           "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-4.1.0.tgz"
         }
       }
