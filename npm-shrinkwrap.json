@@ -1782,6 +1782,23 @@
       "from": "react@>=15.0.2 <15.1.0",
       "resolved": "https://registry.npmjs.org/react/-/react-15.0.2.tgz"
     },
+    "react-cookie": {
+      "version": "1.0.4",
+      "from": "react-cookie@latest",
+      "resolved": "https://registry.npmjs.org/react-cookie/-/react-cookie-1.0.4.tgz",
+      "dependencies": {
+        "cookie": {
+          "version": "0.3.1",
+          "from": "cookie@>=0.3.1 <0.4.0",
+          "resolved": "https://registry.npmjs.org/cookie/-/cookie-0.3.1.tgz"
+        },
+        "object-assign": {
+          "version": "4.1.0",
+          "from": "object-assign@>=4.1.0 <5.0.0",
+          "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-4.1.0.tgz"
+        }
+      }
+    },
     "react-dom": {
       "version": "15.0.2",
       "from": "react-dom@>=15.0.2 <15.1.0",
