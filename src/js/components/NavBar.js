@@ -1,3 +1,4 @@
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import React from 'react';
 import { Link } from 'react-router';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -5,6 +6,26 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import NavTab from './ui/NavTab';
 
 import TripleoOwlSvg from '../../img/tripleo-owl.svg';
+
+const messages = defineMessages({
+  toggleNavigation: {
+    id: 'NavBar.toggleNavigation',
+    defaultMessage: 'Toggle navigation'
+  },
+  logoutLink: {
+    id: 'NavBar.logoutLink',
+    defaultMessage: 'Logout'
+  },
+  deploymentPlanTab: {
+    id: 'NavBar.deploymentPlanTab',
+    defaultMessage: 'Deployment Plan'
+  },
+  nodesTab: {
+    id: 'Navbar.nodesTab',
+    defaultMessage: 'Nodes'
+  }
+});
+
 
 export default class NavBar extends React.Component {
   logout(e) {
@@ -19,7 +40,9 @@ export default class NavBar extends React.Component {
           <button type="button" className="navbar-toggle collapsed"
                   data-toggle="collapse" data-target="#tripleo-navbar-collapse"
                   aria-expanded="false">
-            <span className="sr-only">Toggle navigation</span>
+            <span className="sr-only">
+              <FormattedMessage {...messages.toggleNavigation}/>
+            </span>
             <span className="icon-bar"></span>
             <span className="icon-bar"></span>
             <span className="icon-bar"></span>
@@ -36,11 +59,19 @@ export default class NavBar extends React.Component {
                 {this.props.user.get('username')}
               </a>
             </li>
-            <li><a href="#" onClick={this.logout.bind(this)}>Logout</a></li>
+            <li>
+              <a href="#" onClick={this.logout.bind(this)}>
+                <FormattedMessage {...messages.logoutLink}/>
+              </a>
+            </li>
           </ul>
           <ul className="nav navbar-nav navbar-primary">
-            <NavTab to="/deployment-plan">Deployment Plan</NavTab>
-            <NavTab to="/nodes">Nodes</NavTab>
+            <NavTab to="/deployment-plan">
+              <FormattedMessage {...messages.deploymentPlanTab}/>
+            </NavTab>
+            <NavTab to="/nodes">
+              <FormattedMessage {...messages.nodesTab}/>
+            </NavTab>
           </ul>
         </div>
       </nav>
