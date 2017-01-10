@@ -1,3 +1,4 @@
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Formsy from 'formsy-react';
@@ -11,6 +12,38 @@ import NotificationsToaster from './notifications/NotificationsToaster';
 
 import LogoSvg from '../../img/logo.svg';
 import TripleoOwlSvg from '../../img/tripleo-owl.svg';
+
+const messages = defineMessages({
+  username: {
+    id: 'Login.username',
+    defaultMessage: 'Username'
+  },
+  usernameRequired: {
+    id: 'Login.usernameRequired',
+    defaultMessage: 'Username is required'
+  },
+  password: {
+    id: 'Login.password',
+    defaultMessage: 'Password'
+  },
+  passwordRequired: {
+    id: 'Login.passwordRequired',
+    defaultMessage: 'Password is required'
+  },
+  login: {
+    id: 'Login.login',
+    defaultMessage: 'Log In'
+  },
+  welcome: {
+    id: 'Login.welcome',
+    defaultMessage: 'Welcome to TripleO!'
+  },
+  description: {
+    id: 'Login.description',
+    defaultMessage: 'TripleO will help you manage your OpenStack deployments. It\'s the best'
+                    + 'thing since sliced bread. We think you will really enjoy it!'
+  }
+});
 
 class Login extends React.Component {
   constructor() {
@@ -66,31 +99,39 @@ class Login extends React.Component {
             </div>
             <div className="col-sm-7 col-md-6 col-lg-5 login">
               <FormErrorList errors={this.props.formErrors.toJS()}/>
-              <Formsy.Form ref="form"
-                           role="form"
-                           className="form-horizontal"
-                           onSubmit={this.handleLogin.bind(this)}
-                           onValid={this._enableButton.bind(this)}
-                           onInvalid={this._disableButton.bind(this)}>
-                <LoginInput name="username"
-                            placeholder="Username"
-                            title="Username"
-                            validationError="Username is required"
-                            required
-                            autoFocus
+              <Formsy.Form
+                   ref="form"
+                   role="form"
+                   className="form-horizontal"
+                   onSubmit={this.handleLogin.bind(this)}
+                   onValid={this._enableButton.bind(this)}
+                   onInvalid={this._disableButton.bind(this)}>
+                <LoginInput
+                    name="username"
+                    placeholder={this.props.intl.formatMessage(messages.username)}
+                    title={this.props.intl.formatMessage(messages.username)}
+                    validationError={this.props.intl.formatMessage(messages.usernameRequired)}
+                    required
+                    autoFocus
                 />
-                <LoginInput type="password"
-                            name="password"
-                            placeholder="Password"
-                            title="Password"
-                            validationError="Password is required"
-                            required/>
+                <LoginInput
+                    type="password"
+                    name="password"
+                    placeholder={this.props.intl.formatMessage(messages.password)}
+                    title={this.props.intl.formatMessage(messages.password)}
+                    validationError={this.props.intl.formatMessage(messages.passwordRequired)}
+                    required
+                />
                 <div className="form-group">
                   <div className="col-xs-offset-8 col-xs-4 col-sm-4 col-md-4 submit">
-                    <button type="submit"
-                            disabled={!this.state.canSubmit || this.props.isAuthenticating}
-                            className="btn btn-primary btn-lg" tabIndex="4" id="Login__loginButton">
-                      Log In
+                    <button
+                      type="submit"
+                      disabled={!this.state.canSubmit || this.props.isAuthenticating}
+                      className="btn btn-primary btn-lg"
+                      tabIndex="4"
+                      id="Login__loginButton"
+                    >
+                      <FormattedMessage {...messages.login}/>
                     </button>
                   </div>
                 </div>
@@ -98,9 +139,8 @@ class Login extends React.Component {
             </div>
             <div className="col-sm-5 col-md-6 col-lg-7 details">
               <p>
-                <strong>Welcome to TripleO!</strong><br/>
-                TripleO will help you manage your OpenStack deployments. It's the best
-                thing since sliced bread. We think you will really enjoy it!
+                <strong><FormattedMessage {...messages.welcome}/></strong><br/>
+                <FormattedMessage {...messages.description}/>
               </p>
             </div>
           </div>
@@ -114,6 +154,7 @@ Login.propTypes = {
   dispatch: React.PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
+  intl: React.PropTypes.object,
   isAuthenticating: React.PropTypes.bool.isRequired,
   location: React.PropTypes.object,
   userLoggedIn: React.PropTypes.bool.isRequired
@@ -128,4 +169,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps)(injectIntl(Login));
