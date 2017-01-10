@@ -20,16 +20,28 @@ import TabPane from '../ui/TabPane';
 import Modal from '../ui/Modal';
 
 class RegisterNodesDialog extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      jsonErrors: []
+    };
+  }
+
   onNodeChange(updatedNode) {
     this.props.updateNode(updatedNode);
   }
 
   addNodesFromInstackenvJSON(fileContents) {
-    let nodes = JSON.parse(fileContents).nodes;
-    nodes.forEach(node => {
-      node.uuid = uuid.v4();
-      this.addNode(new NodeToRegister(fromJS(node)));
-    });
+    this.setState({ jsonErrors:  [] });
+    try {
+      let nodes = JSON.parse(fileContents).nodes;
+      nodes.forEach(node => {
+        node.uuid = uuid.v4();
+        this.addNode(new NodeToRegister(fromJS(node)));
+      });
+    } catch(e) {
+      this.setState({ jsonErrors: [{ title: 'Invalid JSON', message: e.toString() }] });
+    }
   }
 
   uploadFromFile(event) {
@@ -64,6 +76,8 @@ class RegisterNodesDialog extends React.Component {
   }
 
   onAddNewClick(e) {
+    // Remove error message from a previous failed parsing of instackenv.json
+    this.setState({ jsonErrors:  [] });
     e.preventDefault();
     this.addNode();
   }
@@ -122,10 +136,14 @@ class RegisterNodesDialog extends React.Component {
       return (
         <BlankSlate iconClass="fa fa-cubes"
                     title="No Nodes To Register">
-          <p>Add a node manually or upload nodes from a file.</p>            
+          <p>Add a node manually or upload nodes from a file.</p>
         </BlankSlate>
       );
     }
+  }
+
+  getErrors() {
+    return this.props.registrationErrors.toJS().concat(this.state.jsonErrors);
   }
 
   render() {
@@ -143,7 +161,7 @@ class RegisterNodesDialog extends React.Component {
                 size="lg"
                 content="Registering Nodes..."
                 height={220}>
-          <ModalFormErrorList errors={this.props.registrationErrors.toJS()}/>
+          <ModalFormErrorList errors={this.getErrors()}/>
           <div className="container-fluid">
             <div className="row row-eq-height">
               <div className="col-sm-4 col-lg-3 sidebar-pf sidebar-pf-left">
