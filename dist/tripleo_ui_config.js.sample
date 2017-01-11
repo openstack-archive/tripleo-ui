@@ -6,10 +6,6 @@ window.tripleOUiConfig = {
   //
   // "keystone": "http://192.0.2.1:5000/v2.0",
   //
-  // If you choose to overwrite other services URLs, make sure to also
-  // change the tenant ID suffix where relevant. This can be found by
-  // e.g. running 'openstack catalog show swift' on the CLI.
-  //
   // "heat": "http://192.0.2.1:8004/v1/%(tenant_id)s",
   // "ironic": "http://192.0.2.1:6385",
   // "mistral": "http://192.0.2.1:8989/v2",

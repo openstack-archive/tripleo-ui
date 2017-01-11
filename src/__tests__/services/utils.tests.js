@@ -9,7 +9,10 @@ describe('utility functions', () => {
     login: new InitialLoginState({
       keystoneAccess: Map({
         token: Map({
-          id: 123456
+          id: 123456,
+          tenant: Map({
+            id: 778899
+          })
         }),
         serviceCatalog: List([
           Map({
@@ -26,6 +29,14 @@ describe('utility functions', () => {
             endpoints: List([
               Map({
                 publicURL: 'http://IGNOREDFooPublicUrl'
+              })
+            ])
+          }),
+          Map({
+            name: 'macroservice',
+            endpoints: List([
+              Map({
+                publicURL: 'http://MacroPublicUrl/v1/Foo_%(tenant_id)s'
               })
             ])
           })
@@ -57,6 +68,10 @@ describe('utility functions', () => {
       expect(getServiceUrl(
         'fooservice', null, { fooservice: 'http://FooPublicURL' })
       ).toEqual('http://FooPublicURL');
+    });
+
+    it('expands urls containing the keystone tenant macro', () => {
+      expect(getServiceUrl('macroservice')).toEqual('http://MacroPublicUrl/v1/Foo_778899');
     });
   });
 
