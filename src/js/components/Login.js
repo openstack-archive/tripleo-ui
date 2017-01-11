@@ -89,7 +89,7 @@ class Login extends React.Component {
                   <div className="col-xs-offset-8 col-xs-4 col-sm-4 col-md-4 submit">
                     <button type="submit"
                             disabled={!this.state.canSubmit || this.props.isAuthenticating}
-                            className="btn btn-primary btn-lg" tabIndex="4">
+                            className="btn btn-primary btn-lg" tabIndex="4" id="Login__loginButton">
                       Log In
                     </button>
                   </div>
