@@ -14,6 +14,7 @@ export default class NavTab extends Link {
   }
 }
 NavTab.propTypes = {
+  id: React.PropTypes.string,
   onlyActiveOnIndex: React.PropTypes.bool.isRequired,
   query: React.PropTypes.object,
   to: React.PropTypes.oneOfType([ React.PropTypes.string, React.PropTypes.route ]).isRequired
