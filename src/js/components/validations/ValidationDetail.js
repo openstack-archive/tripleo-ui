@@ -1,3 +1,4 @@
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 import { includes } from 'lodash';
@@ -5,7 +6,34 @@ import { includes } from 'lodash';
 import Modal from '../ui/Modal';
 import { ValidationStatusIcon } from './ValidationStatusIcon';
 
-export default class ValidationDetail extends React.Component {
+const messages = defineMessages({
+  close: {
+    id: 'ValidationDetail.close',
+    defaultMessage: 'Close'
+  },
+  description: {
+    id: 'ValidationDetail.description',
+    defaultMessage: 'Description'
+  },
+  groups: {
+    id: 'ValidationDetail.groups',
+    defaultMessage: 'Groups'
+  },
+  output: {
+    id: 'ValidationDetail.output',
+    defaultMessage: 'Output'
+  },
+  status: {
+    id: 'ValidationDetail.status',
+    defaultMessage: 'Status'
+  },
+  validationDetail: {
+    id: 'ValidationDetail.validationDetail',
+    defaultMessage: 'Validation Detail'
+  }
+});
+
+class _ValidationDetail extends React.Component {
   constructor() {
     super();
     this.state = { isPending: false };
@@ -50,7 +78,7 @@ export default class ValidationDetail extends React.Component {
     if (lastResult && !includes(['running', 'paused'], this.props.status)) {
       return (
         <div>
-          <p><strong>Output:</strong></p>
+          <p><strong><FormattedMessage {...messages.output}/>:</strong></p>
           <pre>{lastResult.output.get('stdout', lastResult.output.get('result'))}</pre>
         </div>
       );
@@ -63,11 +91,11 @@ export default class ValidationDetail extends React.Component {
         <div className="modal-header">
           <button type="button"
                   className="close"
-                  aria-label="Close"
+                  aria-label={this.props.intl.formatMessage(messages.close)}
                   onClick={this.props.hideValidationDetail}>
             <span aria-hidden="true" className="pficon pficon-close"/>
           </button>
-          <h4 className="modal-title">Validation Detail</h4>
+          <h4 className="modal-title"><FormattedMessage {...messages.validationDetail}/></h4>
         </div>
         <div className="modal-body">
           <div className="validation-detail-title">
@@ -78,9 +106,14 @@ export default class ValidationDetail extends React.Component {
             </div>
             <h3>{this.props.name}</h3>
           </div>
-          <p><strong>Description:</strong> <br/>{this.props.description}</p>
-          <p><strong>Groups:</strong> {this.renderValidationGroups()}</p>
-          <p><strong>Status:</strong> {this.props.status}</p>
+        <p>
+          <strong><FormattedMessage {...messages.description}/>:</strong> <br/>
+          {this.props.description}
+        </p>
+        <p>
+          <strong><FormattedMessage {...messages.groups}/>:</strong> {this.renderValidationGroups()}
+        </p>
+        <p><strong><FormattedMessage {...messages.status}/>:</strong> {this.props.status}</p>
           {this.renderValidationOutput()}
         </div>
       </Modal>
@@ -88,13 +121,16 @@ export default class ValidationDetail extends React.Component {
   }
 }
 
-ValidationDetail.propTypes = {
+_ValidationDetail.propTypes = {
   description: React.PropTypes.string,
   groups: ImmutablePropTypes.list.isRequired,
   hideValidationDetail: React.PropTypes.func,
+  intl: React.PropTypes.object,
   name: React.PropTypes.string.isRequired,
   results: ImmutablePropTypes.map.isRequired,
   runValidation: React.PropTypes.func.isRequired,
   status: React.PropTypes.string.isRequired,
   stopValidation: React.PropTypes.func.isRequired
 };
+
+export default injectIntl(_ValidationDetail);

@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
@@ -9,6 +10,29 @@ import Validation from './Validation';
 import ValidationDetail from './ValidationDetail';
 import WorkflowExecutionsActions from '../../actions/WorkflowExecutionsActions';
 import { getValidationsWithResults } from '../../selectors/validations';
+
+const messages = defineMessages({
+  loadingValidations: {
+    id: 'ValidationsList.loadingValidations',
+    defaultMessage: 'Loading Validations...'
+  },
+  noValidations: {
+    id: 'ValidationsList.noValidations',
+    defaultMessage: 'No Validations'
+  },
+  noValidationsMessage: {
+    id: 'ValidationsList.noValidationsMessage',
+    defaultMessage: 'There are no validations at this time.'
+  },
+  refresh: {
+    id: 'ValidationsList.refresh',
+    defaultMessage: 'Refresh'
+  },
+  validations: {
+    id: 'ValidationsList.validations',
+    defaultMessage: 'Validations'
+  }
+});
 
 class ValidationsList extends React.Component {
   constructor() {
@@ -59,8 +83,8 @@ class ValidationsList extends React.Component {
     if (validations.isEmpty()) {
       return (
         <BlankSlate iconClass="pficon pficon-flag"
-                    title="No Validations">
-          <p>There are no validations at this time.</p>            
+                    title={this.props.intl.formatMessage(messages.noValidations)}>
+          <p><FormattedMessage {...messages.noValidationsMessage}/></p>
         </BlankSlate>
       );
     } else {
@@ -83,6 +107,8 @@ class ValidationsList extends React.Component {
   }
 
   render () {
+    const { formatMessage } = this.props.intl;
+
     return (
       <div className="col-sm-12 col-lg-3 sidebar-pf sidebar-pf-right fixed-container validations">
         <div className="sidebar-header
@@ -92,18 +118,19 @@ class ValidationsList extends React.Component {
           <div className="actions pull-right">
             <Loader loaded={!(this.props.validationsLoaded &&
                               this.props.isFetchingValidations)}
-                    content="Loading Validations..."
+                    content={formatMessage(messages.loadingValidations)}
                     inline>
               <a className="link refresh"
                  onClick={this.refreshValidations.bind(this)}>
-                <span className="pficon pficon-refresh"></span> Refresh
+                <span className="pficon pficon-refresh"></span> <FormattedMessage
+                                                                  {...messages.refresh}/>
               </a>
             </Loader>
           </div>
-          <h2 className="h4">Validations</h2>
+          <h2 className="h4"><FormattedMessage {...messages.validations}/></h2>
         </div>
         <Loader loaded={this.props.validationsLoaded && this.props.executionsLoaded}
-                content="Loading Validations..."
+                content={formatMessage(messages.loadingValidations)}
                 componentProps={{ className: 'row fixed-container-body'}}
                 height={80}>
           <div className="list-group list-view-pf validation-list">
@@ -121,6 +148,7 @@ ValidationsList.propTypes = {
   executionsLoaded: React.PropTypes.bool.isRequired,
   fetchValidations: React.PropTypes.func.isRequired,
   fetchWorkflowExecutions: React.PropTypes.func.isRequired,
+  intl: React.PropTypes.object,
   isFetchingValidations: React.PropTypes.bool.isRequired,
   runValidation: React.PropTypes.func.isRequired,
   stopValidation: React.PropTypes.func.isRequired,
@@ -154,4 +182,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ValidationsList);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ValidationsList));
