@@ -2,6 +2,7 @@ import when from 'when';
 
 import * as utils from '../../js/services/utils';
 import MistralApiService from '../../js/services/MistralApiService';
+import { mockGetIntl } from './utils';
 import PlansActions from '../../js/actions/PlansActions';
 import SwiftApiService from '../../js/services/SwiftApiService';
 
@@ -28,7 +29,7 @@ describe('PlansActions', () => {
       spyOn(PlansActions, '_uploadFilesToContainer').and.callFake(createResolvingPromise());
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
-      PlansActions.updatePlan('somecloud', {})(() => {}, () => {});
+      PlansActions.updatePlan('somecloud', {})(() => {}, () => {}, mockGetIntl);
       // Call done with a minimal timeout.
       setTimeout(() => { done(); }, 1);
     });
@@ -57,7 +58,7 @@ describe('PlansActions', () => {
         .and.callFake(createResolvingPromise({ state: 'SUCCESS' }));
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
-      PlansActions.createPlan('somecloud', {})(() => {}, () => {});
+      PlansActions.createPlan('somecloud', {})(() => {}, () => {}, mockGetIntl);
       // Call done with a minimal timeout.
       setTimeout(() => { done(); }, 1);
     });
@@ -76,7 +77,7 @@ describe('PlansActions', () => {
       spyOn(MistralApiService, 'runAction').and.callFake(createResolvingPromise());
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
-      PlansActions.deletePlan('somecloud')(() => {}, () => {});
+      PlansActions.deletePlan('somecloud')(() => {}, () => {}, mockGetIntl);
       // Call done with a minimal timeout.
       setTimeout(() => { done(); }, 1);
     });

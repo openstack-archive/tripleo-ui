@@ -6,6 +6,7 @@ import ParametersActions from '../../js/actions/ParametersActions';
 import ParametersConstants from '../../js/constants/ParametersConstants';
 import MistralApiService from '../../js/services/MistralApiService';
 import MistralConstants from '../../js/constants/MistralConstants';
+import { mockGetIntl } from './utils';
 import { normalizeParameters } from '../../js/actions/ParametersActions';
 
 
@@ -65,7 +66,7 @@ describe('ParametersActions', () => {
         .and.callFake(createResolvingPromise(responseBody));
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
-      ParametersActions.fetchParameters('overcloud')(() => {}, () => {});
+      ParametersActions.fetchParameters('overcloud')(() => {}, () => {}, mockGetIntl);
       // Call done with a minimal timeout.
       setTimeout(() => { done(); }, 1);
     });
@@ -138,7 +139,9 @@ describe('ParametersActions', () => {
         .and.callFake(createRejectingPromise(error));
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
-      ParametersActions.updateParameters('overcloud', { foo: 'bar' })(() => {}, () => {});
+      ParametersActions.updateParameters('overcloud', { foo: 'bar' })(
+        () => {}, () => {}, mockGetIntl
+      );
       // Call done with a minimal timeout.
       setTimeout(() => { done(); }, 1);
     });

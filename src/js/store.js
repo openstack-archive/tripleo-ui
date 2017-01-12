@@ -4,6 +4,7 @@ import createLogger from 'redux-logger';
 import logger from './services/logger';
 
 import appReducer from './reducers/appReducer';
+import { getIntl } from './selectors/i18n';
 
 
 const loggerMiddleware = createLogger({
@@ -15,7 +16,7 @@ const store = createStore(
   appReducer,
   {},
   applyMiddleware(
-    thunkMiddleware,
+    thunkMiddleware.withExtraArgument({ getIntl }),
     loggerMiddleware
   )
 );

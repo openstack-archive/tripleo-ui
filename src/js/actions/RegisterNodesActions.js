@@ -1,4 +1,5 @@
 import { browserHistory } from 'react-router';
+import { defineMessages } from 'react-intl';
 import { normalize, arrayOf } from 'normalizr';
 import { Map } from 'immutable';
 
@@ -11,6 +12,17 @@ import { nodeSchema } from '../normalizrSchemas/nodes';
 import ValidationsActions from './ValidationsActions';
 import MistralConstants from '../constants/MistralConstants';
 import logger from '../services/logger';
+
+const messages = defineMessages({
+  registrationNotificationTitle: {
+    id: 'RegisterNodesActions.registrationNotificationTitle',
+    defaultMessage: 'Nodes Registration Complete'
+  },
+  registrationNotificationMessage: {
+    id: 'RegisterNodesActions.registrationNotificationMessage',
+    defaultMessage: 'The nodes were successfully registered.'
+  }
+});
 
 export default {
   addNode(node) {
@@ -84,7 +96,8 @@ export default {
   },
 
   nodesRegistrationFinished(messagePayload) {
-    return (dispatch, getState) => {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
       const registeredNodes = normalize(messagePayload.registered_nodes,
                                         arrayOf(nodeSchema)).entities.nodes || Map();
       dispatch(NodesActions.addNodes(registeredNodes));
@@ -99,8 +112,8 @@ export default {
       case 'SUCCESS': {
         dispatch(NotificationActions.notify({
           type: 'success',
-          title: 'Nodes Registration Complete',
-          message: 'The nodes were successfully registered'
+          title: formatMessage(messages.registrationNotificationTitle),
+          message: formatMessage(messages.registrationNotificationMessage)
         }));
         dispatch(this.nodesRegistrationSuccess());
         browserHistory.push('/nodes/registered');
