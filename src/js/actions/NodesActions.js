@@ -1,3 +1,4 @@
+import { defineMessages } from 'react-intl';
 import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
 import { reduce } from 'lodash';
@@ -11,6 +12,21 @@ import NotificationActions from './NotificationActions';
 import { nodeSchema } from '../normalizrSchemas/nodes';
 import MistralConstants from '../constants/MistralConstants';
 import logger from '../services/logger';
+
+const messages = defineMessages({
+  introspectionNotificationMessage: {
+    id: 'NodesActions.introspectionNotificationMessage',
+    defaultMessage: 'Selected nodes were successfully introspected'
+  },
+  introspectionNotificationTitle: {
+    id: 'NodesActions.introspectionNotificationTitle',
+    defaultMessage: 'Nodes Introspection Complete'
+  },
+  introspectionFailedNotificationTitle: {
+    id: 'NodesActions.introspectionFailedNotificationTitle',
+    defaultMessage: 'Nodes Introspection Failed'
+  }
+});
 
 export default {
   startOperation(nodeIds) {
@@ -119,7 +135,8 @@ export default {
   },
 
   nodesIntrospectionFinished(messagePayload) {
-    return (dispatch, getState) => {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
       const nodeIds = messagePayload.execution.input.node_uuids;
       dispatch(this.finishOperation(nodeIds));
       dispatch(this.fetchNodes());
@@ -128,15 +145,15 @@ export default {
       case 'SUCCESS': {
         dispatch(NotificationActions.notify({
           type: 'success',
-          title: 'Nodes Introspection Complete',
-          message: 'Selected nodes were successfully introspected'
+          title: formatMessage(messages.introspectionNotificationTitle),
+          message: formatMessage(messages.introspectionNotificationMessage)
         }));
         break;
       }
       case 'FAILED': {
         dispatch(NotificationActions.notify({
           type: 'error',
-          title: 'Nodes Introspection Failed',
+          title: formatMessage(messages.introspectionFailedNotificationTitle),
           message: messagePayload.message.join(', ')
         }));
         break;

@@ -1,3 +1,4 @@
+import { defineMessages } from 'react-intl';
 import { fromJS } from 'immutable';
 import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
@@ -14,6 +15,37 @@ import StackActions from '../actions/StacksActions';
 import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
 import MistralConstants from '../constants/MistralConstants';
+
+const messages = defineMessages({
+  planCreatedNotificationTitle: {
+    id: 'PlansActions.planCreatedNotificationTitle',
+    defaultMessage: 'Plan was created'
+  },
+  planCreatedNotificationMessage: {
+    id: 'PlansActions.planCreatedNotificationMessage',
+    defaultMessage: 'The plan {planName} was successfully created.'
+  },
+  planUpdatedNotificationTitle: {
+    id: 'PlansActions.planUpdatedNotificationTitle',
+    defaultMessage: 'Plan Updated'
+  },
+  planUpdatedNotificationMessage: {
+    id: 'PlansActions.planUpdatedNotificationMessage',
+    defaultMessage: 'The plan {planName} was successfully updated.'
+  },
+  planDeletedNotificationTitle: {
+    id: 'PlansActions.planDeletedNotificationTitle',
+    defaultMessage: 'Plan Deleted'
+  },
+  planDeletedNotificationMessage: {
+    id: 'PlansActions.planDeletedNotificationMessage',
+    defaultMessage: 'The plan {planName} was successfully deleted.'
+  },
+  deploymentFailedNotificationTitle: {
+    id: 'PlansActions.deploymentFailedNotificationTitle',
+    defaultMessage: 'Deployment Failed'
+  }
+});
 
 export default {
   requestPlans() {
@@ -100,14 +132,15 @@ export default {
   },
 
   updatePlan(planName, planFiles) {
-    return dispatch => {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
       dispatch(this.updatePlanPending(planName));
       this._uploadFilesToContainer(planName, fromJS(planFiles), dispatch).then(() => {
         dispatch(this.updatePlanSuccess(planName));
         browserHistory.push('/plans/list');
         dispatch(NotificationActions.notify({
-          title: 'Plan Updated',
-          message: `The plan ${planName} was successfully updated.`,
+          title: formatMessage(messages.planUpdatedNotificationTitle),
+          message: formatMessage(messages.planUpdatedNotificationMessage, { planName: planName }),
           type: 'success'
         }));
         dispatch(this.fetchPlans());
@@ -122,14 +155,15 @@ export default {
   },
 
   updatePlanFromTarball(planName, file) {
-    return (dispatch) => {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
       dispatch(this.updatePlanPending(planName));
       SwiftApiService.uploadTarball(planName, file).then((response) => {
         dispatch(this.updatePlanSuccess(planName));
         browserHistory.push('/plans/list');
         dispatch(NotificationActions.notify({
-          title: 'Plan Updated',
-          message: `The plan ${planName} was successfully updated.`,
+          title: formatMessage(messages.planUpdatedNotificationTitle),
+          message: formatMessage(messages.planUpdatedNotificationMessage, { planName: planName }),
           type: 'success'
         }));
         dispatch(this.fetchPlans());
@@ -249,13 +283,15 @@ export default {
   },
 
   createPlanFinished(payload) {
-    return (dispatch) => {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
       if(payload.status === 'SUCCESS') {
+        const planName = payload.execution.input.container;
         dispatch(this.createPlanSuccess());
         dispatch(NotificationActions.notify({
           type: 'success',
-          title: 'Plan was created',
-          message: `The plan ${payload.execution.input.container} was successfully created`
+          title: formatMessage(messages.planCreatedNotificationTitle),
+          message: formatMessage(messages.planCreatedNotificationMessage, { planName: planName })
         }));
         dispatch(this.fetchPlans());
         browserHistory.push('/plans/list');
@@ -329,15 +365,16 @@ export default {
   },
 
   deletePlan(planName) {
-    return dispatch => {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
       dispatch(this.deletePlanPending(planName));
       browserHistory.push('/plans/list');
       MistralApiService.runAction(MistralConstants.PLAN_DELETE, { container: planName })
         .then(response => {
           dispatch(this.deletePlanSuccess(planName));
           dispatch(NotificationActions.notify({
-            title: 'Plan Deleted',
-            message: `The plan ${planName} was successfully deleted.`,
+            title: formatMessage(messages.planDeletedNotificationTitle),
+            message: formatMessage(messages.planDeletedNotificationMessage, { planName: planName }),
             type: 'success'
           }));
           dispatch(CurrentPlanActions.detectPlan());
@@ -374,11 +411,12 @@ export default {
   },
 
   deployPlanFinished(payload) {
-    return (dispatch) => {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
       if(payload.status === 'FAILED') {
         dispatch(this.deployPlanFailed(payload.execution.input.container));
         dispatch(NotificationActions.notify({
-          title: 'Deployment failed',
+          title: formatMessage(messages.deploymentFailedNotificationTitle),
           message: payload.message,
           type: 'error'
         }));
