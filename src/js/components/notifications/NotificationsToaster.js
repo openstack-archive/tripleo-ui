@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
@@ -24,13 +25,20 @@ class NotificationsToaster extends React.Component {
     this.setState({ isHovered: false });
   }
 
+  _getStringOrMessage(data) {
+    return typeof(data) === 'object' ? this.props.intl.formatMessage(data) : data;
+  }
+
   renderNotifications(){
     return this.props.notifications.toList().map(notification => {
+      const title = this._getStringOrMessage(notification.title);
+      const message = this._getStringOrMessage(notification.message);
+
       return (
         <Notification
           key={notification.id}
-          title={notification.title}
-          message={notification.message}
+          title={title}
+          message={message}
           type={notification.type}
           dismissable={notification.dismissable}
           timeoutable={notification.timeoutable}
@@ -51,6 +59,7 @@ class NotificationsToaster extends React.Component {
   }
 }
 NotificationsToaster.propTypes = {
+  intl: React.PropTypes.object,
   notifications: ImmutablePropTypes.map.isRequired,
   removeNotification: React.PropTypes.func
 };
@@ -68,4 +77,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(NotificationsToaster);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(NotificationsToaster));

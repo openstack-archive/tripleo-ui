@@ -1,3 +1,4 @@
+import { defineMessages } from 'react-intl';
 import { fromJS } from 'immutable';
 import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
@@ -14,6 +15,13 @@ import StackActions from '../actions/StacksActions';
 import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
 import MistralConstants from '../constants/MistralConstants';
+
+const messages = defineMessages({
+  planCreatedNotificationTitle: {
+    id: 'PlansActions.planCreatedNotificationTitle',
+    defaultMessage: 'Plan was created'
+  }
+});
 
 export default {
   requestPlans() {
@@ -254,7 +262,7 @@ export default {
         dispatch(this.createPlanSuccess());
         dispatch(NotificationActions.notify({
           type: 'success',
-          title: 'Plan was created',
+          title: messages.planCreatedNotificationTitle,
           message: `The plan ${payload.execution.input.container} was successfully created`
         }));
         dispatch(this.fetchPlans());
