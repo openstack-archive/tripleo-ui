@@ -1,6 +1,19 @@
+import { defineMessages } from 'react-intl';
+
 import NotificationActions from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
 import ValidationsActions from '../actions/ValidationsActions';
+
+const messages = defineMessages({
+  planActivatedNotificationTitle: {
+    id: 'CurrentPlanActions.planActivatedNotificationTitle',
+    defaultMessage: 'Plan Activated'
+  },
+  planActivatedNotificationMessage: {
+    id: 'CurrentPlanActions.planActivatedNotificationMessage',
+    defaultMessage: 'The plan {planName} was activated.'
+  }
+});
 
 export default {
   detectPlan() {
@@ -46,10 +59,11 @@ export default {
   },
 
   choosePlan(planName) {
-    return dispatch => {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
       dispatch(NotificationActions.notify({
-        title: 'Plan Activated',
-        message: 'The plan ' + planName + ' was activated.',
+        title: formatMessage(messages.planActivatedNotificationTitle),
+        message: formatMessage(messages.planActivatedNotificationMessage, { planName: planName }),
         type: 'success'
       }));
       storePlan(planName);

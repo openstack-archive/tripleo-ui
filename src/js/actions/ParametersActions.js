@@ -1,3 +1,4 @@
+import { defineMessages } from 'react-intl';
 import { normalize } from 'normalizr';
 import { browserHistory } from 'react-router';
 import uuid from 'node-uuid';
@@ -10,6 +11,17 @@ import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import MistralConstants from '../constants/MistralConstants';
 import logger from '../services/logger';
 import { resourceGroupSchema } from '../normalizrSchemas/parameters';
+
+const messages = defineMessages({
+  parametersUpdatedNotficationTitle: {
+    id: 'ParametersActions.parametersUpdatedNotficationTitle',
+    defaultMessage: 'Parameters updated'
+  },
+  parametersUpdatedNotficationMessage: {
+    id: 'ParametersActions.parametersUpdatedNotficationMessage',
+    defaultMessage: 'The Deployment parameters have been successfully updated.'
+  }
+});
 
 export default {
   fetchParametersPending() {
@@ -76,15 +88,16 @@ export default {
   },
 
   updateParameters(planName, data, inputFieldNames, url) {
-    return dispatch => {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
       dispatch(this.updateParametersPending());
       MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE,
                                   { container: planName, parameters: data })
       .then(response => {
         dispatch(this.updateParametersSuccess(data));
         dispatch(NotificationActions.notify({
-          title: 'Parameters updated',
-          message: 'The Deployment parameters have been successfully updated',
+          title: formatMessage(messages.parametersUpdatedNotficationTitle),
+          message: formatMessage(messages.parametersUpdatedNotficationMessage),
           type: 'success'
         }));
         if (url) { browserHistory.push(url); }

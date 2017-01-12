@@ -4,6 +4,7 @@ import * as utils from '../../js/services/utils';
 import EnvironmentConfigurationActions from '../../js/actions/EnvironmentConfigurationActions';
 import { browserHistory } from 'react-router';
 import MistralApiService from '../../js/services/MistralApiService';
+import { mockGetIntl } from './utils';
 
 // Use this to mock asynchronous functions which return a promise.
 // The promise will immediately resolve with `data`.
@@ -56,7 +57,7 @@ describe('EnvironmentConfigurationActions', () => {
                  \"environments/network-isolation.yaml\"}]}}`
       }));
       EnvironmentConfigurationActions.updateEnvironmentConfiguration(
-        'overcloud', {}, {}, '/redirect/url')(() => {}, () => {}
+        'overcloud', {}, {}, '/redirect/url')(() => {}, () => {}, mockGetIntl
       );
       // Call done with a minimal timeout.
       setTimeout(() => { done(); }, 1);

@@ -1,3 +1,4 @@
+import { defineMessages } from 'react-intl';
 import { normalize, arrayOf } from 'normalizr';
 import yaml from 'js-yaml';
 
@@ -11,6 +12,17 @@ import MistralConstants from '../constants/MistralConstants';
 import logger from '../services/logger';
 import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
+
+const messages = defineMessages({
+  envConfigUpdatedNotificationMessage: {
+    id: 'EnvironmentConfigurationActions.envConfigUpdatedNotificationMessage',
+    defaultMessage: 'The Environment Configuration has been successfully updated.'
+  },
+  envConfigUpdatedNotificationTitle: {
+    id: 'EnvironmentConfigurationActions.envConfigUpdatedNotificationTitle',
+    defaultMessage: 'Environment Configuration updated'
+  }
+});
 
 export default {
 
@@ -55,7 +67,8 @@ export default {
   },
 
   updateEnvironmentConfiguration(planName, data, formFields, redirectPath) {
-    return dispatch => {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
       dispatch(this.updateEnvironmentConfigurationPending());
       MistralApiService.runAction(MistralConstants.CAPABILITIES_UPDATE,
                                   { environments: data, container: planName })
@@ -64,8 +77,8 @@ export default {
         dispatch(this.updateEnvironmentConfigurationSuccess(enabledEnvs));
         if (redirectPath) { browserHistory.push(redirectPath); }
         dispatch(NotificationActions.notify({
-          title: 'Environment Configuration updated',
-          message: 'The Environment Configuration has been successfully updated',
+          title: formatMessage(messages.envConfigUpdatedNotificationTitle),
+          message: formatMessage(messages.envConfigUpdatedNotificationMessage),
           type: 'success'
         }));
       }).catch((error) => {
