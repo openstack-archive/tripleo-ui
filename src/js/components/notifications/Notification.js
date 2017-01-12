@@ -1,3 +1,4 @@
+import { FormattedMessage } from 'react-intl';
 import React from 'react';
 import ClassNames from 'classnames';
 import Timer from '../utils/Timer';
@@ -36,7 +37,14 @@ export default class Notification extends React.Component {
     }
   }
 
+  _getStringOrMessage(data) {
+    return typeof(data) === 'object' ? <FormattedMessage {...data}/> : data;
+  }
+
   render() {
+    const title = this._getStringOrMessage(this.props.title);
+    const message = this._getStringOrMessage(this.props.message);
+
     let classes = ClassNames({
       'toast-pf alert pull-right': true,
       'alert': true,
@@ -65,8 +73,8 @@ export default class Notification extends React.Component {
                     onClick={this._hideNotification.bind(this)}>
               <span className="pficon pficon-close" aria-hidden="true"></span>
             </button> : false}
-          <strong>{this.props.title}</strong>
-          <p>{this.props.message}</p>
+          <strong>{title}</strong>
+          <p>{message}</p>
         </div>
       </div>
     );
@@ -75,11 +83,17 @@ export default class Notification extends React.Component {
 
 Notification.propTypes = {
   dismissable: React.PropTypes.bool.isRequired,
-  message: React.PropTypes.string.isRequired,
+  message: React.PropTypes.oneOfType([
+    React.PropTypes.object,
+    React.PropTypes.string
+  ]).isRequired,
   removeNotification: React.PropTypes.func,
   timeoutable: React.PropTypes.bool.isRequired,
   timerPaused: React.PropTypes.bool,
-  title: React.PropTypes.string.isRequired,
+  title: React.PropTypes.oneOfType([
+    React.PropTypes.object,
+    React.PropTypes.string
+  ]).isRequired,
   type: React.PropTypes.string.isRequired
 };
 
