@@ -22,7 +22,6 @@ class DeploymentSuccess extends React.Component {
   componentDidMount() {
     this.props.fetchStackResource(this.props.stack, 'PublicVirtualIP');
     this.props.fetchStackEnvironment(this.props.stack);
-    this.props.runPostDeploymentValidations();
   }
 
   render() {
@@ -54,7 +53,6 @@ DeploymentSuccess.propTypes = {
   fetchStackResource: React.PropTypes.func.isRequired,
   intl: React.PropTypes.object,
   isRequestingStackDelete: React.PropTypes.bool,
-  runPostDeploymentValidations: React.PropTypes.func.isRequired,
   stack: ImmutablePropTypes.record.isRequired,
   stackResources: ImmutablePropTypes.map.isRequired,
   stackResourcesLoaded: React.PropTypes.bool.isRequired

@@ -22,6 +22,7 @@ import NoPlans from './NoPlans';
 import NotificationActions from '../../actions/NotificationActions';
 import PlanActions from '../../actions/PlansActions';
 import StacksActions from '../../actions/StacksActions';
+import stackStates from '../../constants/StacksConstants';
 import RolesStep from './RolesStep';
 import RolesActions from '../../actions/RolesActions';
 import ValidationsActions from '../../actions/ValidationsActions';
@@ -52,6 +53,7 @@ class DeploymentPlan extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.stacksLoaded) { this.props.fetchStacks(); }
+    this.postDeploymentValidationsCheck(nextProps.currentStack);
     this.pollCurrentStack(nextProps.currentStack);
   }
 
@@ -68,6 +70,18 @@ class DeploymentPlan extends React.Component {
           this.props.fetchStackResources(currentStack);
         }, 20000);
       }
+    }
+  }
+
+  postDeploymentValidationsCheck(nextStack) {
+    const { currentStack, currentPlan } = this.props;
+    const progressStates = [stackStates.UPDATE_IN_PROGRESS, stackStates.CREATE_IN_PROGRESS];
+    const successStates = [stackStates.UPDATE_COMPLETE, stackStates.CREATE_COMPLETE];
+    if (currentStack
+        && nextStack
+        && progressStates.includes(currentStack.stack_status)
+        && successStates.includes(nextStack.stack_status)) {
+      this.props.runPostDeploymentValidations(currentPlan.name);
     }
   }
 
@@ -132,8 +146,6 @@ class DeploymentPlan extends React.Component {
                   fetchStackEnvironment={this.props.fetchStackEnvironment}
                   fetchStackResource={this.props.fetchStackResource}
                   isRequestingStackDelete={this.props.isRequestingStackDelete}
-                  runPostDeploymentValidations={
-                    this.props.runPostDeploymentValidations.bind(this, currentPlanName)}
                   stacksLoaded={this.props.stacksLoaded}/>
               </DeploymentPlanStep>
             </ol>
