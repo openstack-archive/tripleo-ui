@@ -2,6 +2,7 @@ import { List, Map } from 'immutable';
 
 import { InitialPlanState } from '../../../js/immutableRecords/plans';
 import { CurrentPlanState } from '../../../js/immutableRecords/currentPlan';
+import { RolesState } from '../../../js/immutableRecords/roles';
 import { StacksState } from '../../../js/immutableRecords/stacks';
 import { EnvironmentConfigurationState }
   from '../../../js/immutableRecords/environmentConfiguration';
@@ -15,7 +16,7 @@ describe('DeploymentPlan mapStateToProps', () => {
           plans: new InitialPlanState({ all: List() }),
           currentPlan: new CurrentPlanState,
           stacks: new StacksState,
-          roles: Map({
+          roles: new RolesState({
             loaded: false,
             isFetching: false,
             roles: Map()
@@ -36,7 +37,7 @@ describe('DeploymentPlan mapStateToProps', () => {
           plans: new InitialPlanState({ all: List(['foo', 'bar']) }),
           currentPlan: new CurrentPlanState,
           stacks: new StacksState,
-          roles: Map({
+          roles: new RolesState({
             loaded: false,
             isFetching: false,
             roles: Map()
