@@ -11,3 +11,4 @@ tripleo-ui-*.tar.gz
 app.conf
 messages.pot
 i18n/extracted-messages*
+npm-debug.log

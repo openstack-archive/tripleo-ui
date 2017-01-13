@@ -39,7 +39,7 @@ export default function stacksReducer(state = initialState, action) {
   case StacksConstants.FETCH_RESOURCES_FAILED:
     return state.set('isFetchingResources', false);
 
-  case StacksConstants.FETCH_ENVIRONMENT_SUCCESS:
+  case StacksConstants.FETCH_STACK_ENVIRONMENT_SUCCESS:
     return state.setIn(
       ['stacks', action.payload.stack.stack_name, 'environment'],
       fromJS(action.payload.environment));

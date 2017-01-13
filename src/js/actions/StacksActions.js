@@ -119,7 +119,7 @@ export default {
 
   fetchEnvironmentSuccess(stack, environment) {
     return {
-      type: StacksConstants.FETCH_ENVIRONMENT_SUCCESS,
+      type: StacksConstants.FETCH_STACK_ENVIRONMENT_SUCCESS,
       payload: {
         environment,
         stack
@@ -129,7 +129,7 @@ export default {
 
   fetchEnvironmentFailed(stack) {
     return {
-      type: StacksConstants.FETCH_ENVIRONMENT_FAILED,
+      type: StacksConstants.FETCH_STACK_ENVIRONMENT_FAILED,
       payload: {
         stack
       }
@@ -138,7 +138,7 @@ export default {
 
   fetchEnvironmentPending(stack) {
     return {
-      type: StacksConstants.FETCH_ENVIRONMENT_PENDING,
+      type: StacksConstants.FETCH_STACK_ENVIRONMENT_PENDING,
       payload: {
         stack
       }
