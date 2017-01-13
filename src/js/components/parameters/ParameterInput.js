@@ -1,3 +1,4 @@
+import { defineMessages, injectIntl } from 'react-intl';
 import React from 'react';
 import { Map, List } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -7,7 +8,14 @@ import HorizontalTextarea from '../ui/forms/HorizontalTextarea';
 import HorizontalCheckBox from '../ui/forms/HorizontalCheckBox';
 import HorizontalStaticText from '../ui/forms/HorizontalStaticText';
 
-export default class ParameterInput extends React.Component {
+const messages = defineMessages({
+  enterValidJson: {
+    id: 'ParameterInput.enterValidJson',
+    defaultMessage: 'Please enter a valid JSON string'
+  }
+});
+
+class ParameterInput extends React.Component {
   /**
   * Process the parameter, generate relevant input
   */
@@ -27,7 +35,7 @@ export default class ParameterInput extends React.Component {
                             description={description}
                             value={defaultValue ? JSON.stringify(defaultValue.toJS()) : ''}
                             validations="isJson"
-                            validationError="Please enter a valid JSON string"
+                            validationError={this.props.intl.formatMessage(messages.enterValidJson)}
                             labelColumnClasses="col-sm-4"
                             inputColumnClasses="col-sm-8"/>
       );
@@ -102,6 +110,7 @@ ParameterInput.propTypes = {
     React.PropTypes.string
   ]).isRequired,
   description: React.PropTypes.string.isRequired,
+  intl: React.PropTypes.object,
   label: React.PropTypes.string.isRequired,
   name: React.PropTypes.string.isRequired,
   type: React.PropTypes.string.isRequired,
@@ -110,3 +119,5 @@ ParameterInput.propTypes = {
 ParameterInput.defaultProps = {
   defaultValue: ''
 };
+
+export default injectIntl(ParameterInput);
