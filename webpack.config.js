@@ -1,5 +1,6 @@
 require('es6-promise').polyfill(); // https://github.com/webpack/css-loader/issues/144
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+let FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 module.exports = {
   devtool: 'inline-source-map',
@@ -13,6 +14,15 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html'
+    }),
+    new FaviconsWebpackPlugin({
+      logo: __dirname + '/src/img/owl.png',
+      prefix: 'icons-tripleo/',
+      emitStats: false,
+      statsFilename: 'iconstats-tripleo.json',
+      persistentCache: true,
+      inject: true,
+      title: 'TripleO UI'
     })
   ],
   module: {
@@ -96,7 +106,7 @@ module.exports = {
   devServer: {
     contentBase: './dist',
     host: '0.0.0.0',
-    port: 3000,
+    port: 33000,
     colors: true,
     historyApiFallback: true,
     inline: true
