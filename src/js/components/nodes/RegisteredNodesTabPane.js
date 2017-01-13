@@ -6,6 +6,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Formsy from 'formsy-react';
 
 import { getRegisteredNodes, getNodesOperationInProgress } from '../../selectors/nodes';
+import { getRoles } from '../../selectors/roles';
 import ConfirmationModal from '../ui/ConfirmationModal';
 import FormErrorList from '../ui/forms/FormErrorList';
 import NodesActions from '../../actions/NodesActions';
@@ -150,7 +151,7 @@ RegisteredNodesTabPane.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    roles: state.roles.get('roles'),
+    roles: getRoles(state),
     registeredNodes: getRegisteredNodes(state),
     nodesInProgress: state.nodes.get('nodesInProgress'),
     nodesOperationInProgress: getNodesOperationInProgress(state),

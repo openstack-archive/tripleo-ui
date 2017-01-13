@@ -9,6 +9,7 @@ import FormErrorList from '../ui/forms/FormErrorList';
 import NodesTable from './NodesTable';
 import { getNodesOperationInProgress,
          getMaintenanceNodes } from '../../selectors/nodes';
+import { getRoles } from '../../selectors/roles';
 
 class MaintenanceNodesTabPane extends React.Component {
   constructor() {
@@ -83,7 +84,7 @@ MaintenanceNodesTabPane.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    roles: state.roles.get('roles'),
+    roles: getRoles(state),
     maintenanceNodes: getMaintenanceNodes(state),
     nodesInProgress: state.nodes.get('nodesInProgress'),
     nodesOperationInProgress: getNodesOperationInProgress(state),

@@ -7,6 +7,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import { getNodesOperationInProgress,
          getDeployedNodes } from '../../selectors/nodes';
+import { getRoles } from '../../selectors/roles';
 import FormErrorList from '../ui/forms/FormErrorList';
 import NodesTable from './NodesTable';
 
@@ -87,7 +88,7 @@ function mapStateToProps(state) {
     isFetchingNodes: state.nodes.get('isFetching'),
     nodesInProgress: state.nodes.get('nodesInProgress'),
     nodesOperationInProgress: getNodesOperationInProgress(state),
-    roles: state.roles.get('roles')
+    roles: getRoles(state)
   };
 }
 
