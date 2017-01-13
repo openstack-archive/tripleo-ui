@@ -79,7 +79,7 @@ export default class EnvironmentGroup extends React.Component {
 }
 EnvironmentGroup.propTypes = {
   description: React.PropTypes.string,
-  environments: ImmutablePropTypes.list,
+  environments: ImmutablePropTypes.map,
   title: React.PropTypes.string
 };
 

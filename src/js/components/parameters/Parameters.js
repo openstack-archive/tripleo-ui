@@ -7,11 +7,16 @@ import { Link } from 'react-router';
 import { fromJS, is } from 'immutable';
 import React from 'react';
 
+import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
+import EnvironmentParameters from './EnvironmentParameters';
+import { getRootParameters } from '../../selectors/parameters';
+import { getEnabledEnvironments } from '../../selectors/environmentConfiguration';
 import Loader from '../ui/Loader';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import ParametersActions from '../../actions/ParametersActions';
 import ParameterInputList from './ParameterInputList';
-import { getRootParameters } from '../../selectors/parameters';
+import Tab from '../ui/Tab';
+import TabPane from '../ui/TabPane';
 
 const messages = defineMessages({
   saveChanges: {
@@ -28,11 +33,13 @@ class Parameters extends React.Component {
   constructor() {
     super();
     this.state = {
-      canSubmit: false
+      canSubmit: false,
+      selectedTab: 'general'
     };
   }
 
   componentDidMount() {
+    this.props.fetchEnvironmentConfiguration(this.props.currentPlanName, this.props.parentPath);
     this.props.fetchParameters(this.props.currentPlanName, this.props.parentPath);
   }
 
@@ -55,7 +62,7 @@ class Parameters extends React.Component {
   */
   _filterFormData(formData) {
     return fromJS(formData).filterNot((value, key) => {
-      return is(fromJS(this.props.parameters.get(key).default), value);
+      return is(fromJS(this.props.allParameters.get(key).default), value);
     }).toJS();
   }
 
@@ -87,9 +94,51 @@ class Parameters extends React.Component {
     this.props.updateParameters(
       this.props.currentPlanName,
       this._filterFormData(this._jsonParseFormData(formData)),
-      Object.keys(this.refs.parameterConfigurationForm.inputs),
-      this.props.parentPath
+      Object.keys(this.refs.parameterConfigurationForm.inputs)
     );
+  }
+
+  selectTab(tabName) {
+    this.setState({
+      selectedTab: tabName
+    });
+  }
+
+  renderTabs() {
+    return this.props.enabledEnvironments.toList().map(environment => {
+      return (
+        <Tab key={environment.file}
+             title={environment.description}
+             isActive={environment.file === this.state.selectedTab}>
+          <a className="link"
+             onClick={this.selectTab.bind(this, environment.file)}>
+             {environment.title}
+          </a>
+        </Tab>
+      );
+    });
+  }
+
+  renderTabPanes() {
+    if (this.state.selectedTab === 'general') {
+      return (
+        <TabPane isActive>
+          <ParameterInputList
+            parameters={this.props.parameters.toList()}
+            mistralParameters={this.props.mistralParameters}/>
+        </TabPane>
+      );
+    } else {
+      return this.props.enabledEnvironments.toList().map(environment => {
+        return (
+          <TabPane isActive={this.state.selectedTab === environment.file}
+                   key={environment.file}
+                   renderOnlyActive>
+            <EnvironmentParameters environment={environment.file}/>
+          </TabPane>
+        );
+      });
+    }
   }
 
   render() {
@@ -101,18 +150,30 @@ class Parameters extends React.Component {
         onValid={this.enableButton.bind(this)}
         onInvalid={this.disableButton.bind(this)}>
 
-        <div className="modal-body">
-          <Loader height={60}
-            loaded={this.props.parametersLoaded}>
-            <div className="tab-content">
-              <div className="tab-pane active">
-                <ModalFormErrorList errors={this.props.formErrors.toJS()}/>
-                <ParameterInputList
-                  parameters={this.props.parameters.toList()}
-                  mistralParameters={this.props.mistralParameters}/>
-              </div>
+        <div className="container-fluid">
+          <div className="row row-eq-height">
+            <div className="col-sm-4 sidebar-pf sidebar-pf-left">
+              <ul className="nav nav-pills nav-stacked nav-arrows">
+                <Tab key="general"
+                     title="General"
+                     isActive={'general' === this.state.selectedTab}>
+                  <a className="link" onClick={this.selectTab.bind(this, 'general')}>General</a>
+                </Tab>
+                <li className="spacer" />
+                {this.renderTabs()}
+              </ul>
             </div>
-          </Loader>
+            <div className="col-sm-8">
+              <Loader height={120}
+                      content="Fetching Parameters..."
+                      loaded={this.props.parametersLoaded}>
+                <ModalFormErrorList errors={this.props.formErrors.toJS()}/>
+                <div className="tab-content">
+                  {this.renderTabPanes()}
+                </div>
+              </Loader>
+            </div>
+          </div>
         </div>
 
         <div className="modal-footer">
@@ -130,8 +191,11 @@ class Parameters extends React.Component {
   }
 }
 Parameters.propTypes = {
+  allParameters: ImmutablePropTypes.map.isRequired,
   currentPlanName: React.PropTypes.string,
-  fetchParameters: React.PropTypes.func,
+  enabledEnvironments: ImmutablePropTypes.map.isRequired,
+  fetchEnvironmentConfiguration: React.PropTypes.func.isRequired,
+  fetchParameters: React.PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list,
   formFieldErrors: ImmutablePropTypes.map,
   history: React.PropTypes.object,
@@ -146,8 +210,10 @@ Parameters.defaultProps = {
   parentPath: '/deployment-plan'
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
+    allParameters: state.parameters.parameters,
+    enabledEnvironments: getEnabledEnvironments(state),
     form: state.parameters.form,
     formErrors: state.parameters.form.get('formErrors'),
     formFieldErrors: state.parameters.form.get('formFieldErrors'),
@@ -159,6 +225,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchEnvironmentConfiguration: (currentPlanName, redirectPath) => {
+      dispatch(EnvironmentConfigurationActions.fetchEnvironmentConfiguration(currentPlanName,
+                                                                             redirectPath));
+    },
     fetchParameters: (currentPlanName, redirectPath) => {
       dispatch(ParametersActions.fetchParameters(currentPlanName, redirectPath));
     },
