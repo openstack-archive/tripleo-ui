@@ -60,8 +60,7 @@ class EnvironmentConfiguration extends React.Component {
     this.props.updateEnvironmentConfiguration(
       this.props.currentPlanName,
       data,
-      Object.keys(this.refs.environmentConfigurationForm.inputs),
-      this.props.parentPath
+      Object.keys(this.refs.environmentConfigurationForm.inputs)
     );
   }
 
@@ -145,6 +144,7 @@ class EnvironmentConfiguration extends React.Component {
 EnvironmentConfiguration.propTypes = {
   currentPlanName: React.PropTypes.string,
   environmentConfigurationTopics: ImmutablePropTypes.map.isRequired,
+  fetchEnvironment: React.PropTypes.func,
   fetchEnvironmentConfiguration: React.PropTypes.func,
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,

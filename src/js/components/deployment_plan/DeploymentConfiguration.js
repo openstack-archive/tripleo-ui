@@ -23,7 +23,7 @@ const messages = defineMessages({
 export default class DeploymentConfiguration extends React.Component {
   render() {
     return (
-      <Modal dialogClasses="modal-lg">
+      <Modal dialogClasses="modal-xl">
         <div className="modal-header">
           <Link to={this.props.parentPath}
                 type="button"
