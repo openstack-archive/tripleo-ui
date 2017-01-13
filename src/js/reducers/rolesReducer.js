@@ -3,13 +3,9 @@ import { kebabCase, startCase } from 'lodash';
 
 import PlansConstants from '../constants/PlansConstants';
 import RolesConstants from '../constants/RolesConstants';
-import { Role } from '../immutableRecords/roles';
+import { Role, RolesState } from '../immutableRecords/roles';
 
-const initialState = Map({
-  loaded: false,
-  isFetching: false,
-  roles: Map()
-});
+const initialState = new RolesState();
 
 export default function rolesReducer(state = initialState, action) {
 
