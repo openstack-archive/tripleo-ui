@@ -49,7 +49,7 @@ class ParameterInputList extends React.Component {
 ParameterInputList.propTypes = {
   emptyParametersMessage: React.PropTypes.string,
   intl: React.PropTypes.object,
-  mistralParameters: ImmutablePropTypes.map.isRequired,
+  mistralParameters: ImmutablePropTypes.map,
   parameters: React.PropTypes.array.isRequired
 };
 
