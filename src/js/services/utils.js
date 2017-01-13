@@ -13,7 +13,8 @@ export function getServiceUrl(serviceName, urlType='publicURL', appConfig=getApp
   if(!serviceUrl) {
     throw Error(`URL for service ${serviceName} can not be found`);
   }
-  return serviceUrl;
+  let tenantId = getTenantId();
+  return serviceUrl.replace('%(tenant_id)s', tenantId);
 }
 
 function getFromServiceCatalog(serviceName, urlType) {
