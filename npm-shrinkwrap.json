@@ -1,6 +1,6 @@
 {
   "name": "tripleo-ui",
-  "version": "1.0.6",
+  "version": "2.0.1",
   "dependencies": {
     "babel-core": {
       "version": "6.14.0",
@@ -4003,6 +4003,30 @@
       "version": "2.5.1",
       "from": "https://registry.npmjs.org/jasmine-core/-/jasmine-core-2.5.1.tgz",
       "resolved": "https://registry.npmjs.org/jasmine-core/-/jasmine-core-2.5.1.tgz"
+    },
+    "js-yaml": {
+      "version": "3.7.0",
+      "from": "https://registry.npmjs.org/js-yaml/-/js-yaml-3.7.0.tgz",
+      "resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-3.7.0.tgz",
+      "dependencies": {
+        "argparse": {
+          "version": "1.0.9",
+          "from": "https://registry.npmjs.org/argparse/-/argparse-1.0.9.tgz",
+          "resolved": "https://registry.npmjs.org/argparse/-/argparse-1.0.9.tgz",
+          "dependencies": {
+            "sprintf-js": {
+              "version": "1.0.3",
+              "from": "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz",
+              "resolved": "https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz"
+            }
+          }
+        },
+        "esprima": {
+          "version": "2.7.3",
+          "from": "https://registry.npmjs.org/esprima/-/esprima-2.7.3.tgz",
+          "resolved": "https://registry.npmjs.org/esprima/-/esprima-2.7.3.tgz"
+        }
+      }
     },
     "keymirror": {
       "version": "0.1.1",
