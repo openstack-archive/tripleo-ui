@@ -1,4 +1,4 @@
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
@@ -13,12 +13,16 @@ const messages = defineMessages({
   validateAndDeploy: {
     id: 'DeployStep.validateAndDeploy',
     defaultMessage: 'Validate and Deploy'
+  },
+  requestingDeploy: {
+    id: 'DeployStep.requestingDeploy',
+    defaultMessage: 'Requesting a deploy...'
   }
 });
 
 const DeployStep = ({ currentPlan, currentStack, currentStackResources, currentStackResourcesLoaded,
                       currentStackDeploymentProgress, deleteStack, deployPlan, fetchStackResource,
-                      fetchStackEnvironment, isRequestingStackDelete, stacksLoaded }) => {
+                      fetchStackEnvironment, intl, isRequestingStackDelete, stacksLoaded }) => {
 
   if (!currentStack || currentStack.stack_status === stackStates.DELETE_COMPLETE) {
     return (
@@ -27,7 +31,7 @@ const DeployStep = ({ currentPlan, currentStack, currentStackResources, currentS
               disabled={currentPlan.isRequestingPlanDeploy}
               to="/deployment-plan/deployment-detail">
           <Loader loaded={!currentPlan.isRequestingPlanDeploy}
-                  content="Requesting a deploy..."
+                  content={intl.formatMessage(messages.requestingDeploy)}
                   component="span"
                   inline>
             <span className="fa fa-cloud-upload"/> <FormattedMessage
@@ -72,8 +76,9 @@ DeployStep.propTypes = {
   deployPlan: React.PropTypes.func.isRequired,
   fetchStackEnvironment: React.PropTypes.func.isRequired,
   fetchStackResource: React.PropTypes.func.isRequired,
+  intl: React.PropTypes.object,
   isRequestingStackDelete: React.PropTypes.bool.isRequired,
   stacksLoaded: React.PropTypes.bool.isRequired
 };
 
-export default DeployStep;
+export default injectIntl(DeployStep);
