@@ -18,8 +18,7 @@ const messages = defineMessages({
 
 const DeployStep = ({ currentPlan, currentStack, currentStackResources, currentStackResourcesLoaded,
                       currentStackDeploymentProgress, deleteStack, deployPlan, fetchStackResource,
-                      fetchStackEnvironment, isRequestingStackDelete, runPostDeploymentValidations,
-                      stacksLoaded }) => {
+                      fetchStackEnvironment, isRequestingStackDelete, stacksLoaded }) => {
 
   if (!currentStack || currentStack.stack_status === stackStates.DELETE_COMPLETE) {
     return (
@@ -52,8 +51,7 @@ const DeployStep = ({ currentPlan, currentStack, currentStackResources, currentS
                          isRequestingStackDelete={isRequestingStackDelete}
                          deleteStack={deleteStack}
                          fetchStackResource={fetchStackResource}
-                         fetchStackEnvironment={fetchStackEnvironment}
-                         runPostDeploymentValidations={runPostDeploymentValidations}/>
+                         fetchStackEnvironment={fetchStackEnvironment} />
     );
   } else {
     return (
@@ -75,7 +73,6 @@ DeployStep.propTypes = {
   fetchStackEnvironment: React.PropTypes.func.isRequired,
   fetchStackResource: React.PropTypes.func.isRequired,
   isRequestingStackDelete: React.PropTypes.bool.isRequired,
-  runPostDeploymentValidations: React.PropTypes.func.isRequired,
   stacksLoaded: React.PropTypes.bool.isRequired
 };
 
