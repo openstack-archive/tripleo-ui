@@ -12,3 +12,4 @@ app.conf
 messages.pot
 i18n/extracted-messages*
 npm-debug.log
+docs/_build
