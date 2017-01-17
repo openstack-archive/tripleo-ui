@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
@@ -12,6 +13,17 @@ import { getTopicsTree } from '../../selectors/environmentConfiguration';
 import Loader from '../ui/Loader';
 import Tab from '../ui/Tab';
 import TabPane from '../ui/TabPane';
+
+const messages = defineMessages({
+  cancel: {
+    id: 'EnvironmentConfiguration.cancel',
+    defaultMessage: 'Cancel'
+  },
+  saveChanges: {
+    id: 'EnvironmentConfiguration.saveChanges',
+    defaultMessage: 'Save Changes'
+  }
+});
 
 class EnvironmentConfiguration extends React.Component {
   constructor() {
@@ -132,10 +144,10 @@ class EnvironmentConfiguration extends React.Component {
         <div className="modal-footer">
           <button type="submit" disabled={!this.state.canSubmit}
                   className="btn btn-primary">
-            Save Changes
+            <FormattedMessage {...messages.saveChanges}/>
           </button>
           <Link to={this.props.parentPath} type="button" className="btn btn-default" >
-            Cancel
+            <FormattedMessage {...messages.cancel}/>
           </Link>
         </div>
       </Formsy.Form>
