@@ -1,10 +1,18 @@
+import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
 import GenericCheckBox from '../ui/forms/GenericCheckBox';
 import GroupedCheckBox from '../ui/forms/GroupedCheckBox';
 
-export default class EnvironmentGroup extends React.Component {
+const messages = defineMessages({
+  requiredEnvironments: {
+    id: 'EnvironmentGroup.requiredEnvironments',
+    defaultMessage: 'This environment requires {requiresEnvironments}'
+  }
+});
+
+class EnvironmentGroup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,6 +34,8 @@ export default class EnvironmentGroup extends React.Component {
 
   _generateInputs() {
     const { environments } = this.props;
+    const { formatMessage } = this.props.intl;
+
     if (environments.size > 1) {
       return environments.toList().map((environment, index) => {
         let checkBoxValue = this.state.checkedEnvironment === environment.get('file')
@@ -41,8 +51,8 @@ export default class EnvironmentGroup extends React.Component {
                            title={environment.get('title')}
                            value={checkBoxValue}
                            validations={{requiresEnvironments: requiresEnvironments}}
-                           validationError={`This environment requires
-                                             '${requiresEnvironments}'`}
+                           validationError={formatMessage(messages.requiredEnvironments,
+                             { requiresEnvironments: requiresEnvironments })}
                            onChange={this.onGroupedCheckBoxChange.bind(this)}
                            description={environment.get('description')}/>
         );
@@ -58,8 +68,8 @@ export default class EnvironmentGroup extends React.Component {
                          title={environment.get('title')}
                          value={environment.get('enabled') || false}
                          validations={{requiresEnvironments: requiresEnvironments}}
-                         validationError={`This environment requires
-                                           '${requiresEnvironments}'`}
+                         validationError={formatMessage(messages.requiredEnvironments,
+                           { requiresEnvironments: requiresEnvironments })}
                          description={environment.get('description')}/>
       );
     }
@@ -80,9 +90,11 @@ export default class EnvironmentGroup extends React.Component {
 EnvironmentGroup.propTypes = {
   description: React.PropTypes.string,
   environments: ImmutablePropTypes.list,
+  intl: React.PropTypes.object,
   title: React.PropTypes.string
 };
 
+export default injectIntl(EnvironmentGroup);
 
 class EnvironmentGroupHeading extends React.Component {
   render() {
