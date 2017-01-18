@@ -1,0 +1,3 @@
+This job is used to check the tripleo-quickstart-extras gate jobs on a
+noop change periodically. Do not merge it.
+
