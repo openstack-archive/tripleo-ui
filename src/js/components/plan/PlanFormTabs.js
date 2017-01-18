@@ -52,9 +52,9 @@ class PlanFormTab extends React.Component {
                          inputColumnClasses="col-sm-7"
                          labelColumnClasses="col-sm-3"
                          placeholder="Add a Plan Name"
-                         validations={{matchRegexp: /^[A-Za-z0-9_-]+$/}}
+                         validations={{matchRegexp: /^[A-Za-z0-9-]+$/}}
                          validationError="Please use only alphanumeric characters and
-                                          - or _"
+                                          -"
                          required />
         <PlanUploadTypeRadios title="Upload Type"
                               inputColumnClasses="col-sm-7"
