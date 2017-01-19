@@ -1,4 +1,16 @@
+import { defineMessages, FormattedMessage } from 'react-intl';
 import React from 'react';
+
+const messages = defineMessages({
+  localFolder: {
+    id: 'PlanUploadTypeRadios.localFolder',
+    defaultMessage: 'Local Folder'
+  },
+  tarArchive: {
+    id: 'PlanUploadTypeRadios.tarArchive',
+    defaultMessage: 'Tar Archive (tar.gz)'
+  }
+});
 
 export default class PlanUploadTypeRadios extends React.Component {
 
@@ -16,7 +28,7 @@ export default class PlanUploadTypeRadios extends React.Component {
                    name="uploadType"
                    value="tarball"
                    onChange={this.props.setUploadType}
-                   defaultChecked/> Tar Archive (tar.gz)
+                   defaultChecked/> <FormattedMessage {...messages.tarArchive}/>
           </label>
           <label className="radio-inline" htmlFor="checkbox-folder">
             <input ref="checkbox-folder"
@@ -24,7 +36,7 @@ export default class PlanUploadTypeRadios extends React.Component {
                    id="checkbox-folder"
                    name="uploadType"
                    onChange={this.props.setUploadType}
-                   value="folder"/> Local Folder
+                   value="folder"/> <FormattedMessage {...messages.localFolder}/>
           </label>
         </div>
       </div>

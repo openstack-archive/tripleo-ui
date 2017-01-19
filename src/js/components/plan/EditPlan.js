@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
@@ -9,6 +10,25 @@ import PlanEditFormTabs from './PlanEditFormTabs';
 import PlansActions from '../../actions/PlansActions';
 import Modal from '../ui/Modal';
 import Loader from '../ui/Loader';
+
+const messages = defineMessages({
+  cancel: {
+    id: 'EditPlan.cancel',
+    defaultMessage: 'Cancel'
+  },
+  updatePlanNameFiles: {
+    id: 'EditPlan.updatePlanNameFiles',
+    defaultMessage: 'Update {planName} Files'
+  },
+  updatingPlanLoader: {
+    id: 'EditPlan.updatingPlanLoader',
+    defaultMessage: 'Updating plan...'
+  },
+  uploadAndUpdate: {
+    id: 'EditPlan.uploadAndUpdate',
+    defaultMessage: 'Upload Files and Update Plan'
+  }
+});
 
 class EditPlan extends React.Component {
 
@@ -82,12 +102,15 @@ class EditPlan extends React.Component {
                 className="close">
             <span aria-hidden="true" className="pficon pficon-close"/>
           </Link>
-          <h4>Update {this.getNameFromUrl()} Files</h4>
+          <h4>
+            <FormattedMessage {...messages.updatePlanNameFiles}
+                              values={{ planName: this.getNameFromUrl() }}/>
+          </h4>
         </div>
         <Loader loaded={!this.props.isTransitioningPlan}
                 size="lg"
                 height={60}
-                content="Updating plan...">
+                content={this.props.intl.formatMessage(messages.updatingPlanLoader)}>
           <ModalFormErrorList errors={this.props.planFormErrors.toJS()}/>
           <div className="modal-body">
             <PlanEditFormTabs currentTab={this.props.location.query.tab || 'editPlan'}
@@ -102,11 +125,13 @@ class EditPlan extends React.Component {
           <button disabled={!this.state.canSubmit}
                   className="btn btn-primary"
                   type="submit">
-            Upload Files and Update Plan
+            <FormattedMessage {...messages.uploadAndUpdate}/>
           </button>
           <Link to="/plans/list"
                 type="button"
-                className="btn btn-default">Cancel</Link>
+                className="btn btn-default">
+            <FormattedMessage {...messages.cancel}/>
+          </Link>
         </div>
         </Formsy.Form>
       </Modal>
@@ -117,6 +142,7 @@ class EditPlan extends React.Component {
 EditPlan.propTypes = {
   fetchPlan: React.PropTypes.func,
   history: React.PropTypes.object,
+  intl: React.PropTypes.object,
   isTransitioningPlan: React.PropTypes.bool,
   location: React.PropTypes.object,
   params: React.PropTypes.object,
@@ -148,4 +174,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditPlan);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(EditPlan));
