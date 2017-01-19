@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React from 'react';
@@ -23,6 +24,21 @@ import { stackStates } from '../../constants/StacksConstants';
 import StacksActions from '../../actions/StacksActions';
 import ValidationsActions from '../../actions/ValidationsActions';
 
+const messages = defineMessages({
+  close: {
+    id: 'DeploymentDetail.close',
+    defaultMessage: 'Close'
+  },
+  loadingStacksLoader: {
+    id: 'DeploymentDetail.loadingStacksLoader',
+    defaultMessage: 'Loading Stacks...'
+  },
+  modalTitle: {
+    id: 'DeploymentDetail.modalTitle',
+    defaultMessage: 'Plan {planName} deployment'
+  }
+});
+
 class DeploymentDetail extends React.Component {
   renderStatus() {
     const { allPreDeploymentValidationsSuccessful,
@@ -40,7 +56,7 @@ class DeploymentDetail extends React.Component {
     if (!currentStack || currentStack.stack_status === stackStates.DELETE_COMPLETE) {
       return (
         <Loader loaded={stacksLoaded}
-                content="Loading Stacks..."
+                content={this.props.intl.formatMessage(messages.loadingStacksLoader)}
                 height={40}>
           <DeploymentConfirmation
             allValidationsSuccessful={allPreDeploymentValidationsSuccessful}
@@ -87,7 +103,8 @@ class DeploymentDetail extends React.Component {
               <span aria-hidden="true" className="pficon pficon-close"/>
             </Link>
             <h2 className="modal-title">
-              Plan {this.props.currentPlan.name} deployment
+              <FormattedMessage {...messages.modalTitle}
+                                values={{planName: this.props.currentPlan.name}}/>
             </h2>
           </ModalPanelHeader>
           <ModalPanelBody>
@@ -97,7 +114,7 @@ class DeploymentDetail extends React.Component {
             <Link to="/deployment-plan"
                   type="button"
                   className="btn btn-default">
-              Close
+              <FormattedMessage {...messages.close}/>
             </Link>
           </ModalPanelFooter>
         </ModalPanel>
@@ -116,6 +133,7 @@ DeploymentDetail.propTypes = {
   deployPlan: React.PropTypes.func.isRequired,
   environmentConfigurationSummary: React.PropTypes.string,
   fetchStackResources: React.PropTypes.func.isRequired,
+  intl: React.PropTypes.object,
   runPreDeploymentValidations: React.PropTypes.func.isRequired,
   stacksLoaded: React.PropTypes.bool.isRequired
 };
@@ -143,4 +161,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DeploymentDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(DeploymentDetail));
