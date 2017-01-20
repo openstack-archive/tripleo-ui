@@ -3,9 +3,9 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Map } from 'immutable';
 import React from 'react';
 
-import ParameterInputList from '../parameters/ParameterInputList';
-import { getRoleResourceTree } from '../../selectors/parameters';
+import { getRoleServices } from '../../selectors/parameters';
 import { getRole } from '../../selectors/roles';
+import ParameterInputList from '../parameters/ParameterInputList';
 import Tab from '../ui/Tab';
 
 class RoleServices extends React.Component {
@@ -23,15 +23,14 @@ class RoleServices extends React.Component {
   }
 
   renderServiceTabs() {
-    const services = this.props.roleResourceTree.get('services', Map());
-    return services.toList().map(service => {
+    return this.props.services.toList().map(service => {
       return (
-        <Tab key={service.get('name')}
-             title={service.get('description')}
-             isActive={service.get('name') === this.state.selectedService}>
+        <Tab key={service.type}
+             title={service.description}
+             isActive={service.id === this.state.selectedService}>
           <a className="link"
-             onClick={this.selectService.bind(this, service.get('name'))}>
-            {service.get('name')}
+             onClick={this.selectService.bind(this, service.id)}>
+            {service.type.split('::').pop()}
           </a>
         </Tab>
       );
@@ -51,9 +50,8 @@ class RoleServices extends React.Component {
             emptyParametersMessage={this.state.selectedService ?
                                     'There are currently no parameters to configure in this section'
                                     : 'Please select service to configure'}
-            parameters={this.props.roleResourceTree.getIn(['services',
-                                                           this.state.selectedService,
-                                                           'parameters'], Map())}
+            parameters={this.props.services.getIn([this.state.selectedService, 'parameters'],
+                                                  Map()).toList()}
             mistralParameters={this.props.mistralParameters}/>
         </div>
       </div>
@@ -64,14 +62,14 @@ RoleServices.propTypes = {
   mistralParameters: ImmutablePropTypes.map.isRequired,
   params: React.PropTypes.object.isRequired,
   role: ImmutablePropTypes.record.isRequired,
-  roleResourceTree: ImmutablePropTypes.map
+  services: ImmutablePropTypes.map.isRequired
 };
 
 function mapStateToProps(state, props) {
   return {
     mistralParameters: state.parameters.mistralParameters,
-    roleResourceTree: getRoleResourceTree(state, props.params.roleIdentifier),
-    role: getRole(state, props.params.roleIdentifier)
+    role: getRole(state, props.params.roleIdentifier),
+    services: getRoleServices(state, props.params.roleIdentifier)
   };
 }
 

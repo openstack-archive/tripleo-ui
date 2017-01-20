@@ -16,15 +16,16 @@ class ParameterInputList extends React.Component {
   render() {
     const emptyParametersMessage = this.props.emptyParametersMessage
                                    || this.props.intl.formatMessage(messages.noParameters);
-    const parameters = this.props.parameters.toList().map(parameter => {
+
+    const parameters = this.props.parameters.map(parameter => {
       return (
-        <ParameterInput key={parameter.Name}
-                        name={parameter.Name}
-                        label={parameter.Label}
-                        description={parameter.Description}
-                        defaultValue={parameter.Default}
-                        value={parameter.Value}
-                        type={parameter.Type}/>
+        <ParameterInput key={parameter.name}
+                        name={parameter.name}
+                        label={parameter.label}
+                        description={parameter.description}
+                        defaultValue={parameter.default}
+                        value={parameter.value}
+                        type={parameter.type} />
       );
     });
 
@@ -48,8 +49,8 @@ class ParameterInputList extends React.Component {
 ParameterInputList.propTypes = {
   emptyParametersMessage: React.PropTypes.string,
   intl: React.PropTypes.object,
-  mistralParameters: ImmutablePropTypes.map.isRequired,
-  parameters: ImmutablePropTypes.map.isRequired
+  mistralParameters: ImmutablePropTypes.map,
+  parameters: ImmutablePropTypes.list.isRequired
 };
 
 export default injectIntl(ParameterInputList);
