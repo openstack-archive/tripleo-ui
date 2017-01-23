@@ -3,6 +3,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
+import common from '../../messages/common';
 import { getAllPlansButCurrent } from '../../selectors/plans';
 import { getCurrentStack,
          getCurrentStackDeploymentProgress,
@@ -38,10 +39,6 @@ const messages = defineMessages({
   deploymentConfigurationStepHeader: {
     id: 'DeploymentPlan.deploymentConfigurationStepHeader',
     defaultMessage: 'Specify Deployment Configuration'
-  },
-  deployStepHeader: {
-    id: 'DeploymentPlan.deployStepHeader',
-    defaultMessage: 'Deploy'
   }
 });
 
@@ -120,7 +117,7 @@ class DeploymentPlan extends React.Component {
                            rolesLoaded={this.props.rolesLoaded}
                            unassignedAvailableNodes={this.props.unassignedAvailableNodes}/>
               </DeploymentPlanStep>
-            <DeploymentPlanStep title={formatMessage(messages.deployStepHeader)}>
+            <DeploymentPlanStep title={formatMessage(common.deploy)}>
                 <DeployStep
                   currentPlan={this.props.currentPlan}
                   currentStack={this.props.currentStack}

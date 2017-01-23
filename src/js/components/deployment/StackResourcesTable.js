@@ -2,6 +2,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
+import common from '../../messages/common';
 import DataTable from '../ui/tables/DataTable';
 import { DataTableDateFieldCell,
          DataTableDataFieldCell,
@@ -17,10 +18,6 @@ const messages = defineMessages({
   noResourcesAvailable: {
     id: 'StackResourcesTable.noResourcesAvailable',
     defaultMessage: 'There are no Resources available'
-  },
-  name: {
-    id: 'StackResourcesTable.name',
-    defaultMessage: 'Name'
   },
   status: {
     id: 'StackResourcesTable.status',
@@ -84,7 +81,7 @@ class StackResourcesTable extends React.Component {
         <DataTableColumn
           key="resource_name"
           header={<DataTableHeaderCell key="resource_name">
-                    <FormattedMessage {...messages.name}/>
+                    <FormattedMessage {...common.name}/>
                   </DataTableHeaderCell>}
           cell={<DataTableDataFieldCell data={filteredData} field="resource_name"/>}/>
         <DataTableColumn

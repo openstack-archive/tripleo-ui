@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
+import common from '../../messages/common';
 import CurrentPlanActions from '../../actions/CurrentPlanActions';
 import DataTable from '../ui/tables/DataTable';
 import { DataTableCell, DataTableHeaderCell } from '../ui/tables/DataTableCells';
@@ -32,17 +33,9 @@ const messages = defineMessages({
     id: 'ListPlans.plans',
     defaultMessage: 'Plans'
   },
-  name: {
-    id: 'ListPlans.name',
-    defaultMessage: 'Name'
-  },
   noPlans: {
     id: 'ListPlans.noPlans',
     defaultMessage: 'There are currently no plans'
-  },
-  createNewPlan: {
-    id: 'ListPlans.createNewPlan',
-    defaultMessage: 'Create New Plan'
   }
 });
 
@@ -67,7 +60,7 @@ class ListPlans extends React.Component {
             <Link to="/plans/new"
                   query={{tab: 'newPlan'}}
                   className="btn btn-success">
-              <FormattedMessage {...messages.createNewPlan}/>
+              <FormattedMessage {...common.createNewPlan}/>
             </Link>
           </p>
         </td>
@@ -80,7 +73,7 @@ class ListPlans extends React.Component {
       <Link to="/plans/new"
             query={{tab: 'newPlan'}}
             className="btn btn-primary">
-        <span className="fa fa-plus"/>  <FormattedMessage {...messages.createNewPlan}/>
+        <span className="fa fa-plus"/>  <FormattedMessage {...common.createNewPlan}/>
       </Link>
     );
   }
@@ -97,7 +90,7 @@ class ListPlans extends React.Component {
                    noRowsRenderer={this.renderNoPlans.bind(this)}
                    tableActions={this.renderTableActions}>
           <DataTableColumn header={<DataTableHeaderCell key="name">
-                                     <FormattedMessage {...messages.name}/>
+                                     <FormattedMessage {...common.name}/>
                                    </DataTableHeaderCell>}
                            cell={<PlanNameCell
                            data={plans}

@@ -3,14 +3,11 @@ import React from 'react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 
 import BlankSlate from '../ui/BlankSlate';
+import common from '../../messages/common';
 import InlineNotification from '../ui/InlineNotification';
 import Loader from '../ui/Loader';
 
 const messages = defineMessages({
-  deployButton: {
-    id: 'DeploymentConfirmation.deployButton',
-    defaultMessage: 'Deploy'
-  },
   deploymentConfirmation: {
     id: 'DeploymentConfirmation.deploymentConfirmation',
     defaultMessage: 'Are you sure you want to deploy this plan?'
@@ -104,7 +101,7 @@ export const DeployButton = injectIntl(({ deploy, disabled, intl, isRequestingPl
               content={intl.formatMessage(messages.requestingDeploymentLoader)}
               component="span"
               inline>
-        <span className="fa fa-cloud-upload"/> <FormattedMessage {...messages.deployButton}/>
+        <span className="fa fa-cloud-upload"/> <FormattedMessage {...common.deploy}/>
       </Loader>
     </button>
   );

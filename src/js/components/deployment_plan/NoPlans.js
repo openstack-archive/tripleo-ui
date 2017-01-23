@@ -2,6 +2,8 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router';
 import React from 'react';
 
+import common from '../../messages/common';
+
 const messages = defineMessages({
   noPlansAvailable: {
     id: 'NoPlans.noPlansAvailable',
@@ -10,10 +12,6 @@ const messages = defineMessages({
   noPlansAvailableMessage: {
     id: 'NoPlans.noPlansAvailableMessage',
     defaultMessage: 'There are no Deployment Plans available. Please create one first.'
-  },
-  createNewPlan: {
-    id: 'NoPlans.createNewPlan',
-    defaultMessage: 'Create New Plan'
   }
 });
 
@@ -30,7 +28,7 @@ export default class NoPlans extends React.Component {
           <Link to="/plans/new"
                 query={{tab: 'newPlan'}}
                 className="btn btn-lg btn-primary">
-            <span className="fa fa-plus"/> <FormattedMessage {...messages.createNewPlan}/>
+            <span className="fa fa-plus"/> <FormattedMessage {...common.createNewPlan}/>
           </Link>
         </div>
       </div>

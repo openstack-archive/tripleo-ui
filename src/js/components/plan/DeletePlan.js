@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 
 import PlansActions from '../../actions/PlansActions';
 import Modal from '../ui/Modal';
+import common from '../../messages/common';
 
 const messages = defineMessages({
   deletePlan: {
@@ -18,10 +19,6 @@ const messages = defineMessages({
   deletePlanConfirmation: {
     id: 'DeletePlan.deletePlanConfirmation',
     defaultMessage: 'Are you sure you want to delete plan {planName}?'
-  },
-  cancel: {
-    id: 'DeletePlan.cancel',
-    defaultMessage: 'Cancel'
   }
 });
 
@@ -67,7 +64,7 @@ class DeletePlan extends React.Component {
             <FormattedMessage {...messages.deletePlan}/>
           </button>
           <Link to="/plans/list" type="button" className="btn btn-default" >
-            <FormattedMessage {...messages.cancel}/>
+            <FormattedMessage {...common.cancel}/>
           </Link>
         </div>
       </Modal>

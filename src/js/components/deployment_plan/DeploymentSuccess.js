@@ -1,22 +1,12 @@
-import { defineMessages, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
+import common from '../../messages/common';
 import DeleteStackButton from './DeleteStackButton';
 import { deploymentStatusMessages } from '../../constants/StacksConstants';
 import InlineNotification from '../ui/InlineNotification';
 import OvercloudInfo from '../deployment/OvercloudInfo';
-
-const messages = defineMessages({
-  deleteDeployment: {
-    id: 'DeploymentSuccess.deleteDeployment',
-    defaultMessage: 'Delete Deployment'
-  },
-  requestingDeletion: {
-    id: 'DeploymentSuccess.requestingDeletion',
-    defaultMessage: 'Requesting Deletion of Deployment'
-  }
-});
 
 class DeploymentSuccess extends React.Component {
   componentDidMount() {
@@ -37,11 +27,11 @@ class DeploymentSuccess extends React.Component {
         <OvercloudInfo stackResourcesLoaded={this.props.stackResourcesLoaded}
                        stack={this.props.stack}
                        stackResources={this.props.stackResources}/>
-        <DeleteStackButton content={formatMessage(messages.deleteDeployment)}
+        <DeleteStackButton content={formatMessage(common.deleteDeployment)}
                            deleteStack={this.props.deleteStack}
                            disabled={this.props.isRequestingStackDelete}
                            loaded={!this.props.isRequestingStackDelete}
-                           loaderContent={formatMessage(messages.requestingDeletion)}
+                           loaderContent={formatMessage(common.requestingDeletionOfDeployment)}
                            stack={this.props.stack}/>
       </div>
     );

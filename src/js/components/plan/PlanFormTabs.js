@@ -1,6 +1,7 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import React from 'react';
 
+import common from '../../messages/common';
 import HorizontalInput from '../ui/forms/HorizontalInput';
 import NavTab from '../ui/NavTab';
 import PlanFileInput from './PlanFileInput';
@@ -16,25 +17,9 @@ const messages = defineMessages({
     id: 'PlanFormTabs.newPlan',
     defaultMessage: 'New Plan'
   },
-  files: {
-    id: 'PlanFormTabs.files',
-    defaultMessage: 'Files'
-  },
-  planFiles: {
-    id: 'PlanFormTabs.planFiles',
-    defaultMessage: 'Plan Files'
-  },
-  planName: {
-    id: 'PlanFormTabs.planName',
-    defaultMessage: 'Plan Name'
-  },
   planNameValidationError: {
     id: 'PlanFormTabs.planNameValidationError',
     defaultMessage: 'Please use only alphanumeric characters and -'
-  },
-  uploadType: {
-    id: 'PlanFormTabs.uploadType',
-    defaultMessage: 'Upload Type'
   }
 });
 
@@ -51,7 +36,7 @@ export default class PlanFormTabs extends React.Component {
             <FormattedMessage {...messages.newPlan}/>
           </NavTab>
           <NavTab to="/plans/new" query={{tab: 'planFiles'}}>
-            <FormattedMessage {...messages.files}/> <span className="badge">
+            <FormattedMessage {...common.files}/> <span className="badge">
             {this.props.selectedFiles.length}</span>
           </NavTab>
         </ul>
@@ -83,20 +68,20 @@ class _PlanFormTab extends React.Component {
     return (
       <div className={`tab-pane ${this.props.active}`}>
         <HorizontalInput name="planName"
-                         title={formatMessage(messages.planName)}
+                         title={formatMessage(common.planName)}
                          inputColumnClasses="col-sm-7"
                          labelColumnClasses="col-sm-3"
                          placeholder={formatMessage(messages.addPlanName)}
                          validations={{matchRegexp: /^[A-Za-z0-9-]+$/}}
                          validationError={formatMessage(messages.planNameValidationError)}
                          required />
-        <PlanUploadTypeRadios title={formatMessage(messages.uploadType)}
+        <PlanUploadTypeRadios title={formatMessage(common.uploadType)}
                               inputColumnClasses="col-sm-7"
                               labelColumnClasses="col-sm-3"
                               setUploadType={this.props.setUploadType}
                               uploadType={this.props.uploadType}/>
         <PlanFileInput name="planFiles"
-                       title={formatMessage(messages.planFiles)}
+                       title={formatMessage(common.planFiles)}
                        inputColumnClasses="col-sm-7"
                        labelColumnClasses="col-sm-3"
                        uploadType={this.props.uploadType}

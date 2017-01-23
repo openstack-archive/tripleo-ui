@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { isObjectLike, mapValues } from 'lodash';
@@ -7,22 +7,12 @@ import { Link } from 'react-router';
 import { fromJS, is } from 'immutable';
 import React from 'react';
 
+import common from '../../messages/common';
 import Loader from '../ui/Loader';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import ParametersActions from '../../actions/ParametersActions';
 import ParameterInputList from './ParameterInputList';
 import { getRootParameters } from '../../selectors/parameters';
-
-const messages = defineMessages({
-  saveChanges: {
-    id: 'Parameters.saveChanges',
-    defaultMessage: 'Save Changes'
-  },
-  cancel: {
-    id: 'Parameters.cancel',
-    defaultMessage: 'Cancel'
-  }
-});
 
 class Parameters extends React.Component {
   constructor() {
@@ -119,10 +109,10 @@ class Parameters extends React.Component {
           <button type="submit"
                   disabled={!this.state.canSubmit}
                   className="btn btn-primary">
-            <FormattedMessage {...messages.saveChanges}/>
+            <FormattedMessage {...common.saveChanges}/>
           </button>
           <Link to="/deployment-plan" type="button" className="btn btn-default" >
-            <FormattedMessage {...messages.cancel}/>
+            <FormattedMessage {...common.cancel}/>
           </Link>
         </div>
       </Formsy.Form>
