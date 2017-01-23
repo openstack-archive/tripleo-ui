@@ -1,4 +1,8 @@
 import { createSelector } from 'reselect';
+import { List, Set } from 'immutable';
+
+import { parseNodeCapabilities } from '../components/utils/NodeCapabilities';
+import { getRoles } from './roles';
 
 const nodes = state => state.nodes.get('all');
 const nodesInProgress = state => state.nodes.get('nodesInProgress');
@@ -8,6 +12,24 @@ export const getRegisteredNodes = createSelector(
     return nodes.filterNot( node => node.get('provision_state') === 'active' ||
                                     node.get('maintenance') );
   }
+);
+
+/**
+ *  Return a list of profiles collected across all nodes
+ */
+export const getProfilesList = createSelector(
+  nodes, nodes => nodes.reduce((profiles, v, k) => {
+    const profile = parseNodeCapabilities(v.getIn(['properties', 'capabilities'])).profile;
+    return profile ? profiles.push(profile) : profiles;
+  }, List()).sort()
+);
+
+/**
+ *  Return a list of profiles merged with role identifiers
+ */
+export const getAvailableNodeProfiles = createSelector(
+  [getProfilesList, getRoles], (profiles, roles) =>
+    Set.fromKeys(roles).union(profiles).toList().sort()
 );
 
 export const getAvailableNodes = createSelector(
