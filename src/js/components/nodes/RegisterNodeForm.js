@@ -11,8 +11,6 @@ import PXEAndDRACDriverFields from './driver_fields/PXEAndDRACDriverFields';
 export default class RegisterNodeForm extends React.Component {
   constructor(props) {
     super(props);
-    this.driverOptions = ['pxe_ipmitool', 'pxe_ssh', 'pxe_drac'];
-
     this.macAddressValidator = {
       matchRegexp:
         /^([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}(,([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2})*$/
@@ -62,7 +60,20 @@ export default class RegisterNodeForm extends React.Component {
     }
   }
 
+  renderDriverOptions() {
+    return ['pxe_ipmitool', 'pxe_ssh', 'pxe_drac'].map((value, index) =>
+      <option key={index}>{value}</option>
+    );
+  }
+
+  renderArchitectureOptions() {
+    return [undefined, 'x86_64', 'i386'].map((value, index) =>
+      <option key={index} value={value}>{value}</option>
+    );
+  }
+
   render () {
+
     return (
       <div>
         <h4>Node Detail</h4>
@@ -89,8 +100,9 @@ export default class RegisterNodeForm extends React.Component {
                               inputColumnClasses="col-sm-7"
                               labelColumnClasses="col-sm-5"
                               value={this.props.selectedNode.pm_type}
-                              options={this.driverOptions}
-                              required/>
+                              required>
+              {this.renderDriverOptions()}
+            </HorizontalSelect>
             {this.renderDriverFields()}
           </fieldset>
           <fieldset>
@@ -99,8 +111,9 @@ export default class RegisterNodeForm extends React.Component {
                               title="Architecture"
                               inputColumnClasses="col-sm-7"
                               labelColumnClasses="col-sm-5"
-                              value={this.props.selectedNode.arch}
-                              options={[undefined, 'x86_64', 'i386']} />
+                              value={this.props.selectedNode.arch}>
+              {this.renderArchitectureOptions()}
+            </HorizontalSelect>
             <HorizontalInput name="cpu"
                              type="number"
                              min={1}

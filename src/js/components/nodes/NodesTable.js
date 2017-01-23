@@ -9,6 +9,7 @@ import { DataTableCell,
 import { DataTableCheckBoxCell } from '../ui/tables/DataTableCells';
 import DataTableColumn from '../ui/tables/DataTableColumn';
 import Loader from '../ui/Loader';
+import { parseNodeCapabilities } from '../../utils/nodes';
 
 
 export default class NodesTable extends React.Component {
@@ -77,8 +78,8 @@ export default class NodesTable extends React.Component {
           cell={<DataTableDataFieldCell data={filteredData} field="name"/>}/>
         <DataTableColumn
           key="role"
-          header={<DataTableHeaderCell key="role">Role</DataTableHeaderCell>}
-          cell={<NodesTableRoleCell data={filteredData} roles={this.props.roles}/>}/>
+          header={<DataTableHeaderCell key="role">Profile</DataTableHeaderCell>}
+          cell={<NodesTableProfileCell data={filteredData} roles={this.props.roles}/>}/>
         <DataTableColumn
           key="properties.cpu_arch"
           header={<DataTableHeaderCell key="properties.cpu_arch">CPU Arch.</DataTableHeaderCell>}
@@ -131,17 +132,17 @@ NodesTableCheckBoxCell.propTypes = {
   rowIndex: React.PropTypes.number
 };
 
-export class NodesTableRoleCell extends React.Component {
+export class NodesTableProfileCell extends React.Component {
   getAssignedRoleTitle() {
-    const fieldValue = _.result(this.props.data[this.props.rowIndex],
+    const capabilities = _.result(this.props.data[this.props.rowIndex],
                                 'properties.capabilities',
                                 '');
-    const capabilitiesMatch = fieldValue.match(/.*profile:([\w\-]+)/);
-    if(capabilitiesMatch && Array.isArray(capabilitiesMatch) && capabilitiesMatch.length > 1) {
-      const role = this.props.roles.get(capabilitiesMatch[1]);
-      return role ? role.title : capabilitiesMatch[1];
+    const profile = parseNodeCapabilities(capabilities).profile;
+    if(profile) {
+      const role = this.props.roles.get(profile);
+      return role ? role.title : profile;
     } else {
-      return 'Not assigned';
+      return '-';
     }
   }
 
@@ -153,7 +154,7 @@ export class NodesTableRoleCell extends React.Component {
     );
   }
 }
-NodesTableRoleCell.propTypes = {
+NodesTableProfileCell.propTypes = {
   data: React.PropTypes.array.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
   rowIndex: React.PropTypes.number
