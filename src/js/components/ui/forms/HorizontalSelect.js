@@ -11,12 +11,6 @@ class HorizontalSelect extends React.Component {
   }
 
   render() {
-    let options = this.props.options.map((option, index) => {
-      return (
-        <option key={index}>{option}</option>
-      );
-    });
-
     return (
       <div className="form-group">
         <label htmlFor={this.props.name}
@@ -30,7 +24,7 @@ class HorizontalSelect extends React.Component {
                   className="form-control"
                   onChange={this.changeValue.bind(this)}
                   value={this.props.getValue()}>
-            {options}
+            {this.props.children}
            </select>
           <InputErrorMessage getErrorMessage={this.props.getErrorMessage} />
           <InputDescription description={this.props.description} />
@@ -40,13 +34,16 @@ class HorizontalSelect extends React.Component {
   }
 }
 HorizontalSelect.propTypes = {
+  children: React.PropTypes.oneOfType([
+    React.PropTypes.arrayOf(React.PropTypes.element),
+    React.PropTypes.element
+  ]),
   description: React.PropTypes.string,
   getErrorMessage: React.PropTypes.func,
   getValue: React.PropTypes.func,
   inputColumnClasses: React.PropTypes.string.isRequired,
   labelColumnClasses: React.PropTypes.string.isRequired,
   name: React.PropTypes.string.isRequired,
-  options: React.PropTypes.array.isRequired,
   setValue: React.PropTypes.func,
   title: React.PropTypes.string.isRequired
 };
