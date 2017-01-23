@@ -5,12 +5,15 @@ import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Formsy from 'formsy-react';
 
-import { getRegisteredNodes, getNodesOperationInProgress } from '../../selectors/nodes';
 import { getRoles } from '../../selectors/roles';
+import { getAvailableNodeProfiles,
+         getRegisteredNodes,
+         getNodesOperationInProgress } from '../../selectors/nodes';
 import ConfirmationModal from '../ui/ConfirmationModal';
 import FormErrorList from '../ui/forms/FormErrorList';
 import NodesActions from '../../actions/NodesActions';
 import NodesTable from './NodesTable';
+import TagNodesModal from './tag_nodes/TagNodesModal';
 
 class RegisteredNodesTabPane extends React.Component {
   constructor() {
@@ -18,6 +21,8 @@ class RegisteredNodesTabPane extends React.Component {
     this.state = {
       canSubmit: false,
       showDeleteModal: false,
+      showTagNodesModal: false,
+      submitParameters: {},
       submitType: 'introspect'
     };
   }
@@ -58,6 +63,13 @@ class RegisteredNodesTabPane extends React.Component {
         </button>
         <button className="btn btn-default"
                 type="button"
+                name="tag"
+                onClick={() => this.setState({ showTagNodesModal: true })}
+                disabled={!this.state.canSubmit || this.props.nodesOperationInProgress}>
+          Tag Nodes
+        </button>
+        <button className="btn btn-default"
+                type="button"
                 name="provide"
                 onClick={this.multipleSubmit.bind(this)}
                 disabled={!this.state.canSubmit || this.props.nodesOperationInProgress}>
@@ -74,6 +86,14 @@ class RegisteredNodesTabPane extends React.Component {
     );
   }
 
+  onTagNodesSubmit(tag) {
+    this.setState({
+      submitType: 'tag',
+      showTagNodesModal: false,
+      submitParameters: { tag: tag }
+    }, this.refs.registeredNodesTableForm.submit);
+  }
+
   multipleSubmit(e) {
     this.setState({
       submitType: e.target.name
@@ -87,6 +107,10 @@ class RegisteredNodesTabPane extends React.Component {
     switch (this.state.submitType) {
     case ('introspect'):
       this.props.introspectNodes(nodeIds);
+      break;
+    case ('tag'):
+      this.props.tagNodes(nodeIds, this.state.submitParameters.tag);
+      this.setState({ submitParameters: {} });
       break;
     case ('provide'):
       this.props.provideNodes(nodeIds);
@@ -125,6 +149,11 @@ class RegisteredNodesTabPane extends React.Component {
                              confirmActionName="delete"
                              onConfirm={this.multipleSubmit.bind(this)}
                              onCancel={() => this.setState({ showDeleteModal: false })}/>
+          <TagNodesModal
+            availableProfiles={this.props.availableProfiles.toArray()}
+            onProfileSelected={this.onTagNodesSubmit.bind(this)}
+            onCancel={() => this.setState({ showTagNodesModal: false, submitParameters: {} })}
+            show={this.state.showTagNodesModal} />
         </Formsy.Form>
         {this.props.children}
       </div>
@@ -132,6 +161,7 @@ class RegisteredNodesTabPane extends React.Component {
   }
 }
 RegisteredNodesTabPane.propTypes = {
+  availableProfiles: ImmutablePropTypes.list.isRequired,
   children: React.PropTypes.node,
   deleteNodes: React.PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list,
@@ -142,7 +172,8 @@ RegisteredNodesTabPane.propTypes = {
   nodesOperationInProgress: React.PropTypes.bool.isRequired,
   provideNodes: React.PropTypes.func.isRequired,
   registeredNodes: ImmutablePropTypes.map,
-  roles: ImmutablePropTypes.map
+  roles: ImmutablePropTypes.map,
+  tagNodes: React.PropTypes.func.isRequired
 };
 RegisteredNodesTabPane.defaultProps = {
   formErrors: List(),
@@ -151,6 +182,7 @@ RegisteredNodesTabPane.defaultProps = {
 
 function mapStateToProps(state) {
   return {
+    availableProfiles: getAvailableNodeProfiles(state),
     roles: getRoles(state),
     registeredNodes: getRegisteredNodes(state),
     nodesInProgress: state.nodes.get('nodesInProgress'),
@@ -163,7 +195,8 @@ function mapDispatchToProps(dispatch) {
   return {
     deleteNodes: nodeIds => dispatch(NodesActions.deleteNodes(nodeIds)),
     introspectNodes: nodeIds => dispatch(NodesActions.startNodesIntrospection(nodeIds)),
-    provideNodes: nodeIds => dispatch(NodesActions.startProvideNodes(nodeIds))
+    provideNodes: nodeIds => dispatch(NodesActions.startProvideNodes(nodeIds)),
+    tagNodes: (nodeIds, tag) => dispatch(NodesActions.tagNodes(nodeIds, tag))
   };
 }
 

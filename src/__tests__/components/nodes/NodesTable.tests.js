@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import { Map, Set } from 'immutable';
 
 import NodesTable from '../../../js/components/nodes/NodesTable';
-import { NodesTableRoleCell } from '../../../js/components/nodes/NodesTable';
+import { NodesTableProfileCell } from '../../../js/components/nodes/NodesTable';
 import { Role } from '../../../js/immutableRecords/roles';
 
 const initialState = {
@@ -86,7 +86,7 @@ describe('NodesTableRoleCell', () => {
   describe('getAssignedRoleTitle', () => {
     it('should return Not Assigned when profile is not set in node.properties.capabilities', () => {
       let shallowRenderer = TestUtils.createRenderer();
-      shallowRenderer.render(<NodesTableRoleCell data={nodes.toList().toJS()}
+      shallowRenderer.render(<NodesTableProfileCell data={nodes.toList().toJS()}
                                                  roles={roles}
                                                  rowIndex={0}/>);
       roleCellInstance = shallowRenderer._instance._instance;
@@ -95,11 +95,11 @@ describe('NodesTableRoleCell', () => {
 
     it('should return Not Assigned when profile is not set in node.properties.capabilities', () => {
       let shallowRenderer = TestUtils.createRenderer();
-      shallowRenderer.render(<NodesTableRoleCell data={nodes.toList().toJS()}
+      shallowRenderer.render(<NodesTableProfileCell data={nodes.toList().toJS()}
                                                  roles={roles}
                                                  rowIndex={1}/>);
       roleCellInstance = shallowRenderer._instance._instance;
-      expect(roleCellInstance.getAssignedRoleTitle()).toEqual('Not assigned');
+      expect(roleCellInstance.getAssignedRoleTitle()).toEqual('-');
     });
   });
 });
