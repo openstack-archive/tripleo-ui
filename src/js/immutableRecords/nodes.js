@@ -29,3 +29,8 @@ export const IronicNode = Record({
   disk: undefined,
   capabilities: 'boot_option:local'
 });
+
+export const Port = Record({
+  uuid: undefined,
+  address: undefined
+});
