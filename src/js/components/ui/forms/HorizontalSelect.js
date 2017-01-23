@@ -1,5 +1,6 @@
 import Formsy from 'formsy-react';
 import React from 'react';
+import { isObjectLike } from 'lodash';
 
 import InputDescription from './InputDescription';
 import InputErrorMessage from './InputErrorMessage';
@@ -13,7 +14,9 @@ class HorizontalSelect extends React.Component {
   render() {
     let options = this.props.options.map((option, index) => {
       return (
-        <option key={index}>{option}</option>
+        isObjectLike(option)
+        ? <option key={index} value={option.value}>{option.label}</option>
+        : <option key={index}>{option}</option>
       );
     });
 
@@ -30,6 +33,14 @@ class HorizontalSelect extends React.Component {
                   className="form-control"
                   onChange={this.changeValue.bind(this)}
                   value={this.props.getValue()}>
+            {/* <optgroup>
+              {options}
+            </optgroup>
+            <optgroup>
+              {options}
+            </optgroup> */}
+            {options}
+            <option label="──────────" disabled/>
             {options}
            </select>
           <InputErrorMessage getErrorMessage={this.props.getErrorMessage} />

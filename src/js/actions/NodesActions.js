@@ -152,6 +152,14 @@ export default {
     };
   },
 
+  tagNodes(nodeIds, tag) {
+    return dispatch => {
+      console.log('tag nodes called');
+      console.log(nodeIds);
+      console.log(tag);
+    };
+  },
+
   startProvideNodes(nodeIds) {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
