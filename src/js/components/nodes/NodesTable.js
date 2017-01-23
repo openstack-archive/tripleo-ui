@@ -139,7 +139,7 @@ export class NodesTableRoleCell extends React.Component {
     const capabilitiesMatch = fieldValue.match(/.*profile:([\w\-]+)/);
     if(capabilitiesMatch && Array.isArray(capabilitiesMatch) && capabilitiesMatch.length > 1) {
       const role = this.props.roles.get(capabilitiesMatch[1]);
-      return role ? role.title : 'Not assigned';
+      return role ? role.title : capabilitiesMatch[1];
     } else {
       return 'Not assigned';
     }
