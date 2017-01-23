@@ -5,6 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React from 'react';
 
+import common from '../../messages/common';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import PlansActions from '../../actions/PlansActions';
 import PlanFormTabs from './PlanFormTabs';
@@ -12,14 +13,6 @@ import Modal from '../ui/Modal';
 import Loader from '../ui/Loader';
 
 const messages = defineMessages({
-  cancel: {
-    id: 'NewPlan.cancel',
-    defaultMessage: 'Cancel'
-  },
-  createNewPlan: {
-    id: 'NewPlan.createNewPlan',
-    defaultMessage: 'Create New Plan'
-  },
   creatingPlanLoader: {
     id: 'NewPlan.creatingPlanLoader',
     defaultMessage: 'Creating plan...'
@@ -94,7 +87,7 @@ class NewPlan extends React.Component {
               <span aria-hidden="true" className="pficon pficon-close"/>
             </Link>
               <h4 className="modal-title">
-                <FormattedMessage {...messages.createNewPlan}/>
+                <FormattedMessage {...common.createNewPlan}/>
               </h4>
           </div>
           <Loader loaded={!this.props.isTransitioningPlan}
@@ -119,7 +112,7 @@ class NewPlan extends React.Component {
                   type="button"
                   onClick={() => this.props.cancelCreatePlan()}
                   className="btn btn-default">
-              <FormattedMessage {...messages.cancel}/>
+              <FormattedMessage {...common.cancel}/>
             </Link>
           </div>
         </Formsy.Form>

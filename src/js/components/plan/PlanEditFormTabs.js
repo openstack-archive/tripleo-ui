@@ -3,6 +3,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { List } from 'immutable';
 import React from 'react';
 
+import common from '../../messages/common';
 import HorizontalStaticText from '../ui/forms/HorizontalStaticText';
 import NavTab from '../ui/NavTab';
 import PlanFileInput from './PlanFileInput';
@@ -10,14 +11,6 @@ import PlanFilesTab from './PlanFilesTab';
 import PlanUploadTypeRadios from './PlanUploadTypeRadios';
 
 const messages = defineMessages({
-  files: {
-    id: 'PlanEditFormTabs.files',
-    defaultMessage: 'Files'
-  },
-  planName: {
-    id: 'PlanEditFormTabs.planName',
-    defaultMessage: 'Plan Name'
-  },
   updatePlan: {
     id: 'PlanEditFormTabs.updatePlan',
     defaultMessage: 'Update Plan'
@@ -25,10 +18,6 @@ const messages = defineMessages({
   uploadFiles: {
     id: 'PlanEditFormTabs.uploadFiles',
     defaultMessage: 'Upload Files'
-  },
-  uploadType: {
-    id: 'PlanEditFormTabs.uploadType',
-    defaultMessage: 'Upload Type'
   }
 });
 
@@ -53,7 +42,7 @@ export default class PlanEditFormTabs extends React.Component {
                   query={{tab: 'editPlan'}}><FormattedMessage {...messages.updatePlan}/></NavTab>
           <NavTab to={`/plans/${this.props.planName}/edit`}
                   query={{tab: 'planFiles'}}>
-            <FormattedMessage {...messages.files}/> <span className="badge">
+            <FormattedMessage {...common.files}/> <span className="badge">
             {this.getFileCount.bind(this)()}</span>
           </NavTab>
         </ul>
@@ -88,11 +77,11 @@ class _PlanFormTab extends React.Component {
     const { formatMessage } = this.props.intl;
     return (
       <div className={`tab-pane ${this.props.active}`}>
-        <HorizontalStaticText title={formatMessage(messages.planName)}
+        <HorizontalStaticText title={formatMessage(common.planName)}
                               text={this.props.planName}
                               valueColumnClasses="col-sm-7"
                               labelColumnClasses="col-sm-3"/>
-        <PlanUploadTypeRadios title={formatMessage(messages.uploadType)}
+        <PlanUploadTypeRadios title={formatMessage(common.uploadType)}
                               inputColumnClasses="col-sm-7"
                               labelColumnClasses="col-sm-3"
                               setUploadType={this.props.setUploadType}

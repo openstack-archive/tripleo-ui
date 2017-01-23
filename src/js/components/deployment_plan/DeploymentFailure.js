@@ -1,22 +1,12 @@
-import { defineMessages, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 
+import common from '../../messages/common';
 import DeleteStackButton from './DeleteStackButton';
 import InlineNotification from '../ui/InlineNotification';
 import { deploymentStatusMessages } from '../../constants/StacksConstants';
-
-const messages = defineMessages({
-  deleteDeployment: {
-    id: 'DeploymentFailure.deleteDeployment',
-    defaultMessage: 'Delete Deployment'
-  },
-  requestingDeletion: {
-    id: 'DeploymentFailure.requestingDeletion',
-    defaultMessage: 'Requesting Deletion of Deployment'
-  }
-});
 
 class DeploymentFailure extends React.Component {
   render() {
@@ -31,11 +21,11 @@ class DeploymentFailure extends React.Component {
             More details</Link>
           </p>
         </InlineNotification>
-        <DeleteStackButton content={formatMessage(messages.deleteDeployment)}
+        <DeleteStackButton content={formatMessage(common.deleteDeployment)}
                            deleteStack={this.props.deleteStack}
                            disabled={this.props.isRequestingStackDelete}
                            loaded={!this.props.isRequestingStackDelete}
-                           loaderContent={formatMessage(messages.requestingDeletion)}
+                           loaderContent={formatMessage(common.requestingDeletionOfDeployment)}
                            stack={this.props.stack}/>
       </div>
     );

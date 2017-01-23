@@ -3,14 +3,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 import { includes } from 'lodash';
 
+import common from '../../messages/common';
 import Modal from '../ui/Modal';
 import { ValidationStatusIcon } from './ValidationStatusIcon';
 
 const messages = defineMessages({
-  close: {
-    id: 'ValidationDetail.close',
-    defaultMessage: 'Close'
-  },
   description: {
     id: 'ValidationDetail.description',
     defaultMessage: 'Description:'
@@ -91,7 +88,7 @@ class ValidationDetail extends React.Component {
         <div className="modal-header">
           <button type="button"
                   className="close"
-                  aria-label={this.props.intl.formatMessage(messages.close)}
+                  aria-label={this.props.intl.formatMessage(common.close)}
                   onClick={this.props.hideValidationDetail}>
             <span aria-hidden="true" className="pficon pficon-close"/>
           </button>

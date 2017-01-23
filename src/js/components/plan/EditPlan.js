@@ -5,6 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React from 'react';
 
+import common from '../../messages/common';
 import ModalFormErrorList from '../ui/forms/FormErrorList';
 import PlanEditFormTabs from './PlanEditFormTabs';
 import PlansActions from '../../actions/PlansActions';
@@ -12,10 +13,6 @@ import Modal from '../ui/Modal';
 import Loader from '../ui/Loader';
 
 const messages = defineMessages({
-  cancel: {
-    id: 'EditPlan.cancel',
-    defaultMessage: 'Cancel'
-  },
   updatePlanNameFiles: {
     id: 'EditPlan.updatePlanNameFiles',
     defaultMessage: 'Update {planName} Files'
@@ -130,7 +127,7 @@ class EditPlan extends React.Component {
           <Link to="/plans/list"
                 type="button"
                 className="btn btn-default">
-            <FormattedMessage {...messages.cancel}/>
+            <FormattedMessage {...common.cancel}/>
           </Link>
         </div>
         </Formsy.Form>

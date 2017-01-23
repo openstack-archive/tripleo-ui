@@ -1,15 +1,12 @@
 import { defineMessages, injectIntl } from 'react-intl';
 import React from 'react';
 
+import common from '../../messages/common';
 import ConfirmationModal from '../ui/ConfirmationModal';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Loader from '../ui/Loader';
 
 const messages = defineMessages({
-  deleteDeployment: {
-    id: 'DeleteStackButton.deleteDeployment',
-    defaultMessage: 'Delete Deployment'
-  },
   deleteConfirmationQuestion: {
     id: 'DeleteStackButton.deleteConfirmationQuestion',
     defaultMessage: 'Are you sure you want to delete the stack?'
@@ -47,7 +44,7 @@ class DeleteStackButton extends React.Component {
           </Loader>
         </button>
         <ConfirmationModal show={this.state.showDeleteModal}
-                           title={formatMessage(messages.deleteDeployment)}
+                           title={formatMessage(common.deleteDeployment)}
                            question={formatMessage(messages.deleteConfirmationQuestion)}
                            iconClass="pficon pficon-delete"
                            confirmActionName="delete"

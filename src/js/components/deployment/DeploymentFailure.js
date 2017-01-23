@@ -1,17 +1,11 @@
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
+import common from '../../messages/common';
 import { deploymentStatusMessages } from '../../constants/StacksConstants';
 import InlineNotification from '../ui/InlineNotification';
 import StackResourcesTable from './StackResourcesTable';
-
-const messages = defineMessages({
-  resources: {
-    id: 'DeploymentFailure.resources',
-    defaultMessage: 'Resources'
-  }
-});
 
 export default class DeploymentFailure extends React.Component {
   componentDidMount() {
@@ -25,7 +19,7 @@ export default class DeploymentFailure extends React.Component {
                             title={deploymentStatusMessages[this.props.stack.stack_status]}>
           <p>{this.props.stack.stack_status_reason}</p>
         </InlineNotification>
-        <h2><FormattedMessage {...messages.resources}/></h2>
+        <h2><FormattedMessage {...common.resources}/></h2>
         <StackResourcesTable isFetchingResources={!this.props.stackResourcesLoaded}
                              resources={this.props.stackResources.reverse()}/>
       </div>

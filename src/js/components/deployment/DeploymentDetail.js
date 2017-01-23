@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 import React from 'react';
 
 import { allPreDeploymentValidationsSuccessful } from '../../selectors/validations';
+import common from '../../messages/common';
 import DeploymentConfirmation from './DeploymentConfirmation';
 import DeploymentProgress from './DeploymentProgress';
 import DeploymentSuccess from './DeploymentSuccess';
@@ -25,10 +26,6 @@ import StacksActions from '../../actions/StacksActions';
 import ValidationsActions from '../../actions/ValidationsActions';
 
 const messages = defineMessages({
-  close: {
-    id: 'DeploymentDetail.close',
-    defaultMessage: 'Close'
-  },
   loadingStacksLoader: {
     id: 'DeploymentDetail.loadingStacksLoader',
     defaultMessage: 'Loading Stacks...'
@@ -114,7 +111,7 @@ class DeploymentDetail extends React.Component {
             <Link to="/deployment-plan"
                   type="button"
                   className="btn btn-default">
-              <FormattedMessage {...messages.close}/>
+              <FormattedMessage {...common.close}/>
             </Link>
           </ModalPanelFooter>
         </ModalPanel>

@@ -3,6 +3,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React from 'react';
 
+import common from '../../messages/common';
 import { deploymentStatusMessages as statusMessages,
          stackStates } from '../../constants/StacksConstants';
 import DeleteStackButton from './DeleteStackButton';
@@ -13,10 +14,6 @@ const messages = defineMessages({
   cancelDeployment: {
     id: 'DeploymentProgress.cancelDeployment',
     defaultMessage: 'Cancel Deployment'
-  },
-  requestingDeletion: {
-    id: 'DeploymentProgress.requestingDeletion',
-    defaultMessage: 'Requesting Deletion of Deployment'
   },
   deploymentInProgress: {
     id: 'DeploymentProgress.deploymentInProgress',
@@ -52,7 +49,7 @@ class DeploymentProgress extends React.Component {
                             deleteStack={this.props.deleteStack}
                             disabled={this.props.isRequestingStackDelete}
                             loaded={!this.props.isRequestingStackDelete}
-                            loaderContent={formatMessage(messages.requestingDeletion)}
+                            loaderContent={formatMessage(common.requestingDeletionOfDeployment)}
                             stack={this.props.stack}/>) : null;
 
     return (
