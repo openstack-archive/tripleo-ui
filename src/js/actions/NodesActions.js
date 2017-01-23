@@ -11,6 +11,7 @@ import NotificationActions from './NotificationActions';
 import { nodeSchema } from '../normalizrSchemas/nodes';
 import MistralConstants from '../constants/MistralConstants';
 import logger from '../services/logger';
+import { setNodeCapability } from '../utils/nodes';
 
 export default {
   startOperation(nodeIds) {
@@ -144,6 +145,27 @@ export default {
       default:
         break;
       }
+    };
+  },
+
+  tagNodes(nodeIds, tag) {
+    return (dispatch, getState) => {
+      const nodes = getState().nodes.get('all').filter((n, k) => nodeIds.includes(k));
+      nodes.map(node => {
+        const updatedCapabilities = setNodeCapability(
+          node.getIn(['properties', 'capabilities']), 'profile', tag);
+        console.log(updatedCapabilities);
+        // IronicApiService.patchNode({
+        //   uuid: node.get('uuid'),
+        //   patches: [
+        //     {
+        //       op: 'replace',
+        //       path: '/properties/capabilities',
+        //       value: updatedCapabilities
+        //     }
+        //   ]
+        // });
+      });
     };
   },
 
