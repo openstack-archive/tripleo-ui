@@ -11,6 +11,7 @@ import { getAvailableNodes,
          getUnassignedAvailableNodes,
          getNodesOperationInProgress,
          getAssignedNodes } from '../../selectors/nodes';
+import { getRoles } from '../../selectors/roles';
 import { getCurrentPlan } from '../../selectors/plans';
 import FormErrorList from '../ui/forms/FormErrorList';
 import Modal from '../ui/Modal';
@@ -144,7 +145,7 @@ function mapStateToProps(state) {
     isFetchingNodes: state.nodes.get('isFetching'),
     nodesInProgress: state.nodes.get('nodesInProgress'),
     nodesOperationInProgress: getNodesOperationInProgress(state),
-    roles: state.roles.get('roles'),
+    roles: getRoles(state),
     unassignedAvailableNodes: getUnassignedAvailableNodes(state)
   };
 }

@@ -10,6 +10,7 @@ import { getCurrentStack,
 import { getAvailableNodes, getUnassignedAvailableNodes } from '../../selectors/nodes';
 import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
 import { getCurrentPlan } from '../../selectors/plans';
+import { getRoles } from '../../selectors/roles';
 import ConfigurePlanStep from './ConfigurePlanStep';
 import CurrentPlanActions from '../../actions/CurrentPlanActions';
 import { DeploymentPlanStep } from './DeploymentPlanStep';
@@ -203,7 +204,7 @@ export function mapStateToProps(state) {
     hasPlans: !state.plans.get('all').isEmpty(),
     inactivePlans: getAllPlansButCurrent(state),
     availableNodes: getAvailableNodes(state),
-    roles: state.roles.get('roles'),
+    roles: getRoles(state),
     rolesLoaded: state.roles.get('loaded'),
     stacksLoaded: state.stacks.get('isLoaded'),
     unassignedAvailableNodes: getUnassignedAvailableNodes(state)
