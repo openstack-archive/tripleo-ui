@@ -51,12 +51,8 @@ export default {
   fetchNodes() {
     return (dispatch, getState) => {
       dispatch(this.requestNodes());
-      IronicApiService.getNodes().then((response) => {
-        return when.all(response.nodes.map((node) => {
-          return IronicApiService.getNode(node.uuid);
-        }));
-      }).then((nodes) => {
-        const normalizedNodes = normalize(nodes, arrayOf(nodeSchema)).entities.nodes || {};
+      IronicApiService.getNodes().then(response => {
+        const normalizedNodes = normalize(response.nodes, arrayOf(nodeSchema)).entities.nodes || {};
         return when.map(Object.keys(normalizedNodes), nodeUUID => {
           return IronicApiService.getNodePorts(nodeUUID).then(response => {
             const macs = reduce(response.ports, (result, value) => {
