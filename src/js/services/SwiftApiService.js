@@ -34,6 +34,12 @@ class SwiftApiService {
     });
   }
 
+  getObject(container, object) {
+    return this.defaultRequest(`/${container}/${object}?format=json`, {
+      method: 'GET'
+    });
+  }
+
   uploadTarball(planName, file) {
     return this.defaultRequest(`/${planName}?extract-archive=tar.gz`, {
       method: 'PUT',
