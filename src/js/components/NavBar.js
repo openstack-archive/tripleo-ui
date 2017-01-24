@@ -24,23 +24,23 @@ export default class NavBar extends React.Component {
             <span className="icon-bar"></span>
             <span className="icon-bar"></span>
           </button>
-          <Link className="navbar-brand" to="/">
+          <Link className="navbar-brand" to="/" id="NavBar__indexLink">
             <img src={TripleoOwlSvg} alt="TripleO"></img>
           </Link>
         </div>
         <div className="navbar-collapse collapse" id="tripleo-navbar-collapse">
           <ul className="nav navbar-nav navbar-utility">
             <li>
-              <a>
+              <a id="NavBar__username">
                 <span className="pficon pficon-user"></span>
                 {this.props.user.get('username')}
               </a>
             </li>
-            <li><a href="#" onClick={this.logout.bind(this)}>Logout</a></li>
+            <li><a href="#" onClick={this.logout.bind(this)} id="NavBar__logoutLink">Logout</a></li>
           </ul>
           <ul className="nav navbar-nav navbar-primary">
-            <NavTab to="/deployment-plan">Deployment Plan</NavTab>
-            <NavTab to="/nodes">Nodes</NavTab>
+            <NavTab to="/deployment-plan" id="NavBar__deploymentPlanTab">Deployment Plan</NavTab>
+            <NavTab to="/nodes" id="NavBar__nodesTab">Nodes</NavTab>
           </ul>
         </div>
       </nav>
