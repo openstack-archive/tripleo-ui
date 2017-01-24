@@ -23,11 +23,11 @@ class IronicApiService {
   }
 
   /**
-   * Ironic API: GET /v1/nodes
-   * @returns {array} of nodes.
+   * Ironic API: GET /v1/nodes/detail
+   * @returns {array} of nodes with complete details
    */
   getNodes() {
-    return this.defaultRequest('/nodes');
+    return this.defaultRequest('/nodes/detail');
   }
 
   /**
