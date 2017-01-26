@@ -73,7 +73,7 @@
     "start": "webpack-dev-server --progress",
     "test": "karma start --single-run",
     "test:watch": "karma start",
-    "json2pot": "rip json2pot ./i18n/extracted-messages/**/*.json -o ./messages.pot",
+    "json2pot": "rip json2pot ./i18n/extracted-messages/**/*.json -o ./i18n/messages.pot",
     "po2json": "rip po2json -m ./i18n/extracted-messages/**/*.json"
   },
   "repository": {
