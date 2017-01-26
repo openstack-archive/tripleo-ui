@@ -12,3 +12,8 @@ app.conf
 messages.pot
 i18n/extracted-messages*
 npm-debug.log
+
+# Files created by releasenotes build
+releasenotes/build
+.tox
+
