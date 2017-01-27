@@ -36,12 +36,12 @@ const messages = defineMessages({
   },
   welcome: {
     id: 'Login.welcome',
-    defaultMessage: 'Welcome to TripleO!'
+    defaultMessage: 'Welcome!'
   },
   description: {
     id: 'Login.description',
-    defaultMessage: 'TripleO will help you manage your OpenStack deployments. It\'s the best '
-                    + 'thing since sliced bread. We think you will really enjoy it!'
+    defaultMessage: 'This tool will walk you through the process of configuring and '
+                     + 'deploying an OpenStack environment.'
   }
 });
 
