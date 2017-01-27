@@ -185,7 +185,7 @@ The resulting file (`./messages.pot`) can be uploaded to http://zanata.org to cr
 The translated language file (`messages.po`) then needs to be converted into one JSON file per language (Japanese in this example):
 
 ```
-npm run po2json -- messages.po -o ./i18n/locales/ja.json
+npm run po2json -- i18n/ja.po -o ./i18n/locales/ja.json
 ```
 
 

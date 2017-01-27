@@ -6,7 +6,7 @@ import jaMessages from '../../../../i18n/locales/ja.json';
 
 
 const MESSAGES = {
-  ja: jaMessages.messages
+  ja: jaMessages.ja
 };
 
 
