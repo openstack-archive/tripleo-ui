@@ -33,7 +33,7 @@ one JSON file per language (Japanese in this example):
 
 ::
 
-    npm run po2json -- messages.po -o ./i18n/locales/ja.json
+    npm run po2json -- ./i18n/ja.po -o ./i18n/locales/ja.json
 
 
 Adding a new language
