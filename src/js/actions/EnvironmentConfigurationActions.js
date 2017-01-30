@@ -110,8 +110,8 @@ export default {
         const { resource_registry, parameter_defaults } =
           yaml.safeLoad(response.responseText, { filename: environmentPath, json: true });
         dispatch(this.fetchEnvironmentSuccess({ file: environmentPath,
-                                                resourceRegistry: resource_registry,
-                                                parameterDefaults: parameter_defaults }));
+                                                resourceRegistry: resource_registry || {},
+                                                parameterDefaults: parameter_defaults || {} }));
       }).catch(error => {
         if (error.name && error.name === 'YAMLException') {
           logger.error(`Error parsing ${environmentPath} to JSON`, error);
