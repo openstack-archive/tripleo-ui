@@ -79,7 +79,7 @@ class ListPlans extends React.Component {
     return (
       <Link to="/plans/new"
             query={{tab: 'newPlan'}}
-            className="btn btn-primary">
+            className="btn btn-primary"
             id="ListPlans__newPlanLink">
         <span className="fa fa-plus"/>  <FormattedMessage {...messages.createNewPlan}/>
       </Link>
