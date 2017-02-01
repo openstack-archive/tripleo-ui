@@ -1,0 +1,10 @@
+Code-Review+2: Jiri Tomasek <jtomasek@redhat.com>
+Code-Review+2: Honza Pokorny <honza@redhat.com>
+Workflow+1: Honza Pokorny <honza@redhat.com>
+Code-Review+1: Jason E. Rist <jrist@redhat.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Wed, 01 Feb 2017 18:17:47 +0000
+Reviewed-on: https://review.openstack.org/427204
+Project: openstack/tripleo-ui
+Branch: refs/heads/stable/newton
