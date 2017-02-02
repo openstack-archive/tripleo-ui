@@ -1,4 +1,5 @@
 require('es6-promise').polyfill(); // https://github.com/webpack/css-loader/issues/144
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   devtool: 'inline-source-map',
@@ -9,6 +10,11 @@ module.exports = {
     filename: 'tripleo_ui.js',
     sourceMapFilename: 'tripleo_ui.js.map'
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'src/index.html'
+    })
+  ],
   module: {
     loaders: [
       // Javascript
