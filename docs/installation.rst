@@ -104,7 +104,7 @@ Optionally start Karma to run tests after every change:
 
     npm run test:watch
 
-Copy ``dist/tripleo_ui_config.js.sample`` to ``dist/tripleo_ui_config.js``,
+Copy ``config/tripleo_ui_config.js.sample`` to ``dist/tripleo_ui_config.js``,
 uncomment the lines pertaining to OpenStack services (``keystone``, ``tripleo``,
 etc), and add the urls where these services can be accessed (in this case, the
 IP address of the virt host). You can set values for the other services as well
