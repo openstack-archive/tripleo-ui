@@ -38,7 +38,7 @@ const messages = defineMessages({
   },
   noPlans: {
     id: 'ListPlans.noPlans',
-    defaultMessage: 'There are currently no plans'
+    defaultMessage: 'There are currently no plans.'
   },
   createNewPlan: {
     id: 'ListPlans.createNewPlan',

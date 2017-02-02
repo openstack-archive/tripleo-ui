@@ -10,7 +10,7 @@ import HorizontalStaticText from '../ui/forms/HorizontalStaticText';
 const messages = defineMessages({
   enterValidJson: {
     id: 'ParameterInput.enterValidJson',
-    defaultMessage: 'Please enter a valid JSON string'
+    defaultMessage: 'Please enter a valid JSON string.'
   }
 });
 
