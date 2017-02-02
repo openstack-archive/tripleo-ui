@@ -16,7 +16,7 @@ const messages = defineMessages({
   },
   noResourcesAvailable: {
     id: 'StackResourcesTable.noResourcesAvailable',
-    defaultMessage: 'There are no Resources available'
+    defaultMessage: 'There are no Resources available.'
   },
   name: {
     id: 'StackResourcesTable.name',

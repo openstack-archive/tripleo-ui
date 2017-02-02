@@ -29,7 +29,7 @@ const messages = defineMessages({
   },
   validationsWarningTitle: {
     id: 'DeploymentConfirmation.validationsWarningTitle',
-    defaultMessage: 'Not all pre-deployment validations have passed'
+    defaultMessage: 'Not all pre-deployment validations have passed.'
   },
   validationsWarningMessage: {
     id: 'DeploymentConfirmation.validationsWarningMessage',

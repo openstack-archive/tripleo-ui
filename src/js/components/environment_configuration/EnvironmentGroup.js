@@ -8,7 +8,7 @@ import GroupedCheckBox from '../ui/forms/GroupedCheckBox';
 const messages = defineMessages({
   requiredEnvironments: {
     id: 'EnvironmentGroup.requiredEnvironments',
-    defaultMessage: 'This environment requires {requiredEnvironments}'
+    defaultMessage: 'This environment requires {requiredEnvironments}.'
   }
 });
 

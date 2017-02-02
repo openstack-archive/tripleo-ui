@@ -8,7 +8,7 @@ import ParameterInput from './ParameterInput';
 const messages = defineMessages({
   noParameters: {
     id: 'ParameterInputList.noParameters',
-    defaultMessage: 'There are currently no parameters to configure in this section'
+    defaultMessage: 'There are currently no parameters to configure in this section.'
   }
 });
 

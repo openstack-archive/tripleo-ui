@@ -10,7 +10,8 @@ import PlanUploadTypeRadios from './PlanUploadTypeRadios';
 const messages = defineMessages({
   addPlanName: {
     id: 'PlanFormTabs.addPlanName',
-    defaultMessage: 'Add a Plan Name'
+    defaultMessage: 'Add a Plan Name',
+    description: 'Tooltip for "Plan Name" form field'
   },
   newPlan: {
     id: 'PlanFormTabs.newPlan',
@@ -30,7 +31,7 @@ const messages = defineMessages({
   },
   planNameValidationError: {
     id: 'PlanFormTabs.planNameValidationError',
-    defaultMessage: 'Please use only alphanumeric characters and -'
+    defaultMessage: 'Please use only alphanumeric characters and hyphens (-).'
   },
   uploadType: {
     id: 'PlanFormTabs.uploadType',

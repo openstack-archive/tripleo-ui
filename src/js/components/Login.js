@@ -20,7 +20,7 @@ const messages = defineMessages({
   },
   usernameRequired: {
     id: 'Login.usernameRequired',
-    defaultMessage: 'Username is required'
+    defaultMessage: 'Username is required.'
   },
   password: {
     id: 'Login.password',
@@ -28,7 +28,7 @@ const messages = defineMessages({
   },
   passwordRequired: {
     id: 'Login.passwordRequired',
-    defaultMessage: 'Password is required'
+    defaultMessage: 'Password is required.'
   },
   login: {
     id: 'Login.login',
