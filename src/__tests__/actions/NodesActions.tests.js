@@ -254,7 +254,7 @@ describe('provideNodesFinished', () => {
   it('handles success', () => {
     const messagePayload = {
       status: 'SUCCESS',
-      message: 'Nodes were succesfully made available',
+      message: 'Nodes were successfully made available',
       execution: { input: { node_uuids: [] }}
     };
 
