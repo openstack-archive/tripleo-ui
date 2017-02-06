@@ -3,7 +3,9 @@ import React from 'react';
 import { Link } from 'react-router';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
+import { getAppConfig } from '../services/utils';
 import NavTab from './ui/NavTab';
+import I18nDropdown from './i18n/I18nDropdown';
 
 import TripleoOwlSvg from '../../img/tripleo-owl.svg';
 
@@ -33,6 +35,18 @@ export default class NavBar extends React.Component {
     this.props.onLogout();
   }
 
+  _renderLanguageDropdown() {
+    const languages = getAppConfig().languages || [];
+
+    // Only include the I18nDropdown if there's more than one
+    // language to choose from.
+    return (languages.length > 1) ? (
+      <li>
+        <I18nDropdown/>
+      </li>
+    ) : null;
+  }
+
   render() {
     return (
       <nav className="navbar navbar-default navbar-pf navbar-fixed-top" role="navigation">
@@ -59,6 +73,7 @@ export default class NavBar extends React.Component {
                 {this.props.user.get('username')}
               </a>
             </li>
+            {this._renderLanguageDropdown()}
             <li>
               <a href="#" onClick={this.logout.bind(this)} id="NavBar__logoutLink">
                 <FormattedMessage {...messages.logoutLink}/>
