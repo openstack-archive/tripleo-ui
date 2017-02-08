@@ -1,7 +1,7 @@
 import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
-import { reduce } from 'lodash';
 
+import { getNodesByIds } from '../selectors/nodes';
 import IronicApiErrorHandler from '../services/IronicApiErrorHandler';
 import IronicApiService from '../services/IronicApiService';
 import MistralApiService from '../services/MistralApiService';
@@ -11,6 +11,7 @@ import NotificationActions from './NotificationActions';
 import { nodeSchema } from '../normalizrSchemas/nodes';
 import MistralConstants from '../constants/MistralConstants';
 import logger from '../services/logger';
+import { setNodeCapability } from '../utils/nodes';
 
 export default {
   startOperation(nodeIds) {
@@ -40,10 +41,10 @@ export default {
     };
   },
 
-  receiveNodes(nodes) {
+  receiveNodes(entities) {
     return {
       type: NodesConstants.RECEIVE_NODES,
-      payload: nodes
+      payload: entities
     };
   },
 
@@ -51,20 +52,13 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.requestNodes());
       IronicApiService.getNodes().then(response => {
-        const normalizedNodes = normalize(response.nodes, arrayOf(nodeSchema)).entities.nodes || {};
-        return when.map(Object.keys(normalizedNodes), nodeUUID => {
-          return IronicApiService.getNodePorts(nodeUUID).then(response => {
-            const macs = reduce(response.ports, (result, value) => {
-              result.push(value.address);
-              return result;
-            }, []).join(', ');
-            return {
-              nodeUUID,
-              macs
-            };
+        return when.map(response.nodes, node => {
+          return IronicApiService.getNodePorts(node.uuid).then(response => {
+            node.portsDetail = response.ports;
+            return node;
           });
-        }).then(values => {
-          values.forEach(v => normalizedNodes[v.nodeUUID].macs = v.macs);
+        }).then(nodes => {
+          const normalizedNodes = normalize(nodes, arrayOf(nodeSchema)).entities;
           dispatch(this.receiveNodes(normalizedNodes));
         });
       }).catch((error) => {
@@ -144,6 +138,22 @@ export default {
       default:
         break;
       }
+    };
+  },
+
+  tagNodes(nodeIds, tag) {
+    return (dispatch, getState) => {
+      const nodes = getNodesByIds(getState(), nodeIds);
+      nodes.map(node => {
+        dispatch(this.updateNode({
+          uuid: node.get('uuid'),
+          patches: [{
+            op: 'replace',
+            path: '/properties/capabilities',
+            value: setNodeCapability(node.getIn(['properties', 'capabilities']), 'profile', tag)
+          }]
+        }));
+      });
     };
   },
 

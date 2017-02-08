@@ -108,13 +108,13 @@ describe('Asynchronous Nodes Actions', () => {
     spyOn(NodesActions, 'receiveNodes');
     // Mock the service call.
     spyOn(IronicApiService, 'getNodes').and.callFake(
-      createResolvingPromise({ nodes: [{ uuid: 'uuid' }] })
+      createResolvingPromise({ nodes: [{ uuid: '123' }] })
     );
-    // Note that `getNode` is called multilpe times but always returns the same response
+    // Note that `getNode` is called multiple times but always returns the same response
     // to keep the test simple.
     spyOn(IronicApiService, 'getNode').and.callFake(createResolvingPromise({ uuid: 'uuid' }));
     spyOn(IronicApiService, 'getNodePorts').and.callFake(createResolvingPromise({
-      ports: [{ address: 'mac' }]}));
+      ports: [{ uuid: 'port1', address: 'mac' }]}));
 
     // Call the action creator and the resulting action.
     // In this case, dispatch and getState are just empty placeHolders.
@@ -129,10 +129,19 @@ describe('Asynchronous Nodes Actions', () => {
 
   it('dispatches receiveNodes', () => {
     expect(NodesActions.receiveNodes).toHaveBeenCalledWith({
-      uuid: {
-        uuid: 'uuid',
-        macs: 'mac'
-      }});
+      nodes: {
+        123: {
+          uuid: '123',
+          portsDetail: ['port1']
+        }
+      },
+      ports: {
+        port1: {
+          uuid: 'port1',
+          address: 'mac'
+        }
+      }
+    });
   });
 
 });

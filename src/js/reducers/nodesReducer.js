@@ -1,6 +1,7 @@
 import { fromJS, Map, Set } from 'immutable';
 
 import NodesConstants from '../constants/NodesConstants';
+import { Port } from '../immutableRecords/nodes';
 
 const initialState = Map({
   isFetching: false,
@@ -10,7 +11,8 @@ const initialState = Map({
   introspectedFilter: '',
   deployedFilter: '',
   maintenanceFilter: '',
-  all: Map()
+  all: Map(),
+  ports: Map()
 });
 
 export default function nodesReducer(state = initialState, action) {
@@ -19,10 +21,13 @@ export default function nodesReducer(state = initialState, action) {
   case NodesConstants.REQUEST_NODES:
     return state.set('isFetching', true);
 
-  case NodesConstants.RECEIVE_NODES:
+  case NodesConstants.RECEIVE_NODES: {
+    const { nodes, ports } = action.payload;
     return state
-            .set('all', fromJS(action.payload))
-            .set('isFetching', false);
+      .set('all', fromJS(nodes || {}))
+      .set('ports', Map(ports).map(port => new Port(port)))
+      .set('isFetching', false);
+  }
 
   case NodesConstants.START_NODES_OPERATION:
     return state.update('nodesInProgress',
@@ -44,7 +49,7 @@ export default function nodesReducer(state = initialState, action) {
                         nodesInProgress => nodesInProgress.remove(action.payload));
 
   case NodesConstants.UPDATE_NODE_SUCCESS:
-    return state.setIn(['all', action.payload.uuid], fromJS(action.payload))
+    return state.updateIn(['all', action.payload.uuid], node => node.merge(fromJS(action.payload)))
                 .update('nodesInProgress',
                         nodesInProgress => nodesInProgress.remove(action.payload.uuid));
 
