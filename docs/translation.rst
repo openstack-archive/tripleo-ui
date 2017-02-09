@@ -39,10 +39,15 @@ one JSON file per language (Japanese in this example):
 Adding a new language
 ---------------------
 
-The languages are defined in the ``./src/js/components/i18n/I18NProvider``
-component. To add another language, import the relevant locale data from the
-react-intl packages, as well as the JSON containing the translation and add the
-new language to the MESSAGES constant:
+The languages are defined in 2 places:
+
+The ``./src/js/components/i18n/I18NProvider`` component
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To add a new language, import the relevant locale data from the react-intl
+package, as well as the JSON file which contains the translation. The new
+language then needs to be added to the ``MESSAGES`` constant and the
+constructor. Here's an example for Japanese ("ja"):
 
 .. code-block:: js
 
@@ -50,5 +55,42 @@ new language to the MESSAGES constant:
     import jaMessages from '../../../../i18n/locales/ja.json';
 
     const MESSAGES = {
-      ja: jaMessages.messages
+      ja: jaMessages.ja
     };
+
+    class I18nProvider extends React.Component {
+      constructor() {
+        super();
+        addLocaleData([...ja]);
+      }
+    
+
+2. The language selector in the navigation bar ``./src/js/components/i18n/I18NProvider``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The language selector component contains a JS object with a display name for
+each language. Please use the English translation for the selector:
+
+.. code-block:: js
+
+    const languages = {
+      en: 'English',
+      ja: 'Japanese'
+    };
+
+
+Finally, you can choose which languages are offered to the user by adding them
+to the ``tripleo_ui_config.js`` file:
+
+.. code-block:: js
+
+    // Languages
+    // If you choose more than one language, a language switcher will appear in the navigation bar.
+    "languages": ["en", "ja"],
+
+
+The last step is useful if a language has not -- or only partially -- been
+translated yet. In this case an incomplete language can be defined in the app as
+part of a regular release, but will not show up in the selector by default. Once
+the language translation has been completed it can more easily be backported
+mid-release by updating only the corresponding JSON file.
