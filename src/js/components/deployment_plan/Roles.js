@@ -2,7 +2,6 @@ import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
-import { getAssignedNodes } from '../../selectors/nodes';
 import Loader from '../ui/Loader';
 import RoleCard from './RoleCard';
 
@@ -26,12 +25,6 @@ class Roles extends React.Component {
     }
   }
 
-  getAssignedNodes(availableNodes, roleName) {
-    return availableNodes.filter(
-      node => node.getIn(['properties', 'capabilities']).includes(`profile:${roleName}`)
-    );
-  }
-
   renderRoleCards() {
     return this.props.roles.map(role => {
       return (
@@ -40,8 +33,7 @@ class Roles extends React.Component {
                     title={role.title}
                     identifier={role.identifier}
                     fetchNodes={this.props.fetchNodes}
-                    assignedNodesCount={getAssignedNodes(this.props.availableNodes,
-                                                         role.identifier).size}
+                    assignedNodesCount={this.props.availableNodesByRole.get(role.identifier).size}
                     availableNodesCount={this.props.unassignedAvailableNodes.size}/>
         </div>
       );
@@ -65,7 +57,7 @@ class Roles extends React.Component {
   }
 }
 Roles.propTypes = {
-  availableNodes: ImmutablePropTypes.map,
+  availableNodesByRole: ImmutablePropTypes.map,
   fetchNodes: React.PropTypes.func.isRequired,
   fetchRoles: React.PropTypes.func.isRequired,
   intl: React.PropTypes.object,
