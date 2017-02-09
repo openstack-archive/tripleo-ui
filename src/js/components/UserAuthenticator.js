@@ -1,8 +1,16 @@
 import { connect } from 'react-redux';
+import { defineMessages, injectIntl } from 'react-intl';
 import React from 'react';
 
 import Loader from './ui/Loader';
 import NotificationsToaster from './notifications/NotificationsToaster';
+
+const messages = defineMessages({
+  authenticating: {
+    id: 'UserAuthenticator.authenticating',
+    defaultMessage: 'Authenticating...'
+  }
+});
 
 /**
  * Takes care of authenticating user. User Authentication is triggered in routes
@@ -14,7 +22,7 @@ class UserAuthenticator extends React.Component {
     return (
       <div>
         <Loader loaded={this.props.isAuthenticated}
-                content="Authenticating ..."
+                content={this.props.intl.formatMessage(messages.authenticating)}
                 global>
           {this.props.children}
         </Loader>
@@ -26,6 +34,7 @@ class UserAuthenticator extends React.Component {
 UserAuthenticator.propTypes = {
   children: React.PropTypes.node,
   dispatch: React.PropTypes.func,
+  intl: React.PropTypes.object,
   isAuthenticated: React.PropTypes.bool.isRequired
 };
 
@@ -35,4 +44,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(UserAuthenticator);
+export default connect(mapStateToProps)(injectIntl(UserAuthenticator));

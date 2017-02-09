@@ -23,6 +23,10 @@ const messages = defineMessages({
     id: 'NodesAssignment.assignUnassignNodes',
     defaultMessage: 'Assign/Unassign Selected Nodes'
   },
+  assignNodesToRole: {
+    id: 'NodesAssignment.assignNodesToRole',
+    defaultMessage: 'Assign Nodes to {roleName} Role'
+  },
   done: {
     id: 'NodesAssignment.done',
     defaultMessage: 'Done'
@@ -78,6 +82,7 @@ class NodesAssignment extends React.Component {
   render() {
     const { roleIdentifier } = this.props.params;
     const role = this.props.roles.get(roleIdentifier);
+    const roleName = role ? role.title : roleIdentifier;
     const nodesToAssign = this.props.unassignedAvailableNodes
                             .merge(getAssignedNodes(this.props.availableNodes, roleIdentifier))
                             .sortBy(node => node.get('uuid'));
@@ -95,8 +100,8 @@ class NodesAssignment extends React.Component {
               <span aria-hidden="true" className="pficon pficon-close"/>
             </Link>
             <h4 className="modal-title">
-              Assign Nodes to {role ? role.title : roleIdentifier} Role
-            </h4>
+              <FormattedMessage {...messages.assignNodesToRole} values={{ roleName: roleName }}/>
+              </h4>
           </div>
 
           <div className="modal-body">

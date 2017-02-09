@@ -1,4 +1,4 @@
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
@@ -9,6 +9,10 @@ const messages = defineMessages({
   loadingNodes: {
     id: 'RolesStep.loadingNodes',
     defaultMessage: 'Loading Nodes...'
+  },
+  nodesAvailableToAssign: {
+    id: 'RolesStep.nodesAvailableToAssign',
+    defaultMessage: '<strong>{nodesCount}</strong> Nodes available to assign.'
   }
 });
 
@@ -28,8 +32,9 @@ const RolesStep = ({ isFetchingNodes,
                 content={intl.formatMessage(messages.loadingNodes)}
                 component="span"
                 inline>
-            <strong>{unassignedAvailableNodes.size}</strong> Nodes
-            available to assign
+          <FormattedMessage {...messages.nodesAvailableToAssign}
+                            values={{ nodesCount:
+                                      <strong>{unassignedAvailableNodes.size}</strong> }}/>
         </Loader>
       </p>
       <Roles roles={roles.toList().toJS()}
