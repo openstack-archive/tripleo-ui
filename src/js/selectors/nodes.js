@@ -49,7 +49,7 @@ export const getAvailableNodeProfiles = createSelector(
 );
 
 export const getAvailableNodes = createSelector(
-  getNodes, (nodes) => nodes.filter(node => node.get('provision_state') === 'available')
+  getNodesWithMacs, (nodes) => nodes.filter(node => node.get('provision_state') === 'available')
 );
 
 export const getDeployedNodes = createSelector(
