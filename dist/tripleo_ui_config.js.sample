@@ -17,7 +17,7 @@ window.tripleOUiConfig = {
 
   // Languages
   // If you choose more than one language, a language switcher will appear in the navigation bar.
-  // "languages": ["en"],
+  // "languages": ["en", "en-GB", "es", "ja", "ko-KR", "zh-CN"],
 
   // Logging
   // "loggers": ['console']
