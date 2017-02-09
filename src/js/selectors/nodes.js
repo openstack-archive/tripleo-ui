@@ -24,10 +24,8 @@ export const getNodesWithMacs = createSelector(
 );
 
 export const getRegisteredNodes = createSelector(
-  getNodesWithMacs, (nodes) => {
-    return nodes.filterNot( node => node.get('provision_state') === 'active' ||
-                                    node.get('maintenance') );
-  }
+  getNodesWithMacs, (nodes) =>
+    nodes.filterNot(node => node.get('provision_state') === 'active' || node.get('maintenance'))
 );
 
 /**
@@ -35,7 +33,7 @@ export const getRegisteredNodes = createSelector(
  */
 export const getProfilesList = createSelector(
   getNodes, nodes => nodes.reduce((profiles, v, k) => {
-    const profile = parseNodeCapabilities(v.getIn(['properties', 'capabilities'])).profile;
+    const profile = _getNodeCapabilities(v).profile;
     return profile ? profiles.push(profile) : profiles;
   }, List()).sort()
 );
@@ -49,43 +47,35 @@ export const getAvailableNodeProfiles = createSelector(
 );
 
 export const getAvailableNodes = createSelector(
-  getNodesWithMacs, (nodes) => nodes.filter(node => node.get('provision_state') === 'available')
+  getRegisteredNodes, (nodes) => nodes.filter(node => node.get('provision_state') === 'available')
+);
+
+export const getAvailableNodesByRole = createSelector(
+  [getAvailableNodes, getRoles], (nodes, roles) =>
+    roles.map(role => nodes.filter(node => _getNodeCapabilities(node).profile === role.identifier))
 );
 
 export const getDeployedNodes = createSelector(
-  getNodesWithMacs, (nodes) => {
-    return nodes.filter( node => node.get('provision_state') === 'active' );
-  }
+  getNodesWithMacs, (nodes) =>
+    nodes.filter( node => node.get('provision_state') === 'active' )
 );
 
 export const getMaintenanceNodes = createSelector(
-  getNodesWithMacs, (nodes) => {
-    return nodes.filter( node => node.get('maintenance') );
-  }
+  getNodesWithMacs, (nodes) =>
+    nodes.filter(node => node.get('maintenance'))
 );
 
 export const getUnassignedAvailableNodes = createSelector(
-  getAvailableNodes, (availableNodes) => {
-    return availableNodes.filterNot(
-      node => node.getIn(['properties', 'capabilities'], '').match(/.*profile:([\w\-]+)/)
-    );
-  }
+  getAvailableNodes, (availableNodes) =>
+    availableNodes.filterNot(node => _getNodeCapabilities(node).profile)
 );
 
 /*
  * booleam, returns true if there are any nodes with operation in progress
  */
 export const getNodesOperationInProgress = createSelector(
-  nodesInProgress, (nodesInProgress) => {
-    return !nodesInProgress.isEmpty();
-  }
+  nodesInProgress, (nodesInProgress) => !nodesInProgress.isEmpty()
 );
-
-export const getAssignedNodes = (availableNodes, roleIdentifier) => {
-  return availableNodes.filter(
-    node => node.getIn(['properties', 'capabilities'], '').includes(`profile:${roleIdentifier}`)
-  );
-};
 
 /**
  * Helper function to convert list of port uuids into map of actual ports
@@ -94,3 +84,11 @@ export const getAssignedNodes = (availableNodes, roleIdentifier) => {
  */
 const filterPorts = (ports) =>
   portUUIDs => ports.filter((p, k) => portUUIDs.includes(k));
+
+/**
+ * Helper function to get node capabilities object
+ * @param node
+ * @returns capabilities object
+ */
+const _getNodeCapabilities = (node) =>
+  parseNodeCapabilities(node.getIn(['properties', 'capabilities'], ''));
