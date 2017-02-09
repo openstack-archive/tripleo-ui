@@ -54,8 +54,8 @@ export default function environmentConfigurationReducer(state = initialState, ac
     const { file, resourceRegistry, parameterDefaults } = action.payload;
     return state
       .updateIn(['environments', file ], environment => environment
-        .set('resourceRegistry', fromJS(resourceRegistry))
-        .set('parameterDefaults', fromJS(parameterDefaults))
+        .set('resourceRegistry', fromJS(resourceRegistry || {}))
+        .set('parameterDefaults', fromJS(parameterDefaults || {}))
         .set('isFetching', false));
   }
 
