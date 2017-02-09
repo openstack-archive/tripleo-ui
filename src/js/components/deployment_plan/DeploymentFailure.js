@@ -1,4 +1,4 @@
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
@@ -11,6 +11,10 @@ const messages = defineMessages({
   deleteDeployment: {
     id: 'DeploymentFailure.deleteDeployment',
     defaultMessage: 'Delete Deployment'
+  },
+  moreDetails: {
+    id: 'DeploymentFailure.moreDetails',
+    defaultMessage: 'More details'
   },
   requestingDeletion: {
     id: 'DeploymentFailure.requestingDeletion',
@@ -28,7 +32,7 @@ class DeploymentFailure extends React.Component {
                             title={deploymentStatusMessages[this.props.stack.stack_status]}>
           <p>
             {this.props.stack.stack_status_reason} <Link to="/deployment-plan/deployment-detail">
-            More details</Link>
+            <FormattedMessage {...messages.moreDetails}/></Link>
           </p>
         </InlineNotification>
         <DeleteStackButton content={formatMessage(messages.deleteDeployment)}
