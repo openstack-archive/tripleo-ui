@@ -20,8 +20,8 @@ a single ``.pot`` file with this command:
 
     npm run json2pot
 
-The resulting file (``./messages.pot``) can be uploaded to `Zanata`_ to
-create/update the translation.
+The resulting file (``./i18n/messages.pot``) can be uploaded to
+`Zanata`_ to create/update the translation.
 
 .. _Zanata: http://zanata.org
 
