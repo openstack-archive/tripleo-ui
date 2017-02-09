@@ -7,7 +7,7 @@ import { getAllPlansButCurrent } from '../../selectors/plans';
 import { getCurrentStack,
          getCurrentStackDeploymentProgress,
          getCurrentStackDeploymentInProgress } from '../../selectors/stacks';
-import { getAvailableNodes, getUnassignedAvailableNodes } from '../../selectors/nodes';
+import { getAvailableNodesByRole, getUnassignedAvailableNodes } from '../../selectors/nodes';
 import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
 import { getCurrentPlan } from '../../selectors/plans';
 import { getRoles } from '../../selectors/roles';
@@ -126,7 +126,7 @@ class DeploymentPlan extends React.Component {
             </DeploymentPlanStep>
             <DeploymentPlanStep title={formatMessage(messages.configureRolesStepHeader)}
                                 disabled={this.props.currentStackDeploymentInProgress}>
-                <RolesStep availableNodes={this.props.availableNodes}
+                <RolesStep availableNodesByRole={this.props.availableNodesByRole}
                            fetchNodes={this.props.fetchNodes}
                            fetchRoles={this.props.fetchRoles.bind(this, currentPlanName)}
                            isFetchingNodes={this.props.isFetchingNodes}
@@ -163,7 +163,7 @@ class DeploymentPlan extends React.Component {
 }
 
 DeploymentPlan.propTypes = {
-  availableNodes: ImmutablePropTypes.map,
+  availableNodesByRole: ImmutablePropTypes.map,
   children: React.PropTypes.node,
   choosePlan: React.PropTypes.func,
   currentPlan: ImmutablePropTypes.record,
@@ -215,7 +215,7 @@ export function mapStateToProps(state) {
     isRequestingStackDelete: state.stacks.get('isRequestingStackDelete'),
     hasPlans: !state.plans.get('all').isEmpty(),
     inactivePlans: getAllPlansButCurrent(state),
-    availableNodes: getAvailableNodes(state),
+    availableNodesByRole: getAvailableNodesByRole(state),
     roles: getRoles(state),
     rolesLoaded: state.roles.get('loaded'),
     stacksLoaded: state.stacks.get('isLoaded'),

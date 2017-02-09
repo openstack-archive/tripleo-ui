@@ -13,14 +13,14 @@ const messages = defineMessages({
 });
 
 const RolesStep = ({ isFetchingNodes,
-                            availableNodes,
-                            unassignedAvailableNodes,
-                            roles,
-                            fetchRoles,
-                            fetchNodes,
-                            intl,
-                            isFetchingRoles,
-                            rolesLoaded }) => {
+                     availableNodesByRole,
+                     unassignedAvailableNodes,
+                     roles,
+                     fetchRoles,
+                     fetchNodes,
+                     intl,
+                     isFetchingRoles,
+                     rolesLoaded }) => {
   return (
     <div>
       <p>
@@ -33,7 +33,7 @@ const RolesStep = ({ isFetchingNodes,
         </Loader>
       </p>
       <Roles roles={roles.toList().toJS()}
-             availableNodes={availableNodes}
+             availableNodesByRole={availableNodesByRole}
              unassignedAvailableNodes={unassignedAvailableNodes}
              fetchRoles={fetchRoles}
              fetchNodes={fetchNodes}
@@ -44,7 +44,7 @@ const RolesStep = ({ isFetchingNodes,
   );
 };
 RolesStep.propTypes = {
-  availableNodes: ImmutablePropTypes.map.isRequired,
+  availableNodesByRole: ImmutablePropTypes.map.isRequired,
   fetchNodes: React.PropTypes.func.isRequired,
   fetchRoles: React.PropTypes.func.isRequired,
   intl: React.PropTypes.object,
