@@ -17,8 +17,12 @@ const messages = defineMessages({
 });
 
 const languages = {
-  en: 'English',
-  ja: 'Japanese'
+  'en': 'English',
+  'en-GB': 'British English',
+  'es': 'Spanish',
+  'ja': 'Japanese',
+  'ko-KR': 'Korean',
+  'zh-CN': 'Simplified Chinese'
 };
 
 class I18nDropdown extends React.Component {
