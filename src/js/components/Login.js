@@ -164,4 +164,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(injectIntl(Login));
+export default injectIntl(connect(mapStateToProps)(Login));

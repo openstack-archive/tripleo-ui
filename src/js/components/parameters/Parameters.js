@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { isObjectLike, mapValues } from 'lodash';
@@ -239,4 +239,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Parameters);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Parameters));

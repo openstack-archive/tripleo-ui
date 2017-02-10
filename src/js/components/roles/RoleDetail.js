@@ -219,4 +219,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(RoleDetail));
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(RoleDetail));

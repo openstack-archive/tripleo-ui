@@ -182,4 +182,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ValidationsList));
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(ValidationsList));

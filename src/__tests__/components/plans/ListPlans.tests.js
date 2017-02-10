@@ -7,12 +7,14 @@ import FileList from '../../../js/components/plan/FileList';
 import { PlanFile } from '../../../js/immutableRecords/plans';
 import store from '../../../js/store';
 
-describe('ListPlans component', () => {
+// TODO(jtomasek): re-enable this test once we get rid of PhantomJS and switch to jsdom/jest/enzyme
+// so we can properly test components
+xdescribe('ListPlans component', () => {
   let output;
 
   beforeEach(() => {
     let shallowRenderer = TestUtils.createRenderer();
-    shallowRenderer.render(<ListPlans store={store} />);
+    shallowRenderer.render(<ListPlans store={store}/>);
     output = shallowRenderer.getRenderOutput();
   });
 

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
@@ -145,7 +145,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListPlans);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(ListPlans));
 
 class RowActionsCell extends React.Component {
   render() {
