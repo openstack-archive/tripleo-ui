@@ -2,19 +2,29 @@ import { createSelector } from 'reselect';
 import { List, Set } from 'immutable';
 
 import { internalParameters } from '../constants/ParametersConstants';
-import { Resource } from '../immutableRecords/parameters';
-import { getRole } from './roles';
+import { getRole, getRoles } from './roles';
 import { getEnvironment } from './environmentConfiguration';
+import { Resource } from '../immutableRecords/parameters';
 
-const parameters = (state) => state.parameters.get('parameters').sortBy(p => p.name.toLowerCase());
-const resources = (state) => state.parameters.get('resources').sortBy(r => r.type);
-const getResourceById = (state, resourceId) => state.parameters.resources.get(resourceId);
+const parameters = (state) => state.parameters.get('parameters');
+const resources = (state) => state.parameters.get('resources');
+const resourceById = (state, resourceId) => state.parameters.resources.get(resourceId);
+
+export const getParameters = createSelector(
+  [parameters], parameters =>
+    parameters.sortBy(p => p.name.toLowerCase())
+);
+
+export const getResources = createSelector(
+  [resources], resources =>
+    resources.sortBy(r => r.type)
+);
 
 /**
  * Returns parameters excluding internal parameters
  */
 export const getParametersExclInternal = createSelector(
-  [parameters], parameters =>
+  [getParameters], parameters =>
     parameters.filterNot(p => internalParameters.includes(p.name))
 );
 
@@ -22,19 +32,19 @@ export const getParametersExclInternal = createSelector(
  * Returns parameters defined in root template (overcloud.yaml)
  */
 export const getRootParameters = createSelector(
-  [resources, parameters], (resources, parameters) =>
+  [getResources, getParameters], (resources, parameters) =>
     resources
       .find(resource => resource.name === 'Root', null, new Resource())
       .parameters.update(filterParameters(parameters))
 );
 
 export const getRoleResource = createSelector(
-  [resources, getRole], (resources, role) =>
+  [getResources, getRole], (resources, role) =>
     resources.find(resource => resource.type === `OS::TripleO::${role.name}`, null, new Resource())
 );
 
 export const getRoleParameters = createSelector(
-  [resources, parameters, getRoleResource], (resources, parameters, roleResource) =>
+  [getResources, getParameters, getRoleResource], (resources, parameters, roleResource) =>
     roleResource.parameters.update(filterParameters(parameters))
 );
 
@@ -42,7 +52,7 @@ export const getRoleParameters = createSelector(
  * Returns map of Service resources for specific Role including map of parameters for each Service
  */
 export const getRoleServices = createSelector(
-  [resources, getParametersExclInternal, getRole], (resources, parameters, role) =>
+  [getResources, getParametersExclInternal, getRole], (resources, parameters, role) =>
     resources
       // traverse the resources to find Role's ServiceChain resource
       .find(resource => resource.name === `${role.name}ServiceChain`, null, new Resource())
@@ -65,7 +75,7 @@ export const getRoleServices = createSelector(
  * Brings up network configuration resource for a specific role
  */
 export const getRoleNetworkConfig = createSelector(
-  [resources, parameters, getRoleResource, getRole],
+  [getResources, getParameters, getRoleResource, getRole],
   (resources, parameters, roleResource, role) =>
     roleResource.nestedParameters
       .map(r => resources.get(r))
@@ -77,7 +87,8 @@ export const getRoleNetworkConfig = createSelector(
 
 
 export const getEnvironmentParameters = createSelector(
-  [getParametersExclInternal, resources, getEnvironment], (parameters, resources, environment) => {
+  [getParametersExclInternal, getResources, getEnvironment],
+  (parameters, resources, environment) => {
     return resources
         // get list of resources from environment resource_registry
         .filter(r => environment.resourceRegistry.keySeq().includes(r.type))
@@ -96,8 +107,22 @@ export const getEnvironmentParameters = createSelector(
  * (Can be used e.g. to fetch parameters for a service)
  */
 export const getResourceParameters = createSelector(
-  [parameters, getResourceById], (parameters, resource) =>
+  [getParameters, resourceById], (parameters, resource) =>
     resource.parameters.update(filterParameters(parameters))
+);
+
+/**
+ *  Returns <RoleName>Count parameters for each Role
+ */
+export const getNodeCountParametersByRole = createSelector(
+  [getRoles, getParameters], (roles, parameters) =>
+    roles.map(role => parameters.get(`${role.name}Count`))
+);
+
+export const getTotalAssignedNodesCount = createSelector(
+  getNodeCountParametersByRole, countParamsByRole =>
+    countParamsByRole.reduce((total, parameter) =>
+      parameter ? total + parseInt(parameter.default) : total, 0)
 );
 
 /**
@@ -121,7 +146,7 @@ const filterParameters = (parameters) =>
  * (Can be used e.g. to fetch parameters for a service)
  */
 export const getResourceParametersDeep = createSelector(
-  [resources, parameters, getResourceById], (resources, parameters, resource) =>
+  [getResources, getParameters, resourceById], (resources, parameters, resource) =>
     _extractParameters(resource.parameters, resource.nestedParameters, resources)
       .update(filterParameters(parameters))
 );
