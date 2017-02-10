@@ -3,6 +3,7 @@ import { List, Set } from 'immutable';
 
 import { parseNodeCapabilities } from '../utils/nodes';
 import { getRoles } from './roles';
+import { getNodeCountParametersByRole } from './parameters';
 
 export const getNodes = state => state.nodes.get('all').sortBy(n => n.get('uuid'));
 export const getNodesByIds = (state, nodeIds) =>
@@ -50,9 +51,53 @@ export const getAvailableNodes = createSelector(
   getRegisteredNodes, (nodes) => nodes.filter(node => node.get('provision_state') === 'available')
 );
 
+export const getUntaggedAvailableNodes = createSelector(
+  getAvailableNodes, (availableNodes) =>
+    availableNodes.filterNot(node => _getNodeCapabilities(node).profile)
+);
+
+/**
+ *  Returns Nodes available for assignment for each Role
+ */
 export const getAvailableNodesByRole = createSelector(
-  [getAvailableNodes, getRoles], (nodes, roles) =>
-    roles.map(role => nodes.filter(node => _getNodeCapabilities(node).profile === role.identifier))
+  [getAvailableNodes, getUntaggedAvailableNodes, getRoles], (nodes, untaggedNodes, roles) =>
+    roles.map(role => nodes.filter(node => _getNodeCapabilities(node).profile === role.identifier)
+                           .merge(untaggedNodes))
+);
+
+/**
+ *  Returns sum of untagged assigned Nodes counts across all Roles
+ */
+export const getTotalUntaggedAssignedNodesCount = createSelector(
+  [getAvailableNodes, getRoles, getNodeCountParametersByRole],
+  (nodes, roles, parametersByRole) =>
+    roles.reduce((total, role) => {
+      const taggedCount =
+        nodes.filter(node => _getNodeCapabilities(node).profile === role.identifier).size;
+      const assignedCount =
+        parametersByRole.get(role.identifier) ? parametersByRole.get(role.identifier).default : 0;
+      const remainder = Math.max(0, assignedCount - taggedCount);
+      return Math.max(0, total + remainder);
+    }, 0)
+);
+
+/**
+ *  Returns maximum Nodes count available to assign by each Role
+ */
+export const getAvailableNodesCountsByRole = createSelector(
+  [getAvailableNodes, getUntaggedAvailableNodes, getRoles, getNodeCountParametersByRole,
+   getTotalUntaggedAssignedNodesCount],
+  (nodes, untaggedNodes, roles, parametersByRole, untaggedAssignedCount) => {
+    return roles.map(role => {
+      const taggedCount
+        = nodes.filter(node => _getNodeCapabilities(node).profile === role.identifier).size;
+      const assignedCount =
+        parametersByRole.get(role.identifier) ? parametersByRole.get(role.identifier).default : 0;
+      const untaggedCount = untaggedNodes.size;
+      return taggedCount
+        + Math.max(0, untaggedCount - (untaggedAssignedCount - (assignedCount - taggedCount)));
+    });
+  }
 );
 
 export const getDeployedNodes = createSelector(
@@ -63,11 +108,6 @@ export const getDeployedNodes = createSelector(
 export const getMaintenanceNodes = createSelector(
   getNodesWithMacs, (nodes) =>
     nodes.filter(node => node.get('maintenance'))
-);
-
-export const getUnassignedAvailableNodes = createSelector(
-  getAvailableNodes, (availableNodes) =>
-    availableNodes.filterNot(node => _getNodeCapabilities(node).profile)
 );
 
 /*
