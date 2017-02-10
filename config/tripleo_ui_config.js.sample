@@ -4,22 +4,21 @@ window.tripleOUiConfig = {
   // A valid Keystone service URL is required. The other endpoints
   // will then be obtained automatically from the Keystone catalog.
   //
-  // "keystone": "http://192.0.2.1:5000/v2.0",
+  // 'keystone': 'http://192.0.2.1:5000/v2.0',
   //
-  // "heat": "http://192.0.2.1:8004/v1/%(tenant_id)s",
-  // "ironic": "http://192.0.2.1:6385",
-  // "mistral": "http://192.0.2.1:8989/v2",
-  // "swift": "http://192.0.2.1:8080/v1/AUTH_%(tenant_id)s",
-  // "zaqar-websocket": "ws://192.0.2.1:9000",
+  // 'heat': 'http://192.0.2.1:8004/v1/%(tenant_id)s',
+  // 'ironic': 'http://192.0.2.1:6385',
+  // 'mistral': 'http://192.0.2.1:8989/v2',
+  // 'swift': 'http://192.0.2.1:8080/v1/AUTH_%(tenant_id)s',
+  // 'zaqar-websocket': 'ws://192.0.2.1:9000',
 
   // Default websocket queue name
-  // "zaqar_default_queue": "tripleo",
+  // 'zaqar_default_queue': 'tripleo',
 
   // Languages
   // If you choose more than one language, a language switcher will appear in the navigation bar.
-  // Only "en" (English) is enabled by default.
-  // "languages": ["en-GB", "en", "ja", "ko-KR", "zh-CN", "es"],
+  // 'languages': ['en'],
 
   // Logging
-  // "loggers": ['console']
+  // 'loggers': ['console']
 };
