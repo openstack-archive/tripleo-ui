@@ -29,12 +29,13 @@ class Roles extends React.Component {
     return this.props.roles.map(role => {
       return (
         <div className="col-xs-6 col-sm-4 col-md-3 col-lg-2" key={role.name}>
-          <RoleCard name={role.name}
-                    title={role.title}
-                    identifier={role.identifier}
-                    fetchNodes={this.props.fetchNodes}
-                    assignedNodesCount={this.props.availableNodesByRole.get(role.identifier).size}
-                    availableNodesCount={this.props.unassignedAvailableNodes.size}/>
+          <RoleCard
+            name={role.name}
+            title={role.title}
+            identifier={role.identifier}
+            fetchNodes={this.props.fetchNodes}
+            assignedNodesCountParameter={this.props.nodeCountParametersByRole.get(role.identifier)}
+            availableNodesCount={this.props.availableNodesCountsByRole.get(role.identifier)}/>
         </div>
       );
     });
@@ -57,15 +58,15 @@ class Roles extends React.Component {
   }
 }
 Roles.propTypes = {
-  availableNodesByRole: ImmutablePropTypes.map,
+  availableNodesCountsByRole: ImmutablePropTypes.map.isRequired,
   fetchNodes: React.PropTypes.func.isRequired,
   fetchRoles: React.PropTypes.func.isRequired,
   intl: React.PropTypes.object,
   isFetchingNodes: React.PropTypes.bool,
   isFetchingRoles: React.PropTypes.bool,
   loaded: React.PropTypes.bool.isRequired,
-  roles: React.PropTypes.array.isRequired,
-  unassignedAvailableNodes: ImmutablePropTypes.map
+  nodeCountParametersByRole: ImmutablePropTypes.map.isRequired,
+  roles: React.PropTypes.array.isRequired
 };
 
 export default injectIntl(Roles);

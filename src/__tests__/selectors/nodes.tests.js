@@ -3,6 +3,8 @@ import matchers from 'jasmine-immutable-matchers';
 
 import * as selectors from '../../js/selectors/nodes';
 import { Port } from '../../js/immutableRecords/nodes';
+import { Role, RolesState } from '../../js/immutableRecords/roles';
+import { Parameter } from '../../js/immutableRecords/parameters';
 
 describe('Nodes selectors', () => {
   beforeEach(() => {
@@ -40,8 +42,9 @@ describe('Nodes selectors', () => {
           address: '55:55:55:55:55:55'
         })
       }),
-      all: fromJS([
-        {
+      all: fromJS({
+        node1: {
+          uuid: 'node1',
           provision_state: 'available',
           provision_updated_at: '12-12-2016',
           portsDetail: [1],
@@ -51,7 +54,8 @@ describe('Nodes selectors', () => {
                         cpus: '2',
                         local_gb: '40'}
         },
-        {
+        node2: {
+          uuid: 'node2',
           provision_state: 'available',
           provision_updated_at: '12-12-2016',
           portsDetail: [2],
@@ -61,7 +65,8 @@ describe('Nodes selectors', () => {
                         cpus: '2',
                         local_gb: '40' }
         },
-        {
+        node3: {
+          uuid: 'node3',
           provision_state: 'available',
           provision_updated_at: '12-12-2016',
           portsDetail: [3],
@@ -71,7 +76,8 @@ describe('Nodes selectors', () => {
                         cpus: '2',
                         local_gb: '40' }
         },
-        {
+        node4: {
+          uuid: 'node4',
           provision_state: 'available',
           provision_updated_at: '12-12-2016',
           portsDetail: [4],
@@ -81,7 +87,8 @@ describe('Nodes selectors', () => {
                         cpus: '2',
                         local_gb: '40' }
         },
-        {
+        node5: {
+          uuid: 'node5',
           provision_state: 'available',
           provision_updated_at: '12-12-2016',
           portsDetail: [5],
@@ -91,11 +98,197 @@ describe('Nodes selectors', () => {
                         cpus: '2',
                         local_gb: '40' }
         }
-      ])
+      })
+    }),
+    roles: new RolesState({
+      roles: Map({
+        'control': new Role({
+          name: 'Controller',
+          title: 'Controller',
+          identifier: 'control'
+        }),
+        'compute': new Role({
+          name: 'Compute',
+          title: 'Compute',
+          identifier: 'compute'
+        }),
+        'block-storage': new Role({
+          name: 'BlockStorage',
+          title: 'Block Storage',
+          identifier: 'block-storage'
+        })
+      })
     })
   };
 
   it('provides selector to list Introspected Nodes not assigned to a Role', () => {
-    expect(selectors.getUnassignedAvailableNodes(state).size).toEqual(2);
+    expect(selectors.getUntaggedAvailableNodes(state).size).toEqual(2);
+  });
+
+  it('provides selector to list available Nodes assigned to Roles', () => {
+    const availableNodesByRole = selectors.getAvailableNodesByRole(state);
+    expect(availableNodesByRole.get('control').size).toEqual(4);
+    expect(availableNodesByRole.get('compute').size).toEqual(3);
+    expect(availableNodesByRole.get('block-storage').size).toEqual(2);
+  });
+
+  describe('provides getTotalUntaggedAssignedNodesCount selector', () => {
+    beforeEach(function() {
+      this.nodes = fromJS({
+        node1: {
+          uuid: 'node1',
+          properties: { capabilities: 'boot_option:local' }
+        },
+        node2: {
+          uuid: 'node2',
+          properties: { capabilities: 'boot_option:local,profile:control' }
+        }
+      });
+      this.roles = Map({
+        'control': new Role({
+          name: 'Controller',
+          title: 'Controller',
+          identifier: 'control'
+        }),
+        'compute': new Role({
+          name: 'Compute',
+          title: 'Compute',
+          identifier: 'compute'
+        }),
+        'block-storage': new Role({
+          name: 'BlockStorage',
+          title: 'Block Storage',
+          identifier: 'block-storage'
+        })
+      });
+      this.parametersByRole = Map({
+        control: new Parameter({
+          name: 'ControllerCount',
+          default: 1
+        }),
+        compute: new Parameter({
+          name: 'ComputeCount',
+          default: 1
+        })
+      });
+    });
+
+    it('calculates untagged assigned nodes count', function() {
+      const result = selectors.getTotalUntaggedAssignedNodesCount
+        .resultFunc(this.nodes, this.roles, this.parametersByRole);
+      expect(result).toEqual(1);
+    });
+
+    it('calculates properly when assigned count is less then tagged', function() {
+      this.nodes = fromJS({
+        node1: {
+          uuid: 'node1',
+          properties: { capabilities: 'boot_option:local' }
+        },
+        node2: {
+          uuid: 'node2',
+          properties: { capabilities: 'boot_option:local,profile:control' }
+        },
+        node3: {
+          uuid: 'node3',
+          properties: { capabilities: 'boot_option:local,profile:control' }
+        }
+      });
+      const result = selectors.getTotalUntaggedAssignedNodesCount
+        .resultFunc(this.nodes, this.roles, this.parametersByRole);
+      expect(result).toEqual(1);
+    });
+  });
+
+  describe('provides getAvailableNodesCountsByRole selector', () => {
+    beforeEach(function() {
+      this.availableNodes = fromJS({
+        node1: {
+          uuid: 'node1',
+          properties: { capabilities: 'boot_option:local' }
+        },
+        node2: {
+          uuid: 'node2',
+          properties: { capabilities: 'boot_option:local,profile:control' }
+        }
+      });
+      this.untaggedAvailableNodes = fromJS({
+        node1: {
+          uuid: 'node1',
+          properties: { capabilities: 'boot_option:local' }
+        }
+      });
+      this.roles = Map({
+        'control': new Role({
+          name: 'Controller',
+          title: 'Controller',
+          identifier: 'control'
+        }),
+        'compute': new Role({
+          name: 'Compute',
+          title: 'Compute',
+          identifier: 'compute'
+        }),
+        'block-storage': new Role({
+          name: 'BlockStorage',
+          title: 'Block Storage',
+          identifier: 'block-storage'
+        })
+      });
+      this.nodeCountParametersByRole = Map({
+        'control': new Parameter({
+          name: 'ControllerCount',
+          default: 1
+        }),
+        'compute': new Parameter({
+          name: 'ComputeCount',
+          default: 1
+        }),
+        'block-storage': new Parameter({
+          name: 'BlockStorageCount',
+          default: 0
+        })
+      });
+      this.totalUntaggedAssignedNodesCount = 1;
+    });
+
+    it('calculates maximum available nodes count for each role', function() {
+      const result = selectors.getAvailableNodesCountsByRole
+        .resultFunc(this.availableNodes,
+                    this.untaggedAvailableNodes,
+                    this.roles,
+                    this.nodeCountParametersByRole,
+                    this.totalUntaggedAssignedNodesCount);
+      expect(result.get('control')).toEqual(1);
+      expect(result.get('compute')).toEqual(1);
+      expect(result.get('block-storage')).toEqual(0);
+    });
+
+    it('handles cases when assigned count is higher then actual nodes available', function() {
+      this.nodeCountParametersByRole = Map({
+        'control': new Parameter({
+          name: 'ControllerCount',
+          default: 4
+        }),
+        'compute': new Parameter({
+          name: 'ComputeCount',
+          default: 1
+        }),
+        'block-storage': new Parameter({
+          name: 'BlockStorageCount',
+          default: 0
+        })
+      });
+      this.totalUntaggedAssignedNodesCount = 4;
+      const result = selectors.getAvailableNodesCountsByRole
+        .resultFunc(this.availableNodes,
+                    this.untaggedAvailableNodes,
+                    this.roles,
+                    this.nodeCountParametersByRole,
+                    this.totalUntaggedAssignedNodesCount);
+      expect(result.get('control')).toEqual(1);
+      expect(result.get('compute')).toEqual(0);
+      expect(result.get('block-storage')).toEqual(0);
+    });
   });
 });

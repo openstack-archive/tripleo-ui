@@ -10,21 +10,31 @@ const messages = defineMessages({
     id: 'RolesStep.loadingNodes',
     defaultMessage: 'Loading Nodes...'
   },
+  loadingParameters: {
+    id: 'RolesStep.loadingParameters',
+    defaultMessage: 'Loading Parameters...'
+  },
   nodesAvailableToAssign: {
     id: 'RolesStep.nodesAvailableToAssign',
-    defaultMessage: '{nodesCount} Nodes available to assign.'
+    defaultMessage: '{nodesCount} Nodes available to assign'
   }
 });
 
-const RolesStep = ({ isFetchingNodes,
-                     availableNodesByRole,
-                     unassignedAvailableNodes,
+const RolesStep = ({ availableNodesCount,
+                     availableNodesCountsByRole,
                      roles,
                      fetchRoles,
                      fetchNodes,
                      intl,
+                     isFetchingNodes,
+                     isFetchingParameters,
                      isFetchingRoles,
-                     rolesLoaded }) => {
+                     nodeCountParametersByRole,
+                     rolesLoaded,
+                     totalAssignedNodesCount }) => {
+  const nodesCount = (
+    <strong>{Math.max(0, availableNodesCount - totalAssignedNodesCount)}</strong>
+  );
   return (
     <div>
       <p>
@@ -32,14 +42,19 @@ const RolesStep = ({ isFetchingNodes,
                 content={intl.formatMessage(messages.loadingNodes)}
                 component="span"
                 inline>
-          <FormattedMessage {...messages.nodesAvailableToAssign}
-                            values={{ nodesCount:
-                                      <strong>{unassignedAvailableNodes.size}</strong> }}/>
+          <Loader loaded={!isFetchingParameters}
+                  content={intl.formatMessage(messages.loadingParameters)}
+                  component="span"
+                  inline>
+            <FormattedMessage
+              {...messages.nodesAvailableToAssign}
+              values={{ nodesCount: nodesCount }}/>
+          </Loader>
         </Loader>
       </p>
       <Roles roles={roles.toList().toJS()}
-             availableNodesByRole={availableNodesByRole}
-             unassignedAvailableNodes={unassignedAvailableNodes}
+             availableNodesCountsByRole={availableNodesCountsByRole}
+             nodeCountParametersByRole={nodeCountParametersByRole}
              fetchRoles={fetchRoles}
              fetchNodes={fetchNodes}
              isFetchingNodes={isFetchingNodes}
@@ -49,15 +64,18 @@ const RolesStep = ({ isFetchingNodes,
   );
 };
 RolesStep.propTypes = {
-  availableNodesByRole: ImmutablePropTypes.map.isRequired,
+  availableNodesCount: React.PropTypes.number.isRequired,
+  availableNodesCountsByRole: ImmutablePropTypes.map.isRequired,
   fetchNodes: React.PropTypes.func.isRequired,
   fetchRoles: React.PropTypes.func.isRequired,
   intl: React.PropTypes.object,
   isFetchingNodes: React.PropTypes.bool.isRequired,
+  isFetchingParameters: React.PropTypes.bool.isRequired,
   isFetchingRoles: React.PropTypes.bool.isRequired,
+  nodeCountParametersByRole: ImmutablePropTypes.map.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
   rolesLoaded: React.PropTypes.bool.isRequired,
-  unassignedAvailableNodes: ImmutablePropTypes.map.isRequired
+  totalAssignedNodesCount: React.PropTypes.number.isRequired
 };
 
 export default injectIntl(RolesStep);
