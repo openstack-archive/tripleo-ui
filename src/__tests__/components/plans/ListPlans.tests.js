@@ -1,3 +1,4 @@
+import { IntlProvider } from 'react-intl';
 import { Map } from 'immutable';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
@@ -12,7 +13,9 @@ describe('ListPlans component', () => {
 
   beforeEach(() => {
     let shallowRenderer = TestUtils.createRenderer();
-    shallowRenderer.render(<ListPlans store={store} />);
+    const intlProvider = new IntlProvider({locale: 'en'}, {});
+    const {intl} = intlProvider.getChildContext();
+    shallowRenderer.render(<ListPlans.WrappedComponent store={store} intl={intl}/>);
     output = shallowRenderer.getRenderOutput();
   });
 

@@ -6,7 +6,7 @@ module.exports = function(config) {
     // Add any browsers here
     // browsers: ['PhantomJS', 'Chrome'], // if you have karma-chrome-launcher installed
     browsers: ['PhantomJS'],
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'intl-shim'],
 
     // The entry point for our test suite
     basePath: 'src',

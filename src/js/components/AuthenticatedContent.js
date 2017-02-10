@@ -73,4 +73,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(AuthenticatedContent));
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(AuthenticatedContent));

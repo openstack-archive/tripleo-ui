@@ -44,4 +44,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(injectIntl(UserAuthenticator));
+export default injectIntl(connect(mapStateToProps)(UserAuthenticator));

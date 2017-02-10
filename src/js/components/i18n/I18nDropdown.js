@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import React from 'react';
 
 import Dropdown from '../ui/dropdown/Dropdown';
@@ -59,4 +59,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(I18nDropdown);
+export default injectIntl(connect(null, mapDispatchToProps)(I18nDropdown));
