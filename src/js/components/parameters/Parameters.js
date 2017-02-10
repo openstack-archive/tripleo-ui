@@ -39,8 +39,13 @@ class Parameters extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchEnvironmentConfiguration(this.props.currentPlanName, this.props.parentPath);
-    this.props.fetchParameters(this.props.currentPlanName, this.props.parentPath);
+    const { currentPlanName,
+            fetchEnvironmentConfiguration,
+            fetchParameters,
+            isFetchingParameters,
+            parentPath } = this.props;
+    fetchEnvironmentConfiguration(currentPlanName, parentPath);
+    !isFetchingParameters && fetchParameters(currentPlanName, parentPath);
   }
 
   componentDidUpdate() {
@@ -199,6 +204,7 @@ Parameters.propTypes = {
   formErrors: ImmutablePropTypes.list,
   formFieldErrors: ImmutablePropTypes.map,
   history: React.PropTypes.object,
+  isFetchingParameters: React.PropTypes.bool.isRequired,
   mistralParameters: ImmutablePropTypes.map.isRequired,
   parameters: ImmutablePropTypes.map.isRequired,
   parametersLoaded: React.PropTypes.bool,
@@ -217,6 +223,7 @@ function mapStateToProps(state, ownProps) {
     form: state.parameters.form,
     formErrors: state.parameters.form.get('formErrors'),
     formFieldErrors: state.parameters.form.get('formFieldErrors'),
+    isFetchingParameters: state.parameters.isFetching,
     mistralParameters: state.parameters.mistralParameters,
     parameters: getRootParameters(state),
     parametersLoaded: state.parameters.loaded

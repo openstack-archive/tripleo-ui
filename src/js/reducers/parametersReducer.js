@@ -49,11 +49,13 @@ export default function parametersReducer(state = initialState, action) {
               formErrors: List(),
               formFieldErrors: Map()
             }))
-            .update('parameters', parameters =>
-              parameters.map(parameter =>
+            .update('parameters', parameters => {
+              return parameters.map(parameter =>
                 Object.keys(updatedParameters).includes(parameter.name) ?
                   parameter.set('default', updatedParameters[parameter.name]) :
-                  parameter ));
+                  parameter );
+            });
+
   }
 
   case ParametersConstants.UPDATE_PARAMETERS_FAILED:

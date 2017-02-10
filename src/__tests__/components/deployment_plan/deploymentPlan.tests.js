@@ -2,6 +2,7 @@ import { List, Map } from 'immutable';
 
 import { InitialPlanState } from '../../../js/immutableRecords/plans';
 import { CurrentPlanState } from '../../../js/immutableRecords/currentPlan';
+import { ParametersDefaultState } from '../../../js/immutableRecords/parameters';
 import { RolesState } from '../../../js/immutableRecords/roles';
 import { StacksState } from '../../../js/immutableRecords/stacks';
 import { EnvironmentConfigurationState }
@@ -13,9 +14,10 @@ describe('DeploymentPlan mapStateToProps', () => {
     it('returns ``hasPlans`` as `false`', () => {
       let props = mapStateToProps(
         {
-          plans: new InitialPlanState({ all: List() }),
           currentPlan: new CurrentPlanState,
-          stacks: new StacksState,
+          parameters: new ParametersDefaultState(),
+          plans: new InitialPlanState({ all: List() }),
+          stacks: new StacksState(),
           roles: new RolesState({
             loaded: false,
             isFetching: false,
@@ -31,12 +33,13 @@ describe('DeploymentPlan mapStateToProps', () => {
       );
       expect(props.hasPlans).toBe(false);
     });
-    it('returns ``hasPlans`` as `false`', () => {
+    it('returns ``hasPlans`` as `true`', () => {
       let props = mapStateToProps(
         {
+          currentPlan: new CurrentPlanState(),
+          parameters: new ParametersDefaultState(),
           plans: new InitialPlanState({ all: List(['foo', 'bar']) }),
-          currentPlan: new CurrentPlanState,
-          stacks: new StacksState,
+          stacks: new StacksState(),
           roles: new RolesState({
             loaded: false,
             isFetching: false,

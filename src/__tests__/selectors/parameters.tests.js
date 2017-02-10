@@ -4,7 +4,7 @@ import matchers from 'jasmine-immutable-matchers';
 import * as selectors from '../../js/selectors/parameters';
 // import * as rolesSelectors from '../../js/selectors/roles';
 import { Resource, Parameter, ParametersDefaultState } from '../../js/immutableRecords/parameters';
-import { Role } from '../../js/immutableRecords/roles';
+import { Role, RolesState } from '../../js/immutableRecords/roles';
 
 describe(' validations selectors', () => {
   beforeEach(() => {
@@ -12,12 +12,17 @@ describe(' validations selectors', () => {
   });
 
   const state = {
-    roles: Map({
+    roles: new RolesState({
       roles: Map({
         control: new Role({
           name: 'Controller',
           title: 'Controller',
           identifier: 'control'
+        }),
+        compute: new Role({
+          name: 'Compute',
+          title: 'Compute',
+          identifier: 'compute'
         })
       })
     }),
@@ -90,6 +95,14 @@ describe(' validations selectors', () => {
         }),
         Service1NestedResourceParameter1: new Parameter({
           name: 'Service1NestedResourceParameter1'
+        }),
+        ControllerCount: new Parameter({
+          name: 'ControllerCount',
+          default: 2
+        }),
+        ComputeCount: new Parameter({
+          name: 'ComputeCount',
+          default: 1
         })
       }),
       mistralParameters: Map()
@@ -97,7 +110,7 @@ describe(' validations selectors', () => {
   };
 
   it('getParametersExclInternal', () => {
-    expect(selectors.getParametersExclInternal(state).size).toEqual(5);
+    expect(selectors.getParametersExclInternal(state).size).toEqual(7);
   });
 
   it('getRootParameters', () => {
@@ -122,5 +135,16 @@ describe(' validations selectors', () => {
 
   it('getRoleNetworkConfig', () => {
     expect(selectors.getRoleNetworkConfig(state, 'control').name).toEqual('NetworkConfigResource');
+  });
+
+  it('getRoleCountParameterByRole', () => {
+    const nodeCountParametersByRole = selectors.getNodeCountParametersByRole(state);
+    expect(nodeCountParametersByRole.get('control').default).toEqual(2);
+    expect(nodeCountParametersByRole.get('compute').default).toEqual(1);
+  });
+
+  it('getTotalAssignedNodesCount', () => {
+    const totalAssignedNodesCount = selectors.getTotalAssignedNodesCount(state);
+    expect(totalAssignedNodesCount).toEqual(3);
   });
 });

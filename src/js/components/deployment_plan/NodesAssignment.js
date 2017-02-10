@@ -8,7 +8,7 @@ import React from 'react';
 import { List, Map } from 'immutable';
 
 import { getAvailableNodesByRole,
-         getUnassignedAvailableNodes,
+         getUntaggedAvailableNodes,
          getNodesOperationInProgress } from '../../selectors/nodes';
 import { getRoles } from '../../selectors/roles';
 import { getCurrentPlan } from '../../selectors/plans';
@@ -65,7 +65,7 @@ class NodesAssignment extends React.Component {
     let untagNodeIds = [];
 
     _.each(nodesToUpdateIds, (nodeId) => {
-      if(this.props.unassignedAvailableNodes.keySeq().includes(nodeId)) {
+      if(this.props.untaggedAvailableNodes.keySeq().includes(nodeId)) {
         tagNodeIds.push(nodeId);
       } else {
         untagNodeIds.push(nodeId);
@@ -82,9 +82,6 @@ class NodesAssignment extends React.Component {
     const { roleIdentifier } = this.props.params;
     const role = this.props.roles.get(roleIdentifier);
     const roleName = role ? role.title : roleIdentifier;
-    const nodesToAssign = this.props.unassignedAvailableNodes
-                            .merge(this.props.availableNodesByRole.get(roleIdentifier))
-                            .sortBy(node => node.get('uuid'));
 
     return (
       <Modal dialogClasses="modal-xl">
@@ -105,7 +102,7 @@ class NodesAssignment extends React.Component {
 
           <div className="modal-body">
             <FormErrorList errors={this.props.formErrors.toJS()}/>
-            <NodesTable nodes={nodesToAssign}
+            <NodesTable nodes={this.props.availableNodesByRole.get(roleIdentifier, Map())}
                         roles={this.props.roles}
                         isFetchingNodes={this.props.isFetchingNodes}
                         dataOperationInProgress={this.props.nodesOperationInProgress}
@@ -135,7 +132,7 @@ NodesAssignment.propTypes = {
   nodesOperationInProgress: React.PropTypes.bool,
   params: React.PropTypes.object.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
-  unassignedAvailableNodes: ImmutablePropTypes.map
+  untaggedAvailableNodes: ImmutablePropTypes.map
 };
 NodesAssignment.defaultProps = {
   formErrors: List(),
@@ -150,7 +147,7 @@ function mapStateToProps(state) {
     nodesInProgress: state.nodes.get('nodesInProgress'),
     nodesOperationInProgress: getNodesOperationInProgress(state),
     roles: getRoles(state),
-    unassignedAvailableNodes: getUnassignedAvailableNodes(state)
+    untaggedAvailableNodes: getUntaggedAvailableNodes(state)
   };
 }
 

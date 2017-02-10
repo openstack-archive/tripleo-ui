@@ -1,0 +1,15 @@
+---
+features:
+  - |
+    Nodes counts assigned to Roles are calculated based on actual
+    'Nodes count' parameters in the plan rather than nodes tagged
+    to Roles
+  - |
+    Deployment Plan page now displays global number of Nodes
+    available to distribute among Roles as well as number of assigned
+    Nodes and number of Nodes available to assign for each specific
+    Role at given time
+fixes:
+  - |
+    Fixes `bug 1648002 <https://launchpad.net/bugs/1648002>`__ by calculating
+    assigned Nodes based on Plan parameter values
