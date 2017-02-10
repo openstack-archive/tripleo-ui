@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
@@ -164,4 +164,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NodesAssignment);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(NodesAssignment));

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import React from 'react';
 import { Link } from 'react-router';
 
@@ -95,4 +95,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(null, mapDispatchToProps)(DeletePlan);
+export default injectIntl(connect(null, mapDispatchToProps)(DeletePlan));

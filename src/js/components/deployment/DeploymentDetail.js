@@ -161,4 +161,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(DeploymentDetail));
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(DeploymentDetail));

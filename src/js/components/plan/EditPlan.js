@@ -174,4 +174,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(EditPlan));
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(EditPlan));
