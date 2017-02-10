@@ -7,7 +7,11 @@ import { getAllPlansButCurrent } from '../../selectors/plans';
 import { getCurrentStack,
          getCurrentStackDeploymentProgress,
          getCurrentStackDeploymentInProgress } from '../../selectors/stacks';
-import { getAvailableNodesByRole, getUnassignedAvailableNodes } from '../../selectors/nodes';
+import { getAvailableNodes,
+         getAvailableNodesByRole,
+         getAvailableNodesCountsByRole } from '../../selectors/nodes';
+import { getNodeCountParametersByRole,
+         getTotalAssignedNodesCount } from '../../selectors/parameters';
 import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
 import { getCurrentPlan } from '../../selectors/plans';
 import { getRoles } from '../../selectors/roles';
@@ -21,7 +25,8 @@ import PlansDropdown from './PlansDropdown';
 import NodesActions from '../../actions/NodesActions';
 import NoPlans from './NoPlans';
 import NotificationActions from '../../actions/NotificationActions';
-import PlanActions from '../../actions/PlansActions';
+import ParametersActions from '../../actions/ParametersActions';
+import PlansActions from '../../actions/PlansActions';
 import StacksActions from '../../actions/StacksActions';
 import stackStates from '../../constants/StacksConstants';
 import RolesStep from './RolesStep';
@@ -50,16 +55,22 @@ const messages = defineMessages({
 class DeploymentPlan extends React.Component {
   componentDidMount() {
     this.props.fetchStacks();
+    this.fetchParameters();
   }
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.stacksLoaded) { this.props.fetchStacks(); }
+    if (nextProps.currentPlan !== this.props.currentPlan) { this.fetchParameters(); }
     this.postDeploymentValidationsCheck(nextProps.currentStack);
     this.pollCurrentStack(nextProps.currentStack);
   }
 
   componentWillUnmount() {
     clearTimeout(this.stackProgressTimeout);
+  }
+
+  fetchParameters() {
+    !this.props.isFetchingParameters && this.props.fetchParameters(this.props.currentPlan.name);
   }
 
   pollCurrentStack(currentStack) {
@@ -126,14 +137,17 @@ class DeploymentPlan extends React.Component {
             </DeploymentPlanStep>
             <DeploymentPlanStep title={formatMessage(messages.configureRolesStepHeader)}
                                 disabled={this.props.currentStackDeploymentInProgress}>
-                <RolesStep availableNodesByRole={this.props.availableNodesByRole}
+                <RolesStep nodeCountParametersByRole={this.props.nodeCountParametersByRole}
+                           availableNodesCount={this.props.availableNodes.size}
+                           availableNodesCountsByRole={this.props.availableNodesCountsByRole}
+                           availableNodesByRole={this.props.availableNodesByRole}
                            fetchNodes={this.props.fetchNodes}
                            fetchRoles={this.props.fetchRoles.bind(this, currentPlanName)}
                            isFetchingNodes={this.props.isFetchingNodes}
                            isFetchingRoles={this.props.isFetchingRoles}
                            roles={this.props.roles}
                            rolesLoaded={this.props.rolesLoaded}
-                           unassignedAvailableNodes={this.props.unassignedAvailableNodes}/>
+                           totalAssignedNodesCount={this.props.totalAssignedNodesCount}/>
               </DeploymentPlanStep>
             <DeploymentPlanStep title={formatMessage(messages.deployStepHeader)}>
                 <DeployStep
@@ -163,7 +177,9 @@ class DeploymentPlan extends React.Component {
 }
 
 DeploymentPlan.propTypes = {
+  availableNodes: ImmutablePropTypes.map,
   availableNodesByRole: ImmutablePropTypes.map,
+  availableNodesCountsByRole: ImmutablePropTypes.map.isRequired,
   children: React.PropTypes.node,
   choosePlan: React.PropTypes.func,
   currentPlan: ImmutablePropTypes.record,
@@ -178,6 +194,7 @@ DeploymentPlan.propTypes = {
   environmentConfigurationSummary: React.PropTypes.string,
   fetchEnvironmentConfiguration: React.PropTypes.func,
   fetchNodes: React.PropTypes.func,
+  fetchParameters: React.PropTypes.func,
   fetchRoles: React.PropTypes.func,
   fetchStackEnvironment: React.PropTypes.func,
   fetchStackResource: React.PropTypes.func,
@@ -188,19 +205,24 @@ DeploymentPlan.propTypes = {
   intl: React.PropTypes.object,
   isFetchingEnvironmentConfiguration: React.PropTypes.bool,
   isFetchingNodes: React.PropTypes.bool,
+  isFetchingParameters: React.PropTypes.bool,
   isFetchingRoles: React.PropTypes.bool,
   isRequestingStackDelete: React.PropTypes.bool,
+  nodeCountParametersByRole: ImmutablePropTypes.map,
   notify: React.PropTypes.func,
   roles: ImmutablePropTypes.map,
   rolesLoaded: React.PropTypes.bool,
   route: React.PropTypes.object,
   runPostDeploymentValidations: React.PropTypes.func.isRequired,
   stacksLoaded: React.PropTypes.bool.isRequired,
-  unassignedAvailableNodes: ImmutablePropTypes.map
+  totalAssignedNodesCount: React.PropTypes.number.isRequired
 };
 
 export function mapStateToProps(state) {
   return {
+    availableNodesCountsByRole: getAvailableNodesCountsByRole(state),
+    nodeCountParametersByRole: getNodeCountParametersByRole(state),
+    availableNodes: getAvailableNodes(state),
     currentPlan: getCurrentPlan(state),
     currentStack: getCurrentStack(state),
     currentStackResources: state.stacks.resources,
@@ -211,6 +233,7 @@ export function mapStateToProps(state) {
     environmentConfigurationSummary: getEnvironmentConfigurationSummary(state),
     isFetchingEnvironmentConfiguration: state.environmentConfiguration.isFetching,
     isFetchingNodes: state.nodes.get('isFetching'),
+    isFetchingParameters: state.parameters.isFetching,
     isFetchingRoles: state.roles.get('isFetching'),
     isRequestingStackDelete: state.stacks.get('isRequestingStackDelete'),
     hasPlans: !state.plans.get('all').isEmpty(),
@@ -219,7 +242,7 @@ export function mapStateToProps(state) {
     roles: getRoles(state),
     rolesLoaded: state.roles.get('loaded'),
     stacksLoaded: state.stacks.get('isLoaded'),
-    unassignedAvailableNodes: getUnassignedAvailableNodes(state)
+    totalAssignedNodesCount: getTotalAssignedNodesCount(state)
   };
 }
 
@@ -229,12 +252,13 @@ function mapDispatchToProps(dispatch) {
     deleteStack: (stackName, stackId) => {
       dispatch(StacksActions.deleteStack(stackName, stackId));
     },
-    deployPlan: planName => dispatch(PlanActions.deployPlan(planName)),
+    deployPlan: planName => dispatch(PlansActions.deployPlan(planName)),
     fetchStackEnvironment: (stack) => dispatch(StacksActions.fetchEnvironment(stack)),
     fetchEnvironmentConfiguration: (planName, parentPath) => {
       dispatch(EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName, parentPath));
     },
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
+    fetchParameters: planName => dispatch(ParametersActions.fetchParameters(planName)),
     fetchRoles: planName => dispatch(RolesActions.fetchRoles(planName)),
     fetchStackResources: (stack) =>
       dispatch(StacksActions.fetchResources(stack.stack_name, stack.id)),
