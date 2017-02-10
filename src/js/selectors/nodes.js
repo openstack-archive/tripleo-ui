@@ -3,6 +3,7 @@ import { List, Set } from 'immutable';
 
 import { parseNodeCapabilities } from '../utils/nodes';
 import { getRoles } from './roles';
+import { getNodeCountParametersByRole } from './parameters';
 
 export const getNodes = state => state.nodes.get('all').sortBy(n => n.get('uuid'));
 export const getNodesByIds = (state, nodeIds) =>
@@ -50,10 +51,30 @@ export const getAvailableNodes = createSelector(
   getRegisteredNodes, (nodes) => nodes.filter(node => node.get('provision_state') === 'available')
 );
 
-export const getAvailableNodesByRole = createSelector(
-  [getAvailableNodes, getRoles], (nodes, roles) =>
-    roles.map(role => nodes.filter(node => _getNodeCapabilities(node).profile === role.identifier))
+export const getUntaggedAvailableNodes = createSelector(
+  getAvailableNodes, (availableNodes) =>
+    availableNodes.filterNot(node => _getNodeCapabilities(node).profile)
 );
+
+/**
+ *  Returns Nodes available for assignment for each Role
+ */
+export const getAvailableNodesByRole = createSelector(
+  [getAvailableNodes, getUntaggedAvailableNodes, getRoles], (nodes, untaggedNodes, roles) =>
+    roles.map(role => nodes.filter(node => _getNodeCapabilities(node).profile === role.identifier)
+                           .merge(untaggedNodes))
+);
+
+// export const getAvailableNodesCountsByRole = createSelector(
+//   [getAvailableNodes, getUntaggedAvailableNodes, getRoles, getNodeCountParametersByRole],
+//   (nodes, untaggedNodes, roles, parametersByRole) =>
+//     roles.map(role => {
+//       const taggedCount =
+//         nodes.filter(node => _getNodeCapabilities(node).profile === role.identifier).size;
+//       const assignedCount = parametersByRole.get(role.identifier).default;
+//       const untaggedCount = untaggedNodes.size;
+//     })
+// );
 
 export const getDeployedNodes = createSelector(
   getNodesWithMacs, (nodes) =>
@@ -63,11 +84,6 @@ export const getDeployedNodes = createSelector(
 export const getMaintenanceNodes = createSelector(
   getNodesWithMacs, (nodes) =>
     nodes.filter(node => node.get('maintenance'))
-);
-
-export const getUnassignedAvailableNodes = createSelector(
-  getAvailableNodes, (availableNodes) =>
-    availableNodes.filterNot(node => _getNodeCapabilities(node).profile)
 );
 
 /*

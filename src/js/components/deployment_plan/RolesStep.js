@@ -17,14 +17,19 @@ const messages = defineMessages({
 });
 
 const RolesStep = ({ isFetchingNodes,
+                     nodeCountParametersByRole,
                      availableNodesByRole,
-                     unassignedAvailableNodes,
+                     availableNodesCount,
                      roles,
                      fetchRoles,
                      fetchNodes,
                      intl,
                      isFetchingRoles,
-                     rolesLoaded }) => {
+                     rolesLoaded,
+                     totalAssignedNodesCount }) => {
+  const nodesCount = (
+    <strong>{availableNodesCount - totalAssignedNodesCount}</strong>
+  );
   return (
     <div>
       <p>
@@ -32,14 +37,14 @@ const RolesStep = ({ isFetchingNodes,
                 content={intl.formatMessage(messages.loadingNodes)}
                 component="span"
                 inline>
-          <FormattedMessage {...messages.nodesAvailableToAssign}
-                            values={{ nodesCount:
-                                      <strong>{unassignedAvailableNodes.size}</strong> }}/>
+          <FormattedMessage
+            {...messages.nodesAvailableToAssign}
+            values={{ nodesCount: nodesCount }}/>
         </Loader>
       </p>
       <Roles roles={roles.toList().toJS()}
              availableNodesByRole={availableNodesByRole}
-             unassignedAvailableNodes={unassignedAvailableNodes}
+             nodeCountParametersByRole={nodeCountParametersByRole}
              fetchRoles={fetchRoles}
              fetchNodes={fetchNodes}
              isFetchingNodes={isFetchingNodes}
@@ -50,14 +55,16 @@ const RolesStep = ({ isFetchingNodes,
 };
 RolesStep.propTypes = {
   availableNodesByRole: ImmutablePropTypes.map.isRequired,
+  availableNodesCount: React.PropTypes.number.isRequired,
   fetchNodes: React.PropTypes.func.isRequired,
   fetchRoles: React.PropTypes.func.isRequired,
   intl: React.PropTypes.object,
   isFetchingNodes: React.PropTypes.bool.isRequired,
   isFetchingRoles: React.PropTypes.bool.isRequired,
+  nodeCountParametersByRole: ImmutablePropTypes.map.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
   rolesLoaded: React.PropTypes.bool.isRequired,
-  unassignedAvailableNodes: ImmutablePropTypes.map.isRequired
+  totalAssignedNodesCount: React.PropTypes.number.isRequired
 };
 
 export default injectIntl(RolesStep);

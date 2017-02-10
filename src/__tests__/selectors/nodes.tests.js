@@ -96,6 +96,6 @@ describe('Nodes selectors', () => {
   };
 
   it('provides selector to list Introspected Nodes not assigned to a Role', () => {
-    expect(selectors.getUnassignedAvailableNodes(state).size).toEqual(2);
+    expect(selectors.getUntaggedAvailableNodes(state).size).toEqual(2);
   });
 });
