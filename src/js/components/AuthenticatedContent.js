@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
@@ -8,6 +9,13 @@ import PlansActions from '../actions/PlansActions';
 import NavBar from './NavBar';
 import ValidationsList from './validations/ValidationsList';
 import WorkflowExecutionsActions from '../actions/WorkflowExecutionsActions';
+
+const messages = defineMessages({
+  loadingDeployments: {
+    id: 'AuthenticatedContent.loadingDeployments',
+    defaultMessage: 'Loading Deployments...'
+  }
+});
 
 class AuthenticatedContent extends React.Component {
   componentDidMount() {
@@ -19,7 +27,7 @@ class AuthenticatedContent extends React.Component {
     return (
       <Loader loaded={this.props.plansLoaded &&
                       (!!this.props.currentPlanName || this.props.noPlans)}
-              content="Loading Deployments..."
+              content={this.props.intl.formatMessage(messages.loadingDeployments)}
               global>
         <header>
           <NavBar user={this.props.user}
@@ -41,6 +49,7 @@ AuthenticatedContent.propTypes = {
   dispatch: React.PropTypes.func,
   fetchPlans: React.PropTypes.func,
   fetchWorkflowExecutions: React.PropTypes.func,
+  intl: React.PropTypes.object,
   logoutUser: React.PropTypes.func.isRequired,
   noPlans: React.PropTypes.bool,
   plansLoaded: React.PropTypes.bool,
@@ -64,4 +73,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthenticatedContent);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(AuthenticatedContent));
