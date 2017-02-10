@@ -3,6 +3,7 @@ import { List, Set } from 'immutable';
 
 import { parseNodeCapabilities } from '../utils/nodes';
 import { getRoles } from './roles';
+import { getNodeCountParametersByRole } from './parameters';
 
 export const getNodes = state => state.nodes.get('all').sortBy(n => n.get('uuid'));
 export const getNodesByIds = (state, nodeIds) =>
@@ -50,9 +51,38 @@ export const getAvailableNodes = createSelector(
   getRegisteredNodes, (nodes) => nodes.filter(node => node.get('provision_state') === 'available')
 );
 
+export const getUntaggedAvailableNodes = createSelector(
+  getAvailableNodes, (availableNodes) =>
+    availableNodes.filterNot(node => _getNodeCapabilities(node).profile)
+);
+
+/**
+ *  Returns Nodes available for assignment for each Role
+ */
 export const getAvailableNodesByRole = createSelector(
-  [getAvailableNodes, getRoles], (nodes, roles) =>
-    roles.map(role => nodes.filter(node => _getNodeCapabilities(node).profile === role.identifier))
+  [getAvailableNodes, getUntaggedAvailableNodes, getRoles], (nodes, untaggedNodes, roles) =>
+    roles.map(role => nodes.filter(node => _getNodeCapabilities(node).profile === role.identifier)
+                           .merge(untaggedNodes))
+);
+
+export const getAvailableNodesCountsByRole = createSelector(
+  [getAvailableNodes, getUntaggedAvailableNodes, getRoles, getNodeCountParametersByRole],
+  (nodes, untaggedNodes, roles, parametersByRole) => {
+    const remains = roles.reduce((total, role) => {
+      const taggedCount =
+        nodes.filter(node => _getNodeCapabilities(node).profile === role.identifier).size;
+      const assignedCount =
+        parametersByRole.get(role.identifier) ? parametersByRole.get(role.identifier).default : 0;
+      const remain = Math.max(0, assignedCount - taggedCount);
+      return Math.max(0, total + remain);
+    }, 0);
+    return roles.map(role => {
+      const taggedCount
+        = nodes.filter(node => _getNodeCapabilities(node).profile === role.identifier).size;
+      const untaggedCount = untaggedNodes.size;
+      return Math.max(0, taggedCount + Math.max(0, untaggedCount - remains));
+    });
+  }
 );
 
 export const getDeployedNodes = createSelector(
@@ -63,11 +93,6 @@ export const getDeployedNodes = createSelector(
 export const getMaintenanceNodes = createSelector(
   getNodesWithMacs, (nodes) =>
     nodes.filter(node => node.get('maintenance'))
-);
-
-export const getUnassignedAvailableNodes = createSelector(
-  getAvailableNodes, (availableNodes) =>
-    availableNodes.filterNot(node => _getNodeCapabilities(node).profile)
 );
 
 /*
