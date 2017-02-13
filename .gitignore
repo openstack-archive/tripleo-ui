@@ -13,3 +13,8 @@ messages.pot
 i18n/extracted-messages*
 npm-debug.log
 docs/_build
+
+# Files created by releasenotes build
+releasenotes/build
+.tox
+tripleo_ui.egg-info/
