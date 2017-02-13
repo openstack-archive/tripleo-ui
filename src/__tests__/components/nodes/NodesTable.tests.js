@@ -1,3 +1,4 @@
+import { IntlProvider } from 'react-intl';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { Map, Set } from 'immutable';
@@ -53,10 +54,13 @@ describe('NodesTable component', () => {
   let nodesTableVdom, nodesTableInstance;
   beforeEach(() => {
     let shallowRenderer = TestUtils.createRenderer();
-    shallowRenderer.render(<NodesTable nodes={nodes}
-                                       roles={roles}
-                                       nodesInProgress={Set()}
-                                       isFetchingNodes={false}/>);
+    const intlProvider = new IntlProvider({locale: 'en'}, {});
+    const {intl} = intlProvider.getChildContext();
+    shallowRenderer.render(<NodesTable.WrappedComponent nodes={nodes}
+                                                        roles={roles}
+                                                        nodesInProgress={Set()}
+                                                        isFetchingNodes={false}
+                                                        intl={intl}/>);
     nodesTableVdom = shallowRenderer.getRenderOutput();
     nodesTableInstance = shallowRenderer._instance._instance;
   });
