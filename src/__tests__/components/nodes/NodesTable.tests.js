@@ -49,7 +49,9 @@ let roles = Map({
   })
 });
 
-describe('NodesTable component', () => {
+// TODO(jpichon): Re-enable these tests once the PhantomJS dependency is gone
+// and components can properly be tested (LP#1655026)
+xdescribe('NodesTable component', () => {
   let nodesTableVdom, nodesTableInstance;
   beforeEach(() => {
     let shallowRenderer = TestUtils.createRenderer();
