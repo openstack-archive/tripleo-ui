@@ -1,20 +1,30 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { defineMessages, injectIntl } from 'react-intl';
 import React from 'react';
 
 import HorizontalInput from '../../ui/forms/HorizontalInput';
 import HorizontalTextarea from '../../ui/forms/HorizontalTextarea';
 
-export default class DriverFields extends React.Component {
+const messages = defineMessages({
+  ipOrFqdnValidatorMessage: {
+    id: 'DriverFields.ipOrFqdnValidatorMessage',
+    defaultMessage: 'Please enter a valid IPv4 Address or a valid FQDN.'
+  }
+});
+
+class DriverFields extends React.Component {
   constructor(props) {
     super(props);
 
     let ip_regex = '^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9]' +
                    '[0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
     let fqdn_regex = '^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?$';
-    this.ipOrFqdnValidator = {matchRegexp: new RegExp(ip_regex + '|' + fqdn_regex)};
-    this.ipOrFqdnValidatorMessage = 'Please enter a valid IPv4 Address or a valid FQDN';
 
+    this.ipOrFqdnValidator = {matchRegexp: new RegExp(ip_regex + '|' + fqdn_regex)};
+    this.ipOrFqdnValidatorMessage = this.props.intl.formatMessage(
+      messages.ipOrFqdnValidatorMessage);
   }
+
   render() {
     return (
       <div>
@@ -44,7 +54,10 @@ export default class DriverFields extends React.Component {
 }
 DriverFields.propTypes = {
   addr_title: React.PropTypes.string.isRequired,
+  intl: React.PropTypes.object,
   node: ImmutablePropTypes.record.isRequired,
   pwd_title: React.PropTypes.string.isRequired,
   user_title: React.PropTypes.string.isRequired
 };
+
+export default injectIntl(DriverFields);
