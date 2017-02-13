@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
@@ -12,7 +13,63 @@ import Loader from '../ui/Loader';
 import { parseNodeCapabilities } from '../../utils/nodes';
 
 
-export default class NodesTable extends React.Component {
+const messages = defineMessages({
+  noNodes: {
+    id: 'NodesTable.noNodes',
+    defaultMessage: 'There are no Nodes available.'
+  },
+  loadingNodes: {
+    id: 'NodesTable.loadingNodes',
+    defaultMessage: 'Loading Nodes...'
+  },
+  macAddresses: {
+    id: 'NodesTables.macAddresses',
+    defaultMessage: 'MAC Address(es)',
+    description: 'Table header'
+  },
+  name: {
+    id: 'NodesTables.name',
+    defaultMessage: 'Name',
+    description: 'Table header'
+  },
+  profile: {
+    id: 'NodesTables.profile',
+    defaultMessage: 'Profile',
+    description: 'Table header'
+  },
+  cpuArch: {
+    id: 'NodesTables.cpuArch',
+    defaultMessage: 'CPU Arch.',
+    description: 'Table header'
+  },
+  cpuCores: {
+    id: 'NodesTables.cpuCores',
+    defaultMessage: 'CPU (cores)',
+    description: 'Table header'
+  },
+  diskGb: {
+    id: 'NodesTables.diskGb',
+    defaultMessage: 'Disk (GB)',
+    description: 'Table header'
+  },
+  memoryMb: {
+    id: 'NodesTables.memoryMb',
+    defaultMessage: 'Memory (MB)',
+    description: 'Table header'
+  },
+  powerState: {
+    id: 'NodesTables.powerState',
+    defaultMessage: 'Power State',
+    description: 'Table header'
+  },
+  provisionState: {
+    id: 'NodesTables.provisionState',
+    defaultMessage: 'Provision State',
+    description: 'Table header'
+  }
+});
+
+class NodesTable extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -28,8 +85,8 @@ export default class NodesTable extends React.Component {
         <td className="no-results" colSpan="10">
           <Loader loaded={!this.props.isFetchingNodes}
                   height={40}
-                  content="Loading Nodes...">
-            <p className="text-center">There are no Nodes available</p>
+                  content={this.props.intl.formatMessage(messages.loadingNodes)}>
+            <p className="text-center"><FormattedMessage {...messages.noNodes}/></p>
           </Loader>
         </td>
       </tr>
@@ -70,50 +127,71 @@ export default class NodesTable extends React.Component {
                                         className="shrink"/>}/>
         <DataTableColumn
           key="macs"
-          header={<DataTableHeaderCell key="macs">MAC Address(es)</DataTableHeaderCell>}
+          header={<DataTableHeaderCell key="macs">
+                    <FormattedMessage {...messages.macAddresses}/>
+                  </DataTableHeaderCell>}
           cell={<DataTableDataFieldCell data={filteredData} field="macs"/>}/>
         <DataTableColumn
           key="name"
-          header={<DataTableHeaderCell key="name">Name</DataTableHeaderCell>}
+          header={<DataTableHeaderCell key="name">
+                    <FormattedMessage {...messages.name}/>
+                  </DataTableHeaderCell>}
           cell={<DataTableDataFieldCell data={filteredData} field="name"/>}/>
         <DataTableColumn
           key="role"
-          header={<DataTableHeaderCell key="role">Profile</DataTableHeaderCell>}
+          header={<DataTableHeaderCell key="role">
+                    <FormattedMessage {...messages.profile}/>
+                  </DataTableHeaderCell>}
           cell={<NodesTableProfileCell data={filteredData} roles={this.props.roles}/>}/>
         <DataTableColumn
           key="properties.cpu_arch"
-          header={<DataTableHeaderCell key="properties.cpu_arch">CPU Arch.</DataTableHeaderCell>}
+          header={<DataTableHeaderCell key="properties.cpu_arch">
+                    <FormattedMessage {...messages.cpuArch}/>
+                  </DataTableHeaderCell>}
           cell={<DataTableDataFieldCell data={filteredData} field="properties.cpu_arch"/>}/>
         <DataTableColumn
           key="properties.cpus"
-          header={<DataTableHeaderCell key="properties.cpus">CPU (cores)</DataTableHeaderCell>}
+          header={<DataTableHeaderCell key="properties.cpus">
+                    <FormattedMessage {...messages.cpuCores}/>
+                  </DataTableHeaderCell>}
           cell={<DataTableDataFieldCell data={filteredData} field="properties.cpus"/>}/>
         <DataTableColumn
           key="properties.local_gb"
-          header={<DataTableHeaderCell key="properties.local_gb">Disk (GB)</DataTableHeaderCell>}
+          header={<DataTableHeaderCell key="properties.local_gb">
+                    <FormattedMessage {...messages.diskGb}/>
+                  </DataTableHeaderCell>}
           cell={<DataTableDataFieldCell data={filteredData} field="properties.local_gb"/>}/>
         <DataTableColumn
           key="properties.memory_mb"
-          header={<DataTableHeaderCell key="properties.memory_mb">Memory (MB)</DataTableHeaderCell>}
+          header={<DataTableHeaderCell key="properties.memory_mb">
+                    <FormattedMessage {...messages.memoryMb}/>
+                  </DataTableHeaderCell>}
           cell={<DataTableDataFieldCell data={filteredData} field="properties.memory_mb"/>}/>
         <DataTableColumn
           key="power_state"
-          header={<DataTableHeaderCell key="power_state">Power State</DataTableHeaderCell>}
+          header={<DataTableHeaderCell key="power_state">
+                    <FormattedMessage {...messages.powerState}/>
+                  </DataTableHeaderCell>}
           cell={<DataTableDataFieldCell data={filteredData} field="power_state"/>}/>
         <DataTableColumn
           key="provision_state"
-          header={<DataTableHeaderCell key="provision_state">Provision State</DataTableHeaderCell>}
+          header={<DataTableHeaderCell key="provision_state">
+                    <FormattedMessage {...messages.provisionState}/>
+                  </DataTableHeaderCell>}
           cell={<DataTableDataFieldCell data={filteredData} field="provision_state"/>}/>
       </DataTable>
     );
   }
 }
 NodesTable.propTypes = {
+  intl: React.PropTypes.object,
   isFetchingNodes: React.PropTypes.bool.isRequired,
   nodes: ImmutablePropTypes.map.isRequired,
   nodesInProgress: ImmutablePropTypes.set.isRequired,
   roles: ImmutablePropTypes.map.isRequired
 };
+
+export default injectIntl(NodesTable);
 
 export class NodesTableCheckBoxCell extends React.Component {
   render() {
