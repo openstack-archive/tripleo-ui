@@ -1,4 +1,5 @@
 import Formsy from 'formsy-react';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import React from 'react';
 
 import HorizontalInput from '../ui/forms/HorizontalInput';
@@ -8,22 +9,89 @@ import PXEAndSSHDriverFields from './driver_fields/PXEAndSSHDriverFields';
 import PXEAndIPMIToolDriverFields from './driver_fields/PXEAndIPMIToolDriverFields';
 import PXEAndDRACDriverFields from './driver_fields/PXEAndDRACDriverFields';
 
-export default class RegisterNodeForm extends React.Component {
+const messages = defineMessages({
+  enterValidMacAddress: {
+    id: 'RegisterNodeForm.enterValidMacAddress',
+    defaultMessage: 'Please enter a valid MAC Address.'
+  },
+  nodeNameRegexp: {
+    id: 'RegisterNodeForm.nodeNameRegexp',
+    defaultMessage: 'Name may only consist of RFC3986 unreserved characters, to wit: '
+                    + 'ALPHA / DIGIT / "-" / "." / "_" / "~".'
+  },
+  nodeNameMaxLength: {
+    id: 'RegisterNodeForm.nodeNameMaxLength',
+    defaultMessage: 'Node name can have up to 255 characters.'
+  },
+  nodeDetail: {
+    id: 'RegisterNodeForm.nodeDetail',
+    defaultMessage: 'Node Detail'
+  },
+  general: {
+    id: 'RegisterNodeForm.General',
+    defaultMessage: 'General'
+  },
+  name: {
+    id: 'RegisterNodeForm.name',
+    defaultMessage: 'Name'
+  },
+  management: {
+    id: 'RegisterNodeForm.management',
+    defaultMessage: 'Management'
+  },
+  driver: {
+    id: 'RegisterNodeForm.driver',
+    defaultMessage: 'Driver'
+  },
+  hardware: {
+    id: 'RegisterNodeForm.hardware',
+    defaultMessage: 'Hardware'
+  },
+  architecture: {
+    id: 'RegisterNodeForm.architecture',
+    defaultMessage: 'Architecture'
+  },
+  cpuCount: {
+    id: 'RegisterNodeForm.cpuCount',
+    defaultMessage: 'CPU count'
+  },
+  memoryMb: {
+    id: 'RegisterNodeForm.memoryMb',
+    defaultMessage: 'Memory (MB)'
+  },
+  diskGb: {
+    id: 'RegisterNodeForm.diskGb',
+    defaultMessage: 'Disk (GB)'
+  },
+  networking: {
+    id: 'RegisterNodeForm.networking',
+    defaultMessage: 'Networking'
+  },
+  nicMacAddresses: {
+    id: 'RegisterNodeForm.nicMacAddresses',
+    defaultMessage: 'NIC MAC Addresses'
+  },
+  macAddressesDescription: {
+    id: 'RegisterNodeForm.macAddressesDescription',
+    defaultMessage: 'Comma separated list of MAC Addresses'
+  }
+});
+
+class RegisterNodeForm extends React.Component {
   constructor(props) {
     super(props);
     this.macAddressValidator = {
       matchRegexp:
         /^([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}(,([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2})*$/
     };
-    this.macAddressValidatorMessage = 'Please enter a valid MAC Addresses';
+    this.macAddressValidatorMessage = this.props.intl.formatMessage(messages.enterValidMacAddress);
     this.nodeNameValidations = {
       matchRegexp: /^[A-Z0-9-._~]+$/i,
       maxLength: 255
     };
     this.nodeNameValidationErrors = {
-      matchRegexp: `Name may only consist of RFC3986 unreserved
-                    characters, to wit: ALPHA / DIGIT / "-" / "." / "_" / "~"`,
-      maxLength: 'Node name can have up to 255 characters'
+      matchRegexp: this.props.intl.formatMessage(messages.nodeNameRegexp),
+      maxLength: this.props.intl.formatMessage(messages.nodeNameMaxLength)
     };
   }
 
@@ -76,7 +144,7 @@ export default class RegisterNodeForm extends React.Component {
 
     return (
       <div>
-        <h4>Node Detail</h4>
+        <h4><FormattedMessage {...messages.nodeDetail}/></h4>
         <Formsy.Form ref="nodeForm"
                      className="form-horizontal"
                      onValidSubmit={this.onNodeFormValidSubmit.bind(this)}
@@ -84,9 +152,9 @@ export default class RegisterNodeForm extends React.Component {
                      onValid={this.onValid.bind(this)}
                      onInvalid={this.onInvalid.bind(this)}>
           <fieldset>
-            <legend>General</legend>
+            <legend><FormattedMessage {...messages.general}/></legend>
             <HorizontalInput name="name"
-                             title="Name"
+                             title={this.props.intl.formatMessage(messages.name)}
                              inputColumnClasses="col-sm-7"
                              labelColumnClasses="col-sm-5"
                              validations={this.nodeNameValidations}
@@ -94,9 +162,9 @@ export default class RegisterNodeForm extends React.Component {
                              value={this.props.selectedNode.name}/>
           </fieldset>
           <fieldset>
-            <legend>Management</legend>
+            <legend><FormattedMessage {...messages.management}/></legend>
             <HorizontalSelect name="pm_type"
-                              title="Driver"
+                              title={this.props.intl.formatMessage(messages.driver)}
                               inputColumnClasses="col-sm-7"
                               labelColumnClasses="col-sm-5"
                               value={this.props.selectedNode.pm_type}
@@ -106,9 +174,9 @@ export default class RegisterNodeForm extends React.Component {
             {this.renderDriverFields()}
           </fieldset>
           <fieldset>
-            <legend>Hardware</legend>
+            <legend><FormattedMessage {...messages.hardware}/></legend>
             <HorizontalSelect name="arch"
-                              title="Architecture"
+                              title={this.props.intl.formatMessage(messages.architecture)}
                               inputColumnClasses="col-sm-7"
                               labelColumnClasses="col-sm-5"
                               value={this.props.selectedNode.arch}>
@@ -117,35 +185,36 @@ export default class RegisterNodeForm extends React.Component {
             <HorizontalInput name="cpu"
                              type="number"
                              min={1}
-                             title="CPU count"
+                             title={this.props.intl.formatMessage(messages.cpuCount)}
                              inputColumnClasses="col-sm-7"
                              labelColumnClasses="col-sm-5"
                              value={this.props.selectedNode.cpu}/>
             <HorizontalInput name="memory"
                              type="number"
                              min={1}
-                             title="Memory (MB)"
+                             title={this.props.intl.formatMessage(messages.memoryMb)}
                              inputColumnClasses="col-sm-7"
                              labelColumnClasses="col-sm-5"
                              value={this.props.selectedNode.memory}/>
             <HorizontalInput name="disk"
                              type="number"
                              min={1}
-                             title="Disk (GB)"
+                             title={this.props.intl.formatMessage(messages.diskGb)}
                              inputColumnClasses="col-sm-7"
                              labelColumnClasses="col-sm-5"
                              value={this.props.selectedNode.disk}/>
           </fieldset>
           <fieldset>
-            <legend>Networking</legend>
+            <legend><FormattedMessage {...messages.networking}/></legend>
             <HorizontalArrayInput name="mac"
-                                  title="NIC MAC Addresses"
+                                  title={this.props.intl.formatMessage(messages.nicMacAddresses)}
                                   inputColumnClasses="col-sm-7"
                                   labelColumnClasses="col-sm-5"
                                   value={this.props.selectedNode.mac.toArray()}
                                   validations={this.macAddressValidator}
                                   validationError={this.macAddressValidatorMessage}
-                                  description="Comma separated list of MAC Addresses"
+                                  description={
+                                    this.props.intl.formatMessage(messages.macAddressesDescription)}
                                   required />
           </fieldset>
         </Formsy.Form>
@@ -154,6 +223,9 @@ export default class RegisterNodeForm extends React.Component {
   }
 }
 RegisterNodeForm.propTypes = {
+  intl: React.PropTypes.object,
   onUpdateNode: React.PropTypes.func,
   selectedNode: React.PropTypes.object
 };
+
+export default injectIntl(RegisterNodeForm);
