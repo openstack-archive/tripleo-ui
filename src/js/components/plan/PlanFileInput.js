@@ -41,7 +41,7 @@ class PlanFileInput extends React.Component {
 
       reader.onload = (f => {
         return e => {
-          if(file.name.match(/(\.yaml|\.json|\.pp|\.sh)$/)) {
+          if(file.name.match(/(\.yaml|\.json|\.pp|\.sh|\.j2)$/)) {
             let obj = {
               name: f.webkitRelativePath.replace(/^[^\/]*\//, ''),
               content: e.target.result
