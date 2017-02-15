@@ -3,6 +3,7 @@ import React from 'react';
 import { isObjectLike } from 'lodash';
 
 import HorizontalInput from '../ui/forms/HorizontalInput';
+import HorizontalNumberInput from '../ui/forms/HorizontalNumberInput';
 import HorizontalTextarea from '../ui/forms/HorizontalTextarea';
 import HorizontalCheckBox from '../ui/forms/HorizontalCheckBox';
 import HorizontalStaticText from '../ui/forms/HorizontalStaticText';
@@ -59,14 +60,13 @@ class ParameterInput extends React.Component {
       );
     } else if(type.toLowerCase() === 'number') {
       return (
-        <HorizontalInput name={name}
-                         title={label}
-                         type="number"
-                         min={0}
-                         description={description}
-                         value={defaultValue}
-                         labelColumnClasses="col-sm-4"
-                         inputColumnClasses="col-sm-8"/>
+        <HorizontalNumberInput name={name}
+                               title={label}
+                               min={0}
+                               description={description}
+                               value={defaultValue}
+                               labelColumnClasses="col-sm-4"
+                               inputColumnClasses="col-sm-8"/>
       );
     } else if(type.toLowerCase() === 'boolean') {
       return (

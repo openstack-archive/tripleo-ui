@@ -1,0 +1,4 @@
+fixes:
+  - |
+    Fixes `bug 1664975 <https://launchpad.net/bugs/1664975>`__
+    Adds HorizontalNumberInput component
