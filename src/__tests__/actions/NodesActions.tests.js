@@ -2,6 +2,7 @@ import when from 'when';
 
 import IronicApiService from '../../js/services/IronicApiService';
 import MistralApiService from '../../js/services/MistralApiService';
+import { mockGetIntl } from './utils';
 import NodesActions from '../../js/actions/NodesActions';
 import NotificationActions from '../../js/actions/NotificationActions';
 import NodesConstants from '../../js/constants/NodesConstants';
@@ -196,7 +197,7 @@ describe('nodesIntrospectionFinished', () => {
       ttl: 3600
     };
 
-    NodesActions.nodesIntrospectionFinished(messagePayload)(() => {}, () => {});
+    NodesActions.nodesIntrospectionFinished(messagePayload)(() => {}, () => {}, mockGetIntl);
 
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
     expect(NotificationActions.notify).toHaveBeenCalled();
@@ -217,7 +218,7 @@ describe('nodesIntrospectionFinished', () => {
       ttl: 3600
     };
 
-    NodesActions.nodesIntrospectionFinished(messagePayload)(() => {}, () => {});
+    NodesActions.nodesIntrospectionFinished(messagePayload)(() => {}, () => {}, mockGetIntl);
 
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
     expect(NotificationActions.notify).toHaveBeenCalledWith(

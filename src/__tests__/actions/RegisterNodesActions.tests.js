@@ -3,6 +3,7 @@ import when from 'when';
 import { Map } from 'immutable';
 
 import MistralApiService from '../../js/services/MistralApiService';
+import { mockGetIntl } from './utils';
 import RegisterNodesActions from '../../js/actions/RegisterNodesActions';
 import NodesActions from '../../js/actions/NodesActions';
 import NotificationActions from '../../js/actions/NotificationActions';
@@ -76,7 +77,7 @@ describe('nodesRegistrationFinished', () => {
     const successNotification = {
       type: 'success',
       title: 'Nodes Registration Complete',
-      message: 'The nodes were successfully registered'
+      message: 'The nodes were successfully registered.'
     };
 
     spyOn(NotificationActions, 'notify');
@@ -89,7 +90,7 @@ describe('nodesRegistrationFinished', () => {
           currentPlanName: 'testplan'
         })
       };
-    });
+    }, mockGetIntl);
 
     expect(NodesActions.addNodes).toHaveBeenCalledWith(normalizedRegisteredNodes);
     expect(NodesActions.fetchNodes).toHaveBeenCalledWith();
@@ -131,7 +132,7 @@ describe('nodesRegistrationFinished', () => {
           currentPlanName: 'testplan'
         })
       };
-    });
+    }, mockGetIntl);
 
     expect(browserHistory.push).toHaveBeenCalledWith('/nodes/registered/register');
     expect(NodesActions.addNodes).toHaveBeenCalledWith(normalizedRegisteredNodes);
