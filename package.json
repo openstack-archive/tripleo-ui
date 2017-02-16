@@ -87,6 +87,6 @@
     "tripleo-ui",
     "openstack"
   ],
-  "author": "Jiri Tomasek jtomasek@redhat.com",
+  "author": "Openstack <openstack-dev@lists.openstack.org>",
   "license": "Apache-2.0"
 }
