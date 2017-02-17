@@ -1,10 +1,22 @@
 import React from 'react';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import invariant from 'invariant';
 
 import DataTableRow from './DataTableRow';
 import Loader from '../Loader';
 
-export default class DataTable extends React.Component {
+const messages = defineMessages({
+  filter: {
+    id: 'DataTable.filter',
+    defaultMessage: 'Filter'
+  },
+  itemsVisibleInTable: {
+    id: 'DataTable.itemsVisibleInTable',
+    defaultMessage: 'Showing {showing} of {total} items'
+  }
+});
+
+class DataTable extends React.Component {
   _getColumns() {
     let columns = [];
     React.Children.forEach(this.props.children, (child) => {
@@ -31,8 +43,8 @@ export default class DataTable extends React.Component {
           <label>
             <input type="search"
                    className=""
-                   placeholder={'Filter'}
-                   title={'Filter'}
+                   placeholder={this.props.intl.formatMessage(messages.filter)}
+                   title={this.props.intl.formatMessage(messages.filter)}
                    value={this.props.filterString}
                    onChange={this.onFilterTable.bind(this)}/>
           </label>
@@ -73,7 +85,9 @@ export default class DataTable extends React.Component {
             {this.renderTableActions()}
           </div>
           <div className="dataTables_info">
-            Showing <b>{rows.length}</b> of <b>{this.props.data.length}</b> items
+            <FormattedMessage {...messages.itemsVisibleInTable}
+              values={{showing: <b>{rows.length}</b>,
+                       total:   <b>{this.props.data.length}</b>}} />
           </div>
         </div>
         <div className="table-responsive">
@@ -94,6 +108,9 @@ export default class DataTable extends React.Component {
     );
   }
 }
+
+export default injectIntl(DataTable);
+
 DataTable.propTypes = {
   children: React.PropTypes.oneOfType([
     React.PropTypes.arrayOf(React.PropTypes.node),
@@ -103,6 +120,7 @@ DataTable.propTypes = {
   dataOperationInProgress: React.PropTypes.bool.isRequired,
   filterString: React.PropTypes.string,
   id: React.PropTypes.string,
+  intl: React.PropTypes.object,
   noRowsRenderer: React.PropTypes.func.isRequired,
   onFilter: React.PropTypes.func,
   rowsCount: React.PropTypes.number.isRequired,

@@ -49,7 +49,7 @@ let roles = Map({
   })
 });
 
-describe('NodesTable component', () => {
+xdescribe('NodesTable component', () => {
   let nodesTableVdom, nodesTableInstance;
   beforeEach(() => {
     let shallowRenderer = TestUtils.createRenderer();
