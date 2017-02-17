@@ -1,3 +1,4 @@
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import React from 'react';
@@ -10,6 +11,33 @@ import RolesActions from '../../actions/RolesActions';
 import { getRegisteredNodes,
          getDeployedNodes,
          getMaintenanceNodes } from '../../selectors/nodes';
+
+const messages = defineMessages({
+  refreshResults: {
+    id: 'Nodes.refreshResults',
+    defaultMessage: 'Refresh Results'
+  },
+  registerNodes: {
+    id: 'Nodes.registerNodes',
+    defaultMessage: 'Register Nodes'
+  },
+  nodes: {
+    id: 'Nodes.nodes',
+    defaultMessage: 'Nodes'
+  },
+  registeredTab: {
+    id: 'Nodes.registeredTab',
+    defaultMessage: 'Registered'
+  },
+  deployedTab: {
+    id: 'Nodes.deployedTab',
+    defaultMessage: 'Deployed'
+  },
+  maintenanceTab: {
+    id: 'Nodes.maintenanceTab',
+    defaultMessage: 'Maintenance'
+  }
+});
 
 class Nodes extends React.Component {
   componentDidMount() {
@@ -30,25 +58,29 @@ class Nodes extends React.Component {
           <div className="page-header">
             <div className="pull-right">
               <a href="" onClick={this.refreshResults.bind(this)}>
-                <span className="pficon pficon-refresh"></span> Refresh Results
+                <span className="pficon pficon-refresh"></span>
+                <FormattedMessage {...messages.refreshResults}/>
               </a>
               &nbsp;
               <Link to="/nodes/registered/register"
                     className="btn btn-primary">
-                <span className="fa fa-plus"/> Register Nodes
+                <span className="fa fa-plus"/> <FormattedMessage {...messages.registerNodes}/>
               </Link>
             </div>
-            <h1>Nodes</h1>
+            <h1><FormattedMessage {...messages.nodes}/></h1>
           </div>
           <ul className="nav nav-tabs">
             <NavTab to="/nodes/registered">
-              Registered<span className="badge">{this.props.nodes.get('registered').size}</span>
+              <FormattedMessage {...messages.registeredTab}/>
+              <span className="badge">{this.props.nodes.get('registered').size}</span>
             </NavTab>
             <NavTab to="/nodes/deployed">
-              Deployed<span className="badge">{this.props.nodes.get('deployed').size}</span>
+              <FormattedMessage {...messages.deployedTab}/>
+              <span className="badge">{this.props.nodes.get('deployed').size}</span>
             </NavTab>
             <NavTab to="/nodes/maintenance">
-              Maintenance<span className="badge">{this.props.nodes.get('maintenance').size}</span>
+              <FormattedMessage {...messages.maintenanceTab}/>
+              <span className="badge">{this.props.nodes.get('maintenance').size}</span>
             </NavTab>
           </ul>
           <div className="tab-pane">
