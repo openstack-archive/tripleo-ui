@@ -1,0 +1,4 @@
+fixes:
+  - |
+    Fixes `bug 1662976 <https://launchpad.net/bugs/1662976>`__
+    Add i18n strings to data tables
