@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Formsy from 'formsy-react';
@@ -14,6 +15,35 @@ import FormErrorList from '../ui/forms/FormErrorList';
 import NodesActions from '../../actions/NodesActions';
 import NodesTable from './NodesTable';
 import TagNodesModal from './tag_nodes/TagNodesModal';
+
+const messages = defineMessages({
+  introspectNodes: {
+    id: 'RegisteredNodesTabPane.introspectNodes',
+    defaultMessage: 'Introspect Nodes'
+  },
+  tagNodes: {
+    id: 'RegisteredNodesTabPane.tagNodes',
+    defaultMessage: 'Tag Nodes'
+  },
+  provideNodes: {
+    id: 'RegisteredNodesTabPane.provideNodes',
+    defaultMessage: 'Provide Nodes',
+    description: '"Providing" the nodes changes the provisioning state to "available" so that '
+                 + 'they can be used in a deployment.'
+  },
+  deleteNodes: {
+    id: 'RegisteredNodesTabPane.deleteNodes',
+    defaultMessage: 'Delete Nodes'
+  },
+  deleteNodesModalTitle: {
+    id: 'RegisteredNodesTabPane.deleteNodesModalTitle',
+    defaultMessage: 'Delete Nodes'
+  },
+  deleteNodesModalMessage: {
+    id: 'RegisteredNodesTabPane.deleteNodesModalMessage',
+    defaultMessage: 'Are you sure you want to delete the selected nodes?'
+  }
+});
 
 class RegisteredNodesTabPane extends React.Component {
   constructor() {
@@ -59,28 +89,28 @@ class RegisteredNodesTabPane extends React.Component {
                 name="introspect"
                 onClick={this.multipleSubmit.bind(this)}
                 disabled={!this.state.canSubmit || this.props.nodesOperationInProgress}>
-          Introspect Nodes
+          <FormattedMessage {...messages.introspectNodes} />
         </button>
         <button className="btn btn-default"
                 type="button"
                 name="tag"
                 onClick={() => this.setState({ showTagNodesModal: true })}
                 disabled={!this.state.canSubmit || this.props.nodesOperationInProgress}>
-          Tag Nodes
+          <FormattedMessage {...messages.tagNodes} />
         </button>
         <button className="btn btn-default"
                 type="button"
                 name="provide"
                 onClick={this.multipleSubmit.bind(this)}
                 disabled={!this.state.canSubmit || this.props.nodesOperationInProgress}>
-          Provide Nodes
+          <FormattedMessage {...messages.provideNodes} />
         </button>
         <button className="btn btn-danger"
                 type="button"
                 name="delete"
                 onClick={() => this.setState({ showDeleteModal: true })}
                 disabled={!this.state.canSubmit || this.props.nodesOperationInProgress}>
-          Delete Nodes
+          <FormattedMessage {...messages.deleteNodes} />
         </button>
       </div>
     );
@@ -143,8 +173,9 @@ class RegisteredNodesTabPane extends React.Component {
                       isFetchingNodes={this.props.isFetchingNodes}
                       tableActions={this.getTableActions.bind(this)}/>
           <ConfirmationModal show={this.state.showDeleteModal}
-                             title="Delete Nodes"
-                             question="Are you sure you want to delete the selected nodes?"
+                             title={this.props.intl.formatMessage(messages.deleteNodesModalTitle)}
+                             question={this.props.intl.formatMessage(
+                                         messages.deleteNodesModalMessage)}
                              iconClass="pficon pficon-delete"
                              confirmActionName="delete"
                              onConfirm={this.multipleSubmit.bind(this)}
@@ -166,6 +197,7 @@ RegisteredNodesTabPane.propTypes = {
   deleteNodes: React.PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list,
   formFieldErrors: ImmutablePropTypes.map,
+  intl: React.PropTypes.object,
   introspectNodes: React.PropTypes.func.isRequired,
   isFetchingNodes: React.PropTypes.bool.isRequired,
   nodesInProgress: ImmutablePropTypes.set,
@@ -200,4 +232,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegisteredNodesTabPane);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(RegisteredNodesTabPane));
