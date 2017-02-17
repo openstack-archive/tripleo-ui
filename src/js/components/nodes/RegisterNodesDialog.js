@@ -3,6 +3,7 @@ import { fromJS } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ClassNames from 'classnames';
 import { Link } from 'react-router';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import React from 'react';
 import uuid from 'node-uuid';
 
@@ -18,6 +19,67 @@ import RegisterNodeForm from './RegisterNodeForm';
 import Tab from '../ui/Tab';
 import TabPane from '../ui/TabPane';
 import Modal from '../ui/Modal';
+
+const messages = defineMessages({
+  invalidJson: {
+    id: 'RegisterNodesDialog.invalidJson',
+    defaultMessage: 'Invalid JSON'
+  },
+  csvUnsupported: {
+    id: 'RegisterNodesDialog.csvUnsupported',
+    defaultMessage: 'CSV Upload Unsupported'
+  },
+  selectedFileUnsupported: {
+    id: 'RegisterNodesDialog.selectedFileUnsupported',
+    defaultMessage: 'The selected file format is not supported yet.'
+  },
+  unsupportedFileFormat: {
+    id: 'RegisterNodesDialog.unsupportedFileFormat',
+    defaultMessage: 'Unsupported File Format'
+  },
+  provideCsvOrInstackenvJson: {
+    id: 'RegisterNodesDialog.provideCsvOrInstackenvJson',
+    defaultMessage: 'Please provide a CSV file or instackenv.json.'
+  },
+  undefinedNode: {
+    id: 'RegisterNodesDialog.undefinedNode',
+    defaultMessage: 'Undefined Node'
+  },
+  noNodesToRegister: {
+    id: 'RegisterNodesDialog.noNodesToRegister',
+    defaultMessage: '"No Nodes To Register"'
+  },
+  addANodeManually: {
+    id: 'RegisterNodesDialog.addANodeManually',
+    defaultMessage: 'Add a node manually or upload nodes from a file.'
+  },
+  registerNodes: {
+    id: 'RegisterNodesDialog.registerNodes',
+    defaultMessage: 'Register Nodes'
+  },
+  registeringNodes: {
+    id: 'RegisterNodesDialog.registeringNodes',
+    defaultMessage: 'Registering Nodes...'
+  },
+  addNew: {
+    id: 'RegisterNodesDialog.addNew',
+    defaultMessage: 'Add New',
+    description: 'Small button, to add a new Node'
+  },
+  uploadFromFile: {
+    id: 'RegisterNodesDialog.uploadFromFile',
+    defaultMessage: 'Upload From File'
+  },
+  or: {
+    id: 'RegisterNodesDialog.or',
+    defaultMessage: 'or',
+    description: 'Placed between two buttons: "Add New" <or> "Upload From File"'
+  },
+  cancel: {
+    id: 'RegisterNodesDialog.cancel',
+    defaultMessage: 'Cancel'
+  }
+});
 
 class RegisterNodesDialog extends React.Component {
   constructor() {
@@ -40,7 +102,8 @@ class RegisterNodesDialog extends React.Component {
         this.addNode(new NodeToRegister(fromJS(node)));
       });
     } catch(e) {
-      this.setState({ jsonErrors: [{ title: 'Invalid JSON', message: e.toString() }] });
+      this.setState({ jsonErrors: [{ title: this.props.intl.formatMessage(messages.invalidJson),
+                                     message: e.toString() }] });
     }
   }
 
@@ -56,13 +119,13 @@ class RegisterNodesDialog extends React.Component {
           // TODO(jtomasek): add CSV file support
           // this.addNodesFromCSV(e.target.result);
           this.props.notify({
-            title: 'CSV Upload Unsupported',
-            message: 'The selected file format is not supported yet'
+            title: this.props.intl.formatMessage(messages.csvUnsupported),
+            message: this.props.intl.formatMessage(messages.selectedFileUnsupported)
           });
         } else {
           this.props.notify({
-            title: 'Unsuported File Format',
-            message: 'Please provide csv file or instackenv.json'
+            title: this.props.intl.formatMessage(messages.unsupportedFileFormat),
+            message: this.props.intl.formatMessage(messages.provideCsvOrInstackenvJson)
           });
         }
       });
@@ -98,7 +161,8 @@ class RegisterNodesDialog extends React.Component {
   }
 
   renderNode(node, index) {
-    let nodeName = node.name || node.pm_addr || 'Undefined Node';
+    let nodeName = node.name || node.pm_addr
+                   || this.props.intl.formatMessage(messages.undefinedNode);
     let validationIconClasses = ClassNames({
       'pficon': true,
       'pficon-error-circle-o': !node.valid
@@ -135,8 +199,8 @@ class RegisterNodesDialog extends React.Component {
     } else {
       return (
         <BlankSlate iconClass="fa fa-cubes"
-                    title="No Nodes To Register">
-          <p>Add a node manually or upload nodes from a file.</p>
+                    title={this.props.intl.formatMessage(messages.noNodesToRegister)}>
+          <p><FormattedMessage {...messages.addANodeManually}/></p>
         </BlankSlate>
       );
     }
@@ -155,11 +219,11 @@ class RegisterNodesDialog extends React.Component {
                 className="close">
             <span className="pficon pficon-close"></span>
           </Link>
-          <h4 className="modal-title">Register Nodes</h4>
+          <h4 className="modal-title"><FormattedMessage {...messages.registerNodes}/></h4>
         </div>
         <Loader loaded={!this.props.isRegistering}
                 size="lg"
-                content="Registering Nodes..."
+                content={this.props.intl.formatMessage(messages.registeringNodes)}
                 height={220}>
           <ModalFormErrorList errors={this.getErrors()}/>
           <div className="container-fluid">
@@ -169,13 +233,14 @@ class RegisterNodesDialog extends React.Component {
                   <button className="btn btn-default"
                           type="button"
                           onClick={this.onAddNewClick.bind(this)}>
-                    <span className="fa fa-plus"/> Add New
+                    <span className="fa fa-plus"/> <FormattedMessage {...messages.addNew}/>
                   </button>
-                  &nbsp; or &nbsp;
+                  &nbsp; <FormattedMessage {...messages.or}/> &nbsp;
                   <button className="btn btn-default"
                           onClick={this.selectFile.bind(this)}
                           type="button">
-                    <span className="fa fa-upload"/> Upload From File
+                    <span className="fa fa-upload"/>
+                    <FormattedMessage {...messages.uploadFromFile}/>
                   </button>
                   <form ref="regNodesUploadFileForm">
                     <input style={{display: 'none'}}
@@ -201,13 +266,13 @@ class RegisterNodesDialog extends React.Component {
           <Link to="/nodes/registered"
                 onClick={() => this.props.cancelNodesRegistration()}
                 type="button"
-                className="btn btn-default">Cancel</Link>
+                className="btn btn-default"><FormattedMessage {...messages.cancel}/></Link>
           <button disabled={!this.props.canSubmit}
                   onClick={() => this.props.registerNodes(this.props.ironicNodes,
                                                           '/nodes/registered')}
                   className="btn btn-primary"
                   type="button">
-            Register Nodes
+            <FormattedMessage {...messages.registerNodes}/>
           </button>
         </div>
       </Modal>
@@ -218,6 +283,7 @@ RegisterNodesDialog.propTypes = {
   addNode: React.PropTypes.func.isRequired,
   canSubmit: React.PropTypes.bool.isRequired,
   cancelNodesRegistration: React.PropTypes.func.isRequired,
+  intl: React.PropTypes.object,
   ironicNodes: ImmutablePropTypes.map.isRequired,
   isRegistering: React.PropTypes.bool.isRequired,
   nodesToRegister: ImmutablePropTypes.map.isRequired,
@@ -255,4 +321,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterNodesDialog);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(RegisterNodesDialog));
