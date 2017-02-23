@@ -248,4 +248,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(DeploymentPlan));
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(DeploymentPlan));

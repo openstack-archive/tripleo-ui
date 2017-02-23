@@ -87,4 +87,4 @@ function mapStateToProps(state, props) {
   };
 }
 
-export default connect(mapStateToProps)(injectIntl(RoleServices));
+export default injectIntl(connect(mapStateToProps)(RoleServices));
