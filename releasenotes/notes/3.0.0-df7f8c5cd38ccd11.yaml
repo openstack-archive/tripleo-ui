@@ -6,6 +6,7 @@ features:
   - Internationalization (i18n) support for the TripleO-UI.
   - Improved deployment configuration by providing a way to configure
     parameters for enabled Environments.
+  - Enable users to export deployment plans.
 fixes:
   - Fixes `bug 1642216 <https://bugs.launchpad.net/tripleo/+bug/1642216>`__
     Changes to role configurations are viewed in real time
