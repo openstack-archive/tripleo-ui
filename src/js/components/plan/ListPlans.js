@@ -20,6 +20,10 @@ const messages = defineMessages({
     id: 'ListPlans.edit',
     defaultMessage: 'Edit'
   },
+  export: {
+    id: 'ListPlans.export',
+    defaultMessage: 'Export'
+  },
   delete: {
     id: 'ListPlans.delete',
     defaultMessage: 'Delete'
@@ -163,6 +167,12 @@ class RowActionsCell extends React.Component {
                 query={{tab: 'editPlan'}}
                 className="btn btn-xs btn-default">
             <FormattedMessage {...messages.edit}/>
+          </Link>
+          &nbsp;
+          <Link key="export"
+                to={`/plans/${plan.name}/export`}
+                className="btn btn-xs btn-default">
+            <FormattedMessage {...messages.export}/>
           </Link>
           &nbsp;
           <Link key="delete"
