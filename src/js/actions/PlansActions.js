@@ -44,6 +44,10 @@ const messages = defineMessages({
   deploymentFailedNotificationTitle: {
     id: 'PlansActions.deploymentFailedNotificationTitle',
     defaultMessage: 'Deployment Failed'
+  },
+  exportFailedNotificationTitle: {
+    id: 'PlansActions.exportFailedNotificationTitle',
+    defaultMessage: 'Export Failed'
   }
 });
 
@@ -438,6 +442,66 @@ export default {
         dispatch(StackActions.fetchStacks());
       }).catch(error => {
         dispatch(this.deployPlanFailed(planName));
+        let errorHandler = new MistralApiErrorHandler(error);
+        errorHandler.errors.forEach((error) => {
+          dispatch(NotificationActions.notify(error));
+        });
+      });
+    };
+  },
+
+  exportPlanPending(planName) {
+    return {
+      type: PlansConstants.EXPORT_PLAN_PENDING,
+      payload: planName
+    };
+  },
+
+  exportPlanSuccess(payload) {
+    return {
+      type: PlansConstants.EXPORT_PLAN_SUCCESS,
+      payload: payload
+    };
+  },
+
+  exportPlanFailed(planName) {
+    return {
+      type: PlansConstants.EXPORT_PLAN_FAILED,
+      payload: planName
+    };
+  },
+
+  exportPlanFinished(payload) {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
+      if(payload.status === 'FAILED') {
+        dispatch(this.exportPlanFailed(payload.execution.input.plan));
+        dispatch(NotificationActions.notify({
+          title: formatMessage(messages.exportFailedNotificationTitle),
+          message: payload.message,
+          type: 'error'
+        }));
+      }
+      else {
+        dispatch(this.exportPlanSuccess(payload));
+      }
+    };
+  },
+
+  exportPlan(planName) {
+    return dispatch => {
+      dispatch(this.exportPlanPending(planName));
+      MistralApiService.runWorkflow(
+        MistralConstants.PLAN_EXPORT,
+        { plan: planName }
+      ).then((response) => {
+        if(response.state === 'ERROR') {
+          logger.error('Error in PlansActions.exportPlan', response);
+          dispatch(this.exportPlanFailed(planName));
+        }
+      }).catch((error) => {
+        logger.error('Error in PlansActions.exportPlan', error);
+        dispatch(this.exportPlanFailed(planName));
         let errorHandler = new MistralApiErrorHandler(error);
         errorHandler.errors.forEach((error) => {
           dispatch(NotificationActions.notify(error));

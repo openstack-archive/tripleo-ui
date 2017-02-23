@@ -41,6 +41,11 @@ export default {
         break;
       }
 
+      case (MistralConstants.PLAN_EXPORT): {
+        dispatch(PlansActions.exportPlanFinished(payload));
+        break;
+      }
+
       default:
         break;
       }
