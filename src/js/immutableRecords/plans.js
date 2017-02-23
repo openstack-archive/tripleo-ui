@@ -22,5 +22,6 @@ export const InitialPlanState = Record({
   plansLoaded: false,
   isTransitioningPlan: false,
   planFormErrors: List(),
-  all: Map()
+  all: Map(),
+  isExportingPlan: false
 });
