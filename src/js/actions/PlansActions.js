@@ -325,7 +325,7 @@ export default {
           dispatch(CurrentPlanActions.detectPlan());
         }).catch(error => {
           logger.error('Error deleting plan MistralApiService.runAction', error);
-          dispatch(this.planDeleted(planName));
+          dispatch(this.deletePlanFailed(planName));
           let errorHandler = new MistralApiErrorHandler(error);
           errorHandler.errors.forEach((error) => {
             dispatch(NotificationActions.notify(error));
