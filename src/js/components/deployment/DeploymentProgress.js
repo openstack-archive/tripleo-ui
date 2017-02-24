@@ -32,7 +32,9 @@ export default class DeploymentProgress extends React.Component {
 
   render() {
     const statusMessage = (
-      <strong>{statusMessages[this.props.stack.stack_status]}</strong>
+      <strong>
+        <FormattedMessage {...statusMessages[this.props.stack.stack_status]} />
+      </strong>
     );
 
     return (

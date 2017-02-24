@@ -43,7 +43,9 @@ class DeploymentProgress extends React.Component {
     const { formatMessage } = this.props.intl;
 
     const statusMessage = (
-      <strong>{statusMessages[this.props.stack.stack_status]}</strong>
+      <strong>
+        <FormattedMessage {...statusMessages[this.props.stack.stack_status]} />
+      </strong>
     );
 
     const deleteButton = this.props.stack.stack_status !== stackStates.DELETE_IN_PROGRESS
