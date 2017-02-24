@@ -1,4 +1,5 @@
 import keyMirror from 'keymirror';
+import { defineMessages } from 'react-intl';
 
 export default keyMirror({
   DELETE_STACK_PENDING: null,
@@ -30,13 +31,37 @@ export const stackStates = keyMirror({
   UPDATE_COMPLETE: null
 });
 
-export const deploymentStatusMessages = {
-  CREATE_IN_PROGRESS: 'Deployment in progress',
-  CREATE_COMPLETE: 'Deployment succeeded',
-  CREATE_FAILED: 'Deployment failed',
-  DELETE_IN_PROGRESS: 'Deletion in progress',
-  DELETE_FAILED: 'Deployment deletion failed',
-  UPDATE_IN_PROGRESS: 'Update in progress',
-  UPDATE_FAILED: 'Update failed',
-  UPDATE_COMPLETE: 'Update succeeded'
-};
+export const deploymentStatusMessages = defineMessages({
+  CREATE_IN_PROGRESS: {
+    id: 'DeploymentStatus.createInProgress',
+    defaultMessage: 'Deployment in progress'
+  },
+  CREATE_COMPLETE: {
+    id: 'DeploymentStatus.createComplete',
+    defaultMessage: 'Deployment succeeded'
+  },
+  CREATE_FAILED: {
+    id: 'DeploymentStatus.createFailed',
+    defaultMessage: 'Deployment failed'
+  },
+  DELETE_IN_PROGRESS: {
+    id: 'Deploy.deleteInProgress',
+    defaultMessage: 'Deletion in progress'
+  },
+  DELETE_FAILED: {
+    id: 'DeploymentStatus.deleteFailed',
+    defaultMessage: 'Deployment deletion failed'
+  },
+  UPDATE_IN_PROGRESS: {
+    id: 'DeploymentStatus.updateInProgress',
+    defaultMessage: 'Update in progress'
+  },
+  UPDATE_FAILED: {
+    id: 'DeploymentStatus.updateFailed',
+    defaultMessage: 'Update failed'
+  },
+  UPDATE_COMPLETE: {
+    id: 'DeploymentStatus.updateComplete',
+    defaultMessage: 'Update succeeded'
+  }
+});

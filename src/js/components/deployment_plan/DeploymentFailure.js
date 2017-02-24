@@ -25,11 +25,13 @@ const messages = defineMessages({
 class DeploymentFailure extends React.Component {
   render() {
     const { formatMessage } = this.props.intl;
+    const status = formatMessage(
+      deploymentStatusMessages[this.props.stack.stack_status]);
 
     return (
       <div>
         <InlineNotification type="error"
-                            title={deploymentStatusMessages[this.props.stack.stack_status]}>
+                            title={status}>
           <p>
             {this.props.stack.stack_status_reason} <Link to="/deployment-plan/deployment-detail">
             <FormattedMessage {...messages.moreDetails}/></Link>
