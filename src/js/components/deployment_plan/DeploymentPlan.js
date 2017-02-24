@@ -44,6 +44,40 @@ const messages = defineMessages({
   deployStepHeader: {
     id: 'DeploymentPlan.deployStepHeader',
     defaultMessage: 'Deploy'
+  },
+  hardwareStepTooltip: {
+    id: 'DeploymentPlan.hardwareStepTooltip',
+    defaultMessage: 'This step registers and introspects your nodes. Registration involves ' +
+    'defining the power management details of each node so that you so that the director can ' +
+    'control them during the introspection and provisioning stages. After registration, you ' +
+    'introspect the nodes, which identifies the hardware each node uses and builds a profile of ' +
+    'each node. After registration and introspection, you can assign these nodes into specific ' +
+    'roles in your overcloud.'
+  },
+  configurePlanStepTooltip: {
+    id: 'DeploymentPlan.configurePlanStepTooltip',
+    defaultMessage: 'This step allows you edit specific settings for the overcloud\'s network, ' +
+    'storage, and other certified plugins. Use this step to define your network isolation ' +
+    'configuration and your backend storage settings.'
+  },
+  configureRolesStepTooltip: {
+    id: 'DeploymentPlan.configureRolesStepTooltip',
+    defaultMessage: 'This step assigns and removes nodes from roles in your overcloud. On each ' +
+    'role\'s selection dialog, you can tag available nodes into the role or untag nodes already ' +
+    'assigned to the role. Click "Assign Nodes" for a particular role to open the selection ' +
+    'dialog and start assigning nodes.' +
+    '\n' +
+    'You can also customize role-specific settings in this step. For example, you can compose ' +
+    'services on each role and customize specific parameters related to each role. Click the ' +
+    'pencil icon in the top-right corner of each role to see these role-specific settings'
+  },
+  deployStepTooltip: {
+    id: 'DeploymentPlan.deploymentStepTooltip',
+    defaultMessage: 'This step performs the deployment of the overcloud. Once the deployment ' +
+    'begins, the director tracks the progress and provides a report of each completed, running, ' +
+    'or failed step. When the deployment completes, the director displays the current overcloud ' +
+    'status and login details, which you use to interact with your overcloud. Click "Deploy" to ' +
+    'start the deployment.'
   }
 });
 
@@ -112,11 +146,13 @@ class DeploymentPlan extends React.Component {
             </div>
             <ol className="deployment-step-list">
             <DeploymentPlanStep title={formatMessage(messages.hardwareStepHeader)}
-                                disabled={this.props.currentStackDeploymentInProgress}>
+                                disabled={this.props.currentStackDeploymentInProgress}
+                                tooltip={formatMessage(messages.hardwareStepTooltip)}>
               <HardwareStep />
             </DeploymentPlanStep>
             <DeploymentPlanStep title={formatMessage(messages.deploymentConfigurationStepHeader)}
-                                disabled={this.props.currentStackDeploymentInProgress}>
+                                disabled={this.props.currentStackDeploymentInProgress}
+                                tooltip={formatMessage(messages.configurePlanStepTooltip)}>
                 <ConfigurePlanStep
                   fetchEnvironmentConfiguration={this.props.fetchEnvironmentConfiguration}
                   summary={this.props.environmentConfigurationSummary}
@@ -125,7 +161,8 @@ class DeploymentPlan extends React.Component {
                   loaded={this.props.environmentConfigurationLoaded}/>
             </DeploymentPlanStep>
             <DeploymentPlanStep title={formatMessage(messages.configureRolesStepHeader)}
-                                disabled={this.props.currentStackDeploymentInProgress}>
+                                disabled={this.props.currentStackDeploymentInProgress}
+                                tooltip={formatMessage(messages.configureRolesStepTooltip)}>
                 <RolesStep availableNodesByRole={this.props.availableNodesByRole}
                            fetchNodes={this.props.fetchNodes}
                            fetchRoles={this.props.fetchRoles.bind(this, currentPlanName)}
@@ -135,7 +172,8 @@ class DeploymentPlan extends React.Component {
                            rolesLoaded={this.props.rolesLoaded}
                            unassignedAvailableNodes={this.props.unassignedAvailableNodes}/>
               </DeploymentPlanStep>
-            <DeploymentPlanStep title={formatMessage(messages.deployStepHeader)}>
+            <DeploymentPlanStep title={formatMessage(messages.deployStepHeader)}
+                                tooltip={formatMessage(messages.deployStepTooltip)}>
                 <DeployStep
                   currentPlan={this.props.currentPlan}
                   currentStack={this.props.currentStack}
