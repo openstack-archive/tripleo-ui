@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    Adds tooltips for each of the deployment steps on the deployment plan
+    page.
+fixes:
+  - |
+    Fixes `bug 1648888 <https://bugs.launchpad.net/tripleo/+bug/1648888>`__ 
+    adds tooltips to the Deployment Plan page
