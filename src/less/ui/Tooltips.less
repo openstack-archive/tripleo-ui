@@ -1,0 +1,75 @@
+@tooltip-width: 350px;
+
+[data-tooltip] {
+	cursor: pointer;
+	position: relative;
+	&:before {
+		background: transparent;
+		border-top-color: @gray-base;
+		border-top-color: hsla(0, 0%, 20%, 0.9);
+		border: 6px solid transparent;
+		content: "";
+		margin-bottom: -12px;
+		margin-left: -6px;
+		z-index: 1001;
+	}
+	&:after {
+		background-color: @gray-base;
+		background-color: hsla(0, 0%, 20%, 0.9);
+		color: @component-active-color;
+		content: attr(data-tooltip);
+		font-size: @font-size-small;
+		line-height: @line-height-base;
+		padding: 12px 12px 12px 16px;
+		width: @tooltip-width;
+		z-index: 1000;
+	}
+}
+
+[data-tooltip]:before,[data-tooltip]:after, .tooltip:before, .tooltip:after  {
+	-moz-transform: translate3d(0, 0, 0);
+	-moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	-webkit-transform: translate3d(0, 0, 0);
+	-webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+	left: 50%;
+	opacity: 0;
+	pointer-events: none;
+	position: absolute;
+	top: 0;
+	transform: translate3d(0, 0, 0);
+	transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+	visibility: hidden;
+}
+[data-tooltip]:hover:before,[data-tooltip]:hover:after,[data-tooltip]:focus:before,[data-tooltip]:focus:after, .tooltip:hover:before, .tooltip:hover:after, .tooltip:focus:before, .tooltip:focus:after  {
+	-moz-transform: translateY(-12px);
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+	-webkit-transform: translateY(-12px);
+	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+	opacity: 1;
+	transform: translateY(-12px);
+	visibility: visible;
+}
+.tooltip-right {
+	margin-left: 10px;
+	&:before {
+		border-right-color: @gray-base;
+		border-right-color: hsla(0, 0%, 20%, 0.9);
+		border-top-color: transparent;
+		left: 100%;
+		margin-bottom: 0;
+		margin-left: -12px;
+		top: 3px;
+	}
+	&:after {
+		left: 100%;
+		margin-bottom: -110px;
+		margin-left: 0;
+	}
+}
+.tooltip-right:hover:before, .tooltip-right:hover:after, .tooltip-right:focus:before, .tooltip-right:focus:after  {
+	-moz-transform: translateX(12px);
+	-webkit-transform: translateX(12px);
+	transform: translateX(12px);
+}
