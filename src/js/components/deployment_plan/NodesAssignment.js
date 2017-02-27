@@ -7,10 +7,9 @@ import { Link } from 'react-router';
 import React from 'react';
 import { List, Map } from 'immutable';
 
-import { getAvailableNodes,
+import { getAvailableNodesByRole,
          getUnassignedAvailableNodes,
-         getNodesOperationInProgress,
-         getAssignedNodes } from '../../selectors/nodes';
+         getNodesOperationInProgress } from '../../selectors/nodes';
 import { getRoles } from '../../selectors/roles';
 import { getCurrentPlan } from '../../selectors/plans';
 import FormErrorList from '../ui/forms/FormErrorList';
@@ -84,7 +83,7 @@ class NodesAssignment extends React.Component {
     const role = this.props.roles.get(roleIdentifier);
     const roleName = role ? role.title : roleIdentifier;
     const nodesToAssign = this.props.unassignedAvailableNodes
-                            .merge(getAssignedNodes(this.props.availableNodes, roleIdentifier))
+                            .merge(this.props.availableNodesByRole.get(roleIdentifier))
                             .sortBy(node => node.get('uuid'));
 
     return (
@@ -126,7 +125,7 @@ class NodesAssignment extends React.Component {
 }
 NodesAssignment.propTypes = {
   assignNodes: React.PropTypes.func.isRequired,
-  availableNodes: ImmutablePropTypes.map,
+  availableNodesByRole: ImmutablePropTypes.map,
   currentPlan: ImmutablePropTypes.record,
   fetchNodes: React.PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list.isRequired,
@@ -145,7 +144,7 @@ NodesAssignment.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    availableNodes: getAvailableNodes(state),
+    availableNodesByRole: getAvailableNodesByRole(state),
     currentPlan: getCurrentPlan(state),
     isFetchingNodes: state.nodes.get('isFetching'),
     nodesInProgress: state.nodes.get('nodesInProgress'),
