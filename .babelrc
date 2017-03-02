@@ -4,6 +4,7 @@
     ["react-intl", {
       "messagesDir": "./i18n/extracted-messages/",
       "enforceDescriptions": false
-    }]
+    }],
+    "es6-promise"
   ]
 }
