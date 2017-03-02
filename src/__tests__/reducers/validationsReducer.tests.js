@@ -1,4 +1,3 @@
-import matchers from 'jasmine-immutable-matchers';
 import { List, Map } from 'immutable';
 
 import { Validation } from '../../js/immutableRecords/validations';
@@ -6,10 +5,6 @@ import ValidationsConstants from '../../js/constants/ValidationsConstants';
 import validationsReducer from '../../js/reducers/validationsReducer';
 
 describe('validationsReducer', () => {
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   const initialState = Map({
     validationsLoaded: false,
     isFetching: false,
@@ -76,7 +71,7 @@ describe('validationsReducer', () => {
       }
     };
     const newState = validationsReducer(initialState, action);
-    expect(newState.get('validations')).toEqualImmutable(
+    expect(newState.get('validations')).toEqual(
       updatedState.get('validations')
     );
   });

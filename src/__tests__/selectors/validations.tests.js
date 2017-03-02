@@ -1,5 +1,4 @@
 import { List, Map, OrderedMap } from 'immutable';
-import matchers from 'jasmine-immutable-matchers';
 
 import * as selectors from '../../js/selectors/validations';
 import { Validation } from '../../js/immutableRecords/validations';
@@ -8,10 +7,6 @@ import { WorkflowExecution } from '../../js/immutableRecords/workflowExecutions'
 import MistralConstants from '../../js/constants/MistralConstants';
 
 describe(' validations selectors', () => {
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   const state = {
     currentPlan: new CurrentPlanState({
       conflict: undefined,
@@ -98,7 +93,7 @@ describe(' validations selectors', () => {
   it('provides selector to get validation executions for current plan', () => {
     expect(selectors.getValidationExecutionsForCurrentPlan(state).size).toEqual(2);
     expect(selectors.getValidationExecutionsForCurrentPlan(state))
-      .toEqualImmutable(state.executions.get('executions'));
+      .toEqual(state.executions.get('executions'));
   });
 
   it('provides selector to get validation combined with its results', () => {
