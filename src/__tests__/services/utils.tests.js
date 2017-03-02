@@ -1,7 +1,6 @@
 import { getAuthTokenId, getServiceUrl } from '../../js/services/utils';
 import { InitialLoginState } from '../../js/immutableRecords/login';
 import { List, Map } from 'immutable';
-import matchers from 'jasmine-immutable-matchers';
 import store from '../../js/store';
 
 describe('utility functions', () => {
@@ -51,7 +50,6 @@ describe('utility functions', () => {
   };
 
   beforeEach(() => {
-    jasmine.addMatchers(matchers);
     spyOn(store, 'getState').and.returnValue(appState);
   });
 

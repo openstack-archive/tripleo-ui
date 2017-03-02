@@ -72,11 +72,22 @@
     "build": "webpack --bail",
     "lint": "eslint --max-warnings 0 src",
     "start": "webpack-dev-server --progress",
-    "test": "karma start --single-run",
-    "test:watch": "karma start",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
     "json2pot": "rip json2pot ./i18n/extracted-messages/**/*.json -o ./i18n/messages.pot",
     "po2json": "rip po2json -m ./i18n/extracted-messages/**/*.json",
     "docs": "cd docs && make html && cd -"
+  },
+  "jest": {
+    "testMatch": ["**/__tests__/**/reducers/*.tests.js"],
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+    ]
   },
   "repository": {
     "type": "git",
