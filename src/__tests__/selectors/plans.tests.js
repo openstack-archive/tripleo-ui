@@ -7,10 +7,6 @@ import { InitialPlanState } from '../../js/immutableRecords/plans';
 import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
 
 describe('plans selectors', () => {
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   describe('getAllPlansButCurrent()', () => {
     const state = {
       plans: new InitialPlanState({
