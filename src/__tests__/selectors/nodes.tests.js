@@ -1,14 +1,9 @@
 import { fromJS, Map } from 'immutable';
-import matchers from 'jasmine-immutable-matchers';
 
 import * as selectors from '../../js/selectors/nodes';
 import { Port } from '../../js/immutableRecords/nodes';
 
 describe('Nodes selectors', () => {
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   const state = {
     nodes: Map({
       isFetching: false,
