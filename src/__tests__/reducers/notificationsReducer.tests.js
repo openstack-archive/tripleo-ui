@@ -1,4 +1,3 @@
-import matchers from 'jasmine-immutable-matchers';
 import { Map } from 'immutable';
 
 import { Notification } from '../../js/immutableRecords/notifications';
@@ -6,10 +5,6 @@ import NotificationConstants from '../../js/constants/NotificationConstants';
 import notificationsReducer from '../../js/reducers/notificationsReducer';
 
 describe('notificationsReducer', () => {
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   const initialState = Map({ all: Map() });
   const testNotification = new Notification({
     title: 'Title',
@@ -27,7 +22,7 @@ describe('notificationsReducer', () => {
       type: NotificationConstants.NOTIFY,
       payload: testNotification
     };
-    expect(notificationsReducer(initialState, action)).toEqualImmutable(
+    expect(notificationsReducer(initialState, action)).toEqual(
       Map({
         all: Map({
           someId: testNotification
@@ -46,7 +41,7 @@ describe('notificationsReducer', () => {
         someId: testNotification
       })
     });
-    expect(notificationsReducer(testState, action)).toEqualImmutable(
+    expect(notificationsReducer(testState, action)).toEqual(
       Map({
         all: Map()
       })
@@ -63,7 +58,7 @@ describe('notificationsReducer', () => {
         someId: testNotification
       })
     });
-    expect(notificationsReducer(testState, action)).toEqualImmutable(
+    expect(notificationsReducer(testState, action)).toEqual(
       Map({
         all: Map({
           someId: new Notification({
