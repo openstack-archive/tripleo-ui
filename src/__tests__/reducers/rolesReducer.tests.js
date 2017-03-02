@@ -1,4 +1,3 @@
-import matchers from 'jasmine-immutable-matchers';
 import { Map } from 'immutable';
 
 import { Role } from '../../js/immutableRecords/roles';
@@ -7,10 +6,6 @@ import RolesConstants from '../../js/constants/RolesConstants';
 import rolesReducer from '../../js/reducers/rolesReducer';
 
 describe('rolesReducer', () => {
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   const initialState = Map({
     loaded: false,
     isFetching: false,
@@ -47,7 +42,7 @@ describe('rolesReducer', () => {
       payload: ['Controller']
     };
     const newState = rolesReducer(initialState, action);
-    expect(newState.get('roles')).toEqualImmutable(
+    expect(newState.get('roles')).toEqual(
       updatedState.get('roles')
     );
     expect(newState.get('loaded')).toEqual(true);

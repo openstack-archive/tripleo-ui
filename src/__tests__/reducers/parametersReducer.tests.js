@@ -1,4 +1,3 @@
-import matchers from 'jasmine-immutable-matchers';
 import { List, Map } from 'immutable';
 
 import { ParametersDefaultState, Parameter } from '../../js/immutableRecords/parameters';
@@ -45,10 +44,6 @@ const parametersActionPayload = {
 };
 
 describe('parametersReducer', () => {
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   describe('FETCH_PARAMETERS_PENDING', () => {
     let state;
     const action = {
@@ -67,7 +62,7 @@ describe('parametersReducer', () => {
     });
 
     it('resets form', () => {
-      expect(state.form).toEqualImmutable(Map({
+      expect(state.form).toEqual(Map({
         formErrors: List(),
         formFieldErrors: Map()
       }));
@@ -93,7 +88,7 @@ describe('parametersReducer', () => {
     });
 
     it('resets form', () => {
-      expect(state.form).toEqualImmutable(Map({
+      expect(state.form).toEqual(Map({
         formErrors: List(),
         formFieldErrors: Map()
       }));
@@ -183,7 +178,7 @@ describe('parametersReducer', () => {
     });
 
     it('resets form', () => {
-      expect(state.form).toEqualImmutable(Map({
+      expect(state.form).toEqual(Map({
         formErrors: List(),
         formFieldErrors: Map()
       }));
