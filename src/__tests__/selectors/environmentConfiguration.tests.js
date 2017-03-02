@@ -1,15 +1,10 @@
 import { List, Map, OrderedMap } from 'immutable';
-import matchers from 'jasmine-immutable-matchers';
 
 import * as selectors from '../../js/selectors/environmentConfiguration';
 import { Environment,
          EnvironmentConfigurationState } from '../../js/immutableRecords/environmentConfiguration';
 
 describe('Environment Configuration selectors', () => {
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   const state = {
     environmentConfiguration: new EnvironmentConfigurationState({
       loaded: true,
@@ -47,7 +42,7 @@ describe('Environment Configuration selectors', () => {
   };
 
   it('provides selector to get enabled environments', () => {
-    expect(selectors.getEnabledEnvironments(state)).toEqualImmutable(OrderedMap({
+    expect(selectors.getEnabledEnvironments(state)).toEqual(OrderedMap({
       'environments/environment1.yaml': new Environment({
         file: 'environments/environment1.yaml',
         title: 'Environment1',
@@ -62,7 +57,7 @@ describe('Environment Configuration selectors', () => {
 
   it(`provides selector to get nested tree of Environment Configuration Topics,
       Environment Groups and Environments`, () => {
-    expect(selectors.getTopicsTree(state)).toEqualImmutable(Map({
+    expect(selectors.getTopicsTree(state)).toEqual(Map({
       Topic1: Map({
         title: 'Topic1',
         environment_groups: List([

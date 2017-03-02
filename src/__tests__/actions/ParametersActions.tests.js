@@ -8,7 +8,9 @@ import MistralApiService from '../../js/services/MistralApiService';
 import MistralConstants from '../../js/constants/MistralConstants';
 import { mockGetIntl } from './utils';
 import { normalizeParameters } from '../../js/actions/ParametersActions';
+import storage from '../mocks/storage';
 
+window.localStorage = window.sessionStorage = storage;
 
 // Use this to mock asynchronous functions which return a promise.
 // The promise will immediately resolve with `data`.
@@ -20,6 +22,7 @@ const createResolvingPromise = (data) => {
 
 const createRejectingPromise = (error) => {
   return () => {
+    console.log('reject')
     return when.reject(error);
   };
 };
@@ -131,12 +134,10 @@ describe('ParametersActions', () => {
     };
 
     beforeEach(done => {
-      spyOn(ParametersActions, 'updateParametersPending');
-      spyOn(ParametersActions, 'updateParametersSuccess');
-      spyOn(ParametersActions, 'updateParametersFailed');
-      // Mock the service call.
-      spyOn(MistralApiService, 'runAction')
-        .and.callFake(createRejectingPromise(error));
+      jest.spyOn(ParametersActions, 'updateParametersPending');
+      jest.spyOn(ParametersActions, 'updateParametersSuccess');
+      jest.spyOn(ParametersActions, 'updateParametersFailed');
+      jest.spyOn(MistralApiService, 'runAction').mockImplementation(createRejectingPromise(error));
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
       ParametersActions.updateParameters('overcloud', { foo: 'bar' })(
