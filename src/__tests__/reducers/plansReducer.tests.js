@@ -1,4 +1,3 @@
-import matchers from 'jasmine-immutable-matchers';
 import { List, Map } from 'immutable';
 
 import { InitialPlanState, Plan, PlanFile } from '../../js/immutableRecords/plans';
@@ -7,10 +6,6 @@ import plansReducer from '../../js/reducers/plansReducer';
 
 
 describe('plansReducer state', () => {
-
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
 
   describe('default state', () => {
     let state;
@@ -113,7 +108,7 @@ describe('plansReducer state', () => {
     });
 
     it('updates the plan records `files` attributes', () => {
-      expect(plan.get('files')).toEqualImmutable(Map({
+      expect(plan.get('files')).toEqual(Map({
         'capabilities_map.yaml': new PlanFile({ name: 'capabilities_map.yaml' }),
         'foo.yaml': new PlanFile({ name: 'foo.yaml' })
       }));
@@ -143,7 +138,7 @@ describe('plansReducer state', () => {
         newState,
         PlansActions.deletePlanSuccess('somecloud')
       );
-      expect(newState.get('all')).toEqualImmutable(Map({
+      expect(newState.get('all')).toEqual(Map({
         overcloud: new Plan({ name: 'overcloud' })
       }));
     });
