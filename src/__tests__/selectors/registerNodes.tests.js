@@ -1,14 +1,9 @@
 import { List, Map, OrderedMap } from 'immutable';
-import matchers from 'jasmine-immutable-matchers';
 
 import * as selectors from '../../js/selectors/registerNodes';
 import { NodeToRegister, IronicNode } from '../../js/immutableRecords/nodes';
 
 describe('registerNodes selectors', () => {
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   const state = {
     registerNodes: Map({
       selectedNodeId: undefined,
@@ -64,6 +59,6 @@ describe('registerNodes selectors', () => {
         disk: undefined
       })
     });
-    expect(selectors.getIronicNodesfromNodesToRegister(state)).toEqualImmutable(expectedNodesList);
+    expect(selectors.getIronicNodesfromNodesToRegister(state)).toEqual(expectedNodesList);
   });
 });

@@ -6,6 +6,18 @@ import { mockGetIntl } from './utils';
 import PlansActions from '../../js/actions/PlansActions';
 import SwiftApiService from '../../js/services/SwiftApiService';
 
+window.localStorage = window.sessionStorage = {
+  getItem: function (key) {
+    return this[key];
+  },
+  setItem: function (key, value) {
+    this[key] = value;
+  },
+  removeItem: function(key) {
+    delete this[key];
+    return;
+  }
+};
 
 // Use these to mock asynchronous functions which return a promise.
 // The promise will immediately resolve/reject with `data`.

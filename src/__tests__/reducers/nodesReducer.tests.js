@@ -1,14 +1,9 @@
-import matchers from 'jasmine-immutable-matchers';
 import { Map, Set } from 'immutable';
 
 import NodesConstants from '../../js/constants/NodesConstants';
 import nodesReducer from '../../js/reducers/nodesReducer';
 
 describe('nodesReducer', () => {
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   const initialState = Map({
     isFetching: false,
     nodesInProgress: Set(),
@@ -69,7 +64,7 @@ describe('nodesReducer', () => {
       payload: 'uuid1'
     };
     const newState = nodesReducer(initialState, action);
-    expect(newState.get('nodesInProgress')).toEqualImmutable(Set(['uuid1']));
+    expect(newState.get('nodesInProgress')).toEqual(Set(['uuid1']));
   });
 
   it('should handle UPDATE_NODE_SUCCESS', () => {
@@ -83,10 +78,10 @@ describe('nodesReducer', () => {
       }
     };
     const newState = nodesReducer(updatedState, action);
-    expect(newState.get('all')).toEqualImmutable(
+    expect(newState.get('all')).toEqual(
       updatedNodeState.get('all')
     );
-    expect(newState.get('nodesInProgress')).toEqualImmutable(Set());
+    expect(newState.get('nodesInProgress')).toEqual(Set());
   });
 
   it('should handle UPDATE_NODE_FAILED', () => {
@@ -95,8 +90,8 @@ describe('nodesReducer', () => {
       payload: 'uuid1'
     };
     const newState = nodesReducer(updatedState, action);
-    expect(newState).toEqualImmutable(updatedState);
-    expect(newState.get('nodesInProgress')).toEqualImmutable(Set());
+    expect(newState).toEqual(updatedState);
+    expect(newState.get('nodesInProgress')).toEqual(Set());
   });
 
   it('should handle DELETE_NODE_SUCCESS', () => {
@@ -106,7 +101,7 @@ describe('nodesReducer', () => {
     };
     const newState = nodesReducer(updatedState, action);
     expect(newState.get('all').size).toEqual(1);
-    expect(newState.get('nodesInProgress')).toEqualImmutable(Set());
+    expect(newState.get('nodesInProgress')).toEqual(Set());
   });
 
   it('should handle DELETE_NODE_FAILED', () => {
@@ -115,8 +110,8 @@ describe('nodesReducer', () => {
       payload: 'uuid1'
     };
     const newState = nodesReducer(updatedState, action);
-    expect(newState).toEqualImmutable(updatedState);
-    expect(newState.get('nodesInProgress')).toEqualImmutable(Set());
+    expect(newState).toEqual(updatedState);
+    expect(newState.get('nodesInProgress')).toEqual(Set());
   });
 
   it('should handle ADD_NODES action', () => {
@@ -133,6 +128,6 @@ describe('nodesReducer', () => {
       payload: registeredNodes
     };
     const newState = nodesReducer(initialState, action);
-    expect(newState).toEqualImmutable(updatedState);
+    expect(newState).toEqual(updatedState);
   });
 });
