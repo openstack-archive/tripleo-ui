@@ -1,0 +1,7 @@
+---
+fixes:
+  - |
+    Fixes `bug 1668978 <https://bugs.launchpad.net/tripleo/+bug/1668978>`__
+    Make the process for adding support for a new language (i18n) simpler by
+    reducing the number of steps necessary.  Fewer manual steps should result in
+    fewer bugs, too.

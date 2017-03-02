@@ -36,11 +36,11 @@ export default class NavBar extends React.Component {
   }
 
   _renderLanguageDropdown() {
-    const languages = getAppConfig().languages || [];
+    const languages = getAppConfig().languages || {};
 
     // Only include the I18nDropdown if there's more than one
     // language to choose from.
-    return (languages.length > 1) ? (
+    return (Object.keys(languages).length > 1) ? (
       <li>
         <I18nDropdown/>
       </li>
