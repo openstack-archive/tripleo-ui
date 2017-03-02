@@ -41,10 +41,9 @@ one JSON file per language (Japanese in this example):
 Adding a new language
 ---------------------
 
-The languages are defined and activated in 3 places. Additionally, the
+The languages are defined and activated in 2 places. Additionally, the
 puppet-tripleo module also needs to be updated for users installing the
 UI via the ``openstack undercloud install`` command.
-
 
 1. The ``I18nProvider`` component
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -72,23 +71,7 @@ constructor. Here's an example for Japanese ("ja"):
       }
 
 
-2. The language selector in the navigation bar
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The language selector component contains a JS object with a display name for
-each language. Please use the English translation for the selector:
-
-.. code-block:: js
-
-    // ./src/js/components/i18n/I18nDropdown
-
-    const languages = {
-      'en': 'English',
-      'ja': 'Japanese'
-    };
-
-
-3. The ``tripleo-ui`` configuration file
+2. The ``tripleo-ui`` configuration file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Finally, you can choose which languages are offered to the user by adding them
@@ -99,7 +82,10 @@ to the ``tripleo_ui_config.js`` file:
     // Languages
     // If you choose more than one language, a language switcher
     // will appear in the navigation bar.
-    "languages": ["en", "ja"],
+    'languages': {
+      'en': 'English',
+      'ja': 'Japanese'
+    },
 
 
 The last step is useful if a language has not -- or only partially -- been
@@ -108,7 +94,7 @@ part of a regular release, but will not show up in the selector by default. Once
 the language translation has been completed it can more easily be backported
 mid-release by updating only the corresponding JSON file.
 
-4. The puppet UI manifest
+3. The puppet UI manifest
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When deploying the UI as part of a normal undercloud install, the
@@ -126,7 +112,10 @@ module. The `manifest for the UI`_ must be modified in two places:
 
     [...]
 
-    $enabled_languages        = ['en', 'ja'],
+    $enabled_languages        = {
+      'en' => 'English',
+      'ja' => 'Japanese'
+    }
 
 
 .. _puppet-tripleo: http://git.openstack.org/cgit/openstack/puppet-tripleo
