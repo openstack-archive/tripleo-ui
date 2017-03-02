@@ -18,7 +18,15 @@ window.tripleOUiConfig = {
   // Languages
   // If you choose more than one language, a language switcher will appear in the navigation bar.
   // Only 'en' (English) is enabled by default.
-  // 'languages': ['en-GB', 'en', 'de', 'ja', 'ko-KR', 'zh-CN', 'es'],
+  // 'languages': [
+  //   ['de', 'German'],
+  //   ['en', 'English'],
+  //   ['en-GB', 'British English'],
+  //   ['es', 'Spanish'],
+  //   ['ja', 'Japanese'],
+  //   ['ko-KR', 'Korean'],
+  //   ['zh-CN', 'Simplified Chinese']
+  // ],
 
   // Logging
   // 'loggers': ['console']

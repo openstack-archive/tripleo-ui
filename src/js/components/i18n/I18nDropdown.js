@@ -16,23 +16,16 @@ const messages = defineMessages({
   }
 });
 
-const languages = {
-  'de': 'German',
-  'en': 'English',
-  'en-GB': 'British English',
-  'es': 'Spanish',
-  'ja': 'Japanese',
-  'ko-KR': 'Korean',
-  'zh-CN': 'Simplified Chinese'
-};
-
 class I18nDropdown extends React.Component {
   _renderDropdownItems() {
     const configLanguages = getAppConfig().languages || [];
+
     return configLanguages.map((lang) => {
-      return (MESSAGES[lang] || lang === 'en') ? (
-        <DropdownItem key={`lang-${lang}`} onClick={this.props.chooseLanguage.bind(this, lang)}>
-          {languages[lang]}
+      // Here, lang = ['en', 'English']
+      return (MESSAGES[lang[0]] || lang === 'en') ? (
+        <DropdownItem key={`lang-${lang[0]}`}
+                      onClick={this.props.chooseLanguage.bind(this, lang[0])}>
+          {lang[1]}
         </DropdownItem>
       ) : null;
     });
