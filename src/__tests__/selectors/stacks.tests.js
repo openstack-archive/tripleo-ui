@@ -1,5 +1,4 @@
 import { Map } from 'immutable';
-import matchers from 'jasmine-immutable-matchers';
 
 import { getCurrentStackDeploymentInProgress,
          getCurrentStack } from '../../js/selectors/stacks';
@@ -7,10 +6,6 @@ import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
 import { Stack, StacksState } from '../../js/immutableRecords/stacks';
 
 describe('stacks selectors', () => {
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   describe('getCurrentStack()', () => {
     const state = {
       stacks: new StacksState({
@@ -25,7 +20,7 @@ describe('stacks selectors', () => {
     };
 
     it('returns a stack based on the currentPlanName', () => {
-      expect(getCurrentStack(state)).toEqualImmutable(
+      expect(getCurrentStack(state)).toEqual(
          Stack({ stack_name: 'overcloud', stack_status: 'CREATE_COMPLETE' })
       );
     });
