@@ -1,16 +1,9 @@
-import matchers from 'jasmine-immutable-matchers';
-
 import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
 import currentPlanReducer from '../../js/reducers/currentPlanReducer';
 import CurrentPlanActions from '../../js/actions/CurrentPlanActions';
 
 
 describe('plansReducer state', () => {
-
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   describe('default state', () => {
     let state;
 
