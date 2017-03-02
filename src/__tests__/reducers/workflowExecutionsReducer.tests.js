@@ -1,4 +1,3 @@
-import matchers from 'jasmine-immutable-matchers';
 import { Map, OrderedMap } from 'immutable';
 
 import { WorkflowExecution } from '../../js/immutableRecords/workflowExecutions';
@@ -7,10 +6,6 @@ import workflowExecutionsReducer from '../../js/reducers/workflowExecutionsReduc
 import MistralConstants from '../../js/constants/MistralConstants';
 
 describe('workflowExecutionsReducer', () => {
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   const initialState = Map({
     executionsLoaded: false,
     isFetching: false,
@@ -76,7 +71,7 @@ describe('workflowExecutionsReducer', () => {
       }
     };
     const newState = workflowExecutionsReducer(initialState, action);
-    expect(newState.get('executions')).toEqualImmutable(updatedState.get('executions'));
+    expect(newState.get('executions')).toEqual(updatedState.get('executions'));
   });
 
   it('should handle FETCH_WORKFLOW_EXECUTIONS_FAILED', () => {
@@ -108,7 +103,7 @@ describe('workflowExecutionsReducer', () => {
       }
     };
     const newState = workflowExecutionsReducer(initialState, action);
-    expect(newState.get('executions')).toEqualImmutable(updatedState.get('executions'));
+    expect(newState.get('executions')).toEqual(updatedState.get('executions'));
   });
 
   it('should handle UPDATE_WORKFLOW_EXECUTION_PENDING', () => {
