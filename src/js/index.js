@@ -55,7 +55,7 @@ import { getCurrentStackDeploymentInProgress } from './selectors/stacks';
 import I18nProvider from './components/i18n/I18nProvider';
 import initFormsy from './components/utils/Formsy';
 import ListPlans from './components/plan/ListPlans';
-import Login from './components/Login';
+import Login from './components/login/Login';
 import LoginActions from './actions/LoginActions';
 import NewPlan from './components/plan/NewPlan';
 import Nodes from './components/nodes/Nodes';
