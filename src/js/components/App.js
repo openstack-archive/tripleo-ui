@@ -17,7 +17,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Login from './Login';
+import Login from './login/Login';
 import UserAuthenticator from './UserAuthenticator';
 
 export default class App extends React.Component {

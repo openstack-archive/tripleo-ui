@@ -70,5 +70,5 @@ export function getEnabledLanguages() {
     delete configLanguages[language];
   });
 
-  return configLanguages;
+  return Map(configLanguages).sort();
 }
