@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 
-import Login from '../../js/components/Login';
+import Login from '../../js/components/login/Login';
 import LoginActions from '../../js/actions/LoginActions';
 
 let loginInstance;
