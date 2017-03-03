@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom';
 
 import FormErrorList from './ui/forms/FormErrorList';
 import LoginInput from './ui/forms/LoginInput';
+import LanguageInput from './ui/forms/LanguageInput';
 import LoginActions from '../actions/LoginActions';
 import NotificationsToaster from './notifications/NotificationsToaster';
 
@@ -107,6 +108,8 @@ class Login extends React.Component {
                            onSubmit={this.handleLogin.bind(this)}
                            onValid={this._enableButton.bind(this)}
                            onInvalid={this._disableButton.bind(this)}>
+                <LanguageInput name="language"
+                               language={this.props.language} />
                 <LoginInput name="username"
                             placeholder={formatMessage(messages.username)}
                             title={formatMessage(messages.username)}
@@ -151,6 +154,7 @@ Login.propTypes = {
   formFieldErrors: ImmutablePropTypes.map.isRequired,
   intl: React.PropTypes.object,
   isAuthenticating: React.PropTypes.bool.isRequired,
+  language: React.PropTypes.string,
   location: React.PropTypes.object,
   userLoggedIn: React.PropTypes.bool.isRequired
 };
@@ -159,6 +163,7 @@ function mapStateToProps(state) {
   return {
     formErrors: state.login.getIn(['loginForm', 'formErrors']),
     formFieldErrors: state.login.getIn(['loginForm', 'formFieldErrors']),
+    language: state.i18n.get('language', 'en'),
     userLoggedIn: state.login.hasIn(['keystoneAccess', 'user']),
     isAuthenticating: state.login.get('isAuthenticating')
   };
