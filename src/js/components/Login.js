@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom';
 
 import FormErrorList from './ui/forms/FormErrorList';
 import LoginInput from './ui/forms/LoginInput';
+import LanguageInput from './ui/forms/LanguageInput';
 import LoginActions from '../actions/LoginActions';
 import NotificationsToaster from './notifications/NotificationsToaster';
 
@@ -107,6 +108,7 @@ class Login extends React.Component {
                            onSubmit={this.handleLogin.bind(this)}
                            onValid={this._enableButton.bind(this)}
                            onInvalid={this._disableButton.bind(this)}>
+                <LanguageInput name="language" />
                 <LoginInput name="username"
                             placeholder={formatMessage(messages.username)}
                             title={formatMessage(messages.username)}
