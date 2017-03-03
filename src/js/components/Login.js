@@ -7,8 +7,10 @@ import ReactDOM from 'react-dom';
 
 import FormErrorList from './ui/forms/FormErrorList';
 import LoginInput from './ui/forms/LoginInput';
+import LanguageInput from './ui/forms/LanguageInput';
 import LoginActions from '../actions/LoginActions';
 import NotificationsToaster from './notifications/NotificationsToaster';
+import I18nActions from '../actions/I18nActions';
 
 import LogoSvg from '../../img/logo.svg';
 import TripleoOwlSvg from '../../img/tripleo-owl.svg';
@@ -79,9 +81,7 @@ class Login extends React.Component {
   handleLogin(formData, resetForm, invalidateForm) {
     const nextPath = this.props.location.query.nextPath || '/';
     const formFields = Object.keys(this.refs.form.inputs);
-    this.props.dispatch(
-      LoginActions.authenticateUser(formData, formFields, nextPath)
-    );
+    this.props.authenticateUser(formData, formFields, nextPath);
   }
 
   render() {
@@ -107,6 +107,9 @@ class Login extends React.Component {
                            onSubmit={this.handleLogin.bind(this)}
                            onValid={this._enableButton.bind(this)}
                            onInvalid={this._disableButton.bind(this)}>
+                <LanguageInput name="language"
+                               chooseLanguage={this.props.chooseLanguage}
+                               language={this.props.language} />
                 <LoginInput name="username"
                             placeholder={formatMessage(messages.username)}
                             title={formatMessage(messages.username)}
@@ -146,11 +149,13 @@ class Login extends React.Component {
   }
 }
 Login.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  authenticateUser: PropTypes.func.isRequired,
+  chooseLanguage: PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
   intl: PropTypes.object,
   isAuthenticating: PropTypes.bool.isRequired,
+  language: PropTypes.string,
   location: PropTypes.object,
   userLoggedIn: PropTypes.bool.isRequired
 };
@@ -159,9 +164,19 @@ function mapStateToProps(state) {
   return {
     formErrors: state.login.getIn(['loginForm', 'formErrors']),
     formFieldErrors: state.login.getIn(['loginForm', 'formFieldErrors']),
+    language: state.i18n.get('language', 'en'),
     userLoggedIn: state.login.hasIn(['keystoneAccess', 'user']),
     isAuthenticating: state.login.get('isAuthenticating')
   };
 }
 
-export default injectIntl(connect(mapStateToProps)(Login));
+const mapDispatchToProps = (dispatch) => {
+  return {
+    chooseLanguage: (language) => dispatch(I18nActions.chooseLanguage(language)),
+    authenticateUser: (formData, formFields, nextPath) =>
+      dispatch(LoginActions.authenticateUser(formData, formFields, nextPath))
+  };
+};
+
+
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Login));
