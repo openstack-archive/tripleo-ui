@@ -1,9 +1,8 @@
 import { defineMessages } from 'react-intl';
 import { normalize, arrayOf } from 'normalizr';
-import when from 'when';
 
 import { getNodesByIds } from '../selectors/nodes';
-import IronicApiErrorHandler from '../services/IronicApiErrorHandler';
+import { handleIronicErrors } from './IronicActions';
 import IronicApiService from '../services/IronicApiService';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
@@ -67,23 +66,20 @@ export default {
   fetchNodes() {
     return (dispatch, getState) => {
       dispatch(this.requestNodes());
-      IronicApiService.getNodes().then(response => {
-        return when.map(response.nodes, node => {
-          return IronicApiService.getNodePorts(node.uuid).then(response => {
+      IronicApiService.getNodes()
+      .then(response => {
+        return Promise.all(response.nodes.map(node =>
+          IronicApiService.getNodePorts(node.uuid).then(response => {
             node.portsDetail = response.ports;
             return node;
-          });
-        }).then(nodes => {
-          const normalizedNodes = normalize(nodes, arrayOf(nodeSchema)).entities;
-          dispatch(this.receiveNodes(normalizedNodes));
-        });
+          })
+        ));
+      }).then(nodes => {
+        const normalizedNodes = normalize(nodes, arrayOf(nodeSchema)).entities;
+        dispatch(this.receiveNodes(normalizedNodes));
       }).catch((error) => {
+        dispatch(handleIronicErrors(error));
         dispatch(this.receiveNodes({}));
-        logger.error('Error in NodesActions.fetchNodes', error.stack || error);
-        let errorHandler = new IronicApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
-        });
       });
     };
   },
@@ -231,12 +227,8 @@ export default {
       IronicApiService.patchNode(nodePatch).then(response => {
         dispatch(this.updateNodeSuccess(response));
       }).catch(error => {
+        dispatch(handleIronicErrors(error));
         dispatch(this.updateNodeFailed(nodePatch.uuid));
-        logger.error('Error in NodesActions.UpdateNode', error.stack || error);
-        let errorHandler = new IronicApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
-        });
       });
     };
   },
@@ -270,12 +262,8 @@ export default {
         IronicApiService.deleteNode(nodeId).then(response => {
           dispatch(this.deleteNodeSuccess(nodeId));
         }).catch(error => {
+          dispatch(handleIronicErrors(error));
           dispatch(this.deleteNodeFailed(nodeId));
-          logger.error('Error in NodesActions.DeleteNodes', error.stack || error);
-          let errorHandler = new IronicApiErrorHandler(error);
-          errorHandler.errors.forEach((error) => {
-            dispatch(NotificationActions.notify(error));
-          });
         });
       });
     };

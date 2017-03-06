@@ -1,24 +1,27 @@
-import * as _ from 'lodash';
-import request from 'reqwest';
-import when from 'when';
+import fetch from 'isomorphic-fetch';
 
-import { getServiceUrl, getAuthTokenId } from './utils';
+import { getServiceUrl,
+         getAuthTokenId,
+         checkApiResponseStatus,
+         getApiResponseText } from './utils';
 
 class IronicApiService {
-  defaultRequest(path, additionalAttributes) {
-    return when.try(getServiceUrl, 'ironic').then((serviceUrl) => {
-      let requestAttributes = _.merge({
-        url: `${serviceUrl}${path}`,
-        headers: {
-          'X-Auth-Token': getAuthTokenId(),
-          'X-OpenStack-Ironic-API-Version': '1.14'
-        },
-        crossOrigin: true,
-        contentType: 'application/json',
-        type: 'json',
-        method: 'GET'
-      }, additionalAttributes);
-      return when(request(requestAttributes));
+  defaultRequest(path, additionalAttributes={}) {
+    return getServiceUrl('ironic').then(serviceUrl => {
+      return fetch(
+        `${serviceUrl}${path}`,
+        Object.assign(additionalAttributes, {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Auth-Token': getAuthTokenId(),
+            'X-OpenStack-Ironic-API-Version': '1.14'
+          },
+          method: 'GET'
+        })
+      )
+      .then(getApiResponseText)
+      .then(checkApiResponseStatus);
     });
   }
 
@@ -43,18 +46,17 @@ class IronicApiService {
   }
 
   patchNode(nodePatch) {
-    return this.defaultRequest('/nodes/' + nodePatch.uuid, {
+    return this.defaultRequest(`/nodes/${nodePatch.uuid}`, {
       method: 'PATCH',
       data: JSON.stringify(nodePatch.patches)
     });
   }
 
   deleteNode(nodeId) {
-    return this.defaultRequest('/nodes/' + nodeId, {
+    return this.defaultRequest(`/nodes/${nodeId}`, {
       method: 'DELETE'
     });
   }
-
 }
 
 export default new IronicApiService();

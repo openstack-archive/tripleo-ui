@@ -1,5 +1,8 @@
 import { Map, List } from 'immutable';
+
+import { ApiResponseError } from './errors';
 import store from '../store';
+import { ServiceUrlNotFoundError } from './errors';
 
 /**
  * Returns the public url of an openstack API,
@@ -9,12 +12,13 @@ import store from '../store';
  * the ones exposed through the serviceCatalog.
  */
 export function getServiceUrl(serviceName, urlType='publicURL', appConfig=getAppConfig()) {
-  let serviceUrl = appConfig[serviceName] || getFromServiceCatalog(serviceName, urlType);
-  if(!serviceUrl) {
-    throw Error(`URL for service ${serviceName} can not be found`);
-  }
-  let tenantId = getTenantId();
-  return serviceUrl.replace('%(tenant_id)s', tenantId);
+  return new Promise((resolve, reject) => {
+    let serviceUrl = appConfig[serviceName] || getFromServiceCatalog(serviceName, urlType);
+    if(!serviceUrl) {
+      reject(new ServiceUrlNotFoundError(`URL for service "${serviceName}" can not be found`));
+    }
+    resolve(serviceUrl.replace('%(tenant_id)s', getTenantId()));
+  });
 }
 
 function getFromServiceCatalog(serviceName, urlType) {
@@ -39,3 +43,11 @@ export function getTenantId() {
 export function getAppConfig() {
   return window.tripleOUiConfig || {};
 }
+
+export const checkApiResponseStatus = ({ response, responseText }) => {
+  if (!response.ok) { throw new ApiResponseError(response, responseText); }
+  return JSON.parse(responseText);
+};
+
+export const getApiResponseText = response =>
+  response.text().then(responseText => ({ response, responseText }));
