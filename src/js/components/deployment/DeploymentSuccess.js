@@ -1,16 +1,20 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
+import { injectIntl } from 'react-intl';
 
 import { deploymentStatusMessages } from '../../constants/StacksConstants';
 import InlineNotification from '../ui/InlineNotification';
 import OvercloudInfo from './OvercloudInfo';
 
-export default class DeploymentSuccess extends React.Component {
+class DeploymentSuccess extends React.Component {
   render() {
+    const status = this.props.intl.formatMessage(
+      deploymentStatusMessages[this.props.stack.stack_status]);
+
     return (
       <div className="col-sm-12 fixed-container-body-content">
         <InlineNotification type="success"
-                            title={deploymentStatusMessages[this.props.stack.stack_status]}>
+                            title={status}>
           <p>{this.props.stack.stack_status_reason}</p>
         </InlineNotification>
         <OvercloudInfo stackResourcesLoaded={this.props.stackResourcesLoaded}
@@ -22,7 +26,10 @@ export default class DeploymentSuccess extends React.Component {
 }
 
 DeploymentSuccess.propTypes = {
+  intl: React.PropTypes.object,
   stack: ImmutablePropTypes.record.isRequired,
   stackResources: ImmutablePropTypes.map.isRequired,
   stackResourcesLoaded: React.PropTypes.bool.isRequired
 };
+
+export default injectIntl(DeploymentSuccess);

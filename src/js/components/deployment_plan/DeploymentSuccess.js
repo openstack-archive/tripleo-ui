@@ -26,11 +26,13 @@ class DeploymentSuccess extends React.Component {
 
   render() {
     const { formatMessage } = this.props.intl;
+    const status = formatMessage(
+      deploymentStatusMessages[this.props.stack.stack_status]);
 
     return (
       <div>
         <InlineNotification type="success"
-                            title={deploymentStatusMessages[this.props.stack.stack_status]}>
+                            title={status}>
           <p>{this.props.stack.stack_status_reason}</p>
         </InlineNotification>
         <OvercloudInfo stackResourcesLoaded={this.props.stackResourcesLoaded}
