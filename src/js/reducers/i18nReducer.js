@@ -5,7 +5,7 @@ const initialState = Map({
   messages: {}
 });
 
-export default function plansReducer(state = initialState, action) {
+export default function i18nReducer(state = initialState, action) {
   switch(action.type) {
 
   case 'DETECT_LANGUAGE':
