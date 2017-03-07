@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import { List, Set } from 'immutable';
 
 import { internalParameters } from '../constants/ParametersConstants';
-import { getRole, getRoles } from './roles';
+import { getRole } from './roles';
 import { getEnvironment } from './environmentConfiguration';
 import { Resource } from '../immutableRecords/parameters';
 
@@ -109,20 +109,6 @@ export const getEnvironmentParameters = createSelector(
 export const getResourceParameters = createSelector(
   [getParameters, resourceById], (parameters, resource) =>
     resource.parameters.update(filterParameters(parameters))
-);
-
-/**
- *  Returns <RoleName>Count parameters for each Role
- */
-export const getNodeCountParametersByRole = createSelector(
-  [getRoles, getParameters], (roles, parameters) =>
-    roles.map(role => parameters.get(`${role.name}Count`))
-);
-
-export const getTotalAssignedNodesCount = createSelector(
-  getNodeCountParametersByRole, countParamsByRole =>
-    countParamsByRole.reduce((total, parameter) =>
-      parameter ? total + parseInt(parameter.default) : total, 0)
 );
 
 /**

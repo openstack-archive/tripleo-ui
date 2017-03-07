@@ -3,6 +3,7 @@ import { normalize } from 'normalizr';
 import { browserHistory } from 'react-router';
 import uuid from 'node-uuid';
 import * as _ from 'lodash';
+import { startSubmit, stopSubmit } from 'redux-form';
 
 import NotificationActions from '../actions/NotificationActions';
 import ParametersConstants from '../constants/ParametersConstants';
@@ -90,11 +91,13 @@ export default {
   updateParameters(planName, data, inputFieldNames, url) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
+      dispatch(startSubmit('nodesAssignment'));
       dispatch(this.updateParametersPending());
       MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE,
                                   { container: planName, parameters: data })
       .then(response => {
         dispatch(this.updateParametersSuccess(data));
+        dispatch(stopSubmit('nodesAssignment'));
         dispatch(NotificationActions.notify({
           title: formatMessage(messages.parametersUpdatedNotficationTitle),
           message: formatMessage(messages.parametersUpdatedNotficationMessage),
@@ -104,6 +107,7 @@ export default {
       }).catch(error => {
         logger.error('Error in ParametersActions.updateParameters', error);
         let errorHandler = new MistralApiErrorHandler(error, inputFieldNames);
+        dispatch(stopSubmit('nodesAssignment', { _error: error }));
         dispatch(this.updateParametersFailed(errorHandler.errors, errorHandler.formFieldErrors));
       });
     };
