@@ -1,6 +1,6 @@
 {
   "name": "tripleo-ui",
-  "version": "2.0.1",
+  "version": 7.0.0",
   "dependencies": {
     "ansi-regex": {
       "version": "2.0.0",
@@ -507,6 +507,11 @@
       "from": "encoding@>=0.1.11 <0.2.0",
       "resolved": "https://registry.npmjs.org/encoding/-/encoding-0.1.12.tgz"
     },
+    "es6-error": {
+      "version": "4.0.2",
+      "from": "es6-error@>=4.0.0 <5.0.0",
+      "resolved": "https://registry.npmjs.org/es6-error/-/es6-error-4.0.2.tgz"
+    },
     "escape-string-regexp": {
       "version": "1.0.5",
       "from": "escape-string-regexp@>=1.0.2 <2.0.0",
@@ -613,6 +618,11 @@
       "version": "1.0.2",
       "from": "is-finite@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/is-finite/-/is-finite-1.0.2.tgz"
+    },
+    "is-promise": {
+      "version": "2.1.0",
+      "from": "is-promise@>=2.1.0 <3.0.0",
+      "resolved": "https://registry.npmjs.org/is-promise/-/is-promise-2.1.0.tgz"
     },
     "is-stream": {
       "version": "1.1.0",
@@ -934,6 +944,11 @@
       "version": "3.5.2",
       "from": "redux@>=3.5.2 <3.6.0",
       "resolved": "https://registry.npmjs.org/redux/-/redux-3.5.2.tgz"
+    },
+    "redux-form": {
+      "version": "6.5.0",
+      "from": "redux-form@latest",
+      "resolved": "https://registry.npmjs.org/redux-form/-/redux-form-6.5.0.tgz"
     },
     "redux-logger": {
       "version": "2.6.1",
