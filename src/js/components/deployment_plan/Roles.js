@@ -3,6 +3,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
 import Loader from '../ui/Loader';
+import NodesAssignmentForm from './NodesAssignmentForm';
 import RoleCard from './RoleCard';
 
 const messages = defineMessages({
@@ -49,7 +50,9 @@ class Roles extends React.Component {
                   content={this.props.intl.formatMessage(messages.loadingDeploymentRoles)}
                   height={40}>
             <div className="row-cards-pf">
-              {this.renderRoleCards()}
+              <NodesAssignmentForm>
+                {this.renderRoleCards()}
+              </NodesAssignmentForm>
             </div>
           </Loader>
         </div>

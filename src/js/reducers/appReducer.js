@@ -1,4 +1,6 @@
 import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
+
 import currentPlanReducer from './currentPlanReducer';
 import environmentConfigurationReducer from './environmentConfigurationReducer';
 import i18nReducer from './i18nReducer';
@@ -26,7 +28,8 @@ const appReducer = combineReducers({
   registerNodes: registerNodesReducer,
   roles: rolesReducer,
   stacks: stacksReducer,
-  validations: validationsReducer
+  validations: validationsReducer,
+  form: formReducer
 });
 
 export default appReducer;

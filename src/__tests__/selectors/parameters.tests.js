@@ -89,14 +89,6 @@ describe(' validations selectors', () => {
         }),
         Service1NestedResourceParameter1: new Parameter({
           name: 'Service1NestedResourceParameter1'
-        }),
-        ControllerCount: new Parameter({
-          name: 'ControllerCount',
-          default: 2
-        }),
-        ComputeCount: new Parameter({
-          name: 'ComputeCount',
-          default: 1
         })
       }),
       mistralParameters: Map()
@@ -104,7 +96,7 @@ describe(' validations selectors', () => {
   };
 
   it('getParametersExclInternal', () => {
-    expect(selectors.getParametersExclInternal(state).size).toEqual(7);
+    expect(selectors.getParametersExclInternal(state).size).toEqual(5);
   });
 
   it('getRootParameters', () => {
@@ -129,16 +121,5 @@ describe(' validations selectors', () => {
 
   it('getRoleNetworkConfig', () => {
     expect(selectors.getRoleNetworkConfig(state, 'control').name).toEqual('NetworkConfigResource');
-  });
-
-  it('getRoleCountParameterByRole', () => {
-    const nodeCountParametersByRole = selectors.getNodeCountParametersByRole(state);
-    expect(nodeCountParametersByRole.get('control').default).toEqual(2);
-    expect(nodeCountParametersByRole.get('compute').default).toEqual(1);
-  });
-
-  it('getTotalAssignedNodesCount', () => {
-    const totalAssignedNodesCount = selectors.getTotalAssignedNodesCount(state);
-    expect(totalAssignedNodesCount).toEqual(3);
   });
 });
