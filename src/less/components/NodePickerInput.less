@@ -1,0 +1,30 @@
+// NodePicker component
+.node-picker {
+  .btn-node-picker {
+    width: 100%;
+    padding: 0;
+    display: block;
+    line-height: 1;
+    &.btn-node-picker-up {
+      border-radius: 3px 3px 0 0;
+      border-bottom: none;
+    }
+    &.btn-node-picker-down {
+      border-radius: 0 0 3px 3px;
+      border-top: none;
+    }
+  }
+}
+
+.node-count {
+  min-width: 45px;
+  text-align: center;
+  border: 1px solid @btn-default-border;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2) inset;
+  background: @color-pf-black-200;
+  padding: 0 12px;
+  span.value {
+    font-size: 26px;
+    font-weight: 300;
+  }
+}

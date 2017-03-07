@@ -1,8 +1,14 @@
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+import { Field } from 'redux-form';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 
 import Link from '../ui/Link';
+import NodePickerInput from '../ui/reduxForm/NodePickerInput';
+import { maxValue,
+         minValue,
+         number,
+         messages as validationMessages } from '../ui/reduxForm/validations';
 
 const messages = defineMessages({
   nodesAssigned: {
@@ -23,10 +29,18 @@ const messages = defineMessages({
 const RoleCard = ({ assignedNodesCountParameter,
                     availableNodesCount,
                     identifier,
+                    intl,
                     name,
                     title }) => {
   const disabled = !assignedNodesCountParameter
                    || !availableNodesCount && !assignedNodesCountParameter.default;
+  const validations = [
+    maxValue(availableNodesCount, intl.formatMessage(validationMessages.maxValue,
+                                                     { max: availableNodesCount.toString() })),
+    minValue(0, intl.formatMessage(validationMessages.minValue, { min: '0' })),
+    number(intl.formatMessage(validationMessages.number))
+  ];
+
   return (
     <div className={`card-pf card-pf-accented role-card ${identifier}`}>
       <h2 className="card-pf-title">
@@ -38,10 +52,22 @@ const RoleCard = ({ assignedNodesCountParameter,
         </Link>
       </h2>
       <div className="card-pf-body">
-        <p className="card-pf-utilization-details">
-          <span className="card-pf-utilization-card-details-count">
-            {assignedNodesCountParameter ? assignedNodesCountParameter.default : '-'}
-          </span>
+        <div className="card-pf-utilization-details">
+          <div className="node-picker-cell">
+            {assignedNodesCountParameter
+              ? <Field
+                  component={NodePickerInput}
+                  increment={1}
+                  validate={validations}
+                  name={assignedNodesCountParameter.name}
+                  max={availableNodesCount}/>
+              : <NodePickerInput
+                  increment={1}
+                  input={{ value: '-' }}
+                  meta={{ submitting: true }}
+                  max={availableNodesCount}
+                  min={0}/>}
+          </div>
           <span className="card-pf-utilization-card-details-description">
             <span className="card-pf-utilization-card-details-line-1">
               <FormattedMessage
@@ -52,7 +78,7 @@ const RoleCard = ({ assignedNodesCountParameter,
               <FormattedMessage {...messages.nodesAssigned}/>
             </span>
           </span>
-        </p>
+        </div>
       </div>
       <div className="card-pf-footer">
         <p>
@@ -72,8 +98,9 @@ RoleCard.propTypes = {
   assignedNodesCountParameter: ImmutablePropTypes.record,
   availableNodesCount: React.PropTypes.number.isRequired,
   identifier: React.PropTypes.string.isRequired,
+  intl: React.PropTypes.object,
   name: React.PropTypes.string.isRequired,
   title: React.PropTypes.string.isRequired
 };
 
-export default RoleCard;
+export default injectIntl(RoleCard);
