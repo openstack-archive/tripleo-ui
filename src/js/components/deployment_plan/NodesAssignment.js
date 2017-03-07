@@ -8,8 +8,8 @@ import React from 'react';
 import { List, Map } from 'immutable';
 
 import { getAvailableNodesByRole,
-         getUntaggedAvailableNodes,
-         getNodesOperationInProgress } from '../../selectors/nodes';
+         getUntaggedAvailableNodes } from '../../selectors/nodesAssignment';
+import { getNodesOperationInProgress } from '../../selectors/nodes';
 import { getRoles } from '../../selectors/roles';
 import { getCurrentPlan } from '../../selectors/plans';
 import FormErrorList from '../ui/forms/FormErrorList';

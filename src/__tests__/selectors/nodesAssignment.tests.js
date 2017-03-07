@@ -1,11 +1,11 @@
 import { fromJS, Map } from 'immutable';
 
-import * as selectors from '../../js/selectors/nodes';
+import * as selectors from '../../js/selectors/nodesAssignment';
 import { Port } from '../../js/immutableRecords/nodes';
 import { Role, RolesState } from '../../js/immutableRecords/roles';
-import { Parameter } from '../../js/immutableRecords/parameters';
+import { Parameter, ParametersDefaultState } from '../../js/immutableRecords/parameters';
 
-describe('Nodes selectors', () => {
+describe('Nodes Assignment selectors', () => {
   const state = {
     nodes: Map({
       isFetching: false,
@@ -111,6 +111,18 @@ describe('Nodes selectors', () => {
           name: 'BlockStorage',
           title: 'Block Storage',
           identifier: 'block-storage'
+        })
+      })
+    }),
+    parameters: new ParametersDefaultState({
+      parameters: Map({
+        ControllerCount: new Parameter({
+          name: 'ControllerCount',
+          default: 2
+        }),
+        ComputeCount: new Parameter({
+          name: 'ComputeCount',
+          default: 1
         })
       })
     })
@@ -285,5 +297,16 @@ describe('Nodes selectors', () => {
       expect(result.get('compute')).toEqual(0);
       expect(result.get('block-storage')).toEqual(0);
     });
+  });
+
+  it('getRoleCountParameterByRole', () => {
+    const nodeCountParametersByRole = selectors.getNodeCountParametersByRole(state);
+    expect(nodeCountParametersByRole.get('control').default).toEqual(2);
+    expect(nodeCountParametersByRole.get('compute').default).toEqual(1);
+  });
+
+  it('getTotalAssignedNodesCount', () => {
+    const totalAssignedNodesCount = selectors.getTotalAssignedNodesCount(state);
+    expect(totalAssignedNodesCount).toEqual(3);
   });
 });
