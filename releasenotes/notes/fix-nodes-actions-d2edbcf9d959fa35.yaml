@@ -1,0 +1,4 @@
+fixes:
+  - |
+    Fixes `bug 1671100 <https://launchpad.net/bugs/1671100>`__
+    Fix nodes actions toolbar
