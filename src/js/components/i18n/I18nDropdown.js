@@ -22,9 +22,14 @@ class I18nDropdown extends React.Component {
     const langList = Object.keys(configLanguages).sort((a , b) =>
       configLanguages[a] > configLanguages[b]);
 
+    const enabledLang = this.props.language;
+
     return langList.map((lang) => {
+      const active = enabledLang === lang;
       return (MESSAGES[lang] || lang === 'en') ? (
-        <DropdownItem key={`lang-${lang}`} onClick={this.props.chooseLanguage.bind(this, lang)}>
+        <DropdownItem key={`lang-${lang}`}
+                      active={active}
+                      onClick={this.props.chooseLanguage.bind(this, lang)}>
           {configLanguages[lang]}
         </DropdownItem>
       ) : null;
@@ -44,7 +49,14 @@ class I18nDropdown extends React.Component {
 }
 
 I18nDropdown.propTypes = {
-  chooseLanguage: React.PropTypes.func.isRequired
+  chooseLanguage: React.PropTypes.func.isRequired,
+  language: React.PropTypes.string
+};
+
+const mapStateToProps = (state) => {
+  return {
+    language: state.i18n.get('language', 'en')
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -53,4 +65,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default injectIntl(connect(null, mapDispatchToProps)(I18nDropdown));
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(I18nDropdown));
