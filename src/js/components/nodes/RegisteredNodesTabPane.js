@@ -15,6 +15,7 @@ import FormErrorList from '../ui/forms/FormErrorList';
 import NodesActions from '../../actions/NodesActions';
 import NodesTable from './NodesTable';
 import TagNodesModal from './tag_nodes/TagNodesModal';
+import { findClosestWithAttribute } from '../utils/Dom';
 
 const messages = defineMessages({
   introspectNodes: {
@@ -126,7 +127,7 @@ class RegisteredNodesTabPane extends React.Component {
 
   multipleSubmit(e) {
     this.setState({
-      submitType: e.target.name
+      submitType: findClosestWithAttribute(e.target, 'name')
     }, this.refs.registeredNodesTableForm.submit);
   }
 
