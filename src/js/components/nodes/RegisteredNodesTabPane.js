@@ -124,9 +124,15 @@ class RegisteredNodesTabPane extends React.Component {
     }, this.refs.registeredNodesTableForm.submit);
   }
 
+  findClosestElementName(element) {
+    // If the element has a name attr, return it.
+    // Otherwise try the parent element.
+    return element.name || this.findClosestElementName(element.parentElement);
+  }
+
   multipleSubmit(e) {
     this.setState({
-      submitType: e.target.name
+      submitType: this.findClosestElementName(e.target)
     }, this.refs.registeredNodesTableForm.submit);
   }
 
