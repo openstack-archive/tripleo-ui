@@ -1,3 +1,4 @@
+import { IntlProvider } from 'react-intl';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 
@@ -9,7 +10,9 @@ describe('Nodes Component', () => {
   let NodesVdom, NodesInstance;
   beforeEach(() => {
     let shallowRenderer = TestUtils.createRenderer();
-    shallowRenderer.render(<Nodes/>);
+    const intlProvider = new IntlProvider({ locale: 'en' }, {});
+    const { intl } = intlProvider.getChildContext();
+    shallowRenderer.render(<Nodes.WrappedComponent intl={intl}/>);
     NodesVdom = shallowRenderer.getRenderOutput();
     NodesInstance = shallowRenderer._instance._instance;
   });

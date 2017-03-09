@@ -1,12 +1,4 @@
-// import React from 'react';
-// import TestUtils from 'react-addons-test-utils';
-//
-// const DataTable = require('../../../js/components/ui/tables/DataTable.js');
-//
-// describe('DataTable component', () => {
-//   it('should ')
-// });
-
+import { FormattedMessage, IntlProvider } from 'react-intl';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 
@@ -28,16 +20,19 @@ const mockOnFilter = () => {
   return 'Filtering Happened';
 };
 
-// TODO(hpokorny): Re-enable this test once we get rid of PhantomJS
-xdescribe('DataTable component', () => {
+describe('DataTable component', () => {
   let DataTableVdom, DataTableInstance;
   beforeEach(() => {
     let shallowRenderer = TestUtils.createRenderer();
+    const intlProvider = new IntlProvider({ locale: 'en' }, {});
+    const { intl } = intlProvider.getChildContext();
     shallowRenderer.render(
-      <DataTable data={data}
-                 rowsCount={data.length}
-                 onFilter={mockOnFilter}
-                 noRowsRenderer={mockNoRowsRenderer}>
+      <DataTable.WrappedComponent
+        data={data}
+        rowsCount={data.length}
+        onFilter={mockOnFilter}
+        noRowsRenderer={mockNoRowsRenderer}
+        intl={intl}>
         <DataTableColumn key="uuid"
                          header={<DataTableHeaderCell key="uuid">UUID</DataTableHeaderCell>}
                          cell={<DataTableDataFieldCell data={data} field="uuid"/>}/>
@@ -46,7 +41,7 @@ xdescribe('DataTable component', () => {
                                    Provision State
                                  </DataTableHeaderCell>}
                          cell={<DataTableDataFieldCell data={data} field="provision_state"/>}/>
-      </DataTable>
+      </DataTable.WrappedComponent>
     );
     DataTableVdom = shallowRenderer.getRenderOutput();
     DataTableInstance = shallowRenderer._instance._instance;
@@ -62,7 +57,11 @@ xdescribe('DataTable component', () => {
     expect(tableInfo.props.className).toBe('dataTables_info');
     expect(tableInfo).toEqual(
       <div className="dataTables_info">
-        Showing <b>{data.length}</b> of <b>{data.length}</b> items
+        <FormattedMessage
+          defaultMessage="Showing {showing} of {total} items"
+          id="DataTable.itemsVisibleInTable"
+          tagName="span"
+          values={{ showing: <b>{2}</b>, total: <b>{2}</b> }}/>
       </div>
     );
 

@@ -1,3 +1,4 @@
+import { IntlProvider } from 'react-intl';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import { Map, Set } from 'immutable';
@@ -49,15 +50,20 @@ let roles = Map({
   })
 });
 
-// TODO(hpokorny): Re-enable this test once we get rid of PhantomJS
-xdescribe('NodesTable component', () => {
+describe('NodesTable component', () => {
   let nodesTableVdom, nodesTableInstance;
   beforeEach(() => {
     let shallowRenderer = TestUtils.createRenderer();
-    shallowRenderer.render(<NodesTable nodes={nodes}
-                                       roles={roles}
-                                       nodesInProgress={Set()}
-                                       isFetchingNodes={false}/>);
+    const intlProvider = new IntlProvider({ locale: 'en' }, {});
+    const { intl } = intlProvider.getChildContext();
+    shallowRenderer.render(
+      <NodesTable.WrappedComponent
+        nodes={nodes}
+        roles={roles}
+        nodesInProgress={Set()}
+        isFetchingNodes={false}
+        intl={intl}/>
+    );
     nodesTableVdom = shallowRenderer.getRenderOutput();
     nodesTableInstance = shallowRenderer._instance._instance;
   });
@@ -67,7 +73,7 @@ xdescribe('NodesTable component', () => {
   });
 
   it('should render DataTable and pass data', () => {
-    expect(nodesTableVdom.type.name).toEqual('DataTable');
+    expect(nodesTableVdom.type.displayName).toEqual('InjectIntl(DataTable)');
     expect(nodesTableVdom.props.data).toEqual(nodes.toList().toJS());
     expect(nodesTableVdom.props.noRowsRenderer.name).toBeDefined();
     expect(nodesTableVdom.props.children.length).toEqual(10);

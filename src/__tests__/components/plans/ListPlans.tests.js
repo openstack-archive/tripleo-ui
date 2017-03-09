@@ -1,3 +1,4 @@
+import { IntlProvider } from 'react-intl';
 import { Map } from 'immutable';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
@@ -7,14 +8,14 @@ import FileList from '../../../js/components/plan/FileList';
 import { PlanFile } from '../../../js/immutableRecords/plans';
 import store from '../../../js/store';
 
-// TODO(jtomasek): re-enable this test once we get rid of PhantomJS and switch to jsdom/jest/enzyme
-// so we can properly test components
-xdescribe('ListPlans component', () => {
+describe('ListPlans component', () => {
   let output;
 
   beforeEach(() => {
     let shallowRenderer = TestUtils.createRenderer();
-    shallowRenderer.render(<ListPlans store={store}/>);
+    const intlProvider = new IntlProvider({ locale: 'en' }, {});
+    const { intl } = intlProvider.getChildContext();
+    shallowRenderer.render(<ListPlans.WrappedComponent store={store} intl={intl}/>);
     output = shallowRenderer.getRenderOutput();
   });
 
