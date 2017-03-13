@@ -1,4 +1,3 @@
-import matchers from 'jasmine-immutable-matchers';
 import { Map, OrderedMap } from 'immutable';
 
 import { WorkflowExecution } from '../../js/immutableRecords/workflowExecutions';
@@ -6,11 +5,10 @@ import WorkflowExecutionsConstants from '../../js/constants/WorkflowExecutionsCo
 import workflowExecutionsReducer from '../../js/reducers/workflowExecutionsReducer';
 import MistralConstants from '../../js/constants/MistralConstants';
 
-describe('workflowExecutionsReducer', () => {
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
+const updatedAt = '1970-01-01T00:00:01Z';
+const updatedAtEpoch = Date.parse(updatedAt);
 
+describe('workflowExecutionsReducer', () => {
   const initialState = Map({
     executionsLoaded: false,
     isFetching: false,
@@ -35,7 +33,7 @@ describe('workflowExecutionsReducer', () => {
         state: 'SUCCESS',
         state_info: '',
         task_execution_id: null,
-        updated_at: NaN,
+        updated_at: updatedAtEpoch,
         workflow_id: 'f8b280bb-5ba2-486b-9384-ddd79300d987',
         workflow_name: MistralConstants.VALIDATIONS_RUN
       })
@@ -69,14 +67,14 @@ describe('workflowExecutionsReducer', () => {
           state: 'SUCCESS',
           state_info: '',
           task_execution_id: null,
-          updated_at: '2016-07-18 14:05:08',
+          updated_at: updatedAt,
           workflow_id: 'f8b280bb-5ba2-486b-9384-ddd79300d987',
           workflow_name: MistralConstants.VALIDATIONS_RUN
         }
       }
     };
     const newState = workflowExecutionsReducer(initialState, action);
-    expect(newState.get('executions')).toEqualImmutable(updatedState.get('executions'));
+    expect(newState.get('executions')).toEqual(updatedState.get('executions'));
   });
 
   it('should handle FETCH_WORKFLOW_EXECUTIONS_FAILED', () => {
@@ -102,13 +100,13 @@ describe('workflowExecutionsReducer', () => {
         state: 'SUCCESS',
         state_info: '',
         task_execution_id: null,
-        updated_at: '2016-07-18 14:05:08',
+        updated_at: updatedAt,
         workflow_id: 'f8b280bb-5ba2-486b-9384-ddd79300d987',
         workflow_name: MistralConstants.VALIDATIONS_RUN
       }
     };
     const newState = workflowExecutionsReducer(initialState, action);
-    expect(newState.get('executions')).toEqualImmutable(updatedState.get('executions'));
+    expect(newState.get('executions')).toEqual(updatedState.get('executions'));
   });
 
   it('should handle UPDATE_WORKFLOW_EXECUTION_PENDING', () => {

@@ -1,16 +1,10 @@
 import { List, Map } from 'immutable';
-import matchers from 'jasmine-immutable-matchers';
 
 import * as selectors from '../../js/selectors/parameters';
-// import * as rolesSelectors from '../../js/selectors/roles';
 import { Resource, Parameter, ParametersDefaultState } from '../../js/immutableRecords/parameters';
 import { Role, RolesState } from '../../js/immutableRecords/roles';
 
 describe(' validations selectors', () => {
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   const state = {
     roles: new RolesState({
       roles: Map({

@@ -1,5 +1,4 @@
 import { fromJS, Map } from 'immutable';
-import matchers from 'jasmine-immutable-matchers';
 
 import * as selectors from '../../js/selectors/nodes';
 import { Port } from '../../js/immutableRecords/nodes';
@@ -7,10 +6,6 @@ import { Role, RolesState } from '../../js/immutableRecords/roles';
 import { Parameter } from '../../js/immutableRecords/parameters';
 
 describe('Nodes selectors', () => {
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   const state = {
     nodes: Map({
       isFetching: false,

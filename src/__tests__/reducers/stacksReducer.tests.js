@@ -1,5 +1,4 @@
 import { Map, OrderedMap } from 'immutable';
-import matchers from 'jasmine-immutable-matchers';
 
 import { StacksState, Stack } from '../../js/immutableRecords/stacks';
 import StacksActions from '../../js/actions/StacksActions';
@@ -7,11 +6,6 @@ import stacksReducer from '../../js/reducers/stacksReducer';
 
 
 describe('stacksReducer state', () => {
-
-  beforeEach(() => {
-    jasmine.addMatchers(matchers);
-  });
-
   describe('default state', () => {
     let state;
 
@@ -61,7 +55,7 @@ describe('stacksReducer state', () => {
       });
 
       it('sets stacks in state', () => {
-        expect(state.stacks).toEqualImmutable(Map({
+        expect(state.stacks).toEqual(Map({
           overcloud: new Stack({
             creation_time: undefined,
             deletion_time: undefined,
@@ -96,7 +90,7 @@ describe('stacksReducer state', () => {
       });
 
       it('sets stacks in state to an empty Map', () => {
-        expect(state.stacks).toEqualImmutable(Map());
+        expect(state.stacks).toEqual(Map());
       });
     });
   });

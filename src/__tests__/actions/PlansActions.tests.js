@@ -5,7 +5,9 @@ import MistralApiService from '../../js/services/MistralApiService';
 import { mockGetIntl } from './utils';
 import PlansActions from '../../js/actions/PlansActions';
 import SwiftApiService from '../../js/services/SwiftApiService';
+import storage from '../mocks/storage';
 
+window.localStorage = window.sessionStorage = storage;
 
 // Use these to mock asynchronous functions which return a promise.
 // The promise will immediately resolve/reject with `data`.
