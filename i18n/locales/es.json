@@ -12,6 +12,7 @@
         "DeletePlan.deletePlanName": "Eliminar {planName}",
         "DeleteStackButton.deleteConfirmationQuestion": "\u00bfSeguro que desea eliminar la pila?",
         "DeleteStackButton.deleteDeployment": "Eliminar despliegue",
+        "Deploy.deleteInProgress": "Suprimir en curso",
         "DeployStep.requestingDeploy": "Solicitando un despliegue...",
         "DeployStep.validateAndDeploy": "Validar y desplegar",
         "DeploymentConfiguration.deploymentConfiguration": "Configuraci\u00f3n del despliegue",
