@@ -21,9 +21,11 @@ a single ``.pot`` file with this command:
     npm run json2pot
 
 The resulting file (``./i18n/messages.pot``) can be uploaded to
-`Zanata`_ to create/update the translation.
+`Zanata`_ to create/update the translation. (Note: translations for the
+TripleO UI are synced from the `OpenStack Zanata`_ instance.)
 
 .. _Zanata: http://zanata.org
+.. _OpenStack Zanata: https://translate.openstack.org/project/view/tripleo-ui
 
 Using translated ``.po`` files
 ------------------------------
@@ -39,7 +41,9 @@ one JSON file per language (Japanese in this example):
 Adding a new language
 ---------------------
 
-The languages are defined and activated in 3 places:
+The languages are defined and activated in 3 places. Additionally, the
+puppet-tripleo module also needs to be updated for users installing the
+UI via the ``openstack undercloud install`` command.
 
 
 1. The ``I18nProvider`` component
@@ -103,3 +107,27 @@ translated yet. In this case an incomplete language can be defined in the app as
 part of a regular release, but will not show up in the selector by default. Once
 the language translation has been completed it can more easily be backported
 mid-release by updating only the corresponding JSON file.
+
+4. The puppet UI manifest
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When deploying the UI as part of a normal undercloud install, the
+configuration file is created and managed by the `puppet-tripleo`_
+module. The `manifest for the UI`_ must be modified in two places:
+
+.. code-block:: puppet
+
+    # ./manifests/ui.pp
+
+    # [*enabled_languages*]
+    #  Which languages to show in the UI.
+    #  An array.
+    #  Defaults to ['en', 'ja']
+
+    [...]
+
+    $enabled_languages        = ['en', 'ja'],
+
+
+.. _puppet-tripleo: http://git.openstack.org/cgit/openstack/puppet-tripleo
+.. _manifest for the UI: http://git.openstack.org/cgit/openstack/puppet-tripleo/tree/manifests/ui.pp
