@@ -1,0 +1,7 @@
+---
+fixes:
+  - |
+    "Fixes `bug 1674789 <https://launchpad.net/bugs/1674789>`__
+    This change adds a 'Save and Close' button to the configuration modal dialog
+    and allows users to decide whether or not they'd like the dialog to close
+    once changes are saved."
