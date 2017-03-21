@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import React from 'react';
 
 import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
@@ -22,6 +22,10 @@ const messages = defineMessages({
   saveChanges: {
     id: 'EnvironmentConfiguration.saveChanges',
     defaultMessage: 'Save Changes'
+  },
+  saveAndClose: {
+    id: 'EnvironmentConfiguration.saveAndClose',
+    defaultMessage: 'Save And Close'
   }
 });
 
@@ -30,6 +34,7 @@ class EnvironmentConfiguration extends React.Component {
     super();
     this.state = {
       canSubmit: false,
+      closeOnSubmit: false,
       activeTab: undefined
     };
   }
@@ -74,6 +79,20 @@ class EnvironmentConfiguration extends React.Component {
       data,
       Object.keys(this.refs.environmentConfigurationForm.inputs)
     );
+
+    if (this.state.closeOnSubmit) {
+      this.setState({
+        closeOnSubmit: false
+      });
+
+      browserHistory.push(this.props.parentPath);
+    }
+  }
+
+  onSubmitAndClose() {
+    this.setState({
+      closeOnSubmit: true
+    }, this.refs.environmentConfigurationForm.submit);
   }
 
   activateTab(tabName, e) {
@@ -144,6 +163,11 @@ class EnvironmentConfiguration extends React.Component {
           <button type="submit" disabled={!this.state.canSubmit}
                   className="btn btn-primary">
             <FormattedMessage {...messages.saveChanges}/>
+          </button>
+          <button type="button" disabled={!this.state.canSubmit}
+                  onClick={this.onSubmitAndClose.bind(this)}
+                  className="btn btn-default">
+            <FormattedMessage {...messages.saveAndClose} />
           </button>
           <Link to={this.props.parentPath} type="button" className="btn btn-default" >
             <FormattedMessage {...messages.cancel}/>
