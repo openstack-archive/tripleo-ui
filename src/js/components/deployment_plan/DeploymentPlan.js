@@ -65,8 +65,7 @@ const messages = defineMessages({
     defaultMessage: 'This step assigns and removes nodes from roles in your overcloud. On each ' +
     'role\'s selection dialog, you can tag available nodes into the role or untag nodes already ' +
     'assigned to the role. Click "Assign Nodes" for a particular role to open the selection ' +
-    'dialog and start assigning nodes.' +
-    '\n' +
+    'dialog and start assigning nodes. ' +
     'You can also customize role-specific settings in this step. For example, you can compose ' +
     'services on each role and customize specific parameters related to each role. Click the ' +
     'pencil icon in the top-right corner of each role to see these role-specific settings'
