@@ -17,9 +17,7 @@ const messages = defineMessages({
 });
 
 const languages = {
-  'de': 'German',
   'en': 'English',
-  'en-GB': 'British English',
   'es': 'Spanish',
   'ja': 'Japanese',
   'ko-KR': 'Korean',
