@@ -13,8 +13,7 @@ export function getServiceUrl(serviceName, urlType='publicURL', appConfig=getApp
   if(!serviceUrl) {
     throw Error(`URL for service ${serviceName} can not be found`);
   }
-  let tenantId = getTenantId();
-  return serviceUrl.replace('%(tenant_id)s', tenantId);
+  return serviceUrl.replace('%(project_id)s', getProjectId());
 }
 
 function getFromServiceCatalog(serviceName, urlType) {
@@ -32,8 +31,8 @@ export function getAuthTokenId() {
   return store.getState().login.getIn(['keystoneAccess', 'token', 'id']);
 }
 
-export function getTenantId() {
-  return store.getState().login.getIn(['keystoneAccess', 'token', 'tenant', 'id']);
+export function getProjectId() {
+  return store.getState().login.getIn(['keystoneAccess', 'token', 'project', 'id']);
 }
 
 export function getAppConfig() {
