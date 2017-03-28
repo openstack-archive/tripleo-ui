@@ -10,7 +10,7 @@ export default function loginReducer(state = initialState, action) {
     return state.set('isAuthenticating', true);
 
   case LoginConstants.USER_AUTH_SUCCESS:
-    return state.set('keystoneAccess', action.payload)
+    return state.set('token', action.payload)
                 .set('isAuthenticating', false)
                 .set('isAuthenticated', true);
 

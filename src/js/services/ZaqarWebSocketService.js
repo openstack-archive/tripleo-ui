@@ -1,7 +1,7 @@
 import uuid from 'node-uuid';
 import when from 'when';
 
-import { getAuthTokenId, getTenantId, getServiceUrl } from './utils';
+import { getAuthTokenId, getProjectId, getServiceUrl } from './utils';
 import { ZAQAR_DEFAULT_QUEUE } from '../constants/ZaqarConstants';
 import ZaqarActions from '../actions/ZaqarActions';
 import NotificationActions from '../actions/NotificationActions';
@@ -42,7 +42,7 @@ export default {
       headers: {
         'X-Auth-Token': getAuthTokenId(),
         'Client-ID': this.clientID,
-        'X-Project-ID': getTenantId()
+        'X-Project-ID': getProjectId()
       }
     };
     this.socket.send(JSON.stringify(message));
@@ -53,7 +53,7 @@ export default {
       action: action,
       headers: {
         'Client-ID': this.clientID,
-        'X-Project-ID': getTenantId()
+        'X-Project-ID': getProjectId()
       },
       body: body
     };

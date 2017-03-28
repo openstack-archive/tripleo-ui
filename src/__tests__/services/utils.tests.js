@@ -6,20 +6,19 @@ import store from '../../js/store';
 describe('utility functions', () => {
   const appState = {
     login: new InitialLoginState({
-      keystoneAccess: Map({
-        token: Map({
-          id: 123456,
-          tenant: Map({
-            id: 778899
-          })
+      token: Map({
+        id: 123456,
+        project: Map({
+          id: 778899
         }),
-        serviceCatalog: List([
+        catalog: List([
           Map({
             name: 'nova',
             endpoints: List([
               Map({
-                adminURL: 'http://someNovaAdminUrl',
-                publicURL: 'http://someNovaPublicUrl'
+                id: '1',
+                interface: 'public',
+                url: 'http://someNovaPublicUrl'
               })
             ])
           }),
@@ -27,7 +26,9 @@ describe('utility functions', () => {
             name: 'fooservice',
             endpoints: List([
               Map({
-                publicURL: 'http://IGNOREDFooPublicUrl'
+                id: '1',
+                interface: 'public',
+                url: 'http://someNovaPublicUrl'
               })
             ])
           }),
@@ -35,7 +36,9 @@ describe('utility functions', () => {
             name: 'macroservice',
             endpoints: List([
               Map({
-                publicURL: 'http://MacroPublicUrl/v1/Foo_%(tenant_id)s'
+                id: '1',
+                interface: 'public',
+                url: 'http://MacroPublicUrl/v1/Foo_%(project_id)s'
               })
             ])
           })
@@ -68,7 +71,7 @@ describe('utility functions', () => {
       ).toEqual('http://FooPublicURL');
     });
 
-    it('expands urls containing the keystone tenant macro', () => {
+    it('expands urls containing the keystone project macro', () => {
       expect(getServiceUrl('macroservice')).toEqual('http://MacroPublicUrl/v1/Foo_778899');
     });
   });
