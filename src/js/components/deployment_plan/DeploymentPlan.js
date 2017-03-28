@@ -8,9 +8,9 @@ import { getCurrentStack,
          getCurrentStackDeploymentProgress,
          getCurrentStackDeploymentInProgress } from '../../selectors/stacks';
 import { getAvailableNodes,
-         getAvailableNodesCountsByRole } from '../../selectors/nodes';
-import { getNodeCountParametersByRole,
-         getTotalAssignedNodesCount } from '../../selectors/parameters';
+         getAvailableNodesCountsByRole,
+         getNodeCountParametersByRole,
+         getTotalAssignedNodesCount } from '../../selectors/nodesAssignment';
 import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
 import { getCurrentPlan } from '../../selectors/plans';
 import { getRoles } from '../../selectors/roles';
