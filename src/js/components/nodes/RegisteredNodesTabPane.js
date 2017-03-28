@@ -12,6 +12,7 @@ import { getAvailableNodeProfiles,
          getNodesOperationInProgress } from '../../selectors/nodes';
 import ConfirmationModal from '../ui/ConfirmationModal';
 import FormErrorList from '../ui/forms/FormErrorList';
+import NodesToolbar from './NodesToolbar';
 import NodesActions from '../../actions/NodesActions';
 import NodesTable from './NodesTable';
 import TagNodesModal from './tag_nodes/TagNodesModal';
@@ -160,6 +161,7 @@ class RegisteredNodesTabPane extends React.Component {
   render() {
     return (
       <div>
+        <NodesToolbar/>
         <Formsy.Form ref="registeredNodesTableForm"
                      role="form"
                      className="form"
