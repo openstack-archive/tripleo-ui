@@ -70,7 +70,7 @@ export default class NavBar extends React.Component {
             <li>
               <a id="NavBar__username">
                 <span className="pficon pficon-user"></span>
-                {this.props.user.get('username')}
+                {this.props.user.get('name')}
               </a>
             </li>
             {this._renderLanguageDropdown()}
