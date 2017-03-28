@@ -12,9 +12,12 @@ export default {
   authenticateUserViaToken(keystoneAuthTokenId, nextPath) {
     return (dispatch, getState) => {
       dispatch(this.userAuthStarted());
-      KeystoneApiService.authenticateUserViaToken(keystoneAuthTokenId).then((response) => {
-        cookie.save('keystoneAuthTokenId', response.access.token.id);
-        dispatch(this.userAuthSuccess(response.access));
+      KeystoneApiService.authenticateUserViaToken(keystoneAuthTokenId).then((result) => {
+        const tokenId = result.request.getResponseHeader('X-Subject-Token');
+        let response = result.response;
+        response.token.id = tokenId;
+        cookie.save('keystoneAuthTokenId', tokenId);
+        dispatch(this.userAuthSuccess(response));
         ZaqarWebSocketService.init(getState, dispatch);
         browserHistory.push(nextPath);
       }).catch((error) => {
@@ -30,9 +33,12 @@ export default {
   authenticateUser(formData, formFields, nextPath) {
     return (dispatch, getState) => {
       dispatch(this.userAuthStarted());
-      KeystoneApiService.authenticateUser(formData.username, formData.password).then((response) => {
-        cookie.save('keystoneAuthTokenId', response.access.token.id);
-        dispatch(this.userAuthSuccess(response.access));
+      KeystoneApiService.authenticateUser(formData.username, formData.password).then((result) => {
+        const tokenId = result.request.getResponseHeader('X-Subject-Token');
+        let response = result.response;
+        response.token.id = tokenId;
+        cookie.save('keystoneAuthTokenId', tokenId);
+        dispatch(this.userAuthSuccess(response));
         ZaqarWebSocketService.init(getState, dispatch);
         browserHistory.push(nextPath);
       }).catch((error) => {

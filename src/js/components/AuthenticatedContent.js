@@ -69,7 +69,7 @@ const mapStateToProps = state => {
     currentPlanName: state.currentPlan.currentPlanName,
     noPlans: state.plans.get('all').isEmpty(),
     plansLoaded: state.plans.get('plansLoaded'),
-    user: state.login.getIn(['keystoneAccess', 'user'])
+    user: state.login.getIn(['keystoneAccess', 'token', 'user'])
   };
 };
 

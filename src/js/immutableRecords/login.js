@@ -1,7 +1,7 @@
 import { List, Map, Record } from 'immutable';
 
 export const InitialLoginState = Record({
-  keystoneAccess: Map(),
+  token: Map(),
   loginForm: Map({
     formErrors: List(),
     formFieldErrors: Map()
