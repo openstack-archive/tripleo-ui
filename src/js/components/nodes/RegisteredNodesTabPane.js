@@ -8,10 +8,11 @@ import Formsy from 'formsy-react';
 
 import { getRoles } from '../../selectors/roles';
 import { getAvailableNodeProfiles,
-         getRegisteredNodes,
+         getFilteredRegisteredNodes,
          getNodesOperationInProgress } from '../../selectors/nodes';
 import ConfirmationModal from '../ui/ConfirmationModal';
 import FormErrorList from '../ui/forms/FormErrorList';
+import NodesToolbar from './NodesToolbar';
 import NodesActions from '../../actions/NodesActions';
 import NodesTable from './NodesTable';
 import TagNodesModal from './tag_nodes/TagNodesModal';
@@ -160,6 +161,7 @@ class RegisteredNodesTabPane extends React.Component {
   render() {
     return (
       <div>
+        <NodesToolbar />
         <Formsy.Form ref="registeredNodesTableForm"
                      role="form"
                      className="form"
@@ -217,7 +219,7 @@ function mapStateToProps(state) {
   return {
     availableProfiles: getAvailableNodeProfiles(state),
     roles: getRoles(state),
-    registeredNodes: getRegisteredNodes(state),
+    registeredNodes: getFilteredRegisteredNodes(state),
     nodesInProgress: state.nodes.get('nodesInProgress'),
     nodesOperationInProgress: getNodesOperationInProgress(state),
     isFetchingNodes: state.nodes.get('isFetching')
