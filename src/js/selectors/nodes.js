@@ -1,8 +1,9 @@
 import { createSelector } from 'reselect';
 import { List, Set } from 'immutable';
 
-import { parseNodeCapabilities } from '../utils/nodes';
+import { getFilterByName } from './filters';
 import { getRoles } from './roles';
+import { parseNodeCapabilities } from '../utils/nodes';
 
 export const getNodes = state => state.nodes.get('all').sortBy(n => n.get('uuid'));
 export const getNodesByIds = (state, nodeIds) =>
@@ -10,6 +11,7 @@ export const getNodesByIds = (state, nodeIds) =>
                         .sortBy(n => n.get('uuid'));
 export const getPorts = state => state.nodes.get('ports');
 export const nodesInProgress = state => state.nodes.get('nodesInProgress');
+export const nodesToolbarFilter = state => getFilterByName(state, 'nodesToolbar');
 
 /**
  *  Return Nodes including mac addresses as string at macs attribute
@@ -26,6 +28,22 @@ export const getNodesWithMacs = createSelector(
 export const getRegisteredNodes = createSelector(
   getNodesWithMacs, (nodes) =>
     nodes.filterNot(node => node.get('provision_state') === 'active' || node.get('maintenance'))
+);
+
+/**
+ *  Return Registered Nodes with filters from nodesToolbar applied
+ */
+export const getFilteredRegisteredNodes = createSelector(
+  [getRegisteredNodes, nodesToolbarFilter], (nodes, nodesToolbarFilter) =>
+    nodes
+      .update(nodes => nodesToolbarFilter.get('activeFilters')
+        .reduce((filteredNodes, filter) =>
+          filteredNodes.filter(node =>
+            (node.get(filter.filterBy) || '').toLowerCase()
+              .includes(filter.filterString.toLowerCase())),
+          nodes))
+      .sortBy(node => node.getIn(nodesToolbarFilter.get('sortBy').split('.')))
+      .update(nodes => nodesToolbarFilter.get('sortDir') === 'desc' ? nodes.reverse() : nodes)
 );
 
 /**

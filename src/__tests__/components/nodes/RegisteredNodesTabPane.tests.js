@@ -41,8 +41,8 @@ describe('RegisteredNodesTabPane component', () => {
   });
 
   it('should render NodesTable and pass nodes as data prop', () => {
-    expect(tabPaneVdom.props.children[0].props.children[1].type.displayName)
+    expect(tabPaneVdom.props.children[1].props.children[1].type.displayName)
       .toEqual('InjectIntl(NodesTable)');
-    expect(tabPaneVdom.props.children[0].props.children[1].props.nodes).toEqual(registeredNodes);
+    expect(tabPaneVdom.props.children[1].props.children[1].props.nodes).toEqual(registeredNodes);
   });
 });
