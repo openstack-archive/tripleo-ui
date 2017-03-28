@@ -11,6 +11,7 @@ export default {
   PLAN_CREATE: 'tripleo.plan_management.v1.create_deployment_plan',
   PLAN_DELETE: 'tripleo.plan.delete',
   PLAN_LIST: 'tripleo.plan.list',
+  PLAN_EXPORT: 'tripleo.plan_management.v1.export_deployment_plan',
   ROLE_LIST: 'tripleo.role.list',
   TAG_NODES: 'tripleo.baremetal.v1.tag_nodes',
   VALIDATIONS_LIST: 'tripleo.validations.list_validations',

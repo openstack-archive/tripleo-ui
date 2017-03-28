@@ -87,6 +87,20 @@ export default function plansReducer(state = initialState, action) {
   case PlansConstants.CANCEL_CREATE_PLAN:
     return state.set('planFormErrors', List());
 
+  case PlansConstants.EXPORT_PLAN_PENDING: {
+    return state.set('isExportingPlan', true);
+  }
+
+  case PlansConstants.EXPORT_PLAN_SUCCESS: {
+    return state
+      .set('isExportingPlan', false)
+      .set('planExportUrl', action.payload);
+  }
+
+  case PlansConstants.EXPORT_PLAN_FAILED: {
+    return state.set('isExportingPlan', false);
+  }
+
   default:
     return state;
 

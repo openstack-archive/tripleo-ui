@@ -15,6 +15,7 @@ import DeploymentConfiguration from './components/deployment_plan/DeploymentConf
 import DeploymentDetail from './components/deployment/DeploymentDetail';
 import DeploymentPlan from './components/deployment_plan/DeploymentPlan';
 import EditPlan from './components/plan/EditPlan';
+import ExportPlan from './components/plan/ExportPlan';
 import EnvironmentConfiguration from
   './components/environment_configuration/EnvironmentConfiguration.js';
 import { getCurrentStackDeploymentInProgress } from './selectors/stacks';
@@ -119,6 +120,7 @@ let routes = (
               <Route path="/plans/new" component={NewPlan}/>
               <Route path="/plans/:planName/delete" component={DeletePlan}/>
               <Route path="/plans/:planName/edit" component={EditPlan}/>
+              <Route path="/plans/:planName/export" component={ExportPlan}/>
             </Route>
           </Route>
         </Route>
