@@ -1,6 +1,7 @@
+import { IntlProvider } from 'react-intl';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import { Map } from 'immutable';
+import { Map, Set } from 'immutable';
 
 import DeployedNodesTabPane from '../../../js/components/nodes/DeployedNodesTabPane';
 import store from '../../../js/store';
@@ -15,16 +16,27 @@ let nodes = Map({
 
 let roles = Map();
 
-xdescribe('DeployedNodesTabPane component', () => {
+describe('DeployedNodesTabPane component', () => {
   let tabPaneVdom;
   beforeEach(() => {
     let shallowRenderer = TestUtils.createRenderer();
-    shallowRenderer.render(<DeployedNodesTabPane nodes={nodes} roles={roles} store={store}/>);
+    const intlProvider = new IntlProvider({ locale: 'en' }, {});
+    const { intl } = intlProvider.getChildContext();
+    shallowRenderer.render(
+      <DeployedNodesTabPane.WrappedComponent
+        deployedNodes={nodes.get('deployed')}
+        roles={roles}
+        isFetchingNodes={nodes.get('isFetching')}
+        nodesInProgress={Set()}
+        nodesOperationInProgress={false}
+        store={store}
+        intl={intl}/>
+    );
     tabPaneVdom = shallowRenderer.getRenderOutput();
   });
 
   it('should render NodesTable and pass nodes as data prop', () => {
-    expect(tabPaneVdom.props.children[1].type.name).toEqual('NodesTable');
+    expect(tabPaneVdom.props.children[1].type.displayName).toEqual('InjectIntl(NodesTable)');
     expect(tabPaneVdom.props.children[1].props.nodes).toEqual(nodes.get('deployed'));
   });
 });
