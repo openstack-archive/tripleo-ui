@@ -61,6 +61,7 @@
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationMessage": "La configuraci\u00f3n del entorno ha sido actualizada correctamente.",
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationTitle": "Configuraci\u00f3n del entorno actualizada",
         "EnvironmentGroup.requiredEnvironments": "El entorno requiere {requiredEnvironments}.",
+        "ExportPlan.cancel": "Cancelar",
         "FileList.planFiles": "Archivos del plan",
         "HardwareStep.registerNodes": "Registrar nodos",
         "I18nDropdown.language": "Idioma",

@@ -61,6 +61,7 @@
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationMessage": "\u74b0\u5883\u8a2d\u5b9a\u304c\u6b63\u5e38\u306b\u66f4\u65b0\u3055\u308c\u307e\u3057\u305f\u3002",
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationTitle": "\u74b0\u5883\u8a2d\u5b9a\u304c\u66f4\u65b0\u3055\u308c\u307e\u3057\u305f",
         "EnvironmentGroup.requiredEnvironments": "\u3053\u306e\u74b0\u5883\u306b\u306f {requiredEnvironments} \u304c\u5fc5\u8981\u3067\u3059\u3002",
+        "ExportPlan.cancel": "\u53d6\u308a\u6d88\u3057",
         "FileList.planFiles": "\u30d7\u30e9\u30f3\u30d5\u30a1\u30a4\u30eb",
         "HardwareStep.registerNodes": "\u30ce\u30fc\u30c9\u306e\u767b\u9332",
         "I18nDropdown.language": "\u8a00\u8a9e",

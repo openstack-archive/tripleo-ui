@@ -61,6 +61,7 @@
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationMessage": "The Environment Configuration has been successfully updated.",
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationTitle": "Environment Configuration updated",
         "EnvironmentGroup.requiredEnvironments": "This environment requires {requiredEnvironments}.",
+        "ExportPlan.cancel": "Cancel",
         "FileList.planFiles": "Plan Files",
         "HardwareStep.registerNodes": "Register Nodes",
         "I18nDropdown.language": "Language",
