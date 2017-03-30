@@ -992,9 +992,9 @@
       "resolved": "https://registry.npmjs.org/redux/-/redux-3.5.2.tgz"
     },
     "redux-form": {
-      "version": "6.5.0",
-      "from": "redux-form@latest",
-      "resolved": "https://registry.npmjs.org/redux-form/-/redux-form-6.5.0.tgz"
+      "version": "6.6.1",
+      "from": "redux-form@6.6.1",
+      "resolved": "https://registry.npmjs.org/redux-form/-/redux-form-6.6.1.tgz"
     },
     "redux-logger": {
       "version": "2.6.1",
