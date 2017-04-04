@@ -212,11 +212,13 @@ export default {
         break;
       }
       case 'FAILED': {
-        dispatch(NotificationActions.notify({
-          type: 'error',
-          title: 'Error',
-          message: messagePayload.message
-        }));
+        messagePayload.message.map(message => {
+          dispatch(NotificationActions.notify({
+            type: 'error',
+            title: 'Error',
+            message: message.result
+          }));
+        });
         break;
       }
       default:
