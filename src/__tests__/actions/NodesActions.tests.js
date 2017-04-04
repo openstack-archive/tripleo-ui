@@ -278,7 +278,7 @@ describe('provideNodesFinished', () => {
   it('handles failure', () => {
     const messagePayload = {
       status: 'FAILED',
-      message: 'Failed to set nodes to available.',
+      message: [{ result: 'Failed to set nodes to available.' }],
       execution: { input: { node_uuids: [] }}
     };
 
