@@ -98,9 +98,10 @@ export default {
   nodesRegistrationFinished(messagePayload) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      const registeredNodes = normalize(messagePayload.registered_nodes,
-                                        arrayOf(nodeSchema)).entities.nodes || Map();
-      dispatch(NodesActions.addNodes(registeredNodes));
+      //TODO(jtomasek): re-enable this after Nodes are stored as Records rather than Maps
+      // const registeredNodes = normalize(messagePayload.registered_nodes,
+      //                                   arrayOf(nodeSchema)).entities.nodes || Map();
+      // dispatch(NodesActions.addNodes(registeredNodes));
       // TODO(jtomasek): This should not be needed when workflow returns up to date nodes
       dispatch(NodesActions.fetchNodes());
 
