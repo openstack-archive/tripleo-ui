@@ -265,7 +265,6 @@ export default {
   deleteNodes(nodeIds) {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
-      dispatch(this.pollNodeslistDuringProgress());
       nodeIds.map((nodeId) => {
         IronicApiService.deleteNode(nodeId).then(response => {
           dispatch(this.deleteNodeSuccess(nodeId));
