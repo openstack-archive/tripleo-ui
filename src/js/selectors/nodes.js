@@ -18,7 +18,7 @@ export const getNodesWithMacs = createSelector(
   [getNodes, getPorts], (nodes, ports) =>
     nodes
       .map(node => node
-        .update('portsDetail', filterPorts(ports))
+        .update('portsDetail', List(), filterPorts(ports))
         .update(node => node
           .set('macs', node.get('portsDetail').reduce((str, v) => str + v.address, ''))))
 );
