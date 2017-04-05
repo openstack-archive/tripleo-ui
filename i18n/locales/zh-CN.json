@@ -61,6 +61,7 @@
         "EditPlan.updatingPlanLoader": "\u6b63\u5728\u66f4\u65b0\u8ba1\u5212 ...",
         "EditPlan.uploadAndUpdate": "\u4e0a\u4f20\u6587\u4ef6\u5e76\u66f4\u65b0\u8ba1\u5212",
         "EnvironmentConfiguration.cancel": "\u53d6\u6d88",
+        "EnvironmentConfiguration.saveAndClose": "\u4fdd\u5b58\u5e76\u5173\u95ed",
         "EnvironmentConfiguration.saveChanges": "\u4fdd\u5b58\u53d8\u66f4",
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationMessage": "\u73af\u5883\u914d\u7f6e\u5df2\u88ab\u6210\u529f\u66f4\u65b0\u3002",
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationTitle": "\u73af\u5883\u914d\u7f6e\u88ab\u66f4\u65b0",
