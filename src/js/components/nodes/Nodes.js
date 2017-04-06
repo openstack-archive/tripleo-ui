@@ -59,6 +59,7 @@ class Nodes extends React.Component {
             <div className="pull-right">
               <a href="" onClick={this.refreshResults.bind(this)}>
                 <span className="pficon pficon-refresh"></span>
+                &nbsp;
                 <FormattedMessage {...messages.refreshResults}/>
               </a>
               &nbsp;
