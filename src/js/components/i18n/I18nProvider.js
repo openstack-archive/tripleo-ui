@@ -9,7 +9,6 @@ import zh from 'react-intl/locale-data/zh';
 
 import I18nActions from '../../actions/I18nActions';
 import deMessages from '../../../../i18n/locales/de.json';
-import engbMessages from '../../../../i18n/locales/en-GB.json';
 import esMessages from '../../../../i18n/locales/es.json';
 import jaMessages from '../../../../i18n/locales/ja.json';
 import kokrMessages from '../../../../i18n/locales/ko-KR.json';
@@ -19,7 +18,6 @@ import { getLanguage, getMessages } from '../../selectors/i18n';
 
 export const MESSAGES = {
   'de': deMessages['de'],
-  'en-GB': engbMessages['en-GB'],
   'es': esMessages['es'],
   'ja': jaMessages['ja'],
   'ko-KR': kokrMessages['ko-KR'],
