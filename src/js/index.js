@@ -27,7 +27,6 @@ import LoginActions from './actions/LoginActions';
 import MaintenanceNodesTabPane from './components/nodes/MaintenanceNodesTabPane';
 import NewPlan from './components/plan/NewPlan';
 import Nodes from './components/nodes/Nodes';
-import NodesAssignment from './components/deployment_plan/NodesAssignment';
 import NotificationActions from './actions/NotificationActions';
 import Parameters from './components/parameters/Parameters.js';
 import Plans from './components/plan/Plans.js';
@@ -90,9 +89,6 @@ let routes = (
               <Route path="environment" component={EnvironmentConfiguration}/>
               <Route path="parameters" component={Parameters}/>
             </Route>
-            <Route path=":roleIdentifier/assign-nodes"
-                    component={NodesAssignment}
-                    onEnter={checkRunningDeployment}/>
             <Redirect from="roles/:roleIdentifier" to="roles/:roleIdentifier/parameters"/>
             <Route path="roles/:roleIdentifier"
                     component={RoleDetail}
