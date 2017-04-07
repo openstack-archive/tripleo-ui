@@ -1,5 +1,4 @@
 import when from 'when';
-import uuid from 'node-uuid';
 
 import * as utils from '../../js/services/utils';
 import ParametersActions from '../../js/actions/ParametersActions';
@@ -7,7 +6,6 @@ import ParametersConstants from '../../js/constants/ParametersConstants';
 import MistralApiService from '../../js/services/MistralApiService';
 import MistralConstants from '../../js/constants/MistralConstants';
 import { mockGetIntl } from './utils';
-import { normalizeParameters } from '../../js/actions/ParametersActions';
 import storage from '../mocks/storage';
 
 window.localStorage = window.sessionStorage = storage;
@@ -52,7 +50,12 @@ describe('ParametersActions', () => {
     let responseBody = {
       output: `{
         "result": {
-          "heat_resource_tree": {},
+          "heat_resource_tree": {
+            "resources": {
+              "aaa": { "id": "aaa", "name": "Root" }
+            },
+            "parameters": {}
+          },
           "mistral_environment_parameters": {}
         }
       }`
@@ -62,7 +65,6 @@ describe('ParametersActions', () => {
       spyOn(ParametersActions, 'fetchParametersPending');
       spyOn(ParametersActions, 'fetchParametersSuccess');
       spyOn(ParametersActions, 'fetchParametersFailed');
-      spyOn(uuid, 'v4').and.returnValue('aaa');
       // Mock the service call.
       spyOn(MistralApiService, 'runAction')
         .and.callFake(createResolvingPromise(responseBody));
@@ -87,42 +89,13 @@ describe('ParametersActions', () => {
         aaa: { id: 'aaa', name: 'Root' }
       };
       expect(ParametersActions.fetchParametersSuccess)
-        .toHaveBeenCalledWith({ parameters: undefined,
+        .toHaveBeenCalledWith({ parameters: {},
                                 resources: expectedResources,
                                 mistralParameters: {} });
     });
 
     it('does not dispatch fetchParametersFailed', () => {
       expect(ParametersActions.fetchParametersFailed).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('normalizeParameters', () => {
-    it('normalizes resourceTree', () => {
-      let resourceTree = {
-        Description: 'some description',
-        NestedParameters: {
-          CephStorage: {
-            Description: 'No description',
-            Parameters: {},
-            Type: 'OS::Heat::ResourceGroup'
-          }
-        },
-        Parameters: {
-          BlockStorageCount: {
-            Default: 0,
-            Description: 'Number of BlockStorage nodes to deploy',
-            Label: 'BlockStorageCount',
-            NoEcho: 'false',
-            Type: 'Number'
-          }
-        }
-      };
-      let normalizedResult = normalizeParameters(resourceTree);
-      expect(Object.keys(normalizedResult)).toEqual(['resources', 'parameters']);
-      expect(Object.keys(normalizedResult.resources).length).toEqual(2);
-      expect(Object.keys(normalizedResult.parameters).length).toEqual(1);
-      expect(normalizedResult.parameters.BlockStorageCount.type).toEqual('Number');
     });
   });
 

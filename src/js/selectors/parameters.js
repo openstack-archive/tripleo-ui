@@ -56,18 +56,18 @@ export const getRoleServices = createSelector(
     resources
       // traverse the resources to find Role's ServiceChain resource
       .find(resource => resource.name === `${role.name}ServiceChain`, null, new Resource())
-      .get('nestedParameters', List())
+      .get('resources', List())
       .map(r => resources.get(r))
       .find(r => r.name === 'ServiceChain', null, new Resource())
       // get ServiceChain resources
-      .get('nestedParameters', List())
+      .get('resources', List())
       // replace list of resource ids with Map of actual resources - Services
       .update(filterResources(resources))
       // for each Service, update it's parameters to include parameters of it's nested resources
       .map(r => r
         .update(resource => resource
           .set('parameters',
-               _extractParameters(resource.parameters, resource.nestedParameters, resources)))
+               _extractParameters(resource.parameters, resource.resources, resources)))
         .update('parameters', filterParameters(parameters)))
 );
 
@@ -77,7 +77,7 @@ export const getRoleServices = createSelector(
 export const getRoleNetworkConfig = createSelector(
   [getResources, getParameters, getRoleResource, getRole],
   (resources, parameters, roleResource, role) =>
-    roleResource.nestedParameters
+    roleResource.resources
       .map(r => resources.get(r))
       .find(resource => resource.type === `OS::TripleO::${role.name}::Net::SoftwareConfig`,
             null,
@@ -95,7 +95,7 @@ export const getEnvironmentParameters = createSelector(
         // collect parameter names from those resources
         .reduce((result, resource) =>
           result.union(
-            _extractParameters(resource.parameters, resource.nestedParameters, resources)
+            _extractParameters(resource.parameters, resource.resources, resources)
           ), Set())
         // add parameters from environment's 'parameters' section to the list
         .union(environment.parameterDefaults.keySeq())
@@ -136,7 +136,7 @@ const filterParameters = (parameters) =>
  */
 export const getResourceParametersDeep = createSelector(
   [getResources, getParameters, resourceById], (resources, parameters, resource) =>
-    _extractParameters(resource.parameters, resource.nestedParameters, resources)
+    _extractParameters(resource.parameters, resource.resources, resources)
       .update(filterParameters(parameters))
 );
 
@@ -147,7 +147,7 @@ const _extractParameters = (parameters, nestedResources, allResources) => {
   return nestedResources.reduce((pars, res) => {
     const resource = allResources.get(res);
     return _extractParameters(pars.toSet().union(resource.parameters.toSet()).toList(),
-                              resource.nestedParameters,
+                              resource.resources,
                               allResources);
   }, parameters);
 };
