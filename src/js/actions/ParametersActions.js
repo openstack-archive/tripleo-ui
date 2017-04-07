@@ -15,10 +15,7 @@
  */
 
 import { defineMessages } from 'react-intl';
-import { normalize } from 'normalizr';
 import { browserHistory } from 'react-router';
-import uuid from 'node-uuid';
-import * as _ from 'lodash';
 import { startSubmit, stopSubmit } from 'redux-form';
 
 import NotificationActions from '../actions/NotificationActions';
@@ -27,7 +24,6 @@ import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import MistralConstants from '../constants/MistralConstants';
 import logger from '../services/logger';
-import { resourceGroupSchema } from '../normalizrSchemas/parameters';
 
 const messages = defineMessages({
   parametersUpdatedNotficationTitle: {
@@ -67,11 +63,11 @@ export default {
         container: planName
       })
         .then(response => {
-          const resourceTree = JSON.parse(response.output).result
-            .heat_resource_tree;
+          const { resources, parameters } = JSON.parse(
+            response.output
+          ).result.heat_resource_tree;
           const mistralParameters = JSON.parse(response.output).result
             .mistral_environment_parameters;
-          const { resources, parameters } = normalizeParameters(resourceTree);
           dispatch(
             this.fetchParametersSuccess({
               resources,
@@ -158,46 +154,4 @@ export default {
         });
     };
   }
-};
-
-export const normalizeParameters = resourceTree => {
-  resourceTree.name = 'Root';
-  return (
-    normalize(processResource(resourceTree), resourceGroupSchema).entities || {}
-  );
-};
-
-// Recursively convert NestedParameters and Parameters objects to Arrays
-// so the data structure is easily consumable by normalizr
-export const processResource = resource => {
-  resource.id = uuid.v4();
-
-  if (resource.NestedParameters) {
-    resource.NestedParameters =
-      // Convert NestedParameters (Resources) object to Array
-      _.values(
-        // Set NestedParameter (Resource) object key as NestedParameter name property
-        _.mapValues(resource.NestedParameters, (value, key) => {
-          value.name = key;
-          // Recursively process nested Resources
-          return processResource(value);
-        })
-      );
-  }
-
-  if (resource.Parameters) {
-    resource.Parameters =
-      // Convert Parameters object to Array
-      _.values(
-        // Set Parameter object key as Parameter name property
-        _.mapValues(resource.Parameters, (value, key) => {
-          value.name = key;
-          // Convert Parameter properties to camelCase
-          return _.mapKeys(value, (value, key) => _.camelCase(key));
-        })
-      );
-  }
-
-  // Convert Resource properties to camelCase
-  return _.mapKeys(resource, (value, key) => _.camelCase(key));
 };

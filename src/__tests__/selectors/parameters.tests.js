@@ -45,48 +45,48 @@ describe(' validations selectors', () => {
         aaa: new Resource({
           id: 'aaa',
           name: 'Root',
-          nestedParameters: List(),
+          resources: List(),
           parameters: List(['RootParameter1'])
         }),
         bbb: new Resource({
           id: 'bbb',
           name: 'RoleResource1',
-          nestedParameters: List(['ccc']),
+          resources: List(['ccc']),
           parameters: List(['ControllerRoleParameter']),
           type: 'OS::TripleO::Controller'
         }),
         ccc: new Resource({
           id: 'ccc',
           name: 'NetworkConfigResource',
-          nestedParameters: List(),
+          resources: List(),
           parameters: List(),
           type: 'OS::TripleO::Controller::Net::SoftwareConfig'
         }),
         ddd: new Resource({
           id: 'ddd',
           name: 'ControllerServiceChain',
-          nestedParameters: List(['eee']),
+          resources: List(['eee']),
           parameters: List(),
           type: 'whateverTheTypeIs'
         }),
         eee: new Resource({
           id: 'eee',
           name: 'ServiceChain',
-          nestedParameters: List(['fff']),
+          resources: List(['fff']),
           parameters: List(),
           type: 'whateverTheTypeIs'
         }),
         fff: new Resource({
           id: 'fff',
           name: 'ControllerService1',
-          nestedParameters: List(['ggg']),
+          resources: List(['ggg']),
           parameters: List(['Service1Parameter1', 'Service1Parameter2']),
           type: 'whateverTheTypeIs'
         }),
         ggg: new Resource({
           id: 'ggg',
           name: 'ControllerServiceNestedResource1',
-          nestedParameters: List(),
+          resources: List(),
           parameters: List(['Service1NestedResourceParameter1']),
           type: 'whateverTheTypeIs'
         })

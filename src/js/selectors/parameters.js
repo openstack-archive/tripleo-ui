@@ -83,11 +83,11 @@ export const getRoleServices = createSelector(
         null,
         new Resource()
       )
-      .get('nestedParameters', List())
+      .get('resources', List())
       .map(r => resources.get(r))
       .find(r => r.name === 'ServiceChain', null, new Resource())
       // get ServiceChain resources
-      .get('nestedParameters', List())
+      .get('resources', List())
       // replace list of resource ids with Map of actual resources - Services
       .update(filterResources(resources))
       // for each Service, update it's parameters to include parameters of it's nested resources
@@ -98,7 +98,7 @@ export const getRoleServices = createSelector(
               'parameters',
               _extractParameters(
                 resource.parameters,
-                resource.nestedParameters,
+                resource.resources,
                 resources
               )
             )
@@ -113,7 +113,7 @@ export const getRoleServices = createSelector(
 export const getRoleNetworkConfig = createSelector(
   [getResources, getParameters, getRoleResource, getRole],
   (resources, parameters, roleResource, role) =>
-    roleResource.nestedParameters
+    roleResource.resources
       .map(r => resources.get(r))
       .find(
         resource =>
@@ -137,7 +137,7 @@ export const getEnvironmentParameters = createSelector(
             result.union(
               _extractParameters(
                 resource.parameters,
-                resource.nestedParameters,
+                resource.resources,
                 resources
               )
             ),
@@ -187,7 +187,7 @@ export const getResourceParametersDeep = createSelector(
   (resources, parameters, resource) =>
     _extractParameters(
       resource.parameters,
-      resource.nestedParameters,
+      resource.resources,
       resources
     ).update(filterParameters(parameters))
 );
@@ -200,7 +200,7 @@ const _extractParameters = (parameters, nestedResources, allResources) => {
     const resource = allResources.get(res);
     return _extractParameters(
       pars.toSet().union(resource.parameters.toSet()).toList(),
-      resource.nestedParameters,
+      resource.resources,
       allResources
     );
   }, parameters);
