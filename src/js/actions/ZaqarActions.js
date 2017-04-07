@@ -36,11 +36,6 @@ export default {
         break;
       }
 
-      case (MistralConstants.TAG_NODES): {
-        dispatch(NodesActions.nodesAssignmentFinished(payload));
-        break;
-      }
-
       case (MistralConstants.PLAN_EXPORT): {
         dispatch(PlansActions.exportPlanFinished(payload));
         break;

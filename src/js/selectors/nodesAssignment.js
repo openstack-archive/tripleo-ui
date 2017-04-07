@@ -20,17 +20,6 @@ export const getUntaggedAvailableNodes = createSelector(
 );
 
 /**
- *  Returns Nodes available for assignment for each Role (tagged to specific role
- *  + untagged nodes)
- *  TODO(jtomasek): remove this when NodesAssignment component is no longer used
- */
-export const getAvailableNodesByRole = createSelector(
-  [getAvailableNodes, getUntaggedAvailableNodes, getRoles], (nodes, untaggedNodes, roles) =>
-    roles.map(role => nodes.filter(node => getNodeCapabilities(node).profile === role.identifier)
-                           .merge(untaggedNodes))
-);
-
-/**
  *  Returns <RoleName>Count parameters for each Role
  */
 export const getNodeCountParametersByRole = createSelector(

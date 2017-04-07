@@ -132,13 +132,6 @@ describe('Nodes Assignment selectors', () => {
     expect(selectors.getUntaggedAvailableNodes(state).size).toEqual(2);
   });
 
-  it('provides selector to list available Nodes assigned to Roles', () => {
-    const availableNodesByRole = selectors.getAvailableNodesByRole(state);
-    expect(availableNodesByRole.get('control').size).toEqual(4);
-    expect(availableNodesByRole.get('compute').size).toEqual(3);
-    expect(availableNodesByRole.get('block-storage').size).toEqual(2);
-  });
-
   describe('provides getTotalUntaggedAssignedNodesCount selector', () => {
     beforeEach(function() {
       this.nodes = fromJS({
