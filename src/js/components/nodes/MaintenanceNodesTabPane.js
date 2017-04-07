@@ -9,7 +9,6 @@ import FormErrorList from '../ui/forms/FormErrorList';
 import NodesTable from './NodesTable';
 import { getNodesOperationInProgress,
          getMaintenanceNodes } from '../../selectors/nodes';
-import { getRoles } from '../../selectors/roles';
 
 class MaintenanceNodesTabPane extends React.Component {
   constructor() {
@@ -60,7 +59,6 @@ class MaintenanceNodesTabPane extends React.Component {
                    onInvalid={this.disableButton.bind(this)}>
         <FormErrorList errors={this.props.formErrors.toJS()}/>
         <NodesTable nodes={this.props.maintenanceNodes}
-                    roles={this.props.roles}
                     nodesInProgress={this.props.nodesInProgress}
                     isFetchingNodes={this.props.isFetchingNodes}
                     dataOperationInProgress={this.props.nodesOperationInProgress}/>
@@ -74,8 +72,7 @@ MaintenanceNodesTabPane.propTypes = {
   isFetchingNodes: React.PropTypes.bool.isRequired,
   maintenanceNodes: ImmutablePropTypes.map.isRequired,
   nodesInProgress: ImmutablePropTypes.set.isRequired,
-  nodesOperationInProgress: React.PropTypes.bool.isRequired,
-  roles: ImmutablePropTypes.map
+  nodesOperationInProgress: React.PropTypes.bool.isRequired
 };
 MaintenanceNodesTabPane.defaultProps = {
   formErrors: List(),
@@ -84,7 +81,6 @@ MaintenanceNodesTabPane.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    roles: getRoles(state),
     maintenanceNodes: getMaintenanceNodes(state),
     nodesInProgress: state.nodes.get('nodesInProgress'),
     nodesOperationInProgress: getNodesOperationInProgress(state),
