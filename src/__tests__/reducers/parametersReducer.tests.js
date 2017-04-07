@@ -20,7 +20,7 @@ const parametersActionPayload = {
   },
   resources: {
     '1d0e0c81-2dc6-4b39-a9a7-9ef4fab65ecf': {
-      nestedParameters: [
+      resources: [
         'd1f30e6b-c835-49d8-a21e-2983bde15bab'
       ],
       type: 'OS::TripleO::Services::HeatEngine',
