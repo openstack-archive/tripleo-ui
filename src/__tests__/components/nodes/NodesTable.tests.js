@@ -5,7 +5,6 @@ import { Map, Set } from 'immutable';
 
 import NodesTable from '../../../js/components/nodes/NodesTable';
 import { NodesTableProfileCell } from '../../../js/components/nodes/NodesTable';
-import { Role } from '../../../js/immutableRecords/roles';
 
 const initialState = {
   filterString: '',
@@ -39,17 +38,6 @@ let nodes = Map({
   }
 });
 
-let roles = Map({
-  control: new Role({
-    name: 'control',
-    title: 'Controller'
-  }),
-  compute: new Role({
-    name: 'compute',
-    title: 'Compute'
-  })
-});
-
 describe('NodesTable component', () => {
   let nodesTableVdom, nodesTableInstance;
   beforeEach(() => {
@@ -59,7 +47,6 @@ describe('NodesTable component', () => {
     shallowRenderer.render(
       <NodesTable.WrappedComponent
         nodes={nodes}
-        roles={roles}
         nodesInProgress={Set()}
         isFetchingNodes={false}
         intl={intl}/>
@@ -94,17 +81,15 @@ describe('NodesTableRoleCell', () => {
     it('should return Not Assigned when profile is not set in node.properties.capabilities', () => {
       let shallowRenderer = TestUtils.createRenderer();
       shallowRenderer.render(<NodesTableProfileCell data={nodes.toList().toJS()}
-                                                 roles={roles}
-                                                 rowIndex={0}/>);
+                                                    rowIndex={0}/>);
       roleCellInstance = shallowRenderer._instance._instance;
-      expect(roleCellInstance.getAssignedRoleTitle()).toEqual('Compute');
+      expect(roleCellInstance.getAssignedRoleTitle()).toEqual('compute');
     });
 
     it('should return Not Assigned when profile is not set in node.properties.capabilities', () => {
       let shallowRenderer = TestUtils.createRenderer();
       shallowRenderer.render(<NodesTableProfileCell data={nodes.toList().toJS()}
-                                                 roles={roles}
-                                                 rowIndex={1}/>);
+                                                    rowIndex={1}/>);
       roleCellInstance = shallowRenderer._instance._instance;
       expect(roleCellInstance.getAssignedRoleTitle()).toEqual('-');
     });
