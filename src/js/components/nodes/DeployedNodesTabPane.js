@@ -7,7 +7,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import { getNodesOperationInProgress,
          getDeployedNodes } from '../../selectors/nodes';
-import { getRoles } from '../../selectors/roles';
 import FormErrorList from '../ui/forms/FormErrorList';
 import NodesTable from './NodesTable';
 
@@ -60,7 +59,6 @@ class DeployedNodesTabPane extends React.Component {
                    onInvalid={this.disableButton.bind(this)}>
         <FormErrorList errors={this.props.formErrors.toJS()}/>
         <NodesTable nodes={this.props.deployedNodes}
-                    roles={this.props.roles}
                     nodesInProgress={this.props.nodesInProgress}
                     isFetchingNodes={this.props.isFetchingNodes}
                     dataOperationInProgress={this.props.nodesOperationInProgress}/>
@@ -74,8 +72,7 @@ DeployedNodesTabPane.propTypes = {
   formFieldErrors: ImmutablePropTypes.map.isRequired,
   isFetchingNodes: React.PropTypes.bool.isRequired,
   nodesInProgress: ImmutablePropTypes.set.isRequired,
-  nodesOperationInProgress: React.PropTypes.bool.isRequired,
-  roles: ImmutablePropTypes.map
+  nodesOperationInProgress: React.PropTypes.bool.isRequired
 };
 DeployedNodesTabPane.defaultProps = {
   formErrors: List(),
@@ -87,8 +84,7 @@ function mapStateToProps(state) {
     deployedNodes: getDeployedNodes(state),
     isFetchingNodes: state.nodes.get('isFetching'),
     nodesInProgress: state.nodes.get('nodesInProgress'),
-    nodesOperationInProgress: getNodesOperationInProgress(state),
-    roles: getRoles(state)
+    nodesOperationInProgress: getNodesOperationInProgress(state)
   };
 }
 
