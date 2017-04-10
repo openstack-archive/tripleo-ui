@@ -15,6 +15,7 @@ import StackActions from '../actions/StacksActions';
 import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
 import MistralConstants from '../constants/MistralConstants';
+import { getAppConfig } from '../services/utils';
 
 const messages = defineMessages({
   planCreatedNotificationTitle: {
@@ -483,7 +484,12 @@ export default {
         }));
       }
       else {
-        dispatch(this.exportPlanSuccess(payload.tempurl));
+        let urlParser = document.createElement('a');
+        urlParser.href = payload.tempurl;
+        let url = urlParser.hostname;
+        urlParser.href = getAppConfig().swift;
+        let swiftUrl = urlParser.hostname;
+        dispatch(this.exportPlanSuccess(payload.tempurl.replace(url, swiftUrl)));
       }
     };
   },
