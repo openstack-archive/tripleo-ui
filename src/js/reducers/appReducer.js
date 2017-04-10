@@ -4,6 +4,7 @@ import { reducer as formReducer } from 'redux-form';
 import currentPlanReducer from './currentPlanReducer';
 import environmentConfigurationReducer from './environmentConfigurationReducer';
 import i18nReducer from './i18nReducer';
+import instancesReducer from './instancesReducer';
 import loginReducer from './loginReducer';
 import nodesReducer from './nodesReducer';
 import notificationsReducer from './notificationsReducer';
@@ -20,6 +21,7 @@ const appReducer = combineReducers({
   environmentConfiguration: environmentConfigurationReducer,
   executions: workflowExecutionsReducer,
   i18n: i18nReducer,
+  instances: instancesReducer,
   login: loginReducer,
   nodes: nodesReducer,
   notifications: notificationsReducer,
