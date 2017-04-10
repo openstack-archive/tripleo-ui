@@ -4,6 +4,7 @@ import * as selectors from '../../js/selectors/nodesAssignment';
 import { Port } from '../../js/immutableRecords/nodes';
 import { Role, RolesState } from '../../js/immutableRecords/roles';
 import { Parameter, ParametersDefaultState } from '../../js/immutableRecords/parameters';
+import { InstancesState } from '../../js/immutableRecords/instances';
 
 describe('Nodes Assignment selectors', () => {
   const state = {
@@ -125,7 +126,8 @@ describe('Nodes Assignment selectors', () => {
           default: 1
         })
       })
-    })
+    }),
+    instances: new InstancesState()
   };
 
   it('provides selector to list Introspected Nodes not assigned to a Role', () => {

@@ -1,6 +1,7 @@
 import { List, Map } from 'immutable';
 
 import { InitialPlanState } from '../../../js/immutableRecords/plans';
+import { InstancesState } from '../../../js/immutableRecords/instances';
 import { CurrentPlanState } from '../../../js/immutableRecords/currentPlan';
 import { ParametersDefaultState } from '../../../js/immutableRecords/parameters';
 import { RolesState } from '../../../js/immutableRecords/roles';
@@ -15,6 +16,7 @@ describe('DeploymentPlan mapStateToProps', () => {
       let props = mapStateToProps(
         {
           currentPlan: new CurrentPlanState,
+          instances: new InstancesState(),
           parameters: new ParametersDefaultState(),
           plans: new InitialPlanState({ all: List() }),
           stacks: new StacksState(),
@@ -37,6 +39,7 @@ describe('DeploymentPlan mapStateToProps', () => {
       let props = mapStateToProps(
         {
           currentPlan: new CurrentPlanState(),
+          instances: new InstancesState(),
           parameters: new ParametersDefaultState(),
           plans: new InitialPlanState({ all: List(['foo', 'bar']) }),
           stacks: new StacksState(),
