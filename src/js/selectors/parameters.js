@@ -93,7 +93,10 @@ export const getEnvironmentParameters = createSelector(
         // get list of resources from environment resource_registry
         .filter(r => environment.resourceRegistry.keySeq().includes(r.type))
         // collect parameter names from those resources
-        .reduce((result, resource) => result.union(resource.parameters), Set())
+        .reduce((result, resource) =>
+          result.union(
+            _extractParameters(resource.parameters, resource.nestedParameters, resources)
+          ), Set())
         // add parameters from environment's 'parameters' section to the list
         .union(environment.parameterDefaults.keySeq())
         .toMap()
