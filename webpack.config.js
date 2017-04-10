@@ -16,13 +16,13 @@ module.exports = {
     })
   ],
   module: {
-    loaders: [
+    rules: [
       // Javascript
       {
         test: /\.js$/,
         include: /src/,
         exclude: /src\/js\/workers/,
-        loader: 'babel'
+        loader: 'babel-loader'
       },
 
       // Images
@@ -38,7 +38,7 @@ module.exports = {
       // Fonts and svg images
       {
         test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url',
+        loader: 'url-loader',
         query: {
           limit: 8192,
           mimetype: 'application/font-woff',
@@ -47,7 +47,7 @@ module.exports = {
       },
       {
         test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url',
+        loader: 'url-loader',
         query: {
           limit: 8192,
           mimetype: 'application/octet-stream',
@@ -56,12 +56,12 @@ module.exports = {
       },
       {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file',
+        loader: 'file-loader',
         query: { name: '[name].[ext]' }
       },
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url',
+        loader: 'url-loader',
         query: {
           limit: 8192,
           mimetype: 'image/svg+xml',
@@ -72,32 +72,36 @@ module.exports = {
       // Plain CSS files
       {
         test: /\.css$/,
-        loader: 'style!css'
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
       },
 
       // Less
       {
         test: /\.less$/,
-        loader: 'style!css!less?sourceMap'
+        use: [
+          'style-loader',
+          'css-loader',
+          'less-loader?sourceMap'
+        ]
       },
 
       {
         loader: __dirname + '/src/js/loaders/version.js',
         test: /src\/js\/index.js$/
-      },
-
-      // JSON
-      {
-        test: /\.json$/,
-        loader: 'json'
       }
+
     ]
   },
   devServer: {
     contentBase: './dist',
     host: '0.0.0.0',
     port: 3000,
-    colors: true,
+    stats: {
+      colors: true
+    },
     historyApiFallback: true,
     inline: true
   }
