@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { isObjectLike, mapValues } from 'lodash';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { fromJS, is } from 'immutable';
 import React from 'react';
 
@@ -23,6 +23,10 @@ const messages = defineMessages({
     id: 'Parameters.saveChanges',
     defaultMessage: 'Save Changes'
   },
+  saveAndClose: {
+    id: 'Parameters.saveAndClose',
+    defaultMessage: 'Save And Close'
+  },
   cancel: {
     id: 'Parameters.cancel',
     defaultMessage: 'Cancel'
@@ -34,6 +38,7 @@ class Parameters extends React.Component {
     super();
     this.state = {
       canSubmit: false,
+      closeOnSubmit: false,
       selectedTab: 'general'
     };
   }
@@ -101,6 +106,20 @@ class Parameters extends React.Component {
       this._filterFormData(this._jsonParseFormData(formData)),
       Object.keys(this.refs.parameterConfigurationForm.inputs)
     );
+
+    if (this.state.closeOnSubmit) {
+      this.setState({
+        closeOnSubmit: false
+      });
+
+      browserHistory.push(this.props.parentPath);
+    }
+  }
+
+  onSubmitAndClose() {
+    this.setState({
+      closeOnSubmit: true
+    }, this.refs.parameterConfigurationForm.submit);
   }
 
   selectTab(tabName) {
@@ -186,6 +205,11 @@ class Parameters extends React.Component {
                   disabled={!this.state.canSubmit}
                   className="btn btn-primary">
             <FormattedMessage {...messages.saveChanges}/>
+          </button>
+          <button type="button" disabled={!this.state.canSubmit}
+                  onClick={this.onSubmitAndClose.bind(this)}
+                  className="btn btn-default">
+            <FormattedMessage {...messages.saveAndClose} />
           </button>
           <Link to="/deployment-plan" type="button" className="btn btn-default" >
             <FormattedMessage {...messages.cancel}/>
