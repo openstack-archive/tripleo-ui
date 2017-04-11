@@ -142,6 +142,7 @@
         "ParameterInput.enterValidJson": "\uc720\ud6a8\ud55c JSON \ubb38\uc790\uc5f4\uc744 \uc785\ub825\ud558\uc138\uc694.",
         "ParameterInputList.noParameters": "\uc774 \uc139\uc158\uc5d0\uc11c \uad6c\uc131\ud560 \ub9e4\uac1c\ubcc0\uc218\uac00 \uc5c6\uc2b5\ub2c8\ub2e4.",
         "Parameters.cancel": "\ucde8\uc18c",
+        "Parameters.saveAndClose": "\uc800\uc7a5 \ubc0f \ub2eb\uae30",
         "Parameters.saveChanges": "\ubcc0\uacbd\uc0ac\ud56d \uc800\uc7a5",
         "ParametersActions.parametersUpdatedNotficationMessage": "\ubc30\ud3ec \ub9e4\uac1c \ubcc0\uc218\uac00 \uc131\uacf5\uc801\uc73c\ub85c \uc5c5\ub370\uc774\ud2b8\ub418\uc5c8\uc2b5\ub2c8\ub2e4.",
         "ParametersActions.parametersUpdatedNotficationTitle": "\ub9e4\uac1c \ubcc0\uc218 \uc5c5\ub370\uc774\ud2b8 \uc644\ub8cc",
