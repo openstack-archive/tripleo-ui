@@ -13,7 +13,9 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.userAuthStarted());
       KeystoneApiService.authenticateUserViaToken(keystoneAuthTokenId).then((response) => {
-        cookie.save('keystoneAuthTokenId', response.access.token.id);
+        cookie.save('keystoneAuthTokenId',
+                    response.access.token.id,
+                    { path: '/' });
         dispatch(this.userAuthSuccess(response.access));
         ZaqarWebSocketService.init(getState, dispatch);
         browserHistory.push(nextPath);
@@ -31,7 +33,9 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.userAuthStarted());
       KeystoneApiService.authenticateUser(formData.username, formData.password).then((response) => {
-        cookie.save('keystoneAuthTokenId', response.access.token.id);
+        cookie.save('keystoneAuthTokenId',
+                    response.access.token.id,
+                    { path: '/' });
         dispatch(this.userAuthSuccess(response.access));
         ZaqarWebSocketService.init(getState, dispatch);
         browserHistory.push(nextPath);
