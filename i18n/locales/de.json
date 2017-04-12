@@ -135,6 +135,7 @@
         "ParameterInput.enterValidJson": "Bitte geben Sie einen g\u00fcltigen JSON-String ein.",
         "ParameterInputList.noParameters": "In dieser Sektion sind gerade keine Parameter zu konfigurieren",
         "Parameters.cancel": "Abbrechen",
+        "Parameters.saveAndClose": "Sichern und Schliessen",
         "Parameters.saveChanges": "\u00c4nderungen speichern",
         "ParametersActions.parametersUpdatedNotficationMessage": "Die Bereitstellungsparameter wurden erfolgreich aktualisiert.",
         "ParametersActions.parametersUpdatedNotficationTitle": "Parameter aktualisiert",
