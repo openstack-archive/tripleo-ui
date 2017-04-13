@@ -70,7 +70,7 @@
     "webpack-merge": "^4.1.0"
   },
   "scripts": {
-    "lint": "eslint --max-warnings 0 src && prettier --single-quote --list-different 'src/**/*.js'",
+    "lint": "./bin/run_lint.sh",
     "prettier": "prettier --write --single-quote 'src/**/*.js'",
     "build": "webpack --env=prod --bail --progress",
     "build:dev": "webpack --env=dev --bail --progress",
