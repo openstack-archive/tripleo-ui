@@ -13,6 +13,7 @@ messages.pot
 i18n/extracted-messages*
 npm-debug.log
 docs/_build
+src/js/components/i18n/messages.js
 
 # Files created by releasenotes build
 releasenotes/build

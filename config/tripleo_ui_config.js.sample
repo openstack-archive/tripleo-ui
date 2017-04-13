@@ -16,16 +16,11 @@ window.tripleOUiConfig = {
   // 'zaqar_default_queue': 'tripleo',
 
   // Languages
-  // If you choose more than one language, a language switcher will appear in the navigation bar.
-  // Only 'en' (English) is enabled by default.
-  // 'languages': {
-  //   'de': 'German',
-  //   'en': 'English',
-  //   'es': 'Spanish',
-  //   'ja': 'Japanese',
-  //   'ko-KR': 'Korean',
-  //   'zh-CN': 'Simplified Chinese'
-  // },
+  //
+  // By default, all available languages are enabled.  Use this setting to
+  // disable certain languages.
+  //
+  // 'excludedLanguages': ['de', 'ja'],
 
   // Logging
   // 'loggers': ['console']

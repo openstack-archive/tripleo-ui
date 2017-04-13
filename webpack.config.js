@@ -1,5 +1,6 @@
 require('es6-promise').polyfill(); // https://github.com/webpack/css-loader/issues/144
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var I18nPlugin = require('./src/js/plugins/i18n');
 
 module.exports = {
   devtool: 'inline-source-map',
@@ -13,6 +14,9 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html'
+    }),
+    new I18nPlugin({
+      localePath: 'i18n/locales'
     })
   ],
   module: {
