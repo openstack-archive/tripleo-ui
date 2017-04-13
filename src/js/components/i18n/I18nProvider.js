@@ -1,36 +1,15 @@
 import { addLocaleData, IntlProvider } from 'react-intl';
 import { connect } from 'react-redux';
 import React from 'react';
-import de from 'react-intl/locale-data/de';
-import es from 'react-intl/locale-data/es';
-import id from 'react-intl/locale-data/id';
-import ja from 'react-intl/locale-data/ja';
-import ko from 'react-intl/locale-data/ko';
-import zh from 'react-intl/locale-data/zh';
 
 import I18nActions from '../../actions/I18nActions';
-import deMessages from '../../../../i18n/locales/de.json';
-import esMessages from '../../../../i18n/locales/es.json';
-import idMessages from '../../../../i18n/locales/id.json';
-import jaMessages from '../../../../i18n/locales/ja.json';
-import kokrMessages from '../../../../i18n/locales/ko-KR.json';
-import zhcnMessages from '../../../../i18n/locales/zh-CN.json';
-
+import { MESSAGES, LOCALE_DATA } from './messages';
 import { getLanguage, getMessages } from '../../selectors/i18n';
-
-export const MESSAGES = {
-  'de': deMessages['de'],
-  'es': esMessages['es'],
-  'id': idMessages['id'],
-  'ja': jaMessages['ja'],
-  'ko-KR': kokrMessages['ko-KR'],
-  'zh-CN': zhcnMessages['zh-CN']
-};
 
 class I18nProvider extends React.Component {
   constructor() {
     super();
-    addLocaleData([...de, ...es, ...id, ...ja, ...ko, ...zh]);
+    addLocaleData(LOCALE_DATA);
   }
 
   componentDidMount() {
