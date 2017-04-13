@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
-import { getAppConfig } from '../services/utils';
+import { getEnabledLanguages } from '../services/utils';
 import NavTab from './ui/NavTab';
 import I18nDropdown from './i18n/I18nDropdown';
 
@@ -36,7 +36,7 @@ export default class NavBar extends React.Component {
   }
 
   _renderLanguageDropdown() {
-    const languages = getAppConfig().languages || {};
+    const languages = getEnabledLanguages();
 
     // Only include the I18nDropdown if there's more than one
     // language to choose from.

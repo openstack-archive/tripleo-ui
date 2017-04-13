@@ -6,9 +6,9 @@ import React from 'react';
 import Dropdown from '../ui/dropdown/Dropdown';
 import DropdownToggle from '../ui/dropdown/DropdownToggle';
 import DropdownItem from '../ui/dropdown/DropdownItem';
-import { getAppConfig } from '../../services/utils';
+import { getEnabledLanguages } from '../../services/utils';
 import I18nActions from '../../actions/I18nActions';
-import { MESSAGES } from './I18nProvider';
+import { MESSAGES } from './messages';
 
 const messages = defineMessages({
   language: {
@@ -19,7 +19,7 @@ const messages = defineMessages({
 
 class I18nDropdown extends React.Component {
   _renderDropdownItems() {
-    const configLanguages = getAppConfig().languages || {};
+    const configLanguages = getEnabledLanguages();
     const langList = Object.keys(configLanguages).sort(
       (a, b) => configLanguages[a] > configLanguages[b]
     );
