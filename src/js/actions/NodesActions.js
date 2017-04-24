@@ -34,7 +34,7 @@ import {
   introspectionStatusSchema
 } from '../normalizrSchemas/nodes';
 import MistralConstants from '../constants/MistralConstants';
-import logger from '../services/logger';
+import logger from '../services/logging/LoggingService';
 import { setNodeCapability } from '../utils/nodes';
 
 const messages = defineMessages({
