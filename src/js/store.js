@@ -9,7 +9,16 @@ import { getIntl } from './selectors/i18n';
 
 const loggerMiddleware = createLogger({
   collapsed: true,
-  logger: logger
+  logger: logger,
+  // We're turning off all colors here because the formatting chars obscure the
+  // content server-side.
+  colors: {
+    title: false,
+    prevState: false,
+    action: false,
+    nextState: false,
+    error: false
+  }
 });
 
 const store = createStore(
