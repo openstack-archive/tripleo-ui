@@ -19,10 +19,10 @@ import { Map } from 'immutable';
 import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 
+import store from '../../../js/store';
 import ListPlans from '../../../js/components/plan/ListPlans';
 import FileList from '../../../js/components/plan/FileList';
 import { PlanFile } from '../../../js/immutableRecords/plans';
-import store from '../../../js/store';
 
 describe('ListPlans component', () => {
   let output;
