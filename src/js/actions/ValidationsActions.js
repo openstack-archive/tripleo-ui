@@ -24,7 +24,7 @@ import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import ValidationsConstants from '../constants/ValidationsConstants';
 import { validationSchema } from '../normalizrSchemas/validations';
 import MistralConstants from '../constants/MistralConstants';
-import logger from '../services/logger';
+import logger from '../services/logging/LoggingService';
 
 export default {
   fetchValidations() {
