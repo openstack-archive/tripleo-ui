@@ -5,11 +5,19 @@ import { getAuthTokenId, getProjectId, getServiceUrl } from './utils';
 import { ZAQAR_DEFAULT_QUEUE } from '../constants/ZaqarConstants';
 import ZaqarActions from '../actions/ZaqarActions';
 import NotificationActions from '../actions/NotificationActions';
-import logger from '../services/logger';
+
+// We're using `console` here to avoid circular imports.
+const logger = {
+  error: (...msg) => {
+    console.log(...msg); // eslint-disable-line no-console
+  }
+};
 
 export default {
   socket: null,
   clientID: null,
+  auth: false,
+  pendingMessages: [],
 
   init(getState, dispatch) {
     when.try(getServiceUrl, 'zaqar-websocket').then(serviceUrl => {
@@ -39,7 +47,19 @@ export default {
       };
 
       this.socket.onmessage = evt => {
-        dispatch(ZaqarActions.messageReceived(JSON.parse(evt.data)));
+        const data = JSON.parse(evt.data);
+
+        if (
+          data &&
+          data.body &&
+          data.body.message &&
+          data.body.message === 'Authentified.'
+        ) {
+          this.auth = true;
+          this.flushPendingMessages();
+        }
+
+        dispatch(ZaqarActions.messageReceived(data));
       };
     });
   },
@@ -77,6 +97,33 @@ export default {
       queue_name: queueName,
       ttl: ttl
     });
+  },
+
+  flushPendingMessages() {
+    this.pendingMessages.map(message => {
+      this.sendMessage('message_post', message);
+    });
+
+    this.pendingMessages = [];
+  },
+
+  postMessage(queueName, body, ttl = 3600) {
+    const message = {
+      queue_name: queueName,
+      messages: [
+        {
+          body,
+          ttl
+        }
+      ]
+    };
+
+    if (!this.auth) {
+      this.pendingMessages.push(message);
+      return;
+    }
+
+    this.sendMessage('message_post', message);
   },
 
   close() {
