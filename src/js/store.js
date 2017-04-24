@@ -17,14 +17,25 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
-import logger from './services/logger';
+import logger, { predicate } from './services/logging/LoggingService';
+import ZaqarWebSocketService from './services/ZaqarWebSocketService';
 
 import appReducer from './reducers/appReducer';
 import { getIntl } from './selectors/i18n';
 
 const loggerMiddleware = createLogger({
   collapsed: true,
-  logger: logger
+  predicate: predicate,
+  logger: logger,
+  // We're turning off all colors here because the formatting chars obscure the
+  // content server-side.
+  colors: {
+    title: false,
+    prevState: false,
+    action: false,
+    nextState: false,
+    error: false
+  }
 });
 
 const store = createStore(
@@ -35,5 +46,11 @@ const store = createStore(
     loggerMiddleware
   )
 );
+
+// As soon as the store is available, we can pass it to the Zaqar service which
+// will use it to buffer incoming messages.  The sooner it knows about the
+// store, the sooner it can start keeping track of messages.  It cannot be done
+// any sooner than here.
+ZaqarWebSocketService.setStore(store);
 
 export default store;
