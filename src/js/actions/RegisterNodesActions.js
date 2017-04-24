@@ -27,7 +27,7 @@ import NodesActions from './NodesActions';
 import { nodeSchema } from '../normalizrSchemas/nodes';
 import ValidationsActions from './ValidationsActions';
 import MistralConstants from '../constants/MistralConstants';
-import logger from '../services/logger';
+import logger from '../services/logging/LoggingService';
 
 const messages = defineMessages({
   registrationNotificationTitle: {

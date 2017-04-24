@@ -53,6 +53,9 @@ import RoleParameters from './components/roles/RoleParameters';
 import RoleServices from './components/roles/RoleServices';
 import store from './store';
 import '../less/base.less';
+import ZaqarWebSocketService from './services/ZaqarWebSocketService';
+
+ZaqarWebSocketService.setStore(store);
 
 /**
   * @function checkAuth
