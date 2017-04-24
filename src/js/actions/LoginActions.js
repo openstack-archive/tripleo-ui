@@ -21,7 +21,7 @@ import KeystoneApiErrorHandler from '../services/KeystoneApiErrorHandler';
 import KeystoneApiService from '../services/KeystoneApiService';
 import LoginConstants from '../constants/LoginConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
-import logger from '../services/logger';
+import logger from '../services/logging/LoggingService';
 import cookie from 'react-cookie';
 
 export default {
@@ -35,7 +35,7 @@ export default {
           response.token.id = tokenId;
           cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
           dispatch(this.userAuthSuccess(response.token));
-          ZaqarWebSocketService.init(getState, dispatch);
+          ZaqarWebSocketService.init();
           browserHistory.push(nextPath);
         })
         .catch(error => {
@@ -64,7 +64,7 @@ export default {
           response.token.id = tokenId;
           cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
           dispatch(this.userAuthSuccess(response.token));
-          ZaqarWebSocketService.init(getState, dispatch);
+          ZaqarWebSocketService.init();
           browserHistory.push(nextPath);
         })
         .catch(error => {

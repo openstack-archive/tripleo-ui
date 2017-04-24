@@ -26,7 +26,7 @@ import NotificationActions from '../actions/NotificationActions';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import { topicSchema } from '../normalizrSchemas/environmentConfiguration';
 import MistralConstants from '../constants/MistralConstants';
-import logger from '../services/logger';
+import logger from '../services/logging/LoggingService';
 import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
 

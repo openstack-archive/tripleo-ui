@@ -26,7 +26,7 @@ import ParametersConstants from '../constants/ParametersConstants';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import MistralConstants from '../constants/MistralConstants';
-import logger from '../services/logger';
+import logger from '../services/logging/LoggingService';
 import { resourceGroupSchema } from '../normalizrSchemas/parameters';
 
 const messages = defineMessages({

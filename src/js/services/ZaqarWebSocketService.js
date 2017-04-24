@@ -20,14 +20,29 @@ import when from 'when';
 import { getAuthTokenId, getProjectId, getServiceUrl } from './utils';
 import { ZAQAR_DEFAULT_QUEUE } from '../constants/ZaqarConstants';
 import ZaqarActions from '../actions/ZaqarActions';
+import LoggerActions from '../actions/LoggerActions';
 import NotificationActions from '../actions/NotificationActions';
-import logger from '../services/logger';
+
+// We're using `console` here to avoid circular imports.
+const logger = {
+  error: (...msg) => {
+    console.log(...msg); // eslint-disable-line no-console
+  }
+};
 
 export default {
   socket: null,
   clientID: null,
+  _dispatch: null,
+  _getState: null,
 
-  init(getState, dispatch) {
+  setStore(store) {
+    const { dispatch, getState } = store;
+    this._dispatch = dispatch;
+    this._getState = getState;
+  },
+
+  init() {
     when.try(getServiceUrl, 'zaqar-websocket').then(serviceUrl => {
       this.socket = new WebSocket(serviceUrl);
       this.clientID = uuid.v4();
@@ -45,7 +60,7 @@ export default {
           error.message,
           'Closing Socket.'
         );
-        dispatch(
+        this._dispatch(
           NotificationActions.notify({
             title: 'Zaqar WebSocket encountered Error',
             message: error.message
@@ -55,7 +70,19 @@ export default {
       };
 
       this.socket.onmessage = evt => {
-        dispatch(ZaqarActions.messageReceived(JSON.parse(evt.data)));
+        const data = JSON.parse(evt.data);
+
+        if (
+          data &&
+          data.body &&
+          data.body.message &&
+          data.body.message === 'Authentified.'
+        ) {
+          this._dispatch(LoggerActions.authenticated());
+          this._dispatch(LoggerActions.flushMessages());
+        }
+
+        this._dispatch(ZaqarActions.messageReceived(data));
       };
     });
   },
@@ -93,6 +120,33 @@ export default {
       queue_name: queueName,
       ttl: ttl
     });
+  },
+
+  flushMessages(messages) {
+    return when.try(() => {
+      messages.map(message => {
+        this.sendMessage('message_post', message);
+      });
+    });
+  },
+
+  postMessage(queueName, body, ttl = 3600) {
+    const message = {
+      queue_name: queueName,
+      messages: [
+        {
+          body,
+          ttl
+        }
+      ]
+    };
+
+    if (!this._getState().logger.get('authenticated')) {
+      this._dispatch(LoggerActions.queueMessage(message));
+      return;
+    }
+
+    this.sendMessage('message_post', message);
   },
 
   close() {

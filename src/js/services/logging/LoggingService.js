@@ -25,62 +25,13 @@
 //
 // Usage:
 //
-//   import logger from 'src/js/services/logger';
+//   import logger from 'src/js/services/logging/LoggingService';
 //   logger.log('Hello world!');
 
-class Adapter {
-  debug(...args) {}
-
-  info(...args) {}
-
-  warn(...args) {}
-
-  error(...args) {}
-
-  group(...args) {}
-
-  groupCollapsed(...args) {}
-
-  groupEnd(...args) {}
-
-  log(...args) {}
-}
-
-class ConsoleAdapter extends Adapter {
-  debug(...args) {
-    console.debug(...args); // eslint-disable-line no-console
-  }
-
-  info(...args) {
-    console.info(...args); // eslint-disable-line no-console
-  }
-
-  warn(...args) {
-    console.warn(...args); // eslint-disable-line no-console
-  }
-
-  error(...args) {
-    console.error(...args); // eslint-disable-line no-console
-  }
-
-  group(...args) {
-    console.group(...args); // eslint-disable-line no-console
-  }
-
-  groupCollapsed(...args) {
-    console.groupCollapsed(...args); // eslint-disable-line no-console
-  }
-
-  groupEnd(...args) {
-    console.groupEnd(...args); // eslint-disable-line no-console
-  }
-
-  log(...args) {
-    console.log(...args); // eslint-disable-line no-console
-  }
-}
-
-class ZaqarAdapter extends Adapter {}
+import * as _ from 'lodash';
+import LoggerConstants from '../../constants/LoggerConstants';
+import ConsoleAdapter from './adapters/ConsoleAdapter';
+import ZaqarAdapter from './adapters/ZaqarAdapter';
 
 const AVAILABLE_ADAPTERS = {
   console: new ConsoleAdapter(),
@@ -118,11 +69,7 @@ class Logger {
       return;
     }
 
-    if (window.tripleOUiConfig === undefined) {
-      return;
-    }
-
-    let enabledAdapters = window.tripleOUiConfig.loggers || ['console'];
+    let enabledAdapters = (window.tripleOUiConfig || {}).loggers || ['console'];
 
     enabledAdapters.forEach(adapter => {
       let instance = AVAILABLE_ADAPTERS[adapter];
@@ -149,5 +96,12 @@ class Logger {
     });
   }
 }
+
+const isLoggerAction = action => _.includes(LoggerConstants, action.type);
+
+// The `predicate` prevents redux-logger from logging logger messages
+// in order to avoid an infinite loop.  This function is used in `createLogger`
+// in store.js.
+export const predicate = (getState, action) => !isLoggerAction(action);
 
 export default new Logger();
