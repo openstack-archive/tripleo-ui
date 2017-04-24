@@ -21,7 +21,7 @@ import HeatApiService from '../services/HeatApiService';
 import NotificationActions from '../actions/NotificationActions';
 import StacksConstants from '../constants/StacksConstants';
 import { stackSchema, stackResourceSchema } from '../normalizrSchemas/stacks';
-import logger from '../services/logger';
+import logger from '../services/logging/LoggingService';
 
 export default {
   fetchStacksPending() {
