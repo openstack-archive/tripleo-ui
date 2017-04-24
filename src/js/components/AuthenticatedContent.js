@@ -41,9 +41,9 @@ const messages = defineMessages({
 
 class AuthenticatedContent extends React.Component {
   componentDidMount() {
+    this.props.initializeZaqarConnection();
     this.props.fetchPlans();
     this.props.fetchWorkflowExecutions();
-    this.props.initializeZaqarConnection();
   }
 
   render() {

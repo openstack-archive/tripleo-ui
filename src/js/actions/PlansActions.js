@@ -20,7 +20,7 @@ import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
 
 import CurrentPlanActions from '../actions/CurrentPlanActions';
-import logger from '../services/logger';
+import logger from '../services/logging/LoggingService';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NotificationActions from '../actions/NotificationActions';
