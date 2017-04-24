@@ -25,7 +25,7 @@ export default class FileList extends React.Component {
       selectedFiles.forEach(file => {
         let existing = files[file.name];
         let info = !existing
-          ? Map({ newFile: planFiles.isEmpty() ? false : true })
+          ? Map({ newFile: !planFiles.isEmpty() })
           : Map({ newFile: false });
         files[file.name] = PlanFile({ name: file.name, info: info });
       });
