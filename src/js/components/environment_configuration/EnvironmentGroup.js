@@ -38,9 +38,7 @@ class EnvironmentGroup extends React.Component {
 
     if (environments.size > 1) {
       return environments.toList().map((environment, index) => {
-        let checkBoxValue = this.state.checkedEnvironment === environment.get('file')
-          ? true
-          : false;
+        let checkBoxValue = this.state.checkedEnvironment === environment.get('file');
         let requiredEnvironments = environment.get('requires')
           ? environment.get('requires').toArray()
           : undefined;
