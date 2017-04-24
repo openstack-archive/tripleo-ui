@@ -24,5 +24,6 @@ window.tripleOUiConfig = {
   // 'excludedLanguages': ['de', 'ja'],
 
   // Logging
-  // 'loggers': ['console']
+  // 'loggers': ['console', 'zaqar']
+  // 'logger-zaqar-queue': 'tripleo-ui-logging'
 };
