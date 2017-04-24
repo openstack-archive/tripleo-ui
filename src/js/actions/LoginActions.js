@@ -20,7 +20,7 @@ import KeystoneApiErrorHandler from '../services/KeystoneApiErrorHandler';
 import KeystoneApiService from '../services/KeystoneApiService';
 import LoginConstants from '../constants/LoginConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
-import logger from '../services/logger';
+import logger from '../services/logging/LoggingService';
 import cookie from 'react-cookie';
 
 export default {

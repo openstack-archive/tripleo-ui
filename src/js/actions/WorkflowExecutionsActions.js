@@ -24,7 +24,7 @@ import WorkflowExecutionsConstants
 import {
   workflowExecutionSchema
 } from '../normalizrSchemas/workflowExecutions';
-import logger from '../services/logger';
+import logger from '../services/logging/LoggingService';
 
 export default {
   fetchWorkflowExecutions() {
