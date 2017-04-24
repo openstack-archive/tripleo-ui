@@ -24,7 +24,7 @@ import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 export default {
   initializeConnection(history) {
     return (dispatch, getState) => {
-      ZaqarWebSocketService.init(getState, dispatch, history);
+      ZaqarWebSocketService.init(history);
     };
   },
 

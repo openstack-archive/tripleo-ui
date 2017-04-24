@@ -14,10 +14,9 @@
  * under the License.
  */
 
-import { getAppConfig } from '../services/utils';
+import { List, Record } from 'immutable';
 
-let zaqarDefaultQueue = getAppConfig()['zaqar_default_queue'] || 'tripleo';
-let zaqarLoggingQueue = getAppConfig()['logger-zaqar-queue'] || 'tripleo-ui-logging';
-
-export const ZAQAR_DEFAULT_QUEUE = zaqarDefaultQueue;
-export const ZAQAR_LOGGING_QUEUE = zaqarLoggingQueue;
+export const InitialLoggerState = Record({
+  messages: List(),
+  authenticated: false
+});

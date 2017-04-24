@@ -14,10 +14,10 @@
  * under the License.
  */
 
-import { getAppConfig } from '../services/utils';
+import keyMirror from 'keymirror';
 
-let zaqarDefaultQueue = getAppConfig()['zaqar_default_queue'] || 'tripleo';
-let zaqarLoggingQueue = getAppConfig()['logger-zaqar-queue'] || 'tripleo-ui-logging';
-
-export const ZAQAR_DEFAULT_QUEUE = zaqarDefaultQueue;
-export const ZAQAR_LOGGING_QUEUE = zaqarLoggingQueue;
+export default keyMirror({
+  QUEUE_MESSAGE: null,
+  FLUSH_MESSAGES_SUCCESS: null,
+  WS_AUTHENTICATION_SUCCESS: null
+});
