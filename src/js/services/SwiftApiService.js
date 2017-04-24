@@ -19,7 +19,7 @@ import request from 'reqwest';
 import when from 'when';
 
 import { getAuthTokenId, getServiceUrl } from '../services/utils';
-import logger from '../services/logger';
+import logger from '../services/logging/LoggingService';
 
 class SwiftApiService {
   defaultRequest(path, additionalAttributes) {
