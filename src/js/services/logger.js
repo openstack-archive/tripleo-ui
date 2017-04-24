@@ -28,6 +28,11 @@
 //   import logger from 'src/js/services/logger';
 //   logger.log('Hello world!');
 
+import * as _ from 'lodash';
+import { ZAQAR_DEFAULT_QUEUE } from '../constants/ZaqarConstants';
+import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
+import LoggerConstants from '../constants/LoggerConstants';
+
 class Adapter {
   debug(...args) {}
 
@@ -80,7 +85,72 @@ class ConsoleAdapter extends Adapter {
   }
 }
 
-class ZaqarAdapter extends Adapter {}
+class ZaqarAdapter extends Adapter {
+  constructor() {
+    super();
+    this.indent = 0;
+    this.buffer = [];
+  }
+
+  _formatMessage(message, level) {
+    return {
+      message,
+      level,
+      timestamp: Date.now()
+    };
+  }
+
+  _send(message, level) {
+    if (this.indent !== 0) {
+      this.buffer.push({
+        message,
+        level
+      });
+      return;
+    }
+
+    const msg = this._formatMessage(message, level);
+    ZaqarWebSocketService.postMessage(ZAQAR_DEFAULT_QUEUE, msg);
+  }
+
+  debug(...args) {
+    this._send(args, 'debug');
+  }
+
+  info(...args) {
+    this._send(args, 'info');
+  }
+
+  warn(...args) {
+    this._send(args, 'warn');
+  }
+
+  error(...args) {
+    this._send(args, 'error');
+  }
+
+  group(...args) {
+    this.indent++;
+  }
+
+  groupCollapsed(...args) {
+    this.indent++;
+  }
+
+  groupEnd(...args) {
+    this.indent--;
+
+    this.buffer.map(m => {
+      this._send(m.message, m.level);
+    });
+
+    this.buffer = [];
+  }
+
+  log(...args) {
+    this.info(args);
+  }
+}
 
 const AVAILABLE_ADAPTERS = {
   console: new ConsoleAdapter(),
@@ -118,11 +188,7 @@ class Logger {
       return;
     }
 
-    if (window.tripleOUiConfig === undefined) {
-      return;
-    }
-
-    let enabledAdapters = window.tripleOUiConfig.loggers || ['console'];
+    let enabledAdapters = (window.tripleOUiConfig || {}).loggers || ['console'];
 
     enabledAdapters.forEach(adapter => {
       let instance = AVAILABLE_ADAPTERS[adapter];
@@ -149,5 +215,12 @@ class Logger {
     });
   }
 }
+
+const isLoggerAction = action => _.includes(LoggerConstants, action.type);
+
+// The `predicate` prevents redux-logger from logging logger messages
+// in order to avoid an infinite loop.  This function is used in `createLogger`
+// in store.js.
+export const predicate = (getState, action) => !isLoggerAction(action);
 
 export default new Logger();

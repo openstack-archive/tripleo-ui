@@ -29,5 +29,5 @@ window.tripleOUiConfig = {
   // },
 
   // Logging
-  // 'loggers': ['console']
+  // 'loggers': ['console', 'zaqar']
 };

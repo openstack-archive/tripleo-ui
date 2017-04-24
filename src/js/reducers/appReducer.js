@@ -21,6 +21,7 @@ import currentPlanReducer from './currentPlanReducer';
 import environmentConfigurationReducer from './environmentConfigurationReducer';
 import filtersReducer from './filtersReducer';
 import i18nReducer from './i18nReducer';
+import loggerReducer from './loggerReducer';
 import loginReducer from './loginReducer';
 import nodesReducer from './nodesReducer';
 import notificationsReducer from './notificationsReducer';
@@ -38,6 +39,7 @@ const appReducer = combineReducers({
   executions: workflowExecutionsReducer,
   filters: filtersReducer,
   i18n: i18nReducer,
+  logger: loggerReducer,
   login: loginReducer,
   nodes: nodesReducer,
   notifications: notificationsReducer,

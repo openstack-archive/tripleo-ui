@@ -35,7 +35,7 @@ export default {
           response.token.id = tokenId;
           cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
           dispatch(this.userAuthSuccess(response.token));
-          ZaqarWebSocketService.init(getState, dispatch);
+          ZaqarWebSocketService.init();
           browserHistory.push(nextPath);
         })
         .catch(error => {
@@ -64,7 +64,7 @@ export default {
           response.token.id = tokenId;
           cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
           dispatch(this.userAuthSuccess(response.token));
-          ZaqarWebSocketService.init(getState, dispatch);
+          ZaqarWebSocketService.init();
           browserHistory.push(nextPath);
         })
         .catch(error => {
