@@ -21,7 +21,13 @@ import { getAuthTokenId, getProjectId, getServiceUrl } from './utils';
 import { ZAQAR_DEFAULT_QUEUE } from '../constants/ZaqarConstants';
 import ZaqarActions from '../actions/ZaqarActions';
 import NotificationActions from '../actions/NotificationActions';
-import logger from '../services/logger';
+
+// We're using `console` here to avoid circular imports.
+const logger = {
+  error: (...msg) => {
+    console.log(...msg); // eslint-disable-line no-console
+  }
+};
 
 export default {
   socket: null,
@@ -55,7 +61,8 @@ export default {
       };
 
       this.socket.onmessage = evt => {
-        dispatch(ZaqarActions.messageReceived(JSON.parse(evt.data), history));
+        const data = JSON.parse(evt.data);
+        dispatch(ZaqarActions.messageReceived(data, history));
       };
     });
   },

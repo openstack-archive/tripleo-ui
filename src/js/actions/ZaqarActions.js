@@ -14,6 +14,8 @@
  * under the License.
  */
 
+import { get } from 'lodash';
+import LoggerActions from './LoggerActions';
 import NodesActions from './NodesActions';
 import PlansActions from './PlansActions';
 import RegisterNodesActions from './RegisterNodesActions';
@@ -28,8 +30,18 @@ export default {
     };
   },
 
+  handleAuthenticationSuccess(message, dispatch) {
+    message = get(message, ['body', 'message']);
+
+    if (message === 'Authentified.') {
+      dispatch(LoggerActions.authenticated());
+      dispatch(LoggerActions.flushMessages());
+    }
+  },
+
   messageReceived(message, history) {
     return (dispatch, getState) => {
+      this.handleAuthenticationSuccess(message, dispatch);
       const { type, payload } = message.body;
       switch (type) {
         case MistralConstants.BAREMETAL_REGISTER_OR_UPDATE:
@@ -73,6 +85,32 @@ export default {
         default:
           break;
       }
+    };
+  },
+
+  postMessage(queueName, body, ttl = 3600) {
+    return (dispatch, getState) => {
+      const message = {
+        queue_name: queueName,
+        messages: [
+          {
+            body,
+            ttl
+          }
+        ]
+      };
+
+      // Drop the message on the floor when there is no `store`
+      if (!getState) {
+        return;
+      }
+
+      if (!getState().logger.authenticated) {
+        dispatch(LoggerActions.queueMessage(message));
+        return;
+      }
+
+      ZaqarWebSocketService.sendMessage('message_post', message);
     };
   }
 };
