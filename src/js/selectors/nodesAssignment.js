@@ -1,12 +1,17 @@
 import { createSelector } from 'reselect';
 import { getFormValues } from 'redux-form';
 
+import { getNodes, getNodeCapabilities } from './nodes';
 import { getParameters } from './parameters';
-import { getRegisteredNodes, getNodeCapabilities } from './nodes';
 import { getRoles } from './roles';
 
+
+/**
+ *  Return Nodes which are either available or deployed (active) with current Plan
+ */
 export const getAvailableNodes = createSelector(
-  getRegisteredNodes, (nodes) => nodes.filter(node => node.get('provision_state') === 'available')
+  [getNodes], nodes =>
+    nodes.filter(node => ['available', 'active'].includes(node.get('provision_state')))
 );
 
 export const getUntaggedAvailableNodes = createSelector(
