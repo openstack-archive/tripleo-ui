@@ -18,11 +18,9 @@ export const nodesToolbarFilter = state => getFilterByName(state, 'nodesToolbar'
  */
 export const getNodesWithMacs = createSelector(
   [getNodes, getPorts], (nodes, ports) =>
-    nodes
-      .map(node => node
-        .update('portsDetail', List(), filterPorts(ports))
-        .update(node => node
-          .set('macs', node.get('portsDetail').reduce((str, v) => str + v.address, ''))))
+    nodes.map(node => node
+      .set('macs', ports.filter(p => node.get('uuid') === p.node_uuid)
+        .reduce((str, v) => str + v.address, '')))
 );
 
 export const getRegisteredNodes = createSelector(
@@ -80,14 +78,6 @@ export const getMaintenanceNodes = createSelector(
 export const getNodesOperationInProgress = createSelector(
   nodesInProgress, (nodesInProgress) => !nodesInProgress.isEmpty()
 );
-
-/**
- * Helper function to convert list of port uuids into map of actual ports
- * @param ports - Map of ports to filter on
- * @returns function
- */
-const filterPorts = (ports) =>
-  portUUIDs => ports.filter((p, k) => portUUIDs.includes(k));
 
 /**
  * Helper function to get node capabilities object

@@ -1,6 +1,5 @@
 import { defineMessages } from 'react-intl';
 import { normalize, arrayOf } from 'normalizr';
-import when from 'when';
 
 import { getNodesByIds } from '../selectors/nodes';
 import IronicApiErrorHandler from '../services/IronicApiErrorHandler';
@@ -9,7 +8,7 @@ import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NodesConstants from '../constants/NodesConstants';
 import NotificationActions from './NotificationActions';
-import { nodeSchema } from '../normalizrSchemas/nodes';
+import { nodeSchema, portSchema } from '../normalizrSchemas/nodes';
 import MistralConstants from '../constants/MistralConstants';
 import logger from '../services/logger';
 import { setNodeCapability } from '../utils/nodes';
@@ -68,14 +67,11 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.requestNodes());
       IronicApiService.getNodes().then(response => {
-        return when.map(response.nodes, node => {
-          return IronicApiService.getNodePorts(node.uuid).then(response => {
-            node.portsDetail = response.ports;
-            return node;
-          });
-        }).then(nodes => {
-          const normalizedNodes = normalize(nodes, arrayOf(nodeSchema)).entities;
-          dispatch(this.receiveNodes(normalizedNodes));
+        const nodes = normalize(response.nodes, arrayOf(nodeSchema)).entities.nodes;
+        return IronicApiService.getPorts().then(response => {
+          const ports = normalize(response.ports, arrayOf(portSchema)).entities.ports;
+          console.log({nodes, ports});
+          dispatch(this.receiveNodes({nodes, ports}));
         });
       }).catch((error) => {
         dispatch(this.receiveNodes({}));
