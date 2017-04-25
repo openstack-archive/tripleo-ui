@@ -40,6 +40,7 @@
         "DeploymentPlan.deploymentConfigurationStepHeader": "Especifique la configuraci\u00f3n del despliegue",
         "DeploymentPlan.deploymentStepTooltip": "Este paso realiza el despliegue de la Overcloud. Una vez comenzado el despliegue, el director monitoriza el progreso y muestra un reporte de cada paso. Cuando el despliegue termina, se muestra el estado de la Overcloud y detalles de inicio de sesi\u00f3n. Haga click en \"Desplegar\" para iniciar el despliegue.",
         "DeploymentPlan.hardwareStepHeader": "Prepare el hardware",
+        "DeploymentPlan.hardwareStepTooltip": "Este paso registra e introspecciona los nodos. El registro est\u00e1 relacionado a definir la configuraci\u00f3n de energ\u00eda de cada nodo tal que puedan ser controlados durante la introspecci\u00f3n. Luego del registro los nodos son introspeccionados, lo que significa que el hardware de los nodos es identificado y se construye un perfil para cada uno. Luego del registro e introspecci\u00f3n, se pueden asignar estos nodos a roles espec\u00edficos en la Overcloud.",
         "DeploymentProgress.cancelDeployment": "Cancelar despliegue",
         "DeploymentProgress.deploymentInProgress": "El despliegue est\u00e1 actualmente en progreso.",
         "DeploymentProgress.requestingDeletion": "Solicitando la eliminaci\u00f3n del despliegue",
