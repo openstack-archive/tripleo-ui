@@ -1,6 +1,6 @@
 import { fromJS } from 'immutable';
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import ReactShallowRenderer from 'react-test-renderer/shallow';
 
 import EnvironmentConfigurationTopic from
   '../../../js/components/environment_configuration/EnvironmentConfigurationTopic';
@@ -11,7 +11,7 @@ const topic = MockPlan.capabilities.topics[0];
 describe('EnvironmentConfigurationTopic component', () => {
   let EnvConfTopicVdom;
   beforeEach(() => {
-    let shallowRenderer = TestUtils.createRenderer();
+    let shallowRenderer = new ReactShallowRenderer();
     shallowRenderer.render(
       <EnvironmentConfigurationTopic key={0}
                                      title={topic.title}

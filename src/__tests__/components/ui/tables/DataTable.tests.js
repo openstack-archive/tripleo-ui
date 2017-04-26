@@ -1,6 +1,6 @@
 import { FormattedMessage, IntlProvider } from 'react-intl';
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import ReactShallowRenderer from 'react-test-renderer/shallow';
 
 import DataTable from '../../../../js/components/ui/tables/DataTable';
 import { DataTableHeaderCell,
@@ -23,7 +23,7 @@ const mockOnFilter = () => {
 describe('DataTable component', () => {
   let DataTableVdom, DataTableInstance;
   beforeEach(() => {
-    let shallowRenderer = TestUtils.createRenderer();
+    let shallowRenderer = new ReactShallowRenderer();
     const intlProvider = new IntlProvider({ locale: 'en' }, {});
     const { intl } = intlProvider.getChildContext();
     shallowRenderer.render(
