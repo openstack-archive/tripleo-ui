@@ -1,5 +1,6 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import DataTable from '../ui/tables/DataTable';

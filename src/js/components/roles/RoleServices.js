@@ -2,7 +2,8 @@ import { connect } from 'react-redux';
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Map } from 'immutable';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import { getRoleServices } from '../../selectors/parameters';
 import { getRole } from '../../selectors/roles';

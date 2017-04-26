@@ -3,7 +3,8 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Map } from 'immutable';
 import { PlanFile } from '../../immutableRecords/plans';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const messages = defineMessages({
   planFiles: {
