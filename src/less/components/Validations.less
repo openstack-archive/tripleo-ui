@@ -4,6 +4,9 @@
     position: relative;
     top: 0;
   }
+  .sidebar-header {
+    margin: 38px 0 0;
+  }
 }
 .validation-list {
   overflow-x: hidden;
@@ -127,4 +130,37 @@
 .validation-detail-title {
   display: flex;
   padding-bottom: 10px;
+}
+
+.validations-toolbar {
+  .toolbar-pf {
+    .form-group {
+      @media (min-width: @screen-lg-min) {
+        border-right: none;
+        float: none;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+  }
+  .toolbar-pf-actions {
+    @media (min-width: @screen-lg-min) {
+      .toolbar-pf-filter {
+        padding-left: 0;
+        width: 100%;
+      }
+    }
+  }
+  .toolbar-pf-results {
+    h5, p, ul {
+      @media (min-width: @screen-lg-min) {
+        line-height: (@grid-gutter-width/1.5);
+      }
+    }
+    .toolbar-pf-active-filters {
+      @media (min-width: @screen-lg-min) {
+        display: block;
+      }
+    }
+  }
 }

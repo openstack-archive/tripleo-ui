@@ -12,5 +12,11 @@ export const FiltersInitialState = Record({
     sortBy: 'name',
     sortDir: 'asc',
     contentView: 'table'
+  }),
+  validationsToolbar: Map({
+    activeFilters: Map(),
+    sortBy: 'name',
+    sortDir: 'asc',
+    contentView: 'list'
   })
 });

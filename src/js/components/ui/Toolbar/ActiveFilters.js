@@ -9,8 +9,8 @@ export const ActiveFiltersList = ({
 }) => {
   if (children.length > 0) {
     return (
-      <div style={{ display: 'inline' }}>
-        <p>{label}</p>
+      <span className="toolbar-pf-active-filters">
+        <p>{label}&nbsp;</p>
         <ul className="list-inline">
           {children}
         </ul>
@@ -19,7 +19,7 @@ export const ActiveFiltersList = ({
             {clearAllLabel}
           </a>
         </p>
-      </div>
+      </span>
     );
   } else {
     return null;

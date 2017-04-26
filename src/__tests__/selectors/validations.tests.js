@@ -2,6 +2,10 @@ import { List, Map, OrderedMap } from 'immutable';
 
 import * as selectors from '../../js/selectors/validations';
 import { Validation } from '../../js/immutableRecords/validations';
+import {
+  ActiveFilter,
+  FiltersInitialState
+} from '../../js/immutableRecords/filters';
 import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
 import {
   WorkflowExecution
@@ -9,88 +13,102 @@ import {
 import MistralConstants from '../../js/constants/MistralConstants';
 
 describe(' validations selectors', () => {
-  const state = {
-    currentPlan: new CurrentPlanState({
-      conflict: undefined,
-      currentPlanName: 'overcloud'
-    }),
-    validations: Map({
-      validationsLoaded: true,
-      isFetching: false,
+  let state;
+  beforeEach(() => {
+    state = {
+      currentPlan: new CurrentPlanState({
+        conflict: undefined,
+        currentPlanName: 'overcloud'
+      }),
+      filters: FiltersInitialState(),
       validations: Map({
-        '512e': new Validation({
-          description: '',
-          groups: List(['pre-deployment']),
-          id: '512e',
-          metadata: Map(),
-          name: 'Advanced Format 512e Support',
-          results: Map(),
-          status: undefined,
-          stateInfo: undefined
-        }),
-        'check-network-gateway': new Validation({
-          description: '',
-          groups: List(['pre-deployment']),
-          id: 'check-network-gateway',
-          metadata: Map(),
-          name: 'Check network_gateway on the provisioning network',
-          results: Map(),
-          status: undefined,
-          stateInfo: undefined
+        validationsLoaded: true,
+        isFetching: false,
+        validations: Map({
+          '512e': new Validation({
+            description: '',
+            groups: List(['pre-deployment']),
+            id: '512e',
+            metadata: Map(),
+            name: 'Advanced Format 512e Support',
+            results: Map(),
+            status: undefined,
+            stateInfo: undefined
+          }),
+          'check-network-gateway': new Validation({
+            description: '',
+            groups: List(['pre-deployment']),
+            id: 'check-network-gateway',
+            metadata: Map(),
+            name: 'Check network_gateway on the provisioning network',
+            results: Map(),
+            status: undefined,
+            stateInfo: undefined
+          }),
+          'foo-validation': new Validation({
+            description: '',
+            groups: List(['post-deployment']),
+            id: 'foo-validation',
+            metadata: Map(),
+            name: 'Foo Validation',
+            results: Map(),
+            status: undefined,
+            stateInfo: undefined
+          })
+        })
+      }),
+      executions: Map({
+        executionsLoaded: true,
+        isFetchingExecutions: false,
+        executions: OrderedMap({
+          '1a': new WorkflowExecution({
+            description: '',
+            id: '1a',
+            input: Map({
+              validation_name: 'check-network-gateway',
+              queue_name: 'tripleo',
+              plan: 'overcloud'
+            }),
+            output: Map({
+              stderr: '',
+              plan: 'overcloud',
+              stdout: '',
+              validation_name: 'check-netmork-gateway',
+              status: 'FAILED',
+              queue_name: 'tripleo'
+            }),
+            params: Map({}),
+            state: 'SUCCESS',
+            state_info: null,
+            updated_at: 1468905005000,
+            workflow_name: MistralConstants.VALIDATIONS_RUN
+          }),
+          '2a': new WorkflowExecution({
+            description: '',
+            id: '2a',
+            input: Map({
+              validation_name: 'check-network-gateway',
+              queue_name: 'tripleo',
+              plan: 'overcloud'
+            }),
+            output: Map({
+              stderr: '',
+              plan: 'overcloud',
+              stdout: '',
+              validation_name: 'check-network-gateway',
+              status: 'SUCCESS',
+              queue_name: 'tripleo'
+            }),
+            params: Map({}),
+            state: 'SUCCESS',
+            state_info: null,
+            updated_at: 1468905005001,
+            workflow_name: MistralConstants.VALIDATIONS_RUN
+          })
         })
       })
-    }),
-    executions: Map({
-      executionsLoaded: true,
-      isFetchingExecutions: false,
-      executions: OrderedMap({
-        '1a': new WorkflowExecution({
-          description: '',
-          id: '1a',
-          input: Map({
-            validation_name: 'check-network-gateway',
-            queue_name: 'tripleo',
-            plan: 'overcloud'
-          }),
-          output: Map({
-            stderr: '',
-            plan: 'overcloud',
-            stdout: '',
-            validation_name: 'check-network-gateway',
-            status: 'FAILED',
-            queue_name: 'tripleo'
-          }),
-          params: Map({}),
-          state: 'SUCCESS',
-          state_info: null,
-          updated_at: 1468905005000,
-          workflow_name: MistralConstants.VALIDATIONS_RUN
-        }),
-        '2a': new WorkflowExecution({
-          description: '',
-          id: '2a',
-          input: Map({
-            validation_name: 'check-network-gateway',
-            queue_name: 'tripleo',
-            plan: 'overcloud'
-          }),
-          output: Map({
-            stderr: '',
-            plan: 'overcloud',
-            stdout: '',
-            validation_name: 'check-network-gateway',
-            status: 'SUCCESS',
-            queue_name: 'tripleo'
-          }),
-          params: Map({}),
-          state: 'SUCCESS',
-          state_info: null,
-          updated_at: 1468905005001,
-          workflow_name: MistralConstants.VALIDATIONS_RUN
-        })
-      })
-    })
-  };
+    };
+  });
 
   it('provides selector to get validation executions for current plan', () => {
     expect(selectors.getValidationExecutionsForCurrentPlan(state).size).toEqual(
@@ -103,7 +121,7 @@ describe(' validations selectors', () => {
 
   it('provides selector to get validation combined with its results', () => {
     const validationsWithResults = selectors.getValidationsWithResults(state);
-    expect(validationsWithResults.size).toEqual(2);
+    expect(validationsWithResults.size).toEqual(3);
     expect(validationsWithResults.get('512e').results.size).toEqual(0);
     expect(validationsWithResults.get('512e').status).toEqual('new');
     expect(
@@ -112,5 +130,76 @@ describe(' validations selectors', () => {
     expect(validationsWithResults.get('check-network-gateway').status).toEqual(
       'success'
     );
+  });
+
+  describe('getFilteredValidations selector', () => {
+    it('returns all validations if no filters are set', () => {
+      expect(selectors.getFilteredValidations(state).size).toEqual(3);
+    });
+
+    it('filters validations by name', () => {
+      state.filters = FiltersInitialState({
+        validationsToolbar: Map({
+          activeFilters: Map({
+            fake_id_1: ActiveFilter({
+              uuid: 'fake_id_1',
+              filterBy: 'name',
+              filterString: '512'
+            })
+          }),
+          sortBy: 'name',
+          sortDir: 'asc',
+          contentView: 'list'
+        })
+      });
+      const filtered = selectors.getFilteredValidations(state);
+      expect(filtered.size).toEqual(1);
+      expect(filtered.get('512e')).toBeDefined();
+    });
+
+    it('filters validations by group', () => {
+      state.filters = FiltersInitialState({
+        validationsToolbar: Map({
+          activeFilters: Map({
+            fake_id_1: ActiveFilter({
+              uuid: 'fake_id_1',
+              filterBy: 'group',
+              filterString: 'post-deployment'
+            })
+          }),
+          sortBy: 'name',
+          sortDir: 'asc',
+          contentView: 'list'
+        })
+      });
+      const filtered = selectors.getFilteredValidations(state);
+      expect(filtered.size).toEqual(1);
+      expect(filtered.get('foo-validation')).toBeDefined();
+    });
+
+    it('filters validations by name and group', () => {
+      state.filters = FiltersInitialState({
+        validationsToolbar: Map({
+          activeFilters: Map({
+            fake_id_1: ActiveFilter({
+              uuid: 'fake_id_1',
+              filterBy: 'group',
+              filterString: 'pre-deployment'
+            }),
+            fake_id_2: ActiveFilter({
+              uuid: 'fake_id_2',
+              filterBy: 'name',
+              filterString: 'network_gateway'
+            })
+          }),
+          sortBy: 'name',
+          sortDir: 'asc',
+          contentView: 'list'
+        })
+      });
+      const filtered = selectors.getFilteredValidations(state);
+      expect(filtered.size).toEqual(1);
+      expect(filtered.get('check-network-gateway')).toBeDefined();
+    });
   });
 });
