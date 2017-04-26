@@ -27,7 +27,7 @@ DataTableHeaderCell.propTypes = {
 export class DataTableCell extends React.Component {
   render() {
     return (
-      <td {...this.props}>
+      <td>
         {this.props.children}
       </td>
     );
