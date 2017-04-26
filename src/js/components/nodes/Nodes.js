@@ -1,11 +1,15 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React, { PropTypes } from 'react';
 
+import { getFilterByName } from '../../selectors/filters';
+import { getFilteredNodes } from '../../selectors/nodes';
 import NodesActions from '../../actions/NodesActions';
-import NodesToolbar from './NodesToolbar';
+import NodesToolbar from './NodesToolbar/NodesToolbar';
 import NodesTableView from './NodesTableView';
+import NodesListView from './NodesListView/NodesListView';
 import RolesActions from '../../actions/RolesActions';
 
 const messages = defineMessages({
@@ -35,12 +39,18 @@ class Nodes extends React.Component {
     this.props.fetchRoles(this.props.currentPlanName);
   }
 
+  renderContentView() {
+    return this.props.contentView === 'table'
+      ? <NodesTableView />
+      : <NodesListView nodes={this.props.nodes} />;
+  }
+
   render() {
     return (
       <div>
         <div className="page-header">
           <div className="pull-right">
-            <a href="" onClick={this.refreshResults.bind(this)}>
+            <a className="link btn btn-link" onClick={this.refreshResults.bind(this)}>
               <span className="pficon pficon-refresh" />&nbsp;
               <FormattedMessage {...messages.refreshResults}/>
             </a>
@@ -53,7 +63,7 @@ class Nodes extends React.Component {
           <h1><FormattedMessage {...messages.nodes}/></h1>
         </div>
         <NodesToolbar />
-        <NodesTableView />
+        {this.renderContentView()}
         {this.props.children}
       </div>
     );
@@ -61,13 +71,17 @@ class Nodes extends React.Component {
 }
 Nodes.propTypes = {
   children: PropTypes.node,
+  contentView: PropTypes.string.isRequired,
   currentPlanName: PropTypes.string.isRequired,
   fetchNodes: PropTypes.func.isRequired,
-  fetchRoles: PropTypes.func.isRequired
+  fetchRoles: PropTypes.func.isRequired,
+  nodes: ImmutablePropTypes.map.isRequired
 };
 
 const mapStateToProps = state => ({
-  currentPlanName: state.currentPlan.currentPlanName
+  contentView: getFilterByName(state, 'nodesToolbar').get('contentView', 'list'),
+  currentPlanName: state.currentPlan.currentPlanName,
+  nodes: getFilteredNodes(state)
 });
 
 const mapDispatchToProps = dispatch => ({
