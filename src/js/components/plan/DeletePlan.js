@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import PlansActions from '../../actions/PlansActions';
@@ -83,8 +83,8 @@ class DeletePlan extends React.Component {
 }
 
 DeletePlan.propTypes = {
-  deletePlan: React.PropTypes.func,
-  params: React.PropTypes.object
+  deletePlan: PropTypes.func,
+  params: PropTypes.object
 };
 
 function mapDispatchToProps(dispatch) {

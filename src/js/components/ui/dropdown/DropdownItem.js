@@ -1,6 +1,6 @@
 import ClassNames from 'classnames';
 import { Link } from 'react-router';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export default class DropdownItem extends React.Component {
   handleClick(e) {
@@ -49,17 +49,17 @@ export default class DropdownItem extends React.Component {
   }
 }
 DropdownItem.propTypes = {
-  active: React.PropTypes.bool,
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  active: PropTypes.bool,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ]),
-  className: React.PropTypes.string,
-  disabled: React.PropTypes.bool,
-  divider: React.PropTypes.bool,
-  onClick: React.PropTypes.func,
-  to: React.PropTypes.string,
-  toggleDropdown: React.PropTypes.func
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+  divider: PropTypes.bool,
+  onClick: PropTypes.func,
+  to: PropTypes.string,
+  toggleDropdown: PropTypes.func
 };
 DropdownItem.defaultProps = {
   active: false,

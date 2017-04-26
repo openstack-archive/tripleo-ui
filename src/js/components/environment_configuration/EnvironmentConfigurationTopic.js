@@ -1,5 +1,5 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import EnvironmentGroup from './EnvironmentGroup';
 
@@ -23,7 +23,7 @@ export default class EnvironmentConfigurationTopic extends React.Component {
   }
 }
 EnvironmentConfigurationTopic.propTypes = {
-  description: React.PropTypes.string,
+  description: PropTypes.string,
   environmentGroups: ImmutablePropTypes.list,
-  title: React.PropTypes.string.isRequired
+  title: PropTypes.string.isRequired
 };

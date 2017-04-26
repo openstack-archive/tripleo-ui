@@ -1,7 +1,7 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { Field } from 'redux-form';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Link from '../ui/Link';
 import NodePickerInput from '../ui/reduxForm/NodePickerInput';
@@ -96,11 +96,11 @@ const RoleCard = ({ assignedNodesCountParameter,
 };
 RoleCard.propTypes = {
   assignedNodesCountParameter: ImmutablePropTypes.record,
-  availableNodesCount: React.PropTypes.number.isRequired,
-  identifier: React.PropTypes.string.isRequired,
-  intl: React.PropTypes.object,
-  name: React.PropTypes.string.isRequired,
-  title: React.PropTypes.string.isRequired
+  availableNodesCount: PropTypes.number.isRequired,
+  identifier: PropTypes.string.isRequired,
+  intl: PropTypes.object,
+  name: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired
 };
 
 export default injectIntl(RoleCard);

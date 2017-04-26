@@ -1,6 +1,6 @@
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import DeploymentSuccess from './DeploymentSuccess';
 import DeploymentFailure from './DeploymentFailure';
@@ -69,16 +69,16 @@ const DeployStep = ({ currentPlan, currentStack, currentStackResources, currentS
 DeployStep.propTypes = {
   currentPlan: ImmutablePropTypes.record.isRequired,
   currentStack: ImmutablePropTypes.record,
-  currentStackDeploymentProgress: React.PropTypes.number.isRequired,
+  currentStackDeploymentProgress: PropTypes.number.isRequired,
   currentStackResources: ImmutablePropTypes.map,
-  currentStackResourcesLoaded: React.PropTypes.bool.isRequired,
-  deleteStack: React.PropTypes.func.isRequired,
-  deployPlan: React.PropTypes.func.isRequired,
-  fetchStackEnvironment: React.PropTypes.func.isRequired,
-  fetchStackResource: React.PropTypes.func.isRequired,
-  intl: React.PropTypes.object,
-  isRequestingStackDelete: React.PropTypes.bool.isRequired,
-  stacksLoaded: React.PropTypes.bool.isRequired
+  currentStackResourcesLoaded: PropTypes.bool.isRequired,
+  deleteStack: PropTypes.func.isRequired,
+  deployPlan: PropTypes.func.isRequired,
+  fetchStackEnvironment: PropTypes.func.isRequired,
+  fetchStackResource: PropTypes.func.isRequired,
+  intl: PropTypes.object,
+  isRequestingStackDelete: PropTypes.bool.isRequired,
+  stacksLoaded: PropTypes.bool.isRequired
 };
 
 export default injectIntl(DeployStep);

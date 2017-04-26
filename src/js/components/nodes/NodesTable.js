@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import DataTable from '../ui/tables/DataTable';
@@ -184,8 +184,8 @@ class NodesTable extends React.Component {
   }
 }
 NodesTable.propTypes = {
-  intl: React.PropTypes.object,
-  isFetchingNodes: React.PropTypes.bool.isRequired,
+  intl: PropTypes.object,
+  isFetchingNodes: PropTypes.bool.isRequired,
   nodes: ImmutablePropTypes.map.isRequired,
   nodesInProgress: ImmutablePropTypes.set.isRequired,
   roles: ImmutablePropTypes.map.isRequired
@@ -204,10 +204,10 @@ export class NodesTableCheckBoxCell extends React.Component {
   }
 }
 NodesTableCheckBoxCell.propTypes = {
-  data: React.PropTypes.array.isRequired,
-  field: React.PropTypes.string.isRequired,
+  data: PropTypes.array.isRequired,
+  field: PropTypes.string.isRequired,
   nodesInProgress: ImmutablePropTypes.set.isRequired,
-  rowIndex: React.PropTypes.number
+  rowIndex: PropTypes.number
 };
 
 export class NodesTableProfileCell extends React.Component {
@@ -233,7 +233,7 @@ export class NodesTableProfileCell extends React.Component {
   }
 }
 NodesTableProfileCell.propTypes = {
-  data: React.PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
-  rowIndex: React.PropTypes.number
+  rowIndex: PropTypes.number
 };

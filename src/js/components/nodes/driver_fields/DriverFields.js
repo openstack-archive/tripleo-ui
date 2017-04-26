@@ -1,6 +1,6 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { defineMessages, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import HorizontalInput from '../../ui/forms/HorizontalInput';
 import HorizontalTextarea from '../../ui/forms/HorizontalTextarea';
@@ -53,11 +53,11 @@ class DriverFields extends React.Component {
   }
 }
 DriverFields.propTypes = {
-  addr_title: React.PropTypes.string.isRequired,
-  intl: React.PropTypes.object,
+  addr_title: PropTypes.string.isRequired,
+  intl: PropTypes.object,
   node: ImmutablePropTypes.record.isRequired,
-  pwd_title: React.PropTypes.string.isRequired,
-  user_title: React.PropTypes.string.isRequired
+  pwd_title: PropTypes.string.isRequired,
+  user_title: PropTypes.string.isRequired
 };
 
 export default injectIntl(DriverFields);

@@ -1,5 +1,5 @@
 import ClassNames from 'classnames';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 const NodePickerInput = props => {
   const { increment, input: { value, onChange }, max, meta: { error, submitting }, min } = props;
@@ -32,11 +32,11 @@ const NodePickerInput = props => {
   );
 };
 NodePickerInput.propTypes = {
-  increment: React.PropTypes.number.isRequired,
-  input: React.PropTypes.object.isRequired,
-  max: React.PropTypes.number.isRequired,
-  meta: React.PropTypes.object.isRequired,
-  min: React.PropTypes.number.isRequired
+  increment: PropTypes.number.isRequired,
+  input: PropTypes.object.isRequired,
+  max: PropTypes.number.isRequired,
+  meta: PropTypes.object.isRequired,
+  min: PropTypes.number.isRequired
 };
 NodePickerInput.defaultProps = {
   min: 0
@@ -55,9 +55,9 @@ const PickerArrow = ({ direction, disabled, onClick }) => {
   );
 };
 PickerArrow.propTypes = {
-  direction: React.PropTypes.oneOf(['up', 'down']).isRequired,
-  disabled: React.PropTypes.bool.isRequired,
-  onClick: React.PropTypes.func.isRequired
+  direction: PropTypes.oneOf(['up', 'down']).isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired
 };
 
 const NodeCount = ({ children, error }) => {
@@ -72,6 +72,6 @@ const NodeCount = ({ children, error }) => {
   );
 };
 NodeCount.propTypes = {
-  children: React.PropTypes.node.isRequired,
-  error: React.PropTypes.string
+  children: PropTypes.node.isRequired,
+  error: PropTypes.string
 };

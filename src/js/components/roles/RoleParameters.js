@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import ParameterInputList from '../parameters/ParameterInputList';
 import { getRoleParameters } from '../../selectors/parameters';
@@ -20,7 +20,7 @@ class RoleParameters extends React.Component {
 RoleParameters.propTypes = {
   mistralParameters: ImmutablePropTypes.map.isRequired,
   parameters: ImmutablePropTypes.map.isRequired,
-  params: React.PropTypes.object.isRequired
+  params: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, props) {

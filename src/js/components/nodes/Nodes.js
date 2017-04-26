@@ -1,7 +1,7 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Map } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
@@ -92,9 +92,9 @@ class Nodes extends React.Component {
   }
 }
 Nodes.propTypes = {
-  children: React.PropTypes.node.isRequired,
-  currentPlanName: React.PropTypes.string.isRequired,
-  dispatch: React.PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
+  currentPlanName: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
   nodes: ImmutablePropTypes.map.isRequired
 };
 

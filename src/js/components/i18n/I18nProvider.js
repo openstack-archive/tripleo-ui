@@ -1,6 +1,6 @@
 import { addLocaleData, IntlProvider } from 'react-intl';
 import { connect } from 'react-redux';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import de from 'react-intl/locale-data/de';
 import es from 'react-intl/locale-data/es';
 import id from 'react-intl/locale-data/id';
@@ -47,10 +47,10 @@ class I18nProvider extends React.Component {
 }
 
 I18nProvider.propTypes = {
-  children: React.PropTypes.node,
-  detectLanguage: React.PropTypes.func.isRequired,
-  language: React.PropTypes.string,
-  messages: React.PropTypes.object.isRequired
+  children: PropTypes.node,
+  detectLanguage: PropTypes.func.isRequired,
+  language: PropTypes.string,
+  messages: PropTypes.object.isRequired
 };
 
 I18nProvider.defaultProps = {

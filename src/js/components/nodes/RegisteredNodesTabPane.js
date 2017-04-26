@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Formsy from 'formsy-react';
 
@@ -196,19 +196,19 @@ class RegisteredNodesTabPane extends React.Component {
 }
 RegisteredNodesTabPane.propTypes = {
   availableProfiles: ImmutablePropTypes.list.isRequired,
-  children: React.PropTypes.node,
-  deleteNodes: React.PropTypes.func.isRequired,
+  children: PropTypes.node,
+  deleteNodes: PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list,
   formFieldErrors: ImmutablePropTypes.map,
-  intl: React.PropTypes.object,
-  introspectNodes: React.PropTypes.func.isRequired,
-  isFetchingNodes: React.PropTypes.bool.isRequired,
+  intl: PropTypes.object,
+  introspectNodes: PropTypes.func.isRequired,
+  isFetchingNodes: PropTypes.bool.isRequired,
   nodesInProgress: ImmutablePropTypes.set,
-  nodesOperationInProgress: React.PropTypes.bool.isRequired,
-  provideNodes: React.PropTypes.func.isRequired,
+  nodesOperationInProgress: PropTypes.bool.isRequired,
+  provideNodes: PropTypes.func.isRequired,
   registeredNodes: ImmutablePropTypes.map,
   roles: ImmutablePropTypes.map,
-  tagNodes: React.PropTypes.func.isRequired
+  tagNodes: PropTypes.func.isRequired
 };
 RegisteredNodesTabPane.defaultProps = {
   formErrors: List(),

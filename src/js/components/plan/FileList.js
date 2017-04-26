@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Map } from 'immutable';
 import { PlanFile } from '../../immutableRecords/plans';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 const messages = defineMessages({
   planFiles: {
@@ -77,7 +77,7 @@ export default class FileList extends React.Component {
 
 FileList.propTypes = {
   planFiles: ImmutablePropTypes.map,
-  selectedFiles: React.PropTypes.array
+  selectedFiles: PropTypes.array
 };
 
 FileList.defaultProps = {

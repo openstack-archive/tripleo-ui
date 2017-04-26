@@ -1,7 +1,7 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { List } from 'immutable';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import HorizontalStaticText from '../ui/forms/HorizontalStaticText';
 import NavTab from '../ui/NavTab';
@@ -71,12 +71,12 @@ export default class PlanEditFormTabs extends React.Component {
   }
 }
 PlanEditFormTabs.propTypes = {
-  currentTab: React.PropTypes.string,
+  currentTab: PropTypes.string,
   planFiles: ImmutablePropTypes.map,
-  planName: React.PropTypes.string,
-  selectedFiles: React.PropTypes.array,
-  setUploadType: React.PropTypes.func.isRequired,
-  uploadType: React.PropTypes.string.isRequired
+  planName: PropTypes.string,
+  selectedFiles: PropTypes.array,
+  setUploadType: PropTypes.func.isRequired,
+  uploadType: PropTypes.string.isRequired
 };
 PlanEditFormTabs.defaultProps = {
   currentTtab: 'editPlan'
@@ -109,10 +109,10 @@ class _PlanFormTab extends React.Component {
   }
 }
 _PlanFormTab.propTypes = {
-  active: React.PropTypes.string,
-  intl: React.PropTypes.object,
-  planName: React.PropTypes.string,
-  setUploadType: React.PropTypes.func.isRequired,
-  uploadType: React.PropTypes.string.isRequired
+  active: PropTypes.string,
+  intl: PropTypes.object,
+  planName: PropTypes.string,
+  setUploadType: PropTypes.func.isRequired,
+  uploadType: PropTypes.string.isRequired
 };
 const PlanFormTab = injectIntl(_PlanFormTab);

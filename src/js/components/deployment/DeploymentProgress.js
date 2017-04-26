@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import { deploymentStatusMessages as statusMessages,
          stackStates } from '../../constants/StacksConstants';
@@ -52,9 +52,9 @@ export default class DeploymentProgress extends React.Component {
 }
 
 DeploymentProgress.propTypes = {
-  deploymentProgress: React.PropTypes.number.isRequired,
-  fetchStackResources: React.PropTypes.func.isRequired,
+  deploymentProgress: PropTypes.number.isRequired,
+  fetchStackResources: PropTypes.func.isRequired,
   stack: ImmutablePropTypes.record.isRequired,
   stackResources: ImmutablePropTypes.map.isRequired,
-  stackResourcesLoaded: React.PropTypes.bool.isRequired
+  stackResourcesLoaded: PropTypes.bool.isRequired
 };

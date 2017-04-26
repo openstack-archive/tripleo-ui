@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import TableCheckBox from '../forms/TableCheckBox';
 import Loader from '../Loader';
@@ -17,7 +17,7 @@ export class DataTableHeaderCell extends React.Component {
   }
 }
 DataTableHeaderCell.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };
 
 /**
@@ -33,7 +33,7 @@ export class DataTableCell extends React.Component {
   }
 }
 DataTableCell.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };
 
 /**
@@ -50,9 +50,9 @@ export class DataTableDataFieldCell extends React.Component {
   }
 }
 DataTableDataFieldCell.propTypes = {
-  data: React.PropTypes.array.isRequired,
-  field: React.PropTypes.string.isRequired,
-  rowIndex: React.PropTypes.number
+  data: PropTypes.array.isRequired,
+  field: PropTypes.string.isRequired,
+  rowIndex: PropTypes.number
 };
 
 export const DataTableDateFieldCell = (props) => {
@@ -66,9 +66,9 @@ export const DataTableDateFieldCell = (props) => {
   );
 };
 DataTableDateFieldCell.propTypes = {
-  data: React.PropTypes.array.isRequired,
-  field: React.PropTypes.string.isRequired,
-  rowIndex: React.PropTypes.number
+  data: PropTypes.array.isRequired,
+  field: PropTypes.string.isRequired,
+  rowIndex: PropTypes.number
 };
 
 export class DataTableCheckBoxCell extends React.Component {
@@ -84,11 +84,11 @@ export class DataTableCheckBoxCell extends React.Component {
   }
 }
 DataTableCheckBoxCell.propTypes = {
-  data: React.PropTypes.array.isRequired,
-  disabled: React.PropTypes.bool.isRequired,
-  field: React.PropTypes.string.isRequired,
-  operationInProgress: React.PropTypes.bool.isRequired,
-  rowIndex: React.PropTypes.number
+  data: PropTypes.array.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  field: PropTypes.string.isRequired,
+  operationInProgress: PropTypes.bool.isRequired,
+  rowIndex: PropTypes.number
 };
 DataTableCheckBoxCell.defaultProps = {
   disabled: false,

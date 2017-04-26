@@ -1,5 +1,5 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import HorizontalInput from '../ui/forms/HorizontalInput';
 import NavTab from '../ui/NavTab';
@@ -68,10 +68,10 @@ export default class PlanFormTabs extends React.Component {
   }
 }
 PlanFormTabs.propTypes = {
-  currentTab: React.PropTypes.string,
-  selectedFiles: React.PropTypes.array,
-  setUploadType: React.PropTypes.func.isRequired,
-  uploadType: React.PropTypes.string.isRequired
+  currentTab: PropTypes.string,
+  selectedFiles: PropTypes.array,
+  setUploadType: PropTypes.func.isRequired,
+  uploadType: PropTypes.string.isRequired
 };
 PlanFormTabs.defaultProps = {
   currentTtab: 'newPlan',
@@ -108,10 +108,10 @@ class _PlanFormTab extends React.Component {
   }
 }
 _PlanFormTab.propTypes = {
-  active: React.PropTypes.string,
-  intl: React.PropTypes.object,
-  setUploadType: React.PropTypes.func.isRequired,
-  uploadType: React.PropTypes.string.isRequired
+  active: PropTypes.string,
+  intl: PropTypes.object,
+  setUploadType: PropTypes.func.isRequired,
+  uploadType: PropTypes.string.isRequired
 };
 
 const PlanFormTab = injectIntl(_PlanFormTab);

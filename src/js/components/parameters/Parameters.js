@@ -5,7 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { isObjectLike, mapValues } from 'lodash';
 import { Link, browserHistory } from 'react-router';
 import { fromJS, is } from 'immutable';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentParameters from './EnvironmentParameters';
@@ -221,19 +221,19 @@ class Parameters extends React.Component {
 }
 Parameters.propTypes = {
   allParameters: ImmutablePropTypes.map.isRequired,
-  currentPlanName: React.PropTypes.string,
+  currentPlanName: PropTypes.string,
   enabledEnvironments: ImmutablePropTypes.map.isRequired,
-  fetchEnvironmentConfiguration: React.PropTypes.func.isRequired,
-  fetchParameters: React.PropTypes.func.isRequired,
+  fetchEnvironmentConfiguration: PropTypes.func.isRequired,
+  fetchParameters: PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list,
   formFieldErrors: ImmutablePropTypes.map,
-  history: React.PropTypes.object,
-  isFetchingParameters: React.PropTypes.bool.isRequired,
+  history: PropTypes.object,
+  isFetchingParameters: PropTypes.bool.isRequired,
   mistralParameters: ImmutablePropTypes.map.isRequired,
   parameters: ImmutablePropTypes.map.isRequired,
-  parametersLoaded: React.PropTypes.bool,
-  parentPath: React.PropTypes.string.isRequired,
-  updateParameters: React.PropTypes.func
+  parametersLoaded: PropTypes.bool,
+  parentPath: PropTypes.string.isRequired,
+  updateParameters: PropTypes.func
 };
 
 Parameters.defaultProps = {

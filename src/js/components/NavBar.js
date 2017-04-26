@@ -1,5 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
@@ -94,6 +94,6 @@ export default class NavBar extends React.Component {
   }
 }
 NavBar.propTypes = {
-  onLogout: React.PropTypes.func.isRequired,
+  onLogout: PropTypes.func.isRequired,
   user: ImmutablePropTypes.map
 };

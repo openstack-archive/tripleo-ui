@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import BlankSlate from '../ui/BlankSlate';
 import Loader from '../ui/Loader';
@@ -144,16 +144,16 @@ class ValidationsList extends React.Component {
 }
 
 ValidationsList.propTypes = {
-  currentPlanName: React.PropTypes.string,
-  executionsLoaded: React.PropTypes.bool.isRequired,
-  fetchValidations: React.PropTypes.func.isRequired,
-  fetchWorkflowExecutions: React.PropTypes.func.isRequired,
-  intl: React.PropTypes.object,
-  isFetchingValidations: React.PropTypes.bool.isRequired,
-  runValidation: React.PropTypes.func.isRequired,
-  stopValidation: React.PropTypes.func.isRequired,
+  currentPlanName: PropTypes.string,
+  executionsLoaded: PropTypes.bool.isRequired,
+  fetchValidations: PropTypes.func.isRequired,
+  fetchWorkflowExecutions: PropTypes.func.isRequired,
+  intl: PropTypes.object,
+  isFetchingValidations: PropTypes.bool.isRequired,
+  runValidation: PropTypes.func.isRequired,
+  stopValidation: PropTypes.func.isRequired,
   validations: ImmutablePropTypes.map.isRequired,
-  validationsLoaded: React.PropTypes.bool.isRequired
+  validationsLoaded: PropTypes.bool.isRequired
 };
 
 const mapDispatchToProps = dispatch => {

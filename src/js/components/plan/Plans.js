@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export default class Plans extends React.Component {
 
@@ -14,5 +14,5 @@ export default class Plans extends React.Component {
 }
 
 Plans.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import ClassNames from 'classnames';
 import Timer from '../utils/Timer';
 
@@ -74,13 +74,13 @@ export default class Notification extends React.Component {
 }
 
 Notification.propTypes = {
-  dismissable: React.PropTypes.bool.isRequired,
-  message: React.PropTypes.string.isRequired,
-  removeNotification: React.PropTypes.func,
-  timeoutable: React.PropTypes.bool.isRequired,
-  timerPaused: React.PropTypes.bool,
-  title: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string.isRequired
+  dismissable: PropTypes.bool.isRequired,
+  message: PropTypes.string.isRequired,
+  removeNotification: PropTypes.func,
+  timeoutable: PropTypes.bool.isRequired,
+  timerPaused: PropTypes.bool,
+  title: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired
 };
 
 Notification.defaultProps = {

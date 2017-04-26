@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import CurrentPlanActions from '../../actions/CurrentPlanActions';
 import DataTable from '../ui/tables/DataTable';
@@ -122,11 +122,11 @@ class ListPlans extends React.Component {
   }
 }
 ListPlans.propTypes = {
-  children: React.PropTypes.node,
-  choosePlan: React.PropTypes.func,
-  conflict: React.PropTypes.string,
-  currentPlanName: React.PropTypes.string,
-  fetchPlans: React.PropTypes.func,
+  children: PropTypes.node,
+  choosePlan: PropTypes.func,
+  conflict: PropTypes.string,
+  currentPlanName: PropTypes.string,
+  fetchPlans: PropTypes.func,
   plans: ImmutablePropTypes.map
 };
 
@@ -186,8 +186,8 @@ class RowActionsCell extends React.Component {
   }
 }
 RowActionsCell.propTypes = {
-  data: React.PropTypes.array,
-  rowIndex: React.PropTypes.number
+  data: PropTypes.array,
+  rowIndex: PropTypes.number
 };
 
 export class PlanNameCell extends React.Component {
@@ -228,8 +228,8 @@ export class PlanNameCell extends React.Component {
   }
 }
 PlanNameCell.propTypes = {
-  choosePlan: React.PropTypes.func,
-  currentPlanName: React.PropTypes.string,
-  data: React.PropTypes.array,
-  rowIndex: React.PropTypes.number
+  choosePlan: PropTypes.func,
+  currentPlanName: PropTypes.string,
+  data: PropTypes.array,
+  rowIndex: PropTypes.number
 };

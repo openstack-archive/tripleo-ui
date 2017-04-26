@@ -1,5 +1,5 @@
 import { DropdownButton } from 'react-bootstrap';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 const DropdownSelect = (props) => {
   const { children, input: { name, onChange, value } } = props;
@@ -10,7 +10,7 @@ const DropdownSelect = (props) => {
   );
 };
 DropdownSelect.propTypes = {
-  children: React.PropTypes.node,
-  input: React.PropTypes.object.isRequired
+  children: PropTypes.node,
+  input: PropTypes.object.isRequired
 };
 export default DropdownSelect;

@@ -2,7 +2,7 @@ import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Formsy from 'formsy-react';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 
 import FormErrorList from './ui/forms/FormErrorList';
@@ -146,13 +146,13 @@ class Login extends React.Component {
   }
 }
 Login.propTypes = {
-  dispatch: React.PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
-  intl: React.PropTypes.object,
-  isAuthenticating: React.PropTypes.bool.isRequired,
-  location: React.PropTypes.object,
-  userLoggedIn: React.PropTypes.bool.isRequired
+  intl: PropTypes.object,
+  isAuthenticating: PropTypes.bool.isRequired,
+  location: PropTypes.object,
+  userLoggedIn: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {

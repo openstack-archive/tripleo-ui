@@ -1,7 +1,7 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import { deploymentStatusMessages as statusMessages,
          stackStates } from '../../constants/StacksConstants';
@@ -76,10 +76,10 @@ class DeploymentProgress extends React.Component {
 }
 
 DeploymentProgress.propTypes = {
-  deleteStack: React.PropTypes.func.isRequired,
-  deploymentProgress: React.PropTypes.number.isRequired,
-  intl: React.PropTypes.object,
-  isRequestingStackDelete: React.PropTypes.bool.isRequired,
+  deleteStack: PropTypes.func.isRequired,
+  deploymentProgress: PropTypes.number.isRequired,
+  intl: PropTypes.object,
+  isRequestingStackDelete: PropTypes.bool.isRequired,
   stack: ImmutablePropTypes.record.isRequired
 };
 

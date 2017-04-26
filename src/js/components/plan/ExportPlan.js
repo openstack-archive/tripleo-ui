@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import PlansActions from '../../actions/PlansActions';
@@ -98,11 +98,11 @@ class ExportPlan extends React.Component {
 }
 
 ExportPlan.propTypes = {
-  exportPlan: React.PropTypes.func,
-  intl: React.PropTypes.object,
-  isExportingPlan: React.PropTypes.bool,
-  params: React.PropTypes.object,
-  planExportUrl: React.PropTypes.string
+  exportPlan: PropTypes.func,
+  intl: PropTypes.object,
+  isExportingPlan: PropTypes.bool,
+  params: PropTypes.object,
+  planExportUrl: PropTypes.string
 };
 
 function mapStateToProps(state) {

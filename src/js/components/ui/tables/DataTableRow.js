@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export default class DataTableRow extends React.Component {
   render() {
@@ -11,6 +11,6 @@ export default class DataTableRow extends React.Component {
   }
 }
 DataTableRow.propTypes = {
-  columns: React.PropTypes.array.isRequired,
-  index: React.PropTypes.number.isRequired
+  columns: PropTypes.array.isRequired,
+  index: PropTypes.number.isRequired
 };

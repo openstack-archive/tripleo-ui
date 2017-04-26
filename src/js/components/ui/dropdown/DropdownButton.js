@@ -1,5 +1,5 @@
 import ClassNames from 'classnames';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export default class DropdownButton extends React.Component {
   handleClick(e) {
@@ -19,7 +19,7 @@ export default class DropdownButton extends React.Component {
   }
 }
 DropdownButton.propTypes = {
-  children: React.PropTypes.node,
-  className: React.PropTypes.string,
-  toggleDropdown: React.PropTypes.func
+  children: PropTypes.node,
+  className: PropTypes.string,
+  toggleDropdown: PropTypes.func
 };

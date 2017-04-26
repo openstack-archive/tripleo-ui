@@ -1,6 +1,6 @@
 import ClassNames from 'classnames';
 import Formsy from 'formsy-react';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import InputDescription from './InputDescription';
 import InputErrorMessage from './InputErrorMessage';
@@ -43,21 +43,21 @@ class HorizontalCheckBox extends React.Component {
   }
 }
 HorizontalCheckBox.propTypes = {
-  description: React.PropTypes.string,
-  getErrorMessage: React.PropTypes.func,
-  getValue: React.PropTypes.func,
-  id: React.PropTypes.string.isRequired,
-  inputColumnClasses: React.PropTypes.string.isRequired,
-  isRequired: React.PropTypes.func,
-  isValid: React.PropTypes.func,
-  labelColumnClasses: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
-  placeholder: React.PropTypes.string,
-  setValue: React.PropTypes.func,
-  showError: React.PropTypes.func,
-  showRequired: React.PropTypes.func,
-  title: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string
+  description: PropTypes.string,
+  getErrorMessage: PropTypes.func,
+  getValue: PropTypes.func,
+  id: PropTypes.string.isRequired,
+  inputColumnClasses: PropTypes.string.isRequired,
+  isRequired: PropTypes.func,
+  isValid: PropTypes.func,
+  labelColumnClasses: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  setValue: PropTypes.func,
+  showError: PropTypes.func,
+  showRequired: PropTypes.func,
+  title: PropTypes.string.isRequired,
+  type: PropTypes.string
 };
 HorizontalCheckBox.defaultProps = {
   type: 'checkbox'

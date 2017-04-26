@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Loader from '../ui/Loader';
 import Roles from './Roles';
@@ -64,18 +64,18 @@ const RolesStep = ({ availableNodesCount,
   );
 };
 RolesStep.propTypes = {
-  availableNodesCount: React.PropTypes.number.isRequired,
+  availableNodesCount: PropTypes.number.isRequired,
   availableNodesCountsByRole: ImmutablePropTypes.map.isRequired,
-  fetchNodes: React.PropTypes.func.isRequired,
-  fetchRoles: React.PropTypes.func.isRequired,
-  intl: React.PropTypes.object,
-  isFetchingNodes: React.PropTypes.bool.isRequired,
-  isFetchingParameters: React.PropTypes.bool.isRequired,
-  isFetchingRoles: React.PropTypes.bool.isRequired,
+  fetchNodes: PropTypes.func.isRequired,
+  fetchRoles: PropTypes.func.isRequired,
+  intl: PropTypes.object,
+  isFetchingNodes: PropTypes.bool.isRequired,
+  isFetchingParameters: PropTypes.bool.isRequired,
+  isFetchingRoles: PropTypes.bool.isRequired,
   nodeCountParametersByRole: ImmutablePropTypes.map.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
-  rolesLoaded: React.PropTypes.bool.isRequired,
-  totalAssignedNodesCount: React.PropTypes.number.isRequired
+  rolesLoaded: PropTypes.bool.isRequired,
+  totalAssignedNodesCount: PropTypes.number.isRequired
 };
 
 export default injectIntl(RolesStep);

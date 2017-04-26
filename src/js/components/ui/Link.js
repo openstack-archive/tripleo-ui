@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import {Link as ReactRouterLink} from 'react-router';
 
 export default class Link extends React.Component {
@@ -13,8 +13,8 @@ export default class Link extends React.Component {
 }
 
 Link.propTypes = {
-  className: React.PropTypes.string,
-  disabled: React.PropTypes.bool
+  className: PropTypes.string,
+  disabled: PropTypes.bool
 };
 
 Link.defaultProps = {
