@@ -4,9 +4,10 @@ import { FormGroup, MenuItem } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import DropdownSelect from '../ui/reduxForm/DropdownSelect';
-import { nodeColumnMessages } from './messages';
-import { SortDirectionInput } from '../ui/Toolbar/ToolbarInputs';
+import DropdownSelect from '../../ui/reduxForm/DropdownSelect';
+import { nodeColumnMessages } from '../messages';
+import { ContentViewSelectorInput,
+         SortDirectionInput } from '../../ui/Toolbar/ToolbarInputs';
 
 const messages = defineMessages({
   table: {
@@ -57,17 +58,15 @@ const NodesToolbarForm = ({ handleSubmit, intl }) => (
         title={intl.formatMessage(messages.sortDir)}
         component={SortDirectionInput}/>
     </FormGroup>
-    {/* TODO(jtomasek): Enable this once Nodes ListView is implemented
-        so it is possible to switch between list and table views */}
-    {/* <FormGroup className="toolbar-pf-view-selector">
+    <FormGroup className="pull-right">
       <Field
         name="contentView"
         component={ContentViewSelectorInput}
         options={{
-          table: intl.formatMessage(messages.table),
-          list: intl.formatMessage(messages.list)
+          list: intl.formatMessage(messages.list),
+          table: intl.formatMessage(messages.table)
         }} />
-    </FormGroup> */}
+    </FormGroup>
   </form>
 );
 NodesToolbarForm.propTypes = {

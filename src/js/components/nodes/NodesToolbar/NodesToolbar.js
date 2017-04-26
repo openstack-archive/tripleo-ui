@@ -7,21 +7,22 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { ActiveFilter,
-         ActiveFiltersList } from '../ui/Toolbar/ActiveFilters';
+         ActiveFiltersList } from '../../ui/Toolbar/ActiveFilters';
 import { getActiveFilters,
-         getFilterByName } from '../../selectors/filters';
+         getFilterByName } from '../../../selectors/filters';
 import { getFilteredNodes,
-         getNodes } from '../../selectors/nodes';
-import { nodeColumnMessages } from './messages';
+         getNodes } from '../../../selectors/nodes';
+import { nodeColumnMessages } from '../messages';
 import NodesToolbarForm from './NodesToolbarForm';
-import ToolbarFiltersForm from '../ui/Toolbar/ToolbarFiltersForm';
+import NodesToolbarActions from './NodesToolbarActions';
+import ToolbarFiltersForm from '../../ui/Toolbar/ToolbarFiltersForm';
 import { clearActiveFilters,
          deleteActiveFilter,
          addActiveFilter,
-         updateFilter } from '../../actions/FiltersActions';
+         updateFilter } from '../../../actions/FiltersActions';
 import { Toolbar,
          ToolbarActions,
-         ToolbarResults } from '../ui/Toolbar/Toolbar';
+         ToolbarResults } from '../../ui/Toolbar/Toolbar';
 
 const messages = defineMessages({
   activeFilters: {
@@ -41,27 +42,9 @@ const messages = defineMessages({
     id: 'NodesToolbar.filterStringPlaceholder',
     defaultMessage: 'Add filter'
   },
-  introspectNodes: {
-    id: 'NodesToolbar.introspectNodes',
-    defaultMessage: 'Introspect Nodes'
-  },
   nonFilteredToolbarResults: {
     id: 'NodesToolbar.nonFilteredToolbarResults',
     defaultMessage: '{totalCount, number} {totalCount, plural, one {Node} other {Nodes}}'
-  },
-  tagNodes: {
-    id: 'NodesToolbar.tagNodes',
-    defaultMessage: 'Tag Nodes'
-  },
-  provideNodes: {
-    id: 'NodesToolbar.provideNodes',
-    defaultMessage: 'Provide Nodes',
-    description: '"Providing" the nodes changes the provisioning state to "available" so that '
-                 + 'they can be used in a deployment.'
-  },
-  removeNodes: {
-    id: 'NodesToolbar.removeNodes',
-    defaultMessage: 'Remove Nodes'
   }
 });
 
@@ -98,16 +81,7 @@ class NodesToolbar extends React.Component {
             onChange={this.handleNodesToolbarFormChange.bind(this)}
             onSubmit={updateFilter}
             initialValues={initialValues} />
-          {/* TODO(jtomasek): Use these buttons to trigger Nodes actions once it is removed from
-              NodesTable */}
-          {/* <FormGroup>
-            <Button><FormattedMessage {...messages.introspectNodes} /></Button>
-            <Button><FormattedMessage {...messages.provideNodes} /></Button>
-            <DropdownKebab id="nodesActionsKebab">
-              <MenuItem><FormattedMessage {...messages.tagNodes} /></MenuItem>
-              <MenuItem><FormattedMessage {...messages.removeNodes} /></MenuItem>
-            </DropdownKebab>
-          </FormGroup> */}
+          <NodesToolbarActions />
         </ToolbarActions>
         <ToolbarResults>
           <h5>
