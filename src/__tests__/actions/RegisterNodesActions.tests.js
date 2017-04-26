@@ -96,7 +96,7 @@ describe('nodesRegistrationFinished', () => {
     expect(NodesActions.fetchNodes).toHaveBeenCalledWith();
     expect(NotificationActions.notify).toHaveBeenCalledWith(successNotification);
     expect(RegisterNodesActions.nodesRegistrationSuccess).toHaveBeenCalled();
-    expect(browserHistory.push).toHaveBeenCalledWith('/nodes/registered');
+    expect(browserHistory.push).toHaveBeenCalledWith('/nodes');
   });
 
   it('handles failed nodes registration', () => {
@@ -134,7 +134,7 @@ describe('nodesRegistrationFinished', () => {
       };
     }, mockGetIntl);
 
-    expect(browserHistory.push).toHaveBeenCalledWith('/nodes/registered/register');
+    expect(browserHistory.push).toHaveBeenCalledWith('/nodes/register');
     expect(NodesActions.addNodes).toHaveBeenCalledWith(normalizedRegisteredNodes);
     expect(NodesActions.fetchNodes).toHaveBeenCalledWith();
     expect(RegisterNodesActions.nodesRegistrationFailed).toHaveBeenCalledWith(errors);
