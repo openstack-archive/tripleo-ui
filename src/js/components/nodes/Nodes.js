@@ -1,11 +1,14 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React, { Component, PropTypes } from 'react';
 
+import { getFilteredNodes } from '../../selectors/nodes';
 import NodesActions from '../../actions/NodesActions';
 import NodesToolbar from './NodesToolbar';
 import NodesTableView from './NodesTableView';
+import NodesListView from './NodesListView/NodesListView';
 import RolesActions from '../../actions/RolesActions';
 
 const messages = defineMessages({
@@ -54,6 +57,7 @@ class Nodes extends Component {
         </div>
         <NodesToolbar />
         <NodesTableView />
+        <NodesListView nodes={this.props.nodes} />
         {this.props.children}
       </div>
     );
@@ -63,11 +67,13 @@ Nodes.propTypes = {
   children: PropTypes.node,
   currentPlanName: PropTypes.string.isRequired,
   fetchNodes: PropTypes.func.isRequired,
-  fetchRoles: PropTypes.func.isRequired
+  fetchRoles: PropTypes.func.isRequired,
+  nodes: ImmutablePropTypes.map.isRequired
 };
 
 const mapStateToProps = state => ({
-  currentPlanName: state.currentPlan.currentPlanName
+  currentPlanName: state.currentPlan.currentPlanName,
+  nodes: getFilteredNodes(state)
 });
 
 const mapDispatchToProps = dispatch => ({
