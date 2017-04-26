@@ -3,7 +3,7 @@ import React from 'react';
 export const ActiveFiltersList = ({ children, clearAllLabel, handleClearAll, label }) => {
   if (children.length > 0) {
     return (
-      <div style={{display: 'inline'}}>
+      <div className="toolbar-active-filters-list">
         <p>{label}</p>
         <ul className="list-inline">
           {children}
