@@ -1,7 +1,8 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { List } from 'immutable';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import HorizontalStaticText from '../ui/forms/HorizontalStaticText';
 import NavTab from '../ui/NavTab';

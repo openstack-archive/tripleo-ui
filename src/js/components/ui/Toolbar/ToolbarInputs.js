@@ -1,5 +1,6 @@
 import { Button } from 'react-bootstrap';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 export const SortDirectionInput = ({ input: { onChange, value }, title }) => {
   return (

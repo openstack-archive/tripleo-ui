@@ -2,7 +2,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { debounce } from 'lodash';
 import { Form, reduxForm, submit } from 'redux-form';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import { getAssignedNodesCountsByRole } from '../../selectors/nodesAssignment';
 import { getCurrentPlan } from '../../selectors/plans';

@@ -1,6 +1,7 @@
 import { addLocaleData, IntlProvider } from 'react-intl';
 import { connect } from 'react-redux';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import de from 'react-intl/locale-data/de';
 import es from 'react-intl/locale-data/es';
 import id from 'react-intl/locale-data/id';

@@ -1,5 +1,6 @@
 import ClassNames from 'classnames';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const NodePickerInput = props => {
   const { increment, input: { value, onChange }, max, meta: { error, submitting }, min } = props;

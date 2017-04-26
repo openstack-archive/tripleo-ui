@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import TableCheckBox from '../forms/TableCheckBox';
 import Loader from '../Loader';

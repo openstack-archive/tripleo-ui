@@ -1,5 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const messages = defineMessages({
   localFolder: {

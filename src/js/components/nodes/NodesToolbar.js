@@ -3,7 +3,8 @@ import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { startCase } from 'lodash';
 import { submit } from 'redux-form';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import { ActiveFilter,
          ActiveFiltersList } from '../ui/Toolbar/ActiveFilters';
