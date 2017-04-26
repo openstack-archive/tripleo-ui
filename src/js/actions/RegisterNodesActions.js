@@ -116,7 +116,7 @@ export default {
           message: formatMessage(messages.registrationNotificationMessage)
         }));
         dispatch(this.nodesRegistrationSuccess());
-        browserHistory.push('/nodes/registered');
+        browserHistory.push('/nodes');
         break;
       }
       case 'FAILED': {
@@ -124,7 +124,7 @@ export default {
           title: 'Nodes Registration Failed',
           message: JSON.stringify(messagePayload.message)
         }];
-        browserHistory.push('/nodes/registered/register');
+        browserHistory.push('/nodes/register');
         // TODO(jtomasek): repopulate nodes registration form with failed nodes provided by message
         dispatch(this.nodesRegistrationFailed(errors));
         break;

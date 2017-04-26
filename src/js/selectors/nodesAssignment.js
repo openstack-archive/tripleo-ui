@@ -10,8 +10,9 @@ import { getRoles } from './roles';
  *  Return Nodes which are either available or deployed (active) with current Plan
  */
 export const getAvailableNodes = createSelector(
-  [getNodes], nodes =>
-    nodes.filter(node => ['available', 'active'].includes(node.get('provision_state')))
+  getNodes, (nodes) => nodes
+    .filter(node => ['available', 'active'].includes(node.get('provision_state')))
+    .filter(node => !node.get('maintenance'))
 );
 
 export const getUntaggedAvailableNodes = createSelector(
