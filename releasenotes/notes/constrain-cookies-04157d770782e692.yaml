@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Fixes `bug 1680547 <https://launchpad.net/bugs/1680547>`__
+    Fix a bug where you had to log into the application on every page reload
