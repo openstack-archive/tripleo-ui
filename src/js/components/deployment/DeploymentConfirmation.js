@@ -1,5 +1,6 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 
 import BlankSlate from '../ui/BlankSlate';

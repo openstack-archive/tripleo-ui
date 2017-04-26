@@ -1,5 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import Modal from '../../ui/Modal';
 import TagNodesForm from './TagNodesForm';

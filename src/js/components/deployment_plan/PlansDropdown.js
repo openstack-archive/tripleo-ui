@@ -1,7 +1,8 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import DropdownItem from '../ui/dropdown/DropdownItem';
 import DropdownButton from '../ui/dropdown/DropdownButton';

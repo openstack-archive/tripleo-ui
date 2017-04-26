@@ -1,5 +1,6 @@
 import { DropdownButton } from 'react-bootstrap';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const DropdownSelect = (props) => {
   const { children, input: { name, onChange, value } } = props;

@@ -1,6 +1,7 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { defineMessages, injectIntl } from 'react-intl';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import HorizontalInput from '../../ui/forms/HorizontalInput';
 import HorizontalTextarea from '../../ui/forms/HorizontalTextarea';
