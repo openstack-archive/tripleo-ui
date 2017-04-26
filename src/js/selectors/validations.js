@@ -1,10 +1,12 @@
 import { createSelector } from 'reselect';
 
 import { currentPlanNameSelector } from './plans';
+import { getFilterByName } from './filters';
 import MistralConstants from '../constants/MistralConstants';
 
 const validations = (state) => state.validations.get('validations');
 const executions = (state) => state.executions.get('executions');
+const validationsToolbarFilter = state => getFilterByName(state, 'validationsToolbar');
 
 /**
  * Filter workflow executions only to validations and current plan
@@ -27,6 +29,33 @@ export const getValidationsWithResults = createSelector(
       return validation.set('results', validationResults)
                        .set('status', getValidationStatus(validationResults));
     });
+  }
+);
+
+/**
+ * Filter validations using the active Toolbar filters
+ */
+export const getFilteredValidations = createSelector(
+  [getValidationsWithResults, validationsToolbarFilter],
+  (validations, validationsToolbarFilter) => {
+    const activeFilters = validationsToolbarFilter.get('activeFilters');
+    return activeFilters.reduce((filteredValidations, filter) =>
+      filteredValidations.filter((validation) => {
+        switch(filter.filterBy) {
+        case 'name':
+          return validation.name.toLowerCase().includes(filter.filterString.toLowerCase());
+        case 'group': {
+          return validation.groups.reduce((result, group) => result
+            ? result : group.toLowerCase().includes(filter.filterString.toLowerCase()) , false);
+        }
+        default:
+          return false;
+        }
+      }), validations)
+      .sortBy(validation => validation.getIn(validationsToolbarFilter.get('sortBy').split('.')))
+      .update(validations => validationsToolbarFilter.get('sortDir') === 'desc'
+        ? validations.reverse()
+        : validations);
   }
 );
 

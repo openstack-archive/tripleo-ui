@@ -3,13 +3,13 @@ import React from 'react';
 export const ActiveFiltersList = ({ children, clearAllLabel, handleClearAll, label }) => {
   if (children.length > 0) {
     return (
-      <div style={{display: 'inline'}}>
+      <span className="toolbar-active-filters-list">
         <p>{label}</p>
         <ul className="list-inline">
           {children}
         </ul>
         <p><a className="link" onClick={() => handleClearAll()}>{clearAllLabel}</a></p>
-      </div>
+      </span>
     );
   } else {
     return null;
