@@ -6,10 +6,11 @@ import React from 'react';
 import BlankSlate from '../ui/BlankSlate';
 import Loader from '../ui/Loader';
 import ValidationsActions from '../../actions/ValidationsActions';
+import ValidationsToolbar from './ValidationsToolbar';
 import Validation from './Validation';
 import ValidationDetail from './ValidationDetail';
 import WorkflowExecutionsActions from '../../actions/WorkflowExecutionsActions';
-import { getValidationsWithResults } from '../../selectors/validations';
+import { getFilteredValidations } from '../../selectors/validations';
 
 const messages = defineMessages({
   loadingValidations: {
@@ -128,6 +129,7 @@ class ValidationsList extends React.Component {
             </Loader>
           </div>
           <h2 className="h4"><FormattedMessage {...messages.validations}/></h2>
+          <ValidationsToolbar/>
         </div>
         <Loader loaded={this.props.validationsLoaded && this.props.executionsLoaded}
                 content={formatMessage(messages.loadingValidations)}
@@ -176,7 +178,7 @@ const mapStateToProps = state => {
   return {
     executionsLoaded: state.executions.get('executionsLoaded'),
     isFetchingValidations: state.validations.get('isFetching'),
-    validations: getValidationsWithResults(state),
+    validations: getFilteredValidations(state),
     validationsLoaded: state.validations.get('validationsLoaded'),
     currentPlanName: state.currentPlan.currentPlanName
   };
