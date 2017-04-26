@@ -1,6 +1,6 @@
 import { IntlProvider } from 'react-intl';
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import ReactShallowRenderer from 'react-test-renderer/shallow';
 
 const IronicApiService = require('../../../js/services/IronicApiService');
 
@@ -9,7 +9,7 @@ import Nodes from '../../../js/components/nodes/Nodes';
 describe('Nodes Component', () => {
   let NodesVdom, NodesInstance;
   beforeEach(() => {
-    let shallowRenderer = TestUtils.createRenderer();
+    let shallowRenderer = new ReactShallowRenderer();
     const intlProvider = new IntlProvider({ locale: 'en' }, {});
     const { intl } = intlProvider.getChildContext();
     shallowRenderer.render(<Nodes.WrappedComponent intl={intl}/>);
