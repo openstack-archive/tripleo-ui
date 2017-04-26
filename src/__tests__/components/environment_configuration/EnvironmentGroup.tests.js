@@ -1,5 +1,5 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import ReactShallowRenderer from 'react-test-renderer/shallow';
 
 import EnvironmentGroup from
   '../../../js/components/environment_configuration/EnvironmentGroup';
@@ -11,7 +11,7 @@ const envGroupMultipleEnvs = MockPlan.capabilities.topics[0].environment_groups[
 xdescribe('EnvironmentGroup component', () => {
   let EnvGroupVdom, EnvGroupInstance;
   beforeEach(() => {
-    let shallowRenderer = TestUtils.createRenderer();
+    let shallowRenderer = new ReactShallowRenderer();
     shallowRenderer.render(
       <EnvironmentGroup key={0}
                         title={envGroup.title}
@@ -37,7 +37,7 @@ xdescribe('EnvironmentGroup component', () => {
 xdescribe('EnvironmentGroup component with multiple environments', () => {
   let EnvGroupVdom, EnvGroupInstance;
   beforeEach(() => {
-    let shallowRenderer = TestUtils.createRenderer();
+    let shallowRenderer = new ReactShallowRenderer();
     shallowRenderer.render(
       <EnvironmentGroup key={1}
                         title={envGroupMultipleEnvs.title}

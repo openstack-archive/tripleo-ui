@@ -1,6 +1,6 @@
 import { IntlProvider } from 'react-intl';
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import ReactShallowRenderer from 'react-test-renderer/shallow';
 import { Map, Set } from 'immutable';
 
 import NodesTable from '../../../js/components/nodes/NodesTable';
@@ -41,7 +41,7 @@ let nodes = Map({
 describe('NodesTable component', () => {
   let nodesTableVdom, nodesTableInstance;
   beforeEach(() => {
-    let shallowRenderer = TestUtils.createRenderer();
+    let shallowRenderer = new ReactShallowRenderer();
     const intlProvider = new IntlProvider({ locale: 'en' }, {});
     const { intl } = intlProvider.getChildContext();
     shallowRenderer.render(
@@ -79,7 +79,7 @@ describe('NodesTableRoleCell', () => {
   let roleCellInstance;
   describe('getAssignedRoleTitle', () => {
     it('should return Not Assigned when profile is not set in node.properties.capabilities', () => {
-      let shallowRenderer = TestUtils.createRenderer();
+      let shallowRenderer = new ReactShallowRenderer();
       shallowRenderer.render(<NodesTableProfileCell data={nodes.toList().toJS()}
                                                     rowIndex={0}/>);
       roleCellInstance = shallowRenderer._instance._instance;
@@ -87,7 +87,7 @@ describe('NodesTableRoleCell', () => {
     });
 
     it('should return Not Assigned when profile is not set in node.properties.capabilities', () => {
-      let shallowRenderer = TestUtils.createRenderer();
+      let shallowRenderer = new ReactShallowRenderer();
       shallowRenderer.render(<NodesTableProfileCell data={nodes.toList().toJS()}
                                                     rowIndex={1}/>);
       roleCellInstance = shallowRenderer._instance._instance;
