@@ -128,3 +128,43 @@
   display: flex;
   padding-bottom: 10px;
 }
+
+.validations-toolbar {
+
+  .toolbar-active-filters-list {
+    display: inline;
+  }
+
+  .toolbar-pf {
+    .form-group {
+    // removing default border
+    border-right: 0;
+    margin-bottom: 0;
+    // margin equivalent to items in validation list
+    margin-left: 15px;
+    }
+  }
+  .toolbar-pf-actions {
+    .toolbar-pf-filter {
+      width: 75%;
+      @media (max-width: @screen-lg) {
+        width: 25%;
+      }
+    }
+  }
+  .toolbar-pf-results {
+    h5,
+    p,
+    ul {
+      line-height: @grid-gutter-width;
+  	  // margin equivalent to items in validation list
+      margin-left: 15px;
+    }
+      @media (min-width: @screen-lg) {
+        .toolbar-active-filters-list {
+          display: block;
+        }
+      }
+  }
+
+}
