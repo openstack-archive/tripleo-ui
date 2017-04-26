@@ -76,7 +76,7 @@ describe('NodesTable component', () => {
     expect(nodesTableVdom.type.displayName).toEqual('InjectIntl(DataTable)');
     expect(nodesTableVdom.props.data).toEqual(nodes.toList().toJS());
     expect(nodesTableVdom.props.noRowsRenderer.name).toBeDefined();
-    expect(nodesTableVdom.props.children.length).toEqual(10);
+    expect(nodesTableVdom.props.children.length).toEqual(11);
   });
 
   it('should be able to filter rows', () => {
