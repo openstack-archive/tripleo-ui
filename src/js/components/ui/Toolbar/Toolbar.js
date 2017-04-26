@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export const Toolbar = ({children}) => {
   return (
@@ -12,7 +12,7 @@ export const Toolbar = ({children}) => {
   );
 };
 Toolbar.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };
 
 export const ToolbarActions = ({children}) => (
@@ -21,7 +21,7 @@ export const ToolbarActions = ({children}) => (
   </div>
 );
 ToolbarActions.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };
 
 export const ToolbarResults = ({children}) => (
@@ -34,5 +34,5 @@ export const ToolbarResults = ({children}) => (
   </div>
 );
 ToolbarResults.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };

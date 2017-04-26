@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Loader from './ui/Loader';
 import LoginActions from '../actions/LoginActions';
@@ -44,15 +44,15 @@ class AuthenticatedContent extends React.Component {
   }
 }
 AuthenticatedContent.propTypes = {
-  children: React.PropTypes.node,
-  currentPlanName: React.PropTypes.string,
-  dispatch: React.PropTypes.func,
-  fetchPlans: React.PropTypes.func,
-  fetchWorkflowExecutions: React.PropTypes.func,
-  intl: React.PropTypes.object,
-  logoutUser: React.PropTypes.func.isRequired,
-  noPlans: React.PropTypes.bool,
-  plansLoaded: React.PropTypes.bool,
+  children: PropTypes.node,
+  currentPlanName: PropTypes.string,
+  dispatch: PropTypes.func,
+  fetchPlans: PropTypes.func,
+  fetchWorkflowExecutions: PropTypes.func,
+  intl: PropTypes.object,
+  logoutUser: PropTypes.func.isRequired,
+  noPlans: PropTypes.bool,
+  plansLoaded: PropTypes.bool,
   user: ImmutablePropTypes.map
 };
 

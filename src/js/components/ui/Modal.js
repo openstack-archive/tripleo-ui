@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Portal from 'react-portal';
 
 export default class Modal extends React.Component {
@@ -11,7 +11,7 @@ export default class Modal extends React.Component {
   }
 }
 Modal.propTypes = {
-  show: React.PropTypes.bool.isRequired
+  show: PropTypes.bool.isRequired
 };
 
 Modal.defaultProps = {
@@ -47,9 +47,9 @@ class PortedModal extends React.Component {
   }
 }
 PortedModal.propTypes = {
-  children: React.PropTypes.node,
-  dialogClasses: React.PropTypes.string.isRequired,
-  id: React.PropTypes.string
+  children: PropTypes.node,
+  dialogClasses: PropTypes.string.isRequired,
+  id: PropTypes.string
 };
 
 PortedModal.defaultProps = {

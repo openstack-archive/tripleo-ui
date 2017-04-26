@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Loader from '../ui/Loader';
 
@@ -55,10 +55,10 @@ const OvercloudInfo = ({ intl, stack, stackResources, stackResourcesLoaded }) =>
   );
 };
 OvercloudInfo.propTypes = {
-  intl: React.PropTypes.object,
+  intl: PropTypes.object,
   stack: ImmutablePropTypes.record.isRequired,
   stackResources: ImmutablePropTypes.map.isRequired,
-  stackResourcesLoaded: React.PropTypes.bool.isRequired
+  stackResourcesLoaded: PropTypes.bool.isRequired
 };
 
 export default injectIntl(OvercloudInfo);

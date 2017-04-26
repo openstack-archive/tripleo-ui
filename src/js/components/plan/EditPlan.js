@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import ModalFormErrorList from '../ui/forms/FormErrorList';
 import PlanEditFormTabs from './PlanEditFormTabs';
@@ -140,16 +140,16 @@ class EditPlan extends React.Component {
 }
 
 EditPlan.propTypes = {
-  fetchPlan: React.PropTypes.func,
-  history: React.PropTypes.object,
-  intl: React.PropTypes.object,
-  isTransitioningPlan: React.PropTypes.bool,
-  location: React.PropTypes.object,
-  params: React.PropTypes.object,
+  fetchPlan: PropTypes.func,
+  history: PropTypes.object,
+  intl: PropTypes.object,
+  isTransitioningPlan: PropTypes.bool,
+  location: PropTypes.object,
+  params: PropTypes.object,
   planFormErrors: ImmutablePropTypes.list,
   plans: ImmutablePropTypes.map,
-  updatePlan: React.PropTypes.func,
-  updatePlanFromTarball: React.PropTypes.func
+  updatePlan: PropTypes.func,
+  updatePlanFromTarball: PropTypes.func
 };
 
 function mapStateToProps(state) {

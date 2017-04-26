@@ -1,5 +1,5 @@
 import ClassNames from 'classnames';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export default class TabPane extends React.Component {
   renderChildren() {
@@ -23,12 +23,12 @@ export default class TabPane extends React.Component {
   }
 }
 TabPane.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ]),
-  isActive: React.PropTypes.bool.isRequired,
-  renderOnlyActive: React.PropTypes.bool.isRequired
+  isActive: PropTypes.bool.isRequired,
+  renderOnlyActive: PropTypes.bool.isRequired
 };
 TabPane.defaultProps = {
   renderOnlyActive: false

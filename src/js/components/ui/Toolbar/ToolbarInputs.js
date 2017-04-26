@@ -1,5 +1,5 @@
 import { Button } from 'react-bootstrap';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export const SortDirectionInput = ({ input: { onChange, value }, title }) => {
   return (
@@ -13,9 +13,9 @@ export const SortDirectionInput = ({ input: { onChange, value }, title }) => {
   );
 };
 SortDirectionInput.propTypes = {
-  children: React.PropTypes.node,
-  input: React.PropTypes.object.isRequired,
-  title: React.PropTypes.string
+  children: PropTypes.node,
+  input: PropTypes.object.isRequired,
+  title: PropTypes.string
 };
 
 const getIconClass = (optionKey) => {
@@ -41,6 +41,6 @@ export const ContentViewSelectorInput = ({ input: { onChange, value }, options }
   );
 };
 ContentViewSelectorInput.propTypes = {
-  input: React.PropTypes.object.isRequired,
-  options: React.PropTypes.object.isRequired
+  input: PropTypes.object.isRequired,
+  options: PropTypes.object.isRequired
 };

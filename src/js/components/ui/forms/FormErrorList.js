@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import * as _ from 'lodash';
 
 export default class FormErrorList extends React.Component {
@@ -46,5 +46,5 @@ export default class FormErrorList extends React.Component {
   }
 }
 FormErrorList.propTypes = {
-  errors: React.PropTypes.array.isRequired
+  errors: PropTypes.array.isRequired
 };

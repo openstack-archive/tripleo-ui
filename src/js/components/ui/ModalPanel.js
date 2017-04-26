@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { spring, Motion } from 'react-motion';
 
 /**
@@ -56,7 +56,7 @@ export class ModalPanel extends React.Component {
   }
 }
 ModalPanel.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };
 
 export const ModalPanelHeader = ({ children }) => {
@@ -69,7 +69,7 @@ export const ModalPanelHeader = ({ children }) => {
   );
 };
 ModalPanelHeader.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };
 
 export const ModalPanelBody = ({ children }) => {
@@ -80,7 +80,7 @@ export const ModalPanelBody = ({ children }) => {
   );
 };
 ModalPanelBody.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };
 
 export const ModalPanelFooter = ({ children }) => {
@@ -93,5 +93,5 @@ export const ModalPanelFooter = ({ children }) => {
   );
 };
 ModalPanelFooter.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };

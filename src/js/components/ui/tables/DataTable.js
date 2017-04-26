@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import invariant from 'invariant';
 
@@ -112,19 +112,19 @@ class DataTable extends React.Component {
 export default injectIntl(DataTable);
 
 DataTable.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ]),
-  data: React.PropTypes.array.isRequired,
-  dataOperationInProgress: React.PropTypes.bool.isRequired,
-  filterString: React.PropTypes.string,
-  id: React.PropTypes.string,
-  intl: React.PropTypes.object,
-  noRowsRenderer: React.PropTypes.func.isRequired,
-  onFilter: React.PropTypes.func,
-  rowsCount: React.PropTypes.number.isRequired,
-  tableActions: React.PropTypes.func
+  data: PropTypes.array.isRequired,
+  dataOperationInProgress: PropTypes.bool.isRequired,
+  filterString: PropTypes.string,
+  id: PropTypes.string,
+  intl: PropTypes.object,
+  noRowsRenderer: PropTypes.func.isRequired,
+  onFilter: PropTypes.func,
+  rowsCount: PropTypes.number.isRequired,
+  tableActions: PropTypes.func
 };
 DataTable.defaultProps = {
   className: 'table',

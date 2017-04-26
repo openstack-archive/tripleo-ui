@@ -1,5 +1,5 @@
 import ClassNames from 'classnames';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Modal from '../ui/Modal';
 
@@ -63,23 +63,23 @@ export default class Loader extends React.Component {
   }
 }
 Loader.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ]),
-  className: React.PropTypes.string,
-  component: React.PropTypes.any, // Component to wrap children when loaded
-  componentProps: React.PropTypes.object,
-  content: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.element
+  className: PropTypes.string,
+  component: PropTypes.any, // Component to wrap children when loaded
+  componentProps: PropTypes.object,
+  content: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
   ]),
-  global: React.PropTypes.bool,
-  height: React.PropTypes.number,
-  inline: React.PropTypes.bool,
-  inverse: React.PropTypes.bool,
-  loaded: React.PropTypes.bool,
-  size: React.PropTypes.oneOf(['xs', 'sm', 'lg', 'xl'])
+  global: PropTypes.bool,
+  height: PropTypes.number,
+  inline: PropTypes.bool,
+  inverse: PropTypes.bool,
+  loaded: PropTypes.bool,
+  size: PropTypes.oneOf(['xs', 'sm', 'lg', 'xl'])
 };
 Loader.defaultProps = {
   component: 'div',

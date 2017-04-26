@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { includes } from 'lodash';
 
 import Modal from '../ui/Modal';
@@ -122,15 +122,15 @@ class ValidationDetail extends React.Component {
 }
 
 ValidationDetail.propTypes = {
-  description: React.PropTypes.string,
+  description: PropTypes.string,
   groups: ImmutablePropTypes.list.isRequired,
-  hideValidationDetail: React.PropTypes.func,
-  intl: React.PropTypes.object,
-  name: React.PropTypes.string.isRequired,
+  hideValidationDetail: PropTypes.func,
+  intl: PropTypes.object,
+  name: PropTypes.string.isRequired,
   results: ImmutablePropTypes.map.isRequired,
-  runValidation: React.PropTypes.func.isRequired,
-  status: React.PropTypes.string.isRequired,
-  stopValidation: React.PropTypes.func.isRequired
+  runValidation: PropTypes.func.isRequired,
+  status: PropTypes.string.isRequired,
+  stopValidation: PropTypes.func.isRequired
 };
 
 export default injectIntl(ValidationDetail);

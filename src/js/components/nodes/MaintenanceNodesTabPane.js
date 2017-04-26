@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
 import Formsy from 'formsy-react';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import FormErrorList from '../ui/forms/FormErrorList';
@@ -71,10 +71,10 @@ class MaintenanceNodesTabPane extends React.Component {
 MaintenanceNodesTabPane.propTypes = {
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
-  isFetchingNodes: React.PropTypes.bool.isRequired,
+  isFetchingNodes: PropTypes.bool.isRequired,
   maintenanceNodes: ImmutablePropTypes.map.isRequired,
   nodesInProgress: ImmutablePropTypes.set.isRequired,
-  nodesOperationInProgress: React.PropTypes.bool.isRequired,
+  nodesOperationInProgress: PropTypes.bool.isRequired,
   roles: ImmutablePropTypes.map
 };
 MaintenanceNodesTabPane.defaultProps = {

@@ -1,7 +1,7 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 import { FormGroup, MenuItem } from 'react-bootstrap';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import DropdownSelect from '../ui/reduxForm/DropdownSelect';
 import { nodeColumnMessages } from './messages';
@@ -70,9 +70,9 @@ const NodesToolbarForm = ({ handleSubmit, intl }) => (
   </form>
 );
 NodesToolbarForm.propTypes = {
-  children: React.PropTypes.node,
-  handleSubmit: React.PropTypes.func.isRequired,
-  intl: React.PropTypes.object.isRequired
+  children: PropTypes.node,
+  handleSubmit: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired
 };
 export default injectIntl(reduxForm({
   form: 'nodesToolbar'

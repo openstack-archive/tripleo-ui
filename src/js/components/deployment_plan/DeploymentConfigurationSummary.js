@@ -1,5 +1,5 @@
 import { defineMessages, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Loader from '../ui/Loader';
 
@@ -35,12 +35,12 @@ class DeploymentConfigurationSummary extends React.Component {
   }
 }
 DeploymentConfigurationSummary.propTypes = {
-  fetchEnvironmentConfiguration: React.PropTypes.func.isRequired,
-  intl: React.PropTypes.object,
-  isFetching: React.PropTypes.bool.isRequired,
-  loaded: React.PropTypes.bool.isRequired,
-  planName: React.PropTypes.string,
-  summary: React.PropTypes.string.isRequired
+  fetchEnvironmentConfiguration: PropTypes.func.isRequired,
+  intl: PropTypes.object,
+  isFetching: PropTypes.bool.isRequired,
+  loaded: PropTypes.bool.isRequired,
+  planName: PropTypes.string,
+  summary: PropTypes.string.isRequired
 };
 
 export default injectIntl(DeploymentConfigurationSummary);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export default class HorizontalStaticText extends React.Component {
   render() {
@@ -15,8 +15,8 @@ export default class HorizontalStaticText extends React.Component {
   }
 }
 HorizontalStaticText.propTypes = {
-  inputColumnClasses: React.PropTypes.string,
-  labelColumnClasses: React.PropTypes.string,
-  text: React.PropTypes.string,
-  title: React.PropTypes.string
+  inputColumnClasses: PropTypes.string,
+  labelColumnClasses: PropTypes.string,
+  text: PropTypes.string,
+  title: PropTypes.string
 };

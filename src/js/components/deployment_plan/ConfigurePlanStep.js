@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import DeploymentConfigurationSummary from './DeploymentConfigurationSummary';
 
@@ -23,11 +23,11 @@ const ConfigurePlanStep = (props) => {
   );
 };
 ConfigurePlanStep.propTypes = {
-  fetchEnvironmentConfiguration: React.PropTypes.func.isRequired,
-  isFetching: React.PropTypes.bool.isRequired,
-  loaded: React.PropTypes.bool.isRequired,
-  planName: React.PropTypes.string.isRequired,
-  summary: React.PropTypes.string.isRequired
+  fetchEnvironmentConfiguration: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  loaded: PropTypes.bool.isRequired,
+  planName: PropTypes.string.isRequired,
+  summary: PropTypes.string.isRequired
 };
 
 export default ConfigurePlanStep;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export default class Tab extends React.Component {
   render() {
@@ -7,9 +7,9 @@ export default class Tab extends React.Component {
   }
 }
 Tab.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ]),
-  isActive: React.PropTypes.bool.isRequired
+  isActive: PropTypes.bool.isRequired
 };

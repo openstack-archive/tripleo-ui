@@ -1,5 +1,5 @@
 import { defineMessages, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import DriverFields from './DriverFields';
 
@@ -30,7 +30,7 @@ class PXEAndDRACDriverFields extends React.Component {
 }
 
 PXEAndDRACDriverFields.propTypes = {
-  intl: React.PropTypes.object
+  intl: PropTypes.object
 };
 
 export default injectIntl(PXEAndDRACDriverFields);

@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import ClassNames from 'classnames';
 import { Link } from 'react-router';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import uuid from 'node-uuid';
 
 import BlankSlate from '../ui/BlankSlate';
@@ -280,20 +280,20 @@ class RegisterNodesDialog extends React.Component {
   }
 }
 RegisterNodesDialog.propTypes = {
-  addNode: React.PropTypes.func.isRequired,
-  canSubmit: React.PropTypes.bool.isRequired,
-  cancelNodesRegistration: React.PropTypes.func.isRequired,
-  intl: React.PropTypes.object,
+  addNode: PropTypes.func.isRequired,
+  canSubmit: PropTypes.bool.isRequired,
+  cancelNodesRegistration: PropTypes.func.isRequired,
+  intl: PropTypes.object,
   ironicNodes: ImmutablePropTypes.map.isRequired,
-  isRegistering: React.PropTypes.bool.isRequired,
+  isRegistering: PropTypes.bool.isRequired,
   nodesToRegister: ImmutablePropTypes.map.isRequired,
-  notify: React.PropTypes.func.isRequired,
-  registerNodes: React.PropTypes.func.isRequired,
+  notify: PropTypes.func.isRequired,
+  registerNodes: PropTypes.func.isRequired,
   registrationErrors: ImmutablePropTypes.list.isRequired,
-  removeNode: React.PropTypes.func.isRequired,
-  selectNode: React.PropTypes.func.isRequired,
-  selectedNodeId: React.PropTypes.string,
-  updateNode: React.PropTypes.func.isRequired
+  removeNode: PropTypes.func.isRequired,
+  selectNode: PropTypes.func.isRequired,
+  selectedNodeId: PropTypes.string,
+  updateNode: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {

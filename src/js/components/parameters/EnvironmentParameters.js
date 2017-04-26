@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
 import { getEnvironmentParameters } from '../../selectors/parameters';
@@ -32,11 +32,11 @@ class EnvironmentParameters extends React.Component {
   }
 }
 EnvironmentParameters.propTypes = {
-  currentPlanName: React.PropTypes.string.isRequired,
-  environment: React.PropTypes.string.isRequired,
+  currentPlanName: PropTypes.string.isRequired,
+  environment: PropTypes.string.isRequired,
   environmentError: ImmutablePropTypes.map,
-  fetchEnvironment: React.PropTypes.func.isRequired,
-  isFetchingEnvironment: React.PropTypes.bool.isRequired,
+  fetchEnvironment: PropTypes.func.isRequired,
+  isFetchingEnvironment: PropTypes.bool.isRequired,
   parameters: ImmutablePropTypes.map.isRequired
 };
 

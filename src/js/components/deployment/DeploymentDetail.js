@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import { allPreDeploymentValidationsSuccessful } from '../../selectors/validations';
 import DeploymentConfirmation from './DeploymentConfirmation';
@@ -124,18 +124,18 @@ class DeploymentDetail extends React.Component {
 }
 
 DeploymentDetail.propTypes = {
-  allPreDeploymentValidationsSuccessful: React.PropTypes.bool.isRequired,
+  allPreDeploymentValidationsSuccessful: PropTypes.bool.isRequired,
   currentPlan: ImmutablePropTypes.record.isRequired,
   currentStack: ImmutablePropTypes.record,
-  currentStackDeploymentProgress: React.PropTypes.number.isRequired,
+  currentStackDeploymentProgress: PropTypes.number.isRequired,
   currentStackResources: ImmutablePropTypes.map,
-  currentStackResourcesLoaded: React.PropTypes.bool.isRequired,
-  deployPlan: React.PropTypes.func.isRequired,
-  environmentConfigurationSummary: React.PropTypes.string,
-  fetchStackResources: React.PropTypes.func.isRequired,
-  intl: React.PropTypes.object,
-  runPreDeploymentValidations: React.PropTypes.func.isRequired,
-  stacksLoaded: React.PropTypes.bool.isRequired
+  currentStackResourcesLoaded: PropTypes.bool.isRequired,
+  deployPlan: PropTypes.func.isRequired,
+  environmentConfigurationSummary: PropTypes.string,
+  fetchStackResources: PropTypes.func.isRequired,
+  intl: PropTypes.object,
+  runPreDeploymentValidations: PropTypes.func.isRequired,
+  stacksLoaded: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = (state) => {

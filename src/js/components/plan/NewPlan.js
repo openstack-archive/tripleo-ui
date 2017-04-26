@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import PlansActions from '../../actions/PlansActions';
@@ -129,12 +129,12 @@ class NewPlan extends React.Component {
   }
 }
 NewPlan.propTypes = {
-  cancelCreatePlan: React.PropTypes.func,
-  createPlan: React.PropTypes.func,
-  createPlanFromTarball: React.PropTypes.func,
-  intl: React.PropTypes.object,
-  isTransitioningPlan: React.PropTypes.bool,
-  location: React.PropTypes.object,
+  cancelCreatePlan: PropTypes.func,
+  createPlan: PropTypes.func,
+  createPlanFromTarball: PropTypes.func,
+  intl: PropTypes.object,
+  isTransitioningPlan: PropTypes.bool,
+  location: PropTypes.object,
   planFormErrors: ImmutablePropTypes.list
 };
 

@@ -1,5 +1,5 @@
 import ClassNames from 'classnames';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 const InlineNotification = ({ children, title, type }) => {
   const notificationClasses = ClassNames({
@@ -26,9 +26,9 @@ const InlineNotification = ({ children, title, type }) => {
 };
 
 InlineNotification.propTypes = {
-  children: React.PropTypes.node,
-  title: React.PropTypes.string,
-  type: React.PropTypes.oneOf(['error', 'warning', 'success', 'info']).isRequired
+  children: PropTypes.node,
+  title: PropTypes.string,
+  type: PropTypes.oneOf(['error', 'warning', 'success', 'info']).isRequired
 };
 InlineNotification.defaultProps = {
   type: 'error'

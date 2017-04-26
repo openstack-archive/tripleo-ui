@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export const ActiveFiltersList = ({ children, clearAllLabel, handleClearAll, label }) => {
   if (children.length > 0) {
@@ -16,10 +16,10 @@ export const ActiveFiltersList = ({ children, clearAllLabel, handleClearAll, lab
   }
 };
 ActiveFiltersList.propTypes = {
-  children: React.PropTypes.node,
-  clearAllLabel: React.PropTypes.string.isRequired,
-  handleClearAll: React.PropTypes.func.isRequired,
-  label: React.PropTypes.string.isRequired
+  children: PropTypes.node,
+  clearAllLabel: PropTypes.string.isRequired,
+  handleClearAll: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired
 };
 ActiveFiltersList.defaultProps = {
   clearAllLabel: 'Clear All Filters',
@@ -39,7 +39,7 @@ export const ActiveFilter = ({ filterBy, filterString, onRemove }) => (
   </li>
 );
 ActiveFilter.propTypes = {
-  filterBy: React.PropTypes.string,
-  filterString: React.PropTypes.string.isRequired,
-  onRemove: React.PropTypes.func.isRequired
+  filterBy: PropTypes.string,
+  filterString: PropTypes.string.isRequired,
+  onRemove: PropTypes.func.isRequired
 };

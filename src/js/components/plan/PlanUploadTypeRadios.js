@@ -1,5 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 const messages = defineMessages({
   localFolder: {
@@ -45,9 +45,9 @@ export default class PlanUploadTypeRadios extends React.Component {
 }
 
 PlanUploadTypeRadios.propTypes = {
-  inputColumnClasses: React.PropTypes.string.isRequired,
-  labelColumnClasses: React.PropTypes.string.isRequired,
-  setUploadType: React.PropTypes.func.isRequired,
-  title: React.PropTypes.string.isRequired,
-  uploadType: React.PropTypes.string.isRequired
+  inputColumnClasses: PropTypes.string.isRequired,
+  labelColumnClasses: PropTypes.string.isRequired,
+  setUploadType: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  uploadType: PropTypes.string.isRequired
 };

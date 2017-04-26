@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export default class DataTableColumn extends React.Component {
   render() {
@@ -8,6 +8,6 @@ export default class DataTableColumn extends React.Component {
   }
 }
 DataTableColumn.propTypes = {
-  cell: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func]),
-  header: React.PropTypes.oneOfType([React.PropTypes.node, React.PropTypes.func])
+  cell: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+  header: PropTypes.oneOfType([PropTypes.node, PropTypes.func])
 };

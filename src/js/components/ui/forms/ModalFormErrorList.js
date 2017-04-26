@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import * as _ from 'lodash';
 
 import FormErrorList from './FormErrorList';
@@ -17,5 +17,5 @@ export default class ModalFormErrorList extends React.Component {
   }
 }
 ModalFormErrorList.propTypes = {
-  errors: React.PropTypes.array.isRequired
+  errors: PropTypes.array.isRequired
 };

@@ -1,5 +1,5 @@
 import { defineMessages, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import InlineNotification from '../ui/InlineNotification';
@@ -47,8 +47,8 @@ class ParameterInputList extends React.Component {
   }
 }
 ParameterInputList.propTypes = {
-  emptyParametersMessage: React.PropTypes.string,
-  intl: React.PropTypes.object,
+  emptyParametersMessage: PropTypes.string,
+  intl: PropTypes.object,
   mistralParameters: ImmutablePropTypes.map,
   parameters: ImmutablePropTypes.list.isRequired
 };

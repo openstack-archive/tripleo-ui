@@ -1,5 +1,5 @@
 import Formsy from 'formsy-react';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import InputDescription from './InputDescription';
 import InputErrorMessage from './InputErrorMessage';
@@ -34,18 +34,18 @@ class HorizontalSelect extends React.Component {
   }
 }
 HorizontalSelect.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.element),
-    React.PropTypes.element
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.element),
+    PropTypes.element
   ]),
-  description: React.PropTypes.string,
-  getErrorMessage: React.PropTypes.func,
-  getValue: React.PropTypes.func,
-  inputColumnClasses: React.PropTypes.string.isRequired,
-  labelColumnClasses: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
-  setValue: React.PropTypes.func,
-  title: React.PropTypes.string.isRequired
+  description: PropTypes.string,
+  getErrorMessage: PropTypes.func,
+  getValue: PropTypes.func,
+  inputColumnClasses: PropTypes.string.isRequired,
+  labelColumnClasses: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  setValue: PropTypes.func,
+  title: PropTypes.string.isRequired
 };
 HorizontalSelect.defaultProps = {
   inputColumnClasses: 'col-sm-10',

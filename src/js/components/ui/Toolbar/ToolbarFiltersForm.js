@@ -1,5 +1,5 @@
 import { Button, FormGroup, InputGroup, MenuItem } from 'react-bootstrap';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 
 import DropdownSelect from '../reduxForm/DropdownSelect';
@@ -53,14 +53,14 @@ class ToolbarFiltersForm extends React.Component {
   }
 }
 ToolbarFiltersForm.propTypes = {
-  form: React.PropTypes.string.isRequired,
-  formatSelectValue: React.PropTypes.func,
-  handleSubmit: React.PropTypes.func.isRequired,
-  initialValues: React.PropTypes.object,
-  initialize: React.PropTypes.func.isRequired,
-  onSubmit: React.PropTypes.func.isRequired,
-  options: React.PropTypes.object,
-  placeholder: React.PropTypes.string
+  form: PropTypes.string.isRequired,
+  formatSelectValue: PropTypes.func,
+  handleSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.object,
+  initialize: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  options: PropTypes.object,
+  placeholder: PropTypes.string
 };
 ToolbarFiltersForm.defaultProps = {
   placeholder: 'Add filter'

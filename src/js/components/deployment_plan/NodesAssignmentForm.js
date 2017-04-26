@@ -2,7 +2,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { debounce } from 'lodash';
 import { Form, reduxForm, submit } from 'redux-form';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import { getAssignedNodesCountsByRole } from '../../selectors/nodesAssignment';
 import { getCurrentPlan } from '../../selectors/plans';
@@ -42,12 +42,12 @@ class NodesAssignmentForm extends React.Component {
   }
 }
 NodesAssignmentForm.propTypes = {
-  children: React.PropTypes.node,
+  children: PropTypes.node,
   currentPlan: ImmutablePropTypes.record.isRequired,
-  error: React.PropTypes.object,
-  handleSubmit: React.PropTypes.func.isRequired,
-  pristine: React.PropTypes.bool.isRequired,
-  updateParameters: React.PropTypes.func.isRequired
+  error: PropTypes.object,
+  handleSubmit: PropTypes.func.isRequired,
+  pristine: PropTypes.bool.isRequired,
+  updateParameters: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => ({

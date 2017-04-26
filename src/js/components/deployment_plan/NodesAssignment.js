@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { List, Map } from 'immutable';
 
 import { getAvailableNodesByRole,
@@ -121,16 +121,16 @@ class NodesAssignment extends React.Component {
   }
 }
 NodesAssignment.propTypes = {
-  assignNodes: React.PropTypes.func.isRequired,
+  assignNodes: PropTypes.func.isRequired,
   availableNodesByRole: ImmutablePropTypes.map,
   currentPlan: ImmutablePropTypes.record,
-  fetchNodes: React.PropTypes.func.isRequired,
+  fetchNodes: PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
-  isFetchingNodes: React.PropTypes.bool,
+  isFetchingNodes: PropTypes.bool,
   nodesInProgress: ImmutablePropTypes.set,
-  nodesOperationInProgress: React.PropTypes.bool,
-  params: React.PropTypes.object.isRequired,
+  nodesOperationInProgress: PropTypes.bool,
+  params: PropTypes.object.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
   untaggedAvailableNodes: ImmutablePropTypes.map
 };

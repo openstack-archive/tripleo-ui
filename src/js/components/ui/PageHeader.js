@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 
 export class PageHeader extends React.Component {
@@ -11,5 +11,5 @@ export class PageHeader extends React.Component {
   }
 }
 PageHeader.propTypes = {
-  children: React.PropTypes.node
+  children: PropTypes.node
 };
