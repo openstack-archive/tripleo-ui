@@ -1,0 +1,18 @@
+// PatternFly toolbar.less overrides
+// Fix only-child rule in case there are multiple forms used in toolbar-actions to display
+// separators correctly
+.toolbar-pf form:not(:last-child) .form-group:last-child {
+  margin-bottom: (@grid-gutter-width/4);
+  @media (min-width: @grid-float-breakpoint) {
+    border-right: 1px solid @sidebar-pf-border-color;
+    margin-bottom: 0;
+    padding-right: (@grid-gutter-width/2);
+  }
+}
+
+// Make toolbar-pf-active-filters block on small size screens
+.toolbar-pf-active-filters {
+  @media (max-width: @grid-float-breakpoint) {
+    display: block;
+  }
+}
