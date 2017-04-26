@@ -1,5 +1,6 @@
 import ClassNames from 'classnames';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 export default class DropdownButton extends React.Component {
   handleClick(e) {

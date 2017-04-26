@@ -4,7 +4,8 @@ import Formsy from 'formsy-react';
 import { fromJS, is } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { isObjectLike, mapValues } from 'lodash';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Link } from 'react-router';
 
 import { getRole } from '../../selectors/roles';

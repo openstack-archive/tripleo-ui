@@ -1,7 +1,8 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 import { FormGroup, MenuItem } from 'react-bootstrap';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import DropdownSelect from '../ui/reduxForm/DropdownSelect';
 import { nodeColumnMessages } from './messages';

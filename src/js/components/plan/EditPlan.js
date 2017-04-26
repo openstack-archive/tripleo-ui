@@ -3,7 +3,8 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import ModalFormErrorList from '../ui/forms/FormErrorList';
 import PlanEditFormTabs from './PlanEditFormTabs';
