@@ -6,11 +6,6 @@ import { Port } from '../immutableRecords/nodes';
 const initialState = Map({
   isFetching: false,
   nodesInProgress: Set(),
-  allFilter: '',
-  registeredFilter: '',
-  introspectedFilter: '',
-  deployedFilter: '',
-  maintenanceFilter: '',
   all: Map(),
   ports: Map()
 });
