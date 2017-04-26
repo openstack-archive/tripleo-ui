@@ -4,13 +4,13 @@ import React from 'react';
 export const ActiveFiltersList = ({ children, clearAllLabel, handleClearAll, label }) => {
   if (children.length > 0) {
     return (
-      <div style={{display: 'inline'}}>
-        <p>{label}</p>
+      <span className="toolbar-pf-active-filters">
+        <p>{label}&nbsp;</p>
         <ul className="list-inline">
           {children}
         </ul>
         <p><a className="link" onClick={() => handleClearAll()}>{clearAllLabel}</a></p>
-      </div>
+      </span>
     );
   } else {
     return null;

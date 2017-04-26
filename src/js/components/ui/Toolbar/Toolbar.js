@@ -3,8 +3,8 @@ import React from 'react';
 
 export const Toolbar = ({children}) => {
   return (
-    <div className="toolbar-pf">
-      <div className="row">
+    <div className="container-fluid">
+      <div className="toolbar-pf row">
         <div className="col-sm-12">
           {children}
         </div>
@@ -26,11 +26,9 @@ ToolbarActions.propTypes = {
 };
 
 export const ToolbarResults = ({children}) => (
-  <div className="toolbar-pf-results">
-    <div className="row">
-      <div className="col-sm-12">
-        {children}
-      </div>
+  <div className="toolbar-pf-results row">
+    <div className="col-sm-12">
+      {children}
     </div>
   </div>
 );
