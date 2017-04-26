@@ -1,6 +1,6 @@
 import { IntlProvider } from 'react-intl';
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import ReactShallowRenderer from 'react-test-renderer/shallow';
 import { Map, Set } from 'immutable';
 
 import DeployedNodesTabPane from '../../../js/components/nodes/DeployedNodesTabPane';
@@ -19,7 +19,7 @@ let roles = Map();
 describe('DeployedNodesTabPane component', () => {
   let tabPaneVdom;
   beforeEach(() => {
-    let shallowRenderer = TestUtils.createRenderer();
+    let shallowRenderer = new ReactShallowRenderer();
     const intlProvider = new IntlProvider({ locale: 'en' }, {});
     const { intl } = intlProvider.getChildContext();
     shallowRenderer.render(

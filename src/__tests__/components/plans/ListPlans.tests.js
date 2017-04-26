@@ -1,7 +1,7 @@
 import { IntlProvider } from 'react-intl';
 import { Map } from 'immutable';
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import ReactShallowRenderer from 'react-test-renderer/shallow';
 
 import ListPlans from '../../../js/components/plan/ListPlans';
 import FileList from '../../../js/components/plan/FileList';
@@ -12,7 +12,7 @@ describe('ListPlans component', () => {
   let output;
 
   beforeEach(() => {
-    let shallowRenderer = TestUtils.createRenderer();
+    let shallowRenderer = new ReactShallowRenderer();
     const intlProvider = new IntlProvider({ locale: 'en' }, {});
     const { intl } = intlProvider.getChildContext();
     shallowRenderer.render(<ListPlans.WrappedComponent store={store} intl={intl}/>);
@@ -26,7 +26,7 @@ describe('ListPlans component', () => {
 
 let getTableRows = (planFiles, selectedFiles) => {
   let result;
-  let shallowRenderer = TestUtils.createRenderer();
+  let shallowRenderer = new ReactShallowRenderer();
   shallowRenderer.render(<FileList planFiles={planFiles}
                                    selectedFiles={selectedFiles} />);
   result = shallowRenderer.getRenderOutput();

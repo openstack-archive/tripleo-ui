@@ -1,6 +1,6 @@
 import { Map } from 'immutable';
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import ReactShallowRenderer from 'react-test-renderer/shallow';
 
 import EnvironmentConfiguration from
   '../../../js/components/environment_configuration/EnvironmentConfiguration';
@@ -8,7 +8,7 @@ import EnvironmentConfiguration from
 describe('EnvironmentConfiguration component', () => {
   let EnvConfVdom;
   beforeEach(() => {
-    let shallowRenderer = TestUtils.createRenderer();
+    let shallowRenderer = new ReactShallowRenderer();
     shallowRenderer.render(
       <EnvironmentConfiguration
         currentPlanName={'some-plan'}
