@@ -1,7 +1,8 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { Field } from 'redux-form';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import Link from '../ui/Link';
 import NodePickerInput from '../ui/reduxForm/NodePickerInput';

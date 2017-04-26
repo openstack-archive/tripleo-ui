@@ -2,7 +2,8 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import CurrentPlanActions from '../../actions/CurrentPlanActions';
 import DataTable from '../ui/tables/DataTable';

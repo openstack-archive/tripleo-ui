@@ -1,6 +1,7 @@
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import DeleteStackButton from './DeleteStackButton';
 import { deploymentStatusMessages } from '../../constants/StacksConstants';

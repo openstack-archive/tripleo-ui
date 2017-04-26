@@ -2,7 +2,8 @@ import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
 import Formsy from 'formsy-react';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import FormErrorList from '../ui/forms/FormErrorList';

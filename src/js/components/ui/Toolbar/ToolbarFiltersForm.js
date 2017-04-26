@@ -1,5 +1,6 @@
 import { Button, FormGroup, InputGroup, MenuItem } from 'react-bootstrap';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 
 import DropdownSelect from '../reduxForm/DropdownSelect';

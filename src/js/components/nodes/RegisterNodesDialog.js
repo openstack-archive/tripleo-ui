@@ -4,7 +4,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import ClassNames from 'classnames';
 import { Link } from 'react-router';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import uuid from 'node-uuid';
 
 import BlankSlate from '../ui/BlankSlate';

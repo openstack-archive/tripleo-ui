@@ -1,6 +1,7 @@
 import Formsy from 'formsy-react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import HorizontalInput from '../ui/forms/HorizontalInput';
 import HorizontalArrayInput from '../ui/forms/HorizontalArrayInput';

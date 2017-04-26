@@ -2,7 +2,8 @@ import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Formsy from 'formsy-react';
 
