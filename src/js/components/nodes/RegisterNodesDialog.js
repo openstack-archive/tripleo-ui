@@ -215,7 +215,7 @@ class RegisterNodesDialog extends React.Component {
     return (
       <Modal dialogClasses="modal-xl">
         <div className="modal-header">
-          <Link to="/nodes/registered"
+          <Link to="/nodes"
                 type="button"
                 className="close">
             <span className="pficon pficon-close"></span>
@@ -264,13 +264,13 @@ class RegisterNodesDialog extends React.Component {
           </div>
         </Loader>
         <div className="modal-footer">
-          <Link to="/nodes/registered"
+          <Link to="/nodes"
                 onClick={() => this.props.cancelNodesRegistration()}
                 type="button"
                 className="btn btn-default"><FormattedMessage {...messages.cancel}/></Link>
           <button disabled={!this.props.canSubmit}
                   onClick={() => this.props.registerNodes(this.props.ironicNodes,
-                                                          '/nodes/registered')}
+                                                          '/nodes')}
                   className="btn btn-primary"
                   type="button">
             <FormattedMessage {...messages.registerNodes}/>

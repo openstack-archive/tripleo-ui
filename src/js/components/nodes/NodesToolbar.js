@@ -10,8 +10,8 @@ import { ActiveFilter,
          ActiveFiltersList } from '../ui/Toolbar/ActiveFilters';
 import { getActiveFilters,
          getFilterByName } from '../../selectors/filters';
-import { getFilteredRegisteredNodes,
-         getRegisteredNodes } from '../../selectors/nodes';
+import { getFilteredNodes,
+         getNodes } from '../../selectors/nodes';
 import { nodeColumnMessages } from './messages';
 import NodesToolbarForm from './NodesToolbarForm';
 import ToolbarFiltersForm from '../ui/Toolbar/ToolbarFiltersForm';
@@ -161,9 +161,9 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
   return {
     activeFilters: getActiveFilters(state, 'nodesToolbar'),
-    filteredNodesCount: getFilteredRegisteredNodes(state).size,
+    filteredNodesCount: getFilteredNodes(state).size,
     initialValues: getFilterByName(state, 'nodesToolbar').delete('activeFilters').toJS(),
-    nodesCount: getRegisteredNodes(state).size
+    nodesCount: getNodes(state).size
   };
 };
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(NodesToolbar));

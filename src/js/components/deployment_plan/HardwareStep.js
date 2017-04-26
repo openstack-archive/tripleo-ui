@@ -11,7 +11,7 @@ const messages = defineMessages({
 
 const HardwareStep = () => {
   return (
-    <Link className="btn btn-default" to="/nodes/registered/register">
+    <Link className="btn btn-default" to="/nodes/register">
       <span className="fa fa-plus"/> <FormattedMessage {...messages.registerNodes}/>
     </Link>
   );

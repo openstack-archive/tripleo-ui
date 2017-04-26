@@ -67,6 +67,11 @@ const messages = defineMessages({
     id: 'NodesTables.provisionState',
     defaultMessage: 'Provision State',
     description: 'Table header'
+  },
+  maintenance: {
+    id: 'NodesTables.maintenance',
+    defaultMessage: 'Maintenance',
+    description: 'Table header'
   }
 });
 
@@ -83,7 +88,7 @@ class NodesTable extends React.Component {
   renderNoNodesFound() {
     return (
       <tr>
-        <td className="no-results" colSpan="10">
+        <td className="no-results" colSpan="11">
           <Loader loaded={!this.props.isFetchingNodes}
                   height={40}
                   content={this.props.intl.formatMessage(messages.loadingNodes)}>
@@ -180,6 +185,12 @@ class NodesTable extends React.Component {
                     <FormattedMessage {...messages.provisionState}/>
                   </DataTableHeaderCell>}
           cell={<DataTableDataFieldCell data={filteredData} field="provision_state"/>}/>
+        <DataTableColumn
+          key="maintenance"
+          header={<DataTableHeaderCell key="maintenance">
+                    <FormattedMessage {...messages.maintenance}/>
+                  </DataTableHeaderCell>}
+          cell={<NodesTableMaintenanceCell data={filteredData} field="maintenance"/>}/>
       </DataTable>
     );
   }
@@ -192,6 +203,20 @@ NodesTable.propTypes = {
 };
 
 export default injectIntl(NodesTable);
+
+export const NodesTableMaintenanceCell = props => {
+  const value = _.result(props.data[props.rowIndex], props.field).toString();
+  return (
+    <DataTableCell {...props}>
+      {value}
+    </DataTableCell>
+  );
+};
+NodesTableMaintenanceCell.propTypes = {
+  data: React.PropTypes.array.isRequired,
+  field: React.PropTypes.string.isRequired,
+  rowIndex: React.PropTypes.number
+};
 
 export class NodesTableCheckBoxCell extends React.Component {
   render() {
