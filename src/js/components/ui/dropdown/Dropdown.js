@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import ClassNames from 'classnames';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 export default class Dropdown extends React.Component {
   constructor(props) {

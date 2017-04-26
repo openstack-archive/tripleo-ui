@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import ParameterInputList from '../parameters/ParameterInputList';
 import { getRoleParameters } from '../../selectors/parameters';

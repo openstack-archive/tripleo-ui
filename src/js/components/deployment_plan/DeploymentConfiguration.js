@@ -1,6 +1,7 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import NavTab from '../ui/NavTab';
 import Modal from '../ui/Modal';

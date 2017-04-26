@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import * as _ from 'lodash';
 
 export default class FormErrorList extends React.Component {

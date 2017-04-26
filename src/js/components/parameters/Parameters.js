@@ -5,7 +5,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { isObjectLike, mapValues } from 'lodash';
 import { Link, browserHistory } from 'react-router';
 import { fromJS, is } from 'immutable';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentParameters from './EnvironmentParameters';
