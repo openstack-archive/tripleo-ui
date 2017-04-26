@@ -33,17 +33,11 @@ export const getNodesWithMacs = createSelector(
     )
 );
 
-export const getRegisteredNodes = createSelector(getNodesWithMacs, nodes =>
-  nodes.filterNot(
-    node => node.get('provision_state') === 'active' || node.get('maintenance')
-  )
-);
-
 /**
- *  Return Registered Nodes with filters from nodesToolbar applied
+ *  Return Nodes with filters from nodesToolbar applied
  */
-export const getFilteredRegisteredNodes = createSelector(
-  [getRegisteredNodes, nodesToolbarFilter],
+export const getFilteredNodes = createSelector(
+  [getNodesWithMacs, nodesToolbarFilter],
   (nodes, nodesToolbarFilter) =>
     nodes
       .update(nodes =>
@@ -84,14 +78,6 @@ export const getProfilesList = createSelector(getNodes, nodes =>
 export const getAvailableNodeProfiles = createSelector(
   [getProfilesList, getRoles],
   (profiles, roles) => Set.fromKeys(roles).union(profiles).toList().sort()
-);
-
-export const getDeployedNodes = createSelector(getNodesWithMacs, nodes =>
-  nodes.filter(node => node.get('provision_state') === 'active')
-);
-
-export const getMaintenanceNodes = createSelector(getNodesWithMacs, nodes =>
-  nodes.filter(node => node.get('maintenance'))
 );
 
 /*

@@ -9,12 +9,11 @@ import Formsy from 'formsy-react';
 
 import {
   getAvailableNodeProfiles,
-  getFilteredRegisteredNodes,
+  getFilteredNodes,
   getNodesOperationInProgress
 } from '../../selectors/nodes';
 import ConfirmationModal from '../ui/ConfirmationModal';
 import FormErrorList from '../ui/forms/FormErrorList';
-import NodesToolbar from './NodesToolbar';
 import NodesActions from '../../actions/NodesActions';
 import NodesTable from './NodesTable';
 import TagNodesModal from './tag_nodes/TagNodesModal';
@@ -22,34 +21,34 @@ import { findClosestWithAttribute } from '../utils/Dom';
 
 const messages = defineMessages({
   introspectNodes: {
-    id: 'RegisteredNodesTabPane.introspectNodes',
+    id: 'NodesTableView.introspectNodes',
     defaultMessage: 'Introspect Nodes'
   },
   tagNodes: {
-    id: 'RegisteredNodesTabPane.tagNodes',
+    id: 'NodesTableView.tagNodes',
     defaultMessage: 'Tag Nodes'
   },
   provideNodes: {
-    id: 'RegisteredNodesTabPane.provideNodes',
+    id: 'NodesTableView.provideNodes',
     defaultMessage: 'Provide Nodes',
     description: '"Providing" the nodes changes the provisioning state to "available" so that ' +
       'they can be used in a deployment.'
   },
   deleteNodes: {
-    id: 'RegisteredNodesTabPane.deleteNodes',
+    id: 'NodesTableView.deleteNodes',
     defaultMessage: 'Delete Nodes'
   },
   deleteNodesModalTitle: {
-    id: 'RegisteredNodesTabPane.deleteNodesModalTitle',
+    id: 'NodesTableView.deleteNodesModalTitle',
     defaultMessage: 'Delete Nodes'
   },
   deleteNodesModalMessage: {
-    id: 'RegisteredNodesTabPane.deleteNodesModalMessage',
+    id: 'NodesTableView.deleteNodesModalMessage',
     defaultMessage: 'Are you sure you want to delete the selected nodes?'
   }
 });
 
-class RegisteredNodesTabPane extends React.Component {
+class NodesTableView extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -190,7 +189,6 @@ class RegisteredNodesTabPane extends React.Component {
   render() {
     return (
       <div>
-        <NodesToolbar />
         <Formsy.Form
           ref="registeredNodesTableForm"
           role="form"
@@ -201,7 +199,7 @@ class RegisteredNodesTabPane extends React.Component {
         >
           <FormErrorList errors={this.props.formErrors.toJS()} />
           <NodesTable
-            nodes={this.props.registeredNodes}
+            nodes={this.props.nodes}
             dataOperationInProgress={this.props.nodesOperationInProgress}
             nodesInProgress={this.props.nodesInProgress}
             isFetchingNodes={this.props.isFetchingNodes}
@@ -228,12 +226,11 @@ class RegisteredNodesTabPane extends React.Component {
             show={this.state.showTagNodesModal}
           />
         </Formsy.Form>
-        {this.props.children}
       </div>
     );
   }
 }
-RegisteredNodesTabPane.propTypes = {
+NodesTableView.propTypes = {
   availableProfiles: ImmutablePropTypes.list.isRequired,
   children: PropTypes.node,
   deleteNodes: PropTypes.func.isRequired,
@@ -242,13 +239,13 @@ RegisteredNodesTabPane.propTypes = {
   intl: PropTypes.object,
   introspectNodes: PropTypes.func.isRequired,
   isFetchingNodes: PropTypes.bool.isRequired,
+  nodes: ImmutablePropTypes.map,
   nodesInProgress: ImmutablePropTypes.set,
   nodesOperationInProgress: PropTypes.bool.isRequired,
   provideNodes: PropTypes.func.isRequired,
-  registeredNodes: ImmutablePropTypes.map,
   tagNodes: PropTypes.func.isRequired
 };
-RegisteredNodesTabPane.defaultProps = {
+NodesTableView.defaultProps = {
   formErrors: List(),
   formFieldErrors: Map()
 };
@@ -256,7 +253,7 @@ RegisteredNodesTabPane.defaultProps = {
 function mapStateToProps(state) {
   return {
     availableProfiles: getAvailableNodeProfiles(state),
-    registeredNodes: getFilteredRegisteredNodes(state),
+    nodes: getFilteredNodes(state),
     nodesInProgress: state.nodes.get('nodesInProgress'),
     nodesOperationInProgress: getNodesOperationInProgress(state),
     isFetchingNodes: state.nodes.get('isFetching')
@@ -274,5 +271,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default injectIntl(
-  connect(mapStateToProps, mapDispatchToProps)(RegisteredNodesTabPane)
+  connect(mapStateToProps, mapDispatchToProps)(NodesTableView)
 );

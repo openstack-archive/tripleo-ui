@@ -25,16 +25,12 @@ import initFormsy from './components/utils/Formsy';
 import ListPlans from './components/plan/ListPlans';
 import Login from './components/Login';
 import LoginActions from './actions/LoginActions';
-import MaintenanceNodesTabPane
-  from './components/nodes/MaintenanceNodesTabPane';
 import NewPlan from './components/plan/NewPlan';
 import Nodes from './components/nodes/Nodes';
 import NotificationActions from './actions/NotificationActions';
 import Parameters from './components/parameters/Parameters.js';
 import Plans from './components/plan/Plans.js';
-import DeployedNodesTabPane from './components/nodes/DeployedNodesTabPane';
 import RegisterNodesDialog from './components/nodes/RegisterNodesDialog';
-import RegisteredNodesTabPane from './components/nodes/RegisteredNodesTabPane';
 import RoleDetail from './components/roles/RoleDetail';
 import RoleNetworkConfig from './components/roles/RoleNetworkConfig';
 import RoleParameters from './components/roles/RoleParameters';
@@ -120,13 +116,8 @@ let routes = (
             <Route path="deployment-detail" component={DeploymentDetail} />
           </Route>
 
-          <Redirect from="nodes" to="nodes/registered" />
           <Route path="nodes" component={Nodes}>
-            <Route path="registered" component={RegisteredNodesTabPane}>
-              <Route path="register" component={RegisterNodesDialog} />
-            </Route>
-            <Route path="deployed" component={DeployedNodesTabPane} />
-            <Route path="maintenance" component={MaintenanceNodesTabPane} />
+            <Route path="register" component={RegisterNodesDialog} />
           </Route>
 
           <Redirect from="plans" to="plans/list" />
