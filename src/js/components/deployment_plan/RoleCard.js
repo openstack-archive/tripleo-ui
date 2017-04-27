@@ -21,7 +21,7 @@ const messages = defineMessages({
   },
   availableNodesCount: {
     id: 'RoleCard.availableNodesCount',
-    defaultMessage: 'of {count}',
+    defaultMessage: 'of {count, number}',
     description: 'Used to display available nodes to assign, e.g. 1 of 2 Nodes Assigned'
   }
 });
@@ -36,7 +36,7 @@ const RoleCard = ({ assignedNodesCountParameter,
                    || !availableNodesCount && !assignedNodesCountParameter.default;
   const validations = [
     maxValue(availableNodesCount, intl.formatMessage(validationMessages.maxValue,
-                                                     { max: availableNodesCount.toString() })),
+                                                     { max: availableNodesCount })),
     minValue(0, intl.formatMessage(validationMessages.minValue, { min: '0' })),
     number(intl.formatMessage(validationMessages.number))
   ];
@@ -72,7 +72,7 @@ const RoleCard = ({ assignedNodesCountParameter,
             <span className="card-pf-utilization-card-details-line-1">
               <FormattedMessage
                 {...messages.availableNodesCount}
-                values={{ count: availableNodesCount.toString() }}/>
+                values={{ count: availableNodesCount }}/>
             </span>
             <span className="card-pf-utilization-card-details-line-2">
               <FormattedMessage {...messages.nodesAssigned}/>

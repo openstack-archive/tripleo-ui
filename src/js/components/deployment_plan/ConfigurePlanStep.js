@@ -7,7 +7,7 @@ import DeploymentConfigurationSummary from './DeploymentConfigurationSummary';
 const messages = defineMessages({
   editConfigurationLink: {
     id: 'ConfigurePlanStep.editConfigurationLink',
-    defaultMessage: 'Edit Configurations'
+    defaultMessage: 'Edit Configuration'
   }
 });
 
