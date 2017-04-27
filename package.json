@@ -19,7 +19,7 @@
     "lodash": "^4.0.0",
     "node-uuid": "^1.4.7",
     "normalizr": "^2.0.0",
-    "patternfly": "~3.3.5",
+    "patternfly": "^3.23.3",
     "react": "~15.0.2",
     "react-bootstrap": "^0.30.8",
     "react-cookie": "^1.0.4",
