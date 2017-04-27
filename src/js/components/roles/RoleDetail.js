@@ -4,7 +4,7 @@ import Formsy from 'formsy-react';
 import { fromJS, is } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { isObjectLike, mapValues } from 'lodash';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
 import { getRole } from '../../selectors/roles';
@@ -181,17 +181,17 @@ class RoleDetail extends React.Component {
 }
 RoleDetail.propTypes = {
   allParameters: ImmutablePropTypes.map.isRequired,
-  children: React.PropTypes.node,
-  currentPlanName: React.PropTypes.string,
-  fetchParameters: React.PropTypes.func,
+  children: PropTypes.node,
+  currentPlanName: PropTypes.string,
+  fetchParameters: PropTypes.func,
   formErrors: ImmutablePropTypes.list,
   formFieldErrors: ImmutablePropTypes.map,
-  intl: React.PropTypes.object,
-  parametersLoaded: React.PropTypes.bool.isRequired,
-  params: React.PropTypes.object.isRequired,
+  intl: PropTypes.object,
+  parametersLoaded: PropTypes.bool.isRequired,
+  params: PropTypes.object.isRequired,
   role: ImmutablePropTypes.record,
-  rolesLoaded: React.PropTypes.bool.isRequired,
-  updateParameters: React.PropTypes.func
+  rolesLoaded: PropTypes.bool.isRequired,
+  updateParameters: PropTypes.func
 };
 
 function mapStateToProps(state, props) {

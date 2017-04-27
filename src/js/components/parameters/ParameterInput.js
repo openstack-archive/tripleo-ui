@@ -1,5 +1,5 @@
 import { defineMessages, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { isObjectLike } from 'lodash';
 
 import HorizontalInput from '../ui/forms/HorizontalInput';
@@ -92,24 +92,24 @@ class ParameterInput extends React.Component {
 }
 
 ParameterInput.propTypes = {
-  defaultValue: React.PropTypes.oneOfType([
-    React.PropTypes.object,
-    React.PropTypes.array,
-    React.PropTypes.bool,
-    React.PropTypes.number,
-    React.PropTypes.string
+  defaultValue: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+    PropTypes.bool,
+    PropTypes.number,
+    PropTypes.string
   ]),
-  description: React.PropTypes.string.isRequired,
-  intl: React.PropTypes.object,
-  label: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string.isRequired,
-  value: React.PropTypes.oneOfType([
-    React.PropTypes.object,
-    React.PropTypes.array,
-    React.PropTypes.bool,
-    React.PropTypes.number,
-    React.PropTypes.string
+  description: PropTypes.string.isRequired,
+  intl: PropTypes.object,
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+    PropTypes.bool,
+    PropTypes.number,
+    PropTypes.string
   ])
 };
 ParameterInput.defaultProps = {

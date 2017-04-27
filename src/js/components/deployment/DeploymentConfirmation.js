@@ -1,5 +1,5 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 
 import BlankSlate from '../ui/BlankSlate';
@@ -66,12 +66,12 @@ class DeploymentConfirmation extends React.Component {
   }
 }
 DeploymentConfirmation.propTypes = {
-  allValidationsSuccessful: React.PropTypes.bool.isRequired,
+  allValidationsSuccessful: PropTypes.bool.isRequired,
   currentPlan: ImmutablePropTypes.record.isRequired,
-  deployPlan: React.PropTypes.func.isRequired,
-  environmentSummary: React.PropTypes.string.isRequired,
-  intl: React.PropTypes.object,
-  runPreDeploymentValidations: React.PropTypes.func.isRequired
+  deployPlan: PropTypes.func.isRequired,
+  environmentSummary: PropTypes.string.isRequired,
+  intl: PropTypes.object,
+  runPreDeploymentValidations: PropTypes.func.isRequired
 };
 
 export default injectIntl(DeploymentConfirmation);
@@ -90,8 +90,8 @@ export const ValidationsWarning = injectIntl(({ allValidationsSuccessful, intl }
   return null;
 });
 ValidationsWarning.propTypes = {
-  allValidationsSuccessful: React.PropTypes.bool.isRequired,
-  intl: React.PropTypes.object
+  allValidationsSuccessful: PropTypes.bool.isRequired,
+  intl: PropTypes.object
 };
 
 export const DeployButton = injectIntl(({ deploy, disabled, intl, isRequestingPlanDeploy }) => {
@@ -110,8 +110,8 @@ export const DeployButton = injectIntl(({ deploy, disabled, intl, isRequestingPl
   );
 });
 DeployButton.propTypes = {
-  deploy: React.PropTypes.func.isRequired,
-  disabled: React.PropTypes.bool.isRequired,
-  intl: React.PropTypes.object,
-  isRequestingPlanDeploy: React.PropTypes.bool.isRequired
+  deploy: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  intl: PropTypes.object,
+  isRequestingPlanDeploy: PropTypes.bool.isRequired
 };

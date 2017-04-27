@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
 export default class NavTab extends Link {
@@ -14,13 +14,13 @@ export default class NavTab extends Link {
   }
 }
 NavTab.propTypes = {
-  onlyActiveOnIndex: React.PropTypes.bool.isRequired,
-  query: React.PropTypes.object,
-  to: React.PropTypes.oneOfType([ React.PropTypes.string, React.PropTypes.route ]).isRequired
+  onlyActiveOnIndex: PropTypes.bool.isRequired,
+  query: PropTypes.object,
+  to: PropTypes.oneOfType([ PropTypes.string, PropTypes.route ]).isRequired
 };
 NavTab.defaultProps = {
   onlyActiveOnIndex: false
 };
 NavTab.contextTypes = {
-  router: React.PropTypes.object
+  router: PropTypes.object
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export const DeploymentPlanStep = ({ children, disabled, title, tooltip }) => {
   return (
@@ -18,10 +18,10 @@ export const DeploymentPlanStep = ({ children, disabled, title, tooltip }) => {
 };
 
 DeploymentPlanStep.propTypes = {
-  children: React.PropTypes.node,
-  disabled: React.PropTypes.bool,
-  title: React.PropTypes.string.isRequired,
-  tooltip: React.PropTypes.string
+  children: PropTypes.node,
+  disabled: PropTypes.bool,
+  title: PropTypes.string.isRequired,
+  tooltip: PropTypes.string
 };
 
 DeploymentPlanStep.defaultProps = {

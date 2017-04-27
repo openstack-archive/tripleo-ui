@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Notification from './Notification';
 import NotificationActions from '../../actions/NotificationActions';
@@ -52,7 +52,7 @@ class NotificationsToaster extends React.Component {
 }
 NotificationsToaster.propTypes = {
   notifications: ImmutablePropTypes.map.isRequired,
-  removeNotification: React.PropTypes.func
+  removeNotification: PropTypes.func
 };
 
 function mapStateToProps(state) {

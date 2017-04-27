@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import HorizontalSelect from '../../ui/forms/HorizontalSelect';
 import HorizontalInput from '../../ui/forms/HorizontalInput';
@@ -138,9 +138,9 @@ class TagNodesForm extends React.Component {
 
 }
 TagNodesForm.propTypes = {
-  intl: React.PropTypes.object.isRequired,
-  onCancel: React.PropTypes.func.isRequired,
-  onSubmit: React.PropTypes.func.isRequired,
-  profiles: React.PropTypes.array.isRequired
+  intl: PropTypes.object.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  profiles: PropTypes.array.isRequired
 };
 export default injectIntl(TagNodesForm);

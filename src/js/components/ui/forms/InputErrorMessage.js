@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export default class InputDescription extends React.Component {
   render() {
@@ -9,5 +9,5 @@ export default class InputDescription extends React.Component {
   }
 }
 InputDescription.propTypes = {
-  getErrorMessage: React.PropTypes.func.isRequired
+  getErrorMessage: PropTypes.func.isRequired
 };

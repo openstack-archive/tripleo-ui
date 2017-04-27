@@ -1,6 +1,6 @@
 import ClassNames from 'classnames';
 import Formsy from 'formsy-react';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 class PlanFileInput extends React.Component {
   constructor() {
@@ -130,18 +130,18 @@ class PlanFileInput extends React.Component {
   }
 }
 PlanFileInput.propTypes = {
-  description: React.PropTypes.string,
-  getErrorMessage: React.PropTypes.func,
-  getValue: React.PropTypes.func,
-  inputColumnClasses: React.PropTypes.string.isRequired,
-  isRequired: React.PropTypes.func,
-  isValid: React.PropTypes.func,
-  labelColumnClasses: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
-  setValue: React.PropTypes.func,
-  showError: React.PropTypes.func,
-  title: React.PropTypes.string.isRequired,
-  uploadType: React.PropTypes.string
+  description: PropTypes.string,
+  getErrorMessage: PropTypes.func,
+  getValue: PropTypes.func,
+  inputColumnClasses: PropTypes.string.isRequired,
+  isRequired: PropTypes.func,
+  isValid: PropTypes.func,
+  labelColumnClasses: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  setValue: PropTypes.func,
+  showError: PropTypes.func,
+  title: PropTypes.string.isRequired,
+  uploadType: PropTypes.string
 };
 PlanFileInput.defaultProps = {
   inputColumnClasses: 'col-sm-10',

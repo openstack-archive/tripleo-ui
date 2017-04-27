@@ -1,5 +1,5 @@
 import Formsy from 'formsy-react';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 class TableCheckBox extends React.Component {
   changeValue(event) {
@@ -20,12 +20,12 @@ class TableCheckBox extends React.Component {
   }
 }
 TableCheckBox.propTypes = {
-  disabled: React.PropTypes.bool.isRequired,
-  getValue: React.PropTypes.func,
-  id: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
-  setValue: React.PropTypes.func,
-  type: React.PropTypes.string
+  disabled: PropTypes.bool.isRequired,
+  getValue: PropTypes.func,
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  setValue: PropTypes.func,
+  type: PropTypes.string
 };
 TableCheckBox.defaultProps = {
   disabled: false,

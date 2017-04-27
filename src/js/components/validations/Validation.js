@@ -1,5 +1,5 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import { ValidationStatusIcon } from './ValidationStatusIcon';
 
@@ -75,13 +75,13 @@ export default class Validation extends React.Component {
 }
 
 Validation.propTypes = {
-  description: React.PropTypes.string,
+  description: PropTypes.string,
   groups: ImmutablePropTypes.list.isRequired,
-  id: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   results: ImmutablePropTypes.map.isRequired,
-  runValidation: React.PropTypes.func.isRequired,
-  showValidationDetail: React.PropTypes.func.isRequired,
-  status: React.PropTypes.string,
-  stopValidation: React.PropTypes.func.isRequired
+  runValidation: PropTypes.func.isRequired,
+  showValidationDetail: PropTypes.func.isRequired,
+  status: PropTypes.string,
+  stopValidation: PropTypes.func.isRequired
 };

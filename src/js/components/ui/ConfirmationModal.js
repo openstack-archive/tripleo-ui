@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Modal from '../ui/Modal';
 
@@ -52,14 +52,14 @@ export default class ConfirmationModal extends React.Component {
   }
 }
 ConfirmationModal.propTypes = {
-  confirmActionName: React.PropTypes.string,
-  confirmActionTitle: React.PropTypes.string,
-  iconClass: React.PropTypes.string,
-  onCancel: React.PropTypes.func.isRequired,
-  onConfirm: React.PropTypes.func.isRequired,
-  question: React.PropTypes.string.isRequired,
-  show: React.PropTypes.bool.isRequired,
-  title: React.PropTypes.string.isRequired
+  confirmActionName: PropTypes.string,
+  confirmActionTitle: PropTypes.string,
+  iconClass: PropTypes.string,
+  onCancel: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+  question: PropTypes.string.isRequired,
+  show: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired
 };
 ConfirmationModal.defaultProps = {
   question: 'Are you sure?'

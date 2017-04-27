@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Loader from './ui/Loader';
 import NotificationsToaster from './notifications/NotificationsToaster';
@@ -32,10 +32,10 @@ class UserAuthenticator extends React.Component {
   }
 }
 UserAuthenticator.propTypes = {
-  children: React.PropTypes.node,
-  dispatch: React.PropTypes.func,
-  intl: React.PropTypes.object,
-  isAuthenticated: React.PropTypes.bool.isRequired
+  children: PropTypes.node,
+  dispatch: PropTypes.func,
+  intl: PropTypes.object,
+  isAuthenticated: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => {

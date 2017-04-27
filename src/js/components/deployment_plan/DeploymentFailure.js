@@ -1,5 +1,5 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 
@@ -49,9 +49,9 @@ class DeploymentFailure extends React.Component {
 }
 
 DeploymentFailure.propTypes = {
-  deleteStack: React.PropTypes.func.isRequired,
-  intl: React.PropTypes.object,
-  isRequestingStackDelete: React.PropTypes.bool,
+  deleteStack: PropTypes.func.isRequired,
+  intl: PropTypes.object,
+  isRequestingStackDelete: PropTypes.bool,
   stack: ImmutablePropTypes.record.isRequired
 };
 

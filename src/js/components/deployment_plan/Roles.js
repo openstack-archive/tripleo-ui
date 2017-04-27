@@ -1,6 +1,6 @@
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Loader from '../ui/Loader';
 import NodesAssignmentForm from './NodesAssignmentForm';
@@ -62,14 +62,14 @@ class Roles extends React.Component {
 }
 Roles.propTypes = {
   availableNodesCountsByRole: ImmutablePropTypes.map.isRequired,
-  fetchNodes: React.PropTypes.func.isRequired,
-  fetchRoles: React.PropTypes.func.isRequired,
-  intl: React.PropTypes.object,
-  isFetchingNodes: React.PropTypes.bool,
-  isFetchingRoles: React.PropTypes.bool,
-  loaded: React.PropTypes.bool.isRequired,
+  fetchNodes: PropTypes.func.isRequired,
+  fetchRoles: PropTypes.func.isRequired,
+  intl: PropTypes.object,
+  isFetchingNodes: PropTypes.bool,
+  isFetchingRoles: PropTypes.bool,
+  loaded: PropTypes.bool.isRequired,
   nodeCountParametersByRole: ImmutablePropTypes.map.isRequired,
-  roles: React.PropTypes.array.isRequired
+  roles: PropTypes.array.isRequired
 };
 
 export default injectIntl(Roles);

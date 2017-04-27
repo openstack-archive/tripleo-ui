@@ -1,6 +1,6 @@
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import GenericCheckBox from '../ui/forms/GenericCheckBox';
 import GroupedCheckBox from '../ui/forms/GroupedCheckBox';
@@ -86,10 +86,10 @@ class EnvironmentGroup extends React.Component {
   }
 }
 EnvironmentGroup.propTypes = {
-  description: React.PropTypes.string,
+  description: PropTypes.string,
   environments: ImmutablePropTypes.map,
-  intl: React.PropTypes.object,
-  title: React.PropTypes.string
+  intl: PropTypes.object,
+  title: PropTypes.string
 };
 
 export default injectIntl(EnvironmentGroup);
@@ -113,6 +113,6 @@ class EnvironmentGroupHeading extends React.Component {
   }
 }
 EnvironmentGroupHeading.propTypes = {
-  description: React.PropTypes.string,
-  title: React.PropTypes.string
+  description: PropTypes.string,
+  title: PropTypes.string
 };

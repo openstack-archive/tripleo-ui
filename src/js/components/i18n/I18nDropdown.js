@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Dropdown from '../ui/dropdown/Dropdown';
 import DropdownToggle from '../ui/dropdown/DropdownToggle';
@@ -49,8 +49,8 @@ class I18nDropdown extends React.Component {
 }
 
 I18nDropdown.propTypes = {
-  chooseLanguage: React.PropTypes.func.isRequired,
-  language: React.PropTypes.string
+  chooseLanguage: PropTypes.func.isRequired,
+  language: PropTypes.string
 };
 
 const mapStateToProps = (state) => {

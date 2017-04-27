@@ -3,7 +3,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { startCase } from 'lodash';
 import { submit } from 'redux-form';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import { ActiveFilter,
          ActiveFiltersList } from '../ui/Toolbar/ActiveFilters';
@@ -137,15 +137,15 @@ class NodesToolbar extends React.Component {
 }
 NodesToolbar.propTypes = {
   activeFilters: ImmutablePropTypes.map.isRequired,
-  addActiveFilter: React.PropTypes.func.isRequired,
-  clearActiveFilters: React.PropTypes.func.isRequired,
-  deleteActiveFilter: React.PropTypes.func.isRequired,
-  filteredNodesCount: React.PropTypes.number.isRequired,
-  initialValues: React.PropTypes.object.isRequired,
-  intl: React.PropTypes.object,
-  nodesCount: React.PropTypes.number.isRequired,
-  submitNodesToolbarForm: React.PropTypes.func.isRequired,
-  updateFilter: React.PropTypes.func.isRequired
+  addActiveFilter: PropTypes.func.isRequired,
+  clearActiveFilters: PropTypes.func.isRequired,
+  deleteActiveFilter: PropTypes.func.isRequired,
+  filteredNodesCount: PropTypes.number.isRequired,
+  initialValues: PropTypes.object.isRequired,
+  intl: PropTypes.object,
+  nodesCount: PropTypes.number.isRequired,
+  submitNodesToolbarForm: PropTypes.func.isRequired,
+  updateFilter: PropTypes.func.isRequired
 };
 const mapDispatchToProps = (dispatch) => {
   return {

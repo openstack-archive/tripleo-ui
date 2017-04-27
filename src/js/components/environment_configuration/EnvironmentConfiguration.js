@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link, browserHistory } from 'react-router';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentConfigurationTopic from './EnvironmentConfigurationTopic';
@@ -178,16 +178,16 @@ class EnvironmentConfiguration extends React.Component {
   }
 }
 EnvironmentConfiguration.propTypes = {
-  currentPlanName: React.PropTypes.string,
+  currentPlanName: PropTypes.string,
   environmentConfigurationTopics: ImmutablePropTypes.map.isRequired,
-  fetchEnvironment: React.PropTypes.func,
-  fetchEnvironmentConfiguration: React.PropTypes.func,
+  fetchEnvironment: PropTypes.func,
+  fetchEnvironmentConfiguration: PropTypes.func,
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
-  isFetching: React.PropTypes.bool,
-  location: React.PropTypes.object,
-  parentPath: React.PropTypes.string.isRequired,
-  updateEnvironmentConfiguration: React.PropTypes.func
+  isFetching: PropTypes.bool,
+  location: PropTypes.object,
+  parentPath: PropTypes.string.isRequired,
+  updateEnvironmentConfiguration: PropTypes.func
 };
 
 EnvironmentConfiguration.defaultProps = {

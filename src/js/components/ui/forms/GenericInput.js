@@ -1,6 +1,6 @@
 import ClassNames from 'classnames';
 import Formsy from 'formsy-react';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import InputDescription from './InputDescription';
 import InputErrorMessage from './InputErrorMessage';
@@ -37,18 +37,18 @@ class GenericInput extends React.Component {
   }
 }
 GenericInput.propTypes = {
-  description: React.PropTypes.string,
-  disabled: React.PropTypes.bool,
-  getErrorMessage: React.PropTypes.func,
-  getValue: React.PropTypes.func,
-  isRequired: React.PropTypes.func,
-  isValid: React.PropTypes.func,
-  name: React.PropTypes.string.isRequired,
-  placeholder: React.PropTypes.string,
-  setValue: React.PropTypes.func,
-  showError: React.PropTypes.func,
-  title: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string
+  description: PropTypes.string,
+  disabled: PropTypes.bool,
+  getErrorMessage: PropTypes.func,
+  getValue: PropTypes.func,
+  isRequired: PropTypes.func,
+  isValid: PropTypes.func,
+  name: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  setValue: PropTypes.func,
+  showError: PropTypes.func,
+  title: PropTypes.string.isRequired,
+  type: PropTypes.string
 };
 GenericInput.defaultProps = {
   type: 'text'

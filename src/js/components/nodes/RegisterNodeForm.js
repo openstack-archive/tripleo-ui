@@ -1,6 +1,6 @@
 import Formsy from 'formsy-react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import HorizontalInput from '../ui/forms/HorizontalInput';
 import HorizontalArrayInput from '../ui/forms/HorizontalArrayInput';
@@ -223,9 +223,9 @@ class RegisterNodeForm extends React.Component {
   }
 }
 RegisterNodeForm.propTypes = {
-  intl: React.PropTypes.object,
-  onUpdateNode: React.PropTypes.func,
-  selectedNode: React.PropTypes.object
+  intl: PropTypes.object,
+  onUpdateNode: PropTypes.func,
+  selectedNode: PropTypes.object
 };
 
 export default injectIntl(RegisterNodeForm);

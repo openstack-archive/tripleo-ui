@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export default class BlankSlate extends React.Component {
 
@@ -16,9 +16,9 @@ export default class BlankSlate extends React.Component {
 }
 
 BlankSlate.propTypes = {
-  children: React.PropTypes.node,
-  iconClass: React.PropTypes.string,
-  title: React.PropTypes.string
+  children: PropTypes.node,
+  iconClass: PropTypes.string,
+  title: PropTypes.string
 };
 BlankSlate.defaultProps = {
   iconClass: 'fa fa-ban',

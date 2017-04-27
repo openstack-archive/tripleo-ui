@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Map } from 'immutable';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import { getRoleServices } from '../../selectors/parameters';
 import { getRole } from '../../selectors/roles';
@@ -72,9 +72,9 @@ class RoleServices extends React.Component {
   }
 }
 RoleServices.propTypes = {
-  intl: React.PropTypes.object,
+  intl: PropTypes.object,
   mistralParameters: ImmutablePropTypes.map.isRequired,
-  params: React.PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
   role: ImmutablePropTypes.record.isRequired,
   services: ImmutablePropTypes.map.isRequired
 };

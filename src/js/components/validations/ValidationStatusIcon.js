@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { includes } from 'lodash';
 import ClassNames from 'classnames';
 
@@ -45,6 +45,6 @@ export const ValidationStatusIcon = ({ status, triggerValidationAction }) => {
   }
 };
 ValidationStatusIcon.propTypes = {
-  status: React.PropTypes.string,
-  triggerValidationAction: React.PropTypes.func.isRequired
+  status: PropTypes.string,
+  triggerValidationAction: PropTypes.func.isRequired
 };

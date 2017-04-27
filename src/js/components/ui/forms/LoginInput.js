@@ -1,5 +1,5 @@
 import Formsy from 'formsy-react';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import InputErrorMessage from './InputErrorMessage';
 
@@ -31,14 +31,14 @@ class LoginInput extends React.Component {
   }
 }
 LoginInput.propTypes = {
-  autoFocus: React.PropTypes.bool,
-  getErrorMessage: React.PropTypes.func,
-  getValue: React.PropTypes.func,
-  name: React.PropTypes.string.isRequired,
-  placeholder: React.PropTypes.string,
-  setValue: React.PropTypes.func,
-  title: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string
+  autoFocus: PropTypes.bool,
+  getErrorMessage: PropTypes.func,
+  getValue: PropTypes.func,
+  name: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  setValue: PropTypes.func,
+  title: PropTypes.string.isRequired,
+  type: PropTypes.string
 };
 LoginInput.defaultProps = {
   autoFocus: false,

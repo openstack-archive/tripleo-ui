@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import { deploymentStatusMessages } from '../../constants/StacksConstants';
 import InlineNotification from '../ui/InlineNotification';
@@ -37,12 +37,12 @@ class DeploymentFailure extends React.Component {
 }
 
 DeploymentFailure.propTypes = {
-  fetchStackResources: React.PropTypes.func.isRequired,
-  intl: React.PropTypes.object,
-  planName: React.PropTypes.string.isRequired,
+  fetchStackResources: PropTypes.func.isRequired,
+  intl: PropTypes.object,
+  planName: PropTypes.string.isRequired,
   stack: ImmutablePropTypes.record.isRequired,
   stackResources: ImmutablePropTypes.map.isRequired,
-  stackResourcesLoaded: React.PropTypes.bool.isRequired
+  stackResourcesLoaded: PropTypes.bool.isRequired
 };
 
 export default injectIntl(DeploymentFailure);

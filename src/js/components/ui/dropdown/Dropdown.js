@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import ClassNames from 'classnames';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export default class Dropdown extends React.Component {
   constructor(props) {
@@ -48,7 +48,7 @@ export default class Dropdown extends React.Component {
   }
 }
 Dropdown.propTypes = {
-  active: React.PropTypes.bool,
-  children: React.PropTypes.node,
-  className: React.PropTypes.string
+  active: PropTypes.bool,
+  children: PropTypes.node,
+  className: PropTypes.string
 };

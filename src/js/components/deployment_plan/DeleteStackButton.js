@@ -1,5 +1,5 @@
 import { defineMessages, injectIntl } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import ConfirmationModal from '../ui/ConfirmationModal';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -59,13 +59,13 @@ class DeleteStackButton extends React.Component {
 }
 
 DeleteStackButton.propTypes = {
-  buttonIconClass: React.PropTypes.string.isRequired,
-  content: React.PropTypes.string.isRequired,
-  deleteStack: React.PropTypes.func.isRequired,
-  disabled: React.PropTypes.bool.isRequired,
-  intl: React.PropTypes.object,
-  loaded: React.PropTypes.bool.isRequired,
-  loaderContent: React.PropTypes.string.isRequired,
+  buttonIconClass: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  deleteStack: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  intl: PropTypes.object,
+  loaded: PropTypes.bool.isRequired,
+  loaderContent: PropTypes.string.isRequired,
   stack: ImmutablePropTypes.record.isRequired
 };
 DeleteStackButton.defaultProps = {

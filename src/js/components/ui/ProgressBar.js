@@ -1,5 +1,5 @@
 import ClassNames from 'classnames';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 const ProgressBar = ({ label, labelPosition, value }) => {
   const classes = ClassNames({
@@ -23,9 +23,9 @@ const ProgressBar = ({ label, labelPosition, value }) => {
 };
 
 ProgressBar.propTypes = {
-  label: React.PropTypes.string,
-  labelPosition: React.PropTypes.oneOf(['left', 'topRight']),
-  value: React.PropTypes.number
+  label: PropTypes.string,
+  labelPosition: PropTypes.oneOf(['left', 'topRight']),
+  value: PropTypes.number
 };
 
 export default ProgressBar;

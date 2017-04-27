@@ -1,5 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import Modal from '../../ui/Modal';
 import TagNodesForm from './TagNodesForm';
@@ -35,8 +35,8 @@ export default class TagNodesModal extends React.Component {
   }
 }
 TagNodesModal.propTypes = {
-  availableProfiles: React.PropTypes.array.isRequired,
-  onCancel: React.PropTypes.func.isRequired,
-  onProfileSelected: React.PropTypes.func.isRequired,
-  show: React.PropTypes.bool.isRequired
+  availableProfiles: PropTypes.array.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onProfileSelected: PropTypes.func.isRequired,
+  show: PropTypes.bool.isRequired
 };

@@ -1,6 +1,6 @@
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import DeleteStackButton from './DeleteStackButton';
 import { deploymentStatusMessages } from '../../constants/StacksConstants';
@@ -50,14 +50,14 @@ class DeploymentSuccess extends React.Component {
 }
 
 DeploymentSuccess.propTypes = {
-  deleteStack: React.PropTypes.func.isRequired,
-  fetchStackEnvironment: React.PropTypes.func.isRequired,
-  fetchStackResource: React.PropTypes.func.isRequired,
-  intl: React.PropTypes.object,
-  isRequestingStackDelete: React.PropTypes.bool,
+  deleteStack: PropTypes.func.isRequired,
+  fetchStackEnvironment: PropTypes.func.isRequired,
+  fetchStackResource: PropTypes.func.isRequired,
+  intl: PropTypes.object,
+  isRequestingStackDelete: PropTypes.bool,
   stack: ImmutablePropTypes.record.isRequired,
   stackResources: ImmutablePropTypes.map.isRequired,
-  stackResourcesLoaded: React.PropTypes.bool.isRequired
+  stackResourcesLoaded: PropTypes.bool.isRequired
 };
 
 export default injectIntl(DeploymentSuccess);
