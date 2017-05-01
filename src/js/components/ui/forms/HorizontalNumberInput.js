@@ -8,13 +8,16 @@ import InputErrorMessage from './InputErrorMessage';
 class HorizontalNumberInput extends React.Component {
   changeValue(event) {
     event.stopPropagation(); // https://github.com/christianalfoni/formsy-react/issues/203
-    this.props.setValue(isNaN(parseInt(event.target.value)) ?
-                          undefined : parseInt(event.target.value));
+    this.props.setValue(
+      isNaN(parseInt(event.target.value))
+        ? undefined
+        : parseInt(event.target.value)
+    );
   }
 
   // https://github.com/christianalfoni/formsy-react/issues/332
   getValue() {
-    if(this.props.getValue()) {
+    if (this.props.getValue()) {
       return this.props.getValue();
     }
     return 0;
@@ -24,27 +27,31 @@ class HorizontalNumberInput extends React.Component {
     let divClasses = ClassNames({
       'form-group': true,
       'has-error': this.props.showError(),
-      'required': this.props.isRequired()
+      required: this.props.isRequired()
     });
 
     return (
       <div className={divClasses}>
-        <label htmlFor={this.props.name}
-               className={`${this.props.labelColumnClasses} control-label`}>
+        <label
+          htmlFor={this.props.name}
+          className={`${this.props.labelColumnClasses} control-label`}
+        >
           {this.props.title}
         </label>
         <div className={this.props.inputColumnClasses}>
-          <input type="number"
-                 name={this.props.name}
-                 ref={this.props.name}
-                 id={this.props.name}
-                 className="form-control"
-                 onChange={this.changeValue.bind(this)}
-                 value={this.getValue()}
-                 placeholder={this.props.placeholder}
-                 min={this.props.min}
-                 max={this.props.max}
-                 disabled={this.props.disabled} />
+          <input
+            type="number"
+            name={this.props.name}
+            ref={this.props.name}
+            id={this.props.name}
+            className="form-control"
+            onChange={this.changeValue.bind(this)}
+            value={this.getValue()}
+            placeholder={this.props.placeholder}
+            min={this.props.min}
+            max={this.props.max}
+            disabled={this.props.disabled}
+          />
           <InputErrorMessage getErrorMessage={this.props.getErrorMessage} />
           <InputDescription description={this.props.description} />
         </div>

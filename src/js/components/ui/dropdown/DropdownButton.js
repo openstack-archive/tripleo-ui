@@ -9,11 +9,13 @@ export default class DropdownButton extends React.Component {
 
   render() {
     return (
-      <button className={ClassNames('btn dropdown-toggle', this.props.className)}
-              onClick={this.handleClick.bind(this)}
-              type="button">
+      <button
+        className={ClassNames('btn dropdown-toggle', this.props.className)}
+        onClick={this.handleClick.bind(this)}
+        type="button"
+      >
         {this.props.children}
-        <span className="caret"/>
+        <span className="caret" />
       </button>
     );
   }

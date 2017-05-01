@@ -7,8 +7,10 @@ import { Link } from 'react-router';
 import React, { PropTypes } from 'react';
 import { List, Map } from 'immutable';
 
-import { getAvailableNodesByRole,
-         getUntaggedAvailableNodes } from '../../selectors/nodesAssignment';
+import {
+  getAvailableNodesByRole,
+  getUntaggedAvailableNodes
+} from '../../selectors/nodesAssignment';
 import { getNodesOperationInProgress } from '../../selectors/nodes';
 import { getRoles } from '../../selectors/roles';
 import { getCurrentPlan } from '../../selectors/plans';
@@ -33,7 +35,6 @@ const messages = defineMessages({
 });
 
 class NodesAssignment extends React.Component {
-
   componentDidMount() {
     this.props.fetchNodes();
   }
@@ -49,10 +50,12 @@ class NodesAssignment extends React.Component {
   getTableActions() {
     return (
       <div className="btn-group">
-        <button className="btn btn-primary"
-                type="submit"
-                disabled={this.props.nodesOperationInProgress}>
-          <FormattedMessage {...messages.assignUnassignNodes}/>
+        <button
+          className="btn btn-primary"
+          type="submit"
+          disabled={this.props.nodesOperationInProgress}
+        >
+          <FormattedMessage {...messages.assignUnassignNodes} />
         </button>
       </div>
     );
@@ -64,8 +67,8 @@ class NodesAssignment extends React.Component {
     let tagNodeIds = [];
     let untagNodeIds = [];
 
-    _.each(nodesToUpdateIds, (nodeId) => {
-      if(this.props.untaggedAvailableNodes.keySeq().includes(nodeId)) {
+    _.each(nodesToUpdateIds, nodeId => {
+      if (this.props.untaggedAvailableNodes.keySeq().includes(nodeId)) {
         tagNodeIds.push(nodeId);
       } else {
         untagNodeIds.push(nodeId);
@@ -85,34 +88,43 @@ class NodesAssignment extends React.Component {
 
     return (
       <Modal dialogClasses="modal-xl">
-        <Formsy.Form ref="nodesAssignmentForm"
-                     role="form"
-                     className="form"
-                     onSubmit={this.handleSubmit.bind(this)}>
+        <Formsy.Form
+          ref="nodesAssignmentForm"
+          role="form"
+          className="form"
+          onSubmit={this.handleSubmit.bind(this)}
+        >
           <div className="modal-header">
-            <Link to="/deployment-plan"
-                  type="button"
-                  className="close">
-              <span aria-hidden="true" className="pficon pficon-close"/>
+            <Link to="/deployment-plan" type="button" className="close">
+              <span aria-hidden="true" className="pficon pficon-close" />
             </Link>
             <h4 className="modal-title">
-              <FormattedMessage {...messages.assignNodesToRole} values={{ roleName: roleName }}/>
+              <FormattedMessage
+                {...messages.assignNodesToRole}
+                values={{ roleName: roleName }}
+              />
             </h4>
           </div>
 
           <div className="modal-body">
-            <FormErrorList errors={this.props.formErrors.toJS()}/>
-            <NodesTable nodes={this.props.availableNodesByRole.get(roleIdentifier, Map())}
-                        roles={this.props.roles}
-                        isFetchingNodes={this.props.isFetchingNodes}
-                        dataOperationInProgress={this.props.nodesOperationInProgress}
-                        nodesInProgress={this.props.nodesInProgress}
-                        tableActions={this.getTableActions.bind(this)}/>
+            <FormErrorList errors={this.props.formErrors.toJS()} />
+            <NodesTable
+              nodes={this.props.availableNodesByRole.get(roleIdentifier, Map())}
+              roles={this.props.roles}
+              isFetchingNodes={this.props.isFetchingNodes}
+              dataOperationInProgress={this.props.nodesOperationInProgress}
+              nodesInProgress={this.props.nodesInProgress}
+              tableActions={this.getTableActions.bind(this)}
+            />
           </div>
 
           <div className="modal-footer">
-            <Link to="/deployment-plan" type="button" className="btn btn-default" >
-              <FormattedMessage {...messages.done}/>
+            <Link
+              to="/deployment-plan"
+              type="button"
+              className="btn btn-default"
+            >
+              <FormattedMessage {...messages.done} />
             </Link>
           </div>
         </Formsy.Form>
@@ -155,9 +167,17 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
     assignNodes: (tagNodeIds, untagNodeIds, role, planName) =>
-        dispatch(NodesActions.startNodesAssignment(tagNodeIds, untagNodeIds, role, planName)
-    )
+      dispatch(
+        NodesActions.startNodesAssignment(
+          tagNodeIds,
+          untagNodeIds,
+          role,
+          planName
+        )
+      )
   };
 }
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(NodesAssignment));
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(NodesAssignment)
+);

@@ -2,7 +2,8 @@ import { defineMessages } from 'react-intl';
 import { normalize, arrayOf } from 'normalizr';
 import yaml from 'js-yaml';
 
-import EnvironmentConfigurationConstants from '../constants/EnvironmentConfigurationConstants';
+import EnvironmentConfigurationConstants
+  from '../constants/EnvironmentConfigurationConstants';
 import { browserHistory } from 'react-router';
 import MistralApiService from '../services/MistralApiService';
 import NotificationActions from '../actions/NotificationActions';
@@ -25,25 +26,33 @@ const messages = defineMessages({
 });
 
 export default {
-
   fetchEnvironmentConfiguration(planName, redirectPath) {
     return dispatch => {
       dispatch(this.fetchEnvironmentConfigurationPending());
-      MistralApiService.runAction(MistralConstants.CAPABILITIES_GET, { container: planName })
-      .then(response => {
-        const entities = normalize(JSON.parse(response.output).result,
-                         arrayOf(topicSchema)).entities || {};
-        dispatch(this.fetchEnvironmentConfigurationSuccess(entities));
-      }).catch(error => {
-        logger.error('Error retrieving EnvironmentConfigurationActions.fetchEnvironment',
-                      error.stack || error);
-        if (redirectPath) { browserHistory.push(redirectPath); }
-        dispatch(this.fetchEnvironmentConfigurationFailed());
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      MistralApiService.runAction(MistralConstants.CAPABILITIES_GET, {
+        container: planName
+      })
+        .then(response => {
+          const entities = normalize(
+            JSON.parse(response.output).result,
+            arrayOf(topicSchema)
+          ).entities || {};
+          dispatch(this.fetchEnvironmentConfigurationSuccess(entities));
+        })
+        .catch(error => {
+          logger.error(
+            'Error retrieving EnvironmentConfigurationActions.fetchEnvironment',
+            error.stack || error
+          );
+          if (redirectPath) {
+            browserHistory.push(redirectPath);
+          }
+          dispatch(this.fetchEnvironmentConfigurationFailed());
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
         });
-      });
     };
   },
 
@@ -70,25 +79,41 @@ export default {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.updateEnvironmentConfigurationPending());
-      MistralApiService.runAction(MistralConstants.CAPABILITIES_UPDATE,
-                                  { environments: data, container: planName })
-      .then(response => {
-        const enabledEnvs = JSON.parse(response.output).result.environments.map(env => env.path);
-        dispatch(this.updateEnvironmentConfigurationSuccess(enabledEnvs));
-        if (redirectPath) { browserHistory.push(redirectPath); }
-        dispatch(NotificationActions.notify({
-          title: formatMessage(messages.envConfigUpdatedNotificationTitle),
-          message: formatMessage(messages.envConfigUpdatedNotificationMessage),
-          type: 'success'
-        }));
-      }).catch((error) => {
-        logger.error('Error in EnvironmentConfigurationActions.updateEnvironment',
-                      error.stack || error);
-        let errorHandler = new MistralApiErrorHandler(error, formFields);
-        dispatch(this.updateEnvironmentConfigurationFailed(errorHandler.errors,
-                                                           errorHandler.formFieldErrors));
-      });
-
+      MistralApiService.runAction(MistralConstants.CAPABILITIES_UPDATE, {
+        environments: data,
+        container: planName
+      })
+        .then(response => {
+          const enabledEnvs = JSON.parse(
+            response.output
+          ).result.environments.map(env => env.path);
+          dispatch(this.updateEnvironmentConfigurationSuccess(enabledEnvs));
+          if (redirectPath) {
+            browserHistory.push(redirectPath);
+          }
+          dispatch(
+            NotificationActions.notify({
+              title: formatMessage(messages.envConfigUpdatedNotificationTitle),
+              message: formatMessage(
+                messages.envConfigUpdatedNotificationMessage
+              ),
+              type: 'success'
+            })
+          );
+        })
+        .catch(error => {
+          logger.error(
+            'Error in EnvironmentConfigurationActions.updateEnvironment',
+            error.stack || error
+          );
+          let errorHandler = new MistralApiErrorHandler(error, formFields);
+          dispatch(
+            this.updateEnvironmentConfigurationFailed(
+              errorHandler.errors,
+              errorHandler.formFieldErrors
+            )
+          );
+        });
     };
   },
 
@@ -119,26 +144,39 @@ export default {
     return dispatch => {
       dispatch(this.fetchEnvironmentPending(environmentPath));
       SwiftApiService.getObject(planName, environmentPath)
-      .then(response => {
-        const { resource_registry, parameter_defaults } =
-          yaml.safeLoad(response.responseText, { filename: environmentPath, json: true });
-        dispatch(this.fetchEnvironmentSuccess({ file: environmentPath,
-                                                resourceRegistry: resource_registry,
-                                                parameterDefaults: parameter_defaults }));
-      }).catch(error => {
-        if (error.name && error.name === 'YAMLException') {
-          logger.error(`Error parsing ${environmentPath} to JSON`, error);
-          dispatch(this.fetchEnvironmentFailed(environmentPath, error));
-        } else {
-          logger.error(`Error EnvironmentConfigurationActions.fetchEnvironment ${environmentPath}`,
-                       error, error.stack);
-          dispatch(this.fetchEnvironmentFailed(environmentPath));
-          let errorHandler = new SwiftApiErrorHandler(error);
-          errorHandler.errors.forEach((error) => {
-            dispatch(NotificationActions.notify(error));
+        .then(response => {
+          const {
+            resource_registry,
+            parameter_defaults
+          } = yaml.safeLoad(response.responseText, {
+            filename: environmentPath,
+            json: true
           });
-        }
-      });
+          dispatch(
+            this.fetchEnvironmentSuccess({
+              file: environmentPath,
+              resourceRegistry: resource_registry,
+              parameterDefaults: parameter_defaults
+            })
+          );
+        })
+        .catch(error => {
+          if (error.name && error.name === 'YAMLException') {
+            logger.error(`Error parsing ${environmentPath} to JSON`, error);
+            dispatch(this.fetchEnvironmentFailed(environmentPath, error));
+          } else {
+            logger.error(
+              `Error EnvironmentConfigurationActions.fetchEnvironment ${environmentPath}`,
+              error,
+              error.stack
+            );
+            dispatch(this.fetchEnvironmentFailed(environmentPath));
+            let errorHandler = new SwiftApiErrorHandler(error);
+            errorHandler.errors.forEach(error => {
+              dispatch(NotificationActions.notify(error));
+            });
+          }
+        });
     };
   },
 

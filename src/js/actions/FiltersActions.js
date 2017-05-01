@@ -1,6 +1,6 @@
 import FiltersConstants from '../constants/FiltersConstants';
 
-export const clearActiveFilters = (filter) => ({
+export const clearActiveFilters = filter => ({
   type: FiltersConstants.CLEAR_ACTIVE_FILTERS,
   payload: filter
 });

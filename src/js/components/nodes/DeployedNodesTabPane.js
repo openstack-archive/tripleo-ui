@@ -5,8 +5,10 @@ import Formsy from 'formsy-react';
 import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
-import { getNodesOperationInProgress,
-         getDeployedNodes } from '../../selectors/nodes';
+import {
+  getNodesOperationInProgress,
+  getDeployedNodes
+} from '../../selectors/nodes';
 import { getRoles } from '../../selectors/roles';
 import FormErrorList from '../ui/forms/FormErrorList';
 import NodesTable from './NodesTable';
@@ -24,7 +26,12 @@ class DeployedNodesTabPane extends React.Component {
   }
 
   canSubmit() {
-    if(_.includes(_.values(this.refs.deployedNodesTableForm.getCurrentValues()), true)) {
+    if (
+      _.includes(
+        _.values(this.refs.deployedNodesTableForm.getCurrentValues()),
+        true
+      )
+    ) {
       this.enableButton();
     } else {
       this.disableButton();
@@ -52,18 +59,22 @@ class DeployedNodesTabPane extends React.Component {
 
   render() {
     return (
-      <Formsy.Form ref="deployedNodesTableForm"
-                   role="form"
-                   className="form"
-                   onSubmit={this.handleSubmit.bind(this)}
-                   onValid={this.canSubmit.bind(this)}
-                   onInvalid={this.disableButton.bind(this)}>
-        <FormErrorList errors={this.props.formErrors.toJS()}/>
-        <NodesTable nodes={this.props.deployedNodes}
-                    roles={this.props.roles}
-                    nodesInProgress={this.props.nodesInProgress}
-                    isFetchingNodes={this.props.isFetchingNodes}
-                    dataOperationInProgress={this.props.nodesOperationInProgress}/>
+      <Formsy.Form
+        ref="deployedNodesTableForm"
+        role="form"
+        className="form"
+        onSubmit={this.handleSubmit.bind(this)}
+        onValid={this.canSubmit.bind(this)}
+        onInvalid={this.disableButton.bind(this)}
+      >
+        <FormErrorList errors={this.props.formErrors.toJS()} />
+        <NodesTable
+          nodes={this.props.deployedNodes}
+          roles={this.props.roles}
+          nodesInProgress={this.props.nodesInProgress}
+          isFetchingNodes={this.props.isFetchingNodes}
+          dataOperationInProgress={this.props.nodesOperationInProgress}
+        />
       </Formsy.Form>
     );
   }

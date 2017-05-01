@@ -5,10 +5,12 @@ import React, { PropTypes } from 'react';
 
 import Link from '../ui/Link';
 import NodePickerInput from '../ui/reduxForm/NodePickerInput';
-import { maxValue,
-         minValue,
-         number,
-         messages as validationMessages } from '../ui/reduxForm/validations';
+import {
+  maxValue,
+  minValue,
+  number,
+  messages as validationMessages
+} from '../ui/reduxForm/validations';
 
 const messages = defineMessages({
   nodesAssigned: {
@@ -26,17 +28,24 @@ const messages = defineMessages({
   }
 });
 
-const RoleCard = ({ assignedNodesCountParameter,
-                    availableNodesCount,
-                    identifier,
-                    intl,
-                    name,
-                    title }) => {
-  const disabled = !assignedNodesCountParameter
-                   || !availableNodesCount && !assignedNodesCountParameter.default;
+const RoleCard = ({
+  assignedNodesCountParameter,
+  availableNodesCount,
+  identifier,
+  intl,
+  name,
+  title
+}) => {
+  const disabled =
+    !assignedNodesCountParameter ||
+    (!availableNodesCount && !assignedNodesCountParameter.default);
   const validations = [
-    maxValue(availableNodesCount, intl.formatMessage(validationMessages.maxValue,
-                                                     { max: availableNodesCount })),
+    maxValue(
+      availableNodesCount,
+      intl.formatMessage(validationMessages.maxValue, {
+        max: availableNodesCount
+      })
+    ),
     minValue(0, intl.formatMessage(validationMessages.minValue, { min: '0' })),
     number(intl.formatMessage(validationMessages.number))
   ];
@@ -45,10 +54,12 @@ const RoleCard = ({ assignedNodesCountParameter,
     <div className={`card-pf card-pf-accented role-card ${identifier}`}>
       <h2 className="card-pf-title">
         {title}
-        <Link to={`deployment-plan/roles/${identifier}`}
-              className="link pull-right"
-              title="Edit Role parameters">
-          <span className="pficon pficon-edit"/>
+        <Link
+          to={`deployment-plan/roles/${identifier}`}
+          className="link pull-right"
+          title="Edit Role parameters"
+        >
+          <span className="pficon pficon-edit" />
         </Link>
       </h2>
       <div className="card-pf-body">
@@ -60,22 +71,25 @@ const RoleCard = ({ assignedNodesCountParameter,
                   increment={1}
                   validate={validations}
                   name={assignedNodesCountParameter.name}
-                  max={availableNodesCount}/>
+                  max={availableNodesCount}
+                />
               : <NodePickerInput
                   increment={1}
                   input={{ value: '-' }}
                   meta={{ submitting: true }}
                   max={availableNodesCount}
-                  min={0}/>}
+                  min={0}
+                />}
           </div>
           <span className="card-pf-utilization-card-details-description">
             <span className="card-pf-utilization-card-details-line-1">
               <FormattedMessage
                 {...messages.availableNodesCount}
-                values={{ count: availableNodesCount }}/>
+                values={{ count: availableNodesCount }}
+              />
             </span>
             <span className="card-pf-utilization-card-details-line-2">
-              <FormattedMessage {...messages.nodesAssigned}/>
+              <FormattedMessage {...messages.nodesAssigned} />
             </span>
           </span>
         </div>
@@ -85,9 +99,10 @@ const RoleCard = ({ assignedNodesCountParameter,
           <Link
             disabled={disabled}
             to={`/deployment-plan/${identifier}/assign-nodes`}
-            className="card-pf-link-with-icon">
+            className="card-pf-link-with-icon"
+          >
             <span className="pficon pficon-add-circle-o" />
-            <FormattedMessage {...messages.assignNodes}/>
+            <FormattedMessage {...messages.assignNodes} />
           </Link>
         </p>
       </div>

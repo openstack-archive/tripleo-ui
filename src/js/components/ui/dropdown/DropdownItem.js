@@ -11,9 +11,7 @@ export default class DropdownItem extends React.Component {
 
   render() {
     if (this.props.divider) {
-      return (
-        <li className="divider"></li>
-      );
+      return <li className="divider" />;
     }
 
     const classes = {

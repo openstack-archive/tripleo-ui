@@ -20,48 +20,72 @@ const messages = defineMessages({
   }
 });
 
-const DeployStep = ({ currentPlan, currentStack, currentStackResources, currentStackResourcesLoaded,
-                      currentStackDeploymentProgress, deleteStack, deployPlan, fetchStackResource,
-                      fetchStackEnvironment, intl, isRequestingStackDelete, stacksLoaded }) => {
-
-  if (!currentStack || currentStack.stack_status === stackStates.DELETE_COMPLETE) {
+const DeployStep = ({
+  currentPlan,
+  currentStack,
+  currentStackResources,
+  currentStackResourcesLoaded,
+  currentStackDeploymentProgress,
+  deleteStack,
+  deployPlan,
+  fetchStackResource,
+  fetchStackEnvironment,
+  intl,
+  isRequestingStackDelete,
+  stacksLoaded
+}) => {
+  if (
+    !currentStack ||
+    currentStack.stack_status === stackStates.DELETE_COMPLETE
+  ) {
     return (
       <Loader loaded={stacksLoaded}>
-        <Link className="link btn btn-primary btn-lg"
-              disabled={currentPlan.isRequestingPlanDeploy}
-              to="/deployment-plan/deployment-detail">
-          <Loader loaded={!currentPlan.isRequestingPlanDeploy}
-                  content={intl.formatMessage(messages.requestingDeploy)}
-                  component="span"
-                  inline>
-            <span className="fa fa-cloud-upload"/> <FormattedMessage
-                                                     {...messages.validateAndDeploy}/>
+        <Link
+          className="link btn btn-primary btn-lg"
+          disabled={currentPlan.isRequestingPlanDeploy}
+          to="/deployment-plan/deployment-detail"
+        >
+          <Loader
+            loaded={!currentPlan.isRequestingPlanDeploy}
+            content={intl.formatMessage(messages.requestingDeploy)}
+            component="span"
+            inline
+          >
+            <span className="fa fa-cloud-upload" />
+            {' '}
+            <FormattedMessage {...messages.validateAndDeploy} />
           </Loader>
         </Link>
       </Loader>
     );
   } else if (currentStack.stack_status.match(/PROGRESS/)) {
     return (
-      <DeploymentProgress stack={currentStack}
-                          isRequestingStackDelete={isRequestingStackDelete}
-                          deleteStack={deleteStack}
-                          deploymentProgress={currentStackDeploymentProgress}/>
+      <DeploymentProgress
+        stack={currentStack}
+        isRequestingStackDelete={isRequestingStackDelete}
+        deleteStack={deleteStack}
+        deploymentProgress={currentStackDeploymentProgress}
+      />
     );
   } else if (currentStack.stack_status.match(/COMPLETE/)) {
     return (
-      <DeploymentSuccess stack={currentStack}
-                         stackResources={currentStackResources}
-                         stackResourcesLoaded={currentStackResourcesLoaded}
-                         isRequestingStackDelete={isRequestingStackDelete}
-                         deleteStack={deleteStack}
-                         fetchStackResource={fetchStackResource}
-                         fetchStackEnvironment={fetchStackEnvironment} />
+      <DeploymentSuccess
+        stack={currentStack}
+        stackResources={currentStackResources}
+        stackResourcesLoaded={currentStackResourcesLoaded}
+        isRequestingStackDelete={isRequestingStackDelete}
+        deleteStack={deleteStack}
+        fetchStackResource={fetchStackResource}
+        fetchStackEnvironment={fetchStackEnvironment}
+      />
     );
   } else {
     return (
-      <DeploymentFailure deleteStack={deleteStack}
-                         isRequestingStackDelete={isRequestingStackDelete}
-                         stack={currentStack}/>
+      <DeploymentFailure
+        deleteStack={deleteStack}
+        isRequestingStackDelete={isRequestingStackDelete}
+        stack={currentStack}
+      />
     );
   }
 };
