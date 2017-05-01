@@ -6,7 +6,10 @@ import React, { PropTypes } from 'react';
 
 import CurrentPlanActions from '../../actions/CurrentPlanActions';
 import DataTable from '../ui/tables/DataTable';
-import { DataTableCell, DataTableHeaderCell } from '../ui/tables/DataTableCells';
+import {
+  DataTableCell,
+  DataTableHeaderCell
+} from '../ui/tables/DataTableCells';
 import DataTableColumn from '../ui/tables/DataTableColumn';
 import { PageHeader } from '../ui/PageHeader';
 import PlansActions from '../../actions/PlansActions';
@@ -63,15 +66,17 @@ class ListPlans extends React.Component {
     return (
       <tr>
         <td colSpan="2">
-          <p></p>
+          <p />
           <p className="text-center">
-            <FormattedMessage {...messages.noPlans}/>
+            <FormattedMessage {...messages.noPlans} />
           </p>
           <p className="text-center">
-            <Link to="/plans/new"
-                  query={{tab: 'newPlan'}}
-                  className="btn btn-success">
-              <FormattedMessage {...messages.createNewPlan}/>
+            <Link
+              to="/plans/new"
+              query={{ tab: 'newPlan' }}
+              className="btn btn-success"
+            >
+              <FormattedMessage {...messages.createNewPlan} />
             </Link>
           </p>
         </td>
@@ -81,11 +86,15 @@ class ListPlans extends React.Component {
 
   renderTableActions() {
     return (
-      <Link to="/plans/new"
-            query={{tab: 'newPlan'}}
-            className="btn btn-primary"
-            id="ListPlans__newPlanLink">
-        <span className="fa fa-plus"/>  <FormattedMessage {...messages.createNewPlan}/>
+      <Link
+        to="/plans/new"
+        query={{ tab: 'newPlan' }}
+        className="btn btn-primary"
+        id="ListPlans__newPlanLink"
+      >
+        <span className="fa fa-plus" />
+        {' '}
+        <FormattedMessage {...messages.createNewPlan} />
       </Link>
     );
   }
@@ -95,26 +104,39 @@ class ListPlans extends React.Component {
     return (
       <div>
         <PageHeader>
-          <FormattedMessage {...messages.plans}/>
+          <FormattedMessage {...messages.plans} />
         </PageHeader>
-        <DataTable data={plans}
-                   rowsCount={plans.length}
-                   noRowsRenderer={this.renderNoPlans.bind(this)}
-                   tableActions={this.renderTableActions}
-                   id="ListPlans__plansTable">
-          <DataTableColumn header={<DataTableHeaderCell key="name">
-                                     <FormattedMessage {...messages.name}/>
-                                   </DataTableHeaderCell>}
-                           cell={<PlanNameCell
-                           data={plans}
-                           currentPlanName={this.props.currentPlanName}
-                           choosePlan={this.props.choosePlan}/>}/>
-          <DataTableColumn header={<DataTableHeaderCell key="actions">
-                                     <FormattedMessage {...messages.actions}/>
-                                   </DataTableHeaderCell>}
-                           cell={<RowActionsCell
-                           className="actions text-right"
-                           data={plans}/>}/>
+        <DataTable
+          data={plans}
+          rowsCount={plans.length}
+          noRowsRenderer={this.renderNoPlans.bind(this)}
+          tableActions={this.renderTableActions}
+          id="ListPlans__plansTable"
+        >
+          <DataTableColumn
+            header={
+              <DataTableHeaderCell key="name">
+                <FormattedMessage {...messages.name} />
+              </DataTableHeaderCell>
+            }
+            cell={
+              <PlanNameCell
+                data={plans}
+                currentPlanName={this.props.currentPlanName}
+                choosePlan={this.props.choosePlan}
+              />
+            }
+          />
+          <DataTableColumn
+            header={
+              <DataTableHeaderCell key="actions">
+                <FormattedMessage {...messages.actions} />
+              </DataTableHeaderCell>
+            }
+            cell={
+              <RowActionsCell className="actions text-right" data={plans} />
+            }
+          />
         </DataTable>
         {this.props.children}
       </div>
@@ -149,36 +171,44 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(ListPlans));
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(ListPlans)
+);
 
 class RowActionsCell extends React.Component {
   render() {
     let plan = this.props.data[this.props.rowIndex];
 
-    if(plan.transition) {
+    if (plan.transition) {
       // TODO(jtomasek): this causes DOMNesting validation error which should eventually go away
       // in future React versions. See https://github.com/facebook/react/issues/5506
       return null;
     } else {
       return (
         <DataTableCell {...this.props}>
-          <Link key="edit"
-                to={`/plans/${plan.name}/edit`}
-                query={{tab: 'editPlan'}}
-                className="btn btn-xs btn-default">
-            <FormattedMessage {...messages.edit}/>
+          <Link
+            key="edit"
+            to={`/plans/${plan.name}/edit`}
+            query={{ tab: 'editPlan' }}
+            className="btn btn-xs btn-default"
+          >
+            <FormattedMessage {...messages.edit} />
           </Link>
           &nbsp;
-          <Link key="export"
-                to={`/plans/${plan.name}/export`}
-                className="btn btn-xs btn-default">
-            <FormattedMessage {...messages.export}/>
+          <Link
+            key="export"
+            to={`/plans/${plan.name}/export`}
+            className="btn btn-xs btn-default"
+          >
+            <FormattedMessage {...messages.export} />
           </Link>
           &nbsp;
-          <Link key="delete"
-                to={`/plans/${plan.name}/delete`}
-                className="btn btn-xs btn-danger ListPlans__editPlanButton">
-            <FormattedMessage {...messages.delete}/>
+          <Link
+            key="delete"
+            to={`/plans/${plan.name}/delete`}
+            className="btn btn-xs btn-danger ListPlans__editPlanButton"
+          >
+            <FormattedMessage {...messages.delete} />
           </Link>
         </DataTableCell>
       );
@@ -197,10 +227,8 @@ export class PlanNameCell extends React.Component {
   }
 
   getActiveIcon(planName) {
-    if(planName === this.props.currentPlanName) {
-      return (
-        <span className="pficon pficon-flag"></span>
-      );
+    if (planName === this.props.currentPlanName) {
+      return <span className="pficon pficon-flag" />;
     }
     return false;
   }
@@ -208,20 +236,23 @@ export class PlanNameCell extends React.Component {
   render() {
     let plan = this.props.data[this.props.rowIndex];
 
-    if(plan.transition === 'deleting') {
+    if (plan.transition === 'deleting') {
       return (
         <DataTableCell {...this.props} colSpan="2" className={plan.transition}>
           <em>
-            <FormattedMessage {...messages.deletingPlanName}
-                              values={{ planName: <strong>{plan.name}</strong>}}/>
+            <FormattedMessage
+              {...messages.deletingPlanName}
+              values={{ planName: <strong>{plan.name}</strong> }}
+            />
           </em>
         </DataTableCell>
       );
     } else {
       return (
         <DataTableCell {...this.props}>
-          {this.getActiveIcon(plan.name)} <a href=""
-                                             onClick={this.onPlanClick.bind(this)}>{plan.name}</a>
+          {this.getActiveIcon(plan.name)}
+          {' '}
+          <a href="" onClick={this.onPlanClick.bind(this)}>{plan.name}</a>
         </DataTableCell>
       );
     }

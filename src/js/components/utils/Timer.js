@@ -1,4 +1,4 @@
-export default function Timer (callback, delay) {
+export default function Timer(callback, delay) {
   var timerId;
   var start;
   var remaining = delay;

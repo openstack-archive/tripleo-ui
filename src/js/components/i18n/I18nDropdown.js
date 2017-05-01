@@ -19,20 +19,23 @@ const messages = defineMessages({
 class I18nDropdown extends React.Component {
   _renderDropdownItems() {
     const configLanguages = getAppConfig().languages || {};
-    const langList = Object.keys(configLanguages).sort((a , b) =>
-      configLanguages[a] > configLanguages[b]);
+    const langList = Object.keys(configLanguages).sort(
+      (a, b) => configLanguages[a] > configLanguages[b]
+    );
 
     const enabledLang = this.props.language;
 
-    return langList.map((lang) => {
+    return langList.map(lang => {
       const active = enabledLang === lang;
-      return (MESSAGES[lang] || lang === 'en') ? (
-        <DropdownItem key={`lang-${lang}`}
-                      active={active}
-                      onClick={this.props.chooseLanguage.bind(this, lang)}>
-          {configLanguages[lang]}
-        </DropdownItem>
-      ) : null;
+      return MESSAGES[lang] || lang === 'en'
+        ? <DropdownItem
+            key={`lang-${lang}`}
+            active={active}
+            onClick={this.props.chooseLanguage.bind(this, lang)}
+          >
+            {configLanguages[lang]}
+          </DropdownItem>
+        : null;
     });
   }
 
@@ -40,7 +43,7 @@ class I18nDropdown extends React.Component {
     return (
       <Dropdown>
         <DropdownToggle>
-          <FormattedMessage {...messages.language}/> <b className="caret"></b>
+          <FormattedMessage {...messages.language} /> <b className="caret" />
         </DropdownToggle>
         {this._renderDropdownItems()}
       </Dropdown>
@@ -53,16 +56,18 @@ I18nDropdown.propTypes = {
   language: PropTypes.string
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     language: state.i18n.get('language', 'en')
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    chooseLanguage: (language) => dispatch(I18nActions.chooseLanguage(language))
+    chooseLanguage: language => dispatch(I18nActions.chooseLanguage(language))
   };
 };
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(I18nDropdown));
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(I18nDropdown)
+);

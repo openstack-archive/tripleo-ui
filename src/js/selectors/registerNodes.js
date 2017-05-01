@@ -9,8 +9,11 @@ const nodesToRegister = state => state.registerNodes.get('nodesToRegister');
  * @return boolean
  */
 export const allNodesToRegisterAreValid = createSelector(
-  nodesToRegister, (nodesToRegister) => {
-    return nodesToRegister.every(node => node.valid) && !nodesToRegister.isEmpty();
+  nodesToRegister,
+  nodesToRegister => {
+    return (
+      nodesToRegister.every(node => node.valid) && !nodesToRegister.isEmpty()
+    );
   }
 );
 
@@ -19,7 +22,8 @@ export const allNodesToRegisterAreValid = createSelector(
  * @return OrderedMap of IronicNodes
  */
 export const getIronicNodesfromNodesToRegister = createSelector(
-  nodesToRegister, (nodesToRegister) => {
+  nodesToRegister,
+  nodesToRegister => {
     return nodesToRegister.map(node => new IronicNode(node));
   }
 );

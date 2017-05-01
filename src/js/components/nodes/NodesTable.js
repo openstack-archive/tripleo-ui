@@ -4,14 +4,15 @@ import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import DataTable from '../ui/tables/DataTable';
-import { DataTableCell,
-         DataTableDataFieldCell,
-         DataTableHeaderCell } from '../ui/tables/DataTableCells';
+import {
+  DataTableCell,
+  DataTableDataFieldCell,
+  DataTableHeaderCell
+} from '../ui/tables/DataTableCells';
 import { DataTableCheckBoxCell } from '../ui/tables/DataTableCells';
 import DataTableColumn from '../ui/tables/DataTableColumn';
 import Loader from '../ui/Loader';
 import { parseNodeCapabilities } from '../../utils/nodes';
-
 
 const messages = defineMessages({
   noNodes: {
@@ -83,10 +84,14 @@ class NodesTable extends React.Component {
     return (
       <tr>
         <td className="no-results" colSpan="10">
-          <Loader loaded={!this.props.isFetchingNodes}
-                  height={40}
-                  content={this.props.intl.formatMessage(messages.loadingNodes)}>
-            <p className="text-center"><FormattedMessage {...messages.noNodes}/></p>
+          <Loader
+            loaded={!this.props.isFetchingNodes}
+            height={40}
+            content={this.props.intl.formatMessage(messages.loadingNodes)}
+          >
+            <p className="text-center">
+              <FormattedMessage {...messages.noNodes} />
+            </p>
           </Loader>
         </td>
       </tr>
@@ -101,84 +106,152 @@ class NodesTable extends React.Component {
 
   _filterData(filterString, data) {
     let dataKeys = ['name'];
-    return filterString ? data.filter((row) => {
-      let result = dataKeys.filter((dataKey) => {
-        return row[dataKey].toLowerCase().includes(filterString.toLowerCase());
-      });
-      return result.length > 0;
-    }) : data;
+    return filterString
+      ? data.filter(row => {
+          let result = dataKeys.filter(dataKey => {
+            return row[dataKey]
+              .toLowerCase()
+              .includes(filterString.toLowerCase());
+          });
+          return result.length > 0;
+        })
+      : data;
   }
 
   render() {
-    let filteredData = this._filterData(this.state.filterString, this.props.nodes.toList().toJS());
+    let filteredData = this._filterData(
+      this.state.filterString,
+      this.props.nodes.toList().toJS()
+    );
     return (
-      <DataTable {...this.props}
+      <DataTable
+        {...this.props}
         data={this.props.nodes.toList().toJS()}
         rowsCount={filteredData.length}
         noRowsRenderer={this.renderNoNodesFound.bind(this)}
         onFilter={this.onFilter.bind(this)}
-        filterString={this.state.filterString}>
+        filterString={this.state.filterString}
+      >
         <DataTableColumn
           key="select"
-          header={<DataTableHeaderCell key="select" className="shrink"/>}
-          cell={<NodesTableCheckBoxCell data={filteredData}
-                                        nodesInProgress={this.props.nodesInProgress}
-                                        field="uuid"
-                                        className="shrink"/>}/>
+          header={<DataTableHeaderCell key="select" className="shrink" />}
+          cell={
+            <NodesTableCheckBoxCell
+              data={filteredData}
+              nodesInProgress={this.props.nodesInProgress}
+              field="uuid"
+              className="shrink"
+            />
+          }
+        />
         <DataTableColumn
           key="macs"
-          header={<DataTableHeaderCell key="macs">
-                    <FormattedMessage {...messages.macAddresses}/>
-                  </DataTableHeaderCell>}
-          cell={<DataTableDataFieldCell data={filteredData} field="macs"/>}/>
+          header={
+            <DataTableHeaderCell key="macs">
+              <FormattedMessage {...messages.macAddresses} />
+            </DataTableHeaderCell>
+          }
+          cell={<DataTableDataFieldCell data={filteredData} field="macs" />}
+        />
         <DataTableColumn
           key="name"
-          header={<DataTableHeaderCell key="name">
-                    <FormattedMessage {...messages.name}/>
-                  </DataTableHeaderCell>}
-          cell={<DataTableDataFieldCell data={filteredData} field="name"/>}/>
+          header={
+            <DataTableHeaderCell key="name">
+              <FormattedMessage {...messages.name} />
+            </DataTableHeaderCell>
+          }
+          cell={<DataTableDataFieldCell data={filteredData} field="name" />}
+        />
         <DataTableColumn
           key="role"
-          header={<DataTableHeaderCell key="role">
-                    <FormattedMessage {...messages.profile}/>
-                  </DataTableHeaderCell>}
-          cell={<NodesTableProfileCell data={filteredData}/>}/>
+          header={
+            <DataTableHeaderCell key="role">
+              <FormattedMessage {...messages.profile} />
+            </DataTableHeaderCell>
+          }
+          cell={<NodesTableProfileCell data={filteredData} />}
+        />
         <DataTableColumn
           key="properties.cpu_arch"
-          header={<DataTableHeaderCell key="properties.cpu_arch">
-                    <FormattedMessage {...messages.cpuArch}/>
-                  </DataTableHeaderCell>}
-          cell={<DataTableDataFieldCell data={filteredData} field="properties.cpu_arch"/>}/>
+          header={
+            <DataTableHeaderCell key="properties.cpu_arch">
+              <FormattedMessage {...messages.cpuArch} />
+            </DataTableHeaderCell>
+          }
+          cell={
+            <DataTableDataFieldCell
+              data={filteredData}
+              field="properties.cpu_arch"
+            />
+          }
+        />
         <DataTableColumn
           key="properties.cpus"
-          header={<DataTableHeaderCell key="properties.cpus">
-                    <FormattedMessage {...messages.cpuCores}/>
-                  </DataTableHeaderCell>}
-          cell={<DataTableDataFieldCell data={filteredData} field="properties.cpus"/>}/>
+          header={
+            <DataTableHeaderCell key="properties.cpus">
+              <FormattedMessage {...messages.cpuCores} />
+            </DataTableHeaderCell>
+          }
+          cell={
+            <DataTableDataFieldCell
+              data={filteredData}
+              field="properties.cpus"
+            />
+          }
+        />
         <DataTableColumn
           key="properties.local_gb"
-          header={<DataTableHeaderCell key="properties.local_gb">
-                    <FormattedMessage {...messages.diskGb}/>
-                  </DataTableHeaderCell>}
-          cell={<DataTableDataFieldCell data={filteredData} field="properties.local_gb"/>}/>
+          header={
+            <DataTableHeaderCell key="properties.local_gb">
+              <FormattedMessage {...messages.diskGb} />
+            </DataTableHeaderCell>
+          }
+          cell={
+            <DataTableDataFieldCell
+              data={filteredData}
+              field="properties.local_gb"
+            />
+          }
+        />
         <DataTableColumn
           key="properties.memory_mb"
-          header={<DataTableHeaderCell key="properties.memory_mb">
-                    <FormattedMessage {...messages.memoryMb}/>
-                  </DataTableHeaderCell>}
-          cell={<DataTableDataFieldCell data={filteredData} field="properties.memory_mb"/>}/>
+          header={
+            <DataTableHeaderCell key="properties.memory_mb">
+              <FormattedMessage {...messages.memoryMb} />
+            </DataTableHeaderCell>
+          }
+          cell={
+            <DataTableDataFieldCell
+              data={filteredData}
+              field="properties.memory_mb"
+            />
+          }
+        />
         <DataTableColumn
           key="power_state"
-          header={<DataTableHeaderCell key="power_state">
-                    <FormattedMessage {...messages.powerState}/>
-                  </DataTableHeaderCell>}
-          cell={<DataTableDataFieldCell data={filteredData} field="power_state"/>}/>
+          header={
+            <DataTableHeaderCell key="power_state">
+              <FormattedMessage {...messages.powerState} />
+            </DataTableHeaderCell>
+          }
+          cell={
+            <DataTableDataFieldCell data={filteredData} field="power_state" />
+          }
+        />
         <DataTableColumn
           key="provision_state"
-          header={<DataTableHeaderCell key="provision_state">
-                    <FormattedMessage {...messages.provisionState}/>
-                  </DataTableHeaderCell>}
-          cell={<DataTableDataFieldCell data={filteredData} field="provision_state"/>}/>
+          header={
+            <DataTableHeaderCell key="provision_state">
+              <FormattedMessage {...messages.provisionState} />
+            </DataTableHeaderCell>
+          }
+          cell={
+            <DataTableDataFieldCell
+              data={filteredData}
+              field="provision_state"
+            />
+          }
+        />
       </DataTable>
     );
   }
@@ -194,11 +267,15 @@ export default injectIntl(NodesTable);
 
 export class NodesTableCheckBoxCell extends React.Component {
   render() {
-    const nodeId = _.result(this.props.data[this.props.rowIndex], this.props.field);
+    const nodeId = _.result(
+      this.props.data[this.props.rowIndex],
+      this.props.field
+    );
     return (
       <DataTableCheckBoxCell
         {...this.props}
-        operationInProgress={this.props.nodesInProgress.includes(nodeId)}/>
+        operationInProgress={this.props.nodesInProgress.includes(nodeId)}
+      />
     );
   }
 }
@@ -211,9 +288,11 @@ NodesTableCheckBoxCell.propTypes = {
 
 export class NodesTableProfileCell extends React.Component {
   getAssignedRoleTitle() {
-    const capabilities = _.result(this.props.data[this.props.rowIndex],
-                                'properties.capabilities',
-                                '');
+    const capabilities = _.result(
+      this.props.data[this.props.rowIndex],
+      'properties.capabilities',
+      ''
+    );
     const profile = parseNodeCapabilities(capabilities).profile;
     return profile ? profile : '-';
   }
