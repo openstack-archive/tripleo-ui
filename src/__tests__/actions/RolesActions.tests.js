@@ -23,8 +23,9 @@ describe('Roles actions', () => {
       type: RolesConstants.FETCH_ROLES_SUCCESS,
       payload: normalizedRolesResponse.entities.roles
     };
-    expect(RolesActions.fetchRolesSuccess(normalizedRolesResponse.entities.roles))
-      .toEqual(expectedAction);
+    expect(
+      RolesActions.fetchRolesSuccess(normalizedRolesResponse.entities.roles)
+    ).toEqual(expectedAction);
   });
 
   it('should create an action for failed Roles request', () => {

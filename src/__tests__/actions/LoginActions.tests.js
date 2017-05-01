@@ -15,7 +15,9 @@ describe('LoginActions', () => {
   xit('creates action to authenticate user via keystone token', () => {
     spyOn(KeystoneApiService, 'authenticateUserViaToken');
     LoginActions.authenticateUserViaToken('someTokenIdString');
-    expect(KeystoneApiService.authenticateUserViaToken).toHaveBeenCalledWith('someTokenIdString');
+    expect(KeystoneApiService.authenticateUserViaToken).toHaveBeenCalledWith(
+      'someTokenIdString'
+    );
   });
 
   xit('creates action to login user with keystoneAccess response', () => {

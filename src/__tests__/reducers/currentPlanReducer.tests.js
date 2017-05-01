@@ -2,13 +2,12 @@ import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
 import currentPlanReducer from '../../js/reducers/currentPlanReducer';
 import CurrentPlanActions from '../../js/actions/CurrentPlanActions';
 
-
 describe('plansReducer state', () => {
   describe('default state', () => {
     let state;
 
     beforeEach(() => {
-      state = currentPlanReducer(undefined, {type: 'undefined-action'});
+      state = currentPlanReducer(undefined, { type: 'undefined-action' });
     });
 
     it('`conflict` is undefined', () => {
@@ -24,8 +23,10 @@ describe('plansReducer state', () => {
     let state;
 
     beforeEach(() => {
-      state = currentPlanReducer(new CurrentPlanState(),
-                                 CurrentPlanActions.planChosen('another-cloud'));
+      state = currentPlanReducer(
+        new CurrentPlanState(),
+        CurrentPlanActions.planChosen('another-cloud')
+      );
     });
 
     it('sets the current planName', () => {

@@ -22,7 +22,10 @@ export default class Notification extends React.Component {
     if (this.props.timeoutable) {
       if (this.props.timerPaused === false && nextProps.timerPaused === true) {
         this._notificationTimer.pause();
-      } else if (this.props.timerPaused === true && nextProps.timerPaused === false) {
+      } else if (
+        this.props.timerPaused === true &&
+        nextProps.timerPaused === false
+      ) {
         this._notificationTimer.resume();
       }
     }
@@ -39,7 +42,7 @@ export default class Notification extends React.Component {
   render() {
     let classes = ClassNames({
       'toast-pf alert pull-right': true,
-      'alert': true,
+      alert: true,
       'alert-danger': this.props.type === 'error',
       'alert-warning': this.props.type === 'warning',
       'alert-success': this.props.type === 'success',
@@ -47,7 +50,7 @@ export default class Notification extends React.Component {
       'alert-dismissable': this.props.dismissable
     });
     let iconClass = ClassNames({
-      'pficon': true,
+      pficon: true,
       'pficon-ok': this.props.type === 'success',
       'pficon-info': this.props.type === 'info',
       'pficon-warning-triangle-o': this.props.type === 'warning',
@@ -57,14 +60,17 @@ export default class Notification extends React.Component {
     return (
       <div className="clearfix">
         <div className={classes} role="alert">
-          <span className={iconClass} aria-hidden="true"></span>
-          {this.props.dismissable ?
-            <button type="button"
-                    className="close"
-                    aria-label="Close"
-                    onClick={this._hideNotification.bind(this)}>
-              <span className="pficon pficon-close" aria-hidden="true"></span>
-            </button> : false}
+          <span className={iconClass} aria-hidden="true" />
+          {this.props.dismissable
+            ? <button
+                type="button"
+                className="close"
+                aria-label="Close"
+                onClick={this._hideNotification.bind(this)}
+              >
+                <span className="pficon pficon-close" aria-hidden="true" />
+              </button>
+            : false}
           <strong>{this.props.title}</strong>
           <p>{this.props.message}</p>
         </div>

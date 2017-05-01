@@ -34,25 +34,31 @@ class DeleteStackButton extends React.Component {
 
     return (
       <div>
-        <button onClick={() => this.setState({ showDeleteModal: true })}
-            type="button"
-            name="delete"
-            disabled={this.props.disabled}
-            className="link btn btn-danger">
-          <Loader loaded={this.props.loaded}
-                  content={this.props.loaderContent}
-                  component="span"
-                  inline>
-            <span className={this.props.buttonIconClass}/> {this.props.content}
+        <button
+          onClick={() => this.setState({ showDeleteModal: true })}
+          type="button"
+          name="delete"
+          disabled={this.props.disabled}
+          className="link btn btn-danger"
+        >
+          <Loader
+            loaded={this.props.loaded}
+            content={this.props.loaderContent}
+            component="span"
+            inline
+          >
+            <span className={this.props.buttonIconClass} /> {this.props.content}
           </Loader>
         </button>
-        <ConfirmationModal show={this.state.showDeleteModal}
-                           title={formatMessage(messages.deleteDeployment)}
-                           question={formatMessage(messages.deleteConfirmationQuestion)}
-                           iconClass="pficon pficon-delete"
-                           confirmActionName="delete"
-                           onConfirm={this.confirmDelete.bind(this)}
-                           onCancel={() => this.setState({ showDeleteModal: false })}/>
+        <ConfirmationModal
+          show={this.state.showDeleteModal}
+          title={formatMessage(messages.deleteDeployment)}
+          question={formatMessage(messages.deleteConfirmationQuestion)}
+          iconClass="pficon pficon-delete"
+          confirmActionName="delete"
+          onConfirm={this.confirmDelete.bind(this)}
+          onCancel={() => this.setState({ showDeleteModal: false })}
+        />
       </div>
     );
   }

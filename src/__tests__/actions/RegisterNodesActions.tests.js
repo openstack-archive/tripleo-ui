@@ -11,7 +11,7 @@ import * as utils from '../../js/services/utils';
 import { IronicNode } from '../../js/immutableRecords/nodes';
 import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
 
-let createResolvingPromise = (data) => {
+let createResolvingPromise = data => {
   return () => {
     return when.resolve(data);
   };
@@ -36,17 +36,26 @@ describe('Asynchronous Register Nodes Action', () => {
     });
     // Call the action creator and the resulting action.
     // In this case, dispatch and getState are just empty placeHolders.
-    RegisterNodesActions.startNodesRegistration(nodesToRegister)(() => {}, () => {});
+    RegisterNodesActions.startNodesRegistration(nodesToRegister)(
+      () => {},
+      () => {}
+    );
     // Call `done` with a minimal timeout.
-    setTimeout(() => { done(); }, 1);
+    setTimeout(() => {
+      done();
+    }, 1);
   });
 
   it('dispatches startNodesRegistrationPending', () => {
-    expect(RegisterNodesActions.startNodesRegistrationPending).toHaveBeenCalled();
+    expect(
+      RegisterNodesActions.startNodesRegistrationPending
+    ).toHaveBeenCalled();
   });
 
   it('dispatches startNodesRegistrationSuccess', () => {
-    expect(RegisterNodesActions.startNodesRegistrationSuccess).toHaveBeenCalledWith();
+    expect(
+      RegisterNodesActions.startNodesRegistrationSuccess
+    ).toHaveBeenCalledWith();
   });
 });
 
@@ -84,17 +93,25 @@ describe('nodesRegistrationFinished', () => {
     spyOn(RegisterNodesActions, 'nodesRegistrationSuccess');
     spyOn(browserHistory, 'push');
 
-    RegisterNodesActions.nodesRegistrationFinished(messagePayload)(() => {}, () => {
-      return {
-        currentPlan: new CurrentPlanState({
-          currentPlanName: 'testplan'
-        })
-      };
-    }, mockGetIntl);
+    RegisterNodesActions.nodesRegistrationFinished(messagePayload)(
+      () => {},
+      () => {
+        return {
+          currentPlan: new CurrentPlanState({
+            currentPlanName: 'testplan'
+          })
+        };
+      },
+      mockGetIntl
+    );
 
-    expect(NodesActions.addNodes).toHaveBeenCalledWith(normalizedRegisteredNodes);
+    expect(NodesActions.addNodes).toHaveBeenCalledWith(
+      normalizedRegisteredNodes
+    );
     expect(NodesActions.fetchNodes).toHaveBeenCalledWith();
-    expect(NotificationActions.notify).toHaveBeenCalledWith(successNotification);
+    expect(NotificationActions.notify).toHaveBeenCalledWith(
+      successNotification
+    );
     expect(RegisterNodesActions.nodesRegistrationSuccess).toHaveBeenCalled();
     expect(browserHistory.push).toHaveBeenCalledWith('/nodes/registered');
   });
@@ -118,27 +135,37 @@ describe('nodesRegistrationFinished', () => {
       1: { uuid: 1, name: 'node1' },
       2: { uuid: 2, name: 'node2' }
     };
-    const errors = [{
-      title: 'Nodes Registration Failed',
-      message: JSON.stringify(messagePayload.message)
-    }];
+    const errors = [
+      {
+        title: 'Nodes Registration Failed',
+        message: JSON.stringify(messagePayload.message)
+      }
+    ];
 
     spyOn(RegisterNodesActions, 'nodesRegistrationFailed');
     spyOn(browserHistory, 'push');
 
-    RegisterNodesActions.nodesRegistrationFinished(messagePayload)(() => {}, () => {
-      return {
-        currentPlan: new CurrentPlanState({
-          currentPlanName: 'testplan'
-        })
-      };
-    }, mockGetIntl);
+    RegisterNodesActions.nodesRegistrationFinished(messagePayload)(
+      () => {},
+      () => {
+        return {
+          currentPlan: new CurrentPlanState({
+            currentPlanName: 'testplan'
+          })
+        };
+      },
+      mockGetIntl
+    );
 
-    expect(browserHistory.push).toHaveBeenCalledWith('/nodes/registered/register');
-    expect(NodesActions.addNodes).toHaveBeenCalledWith(normalizedRegisteredNodes);
+    expect(browserHistory.push).toHaveBeenCalledWith(
+      '/nodes/registered/register'
+    );
+    expect(NodesActions.addNodes).toHaveBeenCalledWith(
+      normalizedRegisteredNodes
+    );
     expect(NodesActions.fetchNodes).toHaveBeenCalledWith();
-    expect(RegisterNodesActions.nodesRegistrationFailed).toHaveBeenCalledWith(errors);
+    expect(RegisterNodesActions.nodesRegistrationFailed).toHaveBeenCalledWith(
+      errors
+    );
   });
-
-
 });

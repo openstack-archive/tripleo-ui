@@ -26,23 +26,28 @@ class DeploymentFailure extends React.Component {
   render() {
     const { formatMessage } = this.props.intl;
     const status = formatMessage(
-      deploymentStatusMessages[this.props.stack.stack_status]);
+      deploymentStatusMessages[this.props.stack.stack_status]
+    );
 
     return (
       <div>
-        <InlineNotification type="error"
-                            title={status}>
+        <InlineNotification type="error" title={status}>
           <p>
-            {this.props.stack.stack_status_reason} <Link to="/deployment-plan/deployment-detail">
-            <FormattedMessage {...messages.moreDetails}/></Link>
+            {this.props.stack.stack_status_reason}
+            {' '}
+            <Link to="/deployment-plan/deployment-detail">
+              <FormattedMessage {...messages.moreDetails} />
+            </Link>
           </p>
         </InlineNotification>
-        <DeleteStackButton content={formatMessage(messages.deleteDeployment)}
-                           deleteStack={this.props.deleteStack}
-                           disabled={this.props.isRequestingStackDelete}
-                           loaded={!this.props.isRequestingStackDelete}
-                           loaderContent={formatMessage(messages.requestingDeletion)}
-                           stack={this.props.stack}/>
+        <DeleteStackButton
+          content={formatMessage(messages.deleteDeployment)}
+          deleteStack={this.props.deleteStack}
+          disabled={this.props.isRequestingStackDelete}
+          loaded={!this.props.isRequestingStackDelete}
+          loaderContent={formatMessage(messages.requestingDeletion)}
+          stack={this.props.stack}
+        />
       </div>
     );
   }

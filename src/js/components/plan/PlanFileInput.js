@@ -12,12 +12,14 @@ class PlanFileInput extends React.Component {
   }
 
   componentDidUpdate() {
-    if(this.props.uploadType === 'folder') {
+    if (this.props.uploadType === 'folder') {
       // Attributes not in react's whitelist need to be added after mounting.
-      this.refs[this.props.name].setAttribute('webkitdirectory', 'webkitdirectory');
+      this.refs[this.props.name].setAttribute(
+        'webkitdirectory',
+        'webkitdirectory'
+      );
       this.refs[this.props.name].setAttribute('multiple', 'multiple');
-    }
-    else {
+    } else {
       this.refs[this.props.name].removeAttribute('webkitdirectory');
       this.refs[this.props.name].removeAttribute('multiple');
     }
@@ -27,21 +29,21 @@ class PlanFileInput extends React.Component {
     let files = [];
     let processedFilesCount = 0;
 
-    for(let i=0, l=inputFiles.length; i<l; i++) {
+    for (let i = 0, l = inputFiles.length; i < l; i++) {
       let reader = new FileReader();
       let file = inputFiles[i];
 
       reader.onerror = (f => {
-        return (e => {
+        return e => {
           this.setState({
             unreadableFile: f.webkitRelativePath
           });
-        });
+        };
       })(file);
 
       reader.onload = (f => {
         return e => {
-          if(file.name.match(/(\.yaml|\.json|\.pp|\.sh|\.j2)$/)) {
+          if (file.name.match(/(\.yaml|\.json|\.pp|\.sh|\.j2)$/)) {
             let obj = {
               name: f.webkitRelativePath.replace(/^[^\/]*\//, ''),
               content: e.target.result
@@ -49,18 +51,20 @@ class PlanFileInput extends React.Component {
             files.push(obj);
           }
           processedFilesCount += 1;
-          this.setState({progress: Math.round(100/l*processedFilesCount)}, () => {
-            // if the last file is processed, setValue -> triggers onChange on Formsy.Form
-            if(processedFilesCount === l) {
-              this.props.setValue(files);
-              this.setState({progress: 0});
+          this.setState(
+            { progress: Math.round(100 / l * processedFilesCount) },
+            () => {
+              // if the last file is processed, setValue -> triggers onChange on Formsy.Form
+              if (processedFilesCount === l) {
+                this.props.setValue(files);
+                this.setState({ progress: 0 });
+              }
             }
-          });
+          );
         };
       })(file);
       reader.readAsText(file);
     }
-
   }
 
   processTarball(file) {
@@ -68,10 +72,9 @@ class PlanFileInput extends React.Component {
   }
 
   processFiles(event) {
-    if(this.props.uploadType === 'folder') {
+    if (this.props.uploadType === 'folder') {
       this.processFolderFiles.bind(this)(event.target.files);
-    }
-    else {
+    } else {
       this.processTarball.bind(this)(event.target.files[0]);
     }
   }
@@ -81,24 +84,27 @@ class PlanFileInput extends React.Component {
     if (!errorMessage && this.state.unreadableFile) {
       errorMessage = `${this.state.unreadableFile} could not be read.`;
     }
-    return errorMessage ? (
-      <span className="help-block">{errorMessage}</span>
-    ) : false;
+    return errorMessage
+      ? <span className="help-block">{errorMessage}</span>
+      : false;
   }
 
   renderDescription() {
     let description = this.props.description;
-    return description ? (
-      <small className="help-block">{description}</small>
-    ) : false;
+    return description
+      ? <small className="help-block">{description}</small>
+      : false;
   }
 
   renderProgress() {
-    return this.state.progress > 0 ? (
-      <div className="progress active help-block">
-        <div className="progress-bar" style={{width: `${this.state.progress}%`}}></div>
-      </div>
-    ) : false;
+    return this.state.progress > 0
+      ? <div className="progress active help-block">
+          <div
+            className="progress-bar"
+            style={{ width: `${this.state.progress}%` }}
+          />
+        </div>
+      : false;
   }
 
   render() {
@@ -106,21 +112,25 @@ class PlanFileInput extends React.Component {
       'form-group': true,
       'has-error': this.props.showError(),
       'has-success': this.props.isValid(),
-      'required': this.props.isRequired()
+      required: this.props.isRequired()
     });
 
-    return(
+    return (
       <div className={divClasses}>
-        <label htmlFor={this.props.name}
-               className={`${this.props.labelColumnClasses} control-label`}>
+        <label
+          htmlFor={this.props.name}
+          className={`${this.props.labelColumnClasses} control-label`}
+        >
           {this.props.title}
         </label>
         <div className={this.props.inputColumnClasses}>
-          <input type="file"
-                 name={this.props.name}
-                 ref={this.props.name}
-                 id={this.props.name}
-                 onChange={this.processFiles.bind(this)}/>
+          <input
+            type="file"
+            name={this.props.name}
+            ref={this.props.name}
+            id={this.props.name}
+            onChange={this.processFiles.bind(this)}
+          />
           {this.renderProgress()}
           {this.renderErrorMessage()}
           {this.renderDescription()}

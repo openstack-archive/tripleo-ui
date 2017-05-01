@@ -66,13 +66,15 @@ describe('utility functions', () => {
     });
 
     it('gives precedence to urls made available through app.conf', () => {
-      expect(getServiceUrl(
-        'fooservice', null, { fooservice: 'http://FooPublicURL' })
+      expect(
+        getServiceUrl('fooservice', null, { fooservice: 'http://FooPublicURL' })
       ).toEqual('http://FooPublicURL');
     });
 
     it('expands urls containing the keystone project macro', () => {
-      expect(getServiceUrl('macroservice')).toEqual('http://MacroPublicUrl/v1/Foo_778899');
+      expect(getServiceUrl('macroservice')).toEqual(
+        'http://MacroPublicUrl/v1/Foo_778899'
+      );
     });
   });
 

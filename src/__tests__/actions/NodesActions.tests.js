@@ -9,10 +9,7 @@ import NodesConstants from '../../js/constants/NodesConstants';
 import * as utils from '../../js/services/utils';
 import MistralConstants from '../../js/constants/MistralConstants';
 
-const mockGetNodesResponse = [
-  { uuid: 1 },
-  { uuid: 2 }
-];
+const mockGetNodesResponse = [{ uuid: 1 }, { uuid: 2 }];
 
 describe('Nodes Actions', () => {
   it('creates action to request nodes', () => {
@@ -27,7 +24,9 @@ describe('Nodes Actions', () => {
       type: NodesConstants.RECEIVE_NODES,
       payload: mockGetNodesResponse
     };
-    expect(NodesActions.receiveNodes(mockGetNodesResponse)).toEqual(expectedAction);
+    expect(NodesActions.receiveNodes(mockGetNodesResponse)).toEqual(
+      expectedAction
+    );
   });
 
   it('creates action to notify that nodes operation started', () => {
@@ -35,7 +34,9 @@ describe('Nodes Actions', () => {
       type: NodesConstants.START_NODES_OPERATION,
       payload: mockGetNodesResponse
     };
-    expect(NodesActions.startOperation(mockGetNodesResponse)).toEqual(expectedAction);
+    expect(NodesActions.startOperation(mockGetNodesResponse)).toEqual(
+      expectedAction
+    );
   });
 
   it('creates action to notify that nodes operation finished', () => {
@@ -43,7 +44,9 @@ describe('Nodes Actions', () => {
       type: NodesConstants.FINISH_NODES_OPERATION,
       payload: mockGetNodesResponse
     };
-    expect(NodesActions.finishOperation(mockGetNodesResponse)).toEqual(expectedAction);
+    expect(NodesActions.finishOperation(mockGetNodesResponse)).toEqual(
+      expectedAction
+    );
   });
 
   it('should create an action for pending Node update', () => {
@@ -62,8 +65,7 @@ describe('Nodes Actions', () => {
       type: NodesConstants.UPDATE_NODE_SUCCESS,
       payload: updatedNode
     };
-    expect(NodesActions.updateNodeSuccess(updatedNode))
-      .toEqual(expectedAction);
+    expect(NodesActions.updateNodeSuccess(updatedNode)).toEqual(expectedAction);
   });
 
   it('should create an action for failed Node update', () => {
@@ -95,7 +97,7 @@ describe('Nodes Actions', () => {
 
 // Use this to mock asynchronous functions which return a promise.
 // The promise will immediately resolve with `data`.
-let createResolvingPromise = (data) => {
+let createResolvingPromise = data => {
   return () => {
     return when.resolve(data);
   };
@@ -113,15 +115,22 @@ describe('Asynchronous Nodes Actions', () => {
     );
     // Note that `getNode` is called multiple times but always returns the same response
     // to keep the test simple.
-    spyOn(IronicApiService, 'getNode').and.callFake(createResolvingPromise({ uuid: 'uuid' }));
-    spyOn(IronicApiService, 'getPorts').and.callFake(createResolvingPromise({
-      ports: [{ uuid: 'port1', address: 'mac', node_uuid: '123' }]}));
+    spyOn(IronicApiService, 'getNode').and.callFake(
+      createResolvingPromise({ uuid: 'uuid' })
+    );
+    spyOn(IronicApiService, 'getPorts').and.callFake(
+      createResolvingPromise({
+        ports: [{ uuid: 'port1', address: 'mac', node_uuid: '123' }]
+      })
+    );
 
     // Call the action creator and the resulting action.
     // In this case, dispatch and getState are just empty placeHolders.
     NodesActions.fetchNodes()(() => {}, () => {});
     // Call `done` with a minimal timeout.
-    setTimeout(() => { done(); }, 1);
+    setTimeout(() => {
+      done();
+    }, 1);
   });
 
   it('dispatches requestNodes', () => {
@@ -144,7 +153,6 @@ describe('Asynchronous Nodes Actions', () => {
       }
     });
   });
-
 });
 
 describe('Asynchronous Introspect Nodes Action', () => {
@@ -162,13 +170,18 @@ describe('Asynchronous Introspect Nodes Action', () => {
     // In this case, dispatch and getState are just empty placeHolders.
     NodesActions.startNodesIntrospection(nodeIds)(() => {}, () => {});
     // Call `done` with a minimal timeout.
-    setTimeout(() => { done(); }, 1);
+    setTimeout(() => {
+      done();
+    }, 1);
   });
 
   it('dispatches startOperation', () => {
     const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
-    expect(MistralApiService.runWorkflow).toHaveBeenCalledWith(
-      MistralConstants.BAREMETAL_INTROSPECT, { node_uuids: nodeIds });
+    expect(
+      MistralApiService.runWorkflow
+    ).toHaveBeenCalledWith(MistralConstants.BAREMETAL_INTROSPECT, {
+      node_uuids: nodeIds
+    });
     expect(NodesActions.startOperation).toHaveBeenCalledWith(nodeIds);
   });
 });
@@ -197,7 +210,11 @@ describe('nodesIntrospectionFinished', () => {
       ttl: 3600
     };
 
-    NodesActions.nodesIntrospectionFinished(messagePayload)(() => {}, () => {}, mockGetIntl);
+    NodesActions.nodesIntrospectionFinished(messagePayload)(
+      () => {},
+      () => {},
+      mockGetIntl
+    );
 
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
     expect(NotificationActions.notify).toHaveBeenCalled();
@@ -211,23 +228,28 @@ describe('nodesIntrospectionFinished', () => {
         }
       },
       status: 'FAILED',
-      message: ['Nodes Introspection failed', 'Some error occurred during introspection'],
+      message: [
+        'Nodes Introspection failed',
+        'Some error occurred during introspection'
+      ],
       introspected_nodes: {},
       execution_id: '622eb415-a522-4016-b5f6-6e9e0b3f687a',
       queue_name: 'tripleo',
       ttl: 3600
     };
 
-    NodesActions.nodesIntrospectionFinished(messagePayload)(() => {}, () => {}, mockGetIntl);
+    NodesActions.nodesIntrospectionFinished(messagePayload)(
+      () => {},
+      () => {},
+      mockGetIntl
+    );
 
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
-    expect(NotificationActions.notify).toHaveBeenCalledWith(
-      {
-        type: 'error',
-        title: 'Nodes Introspection Failed',
-        message: 'Nodes Introspection failed, Some error occurred during introspection'
-      }
-    );
+    expect(NotificationActions.notify).toHaveBeenCalledWith({
+      type: 'error',
+      title: 'Nodes Introspection Failed',
+      message: 'Nodes Introspection failed, Some error occurred during introspection'
+    });
   });
 });
 
@@ -244,12 +266,17 @@ describe('startProvideNodes Action', () => {
     );
 
     NodesActions.startProvideNodes(nodeIds)(() => {}, () => {});
-    setTimeout(() => { done(); }, 1);
+    setTimeout(() => {
+      done();
+    }, 1);
   });
 
   it('dispatches startOperation', () => {
-    expect(MistralApiService.runWorkflow).toHaveBeenCalledWith(MistralConstants.BAREMETAL_PROVIDE,
-                                                               { node_uuids: nodeIds });
+    expect(
+      MistralApiService.runWorkflow
+    ).toHaveBeenCalledWith(MistralConstants.BAREMETAL_PROVIDE, {
+      node_uuids: nodeIds
+    });
     expect(NodesActions.startOperation).toHaveBeenCalledWith(nodeIds);
   });
 });
@@ -265,7 +292,7 @@ describe('provideNodesFinished', () => {
     const messagePayload = {
       status: 'SUCCESS',
       message: 'Nodes were successfully made available',
-      execution: { input: { node_uuids: [] }}
+      execution: { input: { node_uuids: [] } }
     };
 
     NodesActions.provideNodesFinished(messagePayload)(() => {}, () => {});
@@ -279,20 +306,18 @@ describe('provideNodesFinished', () => {
     const messagePayload = {
       status: 'FAILED',
       message: [{ result: 'Failed to set nodes to available.' }],
-      execution: { input: { node_uuids: [] }}
+      execution: { input: { node_uuids: [] } }
     };
 
     NodesActions.provideNodesFinished(messagePayload)(() => {}, () => {});
 
     expect(NodesActions.finishOperation).toHaveBeenCalled();
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
-    expect(NotificationActions.notify).toHaveBeenCalledWith(
-      {
-        type: 'error',
-        title: 'Error',
-        message: 'Failed to set nodes to available.'
-      }
-    );
+    expect(NotificationActions.notify).toHaveBeenCalledWith({
+      type: 'error',
+      title: 'Error',
+      message: 'Failed to set nodes to available.'
+    });
   });
 });
 
@@ -309,16 +334,20 @@ describe('Update Node thunk action', () => {
 
     const nodePatch = {
       uuid: 'someId',
-      patches: [{
-        op: 'replace',
-        path: '/properties/capabilities',
-        value: 'updated value for path'
-      }]
+      patches: [
+        {
+          op: 'replace',
+          path: '/properties/capabilities',
+          value: 'updated value for path'
+        }
+      ]
     };
 
     NodesActions.updateNode(nodePatch)(() => {}, () => {});
     // Call `done` with a minimal timeout.
-    setTimeout(() => { done(); }, 1);
+    setTimeout(() => {
+      done();
+    }, 1);
   });
 
   it('dispatches updateNodePending action', () => {
@@ -326,7 +355,9 @@ describe('Update Node thunk action', () => {
   });
 
   it('dispatches updateNodeSuccess action', () => {
-    expect(NodesActions.updateNodeSuccess).toHaveBeenCalledWith({ uuid: 'someId' });
+    expect(NodesActions.updateNodeSuccess).toHaveBeenCalledWith({
+      uuid: 'someId'
+    });
   });
 });
 
@@ -339,12 +370,15 @@ describe('Delete Nodes thunk action', () => {
     spyOn(NodesActions, 'startOperation');
     spyOn(NodesActions, 'deleteNodeSuccess');
     // Mock the service call.
-    spyOn(IronicApiService, 'deleteNode').and.callFake(createResolvingPromise());
-
+    spyOn(IronicApiService, 'deleteNode').and.callFake(
+      createResolvingPromise()
+    );
 
     NodesActions.deleteNodes(nodeIds)(() => {}, () => {});
     // Call `done` with a minimal timeout.
-    setTimeout(() => { done(); }, 1);
+    setTimeout(() => {
+      done();
+    }, 1);
   });
 
   it('successfully deletes a set of nodes', () => {

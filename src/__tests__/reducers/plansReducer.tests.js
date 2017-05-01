@@ -1,17 +1,19 @@
 import { List, Map } from 'immutable';
 
-import { InitialPlanState, Plan, PlanFile } from '../../js/immutableRecords/plans';
+import {
+  InitialPlanState,
+  Plan,
+  PlanFile
+} from '../../js/immutableRecords/plans';
 import PlansActions from '../../js/actions/PlansActions';
 import plansReducer from '../../js/reducers/plansReducer';
 
-
 describe('plansReducer state', () => {
-
   describe('default state', () => {
     let state;
 
     beforeEach(() => {
-      state = plansReducer(undefined, {type: 'undefined-action'});
+      state = plansReducer(undefined, { type: 'undefined-action' });
     });
 
     it('`isFetchingPlans` is false', () => {
@@ -25,7 +27,10 @@ describe('plansReducer state', () => {
 
   describe('CREATE_PLAN_PENDING', () => {
     it('sets isTransitioningPlan to `true`', () => {
-      let state = plansReducer(new InitialPlanState, PlansActions.createPlanPending());
+      let state = plansReducer(
+        new InitialPlanState(),
+        PlansActions.createPlanPending()
+      );
       expect(state.isTransitioningPlan).toBe(true);
     });
   });
@@ -69,10 +74,7 @@ describe('plansReducer state', () => {
           isFetchingPlans: true,
           all: List()
         }),
-        PlansActions.receivePlans([
-          'overcloud',
-          'another-cloud'
-        ])
+        PlansActions.receivePlans(['overcloud', 'another-cloud'])
       );
     });
 
@@ -95,8 +97,8 @@ describe('plansReducer state', () => {
       state = plansReducer(
         Map({
           all: Map({
-            'some-cloud': new Plan({name: 'some-cloud' }),
-            'overcloud': new Plan({name: 'overcloud' })
+            'some-cloud': new Plan({ name: 'some-cloud' }),
+            overcloud: new Plan({ name: 'overcloud' })
           })
         }),
         PlansActions.receivePlan('overcloud', {
@@ -108,10 +110,14 @@ describe('plansReducer state', () => {
     });
 
     it('updates the plan records `files` attributes', () => {
-      expect(plan.get('files')).toEqual(Map({
-        'capabilities_map.yaml': new PlanFile({ name: 'capabilities_map.yaml' }),
-        'foo.yaml': new PlanFile({ name: 'foo.yaml' })
-      }));
+      expect(plan.get('files')).toEqual(
+        Map({
+          'capabilities_map.yaml': new PlanFile({
+            name: 'capabilities_map.yaml'
+          }),
+          'foo.yaml': new PlanFile({ name: 'foo.yaml' })
+        })
+      );
     });
   });
 
@@ -138,9 +144,11 @@ describe('plansReducer state', () => {
         newState,
         PlansActions.deletePlanSuccess('somecloud')
       );
-      expect(newState.get('all')).toEqual(Map({
-        overcloud: new Plan({ name: 'overcloud' })
-      }));
+      expect(newState.get('all')).toEqual(
+        Map({
+          overcloud: new Plan({ name: 'overcloud' })
+        })
+      );
     });
 
     it('DELETE_PLAN_FAILED sets `transition` in plan Record to false', () => {

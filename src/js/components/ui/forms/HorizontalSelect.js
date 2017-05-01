@@ -13,19 +13,23 @@ class HorizontalSelect extends React.Component {
   render() {
     return (
       <div className="form-group">
-        <label htmlFor={this.props.name}
-               className={`${this.props.labelColumnClasses} control-label`}>
+        <label
+          htmlFor={this.props.name}
+          className={`${this.props.labelColumnClasses} control-label`}
+        >
           {this.props.title}
         </label>
         <div className={this.props.inputColumnClasses}>
-          <select name={this.props.name}
-                  ref={this.props.name}
-                  id={this.props.name}
-                  className="form-control"
-                  onChange={this.changeValue.bind(this)}
-                  value={this.props.getValue()}>
+          <select
+            name={this.props.name}
+            ref={this.props.name}
+            id={this.props.name}
+            className="form-control"
+            onChange={this.changeValue.bind(this)}
+            value={this.props.getValue()}
+          >
             {this.props.children}
-           </select>
+          </select>
           <InputErrorMessage getErrorMessage={this.props.getErrorMessage} />
           <InputDescription description={this.props.description} />
         </div>

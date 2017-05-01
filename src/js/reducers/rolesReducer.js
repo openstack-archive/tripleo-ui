@@ -8,39 +8,40 @@ import { Role, RolesState } from '../immutableRecords/roles';
 const initialState = new RolesState();
 
 export default function rolesReducer(state = initialState, action) {
+  switch (action.type) {
+    case RolesConstants.FETCH_ROLES_PENDING:
+      return state.set('isFetching', true);
 
-  switch(action.type) {
+    case RolesConstants.FETCH_ROLES_SUCCESS: {
+      // Convert roles array into Map of Role records. This could get replaced by normalizing
+      // once the mistral getRoles action returns an array of objects
+      const roles = fromJS(action.payload).reduce(
+        (result, role) =>
+          result.set(_getRoleIdentifier(role), _createRole(role)),
+        Map()
+      );
 
-  case RolesConstants.FETCH_ROLES_PENDING:
-    return state.set('isFetching', true);
+      return state
+        .set('roles', fromJS(roles).map(role => new Role(role)))
+        .set('isFetching', false)
+        .set('loaded', true);
+    }
 
-  case RolesConstants.FETCH_ROLES_SUCCESS: {
-    // Convert roles array into Map of Role records. This could get replaced by normalizing
-    // once the mistral getRoles action returns an array of objects
-    const roles = fromJS(action.payload)
-                    .reduce((result, role) => result.set(_getRoleIdentifier(role),
-                                                         _createRole(role)), Map());
+    case RolesConstants.FETCH_ROLES_FAILED:
+      return state
+        .set('roles', Map())
+        .set('isFetching', false)
+        .set('loaded', true);
 
-    return state.set('roles', fromJS(roles).map(role => new Role(role)))
-                .set('isFetching', false)
-                .set('loaded', true);
-  }
+    case PlansConstants.PLAN_CHOSEN:
+      return state.set('loaded', false);
 
-  case RolesConstants.FETCH_ROLES_FAILED:
-    return state.set('roles', Map())
-                .set('isFetching', false)
-                .set('loaded', true);
-
-  case PlansConstants.PLAN_CHOSEN:
-    return state.set('loaded', false);
-
-  default:
-    return state;
-
+    default:
+      return state;
   }
 }
 
-const _createRole = (roleName) => {
+const _createRole = roleName => {
   return new Role({
     name: roleName,
     title: startCase(roleName),

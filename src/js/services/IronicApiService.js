@@ -6,18 +6,21 @@ import { getServiceUrl, getAuthTokenId } from './utils';
 
 class IronicApiService {
   defaultRequest(path, additionalAttributes) {
-    return when.try(getServiceUrl, 'ironic').then((serviceUrl) => {
-      let requestAttributes = _.merge({
-        url: `${serviceUrl}${path}`,
-        headers: {
-          'X-Auth-Token': getAuthTokenId(),
-          'X-OpenStack-Ironic-API-Version': '1.14'
+    return when.try(getServiceUrl, 'ironic').then(serviceUrl => {
+      let requestAttributes = _.merge(
+        {
+          url: `${serviceUrl}${path}`,
+          headers: {
+            'X-Auth-Token': getAuthTokenId(),
+            'X-OpenStack-Ironic-API-Version': '1.14'
+          },
+          crossOrigin: true,
+          contentType: 'application/json',
+          type: 'json',
+          method: 'GET'
         },
-        crossOrigin: true,
-        contentType: 'application/json',
-        type: 'json',
-        method: 'GET'
-      }, additionalAttributes);
+        additionalAttributes
+      );
       return when(request(requestAttributes));
     });
   }
@@ -54,7 +57,6 @@ class IronicApiService {
       method: 'DELETE'
     });
   }
-
 }
 
 export default new IronicApiService();

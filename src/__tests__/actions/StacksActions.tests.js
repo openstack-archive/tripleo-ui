@@ -6,13 +6,13 @@ import StacksActions from '../../js/actions/StacksActions';
 
 // Use these to mock asynchronous functions which return a promise.
 // The promise will immediately resolve/reject with `data`.
-let createResolvingPromise = (data) => {
+let createResolvingPromise = data => {
   return () => {
     return when.resolve(data);
   };
 };
 
-let createRejectingPromise = (errorMessage) => {
+let createRejectingPromise = errorMessage => {
   return () => {
     return when.reject(Error(errorMessage));
   };
@@ -32,12 +32,16 @@ describe('StacksActions', () => {
     };
 
     beforeEach(done => {
-      spyOn(HeatApiService, 'getStacks').and.callFake(createResolvingPromise(serviceResponse));
+      spyOn(HeatApiService, 'getStacks').and.callFake(
+        createResolvingPromise(serviceResponse)
+      );
       spyOn(StacksActions, 'fetchStacksPending');
       spyOn(StacksActions, 'fetchStacksSuccess');
       spyOn(StacksActions, 'fetchStacksFailed');
       StacksActions.fetchStacks()(() => {}, () => {});
-      setTimeout(() => { done(); }, 1);
+      setTimeout(() => {
+        done();
+      }, 1);
     });
 
     it('dispatches fetchStacksPending', () => {
@@ -49,18 +53,24 @@ describe('StacksActions', () => {
     });
 
     it('dispatches fetchStacksSuccess', () => {
-      expect(StacksActions.fetchStacksSuccess).toHaveBeenCalledWith(normalizedStacks);
+      expect(StacksActions.fetchStacksSuccess).toHaveBeenCalledWith(
+        normalizedStacks
+      );
     });
   });
 
   describe('fetchStacks (failed)', () => {
     beforeEach(done => {
-      spyOn(HeatApiService, 'getStacks').and.callFake(createRejectingPromise('failed'));
+      spyOn(HeatApiService, 'getStacks').and.callFake(
+        createRejectingPromise('failed')
+      );
       spyOn(StacksActions, 'fetchStacksPending');
       spyOn(StacksActions, 'fetchStacksSuccess');
       spyOn(StacksActions, 'fetchStacksFailed');
       StacksActions.fetchStacks()(() => {}, () => {});
-      setTimeout(() => { done(); }, 1);
+      setTimeout(() => {
+        done();
+      }, 1);
     });
 
     it('dispatches fetchStacksPending', () => {
@@ -75,5 +85,4 @@ describe('StacksActions', () => {
       expect(StacksActions.fetchStacksFailed).toHaveBeenCalled();
     });
   });
-
 });

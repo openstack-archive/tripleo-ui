@@ -4,21 +4,29 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React, { PropTypes } from 'react';
 
-import { allPreDeploymentValidationsSuccessful } from '../../selectors/validations';
+import {
+  allPreDeploymentValidationsSuccessful
+} from '../../selectors/validations';
 import DeploymentConfirmation from './DeploymentConfirmation';
 import DeploymentProgress from './DeploymentProgress';
 import DeploymentSuccess from './DeploymentSuccess';
 import DeploymentFailure from './DeploymentFailure';
 import { getCurrentPlan } from '../../selectors/plans';
-import { getCurrentStack,
-         getCurrentStackDeploymentProgress } from '../../selectors/stacks';
-import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
+import {
+  getCurrentStack,
+  getCurrentStackDeploymentProgress
+} from '../../selectors/stacks';
+import {
+  getEnvironmentConfigurationSummary
+} from '../../selectors/environmentConfiguration';
 import Loader from '../ui/Loader';
-import { ModalPanelBackdrop,
-         ModalPanel,
-         ModalPanelHeader,
-         ModalPanelBody,
-         ModalPanelFooter } from '../ui/ModalPanel';
+import {
+  ModalPanelBackdrop,
+  ModalPanel,
+  ModalPanelHeader,
+  ModalPanelBody,
+  ModalPanelFooter
+} from '../ui/ModalPanel';
 import PlanActions from '../../actions/PlansActions';
 import { stackStates } from '../../constants/StacksConstants';
 import StacksActions from '../../actions/StacksActions';
@@ -41,52 +49,66 @@ const messages = defineMessages({
 
 class DeploymentDetail extends React.Component {
   renderStatus() {
-    const { allPreDeploymentValidationsSuccessful,
-            currentPlan,
-            currentStack,
-            currentStackDeploymentProgress,
-            currentStackResources,
-            currentStackResourcesLoaded,
-            deployPlan,
-            environmentConfigurationSummary,
-            fetchStackResources,
-            runPreDeploymentValidations,
-            stacksLoaded } = this.props;
+    const {
+      allPreDeploymentValidationsSuccessful,
+      currentPlan,
+      currentStack,
+      currentStackDeploymentProgress,
+      currentStackResources,
+      currentStackResourcesLoaded,
+      deployPlan,
+      environmentConfigurationSummary,
+      fetchStackResources,
+      runPreDeploymentValidations,
+      stacksLoaded
+    } = this.props;
 
-    if (!currentStack || currentStack.stack_status === stackStates.DELETE_COMPLETE) {
+    if (
+      !currentStack ||
+      currentStack.stack_status === stackStates.DELETE_COMPLETE
+    ) {
       return (
-        <Loader loaded={stacksLoaded}
-                content={this.props.intl.formatMessage(messages.loadingStacksLoader)}
-                height={40}>
+        <Loader
+          loaded={stacksLoaded}
+          content={this.props.intl.formatMessage(messages.loadingStacksLoader)}
+          height={40}
+        >
           <DeploymentConfirmation
             allValidationsSuccessful={allPreDeploymentValidationsSuccessful}
             currentPlan={currentPlan}
             deployPlan={deployPlan}
             environmentSummary={environmentConfigurationSummary}
-            runPreDeploymentValidations={runPreDeploymentValidations}/>
+            runPreDeploymentValidations={runPreDeploymentValidations}
+          />
         </Loader>
       );
     } else if (currentStack.stack_status.match(/PROGRESS/)) {
       return (
-        <DeploymentProgress stack={currentStack}
-                            stackResources={currentStackResources}
-                            deploymentProgress={currentStackDeploymentProgress}
-                            stackResourcesLoaded={currentStackResourcesLoaded}
-                            fetchStackResources={fetchStackResources} />
+        <DeploymentProgress
+          stack={currentStack}
+          stackResources={currentStackResources}
+          deploymentProgress={currentStackDeploymentProgress}
+          stackResourcesLoaded={currentStackResourcesLoaded}
+          fetchStackResources={fetchStackResources}
+        />
       );
     } else if (currentStack.stack_status.match(/COMPLETE/)) {
       return (
-        <DeploymentSuccess stack={currentStack}
-                           stackResources={currentStackResources}
-                           stackResourcesLoaded={currentStackResourcesLoaded}/>
+        <DeploymentSuccess
+          stack={currentStack}
+          stackResources={currentStackResources}
+          stackResourcesLoaded={currentStackResourcesLoaded}
+        />
       );
     } else {
       return (
-        <DeploymentFailure fetchStackResources={fetchStackResources}
-                           stack={currentStack}
-                           stackResources={currentStackResources}
-                           stackResourcesLoaded={currentStackResourcesLoaded}
-                           planName={currentPlan.name}/>
+        <DeploymentFailure
+          fetchStackResources={fetchStackResources}
+          stack={currentStack}
+          stackResources={currentStackResources}
+          stackResourcesLoaded={currentStackResourcesLoaded}
+          planName={currentPlan.name}
+        />
       );
     }
   }
@@ -97,24 +119,26 @@ class DeploymentDetail extends React.Component {
         <ModalPanelBackdrop />
         <ModalPanel>
           <ModalPanelHeader>
-            <Link to="/deployment-plan"
-                  type="button"
-                  className="close">
-              <span aria-hidden="true" className="pficon pficon-close"/>
+            <Link to="/deployment-plan" type="button" className="close">
+              <span aria-hidden="true" className="pficon pficon-close" />
             </Link>
             <h2 className="modal-title">
-              <FormattedMessage {...messages.modalTitle}
-                                values={{planName: this.props.currentPlan.name}}/>
+              <FormattedMessage
+                {...messages.modalTitle}
+                values={{ planName: this.props.currentPlan.name }}
+              />
             </h2>
           </ModalPanelHeader>
           <ModalPanelBody>
             {this.renderStatus()}
           </ModalPanelBody>
           <ModalPanelFooter>
-            <Link to="/deployment-plan"
-                  type="button"
-                  className="btn btn-default">
-              <FormattedMessage {...messages.close}/>
+            <Link
+              to="/deployment-plan"
+              type="button"
+              className="btn btn-default"
+            >
+              <FormattedMessage {...messages.close} />
             </Link>
           </ModalPanelFooter>
         </ModalPanel>
@@ -138,9 +162,11 @@ DeploymentDetail.propTypes = {
   stacksLoaded: PropTypes.bool.isRequired
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    allPreDeploymentValidationsSuccessful: allPreDeploymentValidationsSuccessful(state),
+    allPreDeploymentValidationsSuccessful: allPreDeploymentValidationsSuccessful(
+      state
+    ),
     currentPlan: getCurrentPlan(state),
     currentStack: getCurrentStack(state),
     currentStackDeploymentProgress: getCurrentStackDeploymentProgress(state),
@@ -151,14 +177,18 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     deployPlan: planName => dispatch(PlanActions.deployPlan(planName)),
-    fetchStackResources: (stack) =>
+    fetchStackResources: stack =>
       dispatch(StacksActions.fetchResources(stack.stack_name, stack.id)),
     runPreDeploymentValidations: planName =>
-      dispatch(ValidationsActions.runValidationGroups(['pre-deployment'], planName))
+      dispatch(
+        ValidationsActions.runValidationGroups(['pre-deployment'], planName)
+      )
   };
 };
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(DeploymentDetail));
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(DeploymentDetail)
+);

@@ -25,28 +25,27 @@ export default class DeploymentConfiguration extends React.Component {
     return (
       <Modal dialogClasses="modal-xl">
         <div className="modal-header">
-          <Link to={this.props.parentPath}
-                type="button"
-                className="close">
-            <span aria-hidden="true" className="pficon pficon-close"/>
+          <Link to={this.props.parentPath} type="button" className="close">
+            <span aria-hidden="true" className="pficon pficon-close" />
           </Link>
-            <h4 className="modal-title">
-              <FormattedMessage {...messages.deploymentConfiguration}/>
-            </h4>
+          <h4 className="modal-title">
+            <FormattedMessage {...messages.deploymentConfiguration} />
+          </h4>
         </div>
 
         <ul className="nav nav-tabs">
           <NavTab to="/deployment-plan/configuration/environment">
-            <FormattedMessage {...messages.overallSettings}/>
+            <FormattedMessage {...messages.overallSettings} />
           </NavTab>
           <NavTab to="/deployment-plan/configuration/parameters">
-            <FormattedMessage {...messages.parameters}/>
+            <FormattedMessage {...messages.parameters} />
           </NavTab>
         </ul>
 
-        {React.cloneElement(this.props.children,
-                            {currentPlanName: this.props.currentPlanName,
-                             parentPath: this.props.parentPath})}
+        {React.cloneElement(this.props.children, {
+          currentPlanName: this.props.currentPlanName,
+          parentPath: this.props.parentPath
+        })}
       </Modal>
     );
   }

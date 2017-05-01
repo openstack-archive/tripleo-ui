@@ -78,9 +78,7 @@ describe('nodesReducer', () => {
       }
     };
     const newState = nodesReducer(updatedState, action);
-    expect(newState.get('all')).toEqual(
-      updatedNodeState.get('all')
-    );
+    expect(newState.get('all')).toEqual(updatedNodeState.get('all'));
     expect(newState.get('nodesInProgress')).toEqual(Set());
   });
 

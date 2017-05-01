@@ -1,20 +1,25 @@
 import { Map, fromJS } from 'immutable';
 
-import EnvironmentConfigurationActions from '../../js/actions/EnvironmentConfigurationActions';
+import EnvironmentConfigurationActions
+  from '../../js/actions/EnvironmentConfigurationActions';
 import EnvironmentConfigurationConstants
   from '../../js/constants/EnvironmentConfigurationConstants';
-import environmentConfigurationReducer from '../../js/reducers/environmentConfigurationReducer';
-import { EnvironmentConfigurationState }
-  from '../../js/immutableRecords/environmentConfiguration';
+import environmentConfigurationReducer
+  from '../../js/reducers/environmentConfigurationReducer';
+import {
+  EnvironmentConfigurationState
+} from '../../js/immutableRecords/environmentConfiguration';
 
-const initialState = new EnvironmentConfigurationState;
+const initialState = new EnvironmentConfigurationState();
 
 describe('environmentConfigurationReducer', () => {
   describe('default state', () => {
     let state;
 
     beforeEach(() => {
-      state = environmentConfigurationReducer(initialState, {type: 'undefined-action'});
+      state = environmentConfigurationReducer(initialState, {
+        type: 'undefined-action'
+      });
     });
 
     it('`isFetching` is false', () => {
@@ -55,7 +60,9 @@ describe('environmentConfigurationReducer', () => {
     beforeEach(() => {
       state = environmentConfigurationReducer(
         initialState,
-        EnvironmentConfigurationActions.fetchEnvironmentConfigurationSuccess(payload)
+        EnvironmentConfigurationActions.fetchEnvironmentConfigurationSuccess(
+          payload
+        )
       );
     });
 

@@ -4,12 +4,15 @@ import when from 'when';
 import MistralApiService from '../../js/services/MistralApiService';
 import ValidationsActions from '../../js/actions/ValidationsActions';
 import ValidationsConstants from '../../js/constants/ValidationsConstants';
-import WorkflowExecutionsActions from '../../js/actions/WorkflowExecutionsActions';
-import { WorkflowExecution } from '../../js/immutableRecords/workflowExecutions';
+import WorkflowExecutionsActions
+  from '../../js/actions/WorkflowExecutionsActions';
+import {
+  WorkflowExecution
+} from '../../js/immutableRecords/workflowExecutions';
 import * as utils from '../../js/services/utils';
 import MistralConstants from '../../js/constants/MistralConstants';
 
-let createResolvingPromise = (data) => {
+let createResolvingPromise = data => {
   return () => {
     return when.resolve(data);
   };
@@ -20,7 +23,9 @@ describe('Validations actions', () => {
     const expectedAction = {
       type: ValidationsConstants.FETCH_VALIDATIONS_PENDING
     };
-    expect(ValidationsActions.fetchValidationsPending()).toEqual(expectedAction);
+    expect(ValidationsActions.fetchValidationsPending()).toEqual(
+      expectedAction
+    );
   });
 
   it('should create an action for successful Validations retrieval', () => {
@@ -29,14 +34,14 @@ describe('Validations actions', () => {
         description: '',
         metadata: {},
         id: '512e',
-        groups: [ 'pre-deployment' ],
+        groups: ['pre-deployment'],
         name: 'Advanced Format 512e Support'
       },
       'check-network-gateway': {
         description: '',
         metadata: {},
         id: 'check-network-gateway',
-        groups: [ 'pre-deployment' ],
+        groups: ['pre-deployment'],
         name: 'Check network_gateway on the provisioning network'
       }
     };
@@ -44,8 +49,9 @@ describe('Validations actions', () => {
       type: ValidationsConstants.FETCH_VALIDATIONS_SUCCESS,
       payload: normalizedValidations
     };
-    expect(ValidationsActions.fetchValidationsSuccess(normalizedValidations))
-      .toEqual(expectedAction);
+    expect(
+      ValidationsActions.fetchValidationsSuccess(normalizedValidations)
+    ).toEqual(expectedAction);
   });
 
   it('should create an action for failed Validations request', () => {
@@ -63,19 +69,24 @@ describe('FetchValidations action', () => {
     spyOn(ValidationsActions, 'fetchValidationsPending');
     spyOn(ValidationsActions, 'fetchValidationsSuccess');
 
-    const response = { output: '{"result": [{"id": "512e"}, {"id": "check-network-gateway"}]}' };
+    const response = {
+      output: '{"result": [{"id": "512e"}, {"id": "check-network-gateway"}]}'
+    };
     spyOn(MistralApiService, 'runAction').and.callFake(
       createResolvingPromise(response)
     );
 
     ValidationsActions.fetchValidations()(() => {}, () => {});
-    setTimeout(() => { done(); }, 1);
+    setTimeout(() => {
+      done();
+    }, 1);
   });
 
   it('dispatches appropriate actions and normalizes the response', () => {
     expect(ValidationsActions.fetchValidationsPending).toHaveBeenCalled();
-    expect(MistralApiService.runAction)
-      .toHaveBeenCalledWith(MistralConstants.VALIDATIONS_LIST);
+    expect(MistralApiService.runAction).toHaveBeenCalledWith(
+      MistralConstants.VALIDATIONS_LIST
+    );
     expect(ValidationsActions.fetchValidationsSuccess).toHaveBeenCalled();
   });
 });
@@ -107,14 +118,18 @@ describe('RunValidation action', () => {
     );
 
     ValidationsActions.runValidation('512e', 'overcloud')(() => {}, () => {});
-    setTimeout(() => { done(); }, 1);
+    setTimeout(() => {
+      done();
+    }, 1);
   });
 
   it('dispatches appropriate actions', () => {
-    expect(MistralApiService.runWorkflow)
-      .toHaveBeenCalledWith(MistralConstants.VALIDATIONS_RUN,
-                            { validation_name: '512e',
-                              plan: 'overcloud' });
+    expect(
+      MistralApiService.runWorkflow
+    ).toHaveBeenCalledWith(MistralConstants.VALIDATIONS_RUN, {
+      validation_name: '512e',
+      plan: 'overcloud'
+    });
   });
 });
 
@@ -162,7 +177,8 @@ xdescribe('runValidationMessage action', () => {
     });
 
     ValidationsActions.runValidationMessage(messagePayload)(() => {}, () => {});
-    expect(WorkflowExecutionsActions.addWorkflowExecutionFromMessage)
-      .toHaveBeenCalledWith(expectedExecution);
+    expect(
+      WorkflowExecutionsActions.addWorkflowExecutionFromMessage
+    ).toHaveBeenCalledWith(expectedExecution);
   });
 });

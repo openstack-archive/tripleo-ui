@@ -3,7 +3,9 @@ import { List, Map, OrderedMap } from 'immutable';
 import * as selectors from '../../js/selectors/validations';
 import { Validation } from '../../js/immutableRecords/validations';
 import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
-import { WorkflowExecution } from '../../js/immutableRecords/workflowExecutions';
+import {
+  WorkflowExecution
+} from '../../js/immutableRecords/workflowExecutions';
 import MistralConstants from '../../js/constants/MistralConstants';
 
 describe(' validations selectors', () => {
@@ -91,9 +93,12 @@ describe(' validations selectors', () => {
   };
 
   it('provides selector to get validation executions for current plan', () => {
-    expect(selectors.getValidationExecutionsForCurrentPlan(state).size).toEqual(2);
-    expect(selectors.getValidationExecutionsForCurrentPlan(state))
-      .toEqual(state.executions.get('executions'));
+    expect(selectors.getValidationExecutionsForCurrentPlan(state).size).toEqual(
+      2
+    );
+    expect(selectors.getValidationExecutionsForCurrentPlan(state)).toEqual(
+      state.executions.get('executions')
+    );
   });
 
   it('provides selector to get validation combined with its results', () => {
@@ -101,7 +106,11 @@ describe(' validations selectors', () => {
     expect(validationsWithResults.size).toEqual(2);
     expect(validationsWithResults.get('512e').results.size).toEqual(0);
     expect(validationsWithResults.get('512e').status).toEqual('new');
-    expect(validationsWithResults.get('check-network-gateway').results.size).toEqual(2);
-    expect(validationsWithResults.get('check-network-gateway').status).toEqual('success');
+    expect(
+      validationsWithResults.get('check-network-gateway').results.size
+    ).toEqual(2);
+    expect(validationsWithResults.get('check-network-gateway').status).toEqual(
+      'success'
+    );
   });
 });

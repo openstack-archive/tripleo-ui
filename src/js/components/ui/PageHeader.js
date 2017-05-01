@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 
-
 export class PageHeader extends React.Component {
   render() {
     return (

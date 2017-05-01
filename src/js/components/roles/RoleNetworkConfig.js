@@ -13,7 +13,8 @@ class RoleNetworkConfig extends React.Component {
         <fieldset>{this.props.description}</fieldset>
         <ParameterInputList
           parameters={this.props.parameters.toList()}
-          mistralParameters={this.props.mistralParameters}/>
+          mistralParameters={this.props.mistralParameters}
+        />
       </div>
     );
   }
@@ -27,9 +28,11 @@ RoleNetworkConfig.propTypes = {
 
 function mapStateToProps(state, props) {
   return {
-    description: getRoleNetworkConfig(state, props.params.roleIdentifier).description,
+    description: getRoleNetworkConfig(state, props.params.roleIdentifier)
+      .description,
     mistralParameters: state.parameters.mistralParameters,
-    parameters: getRoleNetworkConfig(state, props.params.roleIdentifier).parameters,
+    parameters: getRoleNetworkConfig(state, props.params.roleIdentifier)
+      .parameters,
     role: getRole(state, props.params.roleIdentifier)
   };
 }

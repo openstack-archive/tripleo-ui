@@ -1,6 +1,9 @@
 import { List, Map } from 'immutable';
 
-import { ParametersDefaultState, Parameter } from '../../js/immutableRecords/parameters';
+import {
+  ParametersDefaultState,
+  Parameter
+} from '../../js/immutableRecords/parameters';
 import ParametersConstants from '../../js/constants/ParametersConstants';
 import parametersReducer from '../../js/reducers/parametersReducer';
 
@@ -20,9 +23,7 @@ const parametersActionPayload = {
   },
   resources: {
     '1d0e0c81-2dc6-4b39-a9a7-9ef4fab65ecf': {
-      nestedParameters: [
-        'd1f30e6b-c835-49d8-a21e-2983bde15bab'
-      ],
+      nestedParameters: ['d1f30e6b-c835-49d8-a21e-2983bde15bab'],
       type: 'OS::TripleO::Services::HeatEngine',
       description: 'Openstack Heat Engine service configured with Puppet\n',
       parameters: [
@@ -51,10 +52,16 @@ describe('parametersReducer', () => {
     };
 
     beforeEach(() => {
-      state = parametersReducer(ParametersDefaultState({
-        isFetching: false,
-        form: Map({ formErrors: List.of('lorem ipsum'), formFieldErrors: Map({ field: 'foo' })})
-      }), action);
+      state = parametersReducer(
+        ParametersDefaultState({
+          isFetching: false,
+          form: Map({
+            formErrors: List.of('lorem ipsum'),
+            formFieldErrors: Map({ field: 'foo' })
+          })
+        }),
+        action
+      );
     });
 
     it('sets isFetching to `true`', () => {
@@ -62,10 +69,12 @@ describe('parametersReducer', () => {
     });
 
     it('resets form', () => {
-      expect(state.form).toEqual(Map({
-        formErrors: List(),
-        formFieldErrors: Map()
-      }));
+      expect(state.form).toEqual(
+        Map({
+          formErrors: List(),
+          formFieldErrors: Map()
+        })
+      );
     });
   });
 
@@ -77,10 +86,13 @@ describe('parametersReducer', () => {
     };
 
     beforeEach(() => {
-      state = parametersReducer(ParametersDefaultState({
-        isFetching: true,
-        form: Map({ some: 'value' })
-      }), action);
+      state = parametersReducer(
+        ParametersDefaultState({
+          isFetching: true,
+          form: Map({ some: 'value' })
+        }),
+        action
+      );
     });
 
     it('sets isFetching to `false`', () => {
@@ -88,23 +100,30 @@ describe('parametersReducer', () => {
     });
 
     it('resets form', () => {
-      expect(state.form).toEqual(Map({
-        formErrors: List(),
-        formFieldErrors: Map()
-      }));
+      expect(state.form).toEqual(
+        Map({
+          formErrors: List(),
+          formFieldErrors: Map()
+        })
+      );
     });
 
     it('sets parameters', () => {
       expect(state.parameters.size).toEqual(1);
-      expect(state.parameters.getIn(['parameter1', 'default']))
-        .toEqual('3PuRFRBdhHDD49Td4jHJYmD3n');
+      expect(state.parameters.getIn(['parameter1', 'default'])).toEqual(
+        '3PuRFRBdhHDD49Td4jHJYmD3n'
+      );
       expect(Map.isMap(state.parameters)).toBe(true);
     });
 
     it('sets resources', () => {
       expect(state.resources.size).toEqual(1);
-      expect(state.resources.getIn(['1d0e0c81-2dc6-4b39-a9a7-9ef4fab65ecf', 'parameters']).size)
-        .toEqual(10);
+      expect(
+        state.resources.getIn([
+          '1d0e0c81-2dc6-4b39-a9a7-9ef4fab65ecf',
+          'parameters'
+        ]).size
+      ).toEqual(10);
       expect(Map.isMap(state.resources)).toBe(true);
     });
   });
@@ -120,9 +139,12 @@ describe('parametersReducer', () => {
     };
 
     beforeEach(() => {
-      state = parametersReducer(ParametersDefaultState({
-        isFetching: true
-      }), action);
+      state = parametersReducer(
+        ParametersDefaultState({
+          isFetching: true
+        }),
+        action
+      );
     });
 
     it('sets `isFetching` to false', () => {
@@ -130,10 +152,12 @@ describe('parametersReducer', () => {
     });
 
     it('sets errors in  `form`', () => {
-      expect(state.form).toEqual(Map({
-        formErrors: List.of({ foo: 'bar' }),
-        formFieldErrors: Map({ field1: 'fail' })
-      }));
+      expect(state.form).toEqual(
+        Map({
+          formErrors: List.of({ foo: 'bar' }),
+          formFieldErrors: Map({ field1: 'fail' })
+        })
+      );
     });
   });
 
@@ -144,9 +168,12 @@ describe('parametersReducer', () => {
     };
 
     beforeEach(() => {
-      state = parametersReducer(ParametersDefaultState({
-        isFetching: false
-      }), action);
+      state = parametersReducer(
+        ParametersDefaultState({
+          isFetching: false
+        }),
+        action
+      );
     });
 
     it('sets `isFetching` to true', () => {
@@ -162,15 +189,18 @@ describe('parametersReducer', () => {
     };
 
     beforeEach(() => {
-      state = parametersReducer(ParametersDefaultState({
-        isFetching: true,
-        form: Map({ some: 'value' }),
-        parameters: Map({
-          foo: new Parameter({
-            name: 'foo'
+      state = parametersReducer(
+        ParametersDefaultState({
+          isFetching: true,
+          form: Map({ some: 'value' }),
+          parameters: Map({
+            foo: new Parameter({
+              name: 'foo'
+            })
           })
-        })
-      }), action);
+        }),
+        action
+      );
     });
 
     it('sets isFetching to `false`', () => {
@@ -178,10 +208,12 @@ describe('parametersReducer', () => {
     });
 
     it('resets form', () => {
-      expect(state.form).toEqual(Map({
-        formErrors: List(),
-        formFieldErrors: Map()
-      }));
+      expect(state.form).toEqual(
+        Map({
+          formErrors: List(),
+          formFieldErrors: Map()
+        })
+      );
     });
 
     it('updates parameters in state with new values', () => {

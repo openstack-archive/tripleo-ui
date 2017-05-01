@@ -20,12 +20,13 @@ class ToolbarFiltersForm extends React.Component {
   renderFilterStringField() {
     return (
       <Field
-        validate={(value) => value ? undefined : 'Required'}
+        validate={value => (value ? undefined : 'Required')}
         autoComplete="off"
         name="filterString"
         component="input"
         placeholder={this.props.placeholder}
-        className="form-control" />
+        className="form-control"
+      />
     );
   }
 
@@ -40,7 +41,8 @@ class ToolbarFiltersForm extends React.Component {
                   <Field
                     name="filterBy"
                     component={DropdownSelect}
-                    format={formatSelectValue}>
+                    format={formatSelectValue}
+                  >
                     {this.renderFilterByOptions()}
                   </Field>
                 </InputGroup.Button>

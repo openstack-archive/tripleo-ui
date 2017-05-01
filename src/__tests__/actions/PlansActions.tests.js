@@ -11,7 +11,7 @@ window.localStorage = window.sessionStorage = storage;
 
 // Use these to mock asynchronous functions which return a promise.
 // The promise will immediately resolve/reject with `data`.
-let createResolvingPromise = (data) => {
+let createResolvingPromise = data => {
   return () => {
     return when.resolve(data);
   };
@@ -28,12 +28,16 @@ describe('PlansActions', () => {
       spyOn(PlansActions, 'updatePlanSuccess');
       spyOn(PlansActions, 'fetchPlans');
       // Mock the service call.
-      spyOn(PlansActions, '_uploadFilesToContainer').and.callFake(createResolvingPromise());
+      spyOn(PlansActions, '_uploadFilesToContainer').and.callFake(
+        createResolvingPromise()
+      );
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
       PlansActions.updatePlan('somecloud', {})(() => {}, () => {}, mockGetIntl);
       // Call done with a minimal timeout.
-      setTimeout(() => { done(); }, 1);
+      setTimeout(() => {
+        done();
+      }, 1);
     });
 
     it('dispatches updatePlanPending', () => {
@@ -54,15 +58,22 @@ describe('PlansActions', () => {
       spyOn(PlansActions, 'createPlanPending');
       spyOn(PlansActions, 'createPlanSuccess');
       // Mock the service call.
-      spyOn(PlansActions, '_uploadFilesToContainer').and.callFake(createResolvingPromise());
-      spyOn(MistralApiService, 'runAction').and.callFake(createResolvingPromise());
-      spyOn(MistralApiService, 'runWorkflow')
-        .and.callFake(createResolvingPromise({ state: 'SUCCESS' }));
+      spyOn(PlansActions, '_uploadFilesToContainer').and.callFake(
+        createResolvingPromise()
+      );
+      spyOn(MistralApiService, 'runAction').and.callFake(
+        createResolvingPromise()
+      );
+      spyOn(MistralApiService, 'runWorkflow').and.callFake(
+        createResolvingPromise({ state: 'SUCCESS' })
+      );
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
       PlansActions.createPlan('somecloud', {})(() => {}, () => {}, mockGetIntl);
       // Call done with a minimal timeout.
-      setTimeout(() => { done(); }, 1);
+      setTimeout(() => {
+        done();
+      }, 1);
     });
 
     it('dispatches createPlanPending', () => {
@@ -76,12 +87,16 @@ describe('PlansActions', () => {
       spyOn(PlansActions, 'deletePlanSuccess');
       spyOn(PlansActions, 'fetchPlans');
       // Mock the service call.
-      spyOn(MistralApiService, 'runAction').and.callFake(createResolvingPromise());
+      spyOn(MistralApiService, 'runAction').and.callFake(
+        createResolvingPromise()
+      );
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
       PlansActions.deletePlan('somecloud')(() => {}, () => {}, mockGetIntl);
       // Call done with a minimal timeout.
-      setTimeout(() => { done(); }, 1);
+      setTimeout(() => {
+        done();
+      }, 1);
     });
 
     it('dispatches deletePlanPending', () => {
@@ -113,7 +128,9 @@ describe('PlansActions', () => {
       // In this case, dispatch and getState are just empty placeHolders.
       PlansActions.fetchPlans()(() => {}, () => {});
       // Call done with a minimal timeout.
-      setTimeout(() => { done(); }, 1);
+      setTimeout(() => {
+        done();
+      }, 1);
     });
 
     it('dispatches requestPlans', () => {
@@ -121,9 +138,11 @@ describe('PlansActions', () => {
     });
 
     it('dispatches receivePlans', () => {
-      expect(PlansActions.receivePlans).toHaveBeenCalledWith([ 'overcloud', 'another-cloud' ]);
+      expect(PlansActions.receivePlans).toHaveBeenCalledWith([
+        'overcloud',
+        'another-cloud'
+      ]);
     });
-
   });
 
   describe('fetchPlan', () => {
@@ -133,11 +152,15 @@ describe('PlansActions', () => {
     ];
 
     beforeEach(done => {
-      spyOn(SwiftApiService, 'getContainer').and.callFake(createResolvingPromise(apiResponse));
+      spyOn(SwiftApiService, 'getContainer').and.callFake(
+        createResolvingPromise(apiResponse)
+      );
       spyOn(PlansActions, 'requestPlan');
       spyOn(PlansActions, 'receivePlan');
       PlansActions.fetchPlan('overcloud')(() => {}, () => {});
-      setTimeout(() => { done(); }, 1);
+      setTimeout(() => {
+        done();
+      }, 1);
     });
 
     it('dispatches requestPlan', () => {
@@ -150,6 +173,5 @@ describe('PlansActions', () => {
         'capabilities_map.yaml': { name: 'capabilities_map.yaml' }
       });
     });
-
   });
 });

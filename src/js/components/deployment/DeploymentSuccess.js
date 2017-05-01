@@ -9,17 +9,19 @@ import OvercloudInfo from './OvercloudInfo';
 class DeploymentSuccess extends React.Component {
   render() {
     const status = this.props.intl.formatMessage(
-      deploymentStatusMessages[this.props.stack.stack_status]);
+      deploymentStatusMessages[this.props.stack.stack_status]
+    );
 
     return (
       <div className="col-sm-12 fixed-container-body-content">
-        <InlineNotification type="success"
-                            title={status}>
+        <InlineNotification type="success" title={status}>
           <p>{this.props.stack.stack_status_reason}</p>
         </InlineNotification>
-        <OvercloudInfo stackResourcesLoaded={this.props.stackResourcesLoaded}
-                       stack={this.props.stack}
-                       stackResources={this.props.stackResources}/>
+        <OvercloudInfo
+          stackResourcesLoaded={this.props.stackResourcesLoaded}
+          stack={this.props.stack}
+          stackResources={this.props.stackResources}
+        />
       </div>
     );
   }

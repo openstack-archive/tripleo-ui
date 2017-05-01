@@ -35,7 +35,7 @@ class NodesAssignmentForm extends React.Component {
     const { error, handleSubmit, children } = this.props;
     return (
       <Form onSubmit={handleSubmit(this.debouncedUpdate.bind(this))}>
-        <FormErrorList errors={error ? [error] : []}/>
+        <FormErrorList errors={error ? [error] : []} />
         {children}
       </Form>
     );
@@ -55,11 +55,17 @@ const mapStateToProps = (state, ownProps) => ({
   initialValues: getAssignedNodesCountsByRole(state).toJS()
 });
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     updateParameters: (currentPlanName, data, inputFields, redirectPath) => {
-      dispatch(ParametersActions.updateParameters(
-        currentPlanName, data, inputFields, redirectPath));
+      dispatch(
+        ParametersActions.updateParameters(
+          currentPlanName,
+          data,
+          inputFields,
+          redirectPath
+        )
+      );
     },
     submit: () => dispatch(submit('nodesAssignment'))
   };
@@ -71,4 +77,6 @@ const form = reduxForm({
   form: 'nodesAssignment'
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(form(NodesAssignmentForm));
+export default connect(mapStateToProps, mapDispatchToProps)(
+  form(NodesAssignmentForm)
+);

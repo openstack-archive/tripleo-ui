@@ -14,14 +14,16 @@ describe('KeystoneApiService', () => {
     };
     KeystoneApiService.handleAuth(when(mockApiRequestResponse));
     // jest.runAllTicks();
-    expect(LoginActions.loginUser).toBeCalledWith(mockApiRequestResponse.access);
+    expect(LoginActions.loginUser).toBeCalledWith(
+      mockApiRequestResponse.access
+    );
   });
 
   xit('fails when request response is error', () => {
     // console.log = jest.genMockFunction();
     let expectedError = new Error('I threw some error');
     // let wrongApiRequest = jest.genMockFunction().mockImplementation(() => {
-      // return when.reject(expectedError);
+    // return when.reject(expectedError);
     // });
     // KeystoneApiService.handleAuth(when(wrongApiRequest()));
     // jest.runAllTicks();
