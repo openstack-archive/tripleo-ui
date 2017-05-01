@@ -27,23 +27,27 @@ class DeploymentSuccess extends React.Component {
   render() {
     const { formatMessage } = this.props.intl;
     const status = formatMessage(
-      deploymentStatusMessages[this.props.stack.stack_status]);
+      deploymentStatusMessages[this.props.stack.stack_status]
+    );
 
     return (
       <div>
-        <InlineNotification type="success"
-                            title={status}>
+        <InlineNotification type="success" title={status}>
           <p>{this.props.stack.stack_status_reason}</p>
         </InlineNotification>
-        <OvercloudInfo stackResourcesLoaded={this.props.stackResourcesLoaded}
-                       stack={this.props.stack}
-                       stackResources={this.props.stackResources}/>
-        <DeleteStackButton content={formatMessage(messages.deleteDeployment)}
-                           deleteStack={this.props.deleteStack}
-                           disabled={this.props.isRequestingStackDelete}
-                           loaded={!this.props.isRequestingStackDelete}
-                           loaderContent={formatMessage(messages.requestingDeletion)}
-                           stack={this.props.stack}/>
+        <OvercloudInfo
+          stackResourcesLoaded={this.props.stackResourcesLoaded}
+          stack={this.props.stack}
+          stackResources={this.props.stackResources}
+        />
+        <DeleteStackButton
+          content={formatMessage(messages.deleteDeployment)}
+          deleteStack={this.props.deleteStack}
+          disabled={this.props.isRequestingStackDelete}
+          loaded={!this.props.isRequestingStackDelete}
+          loaderContent={formatMessage(messages.requestingDeletion)}
+          stack={this.props.stack}
+        />
       </div>
     );
   }

@@ -12,38 +12,56 @@ export default {
   authenticateUserViaToken(keystoneAuthTokenId, nextPath) {
     return (dispatch, getState) => {
       dispatch(this.userAuthStarted());
-      KeystoneApiService.authenticateUserViaToken(keystoneAuthTokenId).then((response) => {
-        cookie.save('keystoneAuthTokenId',
-                    response.access.token.id,
-                    { path: '/' });
-        dispatch(this.userAuthSuccess(response.access));
-        ZaqarWebSocketService.init(getState, dispatch);
-        browserHistory.push(nextPath);
-      }).catch((error) => {
-        logger.error('Error in LoginActions.authenticateUserViaToken', error.stack || error);
-        let errorHandler = new KeystoneApiErrorHandler(error);
-        cookie.remove('keystoneAuthTokenId');
-        browserHistory.push({pathname: '/login', query: { nextPath: nextPath }});
-        dispatch(this.userAuthFailure(errorHandler.errors));
-      });
+      KeystoneApiService.authenticateUserViaToken(keystoneAuthTokenId)
+        .then(response => {
+          cookie.save('keystoneAuthTokenId', response.access.token.id, {
+            path: '/'
+          });
+          dispatch(this.userAuthSuccess(response.access));
+          ZaqarWebSocketService.init(getState, dispatch);
+          browserHistory.push(nextPath);
+        })
+        .catch(error => {
+          logger.error(
+            'Error in LoginActions.authenticateUserViaToken',
+            error.stack || error
+          );
+          let errorHandler = new KeystoneApiErrorHandler(error);
+          cookie.remove('keystoneAuthTokenId');
+          browserHistory.push({
+            pathname: '/login',
+            query: { nextPath: nextPath }
+          });
+          dispatch(this.userAuthFailure(errorHandler.errors));
+        });
     };
   },
 
   authenticateUser(formData, formFields, nextPath) {
     return (dispatch, getState) => {
       dispatch(this.userAuthStarted());
-      KeystoneApiService.authenticateUser(formData.username, formData.password).then((response) => {
-        cookie.save('keystoneAuthTokenId',
-                    response.access.token.id,
-                    { path: '/' });
-        dispatch(this.userAuthSuccess(response.access));
-        ZaqarWebSocketService.init(getState, dispatch);
-        browserHistory.push(nextPath);
-      }).catch((error) => {
-        logger.error('Error in LoginActions.authenticateUser', error.stack || error);
-        let errorHandler = new KeystoneApiErrorHandler(error, formFields);
-        dispatch(this.userAuthFailure(errorHandler.errors, errorHandler.formFieldErrors));
-      });
+      KeystoneApiService.authenticateUser(formData.username, formData.password)
+        .then(response => {
+          cookie.save('keystoneAuthTokenId', response.access.token.id, {
+            path: '/'
+          });
+          dispatch(this.userAuthSuccess(response.access));
+          ZaqarWebSocketService.init(getState, dispatch);
+          browserHistory.push(nextPath);
+        })
+        .catch(error => {
+          logger.error(
+            'Error in LoginActions.authenticateUser',
+            error.stack || error
+          );
+          let errorHandler = new KeystoneApiErrorHandler(error, formFields);
+          dispatch(
+            this.userAuthFailure(
+              errorHandler.errors,
+              errorHandler.formFieldErrors
+            )
+          );
+        });
     };
   },
 

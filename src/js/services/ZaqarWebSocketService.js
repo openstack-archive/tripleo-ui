@@ -12,7 +12,7 @@ export default {
   clientID: null,
 
   init(getState, dispatch) {
-    when.try(getServiceUrl, 'zaqar-websocket').then((serviceUrl) => {
+    when.try(getServiceUrl, 'zaqar-websocket').then(serviceUrl => {
       this.socket = new WebSocket(serviceUrl);
       this.clientID = uuid.v4();
       this.socket.onopen = () => {
@@ -21,16 +21,24 @@ export default {
         this.subscribe(ZAQAR_DEFAULT_QUEUE);
       };
 
-      this.socket.onclose = function (evt) {};
+      this.socket.onclose = function(evt) {};
 
-      this.socket.onerror = function (error) {
-        logger.error('Zaqar WebSocket encountered error: ', error.message, 'Closing Socket.');
-        dispatch(NotificationActions.notify({ title: 'Zaqar WebSocket encountered Error',
-                                              message: error.message }));
+      this.socket.onerror = function(error) {
+        logger.error(
+          'Zaqar WebSocket encountered error: ',
+          error.message,
+          'Closing Socket.'
+        );
+        dispatch(
+          NotificationActions.notify({
+            title: 'Zaqar WebSocket encountered Error',
+            message: error.message
+          })
+        );
         this.close();
       };
 
-      this.socket.onmessage = (evt) => {
+      this.socket.onmessage = evt => {
         dispatch(ZaqarActions.messageReceived(JSON.parse(evt.data)));
       };
     });
@@ -48,7 +56,7 @@ export default {
     this.socket.send(JSON.stringify(message));
   },
 
-  sendMessage(action, body={}) {
+  sendMessage(action, body = {}) {
     const message = {
       action: action,
       headers: {
@@ -64,8 +72,11 @@ export default {
     this.sendMessage('queue_create', { queue_name: queueName });
   },
 
-  subscribe(queueName, ttl=3600) {
-    this.sendMessage('subscription_create', { queue_name: queueName, ttl: ttl });
+  subscribe(queueName, ttl = 3600) {
+    this.sendMessage('subscription_create', {
+      queue_name: queueName,
+      ttl: ttl
+    });
   },
 
   close() {

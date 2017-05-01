@@ -33,48 +33,59 @@ class DeletePlan extends React.Component {
 
   onDeleteClick() {
     let planName = this.getNameFromUrl();
-    if(planName) {
+    if (planName) {
       this.props.deletePlan(planName);
     }
   }
 
-  render () {
+  render() {
     return (
       <Modal dialogClasses="modal-sm" id="DeletePlan__deletePlanModal">
         <div className="modal-header">
-          <Link to="/plans/list"
-                type="button"
-                className="close">
-            <span aria-hidden="true" className="pficon pficon-close"/>
+          <Link to="/plans/list" type="button" className="close">
+            <span aria-hidden="true" className="pficon pficon-close" />
           </Link>
           <h4 className="modal-title">
-            <span className="pficon pficon-delete"></span> <FormattedMessage
+            <span className="pficon pficon-delete" />
+            {' '}
+            <FormattedMessage
               {...messages.deletePlanName}
-              values={{planName: this.getNameFromUrl()}}
+              values={{ planName: this.getNameFromUrl() }}
             />
           </h4>
         </div>
         <div className="modal-body">
           <p>
-            <FormattedMessage {...messages.deletePlanConfirmation}
-                              values={{ planName:
-                                <strong>
-                                  <span id="DeletePlan__planName">{this.getNameFromUrl()}</span>
-                                </strong>}}/>
+            <FormattedMessage
+              {...messages.deletePlanConfirmation}
+              values={{
+                planName: (
+                  <strong>
+                    <span id="DeletePlan__planName">
+                      {this.getNameFromUrl()}
+                    </span>
+                  </strong>
+                )
+              }}
+            />
           </p>
         </div>
         <div className="modal-footer">
-          <button className="btn btn-danger"
-                  onClick={this.onDeleteClick.bind(this)}
-                  id="DeletePlan__deletePlanModalButton"
-                  type="submit">
-            <FormattedMessage {...messages.deletePlan}/>
+          <button
+            className="btn btn-danger"
+            onClick={this.onDeleteClick.bind(this)}
+            id="DeletePlan__deletePlanModalButton"
+            type="submit"
+          >
+            <FormattedMessage {...messages.deletePlan} />
           </button>
-          <Link to="/plans/list"
-                type="button"
-                className="btn btn-default"
-                id="DeletePlan__cancelDeletePlanModalButton">
-            <FormattedMessage {...messages.cancel}/>
+          <Link
+            to="/plans/list"
+            type="button"
+            className="btn btn-default"
+            id="DeletePlan__cancelDeletePlanModalButton"
+          >
+            <FormattedMessage {...messages.cancel} />
           </Link>
         </div>
       </Modal>

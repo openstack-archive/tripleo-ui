@@ -5,15 +5,18 @@ import EnvironmentGroup from './EnvironmentGroup';
 
 export default class EnvironmentConfigurationTopic extends React.Component {
   render() {
-    let environmentGroups = this.props.environmentGroups.toList().map((envGroup, index) => {
-      return (
-        <EnvironmentGroup key={index}
-                          title={envGroup.get('title')}
-                          description={envGroup.get('description')}
-                          environments={envGroup.get('environments')}/>
-      );
-    });
-
+    let environmentGroups = this.props.environmentGroups
+      .toList()
+      .map((envGroup, index) => {
+        return (
+          <EnvironmentGroup
+            key={index}
+            title={envGroup.get('title')}
+            description={envGroup.get('description')}
+            environments={envGroup.get('environments')}
+          />
+        );
+      });
 
     return (
       <fieldset className="environment-topic">

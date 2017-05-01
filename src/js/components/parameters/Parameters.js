@@ -7,10 +7,13 @@ import { Link, browserHistory } from 'react-router';
 import { fromJS, is } from 'immutable';
 import React, { PropTypes } from 'react';
 
-import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
+import EnvironmentConfigurationActions
+  from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentParameters from './EnvironmentParameters';
 import { getRootParameters } from '../../selectors/parameters';
-import { getEnabledEnvironments } from '../../selectors/environmentConfiguration';
+import {
+  getEnabledEnvironments
+} from '../../selectors/environmentConfiguration';
 import Loader from '../ui/Loader';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import ParametersActions from '../../actions/ParametersActions';
@@ -44,11 +47,13 @@ class Parameters extends React.Component {
   }
 
   componentDidMount() {
-    const { currentPlanName,
-            fetchEnvironmentConfiguration,
-            fetchParameters,
-            isFetchingParameters,
-            parentPath } = this.props;
+    const {
+      currentPlanName,
+      fetchEnvironmentConfiguration,
+      fetchParameters,
+      isFetchingParameters,
+      parentPath
+    } = this.props;
     fetchEnvironmentConfiguration(currentPlanName, parentPath);
     !isFetchingParameters && fetchParameters(currentPlanName, parentPath);
   }
@@ -65,15 +70,16 @@ class Parameters extends React.Component {
     this.setState({ canSubmit: false });
   }
 
-
   /**
   * Filter out non updated parameters, so only parameters which have been actually changed
   * get sent to updateparameters
   */
   _filterFormData(formData) {
-    return fromJS(formData).filterNot((value, key) => {
-      return is(fromJS(this.props.allParameters.get(key).default), value);
-    }).toJS();
+    return fromJS(formData)
+      .filterNot((value, key) => {
+        return is(fromJS(this.props.allParameters.get(key).default), value);
+      })
+      .toJS();
   }
 
   /**
@@ -81,14 +87,14 @@ class Parameters extends React.Component {
   * or array. Also, parameters with undefined value are set to null
   */
   _jsonParseFormData(formData) {
-    return mapValues(formData, (value) => {
+    return mapValues(formData, value => {
       try {
         const parsedValue = JSON.parse(value);
         if (isObjectLike(parsedValue)) {
           return parsedValue;
         }
         return value;
-      } catch(e) {
+      } catch (e) {
         return value === undefined ? null : value;
       }
     });
@@ -117,9 +123,12 @@ class Parameters extends React.Component {
   }
 
   onSubmitAndClose() {
-    this.setState({
-      closeOnSubmit: true
-    }, this.refs.parameterConfigurationForm.submit);
+    this.setState(
+      {
+        closeOnSubmit: true
+      },
+      this.refs.parameterConfigurationForm.submit
+    );
   }
 
   selectTab(tabName) {
@@ -131,12 +140,16 @@ class Parameters extends React.Component {
   renderTabs() {
     return this.props.enabledEnvironments.toList().map(environment => {
       return (
-        <Tab key={environment.file}
-             title={environment.description}
-             isActive={environment.file === this.state.selectedTab}>
-          <a className="link"
-             onClick={this.selectTab.bind(this, environment.file)}>
-             {environment.title}
+        <Tab
+          key={environment.file}
+          title={environment.description}
+          isActive={environment.file === this.state.selectedTab}
+        >
+          <a
+            className="link"
+            onClick={this.selectTab.bind(this, environment.file)}
+          >
+            {environment.title}
           </a>
         </Tab>
       );
@@ -149,16 +162,19 @@ class Parameters extends React.Component {
         <TabPane isActive>
           <ParameterInputList
             parameters={this.props.parameters.toList()}
-            mistralParameters={this.props.mistralParameters}/>
+            mistralParameters={this.props.mistralParameters}
+          />
         </TabPane>
       );
     } else {
       return this.props.enabledEnvironments.toList().map(environment => {
         return (
-          <TabPane isActive={this.state.selectedTab === environment.file}
-                   key={environment.file}
-                   renderOnlyActive>
-            <EnvironmentParameters environment={environment.file}/>
+          <TabPane
+            isActive={this.state.selectedTab === environment.file}
+            key={environment.file}
+            renderOnlyActive
+          >
+            <EnvironmentParameters environment={environment.file} />
           </TabPane>
         );
       });
@@ -167,31 +183,42 @@ class Parameters extends React.Component {
 
   render() {
     return (
-      <Formsy.Form ref="parameterConfigurationForm"
+      <Formsy.Form
+        ref="parameterConfigurationForm"
         role="form"
         className="form form-horizontal"
         onSubmit={this.handleSubmit.bind(this)}
         onValid={this.enableButton.bind(this)}
-        onInvalid={this.disableButton.bind(this)}>
+        onInvalid={this.disableButton.bind(this)}
+      >
 
         <div className="container-fluid">
           <div className="row row-eq-height">
             <div className="col-sm-4 sidebar-pf sidebar-pf-left">
               <ul className="nav nav-pills nav-stacked nav-arrows">
-                <Tab key="general"
-                     title="General"
-                     isActive={'general' === this.state.selectedTab}>
-                  <a className="link" onClick={this.selectTab.bind(this, 'general')}>General</a>
+                <Tab
+                  key="general"
+                  title="General"
+                  isActive={'general' === this.state.selectedTab}
+                >
+                  <a
+                    className="link"
+                    onClick={this.selectTab.bind(this, 'general')}
+                  >
+                    General
+                  </a>
                 </Tab>
                 <li className="spacer" />
                 {this.renderTabs()}
               </ul>
             </div>
             <div className="col-sm-8">
-              <Loader height={120}
-                      content="Fetching Parameters..."
-                      loaded={this.props.parametersLoaded}>
-                <ModalFormErrorList errors={this.props.formErrors.toJS()}/>
+              <Loader
+                height={120}
+                content="Fetching Parameters..."
+                loaded={this.props.parametersLoaded}
+              >
+                <ModalFormErrorList errors={this.props.formErrors.toJS()} />
                 <div className="tab-content">
                   {this.renderTabPanes()}
                 </div>
@@ -201,18 +228,23 @@ class Parameters extends React.Component {
         </div>
 
         <div className="modal-footer">
-          <button type="submit"
-                  disabled={!this.state.canSubmit}
-                  className="btn btn-primary">
-            <FormattedMessage {...messages.saveChanges}/>
+          <button
+            type="submit"
+            disabled={!this.state.canSubmit}
+            className="btn btn-primary"
+          >
+            <FormattedMessage {...messages.saveChanges} />
           </button>
-          <button type="button" disabled={!this.state.canSubmit}
-                  onClick={this.onSubmitAndClose.bind(this)}
-                  className="btn btn-default">
+          <button
+            type="button"
+            disabled={!this.state.canSubmit}
+            onClick={this.onSubmitAndClose.bind(this)}
+            className="btn btn-default"
+          >
             <FormattedMessage {...messages.saveAndClose} />
           </button>
-          <Link to="/deployment-plan" type="button" className="btn btn-default" >
-            <FormattedMessage {...messages.cancel}/>
+          <Link to="/deployment-plan" type="button" className="btn btn-default">
+            <FormattedMessage {...messages.cancel} />
           </Link>
         </div>
       </Formsy.Form>
@@ -257,17 +289,31 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchEnvironmentConfiguration: (currentPlanName, redirectPath) => {
-      dispatch(EnvironmentConfigurationActions.fetchEnvironmentConfiguration(currentPlanName,
-                                                                             redirectPath));
+      dispatch(
+        EnvironmentConfigurationActions.fetchEnvironmentConfiguration(
+          currentPlanName,
+          redirectPath
+        )
+      );
     },
     fetchParameters: (currentPlanName, redirectPath) => {
-      dispatch(ParametersActions.fetchParameters(currentPlanName, redirectPath));
+      dispatch(
+        ParametersActions.fetchParameters(currentPlanName, redirectPath)
+      );
     },
     updateParameters: (currentPlanName, data, inputFields, redirectPath) => {
-      dispatch(ParametersActions.updateParameters(
-        currentPlanName, data, inputFields, redirectPath));
+      dispatch(
+        ParametersActions.updateParameters(
+          currentPlanName,
+          data,
+          inputFields,
+          redirectPath
+        )
+      );
     }
   };
 }
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Parameters));
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(Parameters)
+);

@@ -69,17 +69,22 @@ export default {
   fetchPlans() {
     return dispatch => {
       dispatch(this.requestPlans());
-      MistralApiService.runAction(MistralConstants.PLAN_LIST).then((response) => {
-        let plans = JSON.parse(response.output).result || [];
-        dispatch(this.receivePlans(plans));
-        dispatch(CurrentPlanActions.detectPlan());
-      }).catch((error) => {
-        logger.error('Error in PlansActions.fetchPlans', error.stack || error);
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      MistralApiService.runAction(MistralConstants.PLAN_LIST)
+        .then(response => {
+          let plans = JSON.parse(response.output).result || [];
+          dispatch(this.receivePlans(plans));
+          dispatch(CurrentPlanActions.detectPlan());
+        })
+        .catch(error => {
+          logger.error(
+            'Error in PlansActions.fetchPlans',
+            error.stack || error
+          );
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
         });
-      });
     };
   },
 
@@ -102,16 +107,25 @@ export default {
   fetchPlan(planName) {
     return dispatch => {
       dispatch(this.requestPlan());
-      SwiftApiService.getContainer(planName).then(response => {
-        dispatch(this.receivePlan(planName,
-                                  normalize(response, arrayOf(planFileSchema)).entities.planFiles));
-      }).catch(error => {
-        logger.error('Error retrieving plan PlansActions.fetchPlan', error.stack || error);
-        let errorHandler = new SwiftApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      SwiftApiService.getContainer(planName)
+        .then(response => {
+          dispatch(
+            this.receivePlan(
+              planName,
+              normalize(response, arrayOf(planFileSchema)).entities.planFiles
+            )
+          );
+        })
+        .catch(error => {
+          logger.error(
+            'Error retrieving plan PlansActions.fetchPlan',
+            error.stack || error
+          );
+          let errorHandler = new SwiftApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
         });
-      });
     };
   },
 
@@ -140,22 +154,28 @@ export default {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.updatePlanPending(planName));
-      this._uploadFilesToContainer(planName, fromJS(planFiles), dispatch).then(() => {
-        dispatch(this.updatePlanSuccess(planName));
-        browserHistory.push('/plans/list');
-        dispatch(NotificationActions.notify({
-          title: formatMessage(messages.planUpdatedNotificationTitle),
-          message: formatMessage(messages.planUpdatedNotificationMessage, { planName: planName }),
-          type: 'success'
-        }));
-        dispatch(this.fetchPlans());
-      }).catch((errors) => {
-        logger.error('Error in PlansActions.updatePlan', errors);
-        errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      this._uploadFilesToContainer(planName, fromJS(planFiles), dispatch)
+        .then(() => {
+          dispatch(this.updatePlanSuccess(planName));
+          browserHistory.push('/plans/list');
+          dispatch(
+            NotificationActions.notify({
+              title: formatMessage(messages.planUpdatedNotificationTitle),
+              message: formatMessage(messages.planUpdatedNotificationMessage, {
+                planName: planName
+              }),
+              type: 'success'
+            })
+          );
+          dispatch(this.fetchPlans());
+        })
+        .catch(errors => {
+          logger.error('Error in PlansActions.updatePlan', errors);
+          errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
+          dispatch(this.updatePlanFailed(planName));
         });
-        dispatch(this.updatePlanFailed(planName));
-      });
     };
   },
 
@@ -163,27 +183,33 @@ export default {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.updatePlanPending(planName));
-      SwiftApiService.uploadTarball(planName, file).then((response) => {
-        dispatch(this.updatePlanSuccess(planName));
-        browserHistory.push('/plans/list');
-        dispatch(NotificationActions.notify({
-          title: formatMessage(messages.planUpdatedNotificationTitle),
-          message: formatMessage(messages.planUpdatedNotificationMessage, { planName: planName }),
-          type: 'success'
-        }));
-        dispatch(this.fetchPlans());
-      }).catch((error) => {
-        logger.error('Error in PlansActions.updatePlanFromTarball', error);
-        let errorHandler = new SwiftApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      SwiftApiService.uploadTarball(planName, file)
+        .then(response => {
+          dispatch(this.updatePlanSuccess(planName));
+          browserHistory.push('/plans/list');
+          dispatch(
+            NotificationActions.notify({
+              title: formatMessage(messages.planUpdatedNotificationTitle),
+              message: formatMessage(messages.planUpdatedNotificationMessage, {
+                planName: planName
+              }),
+              type: 'success'
+            })
+          );
+          dispatch(this.fetchPlans());
+        })
+        .catch(error => {
+          logger.error('Error in PlansActions.updatePlanFromTarball', error);
+          let errorHandler = new SwiftApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
+          dispatch(this.updatePlanFailed(planName));
         });
-        dispatch(this.updatePlanFailed(planName));
-      });
     };
   },
 
-  cancelCreatePlan () {
+  cancelCreatePlan() {
     return {
       type: PlansConstants.CANCEL_CREATE_PLAN
     };
@@ -219,19 +245,21 @@ export default {
     let uploadedFiles = 0;
     return when.promise((resolve, reject) => {
       files.forEach((value, key) => {
-        SwiftApiService.createObject(container, key, value.get('contents')).then((response) => {
-          // On success increase nr of uploaded files.
-          // If this is the last file in the map, resolve the promise.
-          if(uploadedFiles === files.size - 1) {
-            resolve();
-          }
-          uploadedFiles += 1;
-        }).catch((error) => {
-          // Reject the promise on the first file that fails.
-          logger.error('Error in PlansActions.createPlan', error);
-          let errorHandler = new SwiftApiErrorHandler(error);
-          reject(errorHandler.errors);
-        });
+        SwiftApiService.createObject(container, key, value.get('contents'))
+          .then(response => {
+            // On success increase nr of uploaded files.
+            // If this is the last file in the map, resolve the promise.
+            if (uploadedFiles === files.size - 1) {
+              resolve();
+            }
+            uploadedFiles += 1;
+          })
+          .catch(error => {
+            // Reject the promise on the first file that fails.
+            logger.error('Error in PlansActions.createPlan', error);
+            let errorHandler = new SwiftApiErrorHandler(error);
+            reject(errorHandler.errors);
+          });
       });
     });
   },
@@ -241,110 +269,133 @@ export default {
       dispatch(this.createPlanPending());
       MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
         container: planName
-      }).then((response) => {
-        // Upload all files to container first.
-        this._uploadFilesToContainer(planName, fromJS(planFiles), dispatch).then(() => {
-
-          // Once all files are uploaded, start plan creation workflow.
-          MistralApiService.runWorkflow(
-            MistralConstants.PLAN_CREATE,
-            { container: planName }
-          ).then((response) => {
-            if(response.state === 'ERROR') {
-              logger.error('Error in PlansActions.createPlan', response);
-              dispatch(NotificationActions.notify({
-                title: 'Error',
-                message: response.state_info
-              }));
+      })
+        .then(response => {
+          // Upload all files to container first.
+          this._uploadFilesToContainer(planName, fromJS(planFiles), dispatch)
+            .then(() => {
+              // Once all files are uploaded, start plan creation workflow.
+              MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
+                container: planName
+              })
+                .then(response => {
+                  if (response.state === 'ERROR') {
+                    logger.error('Error in PlansActions.createPlan', response);
+                    dispatch(
+                      NotificationActions.notify({
+                        title: 'Error',
+                        message: response.state_info
+                      })
+                    );
+                    dispatch(this.createPlanFailed());
+                  }
+                })
+                .catch(error => {
+                  logger.error('Error in PlansActions.createPlan', error);
+                  let errorHandler = new MistralApiErrorHandler(error);
+                  errorHandler.errors.forEach(error => {
+                    dispatch(NotificationActions.notify(error));
+                  });
+                  dispatch(this.createPlanFailed());
+                });
+            })
+            .catch(errors => {
+              logger.error('Error in PlansActions.createPlan', errors);
+              // If the file upload fails, just notify the user
+              errors.forEach(error => {
+                dispatch(NotificationActions.notify(error));
+              });
               dispatch(this.createPlanFailed());
-            }
-          }).catch((error) => {
-            logger.error('Error in PlansActions.createPlan', error);
-            let errorHandler = new MistralApiErrorHandler(error);
-            errorHandler.errors.forEach((error) => {
-              dispatch(NotificationActions.notify(error));
             });
-            dispatch(this.createPlanFailed());
-          });
-
-        }).catch((errors) => {
-          logger.error('Error in PlansActions.createPlan', errors);
-          // If the file upload fails, just notify the user
-          errors.forEach((error) => {
+        })
+        .catch(error => {
+          logger.error('Error in PlansActions.createPlan', error);
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
             dispatch(NotificationActions.notify(error));
           });
           dispatch(this.createPlanFailed());
         });
-
-      }).catch((error) => {
-        logger.error('Error in PlansActions.createPlan', error);
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
-        });
-        dispatch(this.createPlanFailed());
-      });
     };
   },
 
   createPlanFinished(payload) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      if(payload.status === 'SUCCESS') {
+      if (payload.status === 'SUCCESS') {
         const planName = payload.execution.input.container;
         dispatch(this.createPlanSuccess());
-        dispatch(NotificationActions.notify({
-          type: 'success',
-          title: formatMessage(messages.planCreatedNotificationTitle),
-          message: formatMessage(messages.planCreatedNotificationMessage, { planName: planName })
-        }));
+        dispatch(
+          NotificationActions.notify({
+            type: 'success',
+            title: formatMessage(messages.planCreatedNotificationTitle),
+            message: formatMessage(messages.planCreatedNotificationMessage, {
+              planName: planName
+            })
+          })
+        );
         dispatch(this.fetchPlans());
         browserHistory.push('/plans/list');
-      }
-      else {
-        dispatch(this.createPlanFailed([{ title: 'Error', message: payload.message }]));
+      } else {
+        dispatch(
+          this.createPlanFailed([{ title: 'Error', message: payload.message }])
+        );
       }
     };
   },
 
   createPlanFromTarball(planName, file) {
-    return (dispatch) => {
+    return dispatch => {
       dispatch(this.createPlanPending());
 
       MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
         container: planName
-      }).then((response) => {
-
-
-        SwiftApiService.uploadTarball(planName, file).then((response) => {
-          MistralApiService.runWorkflow(
-            MistralConstants.PLAN_CREATE,
-            { container: planName }
-          ).then((response) => {
-            if(response.state === 'ERROR') {
-              logger.error('Error in PlansActions.createPlanFromTarball', response);
-              dispatch(this.createPlanFailed([{ title: 'Error', message: response.state_info }]));
-            }
-          }).catch((error) => {
-            logger.error('Error in workflow in PlansActions.createPlanFromTarball', error);
-            let errorHandler = new MistralApiErrorHandler(error);
-            dispatch(this.createPlanFailed(errorHandler.errors));
+      })
+        .then(response => {
+          SwiftApiService.uploadTarball(planName, file)
+            .then(response => {
+              MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
+                container: planName
+              })
+                .then(response => {
+                  if (response.state === 'ERROR') {
+                    logger.error(
+                      'Error in PlansActions.createPlanFromTarball',
+                      response
+                    );
+                    dispatch(
+                      this.createPlanFailed([
+                        { title: 'Error', message: response.state_info }
+                      ])
+                    );
+                  }
+                })
+                .catch(error => {
+                  logger.error(
+                    'Error in workflow in PlansActions.createPlanFromTarball',
+                    error
+                  );
+                  let errorHandler = new MistralApiErrorHandler(error);
+                  dispatch(this.createPlanFailed(errorHandler.errors));
+                });
+            })
+            .catch(error => {
+              logger.error(
+                'Error in Swift in PlansActions.createPlanFromTarball',
+                error
+              );
+              let errorHandler = new SwiftApiErrorHandler(error);
+              dispatch(this.createPlanFailed(errorHandler.errors));
+            });
+        })
+        .catch(error => {
+          logger.error('Error in PlansActions.createPlan', error);
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
           });
-        }).catch((error) => {
-          logger.error('Error in Swift in PlansActions.createPlanFromTarball', error);
-          let errorHandler = new SwiftApiErrorHandler(error);
-          dispatch(this.createPlanFailed(errorHandler.errors));
+          dispatch(this.createPlanFailed());
         });
-
-      }).catch((error) => {
-        logger.error('Error in PlansActions.createPlan', error);
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
-        });
-        dispatch(this.createPlanFailed());
-      });
-
     };
   },
 
@@ -374,20 +425,30 @@ export default {
       const { formatMessage } = getIntl(getState());
       dispatch(this.deletePlanPending(planName));
       browserHistory.push('/plans/list');
-      MistralApiService.runAction(MistralConstants.PLAN_DELETE, { container: planName })
+      MistralApiService.runAction(MistralConstants.PLAN_DELETE, {
+        container: planName
+      })
         .then(response => {
           dispatch(this.deletePlanSuccess(planName));
-          dispatch(NotificationActions.notify({
-            title: formatMessage(messages.planDeletedNotificationTitle),
-            message: formatMessage(messages.planDeletedNotificationMessage, { planName: planName }),
-            type: 'success'
-          }));
+          dispatch(
+            NotificationActions.notify({
+              title: formatMessage(messages.planDeletedNotificationTitle),
+              message: formatMessage(messages.planDeletedNotificationMessage, {
+                planName: planName
+              }),
+              type: 'success'
+            })
+          );
           dispatch(CurrentPlanActions.detectPlan());
-        }).catch(error => {
-          logger.error('Error deleting plan MistralApiService.runAction', error);
+        })
+        .catch(error => {
+          logger.error(
+            'Error deleting plan MistralApiService.runAction',
+            error
+          );
           dispatch(this.deletePlanFailed(planName));
           let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach((error) => {
+          errorHandler.errors.forEach(error => {
             dispatch(NotificationActions.notify(error));
           });
         });
@@ -418,15 +479,16 @@ export default {
   deployPlanFinished(payload) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      if(payload.status === 'FAILED') {
+      if (payload.status === 'FAILED') {
         dispatch(this.deployPlanFailed(payload.execution.input.container));
-        dispatch(NotificationActions.notify({
-          title: formatMessage(messages.deploymentFailedNotificationTitle),
-          message: payload.message,
-          type: 'error'
-        }));
-      }
-      else {
+        dispatch(
+          NotificationActions.notify({
+            title: formatMessage(messages.deploymentFailedNotificationTitle),
+            message: payload.message,
+            type: 'error'
+          })
+        );
+      } else {
         dispatch(this.deployPlanSuccess(payload.execution.input.container));
         dispatch(StackActions.fetchStacks());
       }
@@ -436,18 +498,20 @@ export default {
   deployPlan(planName) {
     return dispatch => {
       dispatch(this.deployPlanPending(planName));
-      MistralApiService.runWorkflow(
-        MistralConstants.DEPLOYMENT_DEPLOY_PLAN,
-        { container: planName, timeout: 240
-      }).then((response) => {
-        dispatch(StackActions.fetchStacks());
-      }).catch(error => {
-        dispatch(this.deployPlanFailed(planName));
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      MistralApiService.runWorkflow(MistralConstants.DEPLOYMENT_DEPLOY_PLAN, {
+        container: planName,
+        timeout: 240
+      })
+        .then(response => {
+          dispatch(StackActions.fetchStacks());
+        })
+        .catch(error => {
+          dispatch(this.deployPlanFailed(planName));
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
         });
-      });
     };
   },
 
@@ -475,21 +539,24 @@ export default {
   exportPlanFinished(payload) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      if(payload.status === 'FAILED' || !payload.tempurl) {
+      if (payload.status === 'FAILED' || !payload.tempurl) {
         dispatch(this.exportPlanFailed(payload.execution.input.plan));
-        dispatch(NotificationActions.notify({
-          title: formatMessage(messages.exportFailedNotificationTitle),
-          message: payload.message,
-          type: 'error'
-        }));
-      }
-      else {
+        dispatch(
+          NotificationActions.notify({
+            title: formatMessage(messages.exportFailedNotificationTitle),
+            message: payload.message,
+            type: 'error'
+          })
+        );
+      } else {
         let urlParser = document.createElement('a');
         urlParser.href = payload.tempurl;
         let url = urlParser.hostname;
         urlParser.href = getAppConfig().swift;
         let swiftUrl = urlParser.hostname;
-        dispatch(this.exportPlanSuccess(payload.tempurl.replace(url, swiftUrl)));
+        dispatch(
+          this.exportPlanSuccess(payload.tempurl.replace(url, swiftUrl))
+        );
       }
     };
   },
@@ -497,22 +564,23 @@ export default {
   exportPlan(planName) {
     return dispatch => {
       dispatch(this.exportPlanPending(planName));
-      MistralApiService.runWorkflow(
-        MistralConstants.PLAN_EXPORT,
-        { plan: planName }
-      ).then((response) => {
-        if(response.state === 'ERROR') {
-          logger.error('Error in PlansActions.exportPlan', response);
+      MistralApiService.runWorkflow(MistralConstants.PLAN_EXPORT, {
+        plan: planName
+      })
+        .then(response => {
+          if (response.state === 'ERROR') {
+            logger.error('Error in PlansActions.exportPlan', response);
+            dispatch(this.exportPlanFailed(planName));
+          }
+        })
+        .catch(error => {
+          logger.error('Error in PlansActions.exportPlan', error);
           dispatch(this.exportPlanFailed(planName));
-        }
-      }).catch((error) => {
-        logger.error('Error in PlansActions.exportPlan', error);
-        dispatch(this.exportPlanFailed(planName));
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
         });
-      });
     };
   }
 };

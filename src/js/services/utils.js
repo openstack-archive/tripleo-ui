@@ -8,9 +8,14 @@ import store from '../store';
  * It gives precedence to urls stored in the app.conf file over
  * the ones exposed through the serviceCatalog.
  */
-export function getServiceUrl(serviceName, urlType='publicURL', appConfig=getAppConfig()) {
-  let serviceUrl = appConfig[serviceName] || getFromServiceCatalog(serviceName, urlType);
-  if(!serviceUrl) {
+export function getServiceUrl(
+  serviceName,
+  urlType = 'publicURL',
+  appConfig = getAppConfig()
+) {
+  let serviceUrl =
+    appConfig[serviceName] || getFromServiceCatalog(serviceName, urlType);
+  if (!serviceUrl) {
     throw Error(`URL for service ${serviceName} can not be found`);
   }
   let tenantId = getTenantId();
@@ -18,10 +23,12 @@ export function getServiceUrl(serviceName, urlType='publicURL', appConfig=getApp
 }
 
 function getFromServiceCatalog(serviceName, urlType) {
-  let endpoint = store.getState().login
-    .getIn(['keystoneAccess', 'serviceCatalog'], List())
+  let endpoint = store
+    .getState()
+    .login.getIn(['keystoneAccess', 'serviceCatalog'], List())
     .find(service => service.get('name') === serviceName, null, Map())
-    .get('endpoints', List()).first();
+    .get('endpoints', List())
+    .first();
   return endpoint ? endpoint.get(urlType) : undefined;
 }
 
@@ -33,7 +40,9 @@ export function getAuthTokenId() {
 }
 
 export function getTenantId() {
-  return store.getState().login.getIn(['keystoneAccess', 'token', 'tenant', 'id']);
+  return store
+    .getState()
+    .login.getIn(['keystoneAccess', 'token', 'tenant', 'id']);
 }
 
 export function getAppConfig() {

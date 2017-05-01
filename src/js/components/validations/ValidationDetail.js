@@ -51,14 +51,14 @@ class ValidationDetail extends React.Component {
     this.setState({ isPending: true });
 
     switch (true) {
-    case (this.state.isPending):
-      break;
-    case (this.props.status === 'running'):
-      this.props.stopValidation(this.props.results.last().id);
-      break;
-    default:
-      this.props.runValidation();
-      break;
+      case this.state.isPending:
+        break;
+      case this.props.status === 'running':
+        this.props.stopValidation(this.props.results.last().id);
+        break;
+      default:
+        this.props.runValidation();
+        break;
     }
   }
 
@@ -78,8 +78,10 @@ class ValidationDetail extends React.Component {
     if (lastResult && !includes(['running', 'paused'], this.props.status)) {
       return (
         <div>
-          <p><strong><FormattedMessage {...messages.output}/></strong></p>
-          <pre>{lastResult.output.get('stdout', lastResult.output.get('result'))}</pre>
+          <p><strong><FormattedMessage {...messages.output} /></strong></p>
+          <pre>
+            {lastResult.output.get('stdout', lastResult.output.get('result'))}
+          </pre>
         </div>
       );
     }
@@ -89,31 +91,46 @@ class ValidationDetail extends React.Component {
     return (
       <Modal dialogClasses="modal-lg">
         <div className="modal-header">
-          <button type="button"
-                  className="close"
-                  aria-label={this.props.intl.formatMessage(messages.close)}
-                  onClick={this.props.hideValidationDetail}>
-            <span aria-hidden="true" className="pficon pficon-close"/>
+          <button
+            type="button"
+            className="close"
+            aria-label={this.props.intl.formatMessage(messages.close)}
+            onClick={this.props.hideValidationDetail}
+          >
+            <span aria-hidden="true" className="pficon pficon-close" />
           </button>
-          <h4 className="modal-title"><FormattedMessage {...messages.validationDetail}/></h4>
+          <h4 className="modal-title">
+            <FormattedMessage {...messages.validationDetail} />
+          </h4>
         </div>
         <div className="modal-body">
           <div className="validation-detail-title">
             <div className="list-view-pf-left">
               <ValidationStatusIcon
                 status={this.state.isPending ? 'running' : this.props.status}
-                triggerValidationAction={this.triggerValidationAction.bind(this)}/>
+                triggerValidationAction={this.triggerValidationAction.bind(
+                  this
+                )}
+              />
             </div>
             <h3>{this.props.name}</h3>
           </div>
-        <p>
-          <strong><FormattedMessage {...messages.description}/></strong> <br/>
-          {this.props.description}
-        </p>
-        <p>
-          <strong><FormattedMessage {...messages.groups}/></strong> {this.renderValidationGroups()}
-        </p>
-        <p><strong><FormattedMessage {...messages.status}/></strong> {this.props.status}</p>
+          <p>
+            <strong><FormattedMessage {...messages.description} /></strong>
+            {' '}
+            <br />
+            {this.props.description}
+          </p>
+          <p>
+            <strong><FormattedMessage {...messages.groups} /></strong>
+            {' '}
+            {this.renderValidationGroups()}
+          </p>
+          <p>
+            <strong><FormattedMessage {...messages.status} /></strong>
+            {' '}
+            {this.props.status}
+          </p>
           {this.renderValidationOutput()}
         </div>
       </Modal>
