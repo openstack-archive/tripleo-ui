@@ -4,15 +4,15 @@ import { defineMessages } from 'react-intl';
  *  or Table Column labels etc.
  */
 export const nodeColumnMessages = defineMessages({
-  'name': {
+  name: {
     id: 'NodeColumns.name',
     defaultMessage: 'Name'
   },
-  'power_state': {
+  power_state: {
     id: 'NodeColumns.powerState',
     defaultMessage: 'Power State'
   },
-  'provision_state': {
+  provision_state: {
     id: 'NodeColumns.provisionState',
     defaultMessage: 'Provision State'
   },

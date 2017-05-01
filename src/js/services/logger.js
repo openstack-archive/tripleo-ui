@@ -13,35 +13,24 @@
 //   logger.log('Hello world!');
 
 class Adapter {
+  debug(...args) {}
 
-  debug(...args) {
-  }
+  info(...args) {}
 
-  info(...args) {
-  }
+  warn(...args) {}
 
-  warn(...args) {
-  }
+  error(...args) {}
 
-  error(...args) {
-  }
+  group(...args) {}
 
-  group(...args) {
-  }
+  groupCollapsed(...args) {}
 
-  groupCollapsed(...args) {
-  }
+  groupEnd(...args) {}
 
-  groupEnd(...args) {
-  }
-
-  log(...args) {
-  }
-
+  log(...args) {}
 }
 
 class ConsoleAdapter extends Adapter {
-
   debug(...args) {
     console.debug(...args); // eslint-disable-line no-console
   }
@@ -73,11 +62,9 @@ class ConsoleAdapter extends Adapter {
   log(...args) {
     console.log(...args); // eslint-disable-line no-console
   }
-
 }
 
-class ZaqarAdapter extends Adapter {
-}
+class ZaqarAdapter extends Adapter {}
 
 const AVAILABLE_ADAPTERS = {
   console: new ConsoleAdapter(),
@@ -85,7 +72,6 @@ const AVAILABLE_ADAPTERS = {
 };
 
 class Logger {
-
   AVAILABLE_FUNCTIONS = [
     'debug',
     'info',
@@ -95,7 +81,7 @@ class Logger {
     'groupCollapsed',
     'groupEnd',
     'log'
-  ]
+  ];
 
   constructor() {
     this.adapters = [];
@@ -104,12 +90,11 @@ class Logger {
       this.loadAdapters();
     }
 
-    this.AVAILABLE_FUNCTIONS.forEach((fn) => {
+    this.AVAILABLE_FUNCTIONS.forEach(fn => {
       this[fn] = function(...args) {
         return this.dispatch(fn, ...args);
       };
     });
-
   }
 
   loadAdapters() {
@@ -123,7 +108,7 @@ class Logger {
 
     let enabledAdapters = window.tripleOUiConfig.loggers || ['console'];
 
-    enabledAdapters.forEach((adapter) => {
+    enabledAdapters.forEach(adapter => {
       let instance = AVAILABLE_ADAPTERS[adapter];
 
       if (instance === undefined) {
@@ -131,25 +116,22 @@ class Logger {
       }
 
       this.adapters.push(instance);
-
     });
-
   }
 
   dispatch(fn, ...args) {
     this.loadAdapters();
 
-    this.adapters.forEach((adapter) => {
+    this.adapters.forEach(adapter => {
       let f = adapter[fn];
 
-      if (f === undefined ) {
+      if (f === undefined) {
         throw Error(`Function ${fn} not defined in ${adapter}`);
       }
 
       return adapter[fn](...args);
     });
   }
-
 }
 
 export default new Logger();

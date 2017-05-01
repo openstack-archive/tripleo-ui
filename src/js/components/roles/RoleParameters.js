@@ -12,7 +12,8 @@ class RoleParameters extends React.Component {
       <div className="col-sm-12">
         <ParameterInputList
           parameters={this.props.parameters.toList()}
-          mistralParameters={this.props.mistralParameters}/>
+          mistralParameters={this.props.mistralParameters}
+        />
       </div>
     );
   }

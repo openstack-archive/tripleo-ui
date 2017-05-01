@@ -67,24 +67,32 @@ export default {
   fetchNodes() {
     return (dispatch, getState) => {
       dispatch(this.requestNodes());
-      IronicApiService.getNodes().then(response => {
-        return when.map(response.nodes, node => {
-          return IronicApiService.getNodePorts(node.uuid).then(response => {
-            node.portsDetail = response.ports;
-            return node;
+      IronicApiService.getNodes()
+        .then(response => {
+          return when
+            .map(response.nodes, node => {
+              return IronicApiService.getNodePorts(node.uuid).then(response => {
+                node.portsDetail = response.ports;
+                return node;
+              });
+            })
+            .then(nodes => {
+              const normalizedNodes = normalize(nodes, arrayOf(nodeSchema))
+                .entities;
+              dispatch(this.receiveNodes(normalizedNodes));
+            });
+        })
+        .catch(error => {
+          dispatch(this.receiveNodes({}));
+          logger.error(
+            'Error in NodesActions.fetchNodes',
+            error.stack || error
+          );
+          let errorHandler = new IronicApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
           });
-        }).then(nodes => {
-          const normalizedNodes = normalize(nodes, arrayOf(nodeSchema)).entities;
-          dispatch(this.receiveNodes(normalizedNodes));
         });
-      }).catch((error) => {
-        dispatch(this.receiveNodes({}));
-        logger.error('Error in NodesActions.fetchNodes', error.stack || error);
-        let errorHandler = new IronicApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
-        });
-      });
     };
   },
 
@@ -94,9 +102,9 @@ export default {
   pollNodeslistDuringProgress() {
     return (dispatch, getState) => {
       const nodesState = getState().nodes;
-      if(nodesState.get('nodesInProgress').size > 0) {
+      if (nodesState.get('nodesInProgress').size > 0) {
         // Only fetch nodes if there's currently no unfinished request.
-        if(!nodesState.get('isFetching')) {
+        if (!nodesState.get('isFetching')) {
           dispatch(this.fetchNodes());
         }
         setTimeout(() => {
@@ -110,21 +118,31 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
       dispatch(this.pollNodeslistDuringProgress());
-      MistralApiService.runWorkflow(MistralConstants.BAREMETAL_INTROSPECT,
-                                    { node_uuids: nodeIds })
-      .then((response) => {
-        if(response.state === 'ERROR') {
-          dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
+      MistralApiService.runWorkflow(MistralConstants.BAREMETAL_INTROSPECT, {
+        node_uuids: nodeIds
+      })
+        .then(response => {
+          if (response.state === 'ERROR') {
+            dispatch(
+              NotificationActions.notify({
+                title: 'Error',
+                message: response.state_info
+              })
+            );
+            dispatch(this.finishOperation(nodeIds));
+          }
+        })
+        .catch(error => {
+          logger.error(
+            'Error in NodesActions.startNodesIntrospection',
+            error.stack || error
+          );
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
           dispatch(this.finishOperation(nodeIds));
-        }
-      }).catch((error) => {
-        logger.error('Error in NodesActions.startNodesIntrospection', error.stack || error);
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
         });
-        dispatch(this.finishOperation(nodeIds));
-      });
     };
   },
 
@@ -135,25 +153,31 @@ export default {
       dispatch(this.finishOperation(nodeIds));
       dispatch(this.fetchNodes());
 
-      switch(messagePayload.status) {
-      case 'SUCCESS': {
-        dispatch(NotificationActions.notify({
-          type: 'success',
-          title: formatMessage(messages.introspectionNotificationTitle),
-          message: formatMessage(messages.introspectionNotificationMessage)
-        }));
-        break;
-      }
-      case 'FAILED': {
-        dispatch(NotificationActions.notify({
-          type: 'error',
-          title: formatMessage(messages.introspectionFailedNotificationTitle),
-          message: messagePayload.message.join(', ')
-        }));
-        break;
-      }
-      default:
-        break;
+      switch (messagePayload.status) {
+        case 'SUCCESS': {
+          dispatch(
+            NotificationActions.notify({
+              type: 'success',
+              title: formatMessage(messages.introspectionNotificationTitle),
+              message: formatMessage(messages.introspectionNotificationMessage)
+            })
+          );
+          break;
+        }
+        case 'FAILED': {
+          dispatch(
+            NotificationActions.notify({
+              type: 'error',
+              title: formatMessage(
+                messages.introspectionFailedNotificationTitle
+              ),
+              message: messagePayload.message.join(', ')
+            })
+          );
+          break;
+        }
+        default:
+          break;
       }
     };
   },
@@ -162,14 +186,22 @@ export default {
     return (dispatch, getState) => {
       const nodes = getNodesByIds(getState(), nodeIds);
       nodes.map(node => {
-        dispatch(this.updateNode({
-          uuid: node.get('uuid'),
-          patches: [{
-            op: 'replace',
-            path: '/properties/capabilities',
-            value: setNodeCapability(node.getIn(['properties', 'capabilities']), 'profile', tag)
-          }]
-        }));
+        dispatch(
+          this.updateNode({
+            uuid: node.get('uuid'),
+            patches: [
+              {
+                op: 'replace',
+                path: '/properties/capabilities',
+                value: setNodeCapability(
+                  node.getIn(['properties', 'capabilities']),
+                  'profile',
+                  tag
+                )
+              }
+            ]
+          })
+        );
       });
     };
   },
@@ -178,21 +210,31 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
       dispatch(this.pollNodeslistDuringProgress());
-      MistralApiService.runWorkflow(MistralConstants.BAREMETAL_PROVIDE,
-                                    { node_uuids: nodeIds })
-      .then((response) => {
-        if(response.state === 'ERROR') {
-          dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
+      MistralApiService.runWorkflow(MistralConstants.BAREMETAL_PROVIDE, {
+        node_uuids: nodeIds
+      })
+        .then(response => {
+          if (response.state === 'ERROR') {
+            dispatch(
+              NotificationActions.notify({
+                title: 'Error',
+                message: response.state_info
+              })
+            );
+            dispatch(this.finishOperation(nodeIds));
+          }
+        })
+        .catch(error => {
+          logger.error(
+            'Error in NodesActions.startProvideNodes',
+            error.stack || error
+          );
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
           dispatch(this.finishOperation(nodeIds));
-        }
-      }).catch((error) => {
-        logger.error('Error in NodesActions.startProvideNodes', error.stack || error);
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
         });
-        dispatch(this.finishOperation(nodeIds));
-      });
     };
   },
 
@@ -202,27 +244,31 @@ export default {
       dispatch(this.finishOperation(nodeIds));
       dispatch(this.fetchNodes());
 
-      switch(messagePayload.status) {
-      case 'SUCCESS': {
-        dispatch(NotificationActions.notify({
-          type: 'success',
-          title: 'Nodes are available',
-          message: messagePayload.message
-        }));
-        break;
-      }
-      case 'FAILED': {
-        messagePayload.message.map(message => {
-          dispatch(NotificationActions.notify({
-            type: 'error',
-            title: 'Error',
-            message: message.result
-          }));
-        });
-        break;
-      }
-      default:
-        break;
+      switch (messagePayload.status) {
+        case 'SUCCESS': {
+          dispatch(
+            NotificationActions.notify({
+              type: 'success',
+              title: 'Nodes are available',
+              message: messagePayload.message
+            })
+          );
+          break;
+        }
+        case 'FAILED': {
+          messagePayload.message.map(message => {
+            dispatch(
+              NotificationActions.notify({
+                type: 'error',
+                title: 'Error',
+                message: message.result
+              })
+            );
+          });
+          break;
+        }
+        default:
+          break;
       }
     };
   },
@@ -230,16 +276,21 @@ export default {
   updateNode(nodePatch) {
     return (dispatch, getState) => {
       dispatch(this.updateNodePending(nodePatch.uuid));
-      IronicApiService.patchNode(nodePatch).then(response => {
-        dispatch(this.updateNodeSuccess(response));
-      }).catch(error => {
-        dispatch(this.updateNodeFailed(nodePatch.uuid));
-        logger.error('Error in NodesActions.UpdateNode', error.stack || error);
-        let errorHandler = new IronicApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      IronicApiService.patchNode(nodePatch)
+        .then(response => {
+          dispatch(this.updateNodeSuccess(response));
+        })
+        .catch(error => {
+          dispatch(this.updateNodeFailed(nodePatch.uuid));
+          logger.error(
+            'Error in NodesActions.UpdateNode',
+            error.stack || error
+          );
+          let errorHandler = new IronicApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
         });
-      });
     };
   },
 
@@ -267,17 +318,22 @@ export default {
   deleteNodes(nodeIds) {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
-      nodeIds.map((nodeId) => {
-        IronicApiService.deleteNode(nodeId).then(response => {
-          dispatch(this.deleteNodeSuccess(nodeId));
-        }).catch(error => {
-          dispatch(this.deleteNodeFailed(nodeId));
-          logger.error('Error in NodesActions.DeleteNodes', error.stack || error);
-          let errorHandler = new IronicApiErrorHandler(error);
-          errorHandler.errors.forEach((error) => {
-            dispatch(NotificationActions.notify(error));
+      nodeIds.map(nodeId => {
+        IronicApiService.deleteNode(nodeId)
+          .then(response => {
+            dispatch(this.deleteNodeSuccess(nodeId));
+          })
+          .catch(error => {
+            dispatch(this.deleteNodeFailed(nodeId));
+            logger.error(
+              'Error in NodesActions.DeleteNodes',
+              error.stack || error
+            );
+            let errorHandler = new IronicApiErrorHandler(error);
+            errorHandler.errors.forEach(error => {
+              dispatch(NotificationActions.notify(error));
+            });
           });
-        });
       });
     };
   },
@@ -301,16 +357,26 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.startOperation(flatNodes));
       dispatch(this.pollNodeslistDuringProgress());
-      MistralApiService.runWorkflow(MistralConstants.TAG_NODES,
-        { tag_node_uuids: tagNodeIds, untag_node_uuids: untagNodeIds, role: role, plan: planName })
-        .then((response) => {
-          if(response.state === 'ERROR') {
-            dispatch(NotificationActions.notify({ title: 'Error', message: response.state_info }));
+      MistralApiService.runWorkflow(MistralConstants.TAG_NODES, {
+        tag_node_uuids: tagNodeIds,
+        untag_node_uuids: untagNodeIds,
+        role: role,
+        plan: planName
+      })
+        .then(response => {
+          if (response.state === 'ERROR') {
+            dispatch(
+              NotificationActions.notify({
+                title: 'Error',
+                message: response.state_info
+              })
+            );
             dispatch(this.finishOperation(flatNodes));
           }
-        }).catch((error) => {
+        })
+        .catch(error => {
           let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach((error) => {
+          errorHandler.errors.forEach(error => {
             dispatch(NotificationActions.notify(error));
           });
           dispatch(this.finishOperation(flatNodes));
@@ -321,21 +387,24 @@ export default {
   nodesAssignmentFinished(messagePayload) {
     return (dispatch, getState) => {
       const nodeIds = messagePayload.execution.input.tag_node_uuids.concat(
-        messagePayload.execution.input.untag_node_uuids);
+        messagePayload.execution.input.untag_node_uuids
+      );
       dispatch(this.finishOperation(nodeIds));
       dispatch(this.fetchNodes());
 
-      switch(messagePayload.status) {
-      case 'FAILED': {
-        dispatch(NotificationActions.notify({
-          type: 'error',
-          title: 'Error',
-          message: messagePayload.message
-        }));
-        break;
-      }
-      default:
-        break;
+      switch (messagePayload.status) {
+        case 'FAILED': {
+          dispatch(
+            NotificationActions.notify({
+              type: 'error',
+              title: 'Error',
+              message: messagePayload.message
+            })
+          );
+          break;
+        }
+        default:
+          break;
       }
     };
   }

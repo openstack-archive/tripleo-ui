@@ -11,13 +11,13 @@ const messages = defineMessages({
   }
 });
 
-const ConfigurePlanStep = (props) => {
+const ConfigurePlanStep = props => {
   return (
     <div>
-      <DeploymentConfigurationSummary { ...props } />
+      <DeploymentConfigurationSummary {...props} />
       &nbsp;
       <Link to="/deployment-plan/configuration">
-        <FormattedMessage { ...messages.editConfigurationLink} />
+        <FormattedMessage {...messages.editConfigurationLink} />
       </Link>
     </div>
   );

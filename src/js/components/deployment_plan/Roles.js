@@ -20,7 +20,7 @@ class Roles extends React.Component {
   }
 
   componentDidUpdate() {
-    if(!this.props.loaded && !this.props.isFetchingRoles) {
+    if (!this.props.loaded && !this.props.isFetchingRoles) {
       this.props.fetchRoles();
       this.props.fetchNodes();
     }
@@ -35,8 +35,13 @@ class Roles extends React.Component {
             title={role.title}
             identifier={role.identifier}
             fetchNodes={this.props.fetchNodes}
-            assignedNodesCountParameter={this.props.nodeCountParametersByRole.get(role.identifier)}
-            availableNodesCount={this.props.availableNodesCountsByRole.get(role.identifier)}/>
+            assignedNodesCountParameter={this.props.nodeCountParametersByRole.get(
+              role.identifier
+            )}
+            availableNodesCount={this.props.availableNodesCountsByRole.get(
+              role.identifier
+            )}
+          />
         </div>
       );
     });
@@ -46,9 +51,13 @@ class Roles extends React.Component {
     return (
       <div className="panel panel-default roles-panel">
         <div className="panel-body">
-          <Loader loaded={this.props.loaded}
-                  content={this.props.intl.formatMessage(messages.loadingDeploymentRoles)}
-                  height={40}>
+          <Loader
+            loaded={this.props.loaded}
+            content={this.props.intl.formatMessage(
+              messages.loadingDeploymentRoles
+            )}
+            height={40}
+          >
             <div className="row-cards-pf">
               <NodesAssignmentForm>
                 {this.renderRoleCards()}

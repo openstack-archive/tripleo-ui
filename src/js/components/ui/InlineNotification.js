@@ -3,14 +3,14 @@ import React, { PropTypes } from 'react';
 
 const InlineNotification = ({ children, title, type }) => {
   const notificationClasses = ClassNames({
-    'alert': true,
+    alert: true,
     'alert-danger': type === 'error',
     'alert-warning': type === 'warning',
     'alert-success': type === 'success',
     'alert-info': type === 'info'
   });
   const iconClasses = ClassNames({
-    'pficon': true,
+    pficon: true,
     'pficon-error-circle-o': type === 'error',
     'pficon-warning-triangle-o': type === 'warning',
     'pficon-ok': type === 'success',
@@ -19,7 +19,7 @@ const InlineNotification = ({ children, title, type }) => {
 
   return (
     <div className={notificationClasses}>
-      <span className={iconClasses}></span>
+      <span className={iconClasses} />
       <strong>{title}</strong> {children}
     </div>
   );

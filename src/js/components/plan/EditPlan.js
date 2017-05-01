@@ -31,7 +31,6 @@ const messages = defineMessages({
 });
 
 class EditPlan extends React.Component {
-
   constructor() {
     super();
     this.state = {
@@ -46,36 +45,37 @@ class EditPlan extends React.Component {
   }
 
   setUploadType(e) {
-    this.setState({ uploadType: e.target.value === 'folder' ? 'folder' : 'tarball' });
+    this.setState({
+      uploadType: e.target.value === 'folder' ? 'folder' : 'tarball'
+    });
   }
 
   onPlanFilesChange(currentValues) {
-    if(currentValues && currentValues.planFiles) {
+    if (currentValues && currentValues.planFiles) {
       this.setState({ selectedFiles: currentValues.planFiles });
     }
   }
 
   onFormSubmit(form) {
     let planFiles = {};
-    if(this.state.uploadType === 'folder') {
+    if (this.state.uploadType === 'folder') {
       this.state.selectedFiles.map(item => {
         planFiles[item.name] = {};
         planFiles[item.name].contents = item.content;
       });
       this.props.updatePlan(this.getNameFromUrl(), planFiles);
-    }
-    else {
+    } else {
       let file = this.state.selectedFiles[0].file;
       this.props.updatePlanFromTarball(this.getNameFromUrl(), file);
     }
   }
 
   onFormValid() {
-    this.setState({canSubmit: true});
+    this.setState({ canSubmit: true });
   }
 
   onFormInvalid() {
-    this.setState({canSubmit: false});
+    this.setState({ canSubmit: false });
   }
 
   getNameFromUrl() {
@@ -89,50 +89,56 @@ class EditPlan extends React.Component {
 
     return (
       <Modal dialogClasses="modal-lg">
-        <Formsy.Form ref="EditPlanForm"
-                     role="form"
-                     className="form-horizontal"
-                     onChange={this.onPlanFilesChange.bind(this)}
-                     onValidSubmit={this.onFormSubmit.bind(this)}
-                     onValid={this.onFormValid.bind(this)}
-                     onInvalid={this.onFormInvalid.bind(this)}>
-        <div className="modal-header">
-          <Link to="/plans/list"
-                type="button"
-                className="close">
-            <span aria-hidden="true" className="pficon pficon-close"/>
-          </Link>
-          <h4>
-            <FormattedMessage {...messages.updatePlanNameFiles}
-                              values={{ planName: this.getNameFromUrl() }}/>
-          </h4>
-        </div>
-        <Loader loaded={!this.props.isTransitioningPlan}
-                size="lg"
-                height={60}
-                content={this.props.intl.formatMessage(messages.updatingPlanLoader)}>
-          <ModalFormErrorList errors={this.props.planFormErrors.toJS()}/>
-          <div className="modal-body">
-            <PlanEditFormTabs currentTab={this.props.location.query.tab || 'editPlan'}
-                              selectedFiles={this.state.selectedFiles}
-                              planName={this.getNameFromUrl()}
-                              planFiles={planFiles}
-                              setUploadType={this.setUploadType.bind(this)}
-                              uploadType={this.state.uploadType}/>
+        <Formsy.Form
+          ref="EditPlanForm"
+          role="form"
+          className="form-horizontal"
+          onChange={this.onPlanFilesChange.bind(this)}
+          onValidSubmit={this.onFormSubmit.bind(this)}
+          onValid={this.onFormValid.bind(this)}
+          onInvalid={this.onFormInvalid.bind(this)}
+        >
+          <div className="modal-header">
+            <Link to="/plans/list" type="button" className="close">
+              <span aria-hidden="true" className="pficon pficon-close" />
+            </Link>
+            <h4>
+              <FormattedMessage
+                {...messages.updatePlanNameFiles}
+                values={{ planName: this.getNameFromUrl() }}
+              />
+            </h4>
           </div>
-        </Loader>
-        <div className="modal-footer">
-          <button disabled={!this.state.canSubmit}
-                  className="btn btn-primary"
-                  type="submit">
-            <FormattedMessage {...messages.uploadAndUpdate}/>
-          </button>
-          <Link to="/plans/list"
-                type="button"
-                className="btn btn-default">
-            <FormattedMessage {...messages.cancel}/>
-          </Link>
-        </div>
+          <Loader
+            loaded={!this.props.isTransitioningPlan}
+            size="lg"
+            height={60}
+            content={this.props.intl.formatMessage(messages.updatingPlanLoader)}
+          >
+            <ModalFormErrorList errors={this.props.planFormErrors.toJS()} />
+            <div className="modal-body">
+              <PlanEditFormTabs
+                currentTab={this.props.location.query.tab || 'editPlan'}
+                selectedFiles={this.state.selectedFiles}
+                planName={this.getNameFromUrl()}
+                planFiles={planFiles}
+                setUploadType={this.setUploadType.bind(this)}
+                uploadType={this.state.uploadType}
+              />
+            </div>
+          </Loader>
+          <div className="modal-footer">
+            <button
+              disabled={!this.state.canSubmit}
+              className="btn btn-primary"
+              type="submit"
+            >
+              <FormattedMessage {...messages.uploadAndUpdate} />
+            </button>
+            <Link to="/plans/list" type="button" className="btn btn-default">
+              <FormattedMessage {...messages.cancel} />
+            </Link>
+          </div>
         </Formsy.Form>
       </Modal>
     );
@@ -162,7 +168,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchPlan: (planName) => {
+    fetchPlan: planName => {
       dispatch(PlansActions.fetchPlan(planName));
     },
     updatePlan: (planName, files) => {
@@ -174,4 +180,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(EditPlan));
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(EditPlan)
+);

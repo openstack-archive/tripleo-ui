@@ -16,10 +16,10 @@ export const messages = defineMessages({
 });
 
 export const minValue = (min, message) => value =>
-  value && value < min ? message : undefined;
+  (value && value < min ? message : undefined);
 
 export const maxValue = (max, message) => value =>
-  value && value > max ? message : undefined;
+  (value && value > max ? message : undefined);
 
 export const number = message => value =>
-  value && isNaN(Number(value)) ? message : undefined;
+  (value && isNaN(Number(value)) ? message : undefined);
