@@ -72,16 +72,13 @@ class TagNodesForm extends React.Component {
 
   renderOptions() {
     return this.props.profiles
-      .map((profile, index) =>
-        <option key={index}>{profile}</option>
-      ).concat([
+      .map((profile, index) => <option key={index}>{profile}</option>)
+      .concat([
         <option key="spacer1" value="spacer" disabled>──────────</option>,
-        <option key="noProfile"
-                value="">
+        <option key="noProfile" value="">
           {this.props.intl.formatMessage(messages.noProfileOption)}
         </option>,
-        <option key="custom"
-                value="custom">
+        <option key="custom" value="custom">
           {this.props.intl.formatMessage(messages.customProfileOption)}
         </option>
       ]);
@@ -90,52 +87,63 @@ class TagNodesForm extends React.Component {
   render() {
     const { formatMessage } = this.props.intl;
     return (
-      <Formsy.Form ref="tagNodesForm"
-                   className="form form-horizontal"
-                   onChange={this.checkSelectedProfile.bind(this)}
-                   onSubmit={this.handleSubmit.bind(this)}
-                   onValid={this.enableButton.bind(this)}
-                   onInvalid={this.disableButton.bind(this)}>
+      <Formsy.Form
+        ref="tagNodesForm"
+        className="form form-horizontal"
+        onChange={this.checkSelectedProfile.bind(this)}
+        onSubmit={this.handleSubmit.bind(this)}
+        onValid={this.enableButton.bind(this)}
+        onInvalid={this.disableButton.bind(this)}
+      >
         <div className="modal-body">
           <fieldset>
-            <HorizontalSelect name="profile"
-                              title={formatMessage(messages.selectProfileLabel)}
-                              inputColumnClasses="col-sm-7"
-                              labelColumnClasses="col-sm-3"
-                              value="">
+            <HorizontalSelect
+              name="profile"
+              title={formatMessage(messages.selectProfileLabel)}
+              inputColumnClasses="col-sm-7"
+              labelColumnClasses="col-sm-3"
+              value=""
+            >
               {this.renderOptions()}
             </HorizontalSelect>
             {this.state.showCustomInput
-              ? <HorizontalInput name="customProfile"
-                                 title={formatMessage(messages.customProfileLabel)}
-                                 type="text"
-                                 inputColumnClasses="col-sm-7"
-                                 labelColumnClasses="col-sm-3"
-                                 value=""
-                                 validations={{ matchRegexp: /^[0-9a-z]+(-[0-9a-z]+)*$/ }}
-                                 validationError={formatMessage(messages.customProfileErrorMessage)}
-                                 description={formatMessage(messages.customProfileDescription)}
-                                 required/>
+              ? <HorizontalInput
+                  name="customProfile"
+                  title={formatMessage(messages.customProfileLabel)}
+                  type="text"
+                  inputColumnClasses="col-sm-7"
+                  labelColumnClasses="col-sm-3"
+                  value=""
+                  validations={{ matchRegexp: /^[0-9a-z]+(-[0-9a-z]+)*$/ }}
+                  validationError={formatMessage(
+                    messages.customProfileErrorMessage
+                  )}
+                  description={formatMessage(messages.customProfileDescription)}
+                  required
+                />
               : null}
           </fieldset>
         </div>
         <div className="modal-footer">
-          <button className="btn btn-primary"
-                  disabled={!this.state.canSubmit}
-                  type="submit">
-            <FormattedMessage {...messages.confirm}/>
+          <button
+            className="btn btn-primary"
+            disabled={!this.state.canSubmit}
+            type="submit"
+          >
+            <FormattedMessage {...messages.confirm} />
           </button>
-          <button type="button"
-                  className="btn btn-default"
-                  aria-label="Close"
-                  onClick={this.props.onCancel}>
-            <FormattedMessage {...messages.cancel}/>
+          <button
+            type="button"
+            className="btn btn-default"
+            aria-label="Close"
+            onClick={this.props.onCancel}
+          >
+            <FormattedMessage {...messages.cancel} />
           </button>
         </div>
       </Formsy.Form>
     );
   }
-
 }
 TagNodesForm.propTypes = {
   intl: PropTypes.object.isRequired,

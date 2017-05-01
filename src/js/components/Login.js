@@ -40,8 +40,8 @@ const messages = defineMessages({
   },
   description: {
     id: 'Login.description',
-    defaultMessage: 'This tool will walk you through the process of configuring and '
-                     + 'deploying an OpenStack environment.'
+    defaultMessage: 'This tool will walk you through the process of configuring and ' +
+      'deploying an OpenStack environment.'
   }
 });
 
@@ -90,43 +90,51 @@ class Login extends React.Component {
     return (
       <div>
         <span id="badge">
-          <img src={LogoSvg} alt="TripleO"></img>
+          <img src={LogoSvg} alt="TripleO" />
         </span>
         <div className="container">
           <div className="row">
             <div className="col-sm-12">
               <div id="brand">
-                <img src={TripleoOwlSvg} alt="TripleO"></img>
+                <img src={TripleoOwlSvg} alt="TripleO" />
               </div>
             </div>
             <div className="col-sm-7 col-md-6 col-lg-5 login">
-              <FormErrorList errors={this.props.formErrors.toJS()}/>
-              <Formsy.Form ref="form"
-                           role="form"
-                           className="form-horizontal"
-                           onSubmit={this.handleLogin.bind(this)}
-                           onValid={this._enableButton.bind(this)}
-                           onInvalid={this._disableButton.bind(this)}>
-                <LoginInput name="username"
-                            placeholder={formatMessage(messages.username)}
-                            title={formatMessage(messages.username)}
-                            validationError={formatMessage(messages.usernameRequired)}
-                            required
-                            autoFocus/>
-                <LoginInput type="password"
-                            name="password"
-                            placeholder={formatMessage(messages.password)}
-                            title={formatMessage(messages.password)}
-                            validationError={formatMessage(messages.passwordRequired)}
-                            required/>
+              <FormErrorList errors={this.props.formErrors.toJS()} />
+              <Formsy.Form
+                ref="form"
+                role="form"
+                className="form-horizontal"
+                onSubmit={this.handleLogin.bind(this)}
+                onValid={this._enableButton.bind(this)}
+                onInvalid={this._disableButton.bind(this)}>
+                <LoginInput
+                  name="username"
+                  placeholder={formatMessage(messages.username)}
+                  title={formatMessage(messages.username)}
+                  validationError={formatMessage(messages.usernameRequired)}
+                  required
+                  autoFocus
+                />
+                <LoginInput
+                  type="password"
+                  name="password"
+                  placeholder={formatMessage(messages.password)}
+                  title={formatMessage(messages.password)}
+                  validationError={formatMessage(messages.passwordRequired)}
+                  required
+                />
                 <div className="form-group">
                   <div className="col-xs-offset-8 col-xs-4 col-sm-4 col-md-4 submit">
-                    <button type="submit"
-                            disabled={!this.state.canSubmit || this.props.isAuthenticating}
-                            className="btn btn-primary btn-lg"
-                            tabIndex="4"
-                            id="Login__loginButton">
-                      <FormattedMessage {...messages.login}/>
+                    <button
+                      type="submit"
+                      disabled={
+                        !this.state.canSubmit || this.props.isAuthenticating
+                      }
+                      className="btn btn-primary btn-lg"
+                      tabIndex="4"
+                      id="Login__loginButton">
+                      <FormattedMessage {...messages.login} />
                     </button>
                   </div>
                 </div>
@@ -134,8 +142,9 @@ class Login extends React.Component {
             </div>
             <div className="col-sm-5 col-md-6 col-lg-7 details">
               <p>
-                <strong><FormattedMessage {...messages.welcome}/></strong><br/>
-                <FormattedMessage {...messages.description}/>
+                <strong><FormattedMessage {...messages.welcome} /></strong>
+                <br />
+                <FormattedMessage {...messages.description} />
               </p>
             </div>
           </div>

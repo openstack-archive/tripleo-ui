@@ -69,7 +69,8 @@
   },
   "scripts": {
     "build": "webpack --bail",
-    "lint": "eslint --max-warnings 0 src",
+    "lint": "eslint --max-warnings 0 src && prettier --single-quote --jsx-bracket-same-line --list-different src/js/**/*.js",
+    "prettier": "prettier --write --single-quote --jsx-bracket-same-line src/js/**/*.js",
     "start": "webpack-dev-server --progress",
     "test": "jest",
     "test:watch": "jest --watchAll",

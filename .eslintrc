@@ -1,22 +1,17 @@
 {
   "rules": {
     "default-case": 0,
-    "indent": [ 2, 2 ],
     "linebreak-style": [ 2, "unix" ],
-    "max-len": [1, 100, 2, { "ignoreComments": true }],
     "no-cond-assign": [2, "except-parens"],
+    "no-console": 2,
     "no-else-return": 0,
     "no-param-reassign": 0,
     "no-unneeded-ternary": 1,
     "no-unused-vars": [1, {"vars": "local", "args": "none"}],
-    "quotes": [ 2, "single" ],
-    "quote-props": [1, "consistent-as-needed"],
     "radix": 0,
     "react/jsx-boolean-value": [1, "never"],
-    "react/jsx-curly-spacing": [1, "never"],
     "react/jsx-no-duplicate-props": 1,
     "react/jsx-no-undef": 1,
-    "jsx-quotes": [1, "prefer-double"],
     "react/sort-prop-types": 1,
     "react/jsx-sort-props": 0,
     "react/jsx-uses-react": 1,
@@ -31,9 +26,7 @@
     "react/require-extension": 1,
     "react/self-closing-comp": 1,
     "react/sort-comp": 1,
-    "react/wrap-multilines": 1,
     "space-infix-ops": 0,
-    "semi": [ 2, "always" ],
     "strict": 0
   },
   "env": {
@@ -43,7 +36,10 @@
     "node": true,
     "jest": true
   },
-  "extends": "eslint:recommended",
+  "extends": [
+    "prettier",
+    "prettier/react"
+  ],
   "ecmaFeatures": {
     "jsx": true,
     "experimentalObjectRestSpread": true

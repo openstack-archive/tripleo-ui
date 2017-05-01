@@ -8,17 +8,23 @@ import store from '../store';
  * It gives precedence to urls stored in the app.conf file over
  * the ones exposed through the serviceCatalog.
  */
-export function getServiceUrl(serviceName, urlType='public', appConfig=getAppConfig()) {
-  let serviceUrl = appConfig[serviceName] || getFromServiceCatalog(serviceName, urlType);
-  if(!serviceUrl) {
+export function getServiceUrl(
+  serviceName,
+  urlType = 'public',
+  appConfig = getAppConfig()
+) {
+  let serviceUrl =
+    appConfig[serviceName] || getFromServiceCatalog(serviceName, urlType);
+  if (!serviceUrl) {
     throw Error(`URL for service ${serviceName} can not be found`);
   }
   return serviceUrl.replace('%(project_id)s', getProjectId());
 }
 
 function getFromServiceCatalog(serviceName, urlType) {
-  return store.getState().login
-    .getIn(['token', 'catalog'], List())
+  return store
+    .getState()
+    .login.getIn(['token', 'catalog'], List())
     .find(service => service.get('name') === serviceName, null, Map())
     .get('endpoints', List())
     .find(endpoint => endpoint.get('interface') === urlType, null, Map())

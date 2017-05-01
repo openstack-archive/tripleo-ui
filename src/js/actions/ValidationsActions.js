@@ -14,19 +14,24 @@ export default {
   fetchValidations() {
     return (dispatch, getState) => {
       dispatch(this.fetchValidationsPending());
-      MistralApiService.runAction(MistralConstants.VALIDATIONS_LIST).then((response) => {
-        const actionResult = JSON.parse(response.output).result;
-        const validations = normalize(actionResult,
-                                      arrayOf(validationSchema)).entities.validations || {};
-        dispatch(this.fetchValidationsSuccess(validations));
-      }).catch((error) => {
-        logger.error('Error in ValidationsActions.fetchValidations', error.stack || error);
-        dispatch(this.fetchValidationsFailed());
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      MistralApiService.runAction(MistralConstants.VALIDATIONS_LIST)
+        .then(response => {
+          const actionResult = JSON.parse(response.output).result;
+          const validations = normalize(actionResult, arrayOf(validationSchema))
+            .entities.validations || {};
+          dispatch(this.fetchValidationsSuccess(validations));
+        })
+        .catch(error => {
+          logger.error(
+            'Error in ValidationsActions.fetchValidations',
+            error.stack || error
+          );
+          dispatch(this.fetchValidationsFailed());
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
         });
-      });
     };
   },
 
@@ -51,24 +56,33 @@ export default {
 
   runValidation(id, currentPlanName) {
     return (dispatch, getState) => {
-      MistralApiService.runWorkflow(MistralConstants.VALIDATIONS_RUN,
-                                    { validation_name: id,
-                                      plan: currentPlanName })
-      .then((response) => {
-        if(response.state === 'ERROR') {
-          dispatch(NotificationActions.notify({ title: 'Error running Validation',
-                                                message: response.state_info }));
-          dispatch(WorkflowExecutionsActions.addWorkflowExecution(response));
-        } else {
-          dispatch(WorkflowExecutionsActions.addWorkflowExecution(response));
-        }
-      }).catch((error) => {
-        logger.error('Error in ValidationsActions.runValidation', error.stack || error);
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      MistralApiService.runWorkflow(MistralConstants.VALIDATIONS_RUN, {
+        validation_name: id,
+        plan: currentPlanName
+      })
+        .then(response => {
+          if (response.state === 'ERROR') {
+            dispatch(
+              NotificationActions.notify({
+                title: 'Error running Validation',
+                message: response.state_info
+              })
+            );
+            dispatch(WorkflowExecutionsActions.addWorkflowExecution(response));
+          } else {
+            dispatch(WorkflowExecutionsActions.addWorkflowExecution(response));
+          }
+        })
+        .catch(error => {
+          logger.error(
+            'Error in ValidationsActions.runValidation',
+            error.stack || error
+          );
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
         });
-      });
     };
   },
 
@@ -88,21 +102,30 @@ export default {
 
   runValidationGroups(groups, currentPlanName) {
     return (dispatch, getState) => {
-      MistralApiService.runWorkflow(MistralConstants.VALIDATIONS_RUN_GROUPS,
-                                    { group_names: groups,
-                                      plan: currentPlanName })
-      .then((response) => {
-        if(response.state === 'ERROR') {
-          dispatch(NotificationActions.notify({ title: 'Error running Validation',
-                                                message: response.state_info }));
-        }
-      }).catch((error) => {
-        logger.error('Error in ValidationsActions.runValidationGroups', error.stack || error);
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      MistralApiService.runWorkflow(MistralConstants.VALIDATIONS_RUN_GROUPS, {
+        group_names: groups,
+        plan: currentPlanName
+      })
+        .then(response => {
+          if (response.state === 'ERROR') {
+            dispatch(
+              NotificationActions.notify({
+                title: 'Error running Validation',
+                message: response.state_info
+              })
+            );
+          }
+        })
+        .catch(error => {
+          logger.error(
+            'Error in ValidationsActions.runValidationGroups',
+            error.stack || error
+          );
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
         });
-      });
     };
   }
 };
