@@ -2,8 +2,10 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React, { PropTypes } from 'react';
 
-import { deploymentStatusMessages as statusMessages,
-         stackStates } from '../../constants/StacksConstants';
+import {
+  deploymentStatusMessages as statusMessages,
+  stackStates
+} from '../../constants/StacksConstants';
 import Loader from '../ui/Loader';
 import ProgressBar from '../ui/ProgressBar';
 import StackResourcesTable from './StackResourcesTable';
@@ -21,13 +23,13 @@ export default class DeploymentProgress extends React.Component {
   }
 
   renderProgressBar() {
-    return (
-      this.props.stack.stack_status === stackStates.CREATE_IN_PROGRESS ? (
-        <ProgressBar value={this.props.deploymentProgress}
-                     label={this.props.deploymentProgress + '%'}
-                     labelPosition="topRight"/>
-      ) : null
-    );
+    return this.props.stack.stack_status === stackStates.CREATE_IN_PROGRESS
+      ? <ProgressBar
+          value={this.props.deploymentProgress}
+          label={this.props.deploymentProgress + '%'}
+          labelPosition="topRight"
+        />
+      : null;
   }
 
   render() {
@@ -40,12 +42,14 @@ export default class DeploymentProgress extends React.Component {
     return (
       <div className="col-sm-12 fixed-container-body-content">
         <div className="progress-description">
-          <Loader loaded={false} content={statusMessage} inline/>
+          <Loader loaded={false} content={statusMessage} inline />
         </div>
         {this.renderProgressBar()}
-        <h2><FormattedMessage {...messages.resources}/></h2>
-        <StackResourcesTable isFetchingResources={!this.props.stackResourcesLoaded}
-                             resources={this.props.stackResources.reverse()}/>
+        <h2><FormattedMessage {...messages.resources} /></h2>
+        <StackResourcesTable
+          isFetchingResources={!this.props.stackResourcesLoaded}
+          resources={this.props.stackResources.reverse()}
+        />
       </div>
     );
   }

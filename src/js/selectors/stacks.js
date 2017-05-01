@@ -21,7 +21,10 @@ export const getCurrentStack = createSelector(
 export const getCurrentStackDeploymentInProgress = createSelector(
   [stacksSelector, currentPlanNameSelector],
   (stacks, currentPlanName) => {
-    return stacks.get(currentPlanName, new Stack()).stack_status === 'CREATE_IN_PROGRESS';
+    return (
+      stacks.get(currentPlanName, new Stack()).stack_status ===
+      'CREATE_IN_PROGRESS'
+    );
   }
 );
 
@@ -29,9 +32,10 @@ export const getCurrentStackDeploymentInProgress = createSelector(
  * Returns calculated percentage of deployment progress
  */
 export const getCurrentStackDeploymentProgress = createSelector(
-  [stackResourcesSelector], (resources) => {
+  [stackResourcesSelector],
+  resources => {
     let allResources = resources.size;
-    if(allResources > 0) {
+    if (allResources > 0) {
       let completeResources = resources.filter(r => {
         return r.resource_status === 'CREATE_COMPLETE';
       }).size;

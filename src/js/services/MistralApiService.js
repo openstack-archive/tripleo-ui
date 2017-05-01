@@ -6,15 +6,18 @@ import { getServiceUrl, getAuthTokenId } from './utils';
 
 class MistralApiService {
   defaultRequest(path, additionalAttributes) {
-    return when.try(getServiceUrl, 'mistral').then((serviceUrl) => {
-      let requestAttributes = _.merge({
-        url: `${serviceUrl}${path}`,
-        headers: { 'X-Auth-Token': getAuthTokenId() },
-        crossOrigin: true,
-        contentType: 'application/json',
-        type: 'json',
-        method: 'GET'
-      }, additionalAttributes);
+    return when.try(getServiceUrl, 'mistral').then(serviceUrl => {
+      let requestAttributes = _.merge(
+        {
+          url: `${serviceUrl}${path}`,
+          headers: { 'X-Auth-Token': getAuthTokenId() },
+          crossOrigin: true,
+          contentType: 'application/json',
+          type: 'json',
+          method: 'GET'
+        },
+        additionalAttributes
+      );
       return when(request(requestAttributes));
     });
   }
@@ -93,7 +96,7 @@ class MistralApiService {
           run_sync: true
         }
       })
-    }).then((response) => {
+    }).then(response => {
       if (response.state === 'SUCCESS') {
         return when.resolve(response);
       } else {

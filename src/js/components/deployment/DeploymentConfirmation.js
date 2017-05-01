@@ -33,8 +33,8 @@ const messages = defineMessages({
   },
   validationsWarningMessage: {
     id: 'DeploymentConfirmation.validationsWarningMessage',
-    defaultMessage: 'It is highly recommended that you resolve all validation issues before '
-                    + 'continuing.'
+    defaultMessage: 'It is highly recommended that you resolve all validation issues before ' +
+      'continuing.'
   }
 });
 
@@ -44,22 +44,38 @@ class DeploymentConfirmation extends React.Component {
   }
 
   render() {
-    const { allValidationsSuccessful, currentPlan, deployPlan, environmentSummary } = this.props;
+    const {
+      allValidationsSuccessful,
+      currentPlan,
+      deployPlan,
+      environmentSummary
+    } = this.props;
 
     return (
       <div className="col-sm-12 deployment-summary">
-        <BlankSlate iconClass="fa fa-cloud-upload"
-                    title={this.props.intl.formatMessage(messages.deploymentConfirmationHeader,
-                                                         { planName: currentPlan.name })}>
-          <p><strong><FormattedMessage {...messages.summary}/></strong> {environmentSummary}</p>
-          <ValidationsWarning allValidationsSuccessful={allValidationsSuccessful}/>
+        <BlankSlate
+          iconClass="fa fa-cloud-upload"
+          title={this.props.intl.formatMessage(
+            messages.deploymentConfirmationHeader,
+            { planName: currentPlan.name }
+          )}
+        >
+          <p>
+            <strong><FormattedMessage {...messages.summary} /></strong>
+            {' '}
+            {environmentSummary}
+          </p>
+          <ValidationsWarning
+            allValidationsSuccessful={allValidationsSuccessful}
+          />
           <p>
             <FormattedMessage {...messages.deploymentConfirmation} />
           </p>
           <DeployButton
             disabled={currentPlan.isRequestingPlanDeploy}
             deploy={deployPlan.bind(this, currentPlan.name)}
-            isRequestingPlanDeploy={currentPlan.isRequestingPlanDeploy}/>
+            isRequestingPlanDeploy={currentPlan.isRequestingPlanDeploy}
+          />
         </BlankSlate>
       </div>
     );
@@ -76,39 +92,51 @@ DeploymentConfirmation.propTypes = {
 
 export default injectIntl(DeploymentConfirmation);
 
-export const ValidationsWarning = injectIntl(({ allValidationsSuccessful, intl }) => {
-  if (!allValidationsSuccessful) {
-    return (
-      <InlineNotification type="warning"
-                          title={intl.formatMessage(messages.validationsWarningTitle)}>
-        <p>
-          <FormattedMessage {...messages.validationsWarningMessage} />
-        </p>
-      </InlineNotification>
-    );
+export const ValidationsWarning = injectIntl(
+  ({ allValidationsSuccessful, intl }) => {
+    if (!allValidationsSuccessful) {
+      return (
+        <InlineNotification
+          type="warning"
+          title={intl.formatMessage(messages.validationsWarningTitle)}
+        >
+          <p>
+            <FormattedMessage {...messages.validationsWarningMessage} />
+          </p>
+        </InlineNotification>
+      );
+    }
+    return null;
   }
-  return null;
-});
+);
 ValidationsWarning.propTypes = {
   allValidationsSuccessful: PropTypes.bool.isRequired,
   intl: PropTypes.object
 };
 
-export const DeployButton = injectIntl(({ deploy, disabled, intl, isRequestingPlanDeploy }) => {
-  return (
-    <button type="button"
-            disabled={disabled}
-            className="btn btn-lg btn-primary"
-            onClick={() => deploy()}>
-      <Loader loaded={!isRequestingPlanDeploy}
-              content={intl.formatMessage(messages.requestingDeploymentLoader)}
-              component="span"
-              inline>
-        <span className="fa fa-cloud-upload"/> <FormattedMessage {...messages.deployButton}/>
-      </Loader>
-    </button>
-  );
-});
+export const DeployButton = injectIntl(
+  ({ deploy, disabled, intl, isRequestingPlanDeploy }) => {
+    return (
+      <button
+        type="button"
+        disabled={disabled}
+        className="btn btn-lg btn-primary"
+        onClick={() => deploy()}
+      >
+        <Loader
+          loaded={!isRequestingPlanDeploy}
+          content={intl.formatMessage(messages.requestingDeploymentLoader)}
+          component="span"
+          inline
+        >
+          <span className="fa fa-cloud-upload" />
+          {' '}
+          <FormattedMessage {...messages.deployButton} />
+        </Loader>
+      </button>
+    );
+  }
+);
 DeployButton.propTypes = {
   deploy: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
