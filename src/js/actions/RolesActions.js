@@ -10,17 +10,20 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.fetchRolesPending());
 
-      MistralApiService.runAction(MistralConstants.ROLE_LIST, { container: planName })
-      .then((response) => {
-        dispatch(this.fetchRolesSuccess(JSON.parse(response.output).result));
-      }).catch((error) => {
-        logger.error('Error in RolesAction.fetchRoles', error.stack || error);
-        dispatch(this.fetchRolesFailed());
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      MistralApiService.runAction(MistralConstants.ROLE_LIST, {
+        container: planName
+      })
+        .then(response => {
+          dispatch(this.fetchRolesSuccess(JSON.parse(response.output).result));
+        })
+        .catch(error => {
+          logger.error('Error in RolesAction.fetchRoles', error.stack || error);
+          dispatch(this.fetchRolesFailed());
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
         });
-      });
     };
   },
 

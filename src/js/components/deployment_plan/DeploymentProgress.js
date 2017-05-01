@@ -3,8 +3,10 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import React, { PropTypes } from 'react';
 
-import { deploymentStatusMessages as statusMessages,
-         stackStates } from '../../constants/StacksConstants';
+import {
+  deploymentStatusMessages as statusMessages,
+  stackStates
+} from '../../constants/StacksConstants';
 import DeleteStackButton from './DeleteStackButton';
 import Loader from '../ui/Loader';
 import ProgressBar from '../ui/ProgressBar';
@@ -30,13 +32,13 @@ const messages = defineMessages({
 
 class DeploymentProgress extends React.Component {
   renderProgressBar() {
-    return (
-      this.props.stack.stack_status === stackStates.CREATE_IN_PROGRESS ? (
-        <ProgressBar value={this.props.deploymentProgress}
-                     label={this.props.deploymentProgress + '%'}
-                     labelPosition="topRight"/>
-      ) : null
-    );
+    return this.props.stack.stack_status === stackStates.CREATE_IN_PROGRESS
+      ? <ProgressBar
+          value={this.props.deploymentProgress}
+          label={this.props.deploymentProgress + '%'}
+          labelPosition="topRight"
+        />
+      : null;
   }
 
   render() {
@@ -48,25 +50,29 @@ class DeploymentProgress extends React.Component {
       </strong>
     );
 
-    const deleteButton = this.props.stack.stack_status !== stackStates.DELETE_IN_PROGRESS
-      ? (<DeleteStackButton content={formatMessage(messages.cancelDeployment)}
-                            buttonIconClass="fa fa-ban"
-                            deleteStack={this.props.deleteStack}
-                            disabled={this.props.isRequestingStackDelete}
-                            loaded={!this.props.isRequestingStackDelete}
-                            loaderContent={formatMessage(messages.requestingDeletion)}
-                            stack={this.props.stack}/>) : null;
+    const deleteButton = this.props.stack.stack_status !==
+      stackStates.DELETE_IN_PROGRESS
+      ? <DeleteStackButton
+          content={formatMessage(messages.cancelDeployment)}
+          buttonIconClass="fa fa-ban"
+          deleteStack={this.props.deleteStack}
+          disabled={this.props.isRequestingStackDelete}
+          loaded={!this.props.isRequestingStackDelete}
+          loaderContent={formatMessage(messages.requestingDeletion)}
+          stack={this.props.stack}
+        />
+      : null;
 
     return (
       <div>
         <p>
-          <span><FormattedMessage {...messages.deploymentInProgress}/> </span>
+          <span><FormattedMessage {...messages.deploymentInProgress} /> </span>
           <Link to="/deployment-plan/deployment-detail">
-            <FormattedMessage {...messages.viewInformation}/>
+            <FormattedMessage {...messages.viewInformation} />
           </Link>
         </p>
         <div className="progress-description">
-          <Loader loaded={false} content={statusMessage} inline/>
+          <Loader loaded={false} content={statusMessage} inline />
         </div>
         {this.renderProgressBar()}
         {deleteButton}

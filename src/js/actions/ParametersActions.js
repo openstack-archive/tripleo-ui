@@ -47,21 +47,37 @@ export default {
   fetchParameters(planName, parentPath) {
     return dispatch => {
       dispatch(this.fetchParametersPending());
-      MistralApiService.runAction(MistralConstants.PARAMETERS_GET, { container: planName })
-      .then(response => {
-        const resourceTree = JSON.parse(response.output).result.heat_resource_tree;
-        const mistralParameters = JSON.parse(response.output).result.mistral_environment_parameters;
-        const { resources, parameters } = normalizeParameters(resourceTree);
-        dispatch(this.fetchParametersSuccess({ resources, parameters, mistralParameters }));
-      }).catch(error => {
-        dispatch(this.fetchParametersFailed());
-        if(parentPath) { browserHistory.push(parentPath); }
-        logger.error('Error in ParametersActions.fetchParameters', error.stack || error);
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      MistralApiService.runAction(MistralConstants.PARAMETERS_GET, {
+        container: planName
+      })
+        .then(response => {
+          const resourceTree = JSON.parse(response.output).result
+            .heat_resource_tree;
+          const mistralParameters = JSON.parse(response.output).result
+            .mistral_environment_parameters;
+          const { resources, parameters } = normalizeParameters(resourceTree);
+          dispatch(
+            this.fetchParametersSuccess({
+              resources,
+              parameters,
+              mistralParameters
+            })
+          );
+        })
+        .catch(error => {
+          dispatch(this.fetchParametersFailed());
+          if (parentPath) {
+            browserHistory.push(parentPath);
+          }
+          logger.error(
+            'Error in ParametersActions.fetchParameters',
+            error.stack || error
+          );
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
         });
-      });
     };
   },
 
@@ -93,30 +109,46 @@ export default {
       const { formatMessage } = getIntl(getState());
       dispatch(startSubmit('nodesAssignment'));
       dispatch(this.updateParametersPending());
-      MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE,
-                                  { container: planName, parameters: data })
-      .then(response => {
-        dispatch(this.updateParametersSuccess(data));
-        dispatch(stopSubmit('nodesAssignment'));
-        dispatch(NotificationActions.notify({
-          title: formatMessage(messages.parametersUpdatedNotficationTitle),
-          message: formatMessage(messages.parametersUpdatedNotficationMessage),
-          type: 'success'
-        }));
-        if (url) { browserHistory.push(url); }
-      }).catch(error => {
-        logger.error('Error in ParametersActions.updateParameters', error);
-        let errorHandler = new MistralApiErrorHandler(error, inputFieldNames);
-        dispatch(stopSubmit('nodesAssignment', { _error: error }));
-        dispatch(this.updateParametersFailed(errorHandler.errors, errorHandler.formFieldErrors));
-      });
+      MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE, {
+        container: planName,
+        parameters: data
+      })
+        .then(response => {
+          dispatch(this.updateParametersSuccess(data));
+          dispatch(stopSubmit('nodesAssignment'));
+          dispatch(
+            NotificationActions.notify({
+              title: formatMessage(messages.parametersUpdatedNotficationTitle),
+              message: formatMessage(
+                messages.parametersUpdatedNotficationMessage
+              ),
+              type: 'success'
+            })
+          );
+          if (url) {
+            browserHistory.push(url);
+          }
+        })
+        .catch(error => {
+          logger.error('Error in ParametersActions.updateParameters', error);
+          let errorHandler = new MistralApiErrorHandler(error, inputFieldNames);
+          dispatch(stopSubmit('nodesAssignment', { _error: error }));
+          dispatch(
+            this.updateParametersFailed(
+              errorHandler.errors,
+              errorHandler.formFieldErrors
+            )
+          );
+        });
     };
   }
 };
 
 export const normalizeParameters = resourceTree => {
   resourceTree.name = 'Root';
-  return normalize(processResource(resourceTree), resourceGroupSchema).entities || {};
+  return (
+    normalize(processResource(resourceTree), resourceGroupSchema).entities || {}
+  );
 };
 
 // Recursively convert NestedParameters and Parameters objects to Arrays
@@ -132,7 +164,8 @@ export const processResource = resource => {
         _.mapValues(resource.NestedParameters, (value, key) => {
           value.name = key;
           // Recursively process nested Resources
-          return processResource(value); })
+          return processResource(value);
+        })
       );
   }
 
@@ -144,7 +177,8 @@ export const processResource = resource => {
         _.mapValues(resource.Parameters, (value, key) => {
           value.name = key;
           // Convert Parameter properties to camelCase
-          return _.mapKeys(value, (value, key) => _.camelCase(key)); })
+          return _.mapKeys(value, (value, key) => _.camelCase(key));
+        })
       );
   }
 

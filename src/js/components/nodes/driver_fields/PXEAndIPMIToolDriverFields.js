@@ -21,10 +21,12 @@ const messages = defineMessages({
 class PXEAndIPMIToolDriverFields extends React.Component {
   render() {
     return (
-      <DriverFields {...this.props}
-                    addr_title={this.props.intl.formatMessage(messages.addr_title)}
-                    user_title={this.props.intl.formatMessage(messages.user_title)}
-                    pwd_title={this.props.intl.formatMessage(messages.pwd_title)} />
+      <DriverFields
+        {...this.props}
+        addr_title={this.props.intl.formatMessage(messages.addr_title)}
+        user_title={this.props.intl.formatMessage(messages.user_title)}
+        pwd_title={this.props.intl.formatMessage(messages.pwd_title)}
+      />
     );
   }
 }

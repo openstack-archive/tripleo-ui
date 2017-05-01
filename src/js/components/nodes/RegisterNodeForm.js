@@ -6,7 +6,8 @@ import HorizontalInput from '../ui/forms/HorizontalInput';
 import HorizontalArrayInput from '../ui/forms/HorizontalArrayInput';
 import HorizontalSelect from '../ui/forms/HorizontalSelect';
 import PXEAndSSHDriverFields from './driver_fields/PXEAndSSHDriverFields';
-import PXEAndIPMIToolDriverFields from './driver_fields/PXEAndIPMIToolDriverFields';
+import PXEAndIPMIToolDriverFields
+  from './driver_fields/PXEAndIPMIToolDriverFields';
 import PXEAndDRACDriverFields from './driver_fields/PXEAndDRACDriverFields';
 
 const messages = defineMessages({
@@ -16,8 +17,8 @@ const messages = defineMessages({
   },
   nodeNameRegexp: {
     id: 'RegisterNodeForm.nodeNameRegexp',
-    defaultMessage: 'Name may only consist of RFC3986 unreserved characters, to wit: '
-                    + 'ALPHA / DIGIT / "-" / "." / "_" / "~".'
+    defaultMessage: 'Name may only consist of RFC3986 unreserved characters, to wit: ' +
+      'ALPHA / DIGIT / "-" / "." / "_" / "~".'
   },
   nodeNameMaxLength: {
     id: 'RegisterNodeForm.nodeNameMaxLength',
@@ -81,10 +82,11 @@ class RegisterNodeForm extends React.Component {
   constructor(props) {
     super(props);
     this.macAddressValidator = {
-      matchRegexp:
-        /^([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}(,([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2})*$/
+      matchRegexp: /^([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}(,([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2})*$/
     };
-    this.macAddressValidatorMessage = this.props.intl.formatMessage(messages.enterValidMacAddress);
+    this.macAddressValidatorMessage = this.props.intl.formatMessage(
+      messages.enterValidMacAddress
+    );
     this.nodeNameValidations = {
       matchRegexp: /^[A-Z0-9-._~]+$/i,
       maxLength: 255
@@ -118,104 +120,120 @@ class RegisterNodeForm extends React.Component {
   }
 
   renderDriverFields() {
-    switch(this.props.selectedNode.pm_type) {
-    case 'pxe_ipmitool':
-      return <PXEAndIPMIToolDriverFields node={this.props.selectedNode}/>;
-    case 'pxe_drac':
-      return <PXEAndDRACDriverFields node={this.props.selectedNode}/>;
-    default:
-      return <PXEAndSSHDriverFields node={this.props.selectedNode}/>;
+    switch (this.props.selectedNode.pm_type) {
+      case 'pxe_ipmitool':
+        return <PXEAndIPMIToolDriverFields node={this.props.selectedNode} />;
+      case 'pxe_drac':
+        return <PXEAndDRACDriverFields node={this.props.selectedNode} />;
+      default:
+        return <PXEAndSSHDriverFields node={this.props.selectedNode} />;
     }
   }
 
   renderDriverOptions() {
-    return ['pxe_ipmitool', 'pxe_ssh', 'pxe_drac'].map((value, index) =>
+    return ['pxe_ipmitool', 'pxe_ssh', 'pxe_drac'].map((value, index) => (
       <option key={index}>{value}</option>
-    );
+    ));
   }
 
   renderArchitectureOptions() {
-    return [undefined, 'x86_64', 'i386'].map((value, index) =>
+    return [undefined, 'x86_64', 'i386'].map((value, index) => (
       <option key={index} value={value}>{value}</option>
-    );
+    ));
   }
 
-  render () {
-
+  render() {
     return (
       <div>
-        <h4><FormattedMessage {...messages.nodeDetail}/></h4>
-        <Formsy.Form ref="nodeForm"
-                     className="form-horizontal"
-                     onValidSubmit={this.onNodeFormValidSubmit.bind(this)}
-                     onInvalidSubmit={this.onNodeFormInvalidSubmit.bind(this)}
-                     onValid={this.onValid.bind(this)}
-                     onInvalid={this.onInvalid.bind(this)}>
+        <h4><FormattedMessage {...messages.nodeDetail} /></h4>
+        <Formsy.Form
+          ref="nodeForm"
+          className="form-horizontal"
+          onValidSubmit={this.onNodeFormValidSubmit.bind(this)}
+          onInvalidSubmit={this.onNodeFormInvalidSubmit.bind(this)}
+          onValid={this.onValid.bind(this)}
+          onInvalid={this.onInvalid.bind(this)}
+        >
           <fieldset>
-            <legend><FormattedMessage {...messages.general}/></legend>
-            <HorizontalInput name="name"
-                             title={this.props.intl.formatMessage(messages.name)}
-                             inputColumnClasses="col-sm-7"
-                             labelColumnClasses="col-sm-5"
-                             validations={this.nodeNameValidations}
-                             validationErrors={this.nodeNameValidationErrors}
-                             value={this.props.selectedNode.name}/>
+            <legend><FormattedMessage {...messages.general} /></legend>
+            <HorizontalInput
+              name="name"
+              title={this.props.intl.formatMessage(messages.name)}
+              inputColumnClasses="col-sm-7"
+              labelColumnClasses="col-sm-5"
+              validations={this.nodeNameValidations}
+              validationErrors={this.nodeNameValidationErrors}
+              value={this.props.selectedNode.name}
+            />
           </fieldset>
           <fieldset>
-            <legend><FormattedMessage {...messages.management}/></legend>
-            <HorizontalSelect name="pm_type"
-                              title={this.props.intl.formatMessage(messages.driver)}
-                              inputColumnClasses="col-sm-7"
-                              labelColumnClasses="col-sm-5"
-                              value={this.props.selectedNode.pm_type}
-                              required>
+            <legend><FormattedMessage {...messages.management} /></legend>
+            <HorizontalSelect
+              name="pm_type"
+              title={this.props.intl.formatMessage(messages.driver)}
+              inputColumnClasses="col-sm-7"
+              labelColumnClasses="col-sm-5"
+              value={this.props.selectedNode.pm_type}
+              required
+            >
               {this.renderDriverOptions()}
             </HorizontalSelect>
             {this.renderDriverFields()}
           </fieldset>
           <fieldset>
-            <legend><FormattedMessage {...messages.hardware}/></legend>
-            <HorizontalSelect name="arch"
-                              title={this.props.intl.formatMessage(messages.architecture)}
-                              inputColumnClasses="col-sm-7"
-                              labelColumnClasses="col-sm-5"
-                              value={this.props.selectedNode.arch}>
+            <legend><FormattedMessage {...messages.hardware} /></legend>
+            <HorizontalSelect
+              name="arch"
+              title={this.props.intl.formatMessage(messages.architecture)}
+              inputColumnClasses="col-sm-7"
+              labelColumnClasses="col-sm-5"
+              value={this.props.selectedNode.arch}
+            >
               {this.renderArchitectureOptions()}
             </HorizontalSelect>
-            <HorizontalInput name="cpu"
-                             type="number"
-                             min={1}
-                             title={this.props.intl.formatMessage(messages.cpuCount)}
-                             inputColumnClasses="col-sm-7"
-                             labelColumnClasses="col-sm-5"
-                             value={this.props.selectedNode.cpu}/>
-            <HorizontalInput name="memory"
-                             type="number"
-                             min={1}
-                             title={this.props.intl.formatMessage(messages.memoryMb)}
-                             inputColumnClasses="col-sm-7"
-                             labelColumnClasses="col-sm-5"
-                             value={this.props.selectedNode.memory}/>
-            <HorizontalInput name="disk"
-                             type="number"
-                             min={1}
-                             title={this.props.intl.formatMessage(messages.diskGb)}
-                             inputColumnClasses="col-sm-7"
-                             labelColumnClasses="col-sm-5"
-                             value={this.props.selectedNode.disk}/>
+            <HorizontalInput
+              name="cpu"
+              type="number"
+              min={1}
+              title={this.props.intl.formatMessage(messages.cpuCount)}
+              inputColumnClasses="col-sm-7"
+              labelColumnClasses="col-sm-5"
+              value={this.props.selectedNode.cpu}
+            />
+            <HorizontalInput
+              name="memory"
+              type="number"
+              min={1}
+              title={this.props.intl.formatMessage(messages.memoryMb)}
+              inputColumnClasses="col-sm-7"
+              labelColumnClasses="col-sm-5"
+              value={this.props.selectedNode.memory}
+            />
+            <HorizontalInput
+              name="disk"
+              type="number"
+              min={1}
+              title={this.props.intl.formatMessage(messages.diskGb)}
+              inputColumnClasses="col-sm-7"
+              labelColumnClasses="col-sm-5"
+              value={this.props.selectedNode.disk}
+            />
           </fieldset>
           <fieldset>
-            <legend><FormattedMessage {...messages.networking}/></legend>
-            <HorizontalArrayInput name="mac"
-                                  title={this.props.intl.formatMessage(messages.nicMacAddresses)}
-                                  inputColumnClasses="col-sm-7"
-                                  labelColumnClasses="col-sm-5"
-                                  value={this.props.selectedNode.mac.toArray()}
-                                  validations={this.macAddressValidator}
-                                  validationError={this.macAddressValidatorMessage}
-                                  description={
-                                    this.props.intl.formatMessage(messages.macAddressesDescription)}
-                                  required />
+            <legend><FormattedMessage {...messages.networking} /></legend>
+            <HorizontalArrayInput
+              name="mac"
+              title={this.props.intl.formatMessage(messages.nicMacAddresses)}
+              inputColumnClasses="col-sm-7"
+              labelColumnClasses="col-sm-5"
+              value={this.props.selectedNode.mac.toArray()}
+              validations={this.macAddressValidator}
+              validationError={this.macAddressValidatorMessage}
+              description={this.props.intl.formatMessage(
+                messages.macAddressesDescription
+              )}
+              required
+            />
           </fieldset>
         </Formsy.Form>
       </div>
