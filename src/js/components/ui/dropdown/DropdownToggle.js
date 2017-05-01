@@ -8,9 +8,11 @@ export default class DropdownToggle extends React.Component {
 
   render() {
     return (
-      <a className={this.props.className}
-         data-toggle="dropdown"
-         onClick={this.handleClick.bind(this)}>
+      <a
+        className={this.props.className}
+        data-toggle="dropdown"
+        onClick={this.handleClick.bind(this)}
+      >
         {this.props.children}
       </a>
     );

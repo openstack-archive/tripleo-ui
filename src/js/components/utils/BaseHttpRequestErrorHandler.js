@@ -2,13 +2,15 @@
  * @class
  * @classdesc Implements base for API and Form error handling
  */
-export default class BaseHttpRequestErrorHandler{
+export default class BaseHttpRequestErrorHandler {
   constructor(xmlHttpRequestError, formInputFieldNames) {
     this.xmlHttpRequestError = xmlHttpRequestError;
     this.formInputFieldNames = formInputFieldNames || [];
     this._errors = this._generateErrors(this.xmlHttpRequestError);
-    this._formFieldErrors = this._generateFormFieldErrors(this.xmlHttpRequestError,
-                                                          this.formInputFieldNames);
+    this._formFieldErrors = this._generateFormFieldErrors(
+      this.xmlHttpRequestError,
+      this.formInputFieldNames
+    );
   }
 
   /**

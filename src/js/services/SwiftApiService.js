@@ -6,17 +6,19 @@ import { getAuthTokenId, getServiceUrl } from '../services/utils';
 import logger from '../services/logger';
 
 class SwiftApiService {
-
   defaultRequest(path, additionalAttributes) {
-    return when.try(getServiceUrl, 'swift').then((serviceUrl) => {
-      let requestAttributes = _.merge({
-        url: `${serviceUrl}${path}`,
-        crossOrigin: true,
-        method: 'GET',
-        headers: {
-          'X-Auth-Token': getAuthTokenId()
-        }
-      }, additionalAttributes);
+    return when.try(getServiceUrl, 'swift').then(serviceUrl => {
+      let requestAttributes = _.merge(
+        {
+          url: `${serviceUrl}${path}`,
+          crossOrigin: true,
+          method: 'GET',
+          headers: {
+            'X-Auth-Token': getAuthTokenId()
+          }
+        },
+        additionalAttributes
+      );
       return when(request(requestAttributes));
     });
   }
@@ -46,21 +48,23 @@ class SwiftApiService {
       contentType: 'application/x-www-form-urlencoded',
       processData: false,
       data: file
-    }).then((response) => {
-      return when.resolve(response);
-    }).catch((xhr) => {
-      // Swift doesn't add CORS headers to sucessful PUT requests,
-      // so a failed request is counted as success if *all* of the
-      // following criteria a true:
-      //   - status is 0
-      //   - statusText is empty
-      //   - timeout is false
-      if(xhr.status === 0 && xhr.statusText === '' && xhr.timeout === 0) {
-        return when.resolve(xhr);
-      }
-      logger.error('Tarball upload failed', xhr);
-      return when.reject(xhr);
-    });
+    })
+      .then(response => {
+        return when.resolve(response);
+      })
+      .catch(xhr => {
+        // Swift doesn't add CORS headers to sucessful PUT requests,
+        // so a failed request is counted as success if *all* of the
+        // following criteria a true:
+        //   - status is 0
+        //   - statusText is empty
+        //   - timeout is false
+        if (xhr.status === 0 && xhr.statusText === '' && xhr.timeout === 0) {
+          return when.resolve(xhr);
+        }
+        logger.error('Tarball upload failed', xhr);
+        return when.reject(xhr);
+      });
   }
 }
 

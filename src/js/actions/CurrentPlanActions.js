@@ -24,23 +24,20 @@ export default {
       let currentPlanName = state.currentPlan.get('currentPlanName');
       let previousPlan = currentPlanName || getStoredPlan();
       // No plans present.
-      if(plans.size < 1 ) {
-        if(!previousPlan) {
+      if (plans.size < 1) {
+        if (!previousPlan) {
           currentPlanName = undefined;
         }
-      }
-      // Plans present.
-      // No previously chosen plan.
-      else if(!previousPlan) {
+      } else if (!previousPlan) {
+        // Plans present.
+        // No previously chosen plan.
         currentPlanName = plans.first();
-      }
-      // Previously chosen plan doesn't exist any more.
-      else if(!plans.includes(previousPlan)) {
+      } else if (!plans.includes(previousPlan)) {
+        // Previously chosen plan doesn't exist any more.
         conflict = previousPlan;
         currentPlanName = plans.first();
-      }
-      // No plan in state, but in localStorage
-      else if(!currentPlanName && previousPlan) {
+      } else if (!currentPlanName && previousPlan) {
+        // No plan in state, but in localStorage
         currentPlanName = previousPlan;
       }
       storePlan(currentPlanName);
@@ -61,14 +58,23 @@ export default {
   choosePlan(planName) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      dispatch(NotificationActions.notify({
-        title: formatMessage(messages.planActivatedNotificationTitle),
-        message: formatMessage(messages.planActivatedNotificationMessage, { planName: planName }),
-        type: 'success'
-      }));
+      dispatch(
+        NotificationActions.notify({
+          title: formatMessage(messages.planActivatedNotificationTitle),
+          message: formatMessage(messages.planActivatedNotificationMessage, {
+            planName: planName
+          }),
+          type: 'success'
+        })
+      );
       storePlan(planName);
       dispatch(this.planChosen(planName));
-      dispatch(ValidationsActions.runValidationGroups(['prep', 'pre-deployment'], planName));
+      dispatch(
+        ValidationsActions.runValidationGroups(
+          ['prep', 'pre-deployment'],
+          planName
+        )
+      );
     };
   },
 
@@ -81,18 +87,17 @@ export default {
 };
 
 function storePlan(name) {
-  if(window && window.localStorage) {
-    if(!name) {
+  if (window && window.localStorage) {
+    if (!name) {
       window.localStorage.removeItem('currentPlanName');
-    }
-    else {
+    } else {
       window.localStorage.setItem('currentPlanName', name);
     }
   }
 }
 
 function getStoredPlan() {
-  if(window && window.localStorage) {
+  if (window && window.localStorage) {
     return window.localStorage.getItem('currentPlanName');
   }
   return null;

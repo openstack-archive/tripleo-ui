@@ -19,7 +19,7 @@ const messages = defineMessages({
 class DataTable extends React.Component {
   _getColumns() {
     let columns = [];
-    React.Children.forEach(this.props.children, (child) => {
+    React.Children.forEach(this.props.children, child => {
       if (child == null) {
         return;
       }
@@ -41,12 +41,14 @@ class DataTable extends React.Component {
       return (
         <div className="dataTables_filter">
           <label>
-            <input type="search"
-                   className=""
-                   placeholder={this.props.intl.formatMessage(messages.filter)}
-                   title={this.props.intl.formatMessage(messages.filter)}
-                   value={this.props.filterString}
-                   onChange={this.onFilterTable.bind(this)}/>
+            <input
+              type="search"
+              className=""
+              placeholder={this.props.intl.formatMessage(messages.filter)}
+              title={this.props.intl.formatMessage(messages.filter)}
+              value={this.props.filterString}
+              onChange={this.onFilterTable.bind(this)}
+            />
           </label>
         </div>
       );
@@ -55,7 +57,7 @@ class DataTable extends React.Component {
   }
 
   renderTableActions() {
-    if(this.props.tableActions) {
+    if (this.props.tableActions) {
       return this.props.tableActions();
     }
   }
@@ -63,15 +65,13 @@ class DataTable extends React.Component {
   render() {
     let columns = this._getColumns();
 
-    let headers = columns.map((column) => {
+    let headers = columns.map(column => {
       return column.props.header;
     });
 
     let rows = [];
     for (var i = 0; i < this.props.rowsCount; ++i) {
-      rows[i] = (
-        <DataTableRow key={i} index={i} columns={columns}/>
-      );
+      rows[i] = <DataTableRow key={i} index={i} columns={columns} />;
     }
 
     return (
@@ -79,21 +79,29 @@ class DataTable extends React.Component {
         <div className="dataTables_header">
           {this.renderFilterInput()}
           <div className="dataTables_actions">
-            <Loader loaded={!this.props.dataOperationInProgress}
-                    size="sm"
-                    inline/>
+            <Loader
+              loaded={!this.props.dataOperationInProgress}
+              size="sm"
+              inline
+            />
             {this.renderTableActions()}
           </div>
           <div className="dataTables_info">
-            <FormattedMessage {...messages.itemsVisibleInTable}
-              values={{showing: <b>{rows.length}</b>,
-                       total:   <b>{this.props.data.length}</b>}} />
+            <FormattedMessage
+              {...messages.itemsVisibleInTable}
+              values={{
+                showing: <b>{rows.length}</b>,
+                total: <b>{this.props.data.length}</b>
+              }}
+            />
           </div>
         </div>
         <div className="table-responsive">
-          <table className="table table-stripped table-bordered datatable"
-                 id={this.props.id}
-                 role="grid">
+          <table
+            className="table table-stripped table-bordered datatable"
+            id={this.props.id}
+            role="grid"
+          >
             <thead>
               <tr>
                 {headers}

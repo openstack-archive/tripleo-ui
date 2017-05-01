@@ -5,12 +5,9 @@ Single test run
 ---------------
 
 - ``npm test`` (alternatively run ``karma start --single-run``)
-- ``npm run lint`` to run ESLint
+- ``npm run lint`` to run `prettier`_
 
-`Info on linting setup`_ and `.eslintrc rules tweaks`_.
-
-.. _Info on linting setup: https://medium.com/@dan_abramov/lint-like-it-s-2015-6987d44c5b48
-.. _.eslintrc rules tweaks: http://blog.javascripting.com/2015/09/07/fine-tuning-airbnbs-eslint-config/
+.. _prettier: https://github.com/prettier/prettier
 
 Tests during development
 ------------------------

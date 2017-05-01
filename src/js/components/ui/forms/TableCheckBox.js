@@ -8,14 +8,16 @@ class TableCheckBox extends React.Component {
 
   render() {
     return (
-      <input type={this.props.type}
-             name={this.props.name}
-             ref={this.props.id}
-             id={this.props.id}
-             disabled={this.props.disabled}
-             onChange={this.changeValue.bind(this)}
-             checked={!!this.props.getValue()}
-             value={this.props.getValue()}/>
+      <input
+        type={this.props.type}
+        name={this.props.name}
+        ref={this.props.id}
+        id={this.props.id}
+        disabled={this.props.disabled}
+        onChange={this.changeValue.bind(this)}
+        checked={!!this.props.getValue()}
+        value={this.props.getValue()}
+      />
     );
   }
 }
