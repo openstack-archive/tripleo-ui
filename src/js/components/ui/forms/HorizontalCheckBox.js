@@ -14,25 +14,29 @@ class HorizontalCheckBox extends React.Component {
     let divClasses = ClassNames({
       'form-group': true,
       'has-error': this.props.showError(),
-      'required': this.props.showRequired()
+      required: this.props.showRequired()
     });
 
     return (
       <div className={divClasses}>
-        <label htmlFor={this.props.name}
-               className={`${this.props.labelColumnClasses} control-label`}>
+        <label
+          htmlFor={this.props.name}
+          className={`${this.props.labelColumnClasses} control-label`}
+        >
           {this.props.title}
         </label>
         <div className={this.props.inputColumnClasses}>
           <div className="checkbox">
             <label>
-              <input type={this.props.type}
-                     name={this.props.name}
-                     ref={this.props.id}
-                     id={this.props.id}
-                     onChange={this.changeValue.bind(this)}
-                     checked={!!this.props.getValue()}
-                     value={this.props.getValue()}/>
+              <input
+                type={this.props.type}
+                name={this.props.name}
+                ref={this.props.id}
+                id={this.props.id}
+                onChange={this.changeValue.bind(this)}
+                checked={!!this.props.getValue()}
+                value={this.props.getValue()}
+              />
               <InputErrorMessage getErrorMessage={this.props.getErrorMessage} />
               <InputDescription description={this.props.description} />
             </label>

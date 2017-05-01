@@ -6,18 +6,16 @@ const initialState = Map({
 });
 
 export default function i18nReducer(state = initialState, action) {
-  switch(action.type) {
+  switch (action.type) {
+    case 'DETECT_LANGUAGE':
+      return state
+        .set('language', action.payload.language)
+        .set('messages', action.payload.messages);
 
-  case 'DETECT_LANGUAGE':
-    return state
-             .set('language', action.payload.language)
-             .set('messages', action.payload.messages);
+    case 'CHOOSE_LANGUAGE':
+      return state.set('language', action.payload);
 
-  case 'CHOOSE_LANGUAGE':
-    return state.set('language', action.payload);
-
-  default:
-    return state;
-
+    default:
+      return state;
   }
 }

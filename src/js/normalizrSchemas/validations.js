@@ -12,4 +12,6 @@ import { Schema } from 'normalizr';
 //   latest_result: validationResultSchema
 // });
 
-export const validationSchema = new Schema('validations', { idAttribute: 'id' });
+export const validationSchema = new Schema('validations', {
+  idAttribute: 'id'
+});

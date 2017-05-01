@@ -10,26 +10,27 @@ const initialState = Map({
 });
 
 export default function validationsReducer(state = initialState, action) {
-  switch(action.type) {
+  switch (action.type) {
+    case ValidationsConstants.FETCH_VALIDATIONS_PENDING: {
+      return state.set('isFetching', true);
+    }
 
-  case ValidationsConstants.FETCH_VALIDATIONS_PENDING: {
-    return state.set('isFetching', true);
-  }
+    case ValidationsConstants.FETCH_VALIDATIONS_SUCCESS: {
+      const validations = fromJS(action.payload);
 
-  case ValidationsConstants.FETCH_VALIDATIONS_SUCCESS: {
-    const validations = fromJS(action.payload);
+      return state
+        .set(
+          'validations',
+          validations.map(validation => new Validation(validation))
+        )
+        .set('isFetching', false)
+        .set('validationsLoaded', true);
+    }
 
-    return state.set('validations', validations.map( validation => new Validation(validation)))
-                .set('isFetching', false)
-                .set('validationsLoaded', true);
-  }
+    case ValidationsConstants.FETCH_VALIDATIONS_FAILED:
+      return state.set('isFetching', false).set('validationsLoaded', true);
 
-  case ValidationsConstants.FETCH_VALIDATIONS_FAILED:
-    return state.set('isFetching', false)
-                .set('validationsLoaded', true);
-
-  default:
-    return state;
-
+    default:
+      return state;
   }
 }

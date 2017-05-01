@@ -14,18 +14,21 @@ const messages = defineMessages({
 
 class ParameterInputList extends React.Component {
   render() {
-    const emptyParametersMessage = this.props.emptyParametersMessage
-                                   || this.props.intl.formatMessage(messages.noParameters);
+    const emptyParametersMessage =
+      this.props.emptyParametersMessage ||
+      this.props.intl.formatMessage(messages.noParameters);
 
     const parameters = this.props.parameters.map(parameter => {
       return (
-        <ParameterInput key={parameter.name}
-                        name={parameter.name}
-                        label={parameter.label}
-                        description={parameter.description}
-                        defaultValue={parameter.default}
-                        value={parameter.value}
-                        type={parameter.type} />
+        <ParameterInput
+          key={parameter.name}
+          name={parameter.name}
+          label={parameter.label}
+          description={parameter.description}
+          defaultValue={parameter.default}
+          value={parameter.value}
+          type={parameter.type}
+        />
       );
     });
 

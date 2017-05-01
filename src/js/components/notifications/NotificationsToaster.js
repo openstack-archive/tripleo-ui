@@ -24,7 +24,7 @@ class NotificationsToaster extends React.Component {
     this.setState({ isHovered: false });
   }
 
-  renderNotifications(){
+  renderNotifications() {
     return this.props.notifications.toList().map(notification => {
       return (
         <Notification
@@ -35,16 +35,22 @@ class NotificationsToaster extends React.Component {
           dismissable={notification.dismissable}
           timeoutable={notification.timeoutable}
           timerPaused={this.state.isHovered}
-          removeNotification={this.props.removeNotification.bind(this, notification.id)}/>
+          removeNotification={this.props.removeNotification.bind(
+            this,
+            notification.id
+          )}
+        />
       );
     });
   }
 
   render() {
-    return  (
-      <div className="toast-pf-max-width toast-pf-top-right"
-           onMouseEnter={this._handleMouseEnter.bind(this)}
-           onMouseLeave={this._handleMouseLeave.bind(this)}>
+    return (
+      <div
+        className="toast-pf-max-width toast-pf-top-right"
+        onMouseEnter={this._handleMouseEnter.bind(this)}
+        onMouseLeave={this._handleMouseLeave.bind(this)}
+      >
         {this.renderNotifications()}
       </div>
     );
@@ -67,5 +73,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(NotificationsToaster);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  NotificationsToaster
+);

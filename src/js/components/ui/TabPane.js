@@ -12,7 +12,7 @@ export default class TabPane extends React.Component {
   render() {
     let classes = ClassNames({
       'tab-pane': true,
-      'active': this.props.isActive
+      active: this.props.isActive
     });
 
     return (
