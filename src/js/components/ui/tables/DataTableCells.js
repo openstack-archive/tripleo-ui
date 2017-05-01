@@ -42,7 +42,10 @@ DataTableCell.propTypes = {
 */
 export class DataTableDataFieldCell extends React.Component {
   render() {
-    let value = _.result(this.props.data[this.props.rowIndex], this.props.field);
+    let value = _.result(
+      this.props.data[this.props.rowIndex],
+      this.props.field
+    );
     return (
       <DataTableCell {...this.props}>
         {value}
@@ -56,7 +59,7 @@ DataTableDataFieldCell.propTypes = {
   rowIndex: PropTypes.number
 };
 
-export const DataTableDateFieldCell = (props) => {
+export const DataTableDateFieldCell = props => {
   //TODO(jtomasek): Update this component to parse date and format it using React Intl's
   // FormatedDate
   const value = _.result(props.data[props.rowIndex], props.field);
@@ -74,11 +77,23 @@ DataTableDateFieldCell.propTypes = {
 
 export class DataTableCheckBoxCell extends React.Component {
   render() {
-    let value = _.result(this.props.data[this.props.rowIndex], this.props.field);
+    let value = _.result(
+      this.props.data[this.props.rowIndex],
+      this.props.field
+    );
     return (
       <DataTableCell {...this.props}>
-        <Loader loaded={!this.props.operationInProgress} component="span" inline>
-          <TableCheckBox name={value} id={value} value={false} disabled={this.props.disabled}/>
+        <Loader
+          loaded={!this.props.operationInProgress}
+          component="span"
+          inline
+        >
+          <TableCheckBox
+            name={value}
+            id={value}
+            value={false}
+            disabled={this.props.disabled}
+          />
         </Loader>
       </DataTableCell>
     );

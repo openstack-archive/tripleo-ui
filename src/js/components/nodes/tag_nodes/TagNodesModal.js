@@ -17,20 +17,25 @@ export default class TagNodesModal extends React.Component {
     return (
       <Modal dialogClasses="modal-md" show={this.props.show}>
         <div className="modal-header">
-          <button type="button"
-                  className="close"
-                  aria-label="Close"
-                  onClick={this.props.onCancel}>
-            <span aria-hidden="true" className="pficon pficon-close"/>
+          <button
+            type="button"
+            className="close"
+            aria-label="Close"
+            onClick={this.props.onCancel}
+          >
+            <span aria-hidden="true" className="pficon pficon-close" />
           </button>
           <h4 className="modal-title">
-            <span className="fa fa-tag"/> <FormattedMessage {...messages.title}/>
+            <span className="fa fa-tag" />
+            {' '}
+            <FormattedMessage {...messages.title} />
           </h4>
         </div>
         <TagNodesForm
           onCancel={this.props.onCancel}
           onSubmit={this.props.onProfileSelected}
-          profiles={this.props.availableProfiles}/>
+          profiles={this.props.availableProfiles}
+        />
       </Modal>
     );
   }

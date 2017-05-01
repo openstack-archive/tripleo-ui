@@ -9,9 +9,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import NavTab from '../ui/NavTab';
 import NodesActions from '../../actions/NodesActions';
 import RolesActions from '../../actions/RolesActions';
-import { getRegisteredNodes,
-         getDeployedNodes,
-         getMaintenanceNodes } from '../../selectors/nodes';
+import {
+  getRegisteredNodes,
+  getDeployedNodes,
+  getMaintenanceNodes
+} from '../../selectors/nodes';
 
 const messages = defineMessages({
   refreshResults: {
@@ -59,30 +61,37 @@ class Nodes extends React.Component {
           <div className="page-header">
             <div className="pull-right">
               <a href="" onClick={this.refreshResults.bind(this)}>
-                <span className="pficon pficon-refresh"></span>
+                <span className="pficon pficon-refresh" />
                 &nbsp;
-                <FormattedMessage {...messages.refreshResults}/>
+                <FormattedMessage {...messages.refreshResults} />
               </a>
               &nbsp;
-              <Link to="/nodes/registered/register"
-                    className="btn btn-primary">
-                <span className="fa fa-plus"/> <FormattedMessage {...messages.registerNodes}/>
+              <Link to="/nodes/registered/register" className="btn btn-primary">
+                <span className="fa fa-plus" />
+                {' '}
+                <FormattedMessage {...messages.registerNodes} />
               </Link>
             </div>
-            <h1><FormattedMessage {...messages.nodes}/></h1>
+            <h1><FormattedMessage {...messages.nodes} /></h1>
           </div>
           <ul className="nav nav-tabs">
             <NavTab to="/nodes/registered">
-              <FormattedMessage {...messages.registeredTab}/>
-              <span className="badge">{this.props.nodes.get('registered').size}</span>
+              <FormattedMessage {...messages.registeredTab} />
+              <span className="badge">
+                {this.props.nodes.get('registered').size}
+              </span>
             </NavTab>
             <NavTab to="/nodes/deployed">
-              <FormattedMessage {...messages.deployedTab}/>
-              <span className="badge">{this.props.nodes.get('deployed').size}</span>
+              <FormattedMessage {...messages.deployedTab} />
+              <span className="badge">
+                {this.props.nodes.get('deployed').size}
+              </span>
             </NavTab>
             <NavTab to="/nodes/maintenance">
-              <FormattedMessage {...messages.maintenanceTab}/>
-              <span className="badge">{this.props.nodes.get('maintenance').size}</span>
+              <FormattedMessage {...messages.maintenanceTab} />
+              <span className="badge">
+                {this.props.nodes.get('maintenance').size}
+              </span>
             </NavTab>
           </ul>
           <div className="tab-pane">

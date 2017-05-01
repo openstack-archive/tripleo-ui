@@ -20,10 +20,10 @@ import zhcnMessages from '../../../../i18n/locales/zh-CN.json';
 import { getLanguage, getMessages } from '../../selectors/i18n';
 
 export const MESSAGES = {
-  'de': deMessages['de'],
-  'es': esMessages['es'],
-  'id': idMessages['id'],
-  'ja': jaMessages['ja'],
+  de: deMessages['de'],
+  es: esMessages['es'],
+  id: idMessages['id'],
+  ja: jaMessages['ja'],
   'ko-KR': kokrMessages['ko-KR'],
   'zh-CN': zhcnMessages['zh-CN']
 };
@@ -58,13 +58,13 @@ I18nProvider.defaultProps = {
   messages: {}
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    detectLanguage: (language) => dispatch(I18nActions.detectLanguage(language))
+    detectLanguage: language => dispatch(I18nActions.detectLanguage(language))
   };
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     language: getLanguage(state),
     messages: getMessages(state)

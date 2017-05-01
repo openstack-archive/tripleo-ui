@@ -29,7 +29,9 @@ describe('Notification actions', () => {
       payload: expectedNotification
     };
 
-    expect(NotificationActions.notify(notificationObject)).toEqual(expectedAction);
+    expect(NotificationActions.notify(notificationObject)).toEqual(
+      expectedAction
+    );
   });
 
   it('should create an action to remove notification', () => {

@@ -2,12 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 export default class BlankSlate extends React.Component {
-
-  render () {
+  render() {
     return (
       <div className="blank-slate-pf">
         <div className="blank-slate-pf-icon">
-          <span className={this.props.iconClass}></span>
+          <span className={this.props.iconClass} />
         </div>
         <h1>{this.props.title}</h1>
         {this.props.children}

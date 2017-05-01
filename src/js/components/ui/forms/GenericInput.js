@@ -16,21 +16,25 @@ class GenericInput extends React.Component {
       'form-group': true,
       'has-error': this.props.showError(),
       'has-success': this.props.isValid(),
-      'required': this.props.isRequired()
+      required: this.props.isRequired()
     });
 
     return (
       <div className={divClasses}>
-        <label htmlFor={this.props.name} className="control-label">{this.props.title}</label>
-        <input type={this.props.type}
-               name={this.props.name}
-               ref={this.props.name}
-               id={this.props.name}
-               className="form-control"
-               onChange={this.changeValue.bind(this)}
-               value={this.props.getValue()}
-               placeholder={this.props.placeholder}
-               disabled={this.props.disabled} />
+        <label htmlFor={this.props.name} className="control-label">
+          {this.props.title}
+        </label>
+        <input
+          type={this.props.type}
+          name={this.props.name}
+          ref={this.props.name}
+          id={this.props.name}
+          className="form-control"
+          onChange={this.changeValue.bind(this)}
+          value={this.props.getValue()}
+          placeholder={this.props.placeholder}
+          disabled={this.props.disabled}
+        />
         <InputErrorMessage getErrorMessage={this.props.getErrorMessage} />
         <InputDescription description={this.props.description} />
       </div>

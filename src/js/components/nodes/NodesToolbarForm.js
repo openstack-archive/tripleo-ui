@@ -29,33 +29,35 @@ const NodesToolbarForm = ({ handleSubmit, intl }) => (
       <Field
         name="sortBy"
         component={DropdownSelect}
-        format={value => intl.formatMessage(nodeColumnMessages[value])}>
+        format={value => intl.formatMessage(nodeColumnMessages[value])}
+      >
         <MenuItem eventKey="name">
-          <FormattedMessage {...nodeColumnMessages.name}/>
+          <FormattedMessage {...nodeColumnMessages.name} />
         </MenuItem>
         <MenuItem eventKey="properties.cpu_arch">
-          <FormattedMessage {...nodeColumnMessages['properties.cpu_arch']}/>
+          <FormattedMessage {...nodeColumnMessages['properties.cpu_arch']} />
         </MenuItem>
         <MenuItem eventKey="properties.cpus">
-          <FormattedMessage {...nodeColumnMessages['properties.cpus']}/>
+          <FormattedMessage {...nodeColumnMessages['properties.cpus']} />
         </MenuItem>
         <MenuItem eventKey="properties.local_gb">
-          <FormattedMessage {...nodeColumnMessages['properties.local_gb']}/>
+          <FormattedMessage {...nodeColumnMessages['properties.local_gb']} />
         </MenuItem>
         <MenuItem eventKey="properties.memory_mb">
-          <FormattedMessage {...nodeColumnMessages['properties.memory_mb']}/>
+          <FormattedMessage {...nodeColumnMessages['properties.memory_mb']} />
         </MenuItem>
         <MenuItem eventKey="power_state">
-          <FormattedMessage {...nodeColumnMessages.power_state}/>
+          <FormattedMessage {...nodeColumnMessages.power_state} />
         </MenuItem>
         <MenuItem eventKey="provision_state">
-          <FormattedMessage {...nodeColumnMessages.provision_state}/>
+          <FormattedMessage {...nodeColumnMessages.provision_state} />
         </MenuItem>
       </Field>
       <Field
         name="sortDir"
         title={intl.formatMessage(messages.sortDir)}
-        component={SortDirectionInput}/>
+        component={SortDirectionInput}
+      />
     </FormGroup>
     {/* TODO(jtomasek): Enable this once Nodes ListView is implemented
         so it is possible to switch between list and table views */}
@@ -75,6 +77,8 @@ NodesToolbarForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired
 };
-export default injectIntl(reduxForm({
-  form: 'nodesToolbar'
-})(NodesToolbarForm));
+export default injectIntl(
+  reduxForm({
+    form: 'nodesToolbar'
+  })(NodesToolbarForm)
+);

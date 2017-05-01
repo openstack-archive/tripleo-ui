@@ -17,38 +17,49 @@ class DriverFields extends React.Component {
   constructor(props) {
     super(props);
 
-    let ip_regex = '^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9]' +
-                   '[0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
-    let fqdn_regex = '^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?$';
+    let ip_regex =
+      '^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9]' +
+      '[0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
+    let fqdn_regex =
+      '^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?$';
 
-    this.ipOrFqdnValidator = {matchRegexp: new RegExp(ip_regex + '|' + fqdn_regex)};
+    this.ipOrFqdnValidator = {
+      matchRegexp: new RegExp(ip_regex + '|' + fqdn_regex)
+    };
     this.ipOrFqdnValidatorMessage = this.props.intl.formatMessage(
-      messages.ipOrFqdnValidatorMessage);
+      messages.ipOrFqdnValidatorMessage
+    );
   }
 
   render() {
     return (
       <div>
-        <HorizontalInput name="pm_addr"
-                         title={this.props.addr_title}
-                         inputColumnClasses="col-sm-7"
-                         labelColumnClasses="col-sm-5"
-                         value={this.props.node.pm_addr}
-                         validations={this.ipOrFqdnValidator}
-                         validationError={this.ipOrFqdnValidatorMessage}
-                         required />
-        <HorizontalInput name="pm_user"
-                         title={this.props.user_title}
-                         inputColumnClasses="col-sm-7"
-                         labelColumnClasses="col-sm-5"
-                         value={this.props.node.pm_user}
-                         required />
-        <HorizontalTextarea name="pm_password"
-                            title={this.props.pwd_title}
-                            inputColumnClasses="col-sm-7"
-                            labelColumnClasses="col-sm-5"
-                            value={this.props.node.pm_password}
-                            required />
+        <HorizontalInput
+          name="pm_addr"
+          title={this.props.addr_title}
+          inputColumnClasses="col-sm-7"
+          labelColumnClasses="col-sm-5"
+          value={this.props.node.pm_addr}
+          validations={this.ipOrFqdnValidator}
+          validationError={this.ipOrFqdnValidatorMessage}
+          required
+        />
+        <HorizontalInput
+          name="pm_user"
+          title={this.props.user_title}
+          inputColumnClasses="col-sm-7"
+          labelColumnClasses="col-sm-5"
+          value={this.props.node.pm_user}
+          required
+        />
+        <HorizontalTextarea
+          name="pm_password"
+          title={this.props.pwd_title}
+          inputColumnClasses="col-sm-7"
+          labelColumnClasses="col-sm-5"
+          value={this.props.node.pm_password}
+          required
+        />
       </div>
     );
   }

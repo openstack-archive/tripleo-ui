@@ -32,7 +32,6 @@ const messages = defineMessages({
 });
 
 class NewPlan extends React.Component {
-
   constructor() {
     super();
     this.state = {
@@ -44,7 +43,9 @@ class NewPlan extends React.Component {
   }
 
   setUploadType(e) {
-    this.setState({ uploadType: e.target.value === 'folder' ? 'folder' : 'tarball' });
+    this.setState({
+      uploadType: e.target.value === 'folder' ? 'folder' : 'tarball'
+    });
   }
 
   onPlanFilesChange(currentValues, isChanged) {
@@ -56,72 +57,83 @@ class NewPlan extends React.Component {
 
   onFormSubmit(formData, resetForm, invalidateForm) {
     let planFiles = {};
-    if(this.state.uploadType === 'folder') {
+    if (this.state.uploadType === 'folder') {
       this.state.selectedFiles.map(item => {
         planFiles[item.name] = {};
         planFiles[item.name].contents = item.content;
       });
       this.props.createPlan(formData.planName, planFiles);
-    }
-    else {
+    } else {
       let file = this.state.selectedFiles[0].file;
       this.props.createPlanFromTarball(formData.planName, file);
     }
   }
 
   onFormValid() {
-    this.setState({canSubmit: true});
+    this.setState({ canSubmit: true });
   }
 
   onFormInvalid() {
-    this.setState({canSubmit: false});
+    this.setState({ canSubmit: false });
   }
 
-  render () {
+  render() {
     return (
       <Modal dialogClasses="modal-lg" id="NewPlan__modal">
-        <Formsy.Form ref="NewPlanForm"
-                     role="form"
-                     className="form-horizontal"
-                     onChange={this.onPlanFilesChange.bind(this)}
-                     onValidSubmit={this.onFormSubmit.bind(this)}
-                     onValid={this.onFormValid.bind(this)}
-                     onInvalid={this.onFormInvalid.bind(this)}>
+        <Formsy.Form
+          ref="NewPlanForm"
+          role="form"
+          className="form-horizontal"
+          onChange={this.onPlanFilesChange.bind(this)}
+          onValidSubmit={this.onFormSubmit.bind(this)}
+          onValid={this.onFormValid.bind(this)}
+          onInvalid={this.onFormInvalid.bind(this)}
+        >
           <div className="modal-header">
-            <Link to="/plans/list"
-                  type="button"
-                  onClick={() => this.props.cancelCreatePlan()}
-                  className="close">
-              <span aria-hidden="true" className="pficon pficon-close"/>
+            <Link
+              to="/plans/list"
+              type="button"
+              onClick={() => this.props.cancelCreatePlan()}
+              className="close"
+            >
+              <span aria-hidden="true" className="pficon pficon-close" />
             </Link>
-              <h4 className="modal-title">
-                <FormattedMessage {...messages.createNewPlan}/>
-              </h4>
+            <h4 className="modal-title">
+              <FormattedMessage {...messages.createNewPlan} />
+            </h4>
           </div>
-          <Loader loaded={!this.props.isTransitioningPlan}
-                  size="lg"
-                  content={this.props.intl.formatMessage(messages.creatingPlanLoader)}>
-            <ModalFormErrorList errors={this.props.planFormErrors.toJS()}/>
+          <Loader
+            loaded={!this.props.isTransitioningPlan}
+            size="lg"
+            content={this.props.intl.formatMessage(messages.creatingPlanLoader)}
+          >
+            <ModalFormErrorList errors={this.props.planFormErrors.toJS()} />
             <div className="modal-body">
-                <PlanFormTabs currentTab={this.props.location.query.tab || 'newPlan'}
-                              selectedFiles={this.state.selectedFiles}
-                              setUploadType={this.setUploadType.bind(this)}
-                              uploadType={this.state.uploadType}/>
+              <PlanFormTabs
+                currentTab={this.props.location.query.tab || 'newPlan'}
+                selectedFiles={this.state.selectedFiles}
+                setUploadType={this.setUploadType.bind(this)}
+                uploadType={this.state.uploadType}
+              />
             </div>
           </Loader>
 
           <div className="modal-footer">
-            <button disabled={!this.state.canSubmit}
-                    className="btn btn-primary"
-                    type="submit">
-              <FormattedMessage {...messages.uploadAndCreate}/>
+            <button
+              disabled={!this.state.canSubmit}
+              className="btn btn-primary"
+              type="submit"
+            >
+              <FormattedMessage {...messages.uploadAndCreate} />
             </button>
-            <Link to="/plans/list"
-                  type="button"
-                  onClick={() => this.props.cancelCreatePlan()}
-                  className="btn btn-default"
-                  id="NewPlan__cancelCreatePlanButton">
-              <FormattedMessage {...messages.cancel}/>
+            <Link
+              to="/plans/list"
+              type="button"
+              onClick={() => this.props.cancelCreatePlan()}
+              className="btn btn-default"
+              id="NewPlan__cancelCreatePlanButton"
+            >
+              <FormattedMessage {...messages.cancel} />
             </Link>
           </div>
         </Formsy.Form>
@@ -160,4 +172,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(NewPlan));
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(NewPlan)
+);

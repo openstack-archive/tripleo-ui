@@ -70,10 +70,14 @@ class ValidationsList extends React.Component {
           hideValidationDetail={this.hideValidationDetail.bind(this)}
           name={validation.name}
           results={validation.results}
-          runValidation={this.props.runValidation.bind(this, validation.id,
-                                                       this.props.currentPlanName)}
+          runValidation={this.props.runValidation.bind(
+            this,
+            validation.id,
+            this.props.currentPlanName
+          )}
           status={validation.status}
-          stopValidation={this.props.stopValidation.bind(this)}/>
+          stopValidation={this.props.stopValidation.bind(this)}
+        />
       );
     }
   }
@@ -83,9 +87,11 @@ class ValidationsList extends React.Component {
 
     if (validations.isEmpty()) {
       return (
-        <BlankSlate iconClass="pficon pficon-flag"
-                    title={this.props.intl.formatMessage(messages.noValidations)}>
-          <p><FormattedMessage {...messages.noValidationsMessage}/></p>
+        <BlankSlate
+          iconClass="pficon pficon-flag"
+          title={this.props.intl.formatMessage(messages.noValidations)}
+        >
+          <p><FormattedMessage {...messages.noValidationsMessage} /></p>
         </BlankSlate>
       );
     } else {
@@ -97,17 +103,25 @@ class ValidationsList extends React.Component {
             results={validation.results}
             status={validation.status}
             groups={validation.groups}
-            showValidationDetail={this.showValidationDetail.bind(this, validation.id)}
-            runValidation={this.props.runValidation.bind(this, validation.id, currentPlanName)}
+            showValidationDetail={this.showValidationDetail.bind(
+              this,
+              validation.id
+            )}
+            runValidation={this.props.runValidation.bind(
+              this,
+              validation.id,
+              currentPlanName
+            )}
             stopValidation={this.props.stopValidation.bind(this)}
             description={validation.description}
-            id={validation.id} />
+            id={validation.id}
+          />
         );
       });
     }
   }
 
-  render () {
+  render() {
     const { formatMessage } = this.props.intl;
 
     return (
@@ -117,23 +131,32 @@ class ValidationsList extends React.Component {
                         sidebar-header-bleed-right
                         fixed-container-header">
           <div className="actions pull-right">
-            <Loader loaded={!(this.props.validationsLoaded &&
-                              this.props.isFetchingValidations)}
-                    content={formatMessage(messages.loadingValidations)}
-                    inline>
-              <a className="link refresh"
-                 onClick={this.refreshValidations.bind(this)}>
-                <span className="pficon pficon-refresh"></span> <FormattedMessage
-                                                                  {...messages.refresh}/>
+            <Loader
+              loaded={
+                !(this.props.validationsLoaded &&
+                  this.props.isFetchingValidations)
+              }
+              content={formatMessage(messages.loadingValidations)}
+              inline
+            >
+              <a
+                className="link refresh"
+                onClick={this.refreshValidations.bind(this)}
+              >
+                <span className="pficon pficon-refresh" />
+                {' '}
+                <FormattedMessage {...messages.refresh} />
               </a>
             </Loader>
           </div>
-          <h2 className="h4"><FormattedMessage {...messages.validations}/></h2>
+          <h2 className="h4"><FormattedMessage {...messages.validations} /></h2>
         </div>
-        <Loader loaded={this.props.validationsLoaded && this.props.executionsLoaded}
-                content={formatMessage(messages.loadingValidations)}
-                componentProps={{ className: 'row fixed-container-body'}}
-                height={80}>
+        <Loader
+          loaded={this.props.validationsLoaded && this.props.executionsLoaded}
+          content={formatMessage(messages.loadingValidations)}
+          componentProps={{ className: 'row fixed-container-body' }}
+          height={80}
+        >
           <div className="list-group list-view-pf validation-list">
             {this.renderValidations()}
           </div>
@@ -160,15 +183,17 @@ ValidationsList.propTypes = {
 const mapDispatchToProps = dispatch => {
   return {
     fetchValidations: () => dispatch(ValidationsActions.fetchValidations()),
-    fetchWorkflowExecutions: () => dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
+    fetchWorkflowExecutions: () =>
+      dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
     runValidation: (id, currentPlanName) => {
       dispatch(ValidationsActions.runValidation(id, currentPlanName));
     },
-    stopValidation: (executionId) => {
-      dispatch(WorkflowExecutionsActions.updateWorkflowExecution(
-        executionId,
-        { state: 'PAUSED' }
-      ));
+    stopValidation: executionId => {
+      dispatch(
+        WorkflowExecutionsActions.updateWorkflowExecution(executionId, {
+          state: 'PAUSED'
+        })
+      );
     }
   };
 };
@@ -183,4 +208,6 @@ const mapStateToProps = state => {
   };
 };
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(ValidationsList));
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(ValidationsList)
+);

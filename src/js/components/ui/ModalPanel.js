@@ -35,10 +35,13 @@ import { spring, Motion } from 'react-motion';
 
 export const ModalPanelBackdrop = () => {
   return (
-    <Motion defaultStyle={{opacity: 0}} style={{opacity: spring(1)}}>
-      {interpolatingStyle =>
-        <div style={interpolatingStyle}
-             className="fixed-container modal-panel-backdrop col-sm-12"></div>}
+    <Motion defaultStyle={{ opacity: 0 }} style={{ opacity: spring(1) }}>
+      {interpolatingStyle => (
+        <div
+          style={interpolatingStyle}
+          className="fixed-container modal-panel-backdrop col-sm-12"
+        />
+      )}
     </Motion>
   );
 };
@@ -46,12 +49,18 @@ export const ModalPanelBackdrop = () => {
 export class ModalPanel extends React.Component {
   render() {
     return (
-      <Motion defaultStyle={{opacity: 0, left: 2000}} style={{opacity: 1, left: spring(0)}}>
-        {interpolatingStyle =>
-          <div style={interpolatingStyle}
-               className="fixed-container col-sm-12 col-md-11 col-md-offset-1 col-lg-8 modal-panel">
+      <Motion
+        defaultStyle={{ opacity: 0, left: 2000 }}
+        style={{ opacity: 1, left: spring(0) }}
+      >
+        {interpolatingStyle => (
+          <div
+            style={interpolatingStyle}
+            className="fixed-container col-sm-12 col-md-11 col-md-offset-1 col-lg-8 modal-panel"
+          >
             {this.props.children}
-          </div>}
+          </div>
+        )}
       </Motion>
     );
   }

@@ -59,6 +59,8 @@ describe('registerNodes selectors', () => {
         disk: undefined
       })
     });
-    expect(selectors.getIronicNodesfromNodesToRegister(state)).toEqual(expectedNodesList);
+    expect(selectors.getIronicNodesfromNodesToRegister(state)).toEqual(
+      expectedNodesList
+    );
   });
 });

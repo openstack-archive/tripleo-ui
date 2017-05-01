@@ -22,9 +22,11 @@ class UserAuthenticator extends React.Component {
   render() {
     return (
       <div>
-        <Loader loaded={this.props.isAuthenticated}
-                content={this.props.intl.formatMessage(messages.authenticating)}
-                global>
+        <Loader
+          loaded={this.props.isAuthenticated}
+          content={this.props.intl.formatMessage(messages.authenticating)}
+          global
+        >
           {this.props.children}
         </Loader>
         <NotificationsToaster />

@@ -50,22 +50,33 @@ export default class PlanEditFormTabs extends React.Component {
     return (
       <div>
         <ul className="nav nav-tabs">
-          <NavTab to={`/plans/${this.props.planName}/edit`}
-                  query={{tab: 'editPlan'}}><FormattedMessage {...messages.updatePlan}/></NavTab>
-          <NavTab to={`/plans/${this.props.planName}/edit`}
-                  query={{tab: 'planFiles'}}>
-            <FormattedMessage {...messages.files}/> <span className="badge">
-            {this.getFileCount.bind(this)()}</span>
+          <NavTab
+            to={`/plans/${this.props.planName}/edit`}
+            query={{ tab: 'editPlan' }}
+          >
+            <FormattedMessage {...messages.updatePlan} />
+          </NavTab>
+          <NavTab
+            to={`/plans/${this.props.planName}/edit`}
+            query={{ tab: 'planFiles' }}
+          >
+            <FormattedMessage {...messages.files} /> <span className="badge">
+              {this.getFileCount.bind(this)()}
+            </span>
           </NavTab>
         </ul>
         <div className="tab-content">
-          <PlanFormTab active={this.setActiveTab('editPlan')}
-                       planName={this.props.planName}
-                       uploadType={this.props.uploadType}
-                       setUploadType={this.props.setUploadType}/>
-          <PlanFilesTab active={this.setActiveTab('planFiles')}
-                        planFiles={this.props.planFiles}
-                        selectedFiles={this.props.selectedFiles}/>
+          <PlanFormTab
+            active={this.setActiveTab('editPlan')}
+            planName={this.props.planName}
+            uploadType={this.props.uploadType}
+            setUploadType={this.props.setUploadType}
+          />
+          <PlanFilesTab
+            active={this.setActiveTab('planFiles')}
+            planFiles={this.props.planFiles}
+            selectedFiles={this.props.selectedFiles}
+          />
         </div>
       </div>
     );
@@ -84,27 +95,32 @@ PlanEditFormTabs.defaultProps = {
 };
 
 class _PlanFormTab extends React.Component {
-
   render() {
     const { formatMessage } = this.props.intl;
     return (
       <div className={`tab-pane ${this.props.active}`}>
-        <HorizontalStaticText title={formatMessage(messages.planName)}
-                              text={this.props.planName}
-                              valueColumnClasses="col-sm-7"
-                              labelColumnClasses="col-sm-3"/>
-        <PlanUploadTypeRadios title={formatMessage(messages.uploadType)}
-                              inputColumnClasses="col-sm-7"
-                              labelColumnClasses="col-sm-3"
-                              setUploadType={this.props.setUploadType}
-                              uploadType={this.props.uploadType}/>
-        <PlanFileInput name="planFiles"
-                       title={this.props.intl.formatMessage(messages.uploadFiles)}
-                       inputColumnClasses="col-sm-7"
-                       labelColumnClasses="col-sm-3"
-                       uploadType={this.props.uploadType}
-                       multiple
-                       required/>
+        <HorizontalStaticText
+          title={formatMessage(messages.planName)}
+          text={this.props.planName}
+          valueColumnClasses="col-sm-7"
+          labelColumnClasses="col-sm-3"
+        />
+        <PlanUploadTypeRadios
+          title={formatMessage(messages.uploadType)}
+          inputColumnClasses="col-sm-7"
+          labelColumnClasses="col-sm-3"
+          setUploadType={this.props.setUploadType}
+          uploadType={this.props.uploadType}
+        />
+        <PlanFileInput
+          name="planFiles"
+          title={this.props.intl.formatMessage(messages.uploadFiles)}
+          inputColumnClasses="col-sm-7"
+          labelColumnClasses="col-sm-3"
+          uploadType={this.props.uploadType}
+          multiple
+          required
+        />
       </div>
     );
   }

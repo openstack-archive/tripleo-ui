@@ -12,11 +12,13 @@ import { getRole } from '../../selectors/roles';
 import { getRoleServices } from '../../selectors/parameters';
 import Loader from '../ui/Loader';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
-import { ModalPanelBackdrop,
-         ModalPanel,
-         ModalPanelHeader,
-         ModalPanelBody,
-         ModalPanelFooter } from '../ui/ModalPanel';
+import {
+  ModalPanelBackdrop,
+  ModalPanel,
+  ModalPanelHeader,
+  ModalPanelBody,
+  ModalPanelFooter
+} from '../ui/ModalPanel';
 import NavTab from '../ui/NavTab';
 import ParametersActions from '../../actions/ParametersActions';
 
@@ -71,15 +73,16 @@ class RoleDetail extends React.Component {
     this.setState({ canSubmit: false });
   }
 
-
   /**
   * Filter out non updated parameters, so only parameters which have been actually changed
   * get sent to updateparameters
   */
   _filterFormData(formData) {
-    return fromJS(formData).filterNot((value, key) => {
-      return is(fromJS(this.props.allParameters.get(key).default), value);
-    }).toJS();
+    return fromJS(formData)
+      .filterNot((value, key) => {
+        return is(fromJS(this.props.allParameters.get(key).default), value);
+      })
+      .toJS();
   }
 
   /**
@@ -87,14 +90,14 @@ class RoleDetail extends React.Component {
   * or array. Also, parameters with undefined value are set to null
   */
   _jsonParseFormData(formData) {
-    return mapValues(formData, (value) => {
+    return mapValues(formData, value => {
       try {
         const parsedValue = JSON.parse(value);
         if (isObjectLike(parsedValue)) {
           return parsedValue;
         }
         return value;
-      } catch(e) {
+      } catch (e) {
         return value === undefined ? null : value;
       }
     });
@@ -119,18 +122,26 @@ class RoleDetail extends React.Component {
       return (
         <div className="row">
           <ul className="nav nav-tabs">
-            <NavTab to={`/deployment-plan/roles/${this.props.params.roleIdentifier}/parameters`}>
-              <FormattedMessage {...messages.parameters}/>
+            <NavTab
+              to={`/deployment-plan/roles/${this.props.params.roleIdentifier}/parameters`}
+            >
+              <FormattedMessage {...messages.parameters} />
             </NavTab>
-            <NavTab to={`/deployment-plan/roles/${this.props.params.roleIdentifier}/services`}>
-              <FormattedMessage {...messages.services}/>
+            <NavTab
+              to={`/deployment-plan/roles/${this.props.params.roleIdentifier}/services`}
+            >
+              <FormattedMessage {...messages.services} />
             </NavTab>
-            <NavTab to={`/deployment-plan/roles/${this.props.params.roleIdentifier}`
-                        + '/network-configuration'}>
-              <FormattedMessage {...messages.networkConfiguration}/>
+            <NavTab
+              to={
+                `/deployment-plan/roles/${this.props.params.roleIdentifier}` +
+                  '/network-configuration'
+              }
+            >
+              <FormattedMessage {...messages.networkConfiguration} />
             </NavTab>
           </ul>
-          <ModalFormErrorList errors={this.props.formErrors.toJS()}/>
+          <ModalFormErrorList errors={this.props.formErrors.toJS()} />
         </div>
       );
     }
@@ -141,39 +152,49 @@ class RoleDetail extends React.Component {
     const roleName = this.props.role ? this.props.role.name : null;
 
     return (
-      <Formsy.Form ref="roleParametersForm"
-                   role="form"
-                   className="form form-horizontal"
-                   onSubmit={this.handleSubmit.bind(this)}
-                   onValid={this.enableButton.bind(this)}
-                   onInvalid={this.disableButton.bind(this)}>
+      <Formsy.Form
+        ref="roleParametersForm"
+        role="form"
+        className="form form-horizontal"
+        onSubmit={this.handleSubmit.bind(this)}
+        onValid={this.enableButton.bind(this)}
+        onInvalid={this.disableButton.bind(this)}
+      >
         <ModalPanelBackdrop />
         <ModalPanel>
           <ModalPanelHeader>
-            <Link to="/deployment-plan"
-                  type="button"
-                  className="close">
-              <span aria-hidden="true" className="pficon pficon-close"/>
+            <Link to="/deployment-plan" type="button" className="close">
+              <span aria-hidden="true" className="pficon pficon-close" />
             </Link>
             <h2 className="modal-title">
-              <FormattedMessage {...messages.role} values={{ roleName: roleName }}/>
+              <FormattedMessage
+                {...messages.role}
+                values={{ roleName: roleName }}
+              />
             </h2>
           </ModalPanelHeader>
           {this.renderRoleTabs()}
           <ModalPanelBody>
-            <Loader height={60}
-                    content={this.props.intl.formatMessage(messages.loadingParameters)}
-                    loaded={dataLoaded}>
+            <Loader
+              height={60}
+              content={this.props.intl.formatMessage(
+                messages.loadingParameters
+              )}
+              loaded={dataLoaded}
+            >
               {this.props.children}
             </Loader>
           </ModalPanelBody>
-          {dataLoaded ?
-            <ModalPanelFooter>
-              <button type="submit" disabled={!this.state.canSubmit}
-                      className="btn btn-primary">
-                <FormattedMessage {...messages.saveChanges}/>
-              </button>
-            </ModalPanelFooter>
+          {dataLoaded
+            ? <ModalPanelFooter>
+                <button
+                  type="submit"
+                  disabled={!this.state.canSubmit}
+                  className="btn btn-primary"
+                >
+                  <FormattedMessage {...messages.saveChanges} />
+                </button>
+              </ModalPanelFooter>
             : null}
         </ModalPanel>
       </Formsy.Form>
@@ -211,13 +232,23 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchParameters: (currentPlanName, redirectPath) => {
-      dispatch(ParametersActions.fetchParameters(currentPlanName, redirectPath));
+      dispatch(
+        ParametersActions.fetchParameters(currentPlanName, redirectPath)
+      );
     },
     updateParameters: (currentPlanName, data, inputFields, redirectPath) => {
-      dispatch(ParametersActions.updateParameters(
-        currentPlanName, data, inputFields, redirectPath));
+      dispatch(
+        ParametersActions.updateParameters(
+          currentPlanName,
+          data,
+          inputFields,
+          redirectPath
+        )
+      );
     }
   };
 }
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(RoleDetail));
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(RoleDetail)
+);

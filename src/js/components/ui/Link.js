@@ -7,8 +7,11 @@ export default class Link extends React.Component {
     return (
       <ReactRouterLink
         {...this.props}
-        onClick={(e) =>  this.props.disabled ? e.preventDefault(): null}
-        className={this.props.className + (this.props.disabled ? ' disabled' : '')} />
+        onClick={e => (this.props.disabled ? e.preventDefault() : null)}
+        className={
+          this.props.className + (this.props.disabled ? ' disabled' : '')
+        }
+      />
     );
   }
 }

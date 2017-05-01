@@ -6,7 +6,6 @@ import logger from './services/logger';
 import appReducer from './reducers/appReducer';
 import { getIntl } from './selectors/i18n';
 
-
 const loggerMiddleware = createLogger({
   collapsed: true,
   logger: logger

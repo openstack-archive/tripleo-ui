@@ -42,9 +42,7 @@ describe('rolesReducer', () => {
       payload: ['Controller']
     };
     const newState = rolesReducer(initialState, action);
-    expect(newState.get('roles')).toEqual(
-      updatedState.get('roles')
-    );
+    expect(newState.get('roles')).toEqual(updatedState.get('roles'));
     expect(newState.get('loaded')).toEqual(true);
   });
 

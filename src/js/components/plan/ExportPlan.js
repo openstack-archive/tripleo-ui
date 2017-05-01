@@ -24,8 +24,8 @@ const messages = defineMessages({
   downloadPlanExportMessage: {
     id: 'ExportPlan.downloadMessage',
     defaultMessage: 'The plan export you requested is ready. Please click the button below to ' +
-                    'download the export. You might need to right-click the button and choose ' +
-                    '"Save link as...".'
+      'download the export. You might need to right-click the button and choose ' +
+      '"Save link as...".'
   },
   exportError: {
     id: 'ExportPlan.error',
@@ -48,49 +48,55 @@ class ExportPlan extends React.Component {
     return planName.replace(/[^A-Za-z0-9_-]*/g, '');
   }
 
-  render () {
+  render() {
     return (
       <Modal dialogClasses="modal-sm" id="ExportPlan__exportPlanModal">
         <div className="modal-header">
-          <Link to="/plans/list"
-                type="button"
-                className="close">
-            <span aria-hidden="true" className="pficon pficon-close"/>
+          <Link to="/plans/list" type="button" className="close">
+            <span aria-hidden="true" className="pficon pficon-close" />
           </Link>
           <h4 className="modal-title">
             <FormattedMessage
               {...messages.exportPlanName}
-              values={{planName: this.getNameFromUrl()}}
+              values={{ planName: this.getNameFromUrl() }}
             />
           </h4>
         </div>
         <div className="modal-body text-center">
-          <Loader loaded={!this.props.isExportingPlan}
-                  size="lg"
-                  height={60}
-                  content={this.props.intl.formatMessage(messages.exportingPlanLoader)}>
-            {this.props.planExportUrl ?
-              <div>
-                <div><FormattedMessage {...messages.downloadPlanExportMessage}/></div>
-                <br />
-                <a href={this.props.planExportUrl}
-                   className="btn btn-success">
-                  <FormattedMessage {...messages.downloadPlanExport}/>
-                </a>
-              </div>
-              :
-              <div>
-                <FormattedMessage {...messages.exportError}/>
-              </div>
-            }
+          <Loader
+            loaded={!this.props.isExportingPlan}
+            size="lg"
+            height={60}
+            content={this.props.intl.formatMessage(
+              messages.exportingPlanLoader
+            )}
+          >
+            {this.props.planExportUrl
+              ? <div>
+                  <div>
+                    <FormattedMessage {...messages.downloadPlanExportMessage} />
+                  </div>
+                  <br />
+                  <a
+                    href={this.props.planExportUrl}
+                    className="btn btn-success"
+                  >
+                    <FormattedMessage {...messages.downloadPlanExport} />
+                  </a>
+                </div>
+              : <div>
+                  <FormattedMessage {...messages.exportError} />
+                </div>}
           </Loader>
         </div>
         <div className="modal-footer">
-          <Link to="/plans/list"
-                type="button"
-                className="btn btn-default"
-                id="ExportPlan__cancelExportPlanModalButton">
-            <FormattedMessage {...messages.cancel}/>
+          <Link
+            to="/plans/list"
+            type="button"
+            className="btn btn-default"
+            id="ExportPlan__cancelExportPlanModalButton"
+          >
+            <FormattedMessage {...messages.cancel} />
           </Link>
         </div>
       </Modal>
@@ -119,4 +125,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(ExportPlan));
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(ExportPlan)
+);

@@ -30,17 +30,23 @@ export default {
   fetchStacks(planName) {
     return (dispatch, getState) => {
       dispatch(this.fetchStacksPending());
-      HeatApiService.getStacks().then(response => {
-        const stacks = normalize(response.stacks, arrayOf(stackSchema)).entities.stacks || {};
-        dispatch(this.fetchStacksSuccess(stacks));
-      }).catch(error => {
-        logger.error('Error retrieving stacks StackActions.fetchStacks', error);
-        let errorHandler = new HeatApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      HeatApiService.getStacks()
+        .then(response => {
+          const stacks = normalize(response.stacks, arrayOf(stackSchema))
+            .entities.stacks || {};
+          dispatch(this.fetchStacksSuccess(stacks));
+        })
+        .catch(error => {
+          logger.error(
+            'Error retrieving stacks StackActions.fetchStacks',
+            error
+          );
+          let errorHandler = new HeatApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
+          dispatch(this.fetchStacksFailed(error));
         });
-        dispatch(this.fetchStacksFailed(error));
-      });
     };
   },
 
@@ -64,20 +70,25 @@ export default {
   },
 
   fetchResources(stackName, stackId) {
-    return (dispatch) => {
+    return dispatch => {
       dispatch(this.fetchResourcesPending());
-      HeatApiService.getResources(stackName, stackId).then(({ resources }) => {
-        const res = normalize(resources,
-                              arrayOf(stackResourceSchema)).entities.stackResources || {};
-        dispatch(this.fetchResourcesSuccess(res));
-      }).catch((error) => {
-        logger.error('Error retrieving resources StackActions.fetchResources', error);
-        let errorHandler = new HeatApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      HeatApiService.getResources(stackName, stackId)
+        .then(({ resources }) => {
+          const res = normalize(resources, arrayOf(stackResourceSchema))
+            .entities.stackResources || {};
+          dispatch(this.fetchResourcesSuccess(res));
+        })
+        .catch(error => {
+          logger.error(
+            'Error retrieving resources StackActions.fetchResources',
+            error
+          );
+          let errorHandler = new HeatApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
+          dispatch(this.fetchResourcesFailed(error));
         });
-        dispatch(this.fetchResourcesFailed(error));
-      });
     };
   },
 
@@ -102,18 +113,23 @@ export default {
   },
 
   fetchResource(stack, resourceName) {
-    return (dispatch) => {
+    return dispatch => {
       dispatch(this.fetchResourcePending());
-      HeatApiService.getResource(stack, resourceName).then(({ resource }) => {
-        dispatch(this.fetchResourceSuccess(resource));
-      }).catch((error) => {
-        logger.error('Error retrieving resource StackActions.fetchResource', error);
-        let errorHandler = new HeatApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      HeatApiService.getResource(stack, resourceName)
+        .then(({ resource }) => {
+          dispatch(this.fetchResourceSuccess(resource));
+        })
+        .catch(error => {
+          logger.error(
+            'Error retrieving resource StackActions.fetchResource',
+            error
+          );
+          let errorHandler = new HeatApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
+          dispatch(this.fetchResourceFailed(resourceName));
         });
-        dispatch(this.fetchResourceFailed(resourceName));
-      });
     };
   },
 
@@ -146,18 +162,23 @@ export default {
   },
 
   fetchEnvironment(stack) {
-    return (dispatch) => {
+    return dispatch => {
       dispatch(this.fetchEnvironmentPending(stack));
-      HeatApiService.getEnvironment(stack).then((response) => {
-        dispatch(this.fetchEnvironmentSuccess(stack, response));
-      }).catch((error) => {
-        logger.error('Error retrieving environment StackActions.fetchEnvironment', error);
-        let errorHandler = new HeatApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      HeatApiService.getEnvironment(stack)
+        .then(response => {
+          dispatch(this.fetchEnvironmentSuccess(stack, response));
+        })
+        .catch(error => {
+          logger.error(
+            'Error retrieving environment StackActions.fetchEnvironment',
+            error
+          );
+          let errorHandler = new HeatApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
+          dispatch(this.fetchEnvironmentFailed(error));
         });
-        dispatch(this.fetchEnvironmentFailed(error));
-      });
     };
   },
 
@@ -184,19 +205,20 @@ export default {
    * Starts a delete request for a stack.
    */
   deleteStack(stack) {
-    return (dispatch) => {
+    return dispatch => {
       dispatch(this.deleteStackPending());
-      HeatApiService.deleteStack(stack.stack_name, stack.id).then((response) => {
-        dispatch(this.deleteStackSuccess(stack.stack_name));
-      }).catch((error) => {
-        logger.error('Error deleting stack StackActions.deleteStack', error);
-        let errorHandler = new HeatApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+      HeatApiService.deleteStack(stack.stack_name, stack.id)
+        .then(response => {
+          dispatch(this.deleteStackSuccess(stack.stack_name));
+        })
+        .catch(error => {
+          logger.error('Error deleting stack StackActions.deleteStack', error);
+          let errorHandler = new HeatApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
+          dispatch(this.deleteStackFailed());
         });
-        dispatch(this.deleteStackFailed());
-      });
     };
   }
-
 };

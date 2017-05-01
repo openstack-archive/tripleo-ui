@@ -9,7 +9,6 @@ const messages = defineMessages({
   loadingOvercloudInformation: {
     id: 'OvercloudInfo.loadingOvercloudInformation',
     defaultMessage: 'Loading overcloud information...'
-
   },
   overcloudInformationHeader: {
     id: 'OvercloudInfo.overcloudInformationHeader',
@@ -29,26 +28,37 @@ const messages = defineMessages({
   }
 });
 
-const OvercloudInfo = ({ intl, stack, stackResources, stackResourcesLoaded }) => {
+const OvercloudInfo = ({
+  intl,
+  stack,
+  stackResources,
+  stackResourcesLoaded
+}) => {
   const ip = stackResources.getIn([
-    'PublicVirtualIP', 'attributes', 'ip_address'
+    'PublicVirtualIP',
+    'attributes',
+    'ip_address'
   ]);
 
   const password = stack.getIn([
-    'environment', 'parameter_defaults', 'AdminPassword'
+    'environment',
+    'parameter_defaults',
+    'AdminPassword'
   ]);
 
   // TODO(honza) add SSL
 
   return (
     <div>
-      <h4><FormattedMessage {...messages.overcloudInformationHeader}/></h4>
-      <Loader loaded={stackResourcesLoaded}
-              content={intl.formatMessage(messages.loadingOvercloudInformation)}>
+      <h4><FormattedMessage {...messages.overcloudInformationHeader} /></h4>
+      <Loader
+        loaded={stackResourcesLoaded}
+        content={intl.formatMessage(messages.loadingOvercloudInformation)}
+      >
         <ul className="list">
-          <li><FormattedMessage {...messages.overcloudIpAddress}/> {ip}</li>
-          <li><FormattedMessage {...messages.username}/> admin</li>
-          <li><FormattedMessage {...messages.password}/> {password}</li>
+          <li><FormattedMessage {...messages.overcloudIpAddress} /> {ip}</li>
+          <li><FormattedMessage {...messages.username} /> admin</li>
+          <li><FormattedMessage {...messages.password} /> {password}</li>
         </ul>
       </Loader>
       <br />

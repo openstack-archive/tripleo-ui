@@ -23,8 +23,10 @@ export default class PlansDropdown extends React.Component {
   renderRecentPlans() {
     return this.props.plans.toList().map(plan => {
       return (
-        <DropdownItem key={plan.name}
-                      onClick={this.props.choosePlan.bind(this, plan.name)}>
+        <DropdownItem
+          key={plan.name}
+          onClick={this.props.choosePlan.bind(this, plan.name)}
+        >
           {plan.name}
         </DropdownItem>
       );
@@ -32,22 +34,22 @@ export default class PlansDropdown extends React.Component {
   }
 
   render() {
-    if(this.props.plans.isEmpty()) {
+    if (this.props.plans.isEmpty()) {
       return (
         <Link className="btn btn-link" to="/plans/list">
-          <FormattedMessage {...messages.manageDeployments}/>
+          <FormattedMessage {...messages.manageDeployments} />
         </Link>
       );
     } else {
       return (
         <Dropdown>
           <DropdownButton className="btn-link">
-            <FormattedMessage {...messages.selectDeployment}/>
+            <FormattedMessage {...messages.selectDeployment} />
           </DropdownButton>
           {this.renderRecentPlans()}
-          <DropdownItem key="divider" divider/>
+          <DropdownItem key="divider" divider />
           <DropdownItem key="plansLink" to="/plans/list">
-            <FormattedMessage {...messages.manageDeployments}/>
+            <FormattedMessage {...messages.manageDeployments} />
           </DropdownItem>
         </Dropdown>
       );

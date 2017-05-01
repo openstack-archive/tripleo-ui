@@ -18,32 +18,53 @@ export default class Dropdown extends React.Component {
   render() {
     const children = React.Children.toArray(this.props.children);
 
-    const toggle = _.first(children, child => _.includes(['DropdownButton', 'DropdownToggle'],
-                                                         child.type.name));
+    const toggle = _.first(children, child =>
+      _.includes(['DropdownButton', 'DropdownToggle'], child.type.name)
+    );
 
-    const items = _.map(_.filter(children, child => child.type.name === 'DropdownItem'),
-                        item => React.cloneElement(
-                                  item,{ toggleDropdown: this.toggleDropdown.bind(this) }));
+    const items = _.map(
+      _.filter(children, child => child.type.name === 'DropdownItem'),
+      item =>
+        React.cloneElement(item, {
+          toggleDropdown: this.toggleDropdown.bind(this)
+        })
+    );
 
     // Any other children are prepended to DropdownButton.
     // This can be used to add buttons to Dropdown button group
-    const otherChildren = _.reject(children, child => _.includes(
-      ['DropdownButton', 'DropdownToggle', 'DropdownItem'], child.type.name));
+    const otherChildren = _.reject(children, child =>
+      _.includes(
+        ['DropdownButton', 'DropdownToggle', 'DropdownItem'],
+        child.type.name
+      )
+    );
     const dropdownClasses = {
       open: this.state.isOpen
     };
 
     return (
       <span className="dropdown-wrapper">
-        <div className={ClassNames('dropdown btn-group', dropdownClasses, this.props.className)}>
+        <div
+          className={ClassNames(
+            'dropdown btn-group',
+            dropdownClasses,
+            this.props.className
+          )}
+        >
           {otherChildren}
-          {React.cloneElement(toggle, { toggleDropdown: this.toggleDropdown.bind(this) })}
+          {React.cloneElement(toggle, {
+            toggleDropdown: this.toggleDropdown.bind(this)
+          })}
           <ul className="dropdown-menu" role="menu" ref="menu">
             {items}
           </ul>
         </div>
-        {this.state.isOpen ? <div onClick={this.toggleDropdown.bind(this)}
-                                  className="modal-backdrop fade"></div> : null}
+        {this.state.isOpen
+          ? <div
+              onClick={this.toggleDropdown.bind(this)}
+              className="modal-backdrop fade"
+            />
+          : null}
       </span>
     );
   }

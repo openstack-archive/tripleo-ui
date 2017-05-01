@@ -38,11 +38,15 @@ class RoleServices extends React.Component {
   renderServiceTabs() {
     return this.props.services.toList().map(service => {
       return (
-        <Tab key={service.type}
-             title={service.description}
-             isActive={service.id === this.state.selectedService}>
-          <a className="link"
-             onClick={this.selectService.bind(this, service.id)}>
+        <Tab
+          key={service.type}
+          title={service.description}
+          isActive={service.id === this.state.selectedService}
+        >
+          <a
+            className="link"
+            onClick={this.selectService.bind(this, service.id)}
+          >
             {service.type.split('::').pop()}
           </a>
         </Tab>
@@ -61,12 +65,16 @@ class RoleServices extends React.Component {
         </div>
         <div className="col-sm-8">
           <ParameterInputList
-            emptyParametersMessage={this.state.selectedService
-                                    ? formatMessage(messages.noParameters)
-                                    : formatMessage(messages.selectService)}
-            parameters={this.props.services.getIn([this.state.selectedService, 'parameters'],
-                                                  Map()).toList()}
-            mistralParameters={this.props.mistralParameters}/>
+            emptyParametersMessage={
+              this.state.selectedService
+                ? formatMessage(messages.noParameters)
+                : formatMessage(messages.selectService)
+            }
+            parameters={this.props.services
+              .getIn([this.state.selectedService, 'parameters'], Map())
+              .toList()}
+            mistralParameters={this.props.mistralParameters}
+          />
         </div>
       </div>
     );

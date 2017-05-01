@@ -7,13 +7,9 @@ export default class ConfirmationModal extends React.Component {
   renderTitle() {
     const iconClass = this.props.iconClass;
     if (iconClass) {
-      return (
-        <span><span className={iconClass}/> {this.props.title}</span>
-      );
+      return <span><span className={iconClass} /> {this.props.title}</span>;
     } else {
-      return (
-        <span>{this.props.title}</span>
-      );
+      return <span>{this.props.title}</span>;
     }
   }
 
@@ -21,11 +17,13 @@ export default class ConfirmationModal extends React.Component {
     return (
       <Modal dialogClasses="modal-sm" show={this.props.show}>
         <div className="modal-header">
-          <button type="button"
-                  className="close"
-                  aria-label="Close"
-                  onClick={this.props.onCancel}>
-            <span aria-hidden="true" className="pficon pficon-close"/>
+          <button
+            type="button"
+            className="close"
+            aria-label="Close"
+            onClick={this.props.onCancel}
+          >
+            <span aria-hidden="true" className="pficon pficon-close" />
           </button>
           <h4 className="modal-title">
             {this.renderTitle()}
@@ -35,16 +33,20 @@ export default class ConfirmationModal extends React.Component {
           <p>{this.props.question}</p>
         </div>
         <div className="modal-footer">
-          <button className="btn btn-danger"
-                  type="button"
-                  name={this.props.confirmActionName}
-                  onClick={this.props.onConfirm}>
+          <button
+            className="btn btn-danger"
+            type="button"
+            name={this.props.confirmActionName}
+            onClick={this.props.onConfirm}
+          >
             {this.props.confirmActionTitle || this.props.title}
           </button>
-          <button type="button"
-                  className="btn btn-default"
-                  aria-label="Close"
-                  onClick={this.props.onCancel}>
+          <button
+            type="button"
+            className="btn btn-default"
+            aria-label="Close"
+            onClick={this.props.onCancel}
+          >
             Cancel
           </button>
         </div>

@@ -7,7 +7,8 @@ import { Link, browserHistory } from 'react-router';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
+import EnvironmentConfigurationActions
+  from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentConfigurationTopic from './EnvironmentConfigurationTopic';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import { getTopicsTree } from '../../selectors/environmentConfiguration';
@@ -41,7 +42,10 @@ class EnvironmentConfiguration extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchEnvironmentConfiguration(this.props.currentPlanName, this.props.parentPath);
+    this.props.fetchEnvironmentConfiguration(
+      this.props.currentPlanName,
+      this.props.parentPath
+    );
   }
 
   componentDidUpdate() {
@@ -57,7 +61,9 @@ class EnvironmentConfiguration extends React.Component {
   }
 
   invalidateForm(formFieldErrors) {
-    this.refs.environmentConfigurationForm.updateInputsWithError(formFieldErrors);
+    this.refs.environmentConfigurationForm.updateInputsWithError(
+      formFieldErrors
+    );
   }
 
   /*
@@ -65,11 +71,14 @@ class EnvironmentConfiguration extends React.Component {
   * so we need to convert data back to e.g. { filename.yaml: true, ... }
   */
   _convertFormData(formData) {
-    return _.mapValues(_.mapKeys(formData, (value, key) => {
-      return key+'.yaml';
-    }), (value) => {
-      return value.yaml;
-    });
+    return _.mapValues(
+      _.mapKeys(formData, (value, key) => {
+        return key + '.yaml';
+      }),
+      value => {
+        return value.yaml;
+      }
+    );
   }
 
   handleSubmit(formData, resetForm, invalidateForm) {
@@ -91,9 +100,12 @@ class EnvironmentConfiguration extends React.Component {
   }
 
   onSubmitAndClose() {
-    this.setState({
-      closeOnSubmit: true
-    }, this.refs.environmentConfigurationForm.submit);
+    this.setState(
+      {
+        closeOnSubmit: true
+      },
+      this.refs.environmentConfigurationForm.submit
+    );
   }
 
   activateTab(tabName, e) {
@@ -110,40 +122,46 @@ class EnvironmentConfiguration extends React.Component {
   }
 
   render() {
-    let topics = this.props.environmentConfigurationTopics.toList().map((topic, index) => {
-      let tabName = _.camelCase(topic.get('title'));
-      return (
-        <TabPane isActive={this.isTabActive(tabName)}
-                 key={index}>
-          <EnvironmentConfigurationTopic key={index}
-                                         title={topic.get('title')}
-                                         description={topic.get('description')}
-                                         environmentGroups={topic.get('environment_groups')}/>
-        </TabPane>
-      );
-    });
+    let topics = this.props.environmentConfigurationTopics
+      .toList()
+      .map((topic, index) => {
+        let tabName = _.camelCase(topic.get('title'));
+        return (
+          <TabPane isActive={this.isTabActive(tabName)} key={index}>
+            <EnvironmentConfigurationTopic
+              key={index}
+              title={topic.get('title')}
+              description={topic.get('description')}
+              environmentGroups={topic.get('environment_groups')}
+            />
+          </TabPane>
+        );
+      });
 
-    let topicTabs = this.props.environmentConfigurationTopics.toList().map((topic, index) => {
-      let tabName = _.camelCase(topic.get('title'));
-      return (
-        <Tab key={index} isActive={this.isTabActive(tabName)}>
-          <a href="" onClick={this.activateTab.bind(this, tabName)}>
-            {topic.get('title')}
-          </a>
-        </Tab>
-      );
-    });
+    let topicTabs = this.props.environmentConfigurationTopics
+      .toList()
+      .map((topic, index) => {
+        let tabName = _.camelCase(topic.get('title'));
+        return (
+          <Tab key={index} isActive={this.isTabActive(tabName)}>
+            <a href="" onClick={this.activateTab.bind(this, tabName)}>
+              {topic.get('title')}
+            </a>
+          </Tab>
+        );
+      });
 
     return (
-      <Formsy.Form ref="environmentConfigurationForm"
-                   role="form"
-                   className="form"
-                   onSubmit={this.handleSubmit.bind(this)}
-                   onValid={this.enableButton.bind(this)}
-                   onInvalid={this.disableButton.bind(this)}>
-        <Loader height={60}
-                loaded={!this.props.isFetching}>
-          <ModalFormErrorList errors={this.props.formErrors.toJS()}/>
+      <Formsy.Form
+        ref="environmentConfigurationForm"
+        role="form"
+        className="form"
+        onSubmit={this.handleSubmit.bind(this)}
+        onValid={this.enableButton.bind(this)}
+        onInvalid={this.disableButton.bind(this)}
+      >
+        <Loader height={60} loaded={!this.props.isFetching}>
+          <ModalFormErrorList errors={this.props.formErrors.toJS()} />
           <div className="container-fluid">
             <div className="row row-eq-height">
               <div className="col-sm-4 sidebar-pf sidebar-pf-left">
@@ -161,17 +179,27 @@ class EnvironmentConfiguration extends React.Component {
         </Loader>
 
         <div className="modal-footer">
-          <button type="submit" disabled={!this.state.canSubmit}
-                  className="btn btn-primary">
-            <FormattedMessage {...messages.saveChanges}/>
+          <button
+            type="submit"
+            disabled={!this.state.canSubmit}
+            className="btn btn-primary"
+          >
+            <FormattedMessage {...messages.saveChanges} />
           </button>
-          <button type="button" disabled={!this.state.canSubmit}
-                  onClick={this.onSubmitAndClose.bind(this)}
-                  className="btn btn-default">
+          <button
+            type="button"
+            disabled={!this.state.canSubmit}
+            onClick={this.onSubmitAndClose.bind(this)}
+            className="btn btn-default"
+          >
             <FormattedMessage {...messages.saveAndClose} />
           </button>
-          <Link to={this.props.parentPath} type="button" className="btn btn-default" >
-            <FormattedMessage {...messages.cancel}/>
+          <Link
+            to={this.props.parentPath}
+            type="button"
+            className="btn btn-default"
+          >
+            <FormattedMessage {...messages.cancel} />
           </Link>
         </div>
       </Formsy.Form>
@@ -200,7 +228,10 @@ function mapStateToProps(state) {
     currentPlanName: state.currentPlan.currentPlanName,
     environmentConfigurationTopics: getTopicsTree(state),
     formErrors: state.environmentConfiguration.getIn(['form', 'formErrors']),
-    formFieldErrors: state.environmentConfiguration.getIn(['form', 'formFieldErrors']),
+    formFieldErrors: state.environmentConfiguration.getIn([
+      'form',
+      'formFieldErrors'
+    ]),
     isFetching: state.environmentConfiguration.isFetching
   };
 }
@@ -208,29 +239,49 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchEnvironmentConfiguration: planName => {
-      dispatch(EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName));
+      dispatch(
+        EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName)
+      );
     },
-    updateEnvironmentConfiguration: (planName, data, inputFields, parentPath) => {
-      dispatch(EnvironmentConfigurationActions.updateEnvironmentConfiguration(
-        planName, data, inputFields, parentPath));
+    updateEnvironmentConfiguration: (
+      planName,
+      data,
+      inputFields,
+      parentPath
+    ) => {
+      dispatch(
+        EnvironmentConfigurationActions.updateEnvironmentConfiguration(
+          planName,
+          data,
+          inputFields,
+          parentPath
+        )
+      );
     }
   };
 }
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(EnvironmentConfiguration));
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(EnvironmentConfiguration)
+);
 
 /**
 * requiresEnvironments validation
 * Invalidates input if it is selected and environment it requires is not.
 * example: validations="requiredEnvironments:['some_environment.yaml']"
 */
-Formsy.addValidationRule('requiredEnvironments',
-                         function (values, value, requiredEnvironmentFieldNames) {
-                           if (value) {
-                             return !_.filter(
-                               _.values(
-                                 _.pick(values, requiredEnvironmentFieldNames)
-                               ), function(val){return val === false;}).length;
-                           }
-                           return true;
-                         });
+Formsy.addValidationRule('requiredEnvironments', function(
+  values,
+  value,
+  requiredEnvironmentFieldNames
+) {
+  if (value) {
+    return !_.filter(
+      _.values(_.pick(values, requiredEnvironmentFieldNames)),
+      function(val) {
+        return val === false;
+      }
+    ).length;
+  }
+  return true;
+});

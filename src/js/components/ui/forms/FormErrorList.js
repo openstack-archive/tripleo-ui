@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 export default class FormErrorList extends React.Component {
   renderErrors() {
     const { errors } = this.props;
-    if(errors.length > 1) {
+    if (errors.length > 1) {
       const errorList = errors.map((error, index) => {
         return (
           <li key={index}>
@@ -20,13 +20,12 @@ export default class FormErrorList extends React.Component {
             {errorList}
           </ul>
         </div>
-
       );
     } else {
       return (
         <p>
           <strong>{errors[0].title}</strong>
-          <br/>
+          <br />
           {errors[0].message}
         </p>
       );
@@ -38,8 +37,11 @@ export default class FormErrorList extends React.Component {
       return null;
     } else {
       return (
-        <div className="toast-pf form-error-list alert alert-danger" role="alert">
-          <span className="pficon pficon-error-circle-o" aria-hidden="true"></span>
+        <div
+          className="toast-pf form-error-list alert alert-danger"
+          role="alert"
+        >
+          <span className="pficon pficon-error-circle-o" aria-hidden="true" />
           {this.renderErrors()}
         </div>
       );

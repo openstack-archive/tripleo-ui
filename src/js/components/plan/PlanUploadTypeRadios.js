@@ -14,7 +14,6 @@ const messages = defineMessages({
 });
 
 export default class PlanUploadTypeRadios extends React.Component {
-
   render() {
     return (
       <div className="form-group">
@@ -24,20 +23,28 @@ export default class PlanUploadTypeRadios extends React.Component {
 
         <div className={this.props.inputColumnClasses}>
           <label className="radio-inline" htmlFor="checkbox-tarball">
-            <input type="radio"
-                   id="checkbox-tarball"
-                   name="uploadType"
-                   value="tarball"
-                   onChange={this.props.setUploadType}
-                   defaultChecked/> <FormattedMessage {...messages.tarArchive}/>
+            <input
+              type="radio"
+              id="checkbox-tarball"
+              name="uploadType"
+              value="tarball"
+              onChange={this.props.setUploadType}
+              defaultChecked
+            />
+            {' '}
+            <FormattedMessage {...messages.tarArchive} />
           </label>
           <label className="radio-inline" htmlFor="checkbox-folder">
-            <input ref="checkbox-folder"
-                   type="radio"
-                   id="checkbox-folder"
-                   name="uploadType"
-                   onChange={this.props.setUploadType}
-                   value="folder"/> <FormattedMessage {...messages.localFolder}/>
+            <input
+              ref="checkbox-folder"
+              type="radio"
+              id="checkbox-folder"
+              name="uploadType"
+              onChange={this.props.setUploadType}
+              value="folder"
+            />
+            {' '}
+            <FormattedMessage {...messages.localFolder} />
           </label>
         </div>
       </div>

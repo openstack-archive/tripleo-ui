@@ -29,7 +29,6 @@ const messages = defineMessages({
   }
 });
 
-
 export default class NavBar extends React.Component {
   logout(e) {
     e.preventDefault();
@@ -41,52 +40,63 @@ export default class NavBar extends React.Component {
 
     // Only include the I18nDropdown if there's more than one
     // language to choose from.
-    return (Object.keys(languages).length > 1) ? (
-      <li>
-        <I18nDropdown/>
-      </li>
-    ) : null;
+    return Object.keys(languages).length > 1
+      ? <li>
+          <I18nDropdown />
+        </li>
+      : null;
   }
 
   render() {
     return (
-      <nav className="navbar navbar-default navbar-pf navbar-fixed-top" role="navigation">
+      <nav
+        className="navbar navbar-default navbar-pf navbar-fixed-top"
+        role="navigation"
+      >
         <div className="navbar-header">
-          <button type="button" className="navbar-toggle collapsed"
-                  data-toggle="collapse" data-target="#tripleo-navbar-collapse"
-                  aria-expanded="false">
+          <button
+            type="button"
+            className="navbar-toggle collapsed"
+            data-toggle="collapse"
+            data-target="#tripleo-navbar-collapse"
+            aria-expanded="false"
+          >
             <span className="sr-only">
-              <FormattedMessage {...messages.toggleNavigation}/>
+              <FormattedMessage {...messages.toggleNavigation} />
             </span>
-            <span className="icon-bar"></span>
-            <span className="icon-bar"></span>
-            <span className="icon-bar"></span>
+            <span className="icon-bar" />
+            <span className="icon-bar" />
+            <span className="icon-bar" />
           </button>
           <Link className="navbar-brand" to="/" id="NavBar__indexLink">
-            <img src={TripleoOwlSvg} alt="TripleO"></img>
+            <img src={TripleoOwlSvg} alt="TripleO" />
           </Link>
         </div>
         <div className="navbar-collapse collapse" id="tripleo-navbar-collapse">
           <ul className="nav navbar-nav navbar-utility">
             <li>
               <a id="NavBar__username">
-                <span className="pficon pficon-user"></span>
+                <span className="pficon pficon-user" />
                 {this.props.user.get('name')}
               </a>
             </li>
             {this._renderLanguageDropdown()}
             <li>
-              <a href="#" onClick={this.logout.bind(this)} id="NavBar__logoutLink">
-                <FormattedMessage {...messages.logoutLink}/>
+              <a
+                href="#"
+                onClick={this.logout.bind(this)}
+                id="NavBar__logoutLink"
+              >
+                <FormattedMessage {...messages.logoutLink} />
               </a>
             </li>
           </ul>
           <ul className="nav navbar-nav navbar-primary">
             <NavTab to="/deployment-plan" id="NavBar__deploymentPlanTab">
-              <FormattedMessage {...messages.deploymentPlanTab}/>
+              <FormattedMessage {...messages.deploymentPlanTab} />
             </NavTab>
             <NavTab to="/nodes" id="NavBar__nodesTab">
-              <FormattedMessage {...messages.nodesTab}/>
+              <FormattedMessage {...messages.nodesTab} />
             </NavTab>
           </ul>
         </div>

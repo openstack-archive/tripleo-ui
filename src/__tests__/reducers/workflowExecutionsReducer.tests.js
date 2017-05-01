@@ -1,8 +1,12 @@
 import { Map, OrderedMap } from 'immutable';
 
-import { WorkflowExecution } from '../../js/immutableRecords/workflowExecutions';
-import WorkflowExecutionsConstants from '../../js/constants/WorkflowExecutionsConstants';
-import workflowExecutionsReducer from '../../js/reducers/workflowExecutionsReducer';
+import {
+  WorkflowExecution
+} from '../../js/immutableRecords/workflowExecutions';
+import WorkflowExecutionsConstants
+  from '../../js/constants/WorkflowExecutionsConstants';
+import workflowExecutionsReducer
+  from '../../js/reducers/workflowExecutionsReducer';
 import MistralConstants from '../../js/constants/MistralConstants';
 
 const updatedAt = '1970-01-01T00:00:01Z';

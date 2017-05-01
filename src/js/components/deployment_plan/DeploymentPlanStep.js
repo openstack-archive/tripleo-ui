@@ -6,12 +6,11 @@ export const DeploymentPlanStep = ({ children, disabled, title, tooltip }) => {
     <li className={disabled ? 'disabled' : null}>
       <h3>
         <span>{title}</span>
-        {tooltip ?
-          <span data-tooltip={tooltip} className="tooltip-right">
-            <span className="pficon pficon-info"/>
-          </span>
-          : null
-        }
+        {tooltip
+          ? <span data-tooltip={tooltip} className="tooltip-right">
+              <span className="pficon pficon-info" />
+            </span>
+          : null}
       </h3>
       {children}
     </li>

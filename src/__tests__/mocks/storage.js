@@ -1,8 +1,8 @@
 export default {
-  getItem: function (key) {
+  getItem: function(key) {
     return this[key];
   },
-  setItem: function (key, value) {
+  setItem: function(key, value) {
     this[key] = value;
   },
   removeItem: function(key) {

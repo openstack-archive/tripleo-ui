@@ -14,15 +14,14 @@ const messages = defineMessages({
 });
 
 export default class FileList extends React.Component {
-
   getMergedFiles(planFiles, selectedFiles) {
     let files = {};
-    if(!planFiles.isEmpty()) {
+    if (!planFiles.isEmpty()) {
       planFiles.map(file => {
         files[file.name] = file;
       });
     }
-    if(selectedFiles.length > 0) {
+    if (selectedFiles.length > 0) {
       selectedFiles.forEach(file => {
         let existing = files[file.name];
         let info = !existing
@@ -32,27 +31,34 @@ export default class FileList extends React.Component {
       });
     }
     return Map(files)
-            .sort((fileA, fileB) => {
-              let [aName, aNew] = [ fileA.name.toLowerCase(), fileA.getIn(['info', 'newFile']) ];
-              let [bName, bNew] = [ fileB.name.toLowerCase(), fileB.getIn(['info', 'newFile']) ];
-              if(aNew && !bNew) {
-                return -1;
-              }
-              else if(!aNew && bNew) {
-                return 1;
-              }
-              else {
-                return aName > bName ? 1 : -1;
-              }
-            })
-            .toArray();
+      .sort((fileA, fileB) => {
+        let [aName, aNew] = [
+          fileA.name.toLowerCase(),
+          fileA.getIn(['info', 'newFile'])
+        ];
+        let [bName, bNew] = [
+          fileB.name.toLowerCase(),
+          fileB.getIn(['info', 'newFile'])
+        ];
+        if (aNew && !bNew) {
+          return -1;
+        } else if (!aNew && bNew) {
+          return 1;
+        } else {
+          return aName > bName ? 1 : -1;
+        }
+      })
+      .toArray();
   }
 
   render() {
-    if(this.props.planFiles.size === 0 && this.props.selectedFiles === 0) {
+    if (this.props.planFiles.size === 0 && this.props.selectedFiles === 0) {
       return null;
     }
-    let files = this.getMergedFiles(this.props.planFiles, this.props.selectedFiles).map(file => {
+    let files = this.getMergedFiles(
+      this.props.planFiles,
+      this.props.selectedFiles
+    ).map(file => {
       let info = file.info.toJS() || {};
       let classes = ClassNames({ 'new-plan-file': info.newFile });
       return (
@@ -64,7 +70,9 @@ export default class FileList extends React.Component {
     return (
       <div className="panel panel-default">
         <div className="panel-heading" role="tab" id="plan-files-list-panel">
-          <h4 className="panel-title"><FormattedMessage {...messages.planFiles}/></h4>
+          <h4 className="panel-title">
+            <FormattedMessage {...messages.planFiles} />
+          </h4>
         </div>
         <table className="table upload-files">
           <tbody>

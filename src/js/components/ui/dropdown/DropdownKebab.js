@@ -2,11 +2,11 @@ import { Dropdown } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const DropdownKebab = ({children, id, pullRight}) => {
+const DropdownKebab = ({ children, id, pullRight }) => {
   return (
-    <Dropdown  className="dropdown-kebab-pf" id={id} pullRight={pullRight}>
+    <Dropdown className="dropdown-kebab-pf" id={id} pullRight={pullRight}>
       <Dropdown.Toggle bsStyle="link" noCaret>
-        <span className="fa fa-ellipsis-v"/>
+        <span className="fa fa-ellipsis-v" />
       </Dropdown.Toggle>
       <Dropdown.Menu>
         {children}

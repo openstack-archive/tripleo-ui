@@ -3,7 +3,10 @@ import { fromJS, Map } from 'immutable';
 import * as selectors from '../../js/selectors/nodesAssignment';
 import { Port } from '../../js/immutableRecords/nodes';
 import { Role, RolesState } from '../../js/immutableRecords/roles';
-import { Parameter, ParametersDefaultState } from '../../js/immutableRecords/parameters';
+import {
+  Parameter,
+  ParametersDefaultState
+} from '../../js/immutableRecords/parameters';
 
 describe('Nodes Assignment selectors', () => {
   const state = {
@@ -43,66 +46,76 @@ describe('Nodes Assignment selectors', () => {
           provision_state: 'available',
           provision_updated_at: '12-12-2016',
           portsDetail: [1],
-          properties: { capabilities: 'boot_option:local',
-                        memory_mb: '5120',
-                        cpu_arch: 'x86_64',
-                        cpus: '2',
-                        local_gb: '40'}
+          properties: {
+            capabilities: 'boot_option:local',
+            memory_mb: '5120',
+            cpu_arch: 'x86_64',
+            cpus: '2',
+            local_gb: '40'
+          }
         },
         node2: {
           uuid: 'node2',
           provision_state: 'available',
           provision_updated_at: '12-12-2016',
           portsDetail: [2],
-          properties: { capabilities: 'boot_option:local,profile:control',
-                        memory_mb: '5120',
-                        cpu_arch: 'x86_64',
-                        cpus: '2',
-                        local_gb: '40' }
+          properties: {
+            capabilities: 'boot_option:local,profile:control',
+            memory_mb: '5120',
+            cpu_arch: 'x86_64',
+            cpus: '2',
+            local_gb: '40'
+          }
         },
         node3: {
           uuid: 'node3',
           provision_state: 'available',
           provision_updated_at: '12-12-2016',
           portsDetail: [3],
-          properties: { capabilities: 'profile:control,boot_option:local',
-                        memory_mb: '5120',
-                        cpu_arch: 'x86_64',
-                        cpus: '2',
-                        local_gb: '40' }
+          properties: {
+            capabilities: 'profile:control,boot_option:local',
+            memory_mb: '5120',
+            cpu_arch: 'x86_64',
+            cpus: '2',
+            local_gb: '40'
+          }
         },
         node4: {
           uuid: 'node4',
           provision_state: 'available',
           provision_updated_at: '12-12-2016',
           portsDetail: [4],
-          properties: { capabilities: 'profile:compute,boot_option:local',
-                        memory_mb: '5120',
-                        cpu_arch: 'x86_64',
-                        cpus: '2',
-                        local_gb: '40' }
+          properties: {
+            capabilities: 'profile:compute,boot_option:local',
+            memory_mb: '5120',
+            cpu_arch: 'x86_64',
+            cpus: '2',
+            local_gb: '40'
+          }
         },
         node5: {
           uuid: 'node5',
           provision_state: 'available',
           provision_updated_at: '12-12-2016',
           portsDetail: [5],
-          properties: { capabilities: '',
-                        memory_mb: '5120',
-                        cpu_arch: 'x86_64',
-                        cpus: '2',
-                        local_gb: '40' }
+          properties: {
+            capabilities: '',
+            memory_mb: '5120',
+            cpu_arch: 'x86_64',
+            cpus: '2',
+            local_gb: '40'
+          }
         }
       })
     }),
     roles: new RolesState({
       roles: Map({
-        'control': new Role({
+        control: new Role({
           name: 'Controller',
           title: 'Controller',
           identifier: 'control'
         }),
-        'compute': new Role({
+        compute: new Role({
           name: 'Compute',
           title: 'Compute',
           identifier: 'compute'
@@ -145,12 +158,12 @@ describe('Nodes Assignment selectors', () => {
         }
       });
       this.roles = Map({
-        'control': new Role({
+        control: new Role({
           name: 'Controller',
           title: 'Controller',
           identifier: 'control'
         }),
-        'compute': new Role({
+        compute: new Role({
           name: 'Compute',
           title: 'Compute',
           identifier: 'compute'
@@ -174,8 +187,11 @@ describe('Nodes Assignment selectors', () => {
     });
 
     it('calculates untagged assigned nodes count', function() {
-      const result = selectors.getTotalUntaggedAssignedNodesCount
-        .resultFunc(this.nodes, this.roles, this.parametersByRole);
+      const result = selectors.getTotalUntaggedAssignedNodesCount.resultFunc(
+        this.nodes,
+        this.roles,
+        this.parametersByRole
+      );
       expect(result).toEqual(1);
     });
 
@@ -194,8 +210,11 @@ describe('Nodes Assignment selectors', () => {
           properties: { capabilities: 'boot_option:local,profile:control' }
         }
       });
-      const result = selectors.getTotalUntaggedAssignedNodesCount
-        .resultFunc(this.nodes, this.roles, this.parametersByRole);
+      const result = selectors.getTotalUntaggedAssignedNodesCount.resultFunc(
+        this.nodes,
+        this.roles,
+        this.parametersByRole
+      );
       expect(result).toEqual(1);
     });
   });
@@ -219,12 +238,12 @@ describe('Nodes Assignment selectors', () => {
         }
       });
       this.roles = Map({
-        'control': new Role({
+        control: new Role({
           name: 'Controller',
           title: 'Controller',
           identifier: 'control'
         }),
-        'compute': new Role({
+        compute: new Role({
           name: 'Compute',
           title: 'Compute',
           identifier: 'compute'
@@ -236,11 +255,11 @@ describe('Nodes Assignment selectors', () => {
         })
       });
       this.nodeCountParametersByRole = Map({
-        'control': new Parameter({
+        control: new Parameter({
           name: 'ControllerCount',
           default: 1
         }),
-        'compute': new Parameter({
+        compute: new Parameter({
           name: 'ComputeCount',
           default: 1
         }),
@@ -253,12 +272,13 @@ describe('Nodes Assignment selectors', () => {
     });
 
     it('calculates maximum available nodes count for each role', function() {
-      const result = selectors.getAvailableNodesCountsByRole
-        .resultFunc(this.availableNodes,
-                    this.untaggedAvailableNodes,
-                    this.roles,
-                    this.nodeCountParametersByRole,
-                    this.totalUntaggedAssignedNodesCount);
+      const result = selectors.getAvailableNodesCountsByRole.resultFunc(
+        this.availableNodes,
+        this.untaggedAvailableNodes,
+        this.roles,
+        this.nodeCountParametersByRole,
+        this.totalUntaggedAssignedNodesCount
+      );
       expect(result.get('control')).toEqual(1);
       expect(result.get('compute')).toEqual(1);
       expect(result.get('block-storage')).toEqual(0);
@@ -266,11 +286,11 @@ describe('Nodes Assignment selectors', () => {
 
     it('handles cases when assigned count is higher then actual nodes available', function() {
       this.nodeCountParametersByRole = Map({
-        'control': new Parameter({
+        control: new Parameter({
           name: 'ControllerCount',
           default: 4
         }),
-        'compute': new Parameter({
+        compute: new Parameter({
           name: 'ComputeCount',
           default: 1
         }),
@@ -280,12 +300,13 @@ describe('Nodes Assignment selectors', () => {
         })
       });
       this.totalUntaggedAssignedNodesCount = 4;
-      const result = selectors.getAvailableNodesCountsByRole
-        .resultFunc(this.availableNodes,
-                    this.untaggedAvailableNodes,
-                    this.roles,
-                    this.nodeCountParametersByRole,
-                    this.totalUntaggedAssignedNodesCount);
+      const result = selectors.getAvailableNodesCountsByRole.resultFunc(
+        this.availableNodes,
+        this.untaggedAvailableNodes,
+        this.roles,
+        this.nodeCountParametersByRole,
+        this.totalUntaggedAssignedNodesCount
+      );
       expect(result.get('control')).toEqual(1);
       expect(result.get('compute')).toEqual(0);
       expect(result.get('block-storage')).toEqual(0);
@@ -293,7 +314,9 @@ describe('Nodes Assignment selectors', () => {
   });
 
   it('getRoleCountParameterByRole', () => {
-    const nodeCountParametersByRole = selectors.getNodeCountParametersByRole(state);
+    const nodeCountParametersByRole = selectors.getNodeCountParametersByRole(
+      state
+    );
     expect(nodeCountParametersByRole.get('control').default).toEqual(2);
     expect(nodeCountParametersByRole.get('compute').default).toEqual(1);
   });

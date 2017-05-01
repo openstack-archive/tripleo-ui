@@ -6,22 +6,22 @@ import { submit } from 'redux-form';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { ActiveFilter,
-         ActiveFiltersList } from '../ui/Toolbar/ActiveFilters';
-import { getActiveFilters,
-         getFilterByName } from '../../selectors/filters';
-import { getFilteredRegisteredNodes,
-         getRegisteredNodes } from '../../selectors/nodes';
+import { ActiveFilter, ActiveFiltersList } from '../ui/Toolbar/ActiveFilters';
+import { getActiveFilters, getFilterByName } from '../../selectors/filters';
+import {
+  getFilteredRegisteredNodes,
+  getRegisteredNodes
+} from '../../selectors/nodes';
 import { nodeColumnMessages } from './messages';
 import NodesToolbarForm from './NodesToolbarForm';
 import ToolbarFiltersForm from '../ui/Toolbar/ToolbarFiltersForm';
-import { clearActiveFilters,
-         deleteActiveFilter,
-         addActiveFilter,
-         updateFilter } from '../../actions/FiltersActions';
-import { Toolbar,
-         ToolbarActions,
-         ToolbarResults } from '../ui/Toolbar/Toolbar';
+import {
+  clearActiveFilters,
+  deleteActiveFilter,
+  addActiveFilter,
+  updateFilter
+} from '../../actions/FiltersActions';
+import { Toolbar, ToolbarActions, ToolbarResults } from '../ui/Toolbar/Toolbar';
 
 const messages = defineMessages({
   activeFilters: {
@@ -56,8 +56,8 @@ const messages = defineMessages({
   provideNodes: {
     id: 'NodesToolbar.provideNodes',
     defaultMessage: 'Provide Nodes',
-    description: '"Providing" the nodes changes the provisioning state to "available" so that '
-                 + 'they can be used in a deployment.'
+    description: '"Providing" the nodes changes the provisioning state to "available" so that ' +
+      'they can be used in a deployment.'
   },
   removeNodes: {
     id: 'NodesToolbar.removeNodes',
@@ -71,33 +71,40 @@ class NodesToolbar extends React.Component {
   }
 
   render() {
-    const { activeFilters,
-            clearActiveFilters,
-            deleteActiveFilter,
-            filteredNodesCount,
-            initialValues,
-            intl,
-            addActiveFilter,
-            nodesCount,
-            updateFilter } = this.props;
+    const {
+      activeFilters,
+      clearActiveFilters,
+      deleteActiveFilter,
+      filteredNodesCount,
+      initialValues,
+      intl,
+      addActiveFilter,
+      nodesCount,
+      updateFilter
+    } = this.props;
     return (
       <Toolbar>
         <ToolbarActions>
           <ToolbarFiltersForm
             form="nodesToolbarFilter"
-            formatSelectValue={value => intl.formatMessage(nodeColumnMessages[value])}
+            formatSelectValue={value =>
+              intl.formatMessage(nodeColumnMessages[value])}
             initialValues={{ filterBy: 'name' }}
             onSubmit={addActiveFilter}
             options={{
               name: intl.formatMessage(nodeColumnMessages.name),
               power_state: intl.formatMessage(nodeColumnMessages.power_state),
-              provision_state: intl.formatMessage(nodeColumnMessages.provision_state)
+              provision_state: intl.formatMessage(
+                nodeColumnMessages.provision_state
+              )
             }}
-            placeholder={intl.formatMessage(messages.filterStringPlaceholder)}/>
+            placeholder={intl.formatMessage(messages.filterStringPlaceholder)}
+          />
           <NodesToolbarForm
             onChange={this.handleNodesToolbarFormChange.bind(this)}
             onSubmit={updateFilter}
-            initialValues={initialValues} />
+            initialValues={initialValues}
+          />
           {/* TODO(jtomasek): Use these buttons to trigger Nodes actions once it is removed from
               NodesTable */}
           {/* <FormGroup>
@@ -112,24 +119,30 @@ class NodesToolbar extends React.Component {
         <ToolbarResults>
           <h5>
             {filteredNodesCount === nodesCount
-              ? intl.formatMessage(messages.nonFilteredToolbarResults,
-                                   { totalCount: nodesCount })
-              : intl.formatMessage(messages.filteredToolbarResults,
-                                   { filteredCount: filteredNodesCount,
-                                     totalCount: nodesCount })
-            }
+              ? intl.formatMessage(messages.nonFilteredToolbarResults, {
+                  totalCount: nodesCount
+                })
+              : intl.formatMessage(messages.filteredToolbarResults, {
+                  filteredCount: filteredNodesCount,
+                  totalCount: nodesCount
+                })}
           </h5>
           <ActiveFiltersList
             clearAllLabel={intl.formatMessage(messages.clearAllActiveFilters)}
             handleClearAll={clearActiveFilters}
-            label={intl.formatMessage(messages.activeFilters)} >
-            {activeFilters.toList().toJS().map(filter => (
-              <ActiveFilter
-                filterBy={startCase(filter.filterBy)}
-                filterString={filter.filterString}
-                key={filter.uuid}
-                onRemove={() => deleteActiveFilter(filter.uuid)}/>
-            ))}
+            label={intl.formatMessage(messages.activeFilters)}
+          >
+            {activeFilters
+              .toList()
+              .toJS()
+              .map(filter => (
+                <ActiveFilter
+                  filterBy={startCase(filter.filterBy)}
+                  filterString={filter.filterString}
+                  key={filter.uuid}
+                  onRemove={() => deleteActiveFilter(filter.uuid)}
+                />
+              ))}
           </ActiveFiltersList>
         </ToolbarResults>
       </Toolbar>
@@ -148,7 +161,7 @@ NodesToolbar.propTypes = {
   submitNodesToolbarForm: PropTypes.func.isRequired,
   updateFilter: PropTypes.func.isRequired
 };
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     clearActiveFilters: () => dispatch(clearActiveFilters('nodesToolbar')),
     deleteActiveFilter: uuid =>
@@ -158,12 +171,16 @@ const mapDispatchToProps = (dispatch) => {
     updateFilter: data => dispatch(updateFilter('nodesToolbar', data))
   };
 };
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     activeFilters: getActiveFilters(state, 'nodesToolbar'),
     filteredNodesCount: getFilteredRegisteredNodes(state).size,
-    initialValues: getFilterByName(state, 'nodesToolbar').delete('activeFilters').toJS(),
+    initialValues: getFilterByName(state, 'nodesToolbar')
+      .delete('activeFilters')
+      .toJS(),
     nodesCount: getRegisteredNodes(state).size
   };
 };
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(NodesToolbar));
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(NodesToolbar)
+);

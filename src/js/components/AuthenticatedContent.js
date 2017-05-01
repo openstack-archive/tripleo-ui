@@ -26,18 +26,24 @@ class AuthenticatedContent extends React.Component {
 
   render() {
     return (
-      <Loader loaded={this.props.plansLoaded &&
-                      (!!this.props.currentPlanName || this.props.noPlans)}
-              content={this.props.intl.formatMessage(messages.loadingDeployments)}
-              global>
+      <Loader
+        loaded={
+          this.props.plansLoaded &&
+            (!!this.props.currentPlanName || this.props.noPlans)
+        }
+        content={this.props.intl.formatMessage(messages.loadingDeployments)}
+        global
+      >
         <header>
-          <NavBar user={this.props.user}
-                  onLogout={this.props.logoutUser.bind(this)}/>
+          <NavBar
+            user={this.props.user}
+            onLogout={this.props.logoutUser.bind(this)}
+          />
         </header>
         <div className="wrapper-fixed-body container-fluid">
           <div className="row">
             <div className="col-sm-12 col-lg-9">{this.props.children}</div>
-            <ValidationsList/>
+            <ValidationsList />
           </div>
         </div>
       </Loader>
@@ -61,7 +67,8 @@ const mapDispatchToProps = dispatch => {
   return {
     logoutUser: () => dispatch(LoginActions.logoutUser()),
     fetchPlans: () => dispatch(PlansActions.fetchPlans()),
-    fetchWorkflowExecutions: () => dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions())
+    fetchWorkflowExecutions: () =>
+      dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions())
   };
 };
 
@@ -74,4 +81,6 @@ const mapStateToProps = state => {
   };
 };
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(AuthenticatedContent));
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(AuthenticatedContent)
+);

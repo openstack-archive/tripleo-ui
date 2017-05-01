@@ -5,21 +5,28 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { getAllPlansButCurrent } from '../../selectors/plans';
-import { getCurrentStack,
-         getCurrentStackDeploymentProgress,
-         getCurrentStackDeploymentInProgress } from '../../selectors/stacks';
-import { getAvailableNodes,
-         getAvailableNodesCountsByRole,
-         getNodeCountParametersByRole,
-         getTotalAssignedNodesCount } from '../../selectors/nodesAssignment';
-import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
+import {
+  getCurrentStack,
+  getCurrentStackDeploymentProgress,
+  getCurrentStackDeploymentInProgress
+} from '../../selectors/stacks';
+import {
+  getAvailableNodes,
+  getAvailableNodesCountsByRole,
+  getNodeCountParametersByRole,
+  getTotalAssignedNodesCount
+} from '../../selectors/nodesAssignment';
+import {
+  getEnvironmentConfigurationSummary
+} from '../../selectors/environmentConfiguration';
 import { getCurrentPlan } from '../../selectors/plans';
 import { getRoles } from '../../selectors/roles';
 import ConfigurePlanStep from './ConfigurePlanStep';
 import CurrentPlanActions from '../../actions/CurrentPlanActions';
 import { DeploymentPlanStep } from './DeploymentPlanStep';
 import DeployStep from './DeployStep';
-import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
+import EnvironmentConfigurationActions
+  from '../../actions/EnvironmentConfigurationActions';
 import HardwareStep from './HardwareStep';
 import PlansDropdown from './PlansDropdown';
 import NodesActions from '../../actions/NodesActions';
@@ -53,35 +60,35 @@ const messages = defineMessages({
   hardwareStepTooltip: {
     id: 'DeploymentPlan.hardwareStepTooltip',
     defaultMessage: 'This step registers and introspects your nodes. Registration involves ' +
-    'defining the power management details of each node so that you so that the director can ' +
-    'control them during the introspection and provisioning stages. After registration, you ' +
-    'introspect the nodes, which identifies the hardware each node uses and builds a profile of ' +
-    'each node. After registration and introspection, you can assign these nodes into specific ' +
-    'roles in your overcloud.'
+      'defining the power management details of each node so that you so that the director can ' +
+      'control them during the introspection and provisioning stages. After registration, you ' +
+      'introspect the nodes, which identifies the hardware each node uses and builds a profile of ' +
+      'each node. After registration and introspection, you can assign these nodes into specific ' +
+      'roles in your overcloud.'
   },
   configurePlanStepTooltip: {
     id: 'DeploymentPlan.configurePlanStepTooltip',
-    defaultMessage: 'This step allows you edit specific settings for the overcloud\'s network, ' +
-    'storage, and other certified plugins. Use this step to define your network isolation ' +
-    'configuration and your backend storage settings.'
+    defaultMessage: "This step allows you edit specific settings for the overcloud's network, " +
+      'storage, and other certified plugins. Use this step to define your network isolation ' +
+      'configuration and your backend storage settings.'
   },
   configureRolesStepTooltip: {
     id: 'DeploymentPlan.configureRolesStepTooltip',
     defaultMessage: 'This step assigns and removes nodes from roles in your overcloud. On each ' +
-    'role\'s selection dialog, you can tag available nodes into the role or untag nodes already ' +
-    'assigned to the role. Click "Assign Nodes" for a particular role to open the selection ' +
-    'dialog and start assigning nodes. ' +
-    'You can also customize role-specific settings in this step. For example, you can compose ' +
-    'services on each role and customize specific parameters related to each role. Click the ' +
-    'pencil icon in the top-right corner of each role to see these role-specific settings'
+      "role's selection dialog, you can tag available nodes into the role or untag nodes already " +
+      'assigned to the role. Click "Assign Nodes" for a particular role to open the selection ' +
+      'dialog and start assigning nodes. ' +
+      'You can also customize role-specific settings in this step. For example, you can compose ' +
+      'services on each role and customize specific parameters related to each role. Click the ' +
+      'pencil icon in the top-right corner of each role to see these role-specific settings'
   },
   deployStepTooltip: {
     id: 'DeploymentPlan.deploymentStepTooltip',
     defaultMessage: 'This step performs the deployment of the overcloud. Once the deployment ' +
-    'begins, the director tracks the progress and provides a report of each completed, running, ' +
-    'or failed step. When the deployment completes, the director displays the current overcloud ' +
-    'status and login details, which you use to interact with your overcloud. Click "Deploy" to ' +
-    'start the deployment.'
+      'begins, the director tracks the progress and provides a report of each completed, running, ' +
+      'or failed step. When the deployment completes, the director displays the current overcloud ' +
+      'status and login details, which you use to interact with your overcloud. Click "Deploy" to ' +
+      'start the deployment.'
   }
 });
 
@@ -92,8 +99,12 @@ class DeploymentPlan extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.stacksLoaded) { this.props.fetchStacks(); }
-    if (nextProps.currentPlan !== this.props.currentPlan) { this.fetchParameters(); }
+    if (!nextProps.stacksLoaded) {
+      this.props.fetchStacks();
+    }
+    if (nextProps.currentPlan !== this.props.currentPlan) {
+      this.fetchParameters();
+    }
     this.postDeploymentValidationsCheck(nextProps.currentStack);
     this.pollCurrentStack(nextProps.currentStack);
   }
@@ -103,7 +114,8 @@ class DeploymentPlan extends React.Component {
   }
 
   fetchParameters() {
-    !this.props.isFetchingParameters && this.props.fetchParameters(this.props.currentPlan.name);
+    !this.props.isFetchingParameters &&
+      this.props.fetchParameters(this.props.currentPlan.name);
   }
 
   pollCurrentStack(currentStack) {
@@ -120,12 +132,20 @@ class DeploymentPlan extends React.Component {
 
   postDeploymentValidationsCheck(nextStack) {
     const { currentStack, currentPlan } = this.props;
-    const progressStates = [stackStates.UPDATE_IN_PROGRESS, stackStates.CREATE_IN_PROGRESS];
-    const successStates = [stackStates.UPDATE_COMPLETE, stackStates.CREATE_COMPLETE];
-    if (currentStack
-        && nextStack
-        && progressStates.includes(currentStack.stack_status)
-        && successStates.includes(nextStack.stack_status)) {
+    const progressStates = [
+      stackStates.UPDATE_IN_PROGRESS,
+      stackStates.CREATE_IN_PROGRESS
+    ];
+    const successStates = [
+      stackStates.UPDATE_COMPLETE,
+      stackStates.CREATE_COMPLETE
+    ];
+    if (
+      currentStack &&
+      nextStack &&
+      progressStates.includes(currentStack.stack_status) &&
+      successStates.includes(nextStack.stack_status)
+    ) {
       this.props.runPostDeploymentValidations(currentPlan.name);
     }
   }
@@ -133,80 +153,110 @@ class DeploymentPlan extends React.Component {
   render() {
     const { formatMessage } = this.props.intl;
     let children;
-    const currentPlanName = this.props.hasPlans ? this.props.currentPlan.name : undefined;
+    const currentPlanName = this.props.hasPlans
+      ? this.props.currentPlan.name
+      : undefined;
 
     // Render children only when current plan is already selected
     if (this.props.children && currentPlanName) {
-      children = React.cloneElement(this.props.children,
-                                    {currentPlanName: currentPlanName,
-                                     parentPath: '/' + this.props.route.path});
+      children = React.cloneElement(this.props.children, {
+        currentPlanName: currentPlanName,
+        parentPath: '/' + this.props.route.path
+      });
     }
 
     return (
       <div className="row">
-        {this.props.hasPlans ? (
-          <div className="col-sm-12">
-            <div className="page-header page-header-bleed-right">
-              <h1>
-                {currentPlanName}
-                <PlansDropdown currentPlanName={currentPlanName}
-                               plans={this.props.inactivePlans}
-                               choosePlan={this.props.choosePlan}/>
-              </h1>
+        {this.props.hasPlans
+          ? <div className="col-sm-12">
+              <div className="page-header page-header-bleed-right">
+                <h1>
+                  {currentPlanName}
+                  <PlansDropdown
+                    currentPlanName={currentPlanName}
+                    plans={this.props.inactivePlans}
+                    choosePlan={this.props.choosePlan}
+                  />
+                </h1>
+              </div>
+              <ol className="deployment-step-list">
+                <DeploymentPlanStep
+                  title={formatMessage(messages.hardwareStepHeader)}
+                  disabled={this.props.currentStackDeploymentInProgress}
+                  tooltip={formatMessage(messages.hardwareStepTooltip)}
+                >
+                  <HardwareStep />
+                </DeploymentPlanStep>
+                <DeploymentPlanStep
+                  title={formatMessage(
+                    messages.deploymentConfigurationStepHeader
+                  )}
+                  disabled={this.props.currentStackDeploymentInProgress}
+                  tooltip={formatMessage(messages.configurePlanStepTooltip)}
+                >
+                  <ConfigurePlanStep
+                    fetchEnvironmentConfiguration={
+                      this.props.fetchEnvironmentConfiguration
+                    }
+                    summary={this.props.environmentConfigurationSummary}
+                    planName={currentPlanName}
+                    isFetching={this.props.isFetchingEnvironmentConfiguration}
+                    loaded={this.props.environmentConfigurationLoaded}
+                  />
+                </DeploymentPlanStep>
+                <DeploymentPlanStep
+                  title={formatMessage(messages.configureRolesStepHeader)}
+                  disabled={this.props.currentStackDeploymentInProgress}
+                  tooltip={formatMessage(messages.configureRolesStepTooltip)}
+                >
+                  <RolesStep
+                    nodeCountParametersByRole={
+                      this.props.nodeCountParametersByRole
+                    }
+                    availableNodesCount={this.props.availableNodes.size}
+                    availableNodesCountsByRole={
+                      this.props.availableNodesCountsByRole
+                    }
+                    fetchNodes={this.props.fetchNodes}
+                    fetchRoles={this.props.fetchRoles.bind(
+                      this,
+                      currentPlanName
+                    )}
+                    isFetchingNodes={this.props.isFetchingNodes}
+                    isFetchingRoles={this.props.isFetchingRoles}
+                    isFetchingParameters={this.props.isFetchingParameters}
+                    roles={this.props.roles}
+                    rolesLoaded={this.props.rolesLoaded}
+                    totalAssignedNodesCount={this.props.totalAssignedNodesCount}
+                  />
+                </DeploymentPlanStep>
+                <DeploymentPlanStep
+                  title={formatMessage(messages.deployStepHeader)}
+                  tooltip={formatMessage(messages.deployStepTooltip)}
+                >
+                  <DeployStep
+                    currentPlan={this.props.currentPlan}
+                    currentStack={this.props.currentStack}
+                    currentStackResources={this.props.currentStackResources}
+                    currentStackResourcesLoaded={
+                      this.props.currentStackResourcesLoaded
+                    }
+                    currentStackDeploymentProgress={
+                      this.props.currentStackDeploymentProgress
+                    }
+                    deleteStack={this.props.deleteStack}
+                    deployPlan={this.props.deployPlan}
+                    fetchStackEnvironment={this.props.fetchStackEnvironment}
+                    fetchStackResource={this.props.fetchStackResource}
+                    isRequestingStackDelete={this.props.isRequestingStackDelete}
+                    stacksLoaded={this.props.stacksLoaded}
+                  />
+                </DeploymentPlanStep>
+              </ol>
             </div>
-            <ol className="deployment-step-list">
-            <DeploymentPlanStep title={formatMessage(messages.hardwareStepHeader)}
-                                disabled={this.props.currentStackDeploymentInProgress}
-                                tooltip={formatMessage(messages.hardwareStepTooltip)}>
-              <HardwareStep />
-            </DeploymentPlanStep>
-            <DeploymentPlanStep title={formatMessage(messages.deploymentConfigurationStepHeader)}
-                                disabled={this.props.currentStackDeploymentInProgress}
-                                tooltip={formatMessage(messages.configurePlanStepTooltip)}>
-                <ConfigurePlanStep
-                  fetchEnvironmentConfiguration={this.props.fetchEnvironmentConfiguration}
-                  summary={this.props.environmentConfigurationSummary}
-                  planName={currentPlanName}
-                  isFetching={this.props.isFetchingEnvironmentConfiguration}
-                  loaded={this.props.environmentConfigurationLoaded}/>
-            </DeploymentPlanStep>
-            <DeploymentPlanStep title={formatMessage(messages.configureRolesStepHeader)}
-                                disabled={this.props.currentStackDeploymentInProgress}
-                                tooltip={formatMessage(messages.configureRolesStepTooltip)}>
-                <RolesStep nodeCountParametersByRole={this.props.nodeCountParametersByRole}
-                           availableNodesCount={this.props.availableNodes.size}
-                           availableNodesCountsByRole={this.props.availableNodesCountsByRole}
-                           fetchNodes={this.props.fetchNodes}
-                           fetchRoles={this.props.fetchRoles.bind(this, currentPlanName)}
-                           isFetchingNodes={this.props.isFetchingNodes}
-                           isFetchingRoles={this.props.isFetchingRoles}
-                           isFetchingParameters={this.props.isFetchingParameters}
-                           roles={this.props.roles}
-                           rolesLoaded={this.props.rolesLoaded}
-                           totalAssignedNodesCount={this.props.totalAssignedNodesCount}/>
-              </DeploymentPlanStep>
-            <DeploymentPlanStep title={formatMessage(messages.deployStepHeader)}
-                                tooltip={formatMessage(messages.deployStepTooltip)}>
-                <DeployStep
-                  currentPlan={this.props.currentPlan}
-                  currentStack={this.props.currentStack}
-                  currentStackResources={this.props.currentStackResources}
-                  currentStackResourcesLoaded={this.props.currentStackResourcesLoaded}
-                  currentStackDeploymentProgress={this.props.currentStackDeploymentProgress}
-                  deleteStack={this.props.deleteStack}
-                  deployPlan={this.props.deployPlan}
-                  fetchStackEnvironment={this.props.fetchStackEnvironment}
-                  fetchStackResource={this.props.fetchStackResource}
-                  isRequestingStackDelete={this.props.isRequestingStackDelete}
-                  stacksLoaded={this.props.stacksLoaded}/>
-              </DeploymentPlanStep>
-            </ol>
-          </div>
-        ) : (
-          <div className="col-sm-12">
-            <NoPlans/>
-          </div>
-        )}
+          : <div className="col-sm-12">
+              <NoPlans />
+            </div>}
         {children}
       </div>
     );
@@ -263,11 +313,14 @@ export function mapStateToProps(state) {
     currentStack: getCurrentStack(state),
     currentStackResources: state.stacks.resources,
     currentStackResourcesLoaded: state.stacks.resourcesLoaded,
-    currentStackDeploymentInProgress: getCurrentStackDeploymentInProgress(state),
+    currentStackDeploymentInProgress: getCurrentStackDeploymentInProgress(
+      state
+    ),
     currentStackDeploymentProgress: getCurrentStackDeploymentProgress(state),
     environmentConfigurationLoaded: state.environmentConfiguration.loaded,
     environmentConfigurationSummary: getEnvironmentConfigurationSummary(state),
-    isFetchingEnvironmentConfiguration: state.environmentConfiguration.isFetching,
+    isFetchingEnvironmentConfiguration: state.environmentConfiguration
+      .isFetching,
     isFetchingNodes: state.nodes.get('isFetching'),
     isFetchingParameters: state.parameters.isFetching,
     isFetchingRoles: state.roles.get('isFetching'),
@@ -288,23 +341,34 @@ function mapDispatchToProps(dispatch) {
       dispatch(StacksActions.deleteStack(stackName, stackId));
     },
     deployPlan: planName => dispatch(PlansActions.deployPlan(planName)),
-    fetchStackEnvironment: (stack) => dispatch(StacksActions.fetchEnvironment(stack)),
+    fetchStackEnvironment: stack =>
+      dispatch(StacksActions.fetchEnvironment(stack)),
     fetchEnvironmentConfiguration: (planName, parentPath) => {
-      dispatch(EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName, parentPath));
+      dispatch(
+        EnvironmentConfigurationActions.fetchEnvironmentConfiguration(
+          planName,
+          parentPath
+        )
+      );
     },
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
-    fetchParameters: planName => dispatch(ParametersActions.fetchParameters(planName)),
+    fetchParameters: planName =>
+      dispatch(ParametersActions.fetchParameters(planName)),
     fetchRoles: planName => dispatch(RolesActions.fetchRoles(planName)),
-    fetchStackResources: (stack) =>
+    fetchStackResources: stack =>
       dispatch(StacksActions.fetchResources(stack.stack_name, stack.id)),
     fetchStackResource: (stack, resourceName) =>
       dispatch(StacksActions.fetchResource(stack, resourceName)),
     fetchStacks: () => dispatch(StacksActions.fetchStacks()),
     notify: notification => dispatch(NotificationActions.notify(notification)),
     runPostDeploymentValidations: planName => {
-      dispatch(ValidationsActions.runValidationGroups(['post-deployment'], planName));
+      dispatch(
+        ValidationsActions.runValidationGroups(['post-deployment'], planName)
+      );
     }
   };
 }
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(DeploymentPlan));
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(DeploymentPlan)
+);

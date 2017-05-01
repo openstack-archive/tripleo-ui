@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-export const Toolbar = ({children}) => {
+export const Toolbar = ({ children }) => {
   return (
     <div className="toolbar-pf">
       <div className="row">
@@ -16,7 +16,7 @@ Toolbar.propTypes = {
   children: PropTypes.node
 };
 
-export const ToolbarActions = ({children}) => (
+export const ToolbarActions = ({ children }) => (
   <div className="toolbar-pf-actions">
     {children}
   </div>
@@ -25,7 +25,7 @@ ToolbarActions.propTypes = {
   children: PropTypes.node
 };
 
-export const ToolbarResults = ({children}) => (
+export const ToolbarResults = ({ children }) => (
   <div className="toolbar-pf-results">
     <div className="row">
       <div className="col-sm-12">

@@ -11,7 +11,7 @@ export default class ModalFormErrorList extends React.Component {
     } else {
       return (
         <div className="modal-form-error-list">
-          <FormErrorList errors={this.props.errors}/>
+          <FormErrorList errors={this.props.errors} />
         </div>
       );
     }

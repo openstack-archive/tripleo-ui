@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 const NodePickerInput = props => {
-  const { increment, input: { value, onChange }, max, meta: { error, submitting }, min } = props;
+  const {
+    increment,
+    input: { value, onChange },
+    max,
+    meta: { error, submitting },
+    min
+  } = props;
 
   const incrementValue = increment => {
     const incrementedValue = value + increment;
@@ -21,14 +27,16 @@ const NodePickerInput = props => {
       <PickerArrow
         direction="up"
         onClick={() => onChange(incrementValue(increment))}
-        disabled={submitting || value + increment > max}/>
+        disabled={submitting || value + increment > max}
+      />
       <NodeCount error={error}>
         <span className="value">{value}</span>
       </NodeCount>
       <PickerArrow
         direction="down"
         onClick={() => onChange(incrementValue(-increment))}
-        disabled={submitting || value - increment < min}/>
+        disabled={submitting || value - increment < min}
+      />
     </div>
   );
 };
@@ -50,8 +58,9 @@ const PickerArrow = ({ direction, disabled, onClick }) => {
       type="button"
       className={`btn btn-default btn-node-picker btn-node-picker-${direction}`}
       onClick={onClick}
-      disabled={disabled}>
-      <span className={`fa fa-angle-${direction}`} aria-hidden="true"/>
+      disabled={disabled}
+    >
+      <span className={`fa fa-angle-${direction}`} aria-hidden="true" />
     </button>
   );
 };

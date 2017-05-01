@@ -12,19 +12,24 @@ class LoginInput extends React.Component {
   render() {
     return (
       <div className="form-group">
-        <label className="col-sm-2 col-md-2 control-label" htmlFor={this.props.name}>
+        <label
+          className="col-sm-2 col-md-2 control-label"
+          htmlFor={this.props.name}
+        >
           {this.props.title}
         </label>
         <div className="col-sm-10 col-md-10">
-          <input type={this.props.type}
-                 name={this.props.name}
-                 ref={this.props.name}
-                 className="form-control"
-                 id={this.props.name}
-                 onChange={this.changeValue.bind(this)}
-                 value={this.props.getValue() || ''}
-                 placeholder={this.props.placeholder}
-                 autoFocus={this.props.autoFocus}/>
+          <input
+            type={this.props.type}
+            name={this.props.name}
+            ref={this.props.name}
+            className="form-control"
+            id={this.props.name}
+            onChange={this.changeValue.bind(this)}
+            value={this.props.getValue() || ''}
+            placeholder={this.props.placeholder}
+            autoFocus={this.props.autoFocus}
+          />
           <InputErrorMessage getErrorMessage={this.props.getErrorMessage} />
         </div>
       </div>

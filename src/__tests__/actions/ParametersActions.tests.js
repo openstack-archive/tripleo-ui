@@ -14,13 +14,13 @@ window.localStorage = window.sessionStorage = storage;
 
 // Use this to mock asynchronous functions which return a promise.
 // The promise will immediately resolve with `data`.
-const createResolvingPromise = (data) => {
+const createResolvingPromise = data => {
   return () => {
     return when.resolve(data);
   };
 };
 
-const createRejectingPromise = (error) => {
+const createRejectingPromise = error => {
   return () => {
     return when.reject(error);
   };
@@ -64,18 +64,28 @@ describe('ParametersActions', () => {
       spyOn(ParametersActions, 'fetchParametersFailed');
       spyOn(uuid, 'v4').and.returnValue('aaa');
       // Mock the service call.
-      spyOn(MistralApiService, 'runAction')
-        .and.callFake(createResolvingPromise(responseBody));
+      spyOn(MistralApiService, 'runAction').and.callFake(
+        createResolvingPromise(responseBody)
+      );
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
-      ParametersActions.fetchParameters('overcloud')(() => {}, () => {}, mockGetIntl);
+      ParametersActions.fetchParameters('overcloud')(
+        () => {},
+        () => {},
+        mockGetIntl
+      );
       // Call done with a minimal timeout.
-      setTimeout(() => { done(); }, 1);
+      setTimeout(() => {
+        done();
+      }, 1);
     });
 
     it('calls the Mistral API', () => {
-      expect(MistralApiService.runAction).toHaveBeenCalledWith(MistralConstants.PARAMETERS_GET,
-                                                               { container: 'overcloud' });
+      expect(
+        MistralApiService.runAction
+      ).toHaveBeenCalledWith(MistralConstants.PARAMETERS_GET, {
+        container: 'overcloud'
+      });
     });
 
     it('dispatches fetchParametersPending', () => {
@@ -86,10 +96,11 @@ describe('ParametersActions', () => {
       let expectedResources = {
         aaa: { id: 'aaa', name: 'Root' }
       };
-      expect(ParametersActions.fetchParametersSuccess)
-        .toHaveBeenCalledWith({ parameters: undefined,
-                                resources: expectedResources,
-                                mistralParameters: {} });
+      expect(ParametersActions.fetchParametersSuccess).toHaveBeenCalledWith({
+        parameters: undefined,
+        resources: expectedResources,
+        mistralParameters: {}
+      });
     });
 
     it('does not dispatch fetchParametersFailed', () => {
@@ -119,10 +130,15 @@ describe('ParametersActions', () => {
         }
       };
       let normalizedResult = normalizeParameters(resourceTree);
-      expect(Object.keys(normalizedResult)).toEqual(['resources', 'parameters']);
+      expect(Object.keys(normalizedResult)).toEqual([
+        'resources',
+        'parameters'
+      ]);
       expect(Object.keys(normalizedResult.resources).length).toEqual(2);
       expect(Object.keys(normalizedResult.parameters).length).toEqual(1);
-      expect(normalizedResult.parameters.BlockStorageCount.type).toEqual('Number');
+      expect(normalizedResult.parameters.BlockStorageCount.type).toEqual(
+        'Number'
+      );
     });
   });
 
@@ -136,24 +152,29 @@ describe('ParametersActions', () => {
       jest.spyOn(ParametersActions, 'updateParametersPending');
       jest.spyOn(ParametersActions, 'updateParametersSuccess');
       jest.spyOn(ParametersActions, 'updateParametersFailed');
-      jest.spyOn(MistralApiService, 'runAction').mockImplementation(createRejectingPromise(error));
+      jest
+        .spyOn(MistralApiService, 'runAction')
+        .mockImplementation(createRejectingPromise(error));
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
       ParametersActions.updateParameters('overcloud', { foo: 'bar' })(
-        () => {}, () => {}, mockGetIntl
+        () => {},
+        () => {},
+        mockGetIntl
       );
       // Call done with a minimal timeout.
-      setTimeout(() => { done(); }, 1);
+      setTimeout(() => {
+        done();
+      }, 1);
     });
 
     it('calls the Mistral API', () => {
-      expect(MistralApiService.runAction).toHaveBeenCalledWith(
-        MistralConstants.PARAMETERS_UPDATE,
-        {
-          container: 'overcloud',
-          parameters: { foo: 'bar' }
-        }
-      );
+      expect(
+        MistralApiService.runAction
+      ).toHaveBeenCalledWith(MistralConstants.PARAMETERS_UPDATE, {
+        container: 'overcloud',
+        parameters: { foo: 'bar' }
+      });
     });
 
     it('dispatches updateParametersPending', () => {
@@ -161,7 +182,9 @@ describe('ParametersActions', () => {
     });
 
     it('does not dispatch updateParametersSuccess', () => {
-      expect(ParametersActions.updateParametersSuccess).not.toHaveBeenCalledWith({ foo: 'bar' });
+      expect(
+        ParametersActions.updateParametersSuccess
+      ).not.toHaveBeenCalledWith({ foo: 'bar' });
     });
 
     it('dispatches updateParametersFailed', () => {
@@ -171,11 +194,16 @@ describe('ParametersActions', () => {
 
   describe('updateParametersFailed', () => {
     it('returns ParametersConstants.UPDATE_PARAMETERS_FAILED', () => {
-      expect(ParametersActions.updateParametersFailed(
-        [{ foo: 'bar' }], { field1: 'fail' })
+      expect(
+        ParametersActions.updateParametersFailed([{ foo: 'bar' }], {
+          field1: 'fail'
+        })
       ).toEqual({
         type: ParametersConstants.UPDATE_PARAMETERS_FAILED,
-        payload: { formErrors: [{ foo: 'bar' }], formFieldErrors: { field1: 'fail' } }
+        payload: {
+          formErrors: [{ foo: 'bar' }],
+          formFieldErrors: { field1: 'fail' }
+        }
       });
     });
   });

@@ -21,17 +21,19 @@ class DeploymentFailure extends React.Component {
 
   render() {
     const status = this.props.intl.formatMessage(
-      deploymentStatusMessages[this.props.stack.stack_status]);
+      deploymentStatusMessages[this.props.stack.stack_status]
+    );
 
     return (
       <div className="col-sm-12 fixed-container-body-content">
-        <InlineNotification type="error"
-                            title={status}>
+        <InlineNotification type="error" title={status}>
           <p>{this.props.stack.stack_status_reason}</p>
         </InlineNotification>
-        <h2><FormattedMessage {...messages.resources}/></h2>
-        <StackResourcesTable isFetchingResources={!this.props.stackResourcesLoaded}
-                             resources={this.props.stackResources.reverse()}/>
+        <h2><FormattedMessage {...messages.resources} /></h2>
+        <StackResourcesTable
+          isFetchingResources={!this.props.stackResourcesLoaded}
+          resources={this.props.stackResources.reverse()}
+        />
       </div>
     );
   }

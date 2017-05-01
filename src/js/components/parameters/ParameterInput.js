@@ -22,71 +22,89 @@ class ParameterInput extends React.Component {
   */
   render() {
     const { name, label, description, defaultValue, value, type } = this.props;
-    if(value) {
+    if (value) {
       return (
-        <HorizontalStaticText text={isObjectLike(value) ? JSON.stringify(value) : value}
-                              title={label}
-                              labelColumnClasses="col-sm-4"
-                              inputColumnClasses="col-sm-8"/>
+        <HorizontalStaticText
+          text={isObjectLike(value) ? JSON.stringify(value) : value}
+          title={label}
+          labelColumnClasses="col-sm-4"
+          inputColumnClasses="col-sm-8"
+        />
       );
     } else if (type.toLowerCase() === 'json' || isObjectLike(defaultValue)) {
       return (
-        <HorizontalTextarea name={name}
-                            title={label}
-                            description={description}
-                            value={defaultValue ? JSON.stringify(defaultValue) : ''}
-                            validations="isJson"
-                            validationError={this.props.intl.formatMessage(messages.enterValidJson)}
-                            labelColumnClasses="col-sm-4"
-                            inputColumnClasses="col-sm-8"/>
+        <HorizontalTextarea
+          name={name}
+          title={label}
+          description={description}
+          value={defaultValue ? JSON.stringify(defaultValue) : ''}
+          validations="isJson"
+          validationError={this.props.intl.formatMessage(
+            messages.enterValidJson
+          )}
+          labelColumnClasses="col-sm-4"
+          inputColumnClasses="col-sm-8"
+        />
       );
     } else if (type.toLowerCase() === 'commadelimitedlist') {
       return (
-        <HorizontalTextarea name={name}
-                            title={label}
-                            description={description}
-                            value={defaultValue}
-                            labelColumnClasses="col-sm-4"
-                            inputColumnClasses="col-sm-8"/>
+        <HorizontalTextarea
+          name={name}
+          title={label}
+          description={description}
+          value={defaultValue}
+          labelColumnClasses="col-sm-4"
+          inputColumnClasses="col-sm-8"
+        />
       );
-    } else if(type.toLowerCase() === 'string' &&
-              /^.*(Key|Cert|Certificate)$/.test(name)) {
+    } else if (
+      type.toLowerCase() === 'string' &&
+      /^.*(Key|Cert|Certificate)$/.test(name)
+    ) {
       return (
-        <HorizontalTextarea name={name}
-                            title={label}
-                            description={description}
-                            value={defaultValue}
-                            labelColumnClasses="col-sm-4"
-                            inputColumnClasses="col-sm-8"/>
+        <HorizontalTextarea
+          name={name}
+          title={label}
+          description={description}
+          value={defaultValue}
+          labelColumnClasses="col-sm-4"
+          inputColumnClasses="col-sm-8"
+        />
       );
-    } else if(type.toLowerCase() === 'number') {
+    } else if (type.toLowerCase() === 'number') {
       return (
-        <HorizontalNumberInput name={name}
-                               title={label}
-                               min={0}
-                               description={description}
-                               value={defaultValue}
-                               labelColumnClasses="col-sm-4"
-                               inputColumnClasses="col-sm-8"/>
+        <HorizontalNumberInput
+          name={name}
+          title={label}
+          min={0}
+          description={description}
+          value={defaultValue}
+          labelColumnClasses="col-sm-4"
+          inputColumnClasses="col-sm-8"
+        />
       );
-    } else if(type.toLowerCase() === 'boolean') {
+    } else if (type.toLowerCase() === 'boolean') {
       return (
-        <HorizontalCheckBox name={name}
-                            id={name}
-                            title={label}
-                            description={description}
-                            value={defaultValue}
-                            labelColumnClasses="col-sm-4"
-                            inputColumnClasses="col-sm-8"/>
+        <HorizontalCheckBox
+          name={name}
+          id={name}
+          title={label}
+          description={description}
+          value={defaultValue}
+          labelColumnClasses="col-sm-4"
+          inputColumnClasses="col-sm-8"
+        />
       );
     } else {
       return (
-        <HorizontalInput name={name}
-                         title={label}
-                         description={description}
-                         value={defaultValue}
-                         labelColumnClasses="col-sm-4"
-                         inputColumnClasses="col-sm-8"/>
+        <HorizontalInput
+          name={name}
+          title={label}
+          description={description}
+          value={defaultValue}
+          labelColumnClasses="col-sm-4"
+          inputColumnClasses="col-sm-8"
+        />
       );
     }
   }

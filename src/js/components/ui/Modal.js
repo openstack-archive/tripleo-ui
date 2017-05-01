@@ -34,15 +34,18 @@ class PortedModal extends React.Component {
 
   render() {
     return (
-      <div style={{display: 'block'}}>
+      <div style={{ display: 'block' }}>
         <div className="modal modal-visible" role="dialog">
-          <div className={`modal-dialog ${this.props.dialogClasses}`} id={this.props.id}>
+          <div
+            className={`modal-dialog ${this.props.dialogClasses}`}
+            id={this.props.id}
+          >
             <div className="modal-content">
               {this.props.children}
             </div>
           </div>
         </div>
-        <div className="modal-backdrop in"></div>
+        <div className="modal-backdrop in" />
       </div>
     );
   }

@@ -22,14 +22,14 @@ export default class Validation extends React.Component {
     this.setState({ isPending: true });
 
     switch (true) {
-    case (this.state.isPending):
-      break;
-    case (this.props.status === 'running'):
-      this.props.stopValidation(this.props.results.last().id);
-      break;
-    default:
-      this.props.runValidation();
-      break;
+      case this.state.isPending:
+        break;
+      case this.props.status === 'running':
+        this.props.stopValidation(this.props.results.last().id);
+        break;
+      default:
+        this.props.runValidation();
+        break;
     }
   }
 
@@ -52,17 +52,24 @@ export default class Validation extends React.Component {
           <div className="list-view-pf-left">
             <ValidationStatusIcon
               status={this.state.isPending ? 'running' : this.props.status}
-              triggerValidationAction={this.triggerValidationAction.bind(this)}/>
+              triggerValidationAction={this.triggerValidationAction.bind(this)}
+            />
           </div>
           <div className="list-view-pf-body">
             <div className="list-view-pf-description">
               <div className="list-group-item-heading">
-                <a className="link"
-                   onClick={() => this.props.showValidationDetail()}
-                   title={this.props.name}>{this.props.name}</a>
+                <a
+                  className="link"
+                  onClick={() => this.props.showValidationDetail()}
+                  title={this.props.name}
+                >
+                  {this.props.name}
+                </a>
               </div>
               <div className="list-group-item-text">
-                <small title={this.props.description}>{this.props.description}</small>
+                <small title={this.props.description}>
+                  {this.props.description}
+                </small>
               </div>
             </div>
             <div className="list-view-pf-additional-info">

@@ -22,15 +22,19 @@ export default class NoPlans extends React.Component {
     return (
       <div className="blank-slate-pf">
         <div className="blank-slate-pf-icon">
-          <span className="fa fa-ban"></span>
+          <span className="fa fa-ban" />
         </div>
-        <h1><FormattedMessage {...messages.noPlansAvailable}/></h1>
-        <p><FormattedMessage {...messages.noPlansAvailableMessage}/></p>
+        <h1><FormattedMessage {...messages.noPlansAvailable} /></h1>
+        <p><FormattedMessage {...messages.noPlansAvailableMessage} /></p>
         <div className="blank-slate-pf-main-action">
-          <Link to="/plans/new"
-                query={{tab: 'newPlan'}}
-                className="btn btn-lg btn-primary">
-            <span className="fa fa-plus"/> <FormattedMessage {...messages.createNewPlan}/>
+          <Link
+            to="/plans/new"
+            query={{ tab: 'newPlan' }}
+            className="btn btn-lg btn-primary"
+          >
+            <span className="fa fa-plus" />
+            {' '}
+            <FormattedMessage {...messages.createNewPlan} />
           </Link>
         </div>
       </div>

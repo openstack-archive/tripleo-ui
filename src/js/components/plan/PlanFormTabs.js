@@ -49,20 +49,25 @@ export default class PlanFormTabs extends React.Component {
     return (
       <div>
         <ul className="nav nav-tabs">
-          <NavTab to="/plans/new" query={{tab: 'newPlan'}}>
-            <FormattedMessage {...messages.newPlan}/>
+          <NavTab to="/plans/new" query={{ tab: 'newPlan' }}>
+            <FormattedMessage {...messages.newPlan} />
           </NavTab>
-          <NavTab to="/plans/new" query={{tab: 'planFiles'}}>
-            <FormattedMessage {...messages.files}/> <span className="badge">
-            {this.props.selectedFiles.length}</span>
+          <NavTab to="/plans/new" query={{ tab: 'planFiles' }}>
+            <FormattedMessage {...messages.files} /> <span className="badge">
+              {this.props.selectedFiles.length}
+            </span>
           </NavTab>
         </ul>
         <div className="tab-content">
-          <PlanFormTab active={this.setActiveTab('newPlan')}
-                       uploadType={this.props.uploadType}
-                       setUploadType={this.props.setUploadType}/>
-          <PlanFilesTab active={this.setActiveTab('planFiles')}
-                        selectedFiles={this.props.selectedFiles} />
+          <PlanFormTab
+            active={this.setActiveTab('newPlan')}
+            uploadType={this.props.uploadType}
+            setUploadType={this.props.setUploadType}
+          />
+          <PlanFilesTab
+            active={this.setActiveTab('planFiles')}
+            selectedFiles={this.props.selectedFiles}
+          />
         </div>
       </div>
     );
@@ -84,26 +89,32 @@ class _PlanFormTab extends React.Component {
     const { formatMessage } = this.props.intl;
     return (
       <div className={`tab-pane ${this.props.active}`}>
-        <HorizontalInput name="planName"
-                         title={formatMessage(messages.planName)}
-                         inputColumnClasses="col-sm-7"
-                         labelColumnClasses="col-sm-3"
-                         placeholder={formatMessage(messages.addPlanName)}
-                         validations={{matchRegexp: /^[A-Za-z0-9-]+$/}}
-                         validationError={formatMessage(messages.planNameValidationError)}
-                         required />
-        <PlanUploadTypeRadios title={formatMessage(messages.uploadType)}
-                              inputColumnClasses="col-sm-7"
-                              labelColumnClasses="col-sm-3"
-                              setUploadType={this.props.setUploadType}
-                              uploadType={this.props.uploadType}/>
-        <PlanFileInput name="planFiles"
-                       title={formatMessage(messages.planFiles)}
-                       inputColumnClasses="col-sm-7"
-                       labelColumnClasses="col-sm-3"
-                       uploadType={this.props.uploadType}
-                       multiple
-                       required/>
+        <HorizontalInput
+          name="planName"
+          title={formatMessage(messages.planName)}
+          inputColumnClasses="col-sm-7"
+          labelColumnClasses="col-sm-3"
+          placeholder={formatMessage(messages.addPlanName)}
+          validations={{ matchRegexp: /^[A-Za-z0-9-]+$/ }}
+          validationError={formatMessage(messages.planNameValidationError)}
+          required
+        />
+        <PlanUploadTypeRadios
+          title={formatMessage(messages.uploadType)}
+          inputColumnClasses="col-sm-7"
+          labelColumnClasses="col-sm-3"
+          setUploadType={this.props.setUploadType}
+          uploadType={this.props.uploadType}
+        />
+        <PlanFileInput
+          name="planFiles"
+          title={formatMessage(messages.planFiles)}
+          inputColumnClasses="col-sm-7"
+          labelColumnClasses="col-sm-3"
+          uploadType={this.props.uploadType}
+          multiple
+          required
+        />
       </div>
     );
   }

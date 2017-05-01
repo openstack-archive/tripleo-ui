@@ -4,13 +4,12 @@ import { StacksState, Stack } from '../../js/immutableRecords/stacks';
 import StacksActions from '../../js/actions/StacksActions';
 import stacksReducer from '../../js/reducers/stacksReducer';
 
-
 describe('stacksReducer state', () => {
   describe('default state', () => {
     let state;
 
     beforeEach(() => {
-      state = stacksReducer(undefined, {type: 'undefined-action'});
+      state = stacksReducer(undefined, { type: 'undefined-action' });
     });
 
     it('`isFetching` is false', () => {
@@ -29,8 +28,10 @@ describe('stacksReducer state', () => {
   describe('Stack status', () => {
     describe('fetchStacksPending', () => {
       it('sets isFetching to true', () => {
-        expect(stacksReducer(undefined, StacksActions.fetchStacksPending()).isFetching)
-          .toBe(true);
+        expect(
+          stacksReducer(undefined, StacksActions.fetchStacksPending())
+            .isFetching
+        ).toBe(true);
       });
     });
 
@@ -41,7 +42,10 @@ describe('stacksReducer state', () => {
         state = stacksReducer(
           new StacksState({ isFetching: true }),
           StacksActions.fetchStacksSuccess({
-            overcloud: { stack_name: 'overcloud', stack_status: 'CREATE_COMPLETE' }
+            overcloud: {
+              stack_name: 'overcloud',
+              stack_status: 'CREATE_COMPLETE'
+            }
           })
         );
       });
@@ -55,23 +59,25 @@ describe('stacksReducer state', () => {
       });
 
       it('sets stacks in state', () => {
-        expect(state.stacks).toEqual(Map({
-          overcloud: new Stack({
-            creation_time: undefined,
-            deletion_time: undefined,
-            description: undefined,
-            id: undefined,
-            parent: undefined,
-            resources: OrderedMap(),
-            stack_name: 'overcloud',
-            stack_owner: undefined,
-            stack_status: 'CREATE_COMPLETE',
-            stack_status_reason: undefined,
-            stack_user_project_id: undefined,
-            tags: Map(),
-            updated_time: undefined
+        expect(state.stacks).toEqual(
+          Map({
+            overcloud: new Stack({
+              creation_time: undefined,
+              deletion_time: undefined,
+              description: undefined,
+              id: undefined,
+              parent: undefined,
+              resources: OrderedMap(),
+              stack_name: 'overcloud',
+              stack_owner: undefined,
+              stack_status: 'CREATE_COMPLETE',
+              stack_status_reason: undefined,
+              stack_user_project_id: undefined,
+              tags: Map(),
+              updated_time: undefined
+            })
           })
-        }));
+        );
       });
     });
 

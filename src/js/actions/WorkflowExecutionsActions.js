@@ -3,8 +3,11 @@ import { normalize, arrayOf } from 'normalizr';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NotificationActions from './NotificationActions';
-import WorkflowExecutionsConstants from '../constants/WorkflowExecutionsConstants';
-import { workflowExecutionSchema } from '../normalizrSchemas/workflowExecutions';
+import WorkflowExecutionsConstants
+  from '../constants/WorkflowExecutionsConstants';
+import {
+  workflowExecutionSchema
+} from '../normalizrSchemas/workflowExecutions';
 import logger from '../services/logger';
 
 export default {
@@ -12,19 +15,24 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.fetchWorkflowExecutionsPending());
       MistralApiService.getWorkflowExecutions()
-      .then((response) => {
-        const executions = normalize(response.executions,
-                                     arrayOf(workflowExecutionSchema)).entities.executions || {};
-        dispatch(this.fetchWorkflowExecutionsSuccess(executions));
-      }).catch((error) => {
-        logger.error('Error in WorkflowExecutionsActions.fetchWorkflowExecutions',
-                     error);
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+        .then(response => {
+          const executions = normalize(
+            response.executions,
+            arrayOf(workflowExecutionSchema)
+          ).entities.executions || {};
+          dispatch(this.fetchWorkflowExecutionsSuccess(executions));
+        })
+        .catch(error => {
+          logger.error(
+            'Error in WorkflowExecutionsActions.fetchWorkflowExecutions',
+            error
+          );
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
+          dispatch(this.fetchWorkflowExecutionsFailed());
         });
-        dispatch(this.fetchWorkflowExecutionsFailed());
-      });
     };
   },
 
@@ -58,16 +66,19 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.updateWorkflowExecutionPending(id, patch));
       MistralApiService.updateWorkflowExecution(id, patch)
-      .then((response) => {
-        dispatch(this.addWorkflowExecution(response));
-      }).catch((error) => {
-        logger.error('Error in WorkflowExecutionsActions.updateWorkflowExecution',
-                     error);
-        let errorHandler = new MistralApiErrorHandler(error);
-        errorHandler.errors.forEach((error) => {
-          dispatch(NotificationActions.notify(error));
+        .then(response => {
+          dispatch(this.addWorkflowExecution(response));
+        })
+        .catch(error => {
+          logger.error(
+            'Error in WorkflowExecutionsActions.updateWorkflowExecution',
+            error
+          );
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
         });
-      });
     };
   },
 

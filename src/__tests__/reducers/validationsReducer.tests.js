@@ -58,14 +58,14 @@ describe('validationsReducer', () => {
           description: '',
           metadata: {},
           id: '512e',
-          groups: [ 'pre-deployment' ],
+          groups: ['pre-deployment'],
           name: 'Advanced Format 512e Support'
         },
         'check-network-gateway': {
           description: '',
           metadata: {},
           id: 'check-network-gateway',
-          groups: [ 'pre-deployment' ],
+          groups: ['pre-deployment'],
           name: 'Check network_gateway on the provisioning network'
         }
       }

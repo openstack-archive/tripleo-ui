@@ -1,7 +1,11 @@
 import { List, Map } from 'immutable';
 
 import * as selectors from '../../js/selectors/parameters';
-import { Resource, Parameter, ParametersDefaultState } from '../../js/immutableRecords/parameters';
+import {
+  Resource,
+  Parameter,
+  ParametersDefaultState
+} from '../../js/immutableRecords/parameters';
 import { Role, RolesState } from '../../js/immutableRecords/roles';
 
 describe(' validations selectors', () => {
@@ -104,7 +108,9 @@ describe(' validations selectors', () => {
   });
 
   it('getRoleResource', () => {
-    expect(selectors.getRoleResource(state, 'control').name).toEqual('RoleResource1');
+    expect(selectors.getRoleResource(state, 'control').name).toEqual(
+      'RoleResource1'
+    );
   });
 
   it('getRoleParameters', () => {
@@ -116,10 +122,14 @@ describe(' validations selectors', () => {
   });
 
   it('includes nested resources parameters using _extractParameters in getRoleServices', () => {
-    expect(selectors.getRoleServices(state, 'control').first().parameters.size).toEqual(3);
+    expect(
+      selectors.getRoleServices(state, 'control').first().parameters.size
+    ).toEqual(3);
   });
 
   it('getRoleNetworkConfig', () => {
-    expect(selectors.getRoleNetworkConfig(state, 'control').name).toEqual('NetworkConfigResource');
+    expect(selectors.getRoleNetworkConfig(state, 'control').name).toEqual(
+      'NetworkConfigResource'
+    );
   });
 });
