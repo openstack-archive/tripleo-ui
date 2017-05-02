@@ -1,7 +1,6 @@
 {
     "de": {
         "AuthenticatedContent.loadingDeployments": "Lade Bereitstellung...",
-        "ConfigurePlanStep.editConfigurationLink": "Konfiguration editieren",
         "CurrentPlanActions.planActivatedNotificationMessage": "Der Plan {planName} wurde aktiviiert.",
         "CurrentPlanActions.planActivatedNotificationTitle": "Plan aktiviert",
         "DataTable.filter": "Filter",

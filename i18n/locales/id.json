@@ -1,7 +1,6 @@
 {
     "id": {
         "AuthenticatedContent.loadingDeployments": "Loading Deployments...",
-        "ConfigurePlanStep.editConfigurationLink": "Edit Konfigurasi",
         "CurrentPlanActions.planActivatedNotificationMessage": "The plan (rencana) {planName} diaktifkan.",
         "CurrentPlanActions.planActivatedNotificationTitle": "Plan Activated",
         "DataTable.filter": "Filter",
@@ -218,7 +217,6 @@
         "RegisteredNodesTabPane.provideNodes": "Provide Nodes",
         "RegisteredNodesTabPane.tagNodes": "Tag Nodes",
         "RoleCard.assignNodes": "Assign Nodes",
-        "RoleCard.availableNodesCount": "of {count}",
         "RoleCard.nodesAssigned": "Nodes assigned",
         "RoleDetail.loadingParameters": "Loading parameters...",
         "RoleDetail.networkConfiguration": "Network Configuration",

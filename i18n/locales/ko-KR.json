@@ -1,7 +1,6 @@
 {
     "ko-KR": {
         "AuthenticatedContent.loadingDeployments": "\ubc30\ud3ec\ub97c \ubd88\ub7ec\uc624\ub294 \uc911...",
-        "ConfigurePlanStep.editConfigurationLink": "\uad6c\uc131 \ud3b8\uc9d1",
         "CurrentPlanActions.planActivatedNotificationMessage": "Plan {planName} \ub97c \ud65c\uc131\ud654\ud558\uc600\uc2b5\ub2c8\ub2e4.",
         "CurrentPlanActions.planActivatedNotificationTitle": "Plan \ud65c\uc131\ud654\ub428",
         "DataTable.filter": "\ud544\ud130",
@@ -218,7 +217,6 @@
         "RegisteredNodesTabPane.provideNodes": "\ub178\ub4dc \uc81c\uacf5",
         "RegisteredNodesTabPane.tagNodes": "\ub178\ub4dc \ud0dc\uadf8",
         "RoleCard.assignNodes": "\ub178\ub4dc \ud560\ub2f9",
-        "RoleCard.availableNodesCount": "{count} \uc911",
         "RoleCard.nodesAssigned": "\ub178\ub4dc\uac00 \ud560\ub2f9\ub428",
         "RoleDetail.loadingParameters": "\ub9e4\uac1c\ubcc0\uc218\ub97c \ubd88\ub7ec\uc624\ub294 \uc911...",
         "RoleDetail.networkConfiguration": "\ub124\ud2b8\uc6cc\ud06c \uad6c\uc131",
