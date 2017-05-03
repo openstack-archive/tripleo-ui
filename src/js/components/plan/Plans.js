@@ -26,7 +26,7 @@ import NewPlan from './NewPlan';
 export default class Plans extends React.Component {
   render() {
     return (
-      <div className="row">
+      <div className="row plans-list">
         <div className="col-sm-12">
           <ListPlans />
           <Route path="/plans/new" component={NewPlan} />
