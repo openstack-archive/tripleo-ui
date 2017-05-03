@@ -20,7 +20,7 @@ import React from 'react';
 export default class Plans extends React.Component {
   render() {
     return (
-      <div className="row">
+      <div className="row plans-list">
         <div className="col-sm-12">
           {this.props.children}
         </div>
