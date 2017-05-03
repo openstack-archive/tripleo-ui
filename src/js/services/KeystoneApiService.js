@@ -16,30 +16,74 @@ class KeystoneApiService {
   }
 
   authenticateUser(username, password) {
-    return when(request(this.defaultRequest({
+    let req = request(this.defaultRequest({
       data: JSON.stringify({
         auth: {
-          tenantName: 'admin',
-          passwordCredentials: {
-            username: username,
-            password: password
+          identity: {
+            methods: ['password'],
+            password: {
+              user: {
+                name: username,
+                domain: {
+                  name: 'Default'
+                },
+                password: password
+              }
+            }
+          },
+          scope: {
+            project: {
+              name: 'admin',
+              domain: {
+                name: 'Default'
+              }
+            }
           }
         }
       })
-    })));
+    }));
+
+    // We're passing the req object to the next handler in the chain so that we
+    // can inspect response headers later.
+    return when(req, (response) => {
+      return {
+        request: req.request,
+        response
+      };
+    });
   }
 
   authenticateUserViaToken(keystoneAuthTokenId) {
-    return when(request(this.defaultRequest({
+    let req = request(this.defaultRequest({
       data: JSON.stringify({
         auth: {
-          tenantName: 'admin',
-          token: {
-            id: keystoneAuthTokenId
+          identity: {
+            methods: ['token'],
+            token: {
+              id: keystoneAuthTokenId
+            }
+          },
+          scope: {
+            project: {
+              name: 'admin',
+              domain: {
+                name: 'Default'
+              }
+            }
           }
         }
       })
-    })));
+    }));
+
+    // We're passing the req object to the next handler in the chain so that we
+    // can inspect response headers later.
+    return when(req, (response) => {
+      return {
+        request: req.request,
+        response
+      };
+    });
+
   }
 }
 
