@@ -6,7 +6,6 @@ import React, { PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Formsy from 'formsy-react';
 
-import { getRoles } from '../../selectors/roles';
 import { getAvailableNodeProfiles,
          getFilteredRegisteredNodes,
          getNodesOperationInProgress } from '../../selectors/nodes';
@@ -170,7 +169,6 @@ class RegisteredNodesTabPane extends React.Component {
                      onInvalid={this.disableButton.bind(this)}>
           <FormErrorList errors={this.props.formErrors.toJS()}/>
           <NodesTable nodes={this.props.registeredNodes}
-                      roles={this.props.roles}
                       dataOperationInProgress={this.props.nodesOperationInProgress}
                       nodesInProgress={this.props.nodesInProgress}
                       isFetchingNodes={this.props.isFetchingNodes}
@@ -207,7 +205,6 @@ RegisteredNodesTabPane.propTypes = {
   nodesOperationInProgress: PropTypes.bool.isRequired,
   provideNodes: PropTypes.func.isRequired,
   registeredNodes: ImmutablePropTypes.map,
-  roles: ImmutablePropTypes.map,
   tagNodes: PropTypes.func.isRequired
 };
 RegisteredNodesTabPane.defaultProps = {
@@ -218,7 +215,6 @@ RegisteredNodesTabPane.defaultProps = {
 function mapStateToProps(state) {
   return {
     availableProfiles: getAvailableNodeProfiles(state),
-    roles: getRoles(state),
     registeredNodes: getFilteredRegisteredNodes(state),
     nodesInProgress: state.nodes.get('nodesInProgress'),
     nodesOperationInProgress: getNodesOperationInProgress(state),

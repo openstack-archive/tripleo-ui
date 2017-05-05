@@ -142,7 +142,7 @@ class NodesTable extends React.Component {
           header={<DataTableHeaderCell key="role">
                     <FormattedMessage {...messages.profile}/>
                   </DataTableHeaderCell>}
-          cell={<NodesTableProfileCell data={filteredData} roles={this.props.roles}/>}/>
+          cell={<NodesTableProfileCell data={filteredData}/>}/>
         <DataTableColumn
           key="properties.cpu_arch"
           header={<DataTableHeaderCell key="properties.cpu_arch">
@@ -187,8 +187,7 @@ NodesTable.propTypes = {
   intl: PropTypes.object,
   isFetchingNodes: PropTypes.bool.isRequired,
   nodes: ImmutablePropTypes.map.isRequired,
-  nodesInProgress: ImmutablePropTypes.set.isRequired,
-  roles: ImmutablePropTypes.map.isRequired
+  nodesInProgress: ImmutablePropTypes.set.isRequired
 };
 
 export default injectIntl(NodesTable);
@@ -216,12 +215,7 @@ export class NodesTableProfileCell extends React.Component {
                                 'properties.capabilities',
                                 '');
     const profile = parseNodeCapabilities(capabilities).profile;
-    if(profile) {
-      const role = this.props.roles.get(profile);
-      return role ? role.title : profile;
-    } else {
-      return '-';
-    }
+    return profile ? profile : '-';
   }
 
   render() {
@@ -234,6 +228,5 @@ export class NodesTableProfileCell extends React.Component {
 }
 NodesTableProfileCell.propTypes = {
   data: PropTypes.array.isRequired,
-  roles: ImmutablePropTypes.map.isRequired,
   rowIndex: PropTypes.number
 };
