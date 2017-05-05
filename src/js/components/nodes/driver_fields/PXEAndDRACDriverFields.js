@@ -8,6 +8,10 @@ const messages = defineMessages({
     id: 'PXEAndDRACDriverFields.addr_title',
     defaultMessage: 'DRAC Host'
   },
+  port_title: {
+    id: 'PXEAndDRACDriverFields.port_title',
+    defaultMessage: 'DRAC Port'
+  },
   user_title: {
     id: 'PXEAndDRACDriverFields.user_title',
     defaultMessage: 'DRAC Username'
@@ -24,6 +28,7 @@ class PXEAndDRACDriverFields extends React.Component {
       <DriverFields {...this.props}
                     addr_title={this.props.intl.formatMessage(messages.addr_title)}
                     user_title={this.props.intl.formatMessage(messages.user_title)}
+                    port_title={this.props.intl.formatMessage(messages.port_title)}
                     pwd_title={this.props.intl.formatMessage(messages.pwd_title)} />
     );
   }
