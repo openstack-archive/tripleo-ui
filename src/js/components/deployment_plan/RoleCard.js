@@ -32,8 +32,6 @@ const RoleCard = ({ assignedNodesCountParameter,
                     intl,
                     name,
                     title }) => {
-  const disabled = !assignedNodesCountParameter
-                   || !availableNodesCount && !assignedNodesCountParameter.default;
   const validations = [
     maxValue(availableNodesCount, intl.formatMessage(validationMessages.maxValue,
                                                      { max: availableNodesCount })),
@@ -79,17 +77,6 @@ const RoleCard = ({ assignedNodesCountParameter,
             </span>
           </span>
         </div>
-      </div>
-      <div className="card-pf-footer">
-        <p>
-          <Link
-            disabled={disabled}
-            to={`/deployment-plan/${identifier}/assign-nodes`}
-            className="card-pf-link-with-icon">
-            <span className="pficon pficon-add-circle-o" />
-            <FormattedMessage {...messages.assignNodes}/>
-          </Link>
-        </p>
       </div>
     </div>
   );
