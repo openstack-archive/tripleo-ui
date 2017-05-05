@@ -51,7 +51,9 @@ class HeatApiService {
   }
 
   getResources(stackName, stackId) {
-    return this.defaultRequest(`/stacks/${stackName}/${stackId}/resources`);
+    return this.defaultRequest(
+      `/stacks/${stackName}/${stackId}/resources?nested_depth=3`
+    );
   }
 
   getResource(stack, resourceName) {
