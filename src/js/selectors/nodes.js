@@ -20,7 +20,7 @@ export const getNodesWithMacs = createSelector(
   [getNodes, getPorts], (nodes, ports) =>
     nodes.map(node => node
       .set('macs', ports.filter(p => node.get('uuid') === p.node_uuid)
-        .reduce((str, v) => str + v.address, '')))
+        .map(port => port.address).toList()))
 );
 
 /**
