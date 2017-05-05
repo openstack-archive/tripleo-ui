@@ -8,6 +8,10 @@ const messages = defineMessages({
     id: 'PXEAndSSHDriverFields.addr_title',
     defaultMessage: 'SSH IP Address or FQDN'
   },
+  port_title: {
+    id: 'PXEAndSSHDriverFields.port_title',
+    defaultMessage: 'SSH Port'
+  },
   user_title: {
     id: 'PXEAndSSHDriverFields.user_title',
     defaultMessage: 'SSH User'
@@ -24,6 +28,7 @@ class PXEAndSSHDriverFields extends React.Component {
       <DriverFields {...this.props}
                     addr_title={this.props.intl.formatMessage(messages.addr_title)}
                     user_title={this.props.intl.formatMessage(messages.user_title)}
+                    port_title={this.props.intl.formatMessage(messages.port_title)}
                     pwd_title={this.props.intl.formatMessage(messages.pwd_title)} />
     );
   }
