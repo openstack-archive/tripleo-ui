@@ -37,10 +37,10 @@ const messages = defineMessages({
   }
 });
 
-export const NodeMaintenanceState = ({ maintenance }) => {
+export const NodeMaintenanceState = ({ maintenance, reason }) => {
   if (maintenance) {
     return (
-      <span>
+      <span title={reason}>
         {' | '}
         <span className="pficon pficon-warning-triangle-o" />
         &nbsp;
@@ -51,7 +51,11 @@ export const NodeMaintenanceState = ({ maintenance }) => {
   return null;
 };
 NodeMaintenanceState.propTypes = {
-  maintenance: PropTypes.bool.isRequired
+  maintenance: PropTypes.bool.isRequired,
+  reason: PropTypes.string
+};
+NodeMaintenanceState.defaultProps = {
+  reason: ''
 };
 
 export const NodeProvisionState = ({

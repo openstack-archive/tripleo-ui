@@ -157,7 +157,7 @@ class NodesTable extends React.Component {
               <FormattedMessage {...messages.macAddresses} />
             </DataTableHeaderCell>
           }
-          cell={<DataTableDataFieldCell data={filteredData} field="macs" />}
+          cell={<NodesTableMacsCell data={filteredData} field="macs" />}
         />
         <DataTableColumn
           key="name"
@@ -294,6 +294,20 @@ export const NodesTableMaintenanceCell = props => {
   );
 };
 NodesTableMaintenanceCell.propTypes = {
+  data: React.PropTypes.array.isRequired,
+  field: React.PropTypes.string.isRequired,
+  rowIndex: React.PropTypes.number
+};
+
+export const NodesTableMacsCell = props => {
+  const value = _.result(props.data[props.rowIndex], props.field).join(', ');
+  return (
+    <DataTableCell {...props}>
+      {value}
+    </DataTableCell>
+  );
+};
+NodesTableMacsCell.propTypes = {
   data: React.PropTypes.array.isRequired,
   field: React.PropTypes.string.isRequired,
   rowIndex: React.PropTypes.number
