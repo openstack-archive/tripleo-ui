@@ -2,6 +2,50 @@ import ClassNames from 'classnames';
 import { Field } from 'redux-form';
 import React, { PropTypes } from 'react';
 
+/* ListView example usage:
+
+<ListView>
+  <ListViewItem stacked expanded>
+
+    <ListViewItemHeader> // required only if the ListViewItem is supposed to be expandable
+      <ListViewExpand expanded />
+      <ListViewCheckbox disabled={inProgress} name={`values.${node.uuid}`} />
+      <ListViewMainInfo>
+        <ListViewLeft>
+          <ListViewIcon size="sm" icon={iconClass} />
+        </ListViewLeft>
+        <ListViewBody>
+          <ListViewDescription>
+            <ListViewDescriptionHeading>
+              {name}
+            </ListViewDescriptionHeading>
+            <ListViewDescriptionText>
+              {description}
+            </ListViewDescriptionText>
+          </ListViewDescription>
+          <ListViewAdditionalInfo>
+            <ListViewAdditionalInfoItem>
+              <span className="pficon pficon-flavor" />
+              {Item1}
+            </ListViewAdditionalInfoItem>
+            <ListViewAdditionalInfoItem>
+              <span className="pficon pficon-cpu" />
+              {Item2}
+            </ListViewAdditionalInfoItem>
+          </ListViewAdditionalInfo>
+        </ListViewBody>
+      </ListViewMainInfo>
+    </ListViewItemHeader>
+
+    <ListViewItemContainer onClose={functionWhichClosesMe} expanded> // expandable content
+      <Row>Some content goes here</Row>
+    </ListViewItemContainer>
+
+  </ListViewItem>
+  ...
+</ListView>
+*/
+
 export const ListView = ({ children }) => (
   <div className="list-group list-view-pf list-view-pf-view">
     {children}
@@ -33,6 +77,39 @@ ListViewItem.defaultProps = {
   stacked: false
 };
 
+export const ListViewItemHeader = ({ children }) => (
+  <div className="list-group-item-header">
+    {children}
+  </div>
+);
+ListViewItemHeader.propTypes = {
+  children: PropTypes.node
+};
+
+export const ListViewItemContainer = ({ children, expanded, onClose }) => {
+  const classes = ClassNames({
+    'list-group-item-container container-fluid': true,
+    'hidden': !expanded
+  });
+  return (
+    <div className={classes}>
+      {onClose &&
+        <div className="close">
+          <span className="pficon pficon-close" onClick={() => onClose()} />
+        </div>}
+      {expanded && children}
+    </div>
+  );
+};
+ListViewItemContainer.propTypes = {
+  children: PropTypes.node,
+  expanded: PropTypes.bool.isRequired,
+  onClose: PropTypes.func
+};
+ListViewItemContainer.defaultProps = {
+  expanded: false
+};
+
 export const ListViewCheckbox = ({ disabled, name }) => (
   <div className="list-view-pf-checkbox">
     <Field name={name} type="checkbox" component="input" disabled={disabled} />
@@ -46,19 +123,20 @@ ListViewCheckbox.defaultProps = {
   disabled: false
 };
 
-export const ListViewExpand = ({ expanded  }) => {
+export const ListViewExpand = ({ expanded, toggleExpanded }) => {
   const classes = ClassNames({
     'fa fa-angle-right': true,
     'fa-angle-down': expanded
   });
   return (
-    <a className="list-view-pf-expand">
+    <a className="list-view-pf-expand" onClick={() => toggleExpanded()}>
       <span className={classes} />
     </a>
   );
 };
 ListViewExpand.propTypes = {
-  expanded: PropTypes.bool.isRequired
+  expanded: PropTypes.bool.isRequired,
+  toggleExpanded: PropTypes.func.isRequired
 };
 ListViewExpand.defaultProps = {
   expanded: false
