@@ -8,6 +8,10 @@ const messages = defineMessages({
     id: 'PXEAndIPMIToolDriverFields.addr_title',
     defaultMessage: 'IPMI IP Address or FQDN'
   },
+  port_title: {
+    id: 'PXEAndIPMIToolDriverFields.port_title',
+    defaultMessage: 'IPMI Port'
+  },
   user_title: {
     id: 'PXEAndIPMIToolDriverFields.user_title',
     defaultMessage: 'IPMI Username'
@@ -21,10 +25,13 @@ const messages = defineMessages({
 class PXEAndIPMIToolDriverFields extends React.Component {
   render() {
     return (
-      <DriverFields {...this.props}
-                    addr_title={this.props.intl.formatMessage(messages.addr_title)}
-                    user_title={this.props.intl.formatMessage(messages.user_title)}
-                    pwd_title={this.props.intl.formatMessage(messages.pwd_title)} />
+      <DriverFields
+        {...this.props}
+        addr_title={this.props.intl.formatMessage(messages.addr_title)}
+        user_title={this.props.intl.formatMessage(messages.user_title)}
+        port_title={this.props.intl.formatMessage(messages.port_title)}
+        pwd_title={this.props.intl.formatMessage(messages.pwd_title)}
+      />
     );
   }
 }
