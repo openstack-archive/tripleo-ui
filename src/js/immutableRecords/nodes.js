@@ -16,7 +16,7 @@ export const NodeToRegister = Record({
 });
 
 export const IronicNode = Record({
-  uuid: undefined,
+  // uuid: undefined, TODO(jtomasek): re-add this once registration supports passing uuid
   name: undefined,
   mac: List(),
   pm_type: 'pxe_ssh',
