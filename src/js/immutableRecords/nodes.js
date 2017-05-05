@@ -32,5 +32,6 @@ export const IronicNode = Record({
 
 export const Port = Record({
   uuid: undefined,
-  address: undefined
+  address: undefined,
+  node_uuid: undefined
 });
