@@ -31,5 +31,13 @@ export const nodeColumnMessages = defineMessages({
   'properties.memory_mb': {
     id: 'NodeColumns.memoryMb',
     defaultMessage: 'Memory (MB)'
+  },
+  'properties.capabilities.profile': {
+    id: 'NodeColumns.profile',
+    defaultMessage: 'Profile'
+  },
+  'macs': {
+    id: 'NodeColumns.macs',
+    defaultMessage: 'Mac Addresses'
   }
 });
