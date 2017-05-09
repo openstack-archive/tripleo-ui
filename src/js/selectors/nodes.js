@@ -42,17 +42,15 @@ export const getFilteredNodes = createSelector(
   (nodes, nodesToolbarFilter) =>
     nodes
       .update(nodes =>
-        nodesToolbarFilter
-          .get('activeFilters')
-          .reduce(
-            (filteredNodes, filter) =>
-              filteredNodes.filter(node =>
-                (node.get(filter.filterBy) || '')
-                  .toLowerCase()
-                  .includes(filter.filterString.toLowerCase())
-              ),
-            nodes
-          )
+        nodesToolbarFilter.get('activeFilters').reduce(
+          (filteredNodes, filter) =>
+            filteredNodes.filter(node => {
+              return getNodePropertyString(node, filter.filterBy)
+                .toLowerCase()
+                .includes(filter.filterString.toLowerCase());
+            }),
+          nodes
+        )
       )
       .sortBy(node => node.getIn(nodesToolbarFilter.get('sortBy').split('.')))
       .update(
@@ -96,3 +94,20 @@ export const getNodesOperationInProgress = createSelector(
  */
 export const getNodeCapabilities = node =>
   parseNodeCapabilities(node.getIn(['properties', 'capabilities'], ''));
+
+/**
+ * Helper function to get node property value
+ * @param node
+ * @param propName
+ * @returns property value as string
+ */
+export const getNodePropertyString = (node, propName) => {
+  switch (propName) {
+    case 'macs':
+      return node.get(propName).toString();
+    case 'properties.capabilities.profile':
+      return getNodeCapabilities(node).profile || '';
+    default:
+      return node.getIn(propName.split('.')) || '';
+  }
+};
