@@ -5,7 +5,7 @@ export const ActiveFiltersList = ({ children, clearAllLabel, handleClearAll, lab
   if (children.length > 0) {
     return (
       <div style={{display: 'inline'}}>
-        <p>{label}</p>
+        <p>{label}&nbsp;</p>
         <ul className="list-inline">
           {children}
         </ul>
