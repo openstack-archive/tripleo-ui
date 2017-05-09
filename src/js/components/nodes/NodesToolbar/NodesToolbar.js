@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { startCase } from 'lodash';
 import { submit } from 'redux-form';
 import React, { PropTypes } from 'react';
 
@@ -71,9 +70,17 @@ class NodesToolbar extends React.Component {
             initialValues={{ filterBy: 'name' }}
             onSubmit={addActiveFilter}
             options={{
-              name: intl.formatMessage(nodeColumnMessages.name),
-              power_state: intl.formatMessage(nodeColumnMessages.power_state),
-              provision_state: intl.formatMessage(nodeColumnMessages.provision_state)
+              'name': intl.formatMessage(nodeColumnMessages.name),
+              'properties.capabilities.profile': intl.formatMessage(
+                nodeColumnMessages['properties.capabilities.profile']),
+              'properties.cpu_arch': intl.formatMessage(nodeColumnMessages['properties.cpu_arch']),
+              'properties.cpus': intl.formatMessage(nodeColumnMessages['properties.cpus']),
+              'properties.local_gb': intl.formatMessage(nodeColumnMessages['properties.local_gb']),
+              'properties.memory_mb': intl.formatMessage(
+                nodeColumnMessages['properties.memory_mb']),
+              'macs': intl.formatMessage(nodeColumnMessages.macs),
+              'power_state': intl.formatMessage(nodeColumnMessages.power_state),
+              'provision_state': intl.formatMessage(nodeColumnMessages.provision_state)
             }}
             placeholder={intl.formatMessage(messages.filterStringPlaceholder)}/>
           <NodesToolbarForm
@@ -98,7 +105,7 @@ class NodesToolbar extends React.Component {
             label={intl.formatMessage(messages.activeFilters)} >
             {activeFilters.toList().toJS().map(filter => (
               <ActiveFilter
-                filterBy={startCase(filter.filterBy)}
+                filterBy={intl.formatMessage(nodeColumnMessages[filter.filterBy])}
                 filterString={filter.filterString}
                 key={filter.uuid}
                 onRemove={() => deleteActiveFilter(filter.uuid)}/>
