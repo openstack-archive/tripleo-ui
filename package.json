@@ -61,12 +61,14 @@
     "style-loader": "~0.13.1",
     "url-loader": "~0.5.7",
     "webpack": "2.2.1",
-    "webpack-dev-server": "2.2.1"
+    "webpack-dev-server": "2.2.1",
+    "webpack-merge": "^4.1.0"
   },
   "scripts": {
-    "build": "webpack --bail",
+    "build": "webpack --env=prod --bail --progress",
+    "build:dev": "webpack --env=dev --bail --progress",
     "lint": "eslint --max-warnings 0 src",
-    "start": "webpack-dev-server --progress",
+    "start": "webpack-dev-server --env=dev --progress",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "json2pot": "rip json2pot ./i18n/extracted-messages/**/*.json -o ./i18n/messages.pot",
