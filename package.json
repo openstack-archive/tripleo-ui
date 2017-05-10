@@ -64,7 +64,8 @@
     "webpack-dev-server": "2.2.1"
   },
   "scripts": {
-    "build": "webpack --bail",
+    "build": "NODE_ENV=production webpack --bail -p --progress",
+    "build:dev": "webpack --bail --progress",
     "lint": "eslint --max-warnings 0 src",
     "start": "webpack-dev-server --progress",
     "test": "jest",

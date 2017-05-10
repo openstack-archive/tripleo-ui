@@ -1,8 +1,11 @@
 require('es6-promise').polyfill(); // https://github.com/webpack/css-loader/issues/144
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
+var isProduction = process.env.NODE_ENV === 'production';
+var devtool = isProduction ? false : 'inline-source-map';
+
 module.exports = {
-  devtool: 'inline-source-map',
+  devtool: devtool,
   entry: __dirname + '/src/js/index.js',
   output: {
     path: __dirname + '/dist',
