@@ -3,11 +3,11 @@ import { defineMessages } from 'react-intl';
 export const messages = defineMessages({
   maxValue: {
     id: 'reduxForm.validations.maxValue',
-    defaultMessage: 'Maximum value is {max}.'
+    defaultMessage: 'Maximum value is {max, number}.'
   },
   minValue: {
     id: 'reduxForm.validations.minValue',
-    defaultMessage: 'Minimum value is {min}.'
+    defaultMessage: 'Minimum value is {min, number}.'
   },
   number: {
     id: 'reduxForm.validations.number',
