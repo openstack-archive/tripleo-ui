@@ -15,7 +15,6 @@
  */
 
 import { defineMessages } from 'react-intl';
-import { browserHistory } from 'react-router';
 import { startSubmit, stopSubmit } from 'redux-form';
 
 import NotificationActions from '../actions/NotificationActions';
@@ -56,7 +55,7 @@ export default {
     };
   },
 
-  fetchParameters(planName, parentPath) {
+  fetchParameters(planName, redirect) {
     return dispatch => {
       dispatch(this.fetchParametersPending());
       MistralApiService.runAction(MistralConstants.PARAMETERS_GET, {
@@ -78,8 +77,8 @@ export default {
         })
         .catch(error => {
           dispatch(this.fetchParametersFailed());
-          if (parentPath) {
-            browserHistory.push(parentPath);
+          if (redirect) {
+            redirect();
           }
           logger.error(
             'Error in ParametersActions.fetchParameters',
@@ -116,7 +115,7 @@ export default {
     };
   },
 
-  updateParameters(planName, data, inputFieldNames, url) {
+  updateParameters(planName, data, inputFieldNames, redirect) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(startSubmit('nodesAssignment'));
@@ -137,8 +136,8 @@ export default {
               type: 'success'
             })
           );
-          if (url) {
-            browserHistory.push(url);
+          if (redirect) {
+            redirect();
           }
         })
         .catch(error => {

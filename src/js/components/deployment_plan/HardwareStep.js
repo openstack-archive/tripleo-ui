@@ -15,7 +15,7 @@
  */
 
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import React from 'react';
 
 const messages = defineMessages({

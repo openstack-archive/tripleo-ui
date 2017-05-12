@@ -17,7 +17,7 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import { getAppConfig } from '../services/utils';

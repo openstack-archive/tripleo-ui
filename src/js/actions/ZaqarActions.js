@@ -19,14 +19,23 @@ import PlansActions from './PlansActions';
 import RegisterNodesActions from './RegisterNodesActions';
 import ValidationsActions from './ValidationsActions';
 import MistralConstants from '../constants/MistralConstants';
+import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 
 export default {
-  messageReceived(message) {
+  initializeConnection(history) {
+    return (dispatch, getState) => {
+      ZaqarWebSocketService.init(getState, dispatch, history);
+    };
+  },
+
+  messageReceived(message, history) {
     return (dispatch, getState) => {
       const { type, payload } = message.body;
       switch (type) {
         case MistralConstants.BAREMETAL_REGISTER_OR_UPDATE:
-          dispatch(RegisterNodesActions.nodesRegistrationFinished(payload));
+          dispatch(
+            RegisterNodesActions.nodesRegistrationFinished(payload, history)
+          );
           break;
 
         case MistralConstants.BAREMETAL_INTROSPECT:
@@ -43,7 +52,7 @@ export default {
         }
 
         case MistralConstants.PLAN_CREATE: {
-          dispatch(PlansActions.createPlanFinished(payload));
+          dispatch(PlansActions.createPlanFinished(payload, history));
           break;
         }
 

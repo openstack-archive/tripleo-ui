@@ -14,26 +14,25 @@
  * under the License.
  */
 
+import ClassNames from 'classnames';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import FileList from './FileList';
 
-export default class PlanFilesTab extends React.Component {
-  render() {
-    return (
-      <div className={`tab-pane ${this.props.active}`}>
-        <FileList
-          planFiles={this.props.planFiles}
-          selectedFiles={this.props.selectedFiles}
-        />
-      </div>
-    );
-  }
-}
+const PlanFilesTab = ({ active, ...rest }) => (
+  <div className={ClassNames({ 'tab-pane': true, active: active })}>
+    <FileList {...rest} />
+  </div>
+);
 PlanFilesTab.propTypes = {
-  active: PropTypes.string,
+  active: PropTypes.bool.isRequired,
   planFiles: ImmutablePropTypes.map,
   selectedFiles: PropTypes.array
 };
+PlanFilesTab.defaultProps = {
+  active: false
+};
+
+export default PlanFilesTab;

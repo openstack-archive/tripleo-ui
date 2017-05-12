@@ -14,12 +14,13 @@
  * under the License.
  */
 
+import ClassNames from 'classnames';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import HorizontalInput from '../ui/forms/HorizontalInput';
-import NavTab from '../ui/NavTab';
+import Tab from '../ui/Tab';
 import PlanFileInput from './PlanFileInput';
 import PlanFilesTab from './PlanFilesTab';
 import PlanUploadTypeRadios from './PlanUploadTypeRadios';
@@ -57,31 +58,46 @@ const messages = defineMessages({
 });
 
 export default class PlanFormTabs extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      activeTab: 'newPlan'
+    };
+  }
+
   setActiveTab(tabName) {
-    return this.props.currentTab === tabName ? 'active' : '';
+    this.setState({ activeTab: tabName });
+  }
+
+  isActiveTab(tabName) {
+    return this.state.activeTab === tabName;
   }
 
   render() {
     return (
       <div>
         <ul className="nav nav-tabs">
-          <NavTab to="/plans/new" query={{ tab: 'newPlan' }}>
-            <FormattedMessage {...messages.newPlan} />
-          </NavTab>
-          <NavTab to="/plans/new" query={{ tab: 'planFiles' }}>
-            <FormattedMessage {...messages.files} /> <span className="badge">
-              {this.props.selectedFiles.length}
-            </span>
-          </NavTab>
+          <Tab isActive={this.isActiveTab('newPlan')}>
+            <a className="link" onClick={() => this.setActiveTab('newPlan')}>
+              <FormattedMessage {...messages.newPlan} />
+            </a>
+          </Tab>
+          <Tab isActive={this.isActiveTab('planFiles')}>
+            <a className="link" onClick={() => this.setActiveTab('planFiles')}>
+              <FormattedMessage {...messages.files} /> <span className="badge">
+                {this.props.selectedFiles.length}
+              </span>
+            </a>
+          </Tab>
         </ul>
         <div className="tab-content">
           <PlanFormTab
-            active={this.setActiveTab('newPlan')}
+            active={this.isActiveTab('newPlan')}
             uploadType={this.props.uploadType}
             setUploadType={this.props.setUploadType}
           />
           <PlanFilesTab
-            active={this.setActiveTab('planFiles')}
+            active={this.isActiveTab('planFiles')}
             selectedFiles={this.props.selectedFiles}
           />
         </div>
@@ -90,7 +106,6 @@ export default class PlanFormTabs extends React.Component {
   }
 }
 PlanFormTabs.propTypes = {
-  currentTab: PropTypes.string,
   selectedFiles: PropTypes.array,
   setUploadType: PropTypes.func.isRequired,
   uploadType: PropTypes.string.isRequired
@@ -104,7 +119,9 @@ class _PlanFormTab extends React.Component {
   render() {
     const { formatMessage } = this.props.intl;
     return (
-      <div className={`tab-pane ${this.props.active}`}>
+      <div
+        className={ClassNames({ 'tab-pane': true, active: this.props.active })}
+      >
         <HorizontalInput
           name="planName"
           title={formatMessage(messages.planName)}
@@ -136,10 +153,11 @@ class _PlanFormTab extends React.Component {
   }
 }
 _PlanFormTab.propTypes = {
-  active: PropTypes.string,
+  active: PropTypes.bool.isRequired,
   intl: PropTypes.object,
   setUploadType: PropTypes.func.isRequired,
   uploadType: PropTypes.string.isRequired
 };
+_PlanFormTab.defaultProps = { active: false };
 
 const PlanFormTab = injectIntl(_PlanFormTab);

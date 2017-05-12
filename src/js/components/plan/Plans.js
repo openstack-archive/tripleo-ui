@@ -14,21 +14,27 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
 import React from 'react';
+import { Route } from 'react-router-dom';
+
+import ListPlans from './ListPlans';
+import DeletePlan from './DeletePlan';
+import EditPlan from './EditPlan';
+import ExportPlan from './ExportPlan';
+import NewPlan from './NewPlan';
 
 export default class Plans extends React.Component {
   render() {
     return (
       <div className="row">
         <div className="col-sm-12">
-          {this.props.children}
+          <ListPlans />
+          <Route path="/plans/new" component={NewPlan} />
+          <Route path="/plans/:planName/delete" component={DeletePlan} />
+          <Route path="/plans/:planName/edit" component={EditPlan} />
+          <Route path="/plans/:planName/export" component={ExportPlan} />
         </div>
       </div>
     );
   }
 }
-
-Plans.propTypes = {
-  children: PropTypes.node
-};
