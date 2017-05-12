@@ -18,7 +18,7 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import PlansActions from '../../actions/PlansActions';
 import Loader from '../ui/Loader';
@@ -60,7 +60,7 @@ class ExportPlan extends React.Component {
   }
 
   getNameFromUrl() {
-    let planName = this.props.params.planName || '';
+    let planName = this.props.match.params.planName || '';
     return planName.replace(/[^A-Za-z0-9_-]*/g, '');
   }
 
@@ -68,7 +68,7 @@ class ExportPlan extends React.Component {
     return (
       <Modal dialogClasses="modal-sm" id="ExportPlan__exportPlanModal">
         <div className="modal-header">
-          <Link to="/plans/list" type="button" className="close">
+          <Link to="/plans" type="button" className="close">
             <span aria-hidden="true" className="pficon pficon-close" />
           </Link>
           <h4 className="modal-title">
@@ -107,7 +107,7 @@ class ExportPlan extends React.Component {
         </div>
         <div className="modal-footer">
           <Link
-            to="/plans/list"
+            to="/plans"
             type="button"
             className="btn btn-default"
             id="ExportPlan__cancelExportPlanModalButton"
@@ -124,6 +124,7 @@ ExportPlan.propTypes = {
   exportPlan: PropTypes.func,
   intl: PropTypes.object,
   isExportingPlan: PropTypes.bool,
+  match: PropTypes.object,
   params: PropTypes.object,
   planExportUrl: PropTypes.string
 };

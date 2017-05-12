@@ -18,7 +18,7 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import PlansActions from '../../actions/PlansActions';
 import Modal from '../ui/Modal';
@@ -44,7 +44,7 @@ const messages = defineMessages({
 
 class DeletePlan extends React.Component {
   getNameFromUrl() {
-    let planName = this.props.params.planName || '';
+    let planName = this.props.match.params.planName || '';
     return planName.replace(/[^A-Za-z0-9_-]*/g, '');
   }
 
@@ -59,7 +59,7 @@ class DeletePlan extends React.Component {
     return (
       <Modal dialogClasses="modal-sm" id="DeletePlan__deletePlanModal">
         <div className="modal-header">
-          <Link to="/plans/list" type="button" className="close">
+          <Link to="/plans" type="button" className="close">
             <span aria-hidden="true" className="pficon pficon-close" />
           </Link>
           <h4 className="modal-title">
@@ -97,7 +97,7 @@ class DeletePlan extends React.Component {
             <FormattedMessage {...messages.deletePlan} />
           </button>
           <Link
-            to="/plans/list"
+            to="/plans"
             type="button"
             className="btn btn-default"
             id="DeletePlan__cancelDeletePlanModalButton"
@@ -112,13 +112,14 @@ class DeletePlan extends React.Component {
 
 DeletePlan.propTypes = {
   deletePlan: PropTypes.func,
+  match: PropTypes.object,
   params: PropTypes.object
 };
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, ownProps) {
   return {
     deletePlan: planName => {
-      dispatch(PlansActions.deletePlan(planName));
+      dispatch(PlansActions.deletePlan(planName, ownProps.history));
     }
   };
 }

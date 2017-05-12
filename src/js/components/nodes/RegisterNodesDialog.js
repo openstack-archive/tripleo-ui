@@ -18,7 +18,7 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ClassNames from 'classnames';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';

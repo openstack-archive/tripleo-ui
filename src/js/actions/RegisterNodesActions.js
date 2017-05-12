@@ -14,7 +14,6 @@
  * under the License.
  */
 
-import { browserHistory } from 'react-router';
 import { defineMessages } from 'react-intl';
 import { normalize, arrayOf } from 'normalizr';
 import { Map } from 'immutable';
@@ -69,7 +68,7 @@ export default {
     };
   },
 
-  startNodesRegistration(nodes, redirectPath) {
+  startNodesRegistration(nodes) {
     return (dispatch, getState) => {
       dispatch(this.startNodesRegistrationPending(nodes));
       MistralApiService.runWorkflow(
@@ -124,7 +123,7 @@ export default {
     };
   },
 
-  nodesRegistrationFinished(messagePayload) {
+  nodesRegistrationFinished(messagePayload, history) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       const registeredNodes =
@@ -152,7 +151,7 @@ export default {
             })
           );
           dispatch(this.nodesRegistrationSuccess());
-          browserHistory.push('/nodes');
+          history.push('/nodes');
           break;
         }
         case 'FAILED': {
@@ -162,7 +161,7 @@ export default {
               message: JSON.stringify(messagePayload.message)
             }
           ];
-          browserHistory.push('/nodes/register');
+          history.push('/nodes/register');
           // TODO(jtomasek): repopulate nodes registration form with failed nodes provided by message
           dispatch(this.nodesRegistrationFailed(errors));
           break;

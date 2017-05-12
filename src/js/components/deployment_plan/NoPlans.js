@@ -15,7 +15,7 @@
  */
 
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import React from 'react';
 
 const messages = defineMessages({
@@ -43,11 +43,7 @@ export default class NoPlans extends React.Component {
         <h1><FormattedMessage {...messages.noPlansAvailable} /></h1>
         <p><FormattedMessage {...messages.noPlansAvailableMessage} /></p>
         <div className="blank-slate-pf-main-action">
-          <Link
-            to="/plans/new"
-            query={{ tab: 'newPlan' }}
-            className="btn btn-lg btn-primary"
-          >
+          <Link to="/plans/new" className="btn btn-lg btn-primary">
             <span className="fa fa-plus" />
             {' '}
             <FormattedMessage {...messages.createNewPlan} />

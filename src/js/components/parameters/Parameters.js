@@ -19,7 +19,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { isObjectLike, mapValues } from 'lodash';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 import { fromJS, is } from 'immutable';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -68,11 +68,10 @@ class Parameters extends React.Component {
       currentPlanName,
       fetchEnvironmentConfiguration,
       fetchParameters,
-      isFetchingParameters,
-      parentPath
+      isFetchingParameters
     } = this.props;
-    fetchEnvironmentConfiguration(currentPlanName, parentPath);
-    !isFetchingParameters && fetchParameters(currentPlanName, parentPath);
+    fetchEnvironmentConfiguration(currentPlanName);
+    !isFetchingParameters && fetchParameters(currentPlanName);
   }
 
   componentDidUpdate() {
@@ -135,7 +134,7 @@ class Parameters extends React.Component {
         closeOnSubmit: false
       });
 
-      browserHistory.push(this.props.parentPath);
+      this.props.history.push('/deployment-plan');
     }
   }
 
@@ -281,12 +280,7 @@ Parameters.propTypes = {
   mistralParameters: ImmutablePropTypes.map.isRequired,
   parameters: ImmutablePropTypes.map.isRequired,
   parametersLoaded: PropTypes.bool,
-  parentPath: PropTypes.string.isRequired,
   updateParameters: PropTypes.func
-};
-
-Parameters.defaultProps = {
-  parentPath: '/deployment-plan'
 };
 
 function mapStateToProps(state, ownProps) {
@@ -303,28 +297,30 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, ownProps) {
   return {
-    fetchEnvironmentConfiguration: (currentPlanName, redirectPath) => {
+    fetchEnvironmentConfiguration: currentPlanName => {
       dispatch(
         EnvironmentConfigurationActions.fetchEnvironmentConfiguration(
           currentPlanName,
-          redirectPath
+          () => ownProps.history.push('/deployment-plan')
         )
       );
     },
-    fetchParameters: (currentPlanName, redirectPath) => {
+    fetchParameters: currentPlanName => {
       dispatch(
-        ParametersActions.fetchParameters(currentPlanName, redirectPath)
+        ParametersActions.fetchParameters(currentPlanName, () =>
+          ownProps.history.push('/deployment-plan')
+        )
       );
     },
-    updateParameters: (currentPlanName, data, inputFields, redirectPath) => {
+    updateParameters: (currentPlanName, data, inputFields, redirect) => {
       dispatch(
         ParametersActions.updateParameters(
           currentPlanName,
           data,
           inputFields,
-          redirectPath
+          redirect
         )
       );
     }

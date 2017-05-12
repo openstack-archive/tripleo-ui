@@ -99,7 +99,6 @@ class RoleServices extends React.Component {
 RoleServices.propTypes = {
   intl: PropTypes.object,
   mistralParameters: ImmutablePropTypes.map.isRequired,
-  params: PropTypes.object.isRequired,
   role: ImmutablePropTypes.record.isRequired,
   services: ImmutablePropTypes.map.isRequired
 };
@@ -107,8 +106,8 @@ RoleServices.propTypes = {
 function mapStateToProps(state, props) {
   return {
     mistralParameters: state.parameters.mistralParameters,
-    role: getRole(state, props.params.roleIdentifier),
-    services: getRoleServices(state, props.params.roleIdentifier)
+    role: getRole(state, props.match.params.roleIdentifier),
+    services: getRoleServices(state, props.match.params.roleIdentifier)
   };
 }
 

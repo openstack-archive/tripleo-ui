@@ -16,7 +16,7 @@
 
 import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -52,7 +52,7 @@ export default class PlansDropdown extends React.Component {
   render() {
     if (this.props.plans.isEmpty()) {
       return (
-        <Link className="btn btn-link" to="/plans/list">
+        <Link className="btn btn-link" to="/plans">
           <FormattedMessage {...messages.manageDeployments} />
         </Link>
       );
@@ -64,7 +64,7 @@ export default class PlansDropdown extends React.Component {
           </DropdownButton>
           {this.renderRecentPlans()}
           <DropdownItem key="divider" divider />
-          <DropdownItem key="plansLink" to="/plans/list">
+          <DropdownItem key="plansLink" to="/plans">
             <FormattedMessage {...messages.manageDeployments} />
           </DropdownItem>
         </Dropdown>

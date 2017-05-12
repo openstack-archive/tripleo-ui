@@ -20,10 +20,11 @@ import Formsy from 'formsy-react';
 import { fromJS, is } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { isObjectLike, mapValues } from 'lodash';
+import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router';
 
+import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
 import { getRole } from '../../selectors/roles';
 import { getRoleServices } from '../../selectors/parameters';
 import Loader from '../ui/Loader';
@@ -37,6 +38,9 @@ import {
 } from '../ui/ModalPanel';
 import NavTab from '../ui/NavTab';
 import ParametersActions from '../../actions/ParametersActions';
+import RoleNetworkConfig from './RoleNetworkConfig';
+import RoleParameters from './RoleParameters';
+import RoleServices from './RoleServices';
 
 const messages = defineMessages({
   networkConfiguration: {
@@ -134,30 +138,40 @@ class RoleDetail extends React.Component {
   }
 
   renderRoleTabs() {
-    if (this.props.rolesLoaded && this.props.parametersLoaded) {
+    const {
+      formErrors,
+      location,
+      match: { params: urlParams },
+      parametersLoaded,
+      rolesLoaded
+    } = this.props;
+    if (rolesLoaded && parametersLoaded) {
       return (
         <div className="row">
           <ul className="nav nav-tabs">
             <NavTab
-              to={`/deployment-plan/roles/${this.props.params.roleIdentifier}/parameters`}
+              location={location}
+              to={`/deployment-plan/roles/${urlParams.roleIdentifier}/parameters`}
             >
               <FormattedMessage {...messages.parameters} />
             </NavTab>
             <NavTab
-              to={`/deployment-plan/roles/${this.props.params.roleIdentifier}/services`}
+              location={location}
+              to={`/deployment-plan/roles/${urlParams.roleIdentifier}/services`}
             >
               <FormattedMessage {...messages.services} />
             </NavTab>
             <NavTab
+              location={location}
               to={
-                `/deployment-plan/roles/${this.props.params.roleIdentifier}` +
+                `/deployment-plan/roles/${urlParams.roleIdentifier}` +
                   '/network-configuration'
               }
             >
               <FormattedMessage {...messages.networkConfiguration} />
             </NavTab>
           </ul>
-          <ModalFormErrorList errors={this.props.formErrors.toJS()} />
+          <ModalFormErrorList errors={formErrors.toJS()} />
         </div>
       );
     }
@@ -166,6 +180,7 @@ class RoleDetail extends React.Component {
   render() {
     const dataLoaded = this.props.rolesLoaded && this.props.parametersLoaded;
     const roleName = this.props.role ? this.props.role.name : null;
+    const { match: { params: urlParams } } = this.props;
 
     return (
       <Formsy.Form
@@ -198,7 +213,24 @@ class RoleDetail extends React.Component {
               )}
               loaded={dataLoaded}
             >
-              {this.props.children}
+              <Switch>
+                <Route
+                  path="/deployment-plan/roles/:roleIdentifier/parameters"
+                  component={RoleParameters}
+                />
+                <Route
+                  path="/deployment-plan/roles/:roleIdentifier/services"
+                  component={RoleServices}
+                />
+                <Route
+                  path="/deployment-plan/roles/:roleIdentifier/network-configuration"
+                  component={RoleNetworkConfig}
+                />
+                <Redirect
+                  from="/deployment-plan/roles/:roleIdentifier"
+                  to={`/deployment-plan/roles/${urlParams.roleIdentifier}/parameters`}
+                />
+              </Switch>
             </Loader>
           </ModalPanelBody>
           {dataLoaded
@@ -219,14 +251,14 @@ class RoleDetail extends React.Component {
 }
 RoleDetail.propTypes = {
   allParameters: ImmutablePropTypes.map.isRequired,
-  children: PropTypes.node,
   currentPlanName: PropTypes.string,
   fetchParameters: PropTypes.func,
   formErrors: ImmutablePropTypes.list,
   formFieldErrors: ImmutablePropTypes.map,
   intl: PropTypes.object,
+  location: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
   parametersLoaded: PropTypes.bool.isRequired,
-  params: PropTypes.object.isRequired,
   role: ImmutablePropTypes.record,
   rolesLoaded: PropTypes.bool.isRequired,
   updateParameters: PropTypes.func
@@ -239,8 +271,8 @@ function mapStateToProps(state, props) {
     formFieldErrors: state.parameters.form.get('formFieldErrors'),
     allParameters: state.parameters.parameters,
     parametersLoaded: state.parameters.loaded,
-    role: getRole(state, props.params.roleIdentifier),
-    roleServices: getRoleServices(state, props.params.roleIdentifier),
+    role: getRole(state, props.match.params.roleIdentifier),
+    roleServices: getRoleServices(state, props.match.params.roleIdentifier),
     rolesLoaded: state.roles.get('loaded')
   };
 }
@@ -265,6 +297,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default injectIntl(
-  connect(mapStateToProps, mapDispatchToProps)(RoleDetail)
+export default checkRunningDeployment(
+  injectIntl(connect(mapStateToProps, mapDispatchToProps)(RoleDetail))
 );
