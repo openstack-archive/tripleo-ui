@@ -253,8 +253,6 @@
         "ValidationsList.noValidationsMessage": "\uc9c0\uae08 validation \uc911\uc778 \uac83\uc774 \uc5c6\uc2b5\ub2c8\ub2e4.",
         "ValidationsList.refresh": "\uac31\uc2e0",
         "ValidationsList.validations": "Validations",
-        "reduxForm.validations.maxValue": "\ucd5c\ub300\uac12\uc740 {max} \uc785\ub2c8\ub2e4.",
-        "reduxForm.validations.minValue": "\ucd5c\uc18c\uac12\uc740 {min} \uc785\ub2c8\ub2e4.",
         "reduxForm.validations.number": "\uac12\uc740 \uc22b\uc790\uc5ec\uc57c \ud569\ub2c8\ub2e4."
     }
 }

@@ -1,6 +1,7 @@
 {
     "es": {
         "AuthenticatedContent.loadingDeployments": "Cargando despliegues...",
+        "ConfigurePlanStep.editConfigurationLink": "Editar configuraci\u00f3n",
         "ContentView.list": "Vista en modo lista",
         "ContentView.table": "Vista como tabla",
         "CurrentPlanActions.planActivatedNotificationMessage": "El plan {planName} ha sido activado.",
@@ -221,6 +222,7 @@
         "RegisteredNodesTabPane.provideNodes": "Provea los nodos",
         "RegisteredNodesTabPane.tagNodes": "Etiquetar nodos",
         "RoleCard.assignNodes": "Asignar nodos",
+        "RoleCard.availableNodesCount": "de {count, number}",
         "RoleCard.nodesAssigned": "Nodos asignados",
         "RoleDetail.loadingParameters": "Cargando par\u00e1metros...",
         "RoleDetail.networkConfiguration": "Configuraci\u00f3n de red",
@@ -262,8 +264,8 @@
         "ValidationsList.noValidationsMessage": "No hay validaciones actualmente.",
         "ValidationsList.refresh": "Actualizar",
         "ValidationsList.validations": "Validaciones",
-        "reduxForm.validations.maxValue": "El m\u00e1ximo valor es {max}.",
-        "reduxForm.validations.minValue": "El m\u00ednimo valor es {min}.",
+        "reduxForm.validations.maxValue": "El valor m\u00e1ximo es {max, number}.",
+        "reduxForm.validations.minValue": "El valor m\u00ednimo es {min, number}.",
         "reduxForm.validations.number": "El valor debe ser un n\u00famero."
     }
 }
