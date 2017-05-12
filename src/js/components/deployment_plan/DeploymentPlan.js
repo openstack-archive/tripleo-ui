@@ -19,7 +19,10 @@ import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Route } from 'react-router-dom';
 
+import DeploymentConfiguration from './DeploymentConfiguration';
+import DeploymentDetail from '../deployment/DeploymentDetail';
 import { getAllPlansButCurrent } from '../../selectors/plans';
 import {
   getCurrentStack,
@@ -50,10 +53,11 @@ import NoPlans from './NoPlans';
 import NotificationActions from '../../actions/NotificationActions';
 import ParametersActions from '../../actions/ParametersActions';
 import PlansActions from '../../actions/PlansActions';
-import StacksActions from '../../actions/StacksActions';
-import stackStates from '../../constants/StacksConstants';
+import RoleDetail from '../roles/RoleDetail';
 import RolesStep from './RolesStep';
 import RolesActions from '../../actions/RolesActions';
+import StacksActions from '../../actions/StacksActions';
+import stackStates from '../../constants/StacksConstants';
 import ValidationsActions from '../../actions/ValidationsActions';
 
 const messages = defineMessages({
@@ -168,18 +172,9 @@ class DeploymentPlan extends React.Component {
 
   render() {
     const { formatMessage } = this.props.intl;
-    let children;
     const currentPlanName = this.props.hasPlans
       ? this.props.currentPlan.name
       : undefined;
-
-    // Render children only when current plan is already selected
-    if (this.props.children && currentPlanName) {
-      children = React.cloneElement(this.props.children, {
-        currentPlanName: currentPlanName,
-        parentPath: '/' + this.props.route.path
-      });
-    }
 
     return (
       <div className="row">
@@ -273,7 +268,18 @@ class DeploymentPlan extends React.Component {
           : <div className="col-sm-12">
               <NoPlans />
             </div>}
-        {children}
+        <Route
+          path="/deployment-plan/configuration"
+          component={DeploymentConfiguration}
+        />
+        <Route
+          path="/deployment-plan/roles/:roleIdentifier"
+          component={RoleDetail}
+        />
+        <Route
+          path="/deployment-plan/deployment-detail"
+          component={DeploymentDetail}
+        />
       </div>
     );
   }
@@ -282,7 +288,6 @@ class DeploymentPlan extends React.Component {
 DeploymentPlan.propTypes = {
   availableNodes: ImmutablePropTypes.map,
   availableNodesCountsByRole: ImmutablePropTypes.map.isRequired,
-  children: PropTypes.node,
   choosePlan: PropTypes.func,
   currentPlan: ImmutablePropTypes.record,
   currentStack: ImmutablePropTypes.record,

@@ -27,7 +27,7 @@ export default {
   socket: null,
   clientID: null,
 
-  init(getState, dispatch) {
+  init(getState, dispatch, history) {
     when.try(getServiceUrl, 'zaqar-websocket').then(serviceUrl => {
       this.socket = new WebSocket(serviceUrl);
       this.clientID = uuid.v4();
@@ -55,7 +55,7 @@ export default {
       };
 
       this.socket.onmessage = evt => {
-        dispatch(ZaqarActions.messageReceived(JSON.parse(evt.data)));
+        dispatch(ZaqarActions.messageReceived(JSON.parse(evt.data), history));
       };
     });
   },

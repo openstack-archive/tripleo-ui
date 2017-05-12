@@ -18,7 +18,7 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -107,7 +107,7 @@ class NewPlan extends React.Component {
         >
           <div className="modal-header">
             <Link
-              to="/plans/list"
+              to="/plans"
               type="button"
               onClick={() => this.props.cancelCreatePlan()}
               className="close"
@@ -126,7 +126,6 @@ class NewPlan extends React.Component {
             <ModalFormErrorList errors={this.props.planFormErrors.toJS()} />
             <div className="modal-body">
               <PlanFormTabs
-                currentTab={this.props.location.query.tab || 'newPlan'}
                 selectedFiles={this.state.selectedFiles}
                 setUploadType={this.setUploadType.bind(this)}
                 uploadType={this.state.uploadType}
@@ -143,7 +142,7 @@ class NewPlan extends React.Component {
               <FormattedMessage {...messages.uploadAndCreate} />
             </button>
             <Link
-              to="/plans/list"
+              to="/plans"
               type="button"
               onClick={() => this.props.cancelCreatePlan()}
               className="btn btn-default"

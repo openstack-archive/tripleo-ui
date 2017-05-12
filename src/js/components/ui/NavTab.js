@@ -16,28 +16,32 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, Route } from 'react-router-dom';
 
-export default class NavTab extends Link {
-  render() {
-    let router = this.context.router;
-    let isActive = router.isActive(
-      { pathname: this.props.to, query: this.props.query },
-      this.props.onlyActiveOnIndex
-    );
-    let className = isActive ? 'active' : '';
-    let link = <Link {...this.props} />;
-    return <li className={className}>{link}</li>;
-  }
-}
+const NavTab = ({ activeClassName, children, to, exact, location }) => {
+  return (
+    <Route
+      location={location}
+      path={typeof to === 'object' ? to.pathname : to}
+      exact={exact}
+      children={({ match, location }) => (
+        <li className={match ? activeClassName : ''}>
+          <Link to={to}>{children}</Link>
+        </li>
+      )}
+    />
+  );
+};
 NavTab.propTypes = {
-  onlyActiveOnIndex: PropTypes.bool.isRequired,
-  query: PropTypes.object,
-  to: PropTypes.oneOfType([PropTypes.string, PropTypes.route]).isRequired
+  activeClassName: PropTypes.string.isRequired,
+  children: PropTypes.node,
+  exact: PropTypes.bool.isRequired,
+  location: PropTypes.object,
+  to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired
 };
 NavTab.defaultProps = {
-  onlyActiveOnIndex: false
+  activeClassName: 'active',
+  exact: false
 };
-NavTab.contextTypes = {
-  router: PropTypes.object
-};
+
+export default NavTab;

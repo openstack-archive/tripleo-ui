@@ -19,13 +19,18 @@ import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 
+import DeploymentPlan from './deployment_plan/DeploymentPlan';
 import Loader from './ui/Loader';
 import LoginActions from '../actions/LoginActions';
-import PlansActions from '../actions/PlansActions';
 import NavBar from './NavBar';
+import Nodes from './nodes/Nodes';
+import Plans from './plan/Plans.js';
+import PlansActions from '../actions/PlansActions';
 import ValidationsList from './validations/ValidationsList';
 import WorkflowExecutionsActions from '../actions/WorkflowExecutionsActions';
+import ZaqarActions from '../actions/ZaqarActions';
 
 const messages = defineMessages({
   loadingDeployments: {
@@ -38,27 +43,37 @@ class AuthenticatedContent extends React.Component {
   componentDidMount() {
     this.props.fetchPlans();
     this.props.fetchWorkflowExecutions();
+    this.props.initializeZaqarConnection();
   }
 
   render() {
+    const {
+      currentPlanName,
+      intl,
+      logoutUser,
+      noPlans,
+      plansLoaded,
+      user
+    } = this.props;
     return (
       <Loader
-        loaded={
-          this.props.plansLoaded &&
-            (!!this.props.currentPlanName || this.props.noPlans)
-        }
-        content={this.props.intl.formatMessage(messages.loadingDeployments)}
+        loaded={plansLoaded && (!!currentPlanName || noPlans)}
+        content={intl.formatMessage(messages.loadingDeployments)}
         global
       >
         <header>
-          <NavBar
-            user={this.props.user}
-            onLogout={this.props.logoutUser.bind(this)}
-          />
+          <NavBar user={user} onLogout={logoutUser.bind(this)} />
         </header>
         <div className="wrapper-fixed-body container-fluid">
           <div className="row">
-            <div className="col-sm-12 col-lg-9">{this.props.children}</div>
+            <div className="col-sm-12 col-lg-9">
+              <Switch>
+                <Route path="/nodes" component={Nodes} />
+                <Route path="/deployment-plan" component={DeploymentPlan} />
+                <Route path="/plans" component={Plans} />
+                <Redirect from="/" to="/deployment-plan" />
+              </Switch>
+            </div>
             <ValidationsList />
           </div>
         </div>
@@ -72,6 +87,7 @@ AuthenticatedContent.propTypes = {
   dispatch: PropTypes.func,
   fetchPlans: PropTypes.func,
   fetchWorkflowExecutions: PropTypes.func,
+  initializeZaqarConnection: PropTypes.func.isRequired,
   intl: PropTypes.object,
   logoutUser: PropTypes.func.isRequired,
   noPlans: PropTypes.bool,
@@ -79,24 +95,22 @@ AuthenticatedContent.propTypes = {
   user: ImmutablePropTypes.map
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    logoutUser: () => dispatch(LoginActions.logoutUser()),
-    fetchPlans: () => dispatch(PlansActions.fetchPlans()),
-    fetchWorkflowExecutions: () =>
-      dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions())
-  };
-};
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  logoutUser: () => dispatch(LoginActions.logoutUser()),
+  fetchPlans: () => dispatch(PlansActions.fetchPlans()),
+  fetchWorkflowExecutions: () =>
+    dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
+  initializeZaqarConnection: () =>
+    dispatch(ZaqarActions.initializeConnection(ownProps.history))
+});
 
-const mapStateToProps = state => {
-  return {
-    currentPlanName: state.currentPlan.currentPlanName,
-    noPlans: state.plans.get('all').isEmpty(),
-    plansLoaded: state.plans.get('plansLoaded'),
-    user: state.login.getIn(['token', 'user'])
-  };
-};
+const mapStateToProps = state => ({
+  currentPlanName: state.currentPlan.currentPlanName,
+  noPlans: state.plans.get('all').isEmpty(),
+  plansLoaded: state.plans.get('plansLoaded'),
+  user: state.login.getIn(['token', 'user'])
+});
 
 export default injectIntl(
-  connect(mapStateToProps, mapDispatchToProps)(AuthenticatedContent)
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(AuthenticatedContent))
 );

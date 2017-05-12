@@ -20,7 +20,6 @@ import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
 
 import CurrentPlanActions from '../actions/CurrentPlanActions';
-import { browserHistory } from 'react-router';
 import logger from '../services/logger';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
@@ -166,14 +165,14 @@ export default {
     };
   },
 
-  updatePlan(planName, planFiles) {
+  updatePlan(planName, planFiles, history) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.updatePlanPending(planName));
       this._uploadFilesToContainer(planName, fromJS(planFiles), dispatch)
         .then(() => {
           dispatch(this.updatePlanSuccess(planName));
-          browserHistory.push('/plans/list');
+          history.push('/plans');
           dispatch(
             NotificationActions.notify({
               title: formatMessage(messages.planUpdatedNotificationTitle),
@@ -195,14 +194,14 @@ export default {
     };
   },
 
-  updatePlanFromTarball(planName, file) {
+  updatePlanFromTarball(planName, file, history) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.updatePlanPending(planName));
       SwiftApiService.uploadTarball(planName, file)
         .then(response => {
           dispatch(this.updatePlanSuccess(planName));
-          browserHistory.push('/plans/list');
+          history.push('/plans');
           dispatch(
             NotificationActions.notify({
               title: formatMessage(messages.planUpdatedNotificationTitle),
@@ -335,7 +334,7 @@ export default {
     };
   },
 
-  createPlanFinished(payload) {
+  createPlanFinished(payload, history) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       if (payload.status === 'SUCCESS') {
@@ -351,7 +350,7 @@ export default {
           })
         );
         dispatch(this.fetchPlans());
-        browserHistory.push('/plans/list');
+        history.push('/plans');
       } else {
         dispatch(
           this.createPlanFailed([{ title: 'Error', message: payload.message }])
@@ -436,11 +435,11 @@ export default {
     };
   },
 
-  deletePlan(planName) {
+  deletePlan(planName, history) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.deletePlanPending(planName));
-      browserHistory.push('/plans/list');
+      history.push('/plans');
       MistralApiService.runAction(MistralConstants.PLAN_DELETE, {
         container: planName
       })

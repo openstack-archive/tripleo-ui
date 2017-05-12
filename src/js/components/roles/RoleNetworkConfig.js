@@ -39,18 +39,17 @@ class RoleNetworkConfig extends React.Component {
 RoleNetworkConfig.propTypes = {
   description: PropTypes.string,
   mistralParameters: ImmutablePropTypes.map.isRequired,
-  parameters: ImmutablePropTypes.map.isRequired,
-  params: PropTypes.object.isRequired
+  parameters: ImmutablePropTypes.map.isRequired
 };
 
 function mapStateToProps(state, props) {
   return {
-    description: getRoleNetworkConfig(state, props.params.roleIdentifier)
+    description: getRoleNetworkConfig(state, props.match.params.roleIdentifier)
       .description,
     mistralParameters: state.parameters.mistralParameters,
-    parameters: getRoleNetworkConfig(state, props.params.roleIdentifier)
+    parameters: getRoleNetworkConfig(state, props.match.params.roleIdentifier)
       .parameters,
-    role: getRole(state, props.params.roleIdentifier)
+    role: getRole(state, props.match.params.roleIdentifier)
   };
 }
 
