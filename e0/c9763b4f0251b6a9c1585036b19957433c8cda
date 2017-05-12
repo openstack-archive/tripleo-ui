@@ -1,0 +1,8 @@
+Code-Review+2: Honza Pokorny <honza@redhat.com>
+Workflow+1: Honza Pokorny <honza@redhat.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Fri, 12 May 2017 03:48:35 +0000
+Reviewed-on: https://review.openstack.org/463501
+Project: openstack/tripleo-ui
+Branch: refs/heads/master
