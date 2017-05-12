@@ -20,7 +20,6 @@ import yaml from 'js-yaml';
 
 import EnvironmentConfigurationConstants
   from '../constants/EnvironmentConfigurationConstants';
-import { browserHistory } from 'react-router';
 import MistralApiService from '../services/MistralApiService';
 import NotificationActions from '../actions/NotificationActions';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
@@ -42,7 +41,7 @@ const messages = defineMessages({
 });
 
 export default {
-  fetchEnvironmentConfiguration(planName, redirectPath) {
+  fetchEnvironmentConfiguration(planName, redirect) {
     return dispatch => {
       dispatch(this.fetchEnvironmentConfigurationPending());
       MistralApiService.runAction(MistralConstants.CAPABILITIES_GET, {
@@ -60,8 +59,8 @@ export default {
             'Error retrieving EnvironmentConfigurationActions.fetchEnvironment',
             error.stack || error
           );
-          if (redirectPath) {
-            browserHistory.push(redirectPath);
+          if (redirect) {
+            redirect();
           }
           dispatch(this.fetchEnvironmentConfigurationFailed());
           let errorHandler = new MistralApiErrorHandler(error);
@@ -91,7 +90,7 @@ export default {
     };
   },
 
-  updateEnvironmentConfiguration(planName, data, formFields, redirectPath) {
+  updateEnvironmentConfiguration(planName, data, formFields, redirect) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.updateEnvironmentConfigurationPending());
@@ -104,8 +103,8 @@ export default {
             response.output
           ).result.environments.map(env => env.path);
           dispatch(this.updateEnvironmentConfigurationSuccess(enabledEnvs));
-          if (redirectPath) {
-            browserHistory.push(redirectPath);
+          if (redirect) {
+            redirect();
           }
           dispatch(
             NotificationActions.notify({

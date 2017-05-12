@@ -16,7 +16,7 @@
 
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -88,11 +88,7 @@ class ListPlans extends React.Component {
             <FormattedMessage {...messages.noPlans} />
           </p>
           <p className="text-center">
-            <Link
-              to="/plans/new"
-              query={{ tab: 'newPlan' }}
-              className="btn btn-success"
-            >
+            <Link to="/plans/new" className="btn btn-success">
               <FormattedMessage {...messages.createNewPlan} />
             </Link>
           </p>
@@ -105,7 +101,6 @@ class ListPlans extends React.Component {
     return (
       <Link
         to="/plans/new"
-        query={{ tab: 'newPlan' }}
         className="btn btn-primary"
         id="ListPlans__newPlanLink"
       >
@@ -206,7 +201,6 @@ class RowActionsCell extends React.Component {
           <Link
             key="edit"
             to={`/plans/${plan.name}/edit`}
-            query={{ tab: 'editPlan' }}
             className="btn btn-xs btn-default"
           >
             <FormattedMessage {...messages.edit} />

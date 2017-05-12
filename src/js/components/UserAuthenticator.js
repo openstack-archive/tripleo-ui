@@ -15,11 +15,15 @@
  */
 
 import { connect } from 'react-redux';
+import cookie from 'react-cookie';
 import { defineMessages, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 
+import AuthenticatedContent from './AuthenticatedContent';
 import Loader from './ui/Loader';
+import LoginActions from '../actions/LoginActions';
 import NotificationsToaster from './notifications/NotificationsToaster';
 
 const messages = defineMessages({
@@ -30,37 +34,71 @@ const messages = defineMessages({
 });
 
 /**
- * Takes care of authenticating user. User Authentication is triggered in routes
- * 'onEnter' to this component. After authentication is resolved, component children
- * are rendered. No Actions calling API services can be dispatched from this component
+ * Takes care of authenticating user. After authentication is resolved, AuthenticatedContent
+ * is rendered. No Actions calling API services except Keystone can be dispatched from this
+ * component
  */
 class UserAuthenticator extends React.Component {
+  componentWillMount() {
+    this.checkAuth(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.checkAuth(nextProps);
+  }
+
+  checkAuth(props) {
+    const { isAuthenticated, isAuthenticating } = props;
+    const keystoneAuthTokenId = cookie.load('keystoneAuthTokenId');
+    if (!isAuthenticated && !isAuthenticating && keystoneAuthTokenId) {
+      this.props.authenticateUserViaToken(keystoneAuthTokenId);
+    }
+  }
+
   render() {
-    return (
-      <div>
-        <Loader
-          loaded={this.props.isAuthenticated}
-          content={this.props.intl.formatMessage(messages.authenticating)}
-          global
-        >
-          {this.props.children}
-        </Loader>
-        <NotificationsToaster />
-      </div>
-    );
+    const { isAuthenticating, isAuthenticated, location } = this.props;
+    const keystoneAuthTokenId = cookie.load('keystoneAuthTokenId');
+
+    if (isAuthenticated || isAuthenticating || keystoneAuthTokenId) {
+      return (
+        <div>
+          <Loader
+            loaded={this.props.isAuthenticated}
+            content={this.props.intl.formatMessage(messages.authenticating)}
+            global
+          >
+            <AuthenticatedContent />
+          </Loader>
+          <NotificationsToaster />
+        </div>
+      );
+    } else {
+      return (
+        <Redirect to={{ pathname: '/login', state: { from: location } }} />
+      );
+    }
   }
 }
 UserAuthenticator.propTypes = {
-  children: PropTypes.node,
-  dispatch: PropTypes.func,
+  authenticateUserViaToken: PropTypes.func.isRequired,
   intl: PropTypes.object,
-  isAuthenticated: PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool.isRequired,
+  isAuthenticating: PropTypes.bool.isRequired,
+  location: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.login.isAuthenticated
+    isAuthenticated: state.login.isAuthenticated,
+    isAuthenticating: state.login.isAuthenticating
   };
 };
 
-export default injectIntl(connect(mapStateToProps)(UserAuthenticator));
+const mapDispatchToProps = dispatch => ({
+  authenticateUserViaToken: tokenId =>
+    dispatch(LoginActions.authenticateUserViaToken(tokenId))
+});
+
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(UserAuthenticator)
+);

@@ -36,16 +36,16 @@ class RoleParameters extends React.Component {
   }
 }
 RoleParameters.propTypes = {
+  match: PropTypes.object.isRequired,
   mistralParameters: ImmutablePropTypes.map.isRequired,
-  parameters: ImmutablePropTypes.map.isRequired,
-  params: PropTypes.object.isRequired
+  parameters: ImmutablePropTypes.map.isRequired
 };
 
 function mapStateToProps(state, props) {
   return {
     mistralParameters: state.parameters.mistralParameters,
-    parameters: getRoleParameters(state, props.params.roleIdentifier),
-    role: getRole(state, props.params.roleIdentifier)
+    parameters: getRoleParameters(state, props.match.params.roleIdentifier),
+    role: getRole(state, props.match.params.roleIdentifier)
   };
 }
 

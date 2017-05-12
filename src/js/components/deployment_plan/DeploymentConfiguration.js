@@ -15,12 +15,16 @@
  */
 
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Link } from 'react-router';
+import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
+import EnvironmentConfiguration
+  from '../environment_configuration/EnvironmentConfiguration';
 import NavTab from '../ui/NavTab';
 import Modal from '../ui/Modal';
+import Parameters from '../parameters/Parameters';
 
 const messages = defineMessages({
   deploymentConfiguration: {
@@ -37,12 +41,13 @@ const messages = defineMessages({
   }
 });
 
-export default class DeploymentConfiguration extends React.Component {
+class DeploymentConfiguration extends React.Component {
   render() {
+    const { location } = this.props;
     return (
       <Modal dialogClasses="modal-xl">
         <div className="modal-header">
-          <Link to={this.props.parentPath} type="button" className="close">
+          <Link to="/deployment-plan" type="button" className="close">
             <span aria-hidden="true" className="pficon pficon-close" />
           </Link>
           <h4 className="modal-title">
@@ -51,24 +56,42 @@ export default class DeploymentConfiguration extends React.Component {
         </div>
 
         <ul className="nav nav-tabs">
-          <NavTab to="/deployment-plan/configuration/environment">
+          <NavTab
+            location={location}
+            to="/deployment-plan/configuration/environment"
+          >
             <FormattedMessage {...messages.overallSettings} />
           </NavTab>
-          <NavTab to="/deployment-plan/configuration/parameters">
+          <NavTab
+            location={location}
+            to="/deployment-plan/configuration/parameters"
+          >
             <FormattedMessage {...messages.parameters} />
           </NavTab>
         </ul>
 
-        {React.cloneElement(this.props.children, {
-          currentPlanName: this.props.currentPlanName,
-          parentPath: this.props.parentPath
-        })}
+        <Switch location={location}>
+          <Route
+            location={location}
+            path="/deployment-plan/configuration/environment"
+            component={EnvironmentConfiguration}
+          />
+          <Route
+            location={location}
+            path="/deployment-plan/configuration/parameters"
+            component={Parameters}
+          />
+          <Redirect
+            from="/deployment-plan/configuration"
+            to="/deployment-plan/configuration/environment"
+          />
+        </Switch>
       </Modal>
     );
   }
 }
 DeploymentConfiguration.propTypes = {
-  children: PropTypes.node,
-  currentPlanName: PropTypes.string,
-  parentPath: PropTypes.string
+  location: PropTypes.object.isRequired
 };
+
+export default checkRunningDeployment(DeploymentConfiguration);

@@ -14,7 +14,6 @@
  * under the License.
  */
 
-import { browserHistory } from 'react-router';
 import { Map, fromJS } from 'immutable';
 
 import KeystoneApiErrorHandler from '../services/KeystoneApiErrorHandler';
@@ -35,8 +34,6 @@ export default {
           response.token.id = tokenId;
           cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
           dispatch(this.userAuthSuccess(response.token));
-          ZaqarWebSocketService.init(getState, dispatch);
-          browserHistory.push(nextPath);
         })
         .catch(error => {
           logger.error(
@@ -45,10 +42,6 @@ export default {
           );
           let errorHandler = new KeystoneApiErrorHandler(error);
           cookie.remove('keystoneAuthTokenId');
-          browserHistory.push({
-            pathname: '/login',
-            query: { nextPath: nextPath }
-          });
           dispatch(this.userAuthFailure(errorHandler.errors));
         });
     };
@@ -64,8 +57,6 @@ export default {
           response.token.id = tokenId;
           cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
           dispatch(this.userAuthSuccess(response.token));
-          ZaqarWebSocketService.init(getState, dispatch);
-          browserHistory.push(nextPath);
         })
         .catch(error => {
           logger.error(
@@ -109,7 +100,6 @@ export default {
 
   logoutUser() {
     return dispatch => {
-      browserHistory.push('/login');
       cookie.remove('keystoneAuthTokenId');
       ZaqarWebSocketService.close();
       dispatch(this.logoutUserSuccess());

@@ -18,6 +18,7 @@ import when from 'when';
 
 import * as utils from '../../js/services/utils';
 import MistralApiService from '../../js/services/MistralApiService';
+import mockHistory from '../mocks/history';
 import { mockGetIntl } from './utils';
 import PlansActions from '../../js/actions/PlansActions';
 import SwiftApiService from '../../js/services/SwiftApiService';
@@ -49,7 +50,11 @@ describe('PlansActions', () => {
       );
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
-      PlansActions.updatePlan('somecloud', {})(() => {}, () => {}, mockGetIntl);
+      PlansActions.updatePlan('somecloud', {}, mockHistory)(
+        () => {},
+        () => {},
+        mockGetIntl
+      );
       // Call done with a minimal timeout.
       setTimeout(() => {
         done();
@@ -108,7 +113,11 @@ describe('PlansActions', () => {
       );
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
-      PlansActions.deletePlan('somecloud')(() => {}, () => {}, mockGetIntl);
+      PlansActions.deletePlan('somecloud', mockHistory)(
+        () => {},
+        () => {},
+        mockGetIntl
+      );
       // Call done with a minimal timeout.
       setTimeout(() => {
         done();

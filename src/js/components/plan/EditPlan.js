@@ -18,7 +18,7 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -96,7 +96,7 @@ class EditPlan extends React.Component {
   }
 
   getNameFromUrl() {
-    let planName = this.props.params.planName || '';
+    let planName = this.props.match.params.planName || '';
     return planName.replace(/[^A-Za-z0-9_-]*/g, '');
   }
 
@@ -116,7 +116,7 @@ class EditPlan extends React.Component {
           onInvalid={this.onFormInvalid.bind(this)}
         >
           <div className="modal-header">
-            <Link to="/plans/list" type="button" className="close">
+            <Link to="/plans" type="button" className="close">
               <span aria-hidden="true" className="pficon pficon-close" />
             </Link>
             <h4>
@@ -135,7 +135,6 @@ class EditPlan extends React.Component {
             <ModalFormErrorList errors={this.props.planFormErrors.toJS()} />
             <div className="modal-body">
               <PlanEditFormTabs
-                currentTab={this.props.location.query.tab || 'editPlan'}
                 selectedFiles={this.state.selectedFiles}
                 planName={this.getNameFromUrl()}
                 planFiles={planFiles}
@@ -152,7 +151,7 @@ class EditPlan extends React.Component {
             >
               <FormattedMessage {...messages.uploadAndUpdate} />
             </button>
-            <Link to="/plans/list" type="button" className="btn btn-default">
+            <Link to="/plans" type="button" className="btn btn-default">
               <FormattedMessage {...messages.cancel} />
             </Link>
           </div>
@@ -167,7 +166,7 @@ EditPlan.propTypes = {
   history: PropTypes.object,
   intl: PropTypes.object,
   isTransitioningPlan: PropTypes.bool,
-  location: PropTypes.object,
+  match: PropTypes.object,
   params: PropTypes.object,
   planFormErrors: ImmutablePropTypes.list,
   plans: ImmutablePropTypes.map,
@@ -189,10 +188,10 @@ function mapDispatchToProps(dispatch) {
       dispatch(PlansActions.fetchPlan(planName));
     },
     updatePlan: (planName, files) => {
-      dispatch(PlansActions.updatePlan(planName, files));
+      dispatch(PlansActions.updatePlan(planName, files, history));
     },
     updatePlanFromTarball: (planName, files) => {
-      dispatch(PlansActions.updatePlanFromTarball(planName, files));
+      dispatch(PlansActions.updatePlanFromTarball(planName, files, history));
     }
   };
 }
