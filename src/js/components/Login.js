@@ -21,8 +21,10 @@ import Formsy from 'formsy-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Redirect } from 'react-router-dom';
 
 import FormErrorList from './ui/forms/FormErrorList';
+import Loader from './ui/Loader';
 import LoginInput from './ui/forms/LoginInput';
 import LoginActions from '../actions/LoginActions';
 import NotificationsToaster from './notifications/NotificationsToaster';
@@ -31,6 +33,10 @@ import LogoSvg from '../../img/logo.svg';
 import TripleoOwlSvg from '../../img/tripleo-owl.svg';
 
 const messages = defineMessages({
+  authenticating: {
+    id: 'UserAuthenticator.authenticating',
+    defaultMessage: 'Authenticating...'
+  },
   username: {
     id: 'Login.username',
     defaultMessage: 'Username'
@@ -74,7 +80,9 @@ class Login extends React.Component {
   }
 
   componentDidUpdate() {
-    this.invalidateLoginForm(this.props.formFieldErrors.toJS());
+    if (!this.props.isAuthenticated || this.props.isAuthenticating) {
+      this.invalidateLoginForm(this.props.formFieldErrors.toJS());
+    }
   }
 
   componentWillUnmount() {
@@ -94,83 +102,93 @@ class Login extends React.Component {
   }
 
   handleLogin(formData, resetForm, invalidateForm) {
-    const nextPath = this.props.location.query.nextPath || '/';
     const formFields = Object.keys(this.refs.form.inputs);
-    this.props.dispatch(
-      LoginActions.authenticateUser(formData, formFields, nextPath)
-    );
+    this.props.dispatch(LoginActions.authenticateUser(formData, formFields));
   }
 
   render() {
-    const { formatMessage } = this.props.intl;
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
+    const {
+      formErrors,
+      isAuthenticating,
+      isAuthenticated,
+      intl: { formatMessage }
+    } = this.props;
 
-    return (
-      <div>
-        <span id="badge">
-          <img src={LogoSvg} alt="TripleO" />
-        </span>
-        <div className="container">
-          <div className="row">
-            <div className="col-sm-12">
-              <div id="brand">
-                <img src={TripleoOwlSvg} alt="TripleO" />
+    if (!isAuthenticated) {
+      return (
+        <div>
+          <span id="badge">
+            <img src={LogoSvg} alt="TripleO" />
+          </span>
+          <Loader
+            content={formatMessage(messages.authenticating)}
+            loaded={!isAuthenticating}
+            global
+          />
+          <div className="container">
+            <div className="row">
+              <div className="col-sm-12">
+                <div id="brand">
+                  <img src={TripleoOwlSvg} alt="TripleO" />
+                </div>
+              </div>
+              <div className="col-sm-7 col-md-6 col-lg-5 login">
+                <FormErrorList errors={formErrors.toJS()} />
+                <Formsy.Form
+                  ref="form"
+                  role="form"
+                  className="form-horizontal"
+                  onSubmit={this.handleLogin.bind(this)}
+                  onValid={this._enableButton.bind(this)}
+                  onInvalid={this._disableButton.bind(this)}
+                >
+                  <LoginInput
+                    name="username"
+                    placeholder={formatMessage(messages.username)}
+                    title={formatMessage(messages.username)}
+                    validationError={formatMessage(messages.usernameRequired)}
+                    required
+                    autoFocus
+                  />
+                  <LoginInput
+                    type="password"
+                    name="password"
+                    placeholder={formatMessage(messages.password)}
+                    title={formatMessage(messages.password)}
+                    validationError={formatMessage(messages.passwordRequired)}
+                    required
+                  />
+                  <div className="form-group">
+                    <div className="col-xs-offset-8 col-xs-4 col-sm-4 col-md-4 submit">
+                      <button
+                        type="submit"
+                        disabled={!this.state.canSubmit || isAuthenticating}
+                        className="btn btn-primary btn-lg"
+                        tabIndex="4"
+                        id="Login__loginButton"
+                      >
+                        <FormattedMessage {...messages.login} />
+                      </button>
+                    </div>
+                  </div>
+                </Formsy.Form>
+              </div>
+              <div className="col-sm-5 col-md-6 col-lg-7 details">
+                <p>
+                  <strong><FormattedMessage {...messages.welcome} /></strong>
+                  <br />
+                  <FormattedMessage {...messages.description} />
+                </p>
               </div>
             </div>
-            <div className="col-sm-7 col-md-6 col-lg-5 login">
-              <FormErrorList errors={this.props.formErrors.toJS()} />
-              <Formsy.Form
-                ref="form"
-                role="form"
-                className="form-horizontal"
-                onSubmit={this.handleLogin.bind(this)}
-                onValid={this._enableButton.bind(this)}
-                onInvalid={this._disableButton.bind(this)}
-              >
-                <LoginInput
-                  name="username"
-                  placeholder={formatMessage(messages.username)}
-                  title={formatMessage(messages.username)}
-                  validationError={formatMessage(messages.usernameRequired)}
-                  required
-                  autoFocus
-                />
-                <LoginInput
-                  type="password"
-                  name="password"
-                  placeholder={formatMessage(messages.password)}
-                  title={formatMessage(messages.password)}
-                  validationError={formatMessage(messages.passwordRequired)}
-                  required
-                />
-                <div className="form-group">
-                  <div className="col-xs-offset-8 col-xs-4 col-sm-4 col-md-4 submit">
-                    <button
-                      type="submit"
-                      disabled={
-                        !this.state.canSubmit || this.props.isAuthenticating
-                      }
-                      className="btn btn-primary btn-lg"
-                      tabIndex="4"
-                      id="Login__loginButton"
-                    >
-                      <FormattedMessage {...messages.login} />
-                    </button>
-                  </div>
-                </div>
-              </Formsy.Form>
-            </div>
-            <div className="col-sm-5 col-md-6 col-lg-7 details">
-              <p>
-                <strong><FormattedMessage {...messages.welcome} /></strong>
-                <br />
-                <FormattedMessage {...messages.description} />
-              </p>
-            </div>
           </div>
+          <NotificationsToaster />
         </div>
-        <NotificationsToaster />
-      </div>
-    );
+      );
+    } else {
+      return <Redirect to={from} />;
+    }
   }
 }
 Login.propTypes = {
@@ -178,17 +196,17 @@ Login.propTypes = {
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
   intl: PropTypes.object,
+  isAuthenticated: PropTypes.bool.isRequired,
   isAuthenticating: PropTypes.bool.isRequired,
-  location: PropTypes.object,
-  userLoggedIn: PropTypes.bool.isRequired
+  location: PropTypes.object
 };
 
 function mapStateToProps(state) {
   return {
     formErrors: state.login.getIn(['loginForm', 'formErrors']),
     formFieldErrors: state.login.getIn(['loginForm', 'formFieldErrors']),
-    userLoggedIn: state.login.hasIn(['keystoneAccess', 'user']),
-    isAuthenticating: state.login.get('isAuthenticating')
+    isAuthenticated: state.login.isAuthenticated,
+    isAuthenticating: state.login.isAuthenticating
   };
 }
 

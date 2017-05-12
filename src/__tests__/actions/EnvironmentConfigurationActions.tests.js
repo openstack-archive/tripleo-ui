@@ -19,9 +19,9 @@ import when from 'when';
 import * as utils from '../../js/services/utils';
 import EnvironmentConfigurationActions
   from '../../js/actions/EnvironmentConfigurationActions';
-import { browserHistory } from 'react-router';
 import MistralApiService from '../../js/services/MistralApiService';
 import { mockGetIntl } from './utils';
+import mockHistory from '../mocks/history';
 
 // Use this to mock asynchronous functions which return a promise.
 // The promise will immediately resolve with `data`.
@@ -79,7 +79,6 @@ describe('EnvironmentConfigurationActions', () => {
         EnvironmentConfigurationActions,
         'updateEnvironmentConfigurationSuccess'
       );
-      spyOn(browserHistory, 'push');
       // Mock the service call.
       spyOn(MistralApiService, 'runAction').and.callFake(
         createResolvingPromise({
@@ -92,8 +91,7 @@ describe('EnvironmentConfigurationActions', () => {
       EnvironmentConfigurationActions.updateEnvironmentConfiguration(
         'overcloud',
         {},
-        {},
-        '/redirect/url'
+        {}
       )(() => {}, () => {}, mockGetIntl);
       // Call done with a minimal timeout.
       setTimeout(() => {
@@ -111,10 +109,6 @@ describe('EnvironmentConfigurationActions', () => {
       expect(
         EnvironmentConfigurationActions.updateEnvironmentConfigurationSuccess
       ).toHaveBeenCalled();
-    });
-
-    it('redirects the page', () => {
-      expect(browserHistory.push).toHaveBeenCalledWith('/redirect/url');
     });
   });
 });

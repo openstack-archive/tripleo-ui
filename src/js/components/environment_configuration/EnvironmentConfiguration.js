@@ -19,7 +19,7 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -58,9 +58,8 @@ class EnvironmentConfiguration extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchEnvironmentConfiguration(
-      this.props.currentPlanName,
-      this.props.parentPath
+    this.props.fetchEnvironmentConfiguration(this.props.currentPlanName, () =>
+      this.props.history.push('/deployment-plan')
     );
   }
 
@@ -111,7 +110,7 @@ class EnvironmentConfiguration extends React.Component {
         closeOnSubmit: false
       });
 
-      browserHistory.push(this.props.parentPath);
+      this.props.history.push('/deployment-plan');
     }
   }
 
@@ -210,11 +209,7 @@ class EnvironmentConfiguration extends React.Component {
           >
             <FormattedMessage {...messages.saveAndClose} />
           </button>
-          <Link
-            to={this.props.parentPath}
-            type="button"
-            className="btn btn-default"
-          >
+          <Link to="/deployment-plan" type="button" className="btn btn-default">
             <FormattedMessage {...messages.cancel} />
           </Link>
         </div>
@@ -229,14 +224,10 @@ EnvironmentConfiguration.propTypes = {
   fetchEnvironmentConfiguration: PropTypes.func,
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
+  history: PropTypes.object.isRequired,
   isFetching: PropTypes.bool,
   location: PropTypes.object,
-  parentPath: PropTypes.string.isRequired,
   updateEnvironmentConfiguration: PropTypes.func
-};
-
-EnvironmentConfiguration.defaultProps = {
-  parentPath: '/deployment-plan'
 };
 
 function mapStateToProps(state) {
@@ -259,18 +250,12 @@ function mapDispatchToProps(dispatch) {
         EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName)
       );
     },
-    updateEnvironmentConfiguration: (
-      planName,
-      data,
-      inputFields,
-      parentPath
-    ) => {
+    updateEnvironmentConfiguration: (planName, data, inputFields) => {
       dispatch(
         EnvironmentConfigurationActions.updateEnvironmentConfiguration(
           planName,
           data,
-          inputFields,
-          parentPath
+          inputFields
         )
       );
     }

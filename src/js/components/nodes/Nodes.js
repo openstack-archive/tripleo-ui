@@ -17,9 +17,10 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Route } from 'react-router-dom';
 
 import { getFilterByName } from '../../selectors/filters';
 import { getFilteredNodes, nodesInProgress } from '../../selectors/nodes';
@@ -28,6 +29,7 @@ import NodesListForm from './NodesListView/NodesListForm';
 import NodesListView from './NodesListView/NodesListView';
 import NodesToolbar from './NodesToolbar/NodesToolbar';
 import NodesTableView from './NodesTableView';
+import RegisterNodesDialog from './RegisterNodesDialog';
 import RolesActions from '../../actions/RolesActions';
 
 const messages = defineMessages({
@@ -90,13 +92,13 @@ class Nodes extends React.Component {
         </div>
         <NodesToolbar />
         {this.renderContentView()}
-        {this.props.children}
+
+        <Route path="/nodes/register" component={RegisterNodesDialog} />
       </div>
     );
   }
 }
 Nodes.propTypes = {
-  children: PropTypes.node,
   contentView: PropTypes.string.isRequired,
   currentPlanName: PropTypes.string.isRequired,
   fetchNodes: PropTypes.func.isRequired,

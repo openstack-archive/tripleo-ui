@@ -18,7 +18,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import DeleteStackButton from './DeleteStackButton';
 import InlineNotification from '../ui/InlineNotification';
