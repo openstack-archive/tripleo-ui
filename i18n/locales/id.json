@@ -264,8 +264,6 @@
         "ValidationsList.noValidationsMessage": "There are no (tidak ada) validasi saat ini.",
         "ValidationsList.refresh": "Refresh",
         "ValidationsList.validations": "Validations",
-        "reduxForm.validations.maxValue": "Maximum value is {max}.",
-        "reduxForm.validations.minValue": "Minimum value is {min}.",
         "reduxForm.validations.number": "Value (nilai) harus nomor."
     }
 }
