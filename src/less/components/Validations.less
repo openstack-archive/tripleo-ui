@@ -21,7 +21,8 @@
     top: 0;
   }
   .sidebar-header {
-    margin: 38px 0 0;
+    border-bottom: none;
+    margin: 37px 0 0;
   }
 }
 .validation-list {
@@ -140,6 +141,11 @@
 }
 
 .validations-toolbar {
+  .table-view-pf-toolbar {
+    border-bottom: 1px solid @table-border-color;
+    border-left: none;
+    border-right: none;
+  }
   .toolbar-pf {
     .form-group {
       @media (min-width: @screen-lg-min) {
