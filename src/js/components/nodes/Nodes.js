@@ -1,4 +1,4 @@
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
@@ -7,6 +7,7 @@ import React from 'react';
 
 import { getFilterByName } from '../../selectors/filters';
 import { getFilteredNodes, nodesInProgress } from '../../selectors/nodes';
+import Loader from '../ui/Loader';
 import NodesActions from '../../actions/NodesActions';
 import NodesListForm from './NodesListView/NodesListForm';
 import NodesListView from './NodesListView/NodesListView';
@@ -15,6 +16,10 @@ import NodesTableView from './NodesTableView';
 import RolesActions from '../../actions/RolesActions';
 
 const messages = defineMessages({
+  loadingNodes: {
+    id: 'Nodes.loadingNodes',
+    defaultMessage: 'Loading Nodes...'
+  },
   refreshResults: {
     id: 'Nodes.refreshResults',
     defaultMessage: 'Refresh Results'
@@ -57,13 +62,20 @@ class Nodes extends React.Component {
       <div>
         <div className="page-header">
           <div className="pull-right">
-            <a
-              className="link btn btn-link"
-              onClick={this.refreshResults.bind(this)}
+            <Loader
+              loaded={!(this.props.fetchingNodes && this.props.nodesLoaded)}
+              content={this.props.intl.formatMessage(messages.loadingNodes)}
+              component="span"
+              inline
             >
-              <span className="pficon pficon-refresh" />&nbsp;
-              <FormattedMessage {...messages.refreshResults} />
-            </a>
+              <a
+                className="link btn btn-link"
+                onClick={this.refreshResults.bind(this)}
+              >
+                <span className="pficon pficon-refresh" />&nbsp;
+                <FormattedMessage {...messages.refreshResults} />
+              </a>
+            </Loader>
             &nbsp;
             <Link to="/nodes/register" className="btn btn-primary">
               <span className="fa fa-plus" />&nbsp;
@@ -72,8 +84,14 @@ class Nodes extends React.Component {
           </div>
           <h1><FormattedMessage {...messages.nodes} /></h1>
         </div>
-        <NodesToolbar />
-        {this.renderContentView()}
+        <Loader
+          loaded={this.props.nodesLoaded}
+          content={this.props.intl.formatMessage(messages.loadingNodes)}
+          height={80}
+        >
+          <NodesToolbar />
+          {this.renderContentView()}
+        </Loader>
         {this.props.children}
       </div>
     );
@@ -85,8 +103,11 @@ Nodes.propTypes = {
   currentPlanName: PropTypes.string.isRequired,
   fetchNodes: PropTypes.func.isRequired,
   fetchRoles: PropTypes.func.isRequired,
+  fetchingNodes: PropTypes.bool.isRequired,
+  intl: PropTypes.object.isRequired,
   nodes: ImmutablePropTypes.map.isRequired,
-  nodesInProgress: ImmutablePropTypes.set.isRequired
+  nodesInProgress: ImmutablePropTypes.set.isRequired,
+  nodesLoaded: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -95,8 +116,10 @@ const mapStateToProps = state => ({
     'list'
   ),
   currentPlanName: state.currentPlan.currentPlanName,
+  fetchingNodes: state.nodes.get('isFetching'),
   nodes: getFilteredNodes(state),
-  nodesInProgress: nodesInProgress(state)
+  nodesInProgress: nodesInProgress(state),
+  nodesLoaded: state.nodes.get('isLoaded')
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -105,4 +128,4 @@ const mapDispatchToProps = dispatch => ({
     dispatch(RolesActions.fetchRoles(currentPlanName))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Nodes);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Nodes));
