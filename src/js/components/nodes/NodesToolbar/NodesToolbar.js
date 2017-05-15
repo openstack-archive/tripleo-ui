@@ -21,11 +21,7 @@ import {
   addActiveFilter,
   updateFilter
 } from '../../../actions/FiltersActions';
-import {
-  Toolbar,
-  ToolbarActions,
-  ToolbarResults
-} from '../../ui/Toolbar/Toolbar';
+import { Toolbar, ToolbarActions, ToolbarResults } from '../../ui/Toolbar';
 
 const messages = defineMessages({
   activeFilters: {
@@ -62,14 +58,14 @@ class NodesToolbar extends React.Component {
       clearActiveFilters,
       deleteActiveFilter,
       filteredNodesCount,
-      initialValues,
+      nodesToolbarFilter,
       intl,
       addActiveFilter,
       nodesCount,
       updateFilter
     } = this.props;
     return (
-      <Toolbar>
+      <Toolbar tableView={nodesToolbarFilter.get('contentView') === 'table'}>
         <ToolbarActions>
           <ToolbarFiltersForm
             form="nodesToolbarFilter"
@@ -106,7 +102,7 @@ class NodesToolbar extends React.Component {
           <NodesToolbarForm
             onChange={this.handleNodesToolbarFormChange.bind(this)}
             onSubmit={updateFilter}
-            initialValues={initialValues}
+            initialValues={nodesToolbarFilter.toJS()}
           />
         </ToolbarActions>
         <ToolbarResults>
@@ -150,9 +146,9 @@ NodesToolbar.propTypes = {
   clearActiveFilters: PropTypes.func.isRequired,
   deleteActiveFilter: PropTypes.func.isRequired,
   filteredNodesCount: PropTypes.number.isRequired,
-  initialValues: PropTypes.object.isRequired,
   intl: PropTypes.object,
   nodesCount: PropTypes.number.isRequired,
+  nodesToolbarFilter: PropTypes.object.isRequired,
   submitNodesToolbarForm: PropTypes.func.isRequired,
   updateFilter: PropTypes.func.isRequired
 };
@@ -170,9 +166,9 @@ const mapStateToProps = state => {
   return {
     activeFilters: getActiveFilters(state, 'nodesToolbar'),
     filteredNodesCount: getFilteredNodes(state).size,
-    initialValues: getFilterByName(state, 'nodesToolbar')
-      .delete('activeFilters')
-      .toJS(),
+    nodesToolbarFilter: getFilterByName(state, 'nodesToolbar').delete(
+      'activeFilters'
+    ),
     nodesCount: getNodes(state).size
   };
 };

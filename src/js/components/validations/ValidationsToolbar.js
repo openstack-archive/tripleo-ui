@@ -16,7 +16,7 @@ import {
   getValidationsWithResults
 } from '../../selectors/validations';
 import { PropTypes } from 'prop-types';
-import { Toolbar, ToolbarResults, ToolbarActions } from '../ui/Toolbar/Toolbar';
+import { Toolbar, ToolbarResults, ToolbarActions } from '../ui/Toolbar';
 import ToolbarFiltersForm from '../ui/Toolbar/ToolbarFiltersForm';
 
 const messages = defineMessages({
@@ -65,7 +65,7 @@ class ValidationsToolbar extends React.Component {
     } = this.props;
     return (
       <div className="validations-toolbar">
-        <Toolbar>
+        <Toolbar tableView>
           <ToolbarActions>
             <ToolbarFiltersForm
               form="validationsToolbarFilter"
