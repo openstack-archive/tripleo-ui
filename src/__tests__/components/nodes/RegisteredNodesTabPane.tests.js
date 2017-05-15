@@ -3,7 +3,8 @@ import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 import { List, Map, Set } from 'immutable';
 
-import RegisteredNodesTabPane from '../../../js/components/nodes/RegisteredNodesTabPane';
+import RegisteredNodesTabPane
+  from '../../../js/components/nodes/RegisteredNodesTabPane';
 import store from '../../../js/store';
 
 let registeredNodes = Map({
@@ -32,7 +33,8 @@ describe('RegisteredNodesTabPane component', () => {
         nodesInProgress={Set()}
         nodesOperationInProgress={false}
         store={store}
-        intl={intl}/>
+        intl={intl}
+      />
     );
     tabPaneVdom = shallowRenderer.getRenderOutput();
     /* TODO(jtomasek): replace this with shallowRenderer.getMountedInstance() when it is available
@@ -41,8 +43,11 @@ describe('RegisteredNodesTabPane component', () => {
   });
 
   it('should render NodesTable and pass nodes as data prop', () => {
-    expect(tabPaneVdom.props.children[1].props.children[1].type.displayName)
-      .toEqual('InjectIntl(NodesTable)');
-    expect(tabPaneVdom.props.children[1].props.children[1].props.nodes).toEqual(registeredNodes);
+    expect(
+      tabPaneVdom.props.children[1].props.children[1].type.displayName
+    ).toEqual('InjectIntl(NodesTable)');
+    expect(tabPaneVdom.props.children[1].props.children[1].props.nodes).toEqual(
+      registeredNodes
+    );
   });
 });

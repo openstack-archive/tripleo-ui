@@ -2,8 +2,8 @@ import { Map } from 'immutable';
 import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 
-import EnvironmentConfiguration from
-  '../../../js/components/environment_configuration/EnvironmentConfiguration';
+import EnvironmentConfiguration
+  from '../../../js/components/environment_configuration/EnvironmentConfiguration';
 
 describe('EnvironmentConfiguration component', () => {
   let EnvConfVdom;
@@ -12,7 +12,8 @@ describe('EnvironmentConfiguration component', () => {
     shallowRenderer.render(
       <EnvironmentConfiguration
         currentPlanName={'some-plan'}
-        environmentConfiguration={Map({ topics: [] })}/>
+        environmentConfiguration={Map({ topics: [] })}
+      />
     );
     EnvConfVdom = shallowRenderer.getRenderOutput();
   });
@@ -20,8 +21,12 @@ describe('EnvironmentConfiguration component', () => {
   xit('should render a modal with form', () => {
     let modal = EnvConfVdom.props.children[0];
     expect(modal.props.className).toEqual('modal modal-visible');
-    expect(modal.props.children.props.className).toEqual('modal-dialog modal-lg');
-    expect(modal.props.children.props.children.props.className).toEqual('modal-content');
+    expect(modal.props.children.props.className).toEqual(
+      'modal-dialog modal-lg'
+    );
+    expect(modal.props.children.props.children.props.className).toEqual(
+      'modal-content'
+    );
     let form = modal.props.children.props.children.props.children;
     expect(form.ref).toEqual('environmentConfigurationForm');
   });

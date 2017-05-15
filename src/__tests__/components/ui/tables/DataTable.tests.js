@@ -3,9 +3,12 @@ import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 
 import DataTable from '../../../../js/components/ui/tables/DataTable';
-import { DataTableHeaderCell,
-         DataTableDataFieldCell } from '../../../../js/components/ui/tables/DataTableCells';
-import DataTableColumn from '../../../../js/components/ui/tables/DataTableColumn';
+import {
+  DataTableHeaderCell,
+  DataTableDataFieldCell
+} from '../../../../js/components/ui/tables/DataTableCells';
+import DataTableColumn
+  from '../../../../js/components/ui/tables/DataTableColumn';
 
 const data = [
   { uuid: 1, provision_state: 'failed' },
@@ -32,15 +35,22 @@ describe('DataTable component', () => {
         rowsCount={data.length}
         onFilter={mockOnFilter}
         noRowsRenderer={mockNoRowsRenderer}
-        intl={intl}>
-        <DataTableColumn key="uuid"
-                         header={<DataTableHeaderCell key="uuid">UUID</DataTableHeaderCell>}
-                         cell={<DataTableDataFieldCell data={data} field="uuid"/>}/>
-        <DataTableColumn key="provision_state"
-                         header={<DataTableHeaderCell key="provision_state">
-                                   Provision State
-                                 </DataTableHeaderCell>}
-                         cell={<DataTableDataFieldCell data={data} field="provision_state"/>}/>
+        intl={intl}
+      >
+        <DataTableColumn
+          key="uuid"
+          header={<DataTableHeaderCell key="uuid">UUID</DataTableHeaderCell>}
+          cell={<DataTableDataFieldCell data={data} field="uuid" />}
+        />
+        <DataTableColumn
+          key="provision_state"
+          header={
+            <DataTableHeaderCell key="provision_state">
+              Provision State
+            </DataTableHeaderCell>
+          }
+          cell={<DataTableDataFieldCell data={data} field="provision_state" />}
+        />
       </DataTable.WrappedComponent>
     );
     DataTableVdom = shallowRenderer.getRenderOutput();
@@ -61,7 +71,8 @@ describe('DataTable component', () => {
           defaultMessage="Showing {showing} of {total} items"
           id="DataTable.itemsVisibleInTable"
           tagName="span"
-          values={{ showing: <b>{2}</b>, total: <b>{2}</b> }}/>
+          values={{ showing: <b>{2}</b>, total: <b>{2}</b> }}
+        />
       </div>
     );
 

@@ -15,7 +15,9 @@ describe('ListPlans component', () => {
     let shallowRenderer = new ReactShallowRenderer();
     const intlProvider = new IntlProvider({ locale: 'en' }, {});
     const { intl } = intlProvider.getChildContext();
-    shallowRenderer.render(<ListPlans.WrappedComponent store={store} intl={intl}/>);
+    shallowRenderer.render(
+      <ListPlans.WrappedComponent store={store} intl={intl} />
+    );
     output = shallowRenderer.getRenderOutput();
   });
 
@@ -27,8 +29,9 @@ describe('ListPlans component', () => {
 let getTableRows = (planFiles, selectedFiles) => {
   let result;
   let shallowRenderer = new ReactShallowRenderer();
-  shallowRenderer.render(<FileList planFiles={planFiles}
-                                   selectedFiles={selectedFiles} />);
+  shallowRenderer.render(
+    <FileList planFiles={planFiles} selectedFiles={selectedFiles} />
+  );
   result = shallowRenderer.getRenderOutput();
   return result.props.children[1].props.children.props.children;
 };
@@ -47,13 +50,10 @@ describe('FileList component', () => {
   });
 
   it('renders a list of selected files, ordered alphabetically', () => {
-    let tableRows = getTableRows(
-      Map(),
-      [
-        { name: 'foo.yaml', content: 'foo' },
-        { name: 'bar.yaml', content: 'bar' }
-      ]
-    );
+    let tableRows = getTableRows(Map(), [
+      { name: 'foo.yaml', content: 'foo' },
+      { name: 'bar.yaml', content: 'bar' }
+    ]);
     expect(tableRows[0].key).toBe('bar.yaml');
     expect(tableRows[1].key).toBe('foo.yaml');
   });

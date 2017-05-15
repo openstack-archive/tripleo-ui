@@ -17,7 +17,8 @@ const ProgressBar = ({ label, labelPosition, value }) => {
         aria-valuenow={value}
         aria-valuemin="0"
         aria-valuemax="100"
-        style={{ width: value + '%' }}>
+        style={{ width: value + '%' }}
+      >
         {label ? <span>{value + '%'}</span> : null}
       </div>
     </div>

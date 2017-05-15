@@ -49,7 +49,8 @@ describe('NodesTable component', () => {
         nodes={nodes}
         nodesInProgress={Set()}
         isFetchingNodes={false}
-        intl={intl}/>
+        intl={intl}
+      />
     );
     nodesTableVdom = shallowRenderer.getRenderOutput();
     nodesTableInstance = shallowRenderer._instance._instance;
@@ -69,9 +70,15 @@ describe('NodesTable component', () => {
   it('should be able to filter rows', () => {
     spyOn(nodesTableInstance, '_filterData').and.callThrough();
     nodesTableInstance.onFilter(filterString);
-    expect(nodesTableInstance.state).toEqual({ filterString: '1', sortBy: '', sortDir: 'asc' });
-    expect(nodesTableInstance._filterData)
-      .toHaveBeenCalledWith('1', nodesTableInstance.props.nodes.toList().toJS());
+    expect(nodesTableInstance.state).toEqual({
+      filterString: '1',
+      sortBy: '',
+      sortDir: 'asc'
+    });
+    expect(nodesTableInstance._filterData).toHaveBeenCalledWith(
+      '1',
+      nodesTableInstance.props.nodes.toList().toJS()
+    );
   });
 });
 
@@ -80,16 +87,18 @@ describe('NodesTableRoleCell', () => {
   describe('getAssignedRoleTitle', () => {
     it('should return Not Assigned when profile is not set in node.properties.capabilities', () => {
       let shallowRenderer = new ReactShallowRenderer();
-      shallowRenderer.render(<NodesTableProfileCell data={nodes.toList().toJS()}
-                                                    rowIndex={0}/>);
+      shallowRenderer.render(
+        <NodesTableProfileCell data={nodes.toList().toJS()} rowIndex={0} />
+      );
       roleCellInstance = shallowRenderer._instance._instance;
       expect(roleCellInstance.getAssignedRoleTitle()).toEqual('compute');
     });
 
     it('should return Not Assigned when profile is not set in node.properties.capabilities', () => {
       let shallowRenderer = new ReactShallowRenderer();
-      shallowRenderer.render(<NodesTableProfileCell data={nodes.toList().toJS()}
-                                                    rowIndex={1}/>);
+      shallowRenderer.render(
+        <NodesTableProfileCell data={nodes.toList().toJS()} rowIndex={1} />
+      );
       roleCellInstance = shallowRenderer._instance._instance;
       expect(roleCellInstance.getAssignedRoleTitle()).toEqual('-');
     });

@@ -12,7 +12,7 @@ describe('Nodes Component', () => {
     let shallowRenderer = new ReactShallowRenderer();
     const intlProvider = new IntlProvider({ locale: 'en' }, {});
     const { intl } = intlProvider.getChildContext();
-    shallowRenderer.render(<Nodes.WrappedComponent intl={intl}/>);
+    shallowRenderer.render(<Nodes.WrappedComponent intl={intl} />);
     NodesVdom = shallowRenderer.getRenderOutput();
     NodesInstance = shallowRenderer._instance._instance;
   });
@@ -22,14 +22,14 @@ describe('Nodes Component', () => {
     expect(NodesVdom).toExist();
   });
 
-  xit('should render tab-pane', () => {
-  });
+  xit('should render tab-pane', () => {});
 
-  xit('should listen to NodesStore changes', () => {
-  });
+  xit('should listen to NodesStore changes', () => {});
 
-  xit('should get nodes from NodesStore and store them in state on change in NodesStore', () => {
-  });
+  xit(
+    'should get nodes from NodesStore and store them in state on change in NodesStore',
+    () => {}
+  );
 
   xit('should issue a request to list Nodes on when mounted', () => {
     spyOn(IronicApiService, 'handleGetNodes');

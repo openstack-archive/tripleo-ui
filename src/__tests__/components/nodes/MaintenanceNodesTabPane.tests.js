@@ -3,7 +3,8 @@ import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 import { Map, Set } from 'immutable';
 
-import MaintenanceNodesTabPane from '../../../js/components/nodes/MaintenanceNodesTabPane';
+import MaintenanceNodesTabPane
+  from '../../../js/components/nodes/MaintenanceNodesTabPane';
 import store from '../../../js/store';
 
 let maintenanceNodes = Map({
@@ -27,13 +28,16 @@ describe('MaintenanceNodesTabPane component', () => {
         nodesInProgress={Set()}
         nodesOperationInProgress={false}
         store={store}
-        intl={intl}/>
+        intl={intl}
+      />
     );
     tabPaneVdom = shallowRenderer.getRenderOutput();
   });
 
   it('should render NodesTable and pass nodes as data prop', () => {
-    expect(tabPaneVdom.props.children[1].type.displayName).toEqual('InjectIntl(NodesTable)');
+    expect(tabPaneVdom.props.children[1].type.displayName).toEqual(
+      'InjectIntl(NodesTable)'
+    );
     expect(tabPaneVdom.props.children[1].props.nodes).toEqual(maintenanceNodes);
   });
 });
