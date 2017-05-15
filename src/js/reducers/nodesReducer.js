@@ -5,6 +5,7 @@ import { Port } from '../immutableRecords/nodes';
 
 const initialState = Map({
   isFetching: false,
+  isLoaded: false,
   nodesInProgress: Set(),
   all: Map(),
   ports: Map()
@@ -20,7 +21,8 @@ export default function nodesReducer(state = initialState, action) {
       return state
         .set('all', fromJS(nodes || {}))
         .set('ports', Map(ports).map(port => new Port(port)))
-        .set('isFetching', false);
+        .set('isFetching', false)
+        .set('isLoaded', true);
     }
 
     case NodesConstants.START_NODES_OPERATION:
