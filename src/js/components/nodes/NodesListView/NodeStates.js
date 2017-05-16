@@ -1,6 +1,7 @@
 import ClassNames from 'classnames';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const messages = defineMessages({
   provisionState: {
