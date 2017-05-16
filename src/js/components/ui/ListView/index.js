@@ -1,6 +1,7 @@
 import ClassNames from 'classnames';
 import { Field } from 'redux-form';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 /* ListView example usage:
 
