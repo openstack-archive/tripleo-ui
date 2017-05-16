@@ -8,6 +8,7 @@ export const NodeToRegister = Record({
   pm_user: undefined,
   pm_addr: undefined,
   pm_password: undefined,
+  pm_port: undefined,
   arch: undefined,
   cpu: undefined,
   memory: undefined,
@@ -16,13 +17,14 @@ export const NodeToRegister = Record({
 });
 
 export const IronicNode = Record({
-  uuid: undefined,
+  // uuid: undefined, TODO(jtomasek): re-add this once registration supports passing uuid
   name: undefined,
   mac: List(),
   pm_type: 'pxe_ssh',
   pm_user: undefined,
   pm_addr: undefined,
   pm_password: undefined,
+  pm_port: undefined,
   arch: undefined,
   cpu: undefined,
   memory: undefined,
