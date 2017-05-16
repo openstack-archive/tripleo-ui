@@ -310,9 +310,9 @@ export const NodesTableMaintenanceCell = props => {
   );
 };
 NodesTableMaintenanceCell.propTypes = {
-  data: React.PropTypes.array.isRequired,
-  field: React.PropTypes.string.isRequired,
-  rowIndex: React.PropTypes.number
+  data: PropTypes.array.isRequired,
+  field: PropTypes.string.isRequired,
+  rowIndex: PropTypes.number
 };
 
 export const NodesTableMacsCell = props => {
@@ -324,9 +324,9 @@ export const NodesTableMacsCell = props => {
   );
 };
 NodesTableMacsCell.propTypes = {
-  data: React.PropTypes.array.isRequired,
-  field: React.PropTypes.string.isRequired,
-  rowIndex: React.PropTypes.number
+  data: PropTypes.array.isRequired,
+  field: PropTypes.string.isRequired,
+  rowIndex: PropTypes.number
 };
 
 export class NodesTableCheckBoxCell extends React.Component {

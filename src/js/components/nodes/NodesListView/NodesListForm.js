@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl } from 'react-intl';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Form, reduxForm } from 'redux-form';
 import { pickBy } from 'lodash';
 
