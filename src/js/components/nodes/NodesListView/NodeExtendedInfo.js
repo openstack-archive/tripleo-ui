@@ -1,6 +1,7 @@
 import { FormattedDate, FormattedTime } from 'react-intl';
 import { startCase } from 'lodash';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 
 class NodeExtendedInfo extends React.Component {
