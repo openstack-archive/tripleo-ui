@@ -21,8 +21,8 @@ const messages = defineMessages({
   },
   disabledButtonsWarning: {
     id: 'NodesToolbarActions.disabledButtonsWarning',
-    defaultMessage: `You need to select Nodes first or there is operation already in progress on
-                     some of the selected Nodes`
+    defaultMessage: 'You need to select Nodes first, or there might be an operation already in ' +
+      'progress on some of the selected Nodes.'
   },
   introspectNodes: {
     id: 'NodesToolbarActions.introspectNodes',
