@@ -20,6 +20,7 @@ import {
 } from '../../ui/ListView';
 import NodeExtendedInfo from './NodeExtendedInfo';
 import {
+  NodeIntrospectionState,
   NodeMaintenanceState,
   NodePowerState,
   NodeProvisionState
@@ -68,11 +69,8 @@ export default class NodeListItem extends React.Component {
 
     return (
       <ListViewItem expanded={this.state.expanded} stacked>
-        <ListViewItemHeader>
-          <ListViewExpand
-            expanded={this.state.expanded}
-            toggleExpanded={this.toggleExpanded.bind(this)}
-          />
+        <ListViewItemHeader toggleExpanded={this.toggleExpanded.bind(this)}>
+          <ListViewExpand expanded={this.state.expanded} />
           <ListViewCheckbox
             disabled={inProgress}
             name={`values.${node.uuid}`}
@@ -94,6 +92,10 @@ export default class NodeListItem extends React.Component {
                   <NodeMaintenanceState
                     maintenance={node.maintenance}
                     reason={node.maintenance_reason}
+                  />
+                  {' | '}
+                  <NodeIntrospectionState
+                    state={node.introspectionStatus.state}
                   />
                   {' | '}
                   <NodeProvisionState
