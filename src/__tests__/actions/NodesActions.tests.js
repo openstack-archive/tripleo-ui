@@ -17,6 +17,8 @@
 import when from 'when';
 
 import IronicApiService from '../../js/services/IronicApiService';
+import IronicInspectorApiService
+  from '../../js/services/IronicInspectorApiService';
 import MistralApiService from '../../js/services/MistralApiService';
 import { mockGetIntl } from './utils';
 import NodesActions from '../../js/actions/NodesActions';
@@ -139,6 +141,11 @@ describe('Asynchronous Nodes Actions', () => {
         ports: [{ uuid: 'port1', address: 'mac', node_uuid: '123' }]
       })
     );
+    spyOn(IronicInspectorApiService, 'getIntrospectionStatuses').and.callFake(
+      createResolvingPromise({
+        introspection: [{ uuid: 'node1', state: 'finished' }]
+      })
+    );
 
     // Call the action creator and the resulting action.
     // In this case, dispatch and getState are just empty placeHolders.
@@ -165,6 +172,12 @@ describe('Asynchronous Nodes Actions', () => {
           uuid: 'port1',
           address: 'mac',
           node_uuid: '123'
+        }
+      },
+      introspectionStatuses: {
+        node1: {
+          uuid: 'node1',
+          state: 'finished'
         }
       }
     });
