@@ -35,7 +35,7 @@ export default class IronicApiErrorHandler extends BaseHttpRequestErrorHandler {
       case 0:
         errors.push({
           title: 'Connection Error',
-          message: 'Connection to Ironic is not available'
+          message: 'Connection to Ironic or Ironic Inspector is not available'
         });
         break;
       case 401:
