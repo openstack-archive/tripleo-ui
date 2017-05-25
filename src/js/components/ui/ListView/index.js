@@ -11,6 +11,9 @@ import PropTypes from 'prop-types';
     <ListViewItemHeader> // required only if the ListViewItem is supposed to be expandable
       <ListViewExpand toggleExpanded={functionToToggle} expanded />
       <ListViewCheckbox disabled={inProgress} name={`values.${node.uuid}`} />
+      <ListViewActions>
+        // buttons, dropdowns...
+      </ListViewActions>
       <ListViewMainInfo>
         <ListViewLeft>
           <ListViewIcon size="sm" icon={iconClass} />
@@ -78,13 +81,27 @@ ListViewItem.defaultProps = {
   stacked: false
 };
 
-export const ListViewItemHeader = ({ children }) => (
-  <div className="list-group-item-header">
-    {children}
-  </div>
-);
+export const ListViewItemHeader = ({ children, toggleExpanded }) => {
+  const handleClick = e => {
+    // ignore selected child elements click
+    if (
+      e.target.tagName !== 'BUTTON' &&
+      e.target.tagName !== 'A' &&
+      e.target.tagName !== 'INPUT' &&
+      !e.target.classList.contains('fa-ellipsis-v')
+    ) {
+      toggleExpanded();
+    }
+  };
+  return (
+    <div className="list-group-item-header" onClick={handleClick}>
+      {children}
+    </div>
+  );
+};
 ListViewItemHeader.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  toggleExpanded: PropTypes.func.isRequired
 };
 
 export const ListViewItemContainer = ({ children, expanded, onClose }) => {
@@ -113,7 +130,13 @@ ListViewItemContainer.defaultProps = {
 
 export const ListViewCheckbox = ({ disabled, name }) => (
   <div className="list-view-pf-checkbox">
-    <Field name={name} type="checkbox" component="input" disabled={disabled} />
+    <Field
+      name={name}
+      type="checkbox"
+      component="input"
+      disabled={disabled}
+      onClick={e => e.stopPropagation()}
+    />
   </div>
 );
 ListViewCheckbox.propTypes = {
@@ -124,20 +147,19 @@ ListViewCheckbox.defaultProps = {
   disabled: false
 };
 
-export const ListViewExpand = ({ expanded, toggleExpanded }) => {
+export const ListViewExpand = ({ expanded }) => {
   const classes = ClassNames({
     'fa fa-angle-right': true,
     'fa-angle-down': expanded
   });
   return (
-    <a className="list-view-pf-expand" onClick={() => toggleExpanded()}>
+    <a className="list-view-pf-expand">
       <span className={classes} />
     </a>
   );
 };
 ListViewExpand.propTypes = {
-  expanded: PropTypes.bool.isRequired,
-  toggleExpanded: PropTypes.func.isRequired
+  expanded: PropTypes.bool.isRequired
 };
 ListViewExpand.defaultProps = {
   expanded: false
