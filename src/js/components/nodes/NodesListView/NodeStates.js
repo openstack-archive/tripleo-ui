@@ -4,6 +4,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const messages = defineMessages({
+  introspectionState: {
+    id: 'NodeIntrospectionState.introspectionStateLabel',
+    defaultMessage: 'Introspection:'
+  },
   provisionState: {
     id: 'NodeProvisionState.provisionStateLabel',
     defaultMessage: 'Provision State:'
@@ -79,6 +83,18 @@ export const NodeProvisionState = ({
 NodeProvisionState.propTypes = {
   provisionState: PropTypes.string.isRequired,
   targetProvisionState: PropTypes.string
+};
+
+export const NodeIntrospectionStatus = ({
+  status: { finished, state, error }
+}) => (
+  <span title={error}>
+    <strong><FormattedMessage {...messages.introspectionState} /></strong>&nbsp;
+    {state}
+  </span>
+);
+NodeIntrospectionStatus.propTypes = {
+  status: PropTypes.object.isRequired
 };
 
 export class NodePowerState extends React.Component {
