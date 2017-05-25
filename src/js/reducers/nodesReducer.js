@@ -14,18 +14,16 @@
  * under the License.
  */
 
-import { fromJS, Map, Set } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
 import NodesConstants from '../constants/NodesConstants';
-import { Port } from '../immutableRecords/nodes';
+import {
+  NodesState,
+  Port,
+  IntrospectionStatus
+} from '../immutableRecords/nodes';
 
-const initialState = Map({
-  isFetching: false,
-  isLoaded: false,
-  nodesInProgress: Set(),
-  all: Map(),
-  ports: Map()
-});
+const initialState = new NodesState();
 
 export default function nodesReducer(state = initialState, action) {
   switch (action.type) {
@@ -33,12 +31,16 @@ export default function nodesReducer(state = initialState, action) {
       return state.set('isFetching', true);
 
     case NodesConstants.RECEIVE_NODES: {
-      const { nodes, ports } = action.payload;
+      const { nodes, ports, introspectionStatuses } = action.payload;
       return state
         .set('all', fromJS(nodes || {}))
         .set('ports', Map(ports).map(port => new Port(port)))
-        .set('isFetching', false)
-        .set('isLoaded', true);
+        .set(
+          'introspectionStatuses',
+          Map(introspectionStatuses).map(s => new IntrospectionStatus(s))
+        )
+        .set('isLoaded', true)
+        .set('isFetching', false);
     }
 
     case NodesConstants.START_NODES_OPERATION:

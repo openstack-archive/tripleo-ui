@@ -21,6 +21,7 @@ import {
 } from '../../ui/ListView';
 import NodeExtendedInfo from './NodeExtendedInfo';
 import {
+  NodeIntrospectionStatus,
   NodeMaintenanceState,
   NodePowerState,
   NodeProvisionState
@@ -66,14 +67,10 @@ export default class NodeListItem extends React.Component {
       'pficon pficon-server': true,
       running: inProgress
     });
-
     return (
       <ListViewItem expanded={this.state.expanded} stacked>
-        <ListViewItemHeader>
-          <ListViewExpand
-            expanded={this.state.expanded}
-            toggleExpanded={this.toggleExpanded.bind(this)}
-          />
+        <ListViewItemHeader toggleExpanded={this.toggleExpanded.bind(this)}>
+          <ListViewExpand expanded={this.state.expanded} />
           <ListViewCheckbox
             disabled={inProgress}
             name={`values.${node.uuid}`}
@@ -96,6 +93,8 @@ export default class NodeListItem extends React.Component {
                     maintenance={node.maintenance}
                     reason={node.maintenance_reason}
                   />
+                  {' | '}
+                  <NodeIntrospectionStatus status={node.introspectionStatus} />
                   {' | '}
                   <NodeProvisionState
                     provisionState={node.provision_state}
