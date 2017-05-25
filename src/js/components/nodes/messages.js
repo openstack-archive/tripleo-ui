@@ -32,6 +32,10 @@ export const nodeColumnMessages = defineMessages({
     id: 'NodeColumns.provisionState',
     defaultMessage: 'Provision State'
   },
+  'introspectionStatus.state': {
+    id: 'NodeColumns.introspectionStatus',
+    defaultMessage: 'Introspection Status'
+  },
   'properties.cpu_arch': {
     id: 'NodeColumns.cpuArch',
     defaultMessage: 'CPU Arch.'
