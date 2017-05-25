@@ -19,6 +19,7 @@ import { List, Set } from 'immutable';
 
 import { getFilterByName } from './filters';
 import { getRoles } from './roles';
+import { IntrospectionStatus } from '../immutableRecords/nodes';
 import { parseNodeCapabilities } from '../utils/nodes';
 
 export const getNodes = state =>
@@ -29,6 +30,8 @@ export const getNodesByIds = (state, nodeIds) =>
     .filter((v, k) => nodeIds.includes(k))
     .sortBy(n => n.get('uuid'));
 export const getPorts = state => state.nodes.get('ports');
+export const getIntrospectionStatuses = state =>
+  state.nodes.get('introspectionStatuses');
 export const nodesInProgress = state => state.nodes.get('nodesInProgress');
 export const nodesToolbarFilter = state =>
   getFilterByName(state, 'nodesToolbar');
@@ -36,17 +39,23 @@ export const nodesToolbarFilter = state =>
 /**
  *  Return Nodes including mac addresses as string at macs attribute
  */
-export const getNodesWithMacs = createSelector(
-  [getNodes, getPorts],
-  (nodes, ports) =>
+export const getDetailedNodes = createSelector(
+  [getNodes, getPorts, getIntrospectionStatuses],
+  (nodes, ports, introspectionStatuses) =>
     nodes.map(node =>
-      node.set(
-        'macs',
-        ports
-          .filter(p => node.get('uuid') === p.node_uuid)
-          .map(port => port.address)
-          .toList()
-      )
+      node
+        .set(
+          'macs',
+          ports
+            .filter(p => node.get('uuid') === p.node_uuid)
+            .map(port => port.address)
+            .toList()
+        )
+        .set(
+          'introspectionStatus',
+          // introspectionStatuses.filter(s => node.get('uuid') === s.uuid)
+          introspectionStatuses.get(node.get('uuid'), new IntrospectionStatus())
+        )
     )
 );
 
@@ -54,7 +63,7 @@ export const getNodesWithMacs = createSelector(
  *  Return Nodes with filters from nodesToolbar applied
  */
 export const getFilteredNodes = createSelector(
-  [getNodesWithMacs, nodesToolbarFilter],
+  [getDetailedNodes, nodesToolbarFilter],
   (nodes, nodesToolbarFilter) =>
     nodes
       .update(nodes =>

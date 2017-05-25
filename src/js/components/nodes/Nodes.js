@@ -55,6 +55,9 @@ class Nodes extends React.Component {
     e.preventDefault();
     this.props.fetchNodes();
     this.props.fetchRoles(this.props.currentPlanName);
+    // this.props.fetchNodeIntrospectionData(
+    //   '28a33b9f-fbf8-4acd-8b93-d1132843eecf'
+    // );
   }
 
   renderContentView() {
@@ -117,6 +120,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchNodes: () => dispatch(NodesActions.fetchNodes()),
+  fetchNodeIntrospectionData: nodeId =>
+    dispatch(NodesActions.fetchNodeIntrospectionData(nodeId)),
   fetchRoles: currentPlanName =>
     dispatch(RolesActions.fetchRoles(currentPlanName))
 });
