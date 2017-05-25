@@ -98,6 +98,9 @@ class NodesToolbar extends React.Component {
               power_state: intl.formatMessage(nodeColumnMessages.power_state),
               provision_state: intl.formatMessage(
                 nodeColumnMessages.provision_state
+              ),
+              'introspectionStatus.state': intl.formatMessage(
+                nodeColumnMessages['introspectionStatus.state']
               )
             }}
             placeholder={intl.formatMessage(messages.filterStringPlaceholder)}
