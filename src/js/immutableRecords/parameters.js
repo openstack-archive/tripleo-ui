@@ -42,7 +42,7 @@ export const Resource = Record({
   description: undefined,
   id: undefined,
   name: undefined,
-  nestedParameters: List(),
+  resources: List(),
   parameters: List(),
   type: undefined
 });
