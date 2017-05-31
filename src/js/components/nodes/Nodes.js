@@ -67,6 +67,7 @@ class Nodes extends React.Component {
       ? <NodesTableView />
       : <NodesListForm>
           <NodesListView
+            fetchNodeIntrospectionData={this.props.fetchNodeIntrospectionData}
             nodes={this.props.nodes}
             nodesInProgress={this.props.nodesInProgress}
           />
@@ -117,6 +118,7 @@ Nodes.propTypes = {
   children: PropTypes.node,
   contentView: PropTypes.string.isRequired,
   currentPlanName: PropTypes.string.isRequired,
+  fetchNodeIntrospectionData: PropTypes.func.isRequired,
   fetchNodes: PropTypes.func.isRequired,
   fetchRoles: PropTypes.func.isRequired,
   fetchingNodes: PropTypes.bool.isRequired,
@@ -140,6 +142,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchNodes: () => dispatch(NodesActions.fetchNodes()),
+  fetchNodeIntrospectionData: nodeId =>
+    dispatch(NodesActions.fetchNodeIntrospectionData(nodeId)),
   fetchRoles: currentPlanName =>
     dispatch(RolesActions.fetchRoles(currentPlanName))
 });
