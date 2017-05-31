@@ -1,4 +1,5 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import { ListView } from '../../ui/ListView';
@@ -10,12 +11,12 @@ export default class NodesListView extends React.Component {
       <ListView>
         {this.props.nodes
           .toList()
-          .toJS()
           .map(node => (
             <NodeListItem
+              fetchNodeIntrospectionData={this.props.fetchNodeIntrospectionData}
               node={node}
-              key={node.uuid}
-              inProgress={this.props.nodesInProgress.includes(node.uuid)}
+              key={node.get('uuid')}
+              inProgress={this.props.nodesInProgress.includes(node.get('uuid'))}
             />
           ))}
       </ListView>
@@ -23,6 +24,7 @@ export default class NodesListView extends React.Component {
   }
 }
 NodesListView.propTypes = {
+  fetchNodeIntrospectionData: PropTypes.func.isRequired,
   nodes: ImmutablePropTypes.map.isRequired,
   nodesInProgress: ImmutablePropTypes.set.isRequired
 };
