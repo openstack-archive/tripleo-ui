@@ -1,5 +1,6 @@
 import ClassNames from 'classnames';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import React, { PropTypes } from 'react';
 
 import {
@@ -60,7 +61,7 @@ export default class NodeListItem extends React.Component {
   }
 
   render() {
-    const { node, inProgress } = this.props;
+    const { fetchNodeIntrospectionData, node, inProgress } = this.props;
 
     const iconClass = ClassNames({
       'pficon pficon-server': true,
@@ -73,7 +74,7 @@ export default class NodeListItem extends React.Component {
           <ListViewExpand expanded={this.state.expanded} />
           <ListViewCheckbox
             disabled={inProgress}
-            name={`values.${node.uuid}`}
+            name={`values.${node.get('uuid')}`}
           />
           <ListViewMainInfo>
             <ListViewLeft>
@@ -82,25 +83,25 @@ export default class NodeListItem extends React.Component {
             <ListViewBody>
               <ListViewDescription>
                 <ListViewDescriptionHeading>
-                  {node.name || node.uuid}
+                  {node.get('name') || node.get('uuid')}
                 </ListViewDescriptionHeading>
                 <ListViewDescriptionText>
                   <NodePowerState
-                    powerState={node.power_state}
-                    targetPowerState={node.target_power_state}
+                    powerState={node.get('power_state')}
+                    targetPowerState={node.get('target_power_state')}
                   />
                   <NodeMaintenanceState
-                    maintenance={node.maintenance}
-                    reason={node.maintenance_reason}
+                    maintenance={node.get('maintenance')}
+                    reason={node.get('maintenance_reason')}
                   />
                   {' | '}
                   <NodeIntrospectionState
-                    state={node.introspectionStatus.state}
+                    state={node.getIn(['introspectionStatus', 'state'])}
                   />
                   {' | '}
                   <NodeProvisionState
-                    provisionState={node.provision_state}
-                    targetProvisionState={node.target_provision_state}
+                    provisionState={node.get('provision_state')}
+                    targetProvisionState={node.get('target_provision_state')}
                   />
                 </ListViewDescriptionText>
               </ListViewDescription>
@@ -109,27 +110,30 @@ export default class NodeListItem extends React.Component {
                   <span className="pficon pficon-flavor" />
                   <FormattedMessage {...messages.profile} />
                   &nbsp;
-                  {parseNodeCapabilities(node.properties.capabilities)
-                    .profile || '-'}
+                  {parseNodeCapabilities(
+                    node.getIn(['properties', 'capabilities'])
+                  ).profile || '-'}
                 </ListViewAdditionalInfoItem>
                 <ListViewAdditionalInfoItem>
                   <span className="pficon pficon-cpu" />
-                  <strong>{node.properties.cpus || '-'}</strong>
+                  <strong>{node.getIn(['properties', 'cpus'], '-')}</strong>
                   &nbsp;
                   <FormattedMessage
                     {...messages.cpuCores}
-                    values={{ cpuCores: node.properties.cpus }}
+                    values={{ cpuCores: node.getIn(['properties', 'cpus']) }}
                   />
                 </ListViewAdditionalInfoItem>
                 <ListViewAdditionalInfoItem>
                   <span className="pficon pficon-memory" />
-                  <strong>{node.properties.memory_mb || '-'}</strong>
+                  <strong>
+                    {node.getIn(['properties', 'memory_mb'], '-')}
+                  </strong>
                   &nbsp;
                   <FormattedMessage {...messages.ram} />
                 </ListViewAdditionalInfoItem>
                 <ListViewAdditionalInfoItem>
                   <span className="fa fa-database" />
-                  <strong>{node.properties.local_gb || '-'}</strong>
+                  <strong>{node.getIn(['properties', 'local_gb'], '-')}</strong>
                   &nbsp;
                   <FormattedMessage {...messages.disk} />
                 </ListViewAdditionalInfoItem>
@@ -141,13 +145,17 @@ export default class NodeListItem extends React.Component {
           onClose={this.toggleExpanded.bind(this)}
           expanded={this.state.expanded}
         >
-          <NodeExtendedInfo node={node} />
+          <NodeExtendedInfo
+            node={node}
+            fetchNodeIntrospectionData={fetchNodeIntrospectionData}
+          />
         </ListViewItemContainer>
       </ListViewItem>
     );
   }
 }
 NodeListItem.propTypes = {
+  fetchNodeIntrospectionData: PropTypes.func.isRequired,
   inProgress: PropTypes.bool.isRequired,
-  node: PropTypes.object.isRequired
+  node: ImmutablePropTypes.map.isRequired
 };

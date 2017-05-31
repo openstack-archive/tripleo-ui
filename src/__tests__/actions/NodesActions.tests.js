@@ -121,6 +121,12 @@ let createResolvingPromise = data => {
   };
 };
 
+let createRejectingPromise = error => {
+  return () => {
+    return when.reject(error);
+  };
+};
+
 describe('Asynchronous Nodes Actions', () => {
   beforeEach(done => {
     spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
@@ -180,6 +186,72 @@ describe('Asynchronous Nodes Actions', () => {
           state: 'finished'
         }
       }
+    });
+  });
+});
+
+describe('Fetching Introspection data success', () => {
+  const response = { interfaces: { eth0: { mac: '00:00:00:00:00:11' } } };
+  const nodeId = '598612eb-f21b-435e-a868-7bb74e576cc2';
+
+  beforeEach(done => {
+    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
+    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
+    spyOn(NodesActions, 'fetchNodeIntrospectionDataSuccess');
+    spyOn(IronicInspectorApiService, 'getIntrospectionData').and.callFake(
+      createResolvingPromise(response)
+    );
+
+    NodesActions.fetchNodeIntrospectionData(nodeId)(() => {}, () => {});
+    setTimeout(() => {
+      done();
+    }, 1);
+  });
+
+  it('dispatches fetchNodeIntrospectionDataSuccess', () => {
+    expect(IronicInspectorApiService.getIntrospectionData).toHaveBeenCalledWith(
+      nodeId
+    );
+    expect(NodesActions.fetchNodeIntrospectionDataSuccess).toHaveBeenCalledWith(
+      nodeId,
+      response
+    );
+  });
+});
+
+describe('Fetching Introspection data error', () => {
+  const nodeId = '598612eb-f21b-435e-a868-7bb74e576cc2';
+  const message = 'Data for specified node not available';
+  const error = {
+    status: 404,
+    responseText: `{ "error": { "message": "${message}" } }`
+  };
+
+  beforeEach(done => {
+    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
+    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
+    spyOn(NodesActions, 'fetchNodeIntrospectionDataFailed');
+    spyOn(NotificationActions, 'notify');
+    spyOn(IronicInspectorApiService, 'getIntrospectionData').and.callFake(
+      createRejectingPromise(error)
+    );
+
+    NodesActions.fetchNodeIntrospectionData(nodeId)(() => {}, () => {});
+    setTimeout(() => {
+      done();
+    }, 1);
+  });
+
+  it('dispatches fetchNodeIntrospectionDataFailed', () => {
+    expect(IronicInspectorApiService.getIntrospectionData).toHaveBeenCalledWith(
+      nodeId
+    );
+    expect(NodesActions.fetchNodeIntrospectionDataFailed).toHaveBeenCalledWith(
+      nodeId
+    );
+    expect(NotificationActions.notify).toHaveBeenCalledWith({
+      title: 'Introspection data not found',
+      message: message
     });
   });
 });

@@ -21,7 +21,8 @@ export const NodesState = Record({
   nodesInProgress: Set(),
   all: Map(),
   ports: Map(),
-  introspectionStatuses: Map()
+  introspectionStatuses: Map(),
+  introspectionData: Map()
 });
 
 export const NodeToRegister = Record({
