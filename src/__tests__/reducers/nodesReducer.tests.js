@@ -14,31 +14,25 @@
  * under the License.
  */
 
-import { Map, Set } from 'immutable';
+import { fromJS, Map, Set } from 'immutable';
 
 import NodesConstants from '../../js/constants/NodesConstants';
 import nodesReducer from '../../js/reducers/nodesReducer';
+import { NodesState } from '../../js/immutableRecords/nodes';
 
 describe('nodesReducer', () => {
-  const initialState = Map({
+  const initialState = new NodesState({
     isFetching: false,
     nodesInProgress: Set(),
-    allFilter: '',
-    registeredFilter: '',
-    introspectedFilter: '',
-    deployedFilter: '',
-    maintenanceFilter: '',
-    all: Map()
+    all: Map(),
+    ports: Map(),
+    introspectionStatuses: Map(),
+    introspectionData: Map()
   });
 
-  const updatedState = Map({
+  const updatedState = new NodesState({
     isFetching: false,
     nodesInProgress: Set(),
-    allFilter: '',
-    registeredFilter: '',
-    introspectedFilter: '',
-    deployedFilter: '',
-    maintenanceFilter: '',
     all: Map({
       uuid1: Map({
         uuid: 'uuid1'
@@ -46,17 +40,15 @@ describe('nodesReducer', () => {
       uuid2: Map({
         uuid: 'uuid2'
       })
-    })
+    }),
+    ports: Map(),
+    introspectionStatuses: Map(),
+    introspectionData: Map()
   });
 
-  const updatedNodeState = Map({
+  const updatedNodeState = new NodesState({
     isFetching: false,
     nodesInProgress: Set(),
-    allFilter: '',
-    registeredFilter: '',
-    introspectedFilter: '',
-    deployedFilter: '',
-    maintenanceFilter: '',
     all: Map({
       uuid1: Map({
         uuid: 'uuid1',
@@ -67,7 +59,10 @@ describe('nodesReducer', () => {
       uuid2: Map({
         uuid: 'uuid2'
       })
-    })
+    }),
+    ports: Map(),
+    introspectionStatuses: Map(),
+    introspectionData: Map()
   });
 
   it('should return initial state', () => {
@@ -143,5 +138,28 @@ describe('nodesReducer', () => {
     };
     const newState = nodesReducer(initialState, action);
     expect(newState).toEqual(updatedState);
+  });
+
+  it('should handle FETCH_NODE_INTROSPECTION_DATA_SUCCESS action', () => {
+    const action = {
+      type: NodesConstants.FETCH_NODE_INTROSPECTION_DATA_SUCCESS,
+      payload: {
+        nodeId: 'uuid1',
+        data: { interfaces: { eth0: { mac: '00:00:00:00:00:11' } } }
+      }
+    };
+    const newState = nodesReducer(updatedState, action);
+    expect(newState.introspectionData.get('uuid1')).toEqual(
+      fromJS(action.payload.data)
+    );
+  });
+
+  it('should handle FETCH_NODE_INTROSPECTION_DATA_FAILED action', () => {
+    const action = {
+      type: NodesConstants.FETCH_NODE_INTROSPECTION_DATA_FAILED,
+      payload: 'uuid1'
+    };
+    const newState = nodesReducer(updatedState, action);
+    expect(newState.introspectionData.get('uuid1')).toEqual(undefined);
   });
 });
