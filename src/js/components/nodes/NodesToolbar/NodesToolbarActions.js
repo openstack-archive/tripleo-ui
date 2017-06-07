@@ -2,7 +2,8 @@ import { Button, FormGroup, MenuItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { change, submit, isInvalid } from 'redux-form';
 
 import ConfirmationModal from '../../ui/ConfirmationModal';
