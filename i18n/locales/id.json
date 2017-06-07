@@ -113,6 +113,7 @@
         "NodeColumns.profile": "Profile",
         "NodeColumns.provisionState": "Provision State",
         "NodeMaintenanceState.maintenanceWarning": "Maintenance",
+        "Nodes.loadingNodes": "Loading Nodes...",
         "Nodes.nodes": "Nodes",
         "Nodes.refreshResults": "Refresh Results",
         "Nodes.registerNodes": "Register Nodes",

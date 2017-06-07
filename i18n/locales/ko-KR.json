@@ -110,6 +110,7 @@
         "NodeColumns.profile": "\ud504\ub85c\ud544",
         "NodeColumns.provisionState": "\ud504\ub85c\ube44\uc800\ub2dd \uc0c1\ud0dc",
         "NodeMaintenanceState.maintenanceWarning": "\uc720\uc9c0\ubcf4\uc218",
+        "Nodes.loadingNodes": "\ub178\ub4dc\ub97c \ubd88\ub7ec\uc624\ub294 \uc911...",
         "Nodes.nodes": "\ub178\ub4dc",
         "Nodes.refreshResults": "\uac31\uc2e0 \uacb0\uacfc",
         "Nodes.registerNodes": "\ub178\ub4dc \ub4f1\ub85d",

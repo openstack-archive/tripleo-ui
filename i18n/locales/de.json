@@ -108,6 +108,7 @@
         "NodeColumns.profile": "Profil",
         "NodeColumns.provisionState": "Bereitstellungsstatus",
         "NodeMaintenanceState.maintenanceWarning": "Wartung",
+        "Nodes.loadingNodes": "Lade Knoten...",
         "Nodes.nodes": "Knoten",
         "Nodes.refreshResults": "Ergebnisse aktualisieren",
         "Nodes.registerNodes": "Knoten registrieren",

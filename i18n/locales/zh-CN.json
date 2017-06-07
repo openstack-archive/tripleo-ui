@@ -104,6 +104,7 @@
         "NodeColumns.profile": "\u914d\u7f6e\u96c6",
         "NodeColumns.provisionState": "\u7f6e\u5907\u72b6\u6001",
         "NodeMaintenanceState.maintenanceWarning": "\u7ef4\u62a4",
+        "Nodes.loadingNodes": "\u6b63\u5728\u52a0\u8f7d\u8282\u70b9 ...",
         "Nodes.nodes": "\u8282\u70b9",
         "Nodes.refreshResults": "\u5237\u65b0\u7ed3\u679c",
         "Nodes.registerNodes": "\u6ce8\u518c\u8282\u70b9",
