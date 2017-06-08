@@ -25,6 +25,7 @@ import { Route } from 'react-router-dom';
 import { getFilterByName } from '../../selectors/filters';
 import { getFilteredNodes, nodesInProgress } from '../../selectors/nodes';
 import Loader from '../ui/Loader';
+import NodeDrives from './NodeDrives/NodeDrives';
 import NodesActions from '../../actions/NodesActions';
 import NodesListForm from './NodesListView/NodesListForm';
 import NodesListView from './NodesListView/NodesListView';
@@ -112,6 +113,7 @@ class Nodes extends React.Component {
           {this.renderContentView()}
         </Loader>
         <Route path="/nodes/register" component={RegisterNodesDialog} />
+        <Route path="/nodes/:nodeId/drives" component={NodeDrives} />
       </div>
     );
   }
