@@ -8,8 +8,8 @@ import PropTypes from 'prop-types';
 <ListView>
   <ListViewItem stacked expanded>
 
-    <ListViewItemHeader> // required only if the ListViewItem is supposed to be expandable
-      <ListViewExpand toggleExpanded={functionToToggle} expanded />
+    <ListViewItemHeader toggleExpanded={functionToToggle}> // required only if the ListViewItem is supposed to be expandable
+      <ListViewExpand expanded />
       <ListViewCheckbox disabled={inProgress} name={`values.${node.uuid}`} />
       <ListViewActions>
         // buttons, dropdowns...
