@@ -32,6 +32,8 @@ export const getNodesByIds = (state, nodeIds) =>
 export const getPorts = state => state.nodes.get('ports');
 export const getIntrospectionData = state =>
   state.nodes.get('introspectionData');
+export const getNodeIntrospectionData = (state, nodeId) =>
+  state.nodes.introspectionData.get(nodeId, Map());
 export const getIntrospectionStatuses = state =>
   state.nodes.get('introspectionStatuses');
 export const nodesInProgress = state => state.nodes.get('nodesInProgress');
@@ -143,6 +145,20 @@ export const getAvailableNodeProfiles = createSelector(
 export const getNodesOperationInProgress = createSelector(
   nodesInProgress,
   nodesInProgress => !nodesInProgress.isEmpty()
+);
+
+export const getNodeDrives = createSelector(
+  getNodeIntrospectionData,
+  nodeIntrospectionData =>
+    nodeIntrospectionData
+      .getIn(['inventory', 'disks'], List())
+      .map(disk =>
+        disk.set(
+          'rootDisk',
+          nodeIntrospectionData.getIn(['root_disk', 'name']) ===
+            disk.get('name')
+        )
+      )
 );
 
 /**
