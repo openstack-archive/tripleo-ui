@@ -21,6 +21,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 
+import DebugScreen from './debug/DebugScreen';
 import DeploymentPlan from './deployment_plan/DeploymentPlan';
 import { getCurrentPlanName } from '../selectors/plans';
 import Loader from './ui/Loader';
@@ -68,6 +69,7 @@ class AuthenticatedContent extends React.Component {
                 {currentPlanName
                   ? <Redirect from="/" to={`/plans/${currentPlanName}`} />
                   : <Redirect from="/" to="/plans/manage" />}
+                <Route path="/debug" component={DebugScreen} />
               </Switch>
             </div>
             <ValidationsList />
