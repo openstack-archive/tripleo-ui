@@ -17,7 +17,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ClassNames from 'classnames';
-import Timer from '../utils/Timer';
+import { Timer } from '../utils';
 
 export default class Notification extends React.Component {
   constructor() {

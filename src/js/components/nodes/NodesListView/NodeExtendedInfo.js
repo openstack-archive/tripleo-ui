@@ -91,7 +91,9 @@ const messages = defineMessages({
 
 class NodeExtendedInfo extends React.Component {
   componentDidMount() {
-    if (this.props.node.getIn(['introspectionStatus', 'finished'])) {
+    if (
+      this.props.node.getIn(['introspectionStatus', 'state']) === 'finished'
+    ) {
       this.props.fetchNodeIntrospectionData(this.props.node.get('uuid'));
     }
   }
