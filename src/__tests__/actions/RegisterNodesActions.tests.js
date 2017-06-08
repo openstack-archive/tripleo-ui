@@ -14,11 +14,11 @@
  * under the License.
  */
 
-import { browserHistory } from 'react-router';
 import when from 'when';
 import { Map } from 'immutable';
 
 import MistralApiService from '../../js/services/MistralApiService';
+import mockHistory from '../mocks/history';
 import { mockGetIntl } from './utils';
 import RegisterNodesActions from '../../js/actions/RegisterNodesActions';
 import NodesActions from '../../js/actions/NodesActions';
@@ -107,9 +107,8 @@ describe('nodesRegistrationFinished', () => {
 
     spyOn(NotificationActions, 'notify');
     spyOn(RegisterNodesActions, 'nodesRegistrationSuccess');
-    spyOn(browserHistory, 'push');
 
-    RegisterNodesActions.nodesRegistrationFinished(messagePayload)(
+    RegisterNodesActions.nodesRegistrationFinished(messagePayload, mockHistory)(
       () => {},
       () => {
         return {
@@ -129,7 +128,7 @@ describe('nodesRegistrationFinished', () => {
       successNotification
     );
     expect(RegisterNodesActions.nodesRegistrationSuccess).toHaveBeenCalled();
-    expect(browserHistory.push).toHaveBeenCalledWith('/nodes');
+    expect(mockHistory.push).toHaveBeenCalledWith('/nodes');
   });
 
   it('handles failed nodes registration', () => {
@@ -159,9 +158,8 @@ describe('nodesRegistrationFinished', () => {
     ];
 
     spyOn(RegisterNodesActions, 'nodesRegistrationFailed');
-    spyOn(browserHistory, 'push');
 
-    RegisterNodesActions.nodesRegistrationFinished(messagePayload)(
+    RegisterNodesActions.nodesRegistrationFinished(messagePayload, mockHistory)(
       () => {},
       () => {
         return {
@@ -173,7 +171,7 @@ describe('nodesRegistrationFinished', () => {
       mockGetIntl
     );
 
-    expect(browserHistory.push).toHaveBeenCalledWith('/nodes/register');
+    expect(mockHistory.push).toHaveBeenCalledWith('/nodes/register');
     expect(NodesActions.addNodes).toHaveBeenCalledWith(
       normalizedRegisteredNodes
     );
