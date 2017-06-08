@@ -18,5 +18,7 @@ import { List, Record } from 'immutable';
 
 export const InitialLoggerState = Record({
   messages: List(),
-  authenticated: false
+  authenticated: false,
+  isDownloadingLogs: false,
+  logsUrl: ''
 });

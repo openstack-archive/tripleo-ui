@@ -18,7 +18,10 @@ import uuid from 'node-uuid';
 import when from 'when';
 
 import { getAuthTokenId, getProjectId, getServiceUrl } from './utils';
-import { ZAQAR_DEFAULT_QUEUE } from '../constants/ZaqarConstants';
+import {
+  ZAQAR_DEFAULT_QUEUE,
+  ZAQAR_LOGGING_QUEUE
+} from '../constants/ZaqarConstants';
 import ZaqarActions from '../actions/ZaqarActions';
 import LoggerActions from '../actions/LoggerActions';
 import NotificationActions from '../actions/NotificationActions';
@@ -49,6 +52,7 @@ export default {
       this.socket.onopen = () => {
         this.authenticate();
         this.createQueue(ZAQAR_DEFAULT_QUEUE);
+        this.createQueue(ZAQAR_LOGGING_QUEUE);
         this.subscribe(ZAQAR_DEFAULT_QUEUE);
       };
 

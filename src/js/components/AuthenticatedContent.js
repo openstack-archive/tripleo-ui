@@ -21,6 +21,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 
+import DebugScreen from './debug/DebugScreen';
 import DeploymentPlan from './deployment_plan/DeploymentPlan';
 import Loader from './ui/Loader';
 import LoginActions from '../actions/LoginActions';
@@ -71,6 +72,7 @@ class AuthenticatedContent extends React.Component {
                 <Route path="/nodes" component={Nodes} />
                 <Route path="/deployment-plan" component={DeploymentPlan} />
                 <Route path="/plans" component={Plans} />
+                <Route path="/debug" component={DebugScreen} />
                 <Redirect from="/" to="/deployment-plan" />
               </Switch>
             </div>
