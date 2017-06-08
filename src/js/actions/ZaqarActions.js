@@ -18,6 +18,7 @@ import NodesActions from './NodesActions';
 import PlansActions from './PlansActions';
 import RegisterNodesActions from './RegisterNodesActions';
 import ValidationsActions from './ValidationsActions';
+import LoggerActions from './LoggerActions';
 import MistralConstants from '../constants/MistralConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 
@@ -63,6 +64,11 @@ export default {
 
         case MistralConstants.PLAN_EXPORT: {
           dispatch(PlansActions.exportPlanFinished(payload));
+          break;
+        }
+
+        case MistralConstants.DOWNLOAD_LOGS: {
+          dispatch(LoggerActions.downloadLogsFinished(payload));
           break;
         }
 

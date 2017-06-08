@@ -39,6 +39,10 @@ const messages = defineMessages({
     id: 'NavBar.deploymentPlanTab',
     defaultMessage: 'Deployment Plan'
   },
+  debug: {
+    id: 'NavBar.debug',
+    defaultMessage: 'Debug'
+  },
   nodesTab: {
     id: 'Navbar.nodesTab',
     defaultMessage: 'Nodes'
@@ -97,6 +101,11 @@ export default class NavBar extends React.Component {
               </a>
             </li>
             {this._renderLanguageDropdown()}
+            <li>
+              <Link to="/debug">
+                <FormattedMessage {...messages.debug} />
+              </Link>
+            </li>
             <li>
               <a
                 href="#"
