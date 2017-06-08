@@ -15,9 +15,22 @@
  */
 
 import when from 'when';
+import { defineMessages } from 'react-intl';
+
+import { handleErrors } from './ErrorActions';
 import LoggerConstants from '../constants/LoggerConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 import NotificationActions from '../actions/NotificationActions';
+import MistralConstants from '../constants/MistralConstants';
+import MistralApiService from '../services/MistralApiService';
+import { getServiceUrl } from '../services/utils';
+
+const messages = defineMessages({
+  downloadLogsFailedNotificationTitle: {
+    id: 'LoggerActions.downloadLogsFailedNotificationTitle',
+    defaultMessage: 'Download logs failed'
+  }
+});
 
 export default {
   queueMessage(message) {
@@ -62,6 +75,62 @@ export default {
   authenticated() {
     return {
       type: LoggerConstants.WS_AUTHENTICATION_SUCCESS
+    };
+  },
+
+  downloadLogsPending() {
+    return {
+      type: LoggerConstants.DOWNLOAD_LOGS_PENDING
+    };
+  },
+
+  downloadLogsSuccess(url) {
+    return {
+      type: LoggerConstants.DOWNLOAD_LOGS_SUCCESS,
+      payload: url
+    };
+  },
+
+  downloadLogsFailed() {
+    return {
+      type: LoggerConstants.DOWNLOAD_LOGS_FAILED
+    };
+  },
+
+  downloadLogsFinished(payload) {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
+      if (payload.status === 'FAILED' || !payload.tempurl) {
+        dispatch(this.downloadLogsFailed());
+        dispatch(
+          NotificationActions.notify({
+            title: formatMessage(messages.downloadLogsFailedNotificationTitle),
+            message: payload.message,
+            type: 'error'
+          })
+        );
+      } else {
+        let urlParser = document.createElement('a');
+        urlParser.href = payload.tempurl;
+        let url = urlParser.hostname;
+        urlParser.href = getServiceUrl('swift');
+        let swiftUrl = urlParser.hostname;
+        dispatch(
+          this.downloadLogsSuccess(payload.tempurl.replace(url, swiftUrl))
+        );
+      }
+    };
+  },
+
+  downloadLogs() {
+    return dispatch => {
+      dispatch(this.downloadLogsPending());
+      MistralApiService.runWorkflow(
+        MistralConstants.DOWNLOAD_LOGS
+      ).catch(error => {
+        dispatch(handleErrors(error, 'Failed to download logs'));
+        dispatch(this.downloadLogsFailed());
+      });
     };
   }
 };
