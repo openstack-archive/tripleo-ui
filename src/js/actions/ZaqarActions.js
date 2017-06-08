@@ -78,6 +78,11 @@ export default {
           break;
         }
 
+        case MistralConstants.DOWNLOAD_LOGS: {
+          dispatch(LoggerActions.downloadLogsFinished(payload));
+          break;
+        }
+
         default:
           break;
       }
