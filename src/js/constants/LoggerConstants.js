@@ -17,6 +17,9 @@
 import keyMirror from 'keymirror';
 
 export default keyMirror({
+  DOWNLOAD_LOGS_PENDING: null,
+  DOWNLOAD_LOGS_SUCCESS: null,
+  DOWNLOAD_LOGS_FAILED: null,
   QUEUE_MESSAGE: null,
   FLUSH_MESSAGES_SUCCESS: null,
   WS_AUTHENTICATION_SUCCESS: null

@@ -33,6 +33,17 @@ export default function loggerReduder(state = initialState, action) {
     case LoggerConstants.FLUSH_MESSAGES_SUCCESS:
       return state.set('messages', List());
 
+    case LoggerConstants.DOWNLOAD_LOGS_PENDING:
+      return state.set('isDownloadingLogs', true);
+
+    case LoggerConstants.DOWNLOAD_LOGS_FAILED:
+      return state.set('isDownloadingLogs', false);
+
+    case LoggerConstants.DOWNLOAD_LOGS_SUCCESS:
+      return state
+        .set('isDownloadingLogs', false)
+        .set('logsUrl', action.payload);
+
     default:
       return state;
   }

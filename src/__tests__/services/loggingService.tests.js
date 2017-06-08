@@ -14,11 +14,12 @@
  * under the License.
  */
 
-import { List, Record } from 'immutable';
+import store from '../../js/store';
+import { predicate } from '../../js/services/logging/LoggingService';
 
-export const InitialLoggerState = Record({
-  messages: List(),
-  authenticated: false,
-  isDownloadingLogs: false,
-  logsUrl: ''
+describe('Logger predicate', () => {
+  it('ignores download logs actions', () => {
+    expect(predicate(() => {}, { type: 'QUEUE_MESSAGE'})).toBeFalsy();
+    expect(predicate(() => {}, { type: 'DOWNLOAD_LOGS_SUCCESS'})).toBeTruthy();
+  });
 });
