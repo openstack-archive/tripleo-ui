@@ -23,6 +23,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { getEnabledLanguages } from '../services/utils';
 import NavTab from './ui/NavTab';
 import I18nDropdown from './i18n/I18nDropdown';
+import StatusDropdown from './StatusDropdown';
 
 import TripleoOwlSvg from '../../img/tripleo-owl-navbar.svg';
 
@@ -38,6 +39,10 @@ const messages = defineMessages({
   plansTab: {
     id: 'NavBar.plansTab',
     defaultMessage: 'Plans'
+  },
+  debug: {
+    id: 'NavBar.debug',
+    defaultMessage: 'Debug'
   },
   nodesTab: {
     id: 'Navbar.nodesTab',
@@ -61,6 +66,14 @@ export default class NavBar extends React.Component {
           <I18nDropdown />
         </li>
       : null;
+  }
+
+  _renderHelpDropdown() {
+    return (
+      <li>
+        <StatusDropdown />
+      </li>
+    );
   }
 
   render() {
@@ -97,6 +110,7 @@ export default class NavBar extends React.Component {
               </a>
             </li>
             {this._renderLanguageDropdown()}
+            {this._renderHelpDropdown()}
             <li>
               <a
                 href="#"

@@ -28,7 +28,7 @@
 //   import logger from 'src/js/services/logging/LoggingService';
 //   logger.log('Hello world!');
 
-import { includes } from 'lodash';
+import { includes, startsWith } from 'lodash';
 import LoggerConstants from '../../constants/LoggerConstants';
 import ConsoleAdapter from './adapters/ConsoleAdapter';
 import ZaqarAdapter from './adapters/ZaqarAdapter';
@@ -106,7 +106,12 @@ class Logger {
   }
 }
 
-const isLoggerAction = action => includes(LoggerConstants, action.type);
+const isLoggerAction = action => {
+  if (startsWith(action.type, 'DOWNLOAD_LOGS_')) {
+    return false;
+  }
+  return includes(LoggerConstants, action.type);
+};
 
 // The `predicate` prevents redux-logger from logging logger messages
 // in order to avoid an infinite loop.  This function is used in `createLogger`
