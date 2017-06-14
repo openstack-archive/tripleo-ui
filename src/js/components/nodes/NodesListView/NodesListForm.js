@@ -16,13 +16,14 @@
 
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl } from 'react-intl';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, reduxForm } from 'redux-form';
 import { pickBy } from 'lodash';
 
 import NodesActions from '../../../actions/NodesActions';
-import { nodesInProgress } from '../../../selectors/nodes';
+import { getFilteredNodes, nodesInProgress } from '../../../selectors/nodes';
 
 const messages = defineMessages({
   selectNodes: {
@@ -36,6 +37,15 @@ const messages = defineMessages({
 });
 
 class NodesListForm extends React.Component {
+  componentWillReceiveProps(nextProps) {
+    // remove form values of nodes which are not listed any more
+    const removedValues = this.props.nodes
+      .keySeq()
+      .toSet()
+      .subtract(nextProps.nodes.keySeq());
+    removedValues.map(v => this.props.change(`values.${v}`, false));
+  }
+
   handleFormSubmit(formData) {
     const nodeIds = Object.keys(pickBy(formData.values, value => !!value));
 
@@ -70,11 +80,13 @@ class NodesListForm extends React.Component {
   }
 }
 NodesListForm.propTypes = {
+  change: PropTypes.func.isRequired,
   children: PropTypes.node,
   deleteNodes: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   intl: PropTypes.object,
   introspectNodes: PropTypes.func.isRequired,
+  nodes: ImmutablePropTypes.map.isRequired,
   provideNodes: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   tagNodes: PropTypes.func.isRequired
@@ -94,10 +106,14 @@ const validate = (formData, props) => {
 
 const form = reduxForm({
   form: 'nodesListForm',
+  initialValues: {
+    values: {}
+  },
   validate
 });
 
 const mapStateToProps = state => ({
+  nodes: getFilteredNodes(state),
   nodesInProgress: nodesInProgress(state)
 });
 
