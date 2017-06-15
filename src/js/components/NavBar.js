@@ -24,7 +24,7 @@ import { getAppConfig } from '../services/utils';
 import NavTab from './ui/NavTab';
 import I18nDropdown from './i18n/I18nDropdown';
 
-import TripleoOwlSvg from '../../img/tripleo-owl.svg';
+import TripleoOwlSvg from '../../img/tripleo-owl-navbar.svg';
 
 const messages = defineMessages({
   toggleNavigation: {
