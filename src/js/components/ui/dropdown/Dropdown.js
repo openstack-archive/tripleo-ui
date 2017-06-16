@@ -19,6 +19,10 @@ import ClassNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import DropdownButton from './DropdownButton';
+import DropdownItem from './DropdownItem';
+import DropdownToggle from './DropdownToggle';
+
 export default class Dropdown extends React.Component {
   constructor(props) {
     super(props);
@@ -35,11 +39,11 @@ export default class Dropdown extends React.Component {
     const children = React.Children.toArray(this.props.children);
 
     const toggle = _.first(children, child =>
-      _.includes(['DropdownButton', 'DropdownToggle'], child.type.name)
+      _.includes([DropdownButton, DropdownToggle], child.type)
     );
 
     const items = _.map(
-      _.filter(children, child => child.type.name === 'DropdownItem'),
+      _.filter(children, child => child.type === DropdownItem),
       item =>
         React.cloneElement(item, {
           toggleDropdown: this.toggleDropdown.bind(this)
@@ -49,10 +53,7 @@ export default class Dropdown extends React.Component {
     // Any other children are prepended to DropdownButton.
     // This can be used to add buttons to Dropdown button group
     const otherChildren = _.reject(children, child =>
-      _.includes(
-        ['DropdownButton', 'DropdownToggle', 'DropdownItem'],
-        child.type.name
-      )
+      _.includes([DropdownButton, DropdownToggle, DropdownItem], child.type)
     );
     const dropdownClasses = {
       open: this.state.isOpen

@@ -20,6 +20,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import invariant from 'invariant';
 
 import DataTableRow from './DataTableRow';
+import DataTableColumn from './DataTableColumn';
 import Loader from '../Loader';
 
 const messages = defineMessages({
@@ -41,7 +42,7 @@ class DataTable extends React.Component {
         return;
       }
       invariant(
-        child.type.name === 'DataTableColumn',
+        child.type === DataTableColumn,
         'DataTable child type should be <DataTableColumn />'
       );
       columns.push(child);
