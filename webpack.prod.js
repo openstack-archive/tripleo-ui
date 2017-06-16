@@ -24,7 +24,8 @@ module.exports = env => {
     devtool: 'source-map',
     plugins: [
       new webpack.optimize.UglifyJsPlugin({
-        sourceMap: true
+        sourceMap: true,
+        mangle: false
       }),
       new webpack.BannerPlugin(license),
       new webpack.DefinePlugin({
