@@ -59,7 +59,7 @@ class DeletePlan extends React.Component {
     return (
       <Modal dialogClasses="modal-sm" id="DeletePlan__deletePlanModal">
         <div className="modal-header">
-          <Link to="/plans" type="button" className="close">
+          <Link to="/plans/manage" type="button" className="close">
             <span aria-hidden="true" className="pficon pficon-close" />
           </Link>
           <h4 className="modal-title">
@@ -97,7 +97,7 @@ class DeletePlan extends React.Component {
             <FormattedMessage {...messages.deletePlan} />
           </button>
           <Link
-            to="/plans"
+            to="/plans/manage"
             type="button"
             className="btn btn-default"
             id="DeletePlan__cancelDeletePlanModalButton"

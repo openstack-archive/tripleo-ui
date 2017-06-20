@@ -43,11 +43,15 @@ const messages = defineMessages({
 
 class DeploymentConfiguration extends React.Component {
   render() {
-    const { location } = this.props;
+    const { location, match } = this.props;
     return (
       <Modal dialogClasses="modal-xl">
         <div className="modal-header">
-          <Link to="/deployment-plan" type="button" className="close">
+          <Link
+            to={`/plans/${match.params.planName}`}
+            type="button"
+            className="close"
+          >
             <span aria-hidden="true" className="pficon pficon-close" />
           </Link>
           <h4 className="modal-title">
@@ -56,34 +60,26 @@ class DeploymentConfiguration extends React.Component {
         </div>
 
         <ul className="nav nav-tabs">
-          <NavTab
-            location={location}
-            to="/deployment-plan/configuration/environment"
-          >
+          <NavTab to={`${match.url}/environment`}>
             <FormattedMessage {...messages.overallSettings} />
           </NavTab>
-          <NavTab
-            location={location}
-            to="/deployment-plan/configuration/parameters"
-          >
+          <NavTab to={`${match.url}/parameters`}>
             <FormattedMessage {...messages.parameters} />
           </NavTab>
         </ul>
 
         <Switch location={location}>
           <Route
-            location={location}
-            path="/deployment-plan/configuration/environment"
+            path="/plans/:planName/configuration/environment"
             component={EnvironmentConfiguration}
           />
           <Route
-            location={location}
-            path="/deployment-plan/configuration/parameters"
+            path="/plans/:planName/configuration/parameters"
             component={Parameters}
           />
           <Redirect
-            from="/deployment-plan/configuration"
-            to="/deployment-plan/configuration/environment"
+            from="/plans/:planName/configuration"
+            to={`${match.url}/environment`}
           />
         </Switch>
       </Modal>
@@ -91,7 +87,8 @@ class DeploymentConfiguration extends React.Component {
   }
 }
 DeploymentConfiguration.propTypes = {
-  location: PropTypes.object.isRequired
+  location: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired
 };
 
 export default checkRunningDeployment(DeploymentConfiguration);

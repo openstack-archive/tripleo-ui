@@ -116,7 +116,7 @@ class EditPlan extends React.Component {
           onInvalid={this.onFormInvalid.bind(this)}
         >
           <div className="modal-header">
-            <Link to="/plans" type="button" className="close">
+            <Link to="/plans/manage" type="button" className="close">
               <span aria-hidden="true" className="pficon pficon-close" />
             </Link>
             <h4>
@@ -151,7 +151,7 @@ class EditPlan extends React.Component {
             >
               <FormattedMessage {...messages.uploadAndUpdate} />
             </button>
-            <Link to="/plans" type="button" className="btn btn-default">
+            <Link to="/plans/manage" type="button" className="btn btn-default">
               <FormattedMessage {...messages.cancel} />
             </Link>
           </div>

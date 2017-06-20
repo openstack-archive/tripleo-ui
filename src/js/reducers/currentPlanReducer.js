@@ -24,11 +24,6 @@ export default function currentPlanReducer(state = initialState, action) {
     case PlansConstants.PLAN_CHOSEN:
       return state.set('currentPlanName', action.payload);
 
-    case PlansConstants.PLAN_DETECTED:
-      return state
-        .set('currentPlanName', action.payload.currentPlanName)
-        .set('conflict', action.payload.conflict);
-
     default:
       return state;
   }

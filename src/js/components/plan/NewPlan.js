@@ -107,7 +107,7 @@ class NewPlan extends React.Component {
         >
           <div className="modal-header">
             <Link
-              to="/plans"
+              to="/plans/manage"
               type="button"
               onClick={() => this.props.cancelCreatePlan()}
               className="close"
@@ -142,7 +142,7 @@ class NewPlan extends React.Component {
               <FormattedMessage {...messages.uploadAndCreate} />
             </button>
             <Link
-              to="/plans"
+              to="/plans/manage"
               type="button"
               onClick={() => this.props.cancelCreatePlan()}
               className="btn btn-default"
