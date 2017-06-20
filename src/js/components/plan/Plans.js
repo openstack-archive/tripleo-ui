@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import ListPlans from './ListPlans';
 import DeletePlan from './DeletePlan';
@@ -28,11 +28,19 @@ export default class Plans extends React.Component {
     return (
       <div className="row">
         <div className="col-sm-12">
-          <ListPlans />
-          <Route path="/plans/new" component={NewPlan} />
-          <Route path="/plans/:planName/delete" component={DeletePlan} />
-          <Route path="/plans/:planName/edit" component={EditPlan} />
-          <Route path="/plans/:planName/export" component={ExportPlan} />
+          <Route path="/plans/manage" component={ListPlans} />
+          <Switch>
+            <Route path="/plans/manage/new" component={NewPlan} />
+            <Route
+              path="/plans/manage/:planName/delete"
+              component={DeletePlan}
+            />
+            <Route path="/plans/manage/:planName/edit" component={EditPlan} />
+            <Route
+              path="/plans/manage/:planName/export"
+              component={ExportPlan}
+            />
+          </Switch>
         </div>
       </div>
     );

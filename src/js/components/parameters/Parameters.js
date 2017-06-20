@@ -27,6 +27,7 @@ import React from 'react';
 import EnvironmentConfigurationActions
   from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentParameters from './EnvironmentParameters';
+import { getCurrentPlanName } from '../../selectors/plans';
 import { getRootParameters } from '../../selectors/parameters';
 import {
   getEnabledEnvironments
@@ -134,7 +135,7 @@ class Parameters extends React.Component {
         closeOnSubmit: false
       });
 
-      this.props.history.push('/deployment-plan');
+      this.props.history.push(`/plans/${this.props.currentPlanName}`);
     }
   }
 
@@ -259,7 +260,11 @@ class Parameters extends React.Component {
           >
             <FormattedMessage {...messages.saveAndClose} />
           </button>
-          <Link to="/deployment-plan" type="button" className="btn btn-default">
+          <Link
+            to={`/plans/${this.props.currentPlanName}`}
+            type="button"
+            className="btn btn-default"
+          >
             <FormattedMessage {...messages.cancel} />
           </Link>
         </div>
@@ -290,6 +295,7 @@ function mapStateToProps(state, ownProps) {
     form: state.parameters.form,
     formErrors: state.parameters.form.get('formErrors'),
     formFieldErrors: state.parameters.form.get('formFieldErrors'),
+    currentPlanName: getCurrentPlanName(state),
     isFetchingParameters: state.parameters.isFetching,
     mistralParameters: state.parameters.mistralParameters,
     parameters: getRootParameters(state),
@@ -303,14 +309,14 @@ function mapDispatchToProps(dispatch, ownProps) {
       dispatch(
         EnvironmentConfigurationActions.fetchEnvironmentConfiguration(
           currentPlanName,
-          () => ownProps.history.push('/deployment-plan')
+          () => ownProps.history.push(`/plans/${currentPlanName}`)
         )
       );
     },
     fetchParameters: currentPlanName => {
       dispatch(
         ParametersActions.fetchParameters(currentPlanName, () =>
-          ownProps.history.push('/deployment-plan')
+          ownProps.history.push(`/plans/${currentPlanName}`)
         )
       );
     },

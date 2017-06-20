@@ -21,6 +21,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import BlankSlate from '../ui/BlankSlate';
+import { getCurrentPlanName } from '../../selectors/plans';
 import Loader from '../ui/Loader';
 import ValidationsActions from '../../actions/ValidationsActions';
 import ValidationsToolbar from './ValidationsToolbar';
@@ -222,7 +223,7 @@ const mapStateToProps = state => {
     isFetchingValidations: state.validations.get('isFetching'),
     validations: getFilteredValidations(state),
     validationsLoaded: state.validations.get('validationsLoaded'),
-    currentPlanName: state.currentPlan.currentPlanName
+    currentPlanName: getCurrentPlanName(state)
   };
 };
 

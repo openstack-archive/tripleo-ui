@@ -25,6 +25,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
+import { getCurrentPlanName } from '../../selectors/plans';
 import { getRole } from '../../selectors/roles';
 import { getRoleServices } from '../../selectors/parameters';
 import Loader from '../ui/Loader';
@@ -78,7 +79,8 @@ class RoleDetail extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchParameters(this.props.currentPlanName, '/deployment-plan');
+    const { currentPlanName } = this.props;
+    this.props.fetchParameters(currentPlanName, `/plans/${currentPlanName}`);
   }
 
   componentDidUpdate() {
@@ -139,8 +141,8 @@ class RoleDetail extends React.Component {
 
   renderRoleTabs() {
     const {
+      currentPlanName,
       formErrors,
-      location,
       match: { params: urlParams },
       parametersLoaded,
       rolesLoaded
@@ -150,23 +152,17 @@ class RoleDetail extends React.Component {
         <div className="row">
           <ul className="nav nav-tabs">
             <NavTab
-              location={location}
-              to={`/deployment-plan/roles/${urlParams.roleIdentifier}/parameters`}
+              to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/parameters`}
             >
               <FormattedMessage {...messages.parameters} />
             </NavTab>
             <NavTab
-              location={location}
-              to={`/deployment-plan/roles/${urlParams.roleIdentifier}/services`}
+              to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/services`}
             >
               <FormattedMessage {...messages.services} />
             </NavTab>
             <NavTab
-              location={location}
-              to={
-                `/deployment-plan/roles/${urlParams.roleIdentifier}` +
-                  '/network-configuration'
-              }
+              to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/network-configuration`}
             >
               <FormattedMessage {...messages.networkConfiguration} />
             </NavTab>
@@ -180,7 +176,12 @@ class RoleDetail extends React.Component {
   render() {
     const dataLoaded = this.props.rolesLoaded && this.props.parametersLoaded;
     const roleName = this.props.role ? this.props.role.name : null;
-    const { match: { params: urlParams } } = this.props;
+    const {
+      currentPlanName,
+      intl,
+      location,
+      match: { params: urlParams }
+    } = this.props;
 
     return (
       <Formsy.Form
@@ -194,7 +195,11 @@ class RoleDetail extends React.Component {
         <ModalPanelBackdrop />
         <ModalPanel>
           <ModalPanelHeader>
-            <Link to="/deployment-plan" type="button" className="close">
+            <Link
+              to={`/plans/${currentPlanName}`}
+              type="button"
+              className="close"
+            >
               <span aria-hidden="true" className="pficon pficon-close" />
             </Link>
             <h2 className="modal-title">
@@ -208,27 +213,25 @@ class RoleDetail extends React.Component {
           <ModalPanelBody>
             <Loader
               height={60}
-              content={this.props.intl.formatMessage(
-                messages.loadingParameters
-              )}
+              content={intl.formatMessage(messages.loadingParameters)}
               loaded={dataLoaded}
             >
-              <Switch>
+              <Switch location={location}>
                 <Route
-                  path="/deployment-plan/roles/:roleIdentifier/parameters"
+                  path="/plans/:planName/roles/:roleIdentifier/parameters"
                   component={RoleParameters}
                 />
                 <Route
-                  path="/deployment-plan/roles/:roleIdentifier/services"
+                  path="/plans/:planName/roles/:roleIdentifier/services"
                   component={RoleServices}
                 />
                 <Route
-                  path="/deployment-plan/roles/:roleIdentifier/network-configuration"
+                  path="/plans/:planName/roles/:roleIdentifier/network-configuration"
                   component={RoleNetworkConfig}
                 />
                 <Redirect
-                  from="/deployment-plan/roles/:roleIdentifier"
-                  to={`/deployment-plan/roles/${urlParams.roleIdentifier}/parameters`}
+                  from="/plans/:planName/roles/:roleIdentifier"
+                  to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/parameters`}
                 />
               </Switch>
             </Loader>
@@ -266,7 +269,7 @@ RoleDetail.propTypes = {
 
 function mapStateToProps(state, props) {
   return {
-    currentPlanName: state.currentPlan.currentPlanName,
+    currentPlanName: getCurrentPlanName(state),
     formErrors: state.parameters.form.get('formErrors'),
     formFieldErrors: state.parameters.form.get('formFieldErrors'),
     allParameters: state.parameters.parameters,

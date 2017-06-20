@@ -24,7 +24,6 @@ export default keyMirror({
   REQUEST_PLAN_DELETE: null,
   RECEIVE_PLAN_DELETE: null,
   PLAN_CHOSEN: null,
-  PLAN_DETECTED: null,
   DELETE_PLAN_PENDING: null,
   DELETE_PLAN_SUCCESS: null,
   DELETE_PLAN_FAILED: null,

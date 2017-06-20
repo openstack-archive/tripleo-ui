@@ -19,7 +19,6 @@ import { fromJS } from 'immutable';
 import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
 
-import CurrentPlanActions from '../actions/CurrentPlanActions';
 import logger from '../services/logger';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
@@ -88,7 +87,6 @@ export default {
         .then(response => {
           let plans = JSON.parse(response.output).result || [];
           dispatch(this.receivePlans(plans));
-          dispatch(CurrentPlanActions.detectPlan());
         })
         .catch(error => {
           logger.error(
@@ -439,7 +437,7 @@ export default {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.deletePlanPending(planName));
-      history.push('/plans');
+      history.push('/plans/manage');
       MistralApiService.runAction(MistralConstants.PLAN_DELETE, {
         container: planName
       })
@@ -454,7 +452,6 @@ export default {
               type: 'success'
             })
           );
-          dispatch(CurrentPlanActions.detectPlan());
         })
         .catch(error => {
           logger.error(
