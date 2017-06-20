@@ -16,7 +16,7 @@
 
 import { createSelector } from 'reselect';
 
-import { currentPlanNameSelector } from './plans';
+import { getCurrentPlanName } from './plans';
 import { getFilterByName } from './filters';
 import MistralConstants from '../constants/MistralConstants';
 
@@ -29,7 +29,7 @@ const validationsToolbarFilter = state =>
  * Filter workflow executions only to validations and current plan
  */
 export const getValidationExecutionsForCurrentPlan = createSelector(
-  [executions, currentPlanNameSelector],
+  [executions, getCurrentPlanName],
   (executions, currentPlanName) => {
     return executions.filter(
       execution =>

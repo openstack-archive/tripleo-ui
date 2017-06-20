@@ -48,6 +48,7 @@ const messages = defineMessages({
 const RoleCard = ({
   assignedNodesCountParameter,
   availableNodesCount,
+  currentPlanName,
   identifier,
   intl,
   name,
@@ -69,7 +70,7 @@ const RoleCard = ({
       <h2 className="card-pf-title">
         {title}
         <Link
-          to={`deployment-plan/roles/${identifier}`}
+          to={`/plans/${currentPlanName}/roles/${identifier}`}
           className="link pull-right"
           title="Edit Role parameters"
         >
@@ -114,6 +115,7 @@ const RoleCard = ({
 RoleCard.propTypes = {
   assignedNodesCountParameter: ImmutablePropTypes.record,
   availableNodesCount: PropTypes.number.isRequired,
+  currentPlanName: PropTypes.string.isRequired,
   identifier: PropTypes.string.isRequired,
   intl: PropTypes.object,
   name: PropTypes.string.isRequired,

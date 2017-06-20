@@ -22,6 +22,7 @@ import React from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 
 import DeploymentPlan from './deployment_plan/DeploymentPlan';
+import { getCurrentPlanName } from '../selectors/plans';
 import Loader from './ui/Loader';
 import LoginActions from '../actions/LoginActions';
 import NavBar from './NavBar';
@@ -47,17 +48,10 @@ class AuthenticatedContent extends React.Component {
   }
 
   render() {
-    const {
-      currentPlanName,
-      intl,
-      logoutUser,
-      noPlans,
-      plansLoaded,
-      user
-    } = this.props;
+    const { currentPlanName, intl, logoutUser, plansLoaded, user } = this.props;
     return (
       <Loader
-        loaded={plansLoaded && (!!currentPlanName || noPlans)}
+        loaded={plansLoaded}
         content={intl.formatMessage(messages.loadingDeployments)}
         global
       >
@@ -69,9 +63,11 @@ class AuthenticatedContent extends React.Component {
             <div className="col-sm-12 col-lg-9">
               <Switch>
                 <Route path="/nodes" component={Nodes} />
-                <Route path="/deployment-plan" component={DeploymentPlan} />
-                <Route path="/plans" component={Plans} />
-                <Redirect from="/" to="/deployment-plan" />
+                <Route path="/plans/manage" component={Plans} />
+                <Route path="/plans/:planName" component={DeploymentPlan} />
+                {currentPlanName
+                  ? <Redirect from="/" to={`/plans/${currentPlanName}`} />
+                  : <Redirect from="/" to="/plans/manage" />}
               </Switch>
             </div>
             <ValidationsList />
@@ -90,7 +86,6 @@ AuthenticatedContent.propTypes = {
   initializeZaqarConnection: PropTypes.func.isRequired,
   intl: PropTypes.object,
   logoutUser: PropTypes.func.isRequired,
-  noPlans: PropTypes.bool,
   plansLoaded: PropTypes.bool,
   user: ImmutablePropTypes.map
 };
@@ -105,8 +100,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 });
 
 const mapStateToProps = state => ({
-  currentPlanName: state.currentPlan.currentPlanName,
-  noPlans: state.plans.get('all').isEmpty(),
+  currentPlanName: getCurrentPlanName(state),
   plansLoaded: state.plans.get('plansLoaded'),
   user: state.login.getIn(['token', 'user'])
 });

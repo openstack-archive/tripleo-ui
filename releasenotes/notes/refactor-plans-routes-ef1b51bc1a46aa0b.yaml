@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    'Plans' are now top level navigation item instead of deployment plan. No
+    deployment plan needs to be active by default. Activating deployment plan
+    is done by visiting plan via url.

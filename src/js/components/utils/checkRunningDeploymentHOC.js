@@ -19,9 +19,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import React from 'react';
 
-import {
-  currentPlanNameSelector as getCurrentPlanName
-} from '../../selectors/plans';
+import { getCurrentPlanName } from '../../selectors/plans';
 import { getCurrentStackDeploymentInProgress } from '../../selectors/stacks';
 import NotificationActions from '../../actions/NotificationActions';
 
@@ -39,7 +37,7 @@ export const checkRunningDeployment = WrappedComponent => {
 
     render() {
       return this.props.currentStackDeploymentInProgress
-        ? <Redirect to="/deployment-plan" />
+        ? <Redirect to={`/plans/${this.props.currentPlanName}`} />
         : <WrappedComponent {...this.props} />;
     }
   }

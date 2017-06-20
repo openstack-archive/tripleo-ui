@@ -22,6 +22,7 @@ import {
   getOvercloudInfo
 } from '../../js/selectors/stacks';
 import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
+import { InitialPlanState, Plan } from '../../js/immutableRecords/plans';
 import { Stack, StacksState } from '../../js/immutableRecords/stacks';
 
 describe('stacks selectors', () => {
@@ -41,6 +42,14 @@ describe('stacks selectors', () => {
           })
         }),
         currentStackEnvironment: Map(),
+        plans: new InitialPlanState({
+          plansLoaded: true,
+          all: Map({
+            overcloud: new Plan({
+              name: 'overcloud'
+            })
+          })
+        }),
         currentPlan: new CurrentPlanState({
           currentPlanName: 'overcloud'
         })
@@ -118,6 +127,14 @@ describe('stacks selectors', () => {
           })
         })
       }),
+      plans: new InitialPlanState({
+        plansLoaded: true,
+        all: Map({
+          overcloud: new Plan({
+            name: 'overcloud'
+          })
+        })
+      }),
       currentPlan: new CurrentPlanState({
         currentPlanName: 'overcloud'
       })
@@ -145,6 +162,14 @@ describe('stacks selectors', () => {
             })
           })
         }),
+        plans: new InitialPlanState({
+          plansLoaded: true,
+          all: Map({
+            overcloud: new Plan({
+              name: 'overcloud'
+            })
+          })
+        }),
         currentPlan: new CurrentPlanState({
           currentPlanName: 'overcloud'
         })
@@ -166,6 +191,14 @@ describe('stacks selectors', () => {
             })
           })
         }),
+        plans: new InitialPlanState({
+          plansLoaded: true,
+          all: Map({
+            overcloud: new Plan({
+              name: 'overcloud'
+            })
+          })
+        }),
         currentPlan: new CurrentPlanState({
           currentplanname: 'overcloud'
         })
@@ -180,6 +213,14 @@ describe('stacks selectors', () => {
             anothercloud: Stack({
               stack_name: 'anothercloud',
               stack_status: 'CREATE_IN_PROGRESS'
+            })
+          })
+        }),
+        plans: new InitialPlanState({
+          plansLoaded: true,
+          all: Map({
+            overcloud: new Plan({
+              name: 'overcloud'
             })
           })
         }),

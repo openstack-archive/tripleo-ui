@@ -16,7 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   defineMessages,
   FormattedMessage,
@@ -56,11 +56,6 @@ const messages = defineMessages({
 });
 
 class PlanCard extends React.Component {
-  onPlanClick(e) {
-    e.preventDefault();
-    this.props.choosePlan(e.target.textContent);
-  }
-
   getActiveIcon() {
     if (this.props.plan.name === this.props.currentPlanName) {
       return <span className="pficon pficon-flag" />;
@@ -78,9 +73,9 @@ class PlanCard extends React.Component {
       );
     } else {
       return (
-        <a href="" onClick={this.onPlanClick.bind(this)}>
+        <Link to={`/plans/${this.props.plan.name}`}>
           {this.props.plan.name}
-        </a>
+        </Link>
       );
     }
   }
@@ -158,14 +153,14 @@ class PlanCard extends React.Component {
             &nbsp;
             {this.getActiveIcon()}
             <div className="pull-right">
-              <DropdownKebab id={`card-actions-${planName}`}>
-                <MenuItemLink to={`/plans/${planName}/edit`}>
+              <DropdownKebab id={`card-actions-${planName}`} pullRight>
+                <MenuItemLink to={`/plans/manage/${planName}/edit`}>
                   <FormattedMessage {...messages.edit} />
                 </MenuItemLink>
-                <MenuItemLink to={`/plans/${planName}/export`}>
+                <MenuItemLink to={`/plans/manage/${planName}/export`}>
                   <FormattedMessage {...messages.export} />
                 </MenuItemLink>
-                <MenuItemLink to={`/plans/${planName}/delete`}>
+                <MenuItemLink to={`/plans/manage/${planName}/delete`}>
                   <FormattedMessage {...messages.delete} />
                 </MenuItemLink>
               </DropdownKebab>
@@ -182,12 +177,10 @@ class PlanCard extends React.Component {
 }
 
 PlanCard.propTypes = {
-  choosePlan: PropTypes.func,
   currentPlanName: PropTypes.string,
-  history: PropTypes.object,
   intl: PropTypes.object,
   plan: PropTypes.object,
   stack: PropTypes.object
 };
 
-export default withRouter(injectIntl(PlanCard));
+export default injectIntl(PlanCard);

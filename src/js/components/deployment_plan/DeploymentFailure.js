@@ -41,29 +41,33 @@ const messages = defineMessages({
 
 class DeploymentFailure extends React.Component {
   render() {
-    const { formatMessage } = this.props.intl;
-    const status = formatMessage(
-      deploymentStatusMessages[this.props.stack.stack_status]
-    );
+    const {
+      currentPlanName,
+      deleteStack,
+      intl: { formatMessage },
+      isRequestingStackDelete,
+      stack
+    } = this.props;
+    const status = formatMessage(deploymentStatusMessages[stack.stack_status]);
 
     return (
       <div>
         <InlineNotification type="error" title={status}>
           <p>
-            {this.props.stack.stack_status_reason}
+            {stack.stack_status_reason}
             {' '}
-            <Link to="/deployment-plan/deployment-detail">
+            <Link to={`/plans/${currentPlanName}/deployment-detail`}>
               <FormattedMessage {...messages.moreDetails} />
             </Link>
           </p>
         </InlineNotification>
         <DeleteStackButton
           content={formatMessage(messages.deleteDeployment)}
-          deleteStack={this.props.deleteStack}
-          disabled={this.props.isRequestingStackDelete}
-          loaded={!this.props.isRequestingStackDelete}
+          deleteStack={deleteStack}
+          disabled={isRequestingStackDelete}
+          loaded={!isRequestingStackDelete}
           loaderContent={formatMessage(messages.requestingDeletion)}
-          stack={this.props.stack}
+          stack={stack}
         />
       </div>
     );
@@ -71,6 +75,7 @@ class DeploymentFailure extends React.Component {
 }
 
 DeploymentFailure.propTypes = {
+  currentPlanName: PropTypes.string.isRequired,
   deleteStack: PropTypes.func.isRequired,
   intl: PropTypes.object,
   isRequestingStackDelete: PropTypes.bool,
