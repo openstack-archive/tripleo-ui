@@ -17,6 +17,7 @@
 import when from 'when';
 import { Map } from 'immutable';
 
+import { InitialPlanState, Plan } from '../../js/immutableRecords/plans';
 import MistralApiService from '../../js/services/MistralApiService';
 import mockHistory from '../mocks/history';
 import { mockGetIntl } from './utils';
@@ -112,6 +113,14 @@ describe('nodesRegistrationFinished', () => {
       () => {},
       () => {
         return {
+          plans: new InitialPlanState({
+            plansLoaded: true,
+            all: Map({
+              testplan: new Plan({
+                name: 'testplan'
+              })
+            })
+          }),
           currentPlan: new CurrentPlanState({
             currentPlanName: 'testplan'
           })
@@ -163,6 +172,14 @@ describe('nodesRegistrationFinished', () => {
       () => {},
       () => {
         return {
+          plans: new InitialPlanState({
+            plansLoaded: true,
+            all: Map({
+              testplan: new Plan({
+                name: 'testplan'
+              })
+            })
+          }),
           currentPlan: new CurrentPlanState({
             currentPlanName: 'testplan'
           })

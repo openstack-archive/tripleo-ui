@@ -30,7 +30,7 @@ const CreatePlanCard = () => (
     <div className="card-pf">
       <div className="card-pf-body">
         <span className="pficon pficon-add-circle-o" />&nbsp;
-        <Link to="/plans/new" id="ListPlans__newPlanLink">
+        <Link to="/plans/manage/new" id="ListPlans__newPlanLink">
           <FormattedMessage {...messages.createNewPlan} />
         </Link>
       </div>
