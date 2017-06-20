@@ -20,7 +20,22 @@ import createLogger from 'redux-logger';
 import logger from './services/logger';
 
 import appReducer from './reducers/appReducer';
+import { CurrentPlanState } from './immutableRecords/currentPlan';
 import { getIntl } from './selectors/i18n';
+
+const hydrateStore = () => {
+  return {
+    currentPlan: new CurrentPlanState({
+      currentPlanName: getStoredPlanName()
+    })
+  };
+};
+
+function getStoredPlanName() {
+  if (window && window.localStorage) {
+    return window.localStorage.getItem('currentPlanName');
+  }
+}
 
 const loggerMiddleware = createLogger({
   collapsed: true,
@@ -29,7 +44,7 @@ const loggerMiddleware = createLogger({
 
 const store = createStore(
   appReducer,
-  {},
+  hydrateStore(),
   applyMiddleware(
     thunkMiddleware.withExtraArgument({ getIntl }),
     loggerMiddleware

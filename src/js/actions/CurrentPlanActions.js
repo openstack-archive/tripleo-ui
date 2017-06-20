@@ -14,83 +14,31 @@
  * under the License.
  */
 
-import { defineMessages } from 'react-intl';
-
-import NotificationActions from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
 import ValidationsActions from '../actions/ValidationsActions';
-
-const messages = defineMessages({
-  planActivatedNotificationTitle: {
-    id: 'CurrentPlanActions.planActivatedNotificationTitle',
-    defaultMessage: 'Plan Activated'
-  },
-  planActivatedNotificationMessage: {
-    id: 'CurrentPlanActions.planActivatedNotificationMessage',
-    defaultMessage: 'The plan {planName} was activated.'
-  }
-});
+import { getPlans, getCurrentPlanName } from '../selectors/plans';
 
 export default {
-  detectPlan() {
+  choosePlan(newPlanName) {
     return (dispatch, getState) => {
-      let state = getState();
-      let plans = state.plans.all.map(plan => plan.get('name'));
-      let conflict;
-      let currentPlanName = state.currentPlan.get('currentPlanName');
-      let previousPlan = currentPlanName || getStoredPlan();
-      // No plans present.
-      if (plans.size < 1) {
-        if (!previousPlan) {
-          currentPlanName = undefined;
+      const currentPlanName = getCurrentPlanName(getState());
+      const plans = getPlans(getState());
+
+      if (plans.get(newPlanName)) {
+        if (newPlanName !== currentPlanName) {
+          storePlan(newPlanName);
+          dispatch(this.planChosen(newPlanName));
+          dispatch(
+            ValidationsActions.runValidationGroups(
+              ['prep', 'pre-deployment'],
+              newPlanName
+            )
+          );
         }
-      } else if (!previousPlan) {
-        // Plans present.
-        // No previously chosen plan.
-        currentPlanName = plans.first();
-      } else if (!plans.includes(previousPlan)) {
-        // Previously chosen plan doesn't exist any more.
-        conflict = previousPlan;
-        currentPlanName = plans.first();
-      } else if (!currentPlanName && previousPlan) {
-        // No plan in state, but in localStorage
-        currentPlanName = previousPlan;
+      } else {
+        storePlan();
+        dispatch(this.planChosen());
       }
-      storePlan(currentPlanName);
-      dispatch(this.planDetected(currentPlanName, conflict));
-    };
-  },
-
-  planDetected(currentPlanName, conflict) {
-    return {
-      type: PlansConstants.PLAN_DETECTED,
-      payload: {
-        currentPlanName: currentPlanName,
-        conflict: conflict
-      }
-    };
-  },
-
-  choosePlan(planName) {
-    return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      dispatch(
-        NotificationActions.notify({
-          title: formatMessage(messages.planActivatedNotificationTitle),
-          message: formatMessage(messages.planActivatedNotificationMessage, {
-            planName: planName
-          }),
-          type: 'success'
-        })
-      );
-      storePlan(planName);
-      dispatch(this.planChosen(planName));
-      dispatch(
-        ValidationsActions.runValidationGroups(
-          ['prep', 'pre-deployment'],
-          planName
-        )
-      );
     };
   },
 
@@ -104,17 +52,10 @@ export default {
 
 function storePlan(name) {
   if (window && window.localStorage) {
-    if (!name) {
-      window.localStorage.removeItem('currentPlanName');
-    } else {
+    if (name) {
       window.localStorage.setItem('currentPlanName', name);
+    } else {
+      window.localStorage.removeItem('currentPlanName');
     }
   }
-}
-
-function getStoredPlan() {
-  if (window && window.localStorage) {
-    return window.localStorage.getItem('currentPlanName');
-  }
-  return null;
 }

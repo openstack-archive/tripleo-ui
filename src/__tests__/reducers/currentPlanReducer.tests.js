@@ -26,10 +26,6 @@ describe('plansReducer state', () => {
       state = currentPlanReducer(undefined, { type: 'undefined-action' });
     });
 
-    it('`conflict` is undefined', () => {
-      expect(state.get('conflict')).not.toBeDefined();
-    });
-
     it('`currentPlanName` is undefined', () => {
       expect(state.get('currentPlanName')).not.toBeDefined();
     });

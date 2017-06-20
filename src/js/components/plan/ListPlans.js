@@ -20,7 +20,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import CurrentPlanActions from '../../actions/CurrentPlanActions';
+import { getCurrentPlanName, getPlans } from '../../selectors/plans';
 import { PageHeader } from '../ui/PageHeader';
 import PlansActions from '../../actions/PlansActions';
 import StacksActions from '../../actions/StacksActions';
@@ -50,7 +50,6 @@ class ListPlans extends React.Component {
       <PlanCard
         key={plan.name}
         plan={plan}
-        choosePlan={this.props.choosePlan}
         currentPlanName={this.props.currentPlanName}
         stack={stack}
       />
@@ -83,8 +82,6 @@ class ListPlans extends React.Component {
 
 ListPlans.propTypes = {
   children: PropTypes.node,
-  choosePlan: PropTypes.func,
-  conflict: PropTypes.string,
   currentPlanName: PropTypes.string,
   fetchPlans: PropTypes.func,
   fetchStacks: PropTypes.func,
@@ -94,8 +91,8 @@ ListPlans.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    currentPlanName: state.currentPlan.currentPlanName,
-    plans: state.plans.get('all'),
+    currentPlanName: getCurrentPlanName(state),
+    plans: getPlans(state),
     stacks: state.stacks.get('stacks')
   };
 }
@@ -103,8 +100,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchPlans: () => dispatch(PlansActions.fetchPlans()),
-    fetchStacks: () => dispatch(StacksActions.fetchStacks()),
-    choosePlan: planName => dispatch(CurrentPlanActions.choosePlan(planName))
+    fetchStacks: () => dispatch(StacksActions.fetchStacks())
   };
 }
 

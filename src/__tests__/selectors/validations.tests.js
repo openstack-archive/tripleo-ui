@@ -23,6 +23,7 @@ import {
   FiltersInitialState
 } from '../../js/immutableRecords/filters';
 import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
+import { InitialPlanState, Plan } from '../../js/immutableRecords/plans';
 import {
   WorkflowExecution
 } from '../../js/immutableRecords/workflowExecutions';
@@ -32,8 +33,15 @@ describe(' validations selectors', () => {
   let state;
   beforeEach(() => {
     state = {
+      plans: new InitialPlanState({
+        plansLoaded: true,
+        all: Map({
+          overcloud: new Plan({
+            name: 'overcloud'
+          })
+        })
+      }),
       currentPlan: new CurrentPlanState({
-        conflict: undefined,
         currentPlanName: 'overcloud'
       }),
       filters: FiltersInitialState(),
