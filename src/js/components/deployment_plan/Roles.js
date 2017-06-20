@@ -48,6 +48,7 @@ class Roles extends React.Component {
       return (
         <div className="col-xs-6 col-sm-4 col-md-3 col-lg-2" key={role.name}>
           <RoleCard
+            currentPlanName={this.props.currentPlanName}
             name={role.name}
             title={role.title}
             identifier={role.identifier}
@@ -88,6 +89,7 @@ class Roles extends React.Component {
 }
 Roles.propTypes = {
   availableNodesCountsByRole: ImmutablePropTypes.map.isRequired,
+  currentPlanName: PropTypes.string.isRequired,
   fetchNodes: PropTypes.func.isRequired,
   fetchRoles: PropTypes.func.isRequired,
   intl: PropTypes.object,

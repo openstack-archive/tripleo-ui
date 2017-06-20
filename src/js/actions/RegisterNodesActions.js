@@ -18,6 +18,7 @@ import { defineMessages } from 'react-intl';
 import { normalize, arrayOf } from 'normalizr';
 import { Map } from 'immutable';
 
+import { getCurrentPlanName } from '../selectors/plans';
 import RegisterNodesConstants from '../constants/RegisterNodesConstants';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import MistralApiService from '../services/MistralApiService';
@@ -137,7 +138,7 @@ export default {
       dispatch(
         ValidationsActions.runValidationGroups(
           ['pre-introspection'],
-          getState().currentPlan.currentPlanName
+          getCurrentPlanName(getState())
         )
       );
 

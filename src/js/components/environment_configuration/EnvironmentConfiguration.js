@@ -26,6 +26,7 @@ import React from 'react';
 import EnvironmentConfigurationActions
   from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentConfigurationTopic from './EnvironmentConfigurationTopic';
+import { getCurrentPlanName } from '../../selectors/plans';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import { getTopicsTree } from '../../selectors/environmentConfiguration';
 import Loader from '../ui/Loader';
@@ -58,8 +59,13 @@ class EnvironmentConfiguration extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchEnvironmentConfiguration(this.props.currentPlanName, () =>
-      this.props.history.push('/deployment-plan')
+    const {
+      currentPlanName,
+      fetchEnvironmentConfiguration,
+      history
+    } = this.props;
+    fetchEnvironmentConfiguration(currentPlanName, () =>
+      history.push(`/plans/${currentPlanName}`)
     );
   }
 
@@ -110,7 +116,7 @@ class EnvironmentConfiguration extends React.Component {
         closeOnSubmit: false
       });
 
-      this.props.history.push('/deployment-plan');
+      this.props.history.push(`/plans/${this.props.currentPlanName}`);
     }
   }
 
@@ -209,7 +215,11 @@ class EnvironmentConfiguration extends React.Component {
           >
             <FormattedMessage {...messages.saveAndClose} />
           </button>
-          <Link to="/deployment-plan" type="button" className="btn btn-default">
+          <Link
+            to={`/plans/${this.props.currentPlanName}`}
+            type="button"
+            className="btn btn-default"
+          >
             <FormattedMessage {...messages.cancel} />
           </Link>
         </div>
@@ -232,7 +242,7 @@ EnvironmentConfiguration.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    currentPlanName: state.currentPlan.currentPlanName,
+    currentPlanName: getCurrentPlanName(state),
     environmentConfigurationTopics: getTopicsTree(state),
     formErrors: state.environmentConfiguration.getIn(['form', 'formErrors']),
     formFieldErrors: state.environmentConfiguration.getIn([

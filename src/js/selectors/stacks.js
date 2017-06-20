@@ -18,7 +18,7 @@ import { createSelector } from 'reselect';
 import { Map } from 'immutable';
 
 import { Stack } from '../immutableRecords/stacks';
-import { currentPlanNameSelector } from './plans';
+import { getCurrentPlanName } from './plans';
 
 const stacksSelector = state => state.stacks.stacks;
 const currentStackEnvironmentSelector = state =>
@@ -30,7 +30,7 @@ const stackResourceDetailsSelector = state => state.stacks.resourceDetails;
  * Returns the stack associated with currentPlanName
  */
 export const getCurrentStack = createSelector(
-  [stacksSelector, currentPlanNameSelector],
+  [stacksSelector, getCurrentPlanName],
   (stacks, currentPlanName) => stacks.get(currentPlanName)
 );
 
@@ -39,7 +39,7 @@ export const getCurrentStack = createSelector(
  * (true if the plan is currently being deployed, false it not).
  */
 export const getCurrentStackDeploymentInProgress = createSelector(
-  [stacksSelector, currentPlanNameSelector],
+  [stacksSelector, getCurrentPlanName],
   (stacks, currentPlanName) => {
     return (
       stacks.get(currentPlanName, new Stack()).stack_status ===
@@ -71,7 +71,7 @@ export const getCurrentStackDeploymentProgress = createSelector(
 export const getOvercloudInfo = createSelector(
   [
     currentStackEnvironmentSelector,
-    currentPlanNameSelector,
+    getCurrentPlanName,
     stackResourceDetailsSelector
   ],
   (currentStackEnvironment, currentPlanName, stackResourceDetails) => {
