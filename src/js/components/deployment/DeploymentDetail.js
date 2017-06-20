@@ -28,7 +28,7 @@ import DeploymentConfirmation from './DeploymentConfirmation';
 import DeploymentProgress from './DeploymentProgress';
 import DeploymentSuccess from './DeploymentSuccess';
 import DeploymentFailure from './DeploymentFailure';
-import { getCurrentPlan } from '../../selectors/plans';
+import { getCurrentPlan, getCurrentPlanName } from '../../selectors/plans';
 import {
   getCurrentStack,
   getCurrentStackDeploymentProgress
@@ -69,6 +69,7 @@ class DeploymentDetail extends React.Component {
     const {
       allPreDeploymentValidationsSuccessful,
       currentPlan,
+      currentPlanName,
       currentStack,
       currentStackDeploymentProgress,
       currentStackResources,
@@ -124,25 +125,30 @@ class DeploymentDetail extends React.Component {
           stack={currentStack}
           stackResources={currentStackResources}
           stackResourcesLoaded={currentStackResourcesLoaded}
-          planName={currentPlan.name}
+          planName={currentPlanName}
         />
       );
     }
   }
 
   render() {
+    const { currentPlanName } = this.props;
     return (
       <div>
         <ModalPanelBackdrop />
         <ModalPanel>
           <ModalPanelHeader>
-            <Link to="/deployment-plan" type="button" className="close">
+            <Link
+              to={`/plans/${currentPlanName}`}
+              type="button"
+              className="close"
+            >
               <span aria-hidden="true" className="pficon pficon-close" />
             </Link>
             <h2 className="modal-title">
               <FormattedMessage
                 {...messages.modalTitle}
-                values={{ planName: this.props.currentPlan.name }}
+                values={{ planName: currentPlanName }}
               />
             </h2>
           </ModalPanelHeader>
@@ -151,7 +157,7 @@ class DeploymentDetail extends React.Component {
           </ModalPanelBody>
           <ModalPanelFooter>
             <Link
-              to="/deployment-plan"
+              to={`/plans/${currentPlanName}`}
               type="button"
               className="btn btn-default"
             >
@@ -167,6 +173,7 @@ class DeploymentDetail extends React.Component {
 DeploymentDetail.propTypes = {
   allPreDeploymentValidationsSuccessful: PropTypes.bool.isRequired,
   currentPlan: ImmutablePropTypes.record.isRequired,
+  currentPlanName: PropTypes.string.isRequired,
   currentStack: ImmutablePropTypes.record,
   currentStackDeploymentProgress: PropTypes.number.isRequired,
   currentStackResources: ImmutablePropTypes.map,
@@ -185,6 +192,7 @@ const mapStateToProps = state => {
       state
     ),
     currentPlan: getCurrentPlan(state),
+    currentPlanName: getCurrentPlanName(state),
     currentStack: getCurrentStack(state),
     currentStackDeploymentProgress: getCurrentStackDeploymentProgress(state),
     currentStackResources: state.stacks.resources,

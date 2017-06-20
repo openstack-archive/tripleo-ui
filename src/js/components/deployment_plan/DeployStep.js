@@ -60,7 +60,7 @@ export const DeployStep = ({
         <Link
           className="link btn btn-primary btn-lg"
           disabled={currentPlan.isRequestingPlanDeploy}
-          to="/deployment-plan/deployment-detail"
+          to={`/plans/${currentPlan.name}/deployment-detail`}
         >
           <Loader
             loaded={!currentPlan.isRequestingPlanDeploy}
@@ -78,6 +78,7 @@ export const DeployStep = ({
   } else if (currentStack.stack_status.match(/PROGRESS/)) {
     return (
       <DeploymentProgress
+        currentPlanName={currentPlan.name}
         stack={currentStack}
         isRequestingStackDelete={isRequestingStackDelete}
         deleteStack={deleteStack}
@@ -99,6 +100,7 @@ export const DeployStep = ({
   } else {
     return (
       <DeploymentFailure
+        currentPlanName={currentPlan.name}
         deleteStack={deleteStack}
         isRequestingStackDelete={isRequestingStackDelete}
         stack={currentStack}

@@ -59,24 +59,29 @@ class DeploymentProgress extends React.Component {
   }
 
   render() {
-    const { formatMessage } = this.props.intl;
+    const {
+      currentPlanName,
+      deleteStack,
+      intl: { formatMessage },
+      isRequestingStackDelete,
+      stack
+    } = this.props;
 
     const statusMessage = (
       <strong>
-        <FormattedMessage {...statusMessages[this.props.stack.stack_status]} />
+        <FormattedMessage {...statusMessages[stack.stack_status]} />
       </strong>
     );
 
-    const deleteButton = this.props.stack.stack_status !==
-      stackStates.DELETE_IN_PROGRESS
+    const deleteButton = stack.stack_status !== stackStates.DELETE_IN_PROGRESS
       ? <DeleteStackButton
           content={formatMessage(messages.cancelDeployment)}
           buttonIconClass="fa fa-ban"
-          deleteStack={this.props.deleteStack}
-          disabled={this.props.isRequestingStackDelete}
-          loaded={!this.props.isRequestingStackDelete}
+          deleteStack={deleteStack}
+          disabled={isRequestingStackDelete}
+          loaded={!isRequestingStackDelete}
           loaderContent={formatMessage(messages.requestingDeletion)}
-          stack={this.props.stack}
+          stack={stack}
         />
       : null;
 
@@ -84,7 +89,7 @@ class DeploymentProgress extends React.Component {
       <div>
         <p>
           <span><FormattedMessage {...messages.deploymentInProgress} /> </span>
-          <Link to="/deployment-plan/deployment-detail">
+          <Link to={`/plans/${currentPlanName}/deployment-detail`}>
             <FormattedMessage {...messages.viewInformation} />
           </Link>
         </p>
@@ -99,6 +104,7 @@ class DeploymentProgress extends React.Component {
 }
 
 DeploymentProgress.propTypes = {
+  currentPlanName: PropTypes.string.isRequired,
   deleteStack: PropTypes.func.isRequired,
   deploymentProgress: PropTypes.number.isRequired,
   intl: PropTypes.object,
