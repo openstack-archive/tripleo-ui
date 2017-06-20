@@ -111,6 +111,8 @@ class Logger {
         return this.dispatch(fn, ...args);
       };
     });
+
+    this.registerGlobalErrorHandler();
   }
 
   loadAdapters() {
@@ -147,6 +149,13 @@ class Logger {
 
       return adapter[fn](...args);
     });
+  }
+
+  registerGlobalErrorHandler() {
+    window.onerror = (messageOrEvent, source, lineno, colno, e) => {
+      this.error(e);
+      return true;
+    };
   }
 }
 
