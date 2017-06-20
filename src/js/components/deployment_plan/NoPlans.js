@@ -43,7 +43,7 @@ export default class NoPlans extends React.Component {
         <h1><FormattedMessage {...messages.noPlansAvailable} /></h1>
         <p><FormattedMessage {...messages.noPlansAvailableMessage} /></p>
         <div className="blank-slate-pf-main-action">
-          <Link to="/plans/new" className="btn btn-lg btn-primary">
+          <Link to="/plans/manage/new" className="btn btn-lg btn-primary">
             <span className="fa fa-plus" />
             {' '}
             <FormattedMessage {...messages.createNewPlan} />

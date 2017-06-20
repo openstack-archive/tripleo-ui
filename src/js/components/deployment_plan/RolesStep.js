@@ -40,6 +40,7 @@ const messages = defineMessages({
 const RolesStep = ({
   availableNodesCount,
   availableNodesCountsByRole,
+  currentPlanName,
   roles,
   fetchRoles,
   fetchNodes,
@@ -79,6 +80,7 @@ const RolesStep = ({
         </Loader>
       </p>
       <Roles
+        currentPlanName={currentPlanName}
         roles={roles.toList().toJS()}
         availableNodesCountsByRole={availableNodesCountsByRole}
         nodeCountParametersByRole={nodeCountParametersByRole}
@@ -94,6 +96,7 @@ const RolesStep = ({
 RolesStep.propTypes = {
   availableNodesCount: PropTypes.number.isRequired,
   availableNodesCountsByRole: ImmutablePropTypes.map.isRequired,
+  currentPlanName: PropTypes.string.isRequired,
   fetchNodes: PropTypes.func.isRequired,
   fetchRoles: PropTypes.func.isRequired,
   intl: PropTypes.object,

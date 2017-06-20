@@ -35,9 +35,9 @@ const messages = defineMessages({
     id: 'NavBar.logoutLink',
     defaultMessage: 'Logout'
   },
-  deploymentPlanTab: {
-    id: 'NavBar.deploymentPlanTab',
-    defaultMessage: 'Deployment Plan'
+  plansTab: {
+    id: 'NavBar.plansTab',
+    defaultMessage: 'Plans'
   },
   nodesTab: {
     id: 'Navbar.nodesTab',
@@ -108,8 +108,8 @@ export default class NavBar extends React.Component {
             </li>
           </ul>
           <ul className="nav navbar-nav navbar-primary">
-            <NavTab to="/deployment-plan" id="NavBar__deploymentPlanTab">
-              <FormattedMessage {...messages.deploymentPlanTab} />
+            <NavTab to="/plans" id="NavBar__PlansTab">
+              <FormattedMessage {...messages.plansTab} />
             </NavTab>
             <NavTab to="/nodes" id="NavBar__nodesTab">
               <FormattedMessage {...messages.nodesTab} />

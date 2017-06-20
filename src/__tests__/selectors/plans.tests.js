@@ -40,7 +40,6 @@ describe('plans selectors', () => {
         })
       }),
       currentPlan: new CurrentPlanState({
-        conflict: undefined,
         currentPlanName: 'plan1'
       })
     };
