@@ -15,6 +15,7 @@ Welcome to Tripleo UI's developer documentation!
    testing
    translation
    packaging
+   production
    contributing
 
 * `Source code`_
