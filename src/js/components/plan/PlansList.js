@@ -17,6 +17,7 @@
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -24,17 +25,21 @@ import { getCurrentPlanName, getPlans } from '../../selectors/plans';
 import { PageHeader } from '../ui/PageHeader';
 import PlansActions from '../../actions/PlansActions';
 import StacksActions from '../../actions/StacksActions';
+import NoPlans from './NoPlans';
 import PlanCard from './cards/PlanCard';
-import CreatePlanCard from './cards/CreatePlanCard';
 
 const messages = defineMessages({
+  importPlan: {
+    id: 'PlansList.importPlan',
+    defaultMessage: 'Import Plan'
+  },
   plans: {
-    id: 'ListPlans.plans',
+    id: 'PlansList.plans',
     defaultMessage: 'Plans'
   }
 });
 
-class ListPlans extends React.Component {
+class PlansList extends React.Component {
   constructor() {
     super();
   }
@@ -66,21 +71,28 @@ class ListPlans extends React.Component {
       <div>
         <PageHeader>
           <FormattedMessage {...messages.plans} />
-        </PageHeader>
-        <div className="panel panel-default">
-          <div className="cards-pf">
-            <div className="row row-cards-pf">
-              <CreatePlanCard />
-              {this.renderCards()}
-            </div>
+          <div className="pull-right">
+            <Link to="/plans/manage/new" className="btn btn-primary">
+              <span className="fa fa-plus" />&nbsp;
+              <FormattedMessage {...messages.importPlan} />
+            </Link>
           </div>
-        </div>
+        </PageHeader>
+        {this.props.plans.isEmpty()
+          ? <NoPlans />
+          : <div className="panel panel-default">
+              <div className="cards-pf">
+                <div className="row row-cards-pf">
+                  {this.renderCards()}
+                </div>
+              </div>
+            </div>}
       </div>
     );
   }
 }
 
-ListPlans.propTypes = {
+PlansList.propTypes = {
   children: PropTypes.node,
   currentPlanName: PropTypes.string,
   fetchPlans: PropTypes.func,
@@ -105,5 +117,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default injectIntl(
-  connect(mapStateToProps, mapDispatchToProps)(ListPlans)
+  connect(mapStateToProps, mapDispatchToProps)(PlansList)
 );
