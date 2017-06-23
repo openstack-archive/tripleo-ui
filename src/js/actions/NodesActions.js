@@ -20,6 +20,8 @@ import when from 'when';
 
 import { getNodesByIds } from '../selectors/nodes';
 import IronicApiErrorHandler from '../services/IronicApiErrorHandler';
+import IronicInspectorApiErrorHandler
+  from '../services/IronicInspectorApiErrorHandler';
 import IronicApiService from '../services/IronicApiService';
 import IronicInspectorApiService from '../services/IronicInspectorApiService';
 import MistralApiService from '../services/MistralApiService';
@@ -112,6 +114,40 @@ export default {
             error.stack || error
           );
           let errorHandler = new IronicApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
+        });
+    };
+  },
+
+  fetchNodeIntrospectionDataSuccess(nodeId, data) {
+    return {
+      type: NodesConstants.FETCH_NODE_INTROSPECTION_DATA_SUCCESS,
+      payload: { nodeId, data }
+    };
+  },
+
+  fetchNodeIntrospectionDataFailed(nodeId) {
+    return {
+      type: NodesConstants.FETCH_NODE_INTROSPECTION_DATA_FAILED,
+      payload: nodeId
+    };
+  },
+
+  fetchNodeIntrospectionData(nodeId) {
+    return dispatch => {
+      IronicInspectorApiService.getIntrospectionData(nodeId)
+        .then(response => {
+          dispatch(this.fetchNodeIntrospectionDataSuccess(nodeId, response));
+        })
+        .catch(error => {
+          dispatch(this.fetchNodeIntrospectionDataFailed(nodeId));
+          logger.error(
+            'Error in NodesActions.fetchNodeIntrospectionData',
+            error.stack || error
+          );
+          let errorHandler = new IronicInspectorApiErrorHandler(error);
           errorHandler.errors.forEach(error => {
             dispatch(NotificationActions.notify(error));
           });

@@ -43,6 +43,14 @@ export default function nodesReducer(state = initialState, action) {
         .set('isFetching', false);
     }
 
+    case NodesConstants.FETCH_NODE_INTROSPECTION_DATA_SUCCESS: {
+      const { nodeId, data } = action.payload;
+      return state.setIn(['introspectionData', nodeId], fromJS(data));
+    }
+
+    case NodesConstants.FETCH_NODE_INTROSPECTION_DATA_FAILED:
+      return state.deleteIn(['introspectionData', action.payload]);
+
     case NodesConstants.START_NODES_OPERATION:
       return state.update('nodesInProgress', nodesInProgress =>
         nodesInProgress.union(action.payload)

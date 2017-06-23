@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Nodes List view now fetches and displays introspection data in expanded
+    Node view

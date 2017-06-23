@@ -15,7 +15,7 @@
  */
 
 import { createSelector } from 'reselect';
-import { List, Set } from 'immutable';
+import { List, Map, Set } from 'immutable';
 
 import { getFilterByName } from './filters';
 import { getRoles } from './roles';
@@ -30,6 +30,8 @@ export const getNodesByIds = (state, nodeIds) =>
     .filter((v, k) => nodeIds.includes(k))
     .sortBy(n => n.get('uuid'));
 export const getPorts = state => state.nodes.get('ports');
+export const getIntrospectionData = state =>
+  state.nodes.get('introspectionData');
 export const getIntrospectionStatuses = state =>
   state.nodes.get('introspectionStatuses');
 export const nodesInProgress = state => state.nodes.get('nodesInProgress');
@@ -40,8 +42,8 @@ export const nodesToolbarFilter = state =>
  *  Return Nodes including mac addresses as string at macs attribute
  */
 export const getDetailedNodes = createSelector(
-  [getNodes, getPorts, getIntrospectionStatuses],
-  (nodes, ports, introspectionStatuses) =>
+  [getNodes, getPorts, getIntrospectionStatuses, getIntrospectionData],
+  (nodes, ports, introspectionStatuses, introspectionData) =>
     nodes.map(node =>
       node
         .set(
@@ -54,6 +56,38 @@ export const getDetailedNodes = createSelector(
         .set(
           'introspectionStatus',
           introspectionStatuses.get(node.get('uuid'), new IntrospectionStatus())
+        )
+        .setIn(
+          ['introspectionData', 'interfaces'],
+          introspectionData.getIn([node.get('uuid'), 'interfaces'], Map())
+        )
+        .setIn(
+          ['introspectionData', 'rootDisk'],
+          introspectionData.getIn([node.get('uuid'), 'root_disk', 'name'])
+        )
+        .setIn(
+          ['introspectionData', 'product'],
+          introspectionData.getIn(
+            [node.get('uuid'), 'extra', 'system', 'product'],
+            Map()
+          )
+        )
+        .setIn(
+          ['introspectionData', 'kernelVersion'],
+          introspectionData.getIn([
+            node.get('uuid'),
+            'extra',
+            'system',
+            'kernel',
+            'version'
+          ])
+        )
+        .setIn(
+          ['introspectionData', 'bios'],
+          introspectionData.getIn(
+            [node.get('uuid'), 'extra', 'firmware', 'bios'],
+            Map()
+          )
         )
     )
 );
