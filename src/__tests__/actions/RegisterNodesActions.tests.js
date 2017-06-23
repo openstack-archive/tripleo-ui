@@ -26,7 +26,6 @@ import NodesActions from '../../js/actions/NodesActions';
 import NotificationActions from '../../js/actions/NotificationActions';
 import * as utils from '../../js/services/utils';
 import { IronicNode } from '../../js/immutableRecords/nodes';
-import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
 
 let createResolvingPromise = data => {
   return () => {
@@ -114,15 +113,13 @@ describe('nodesRegistrationFinished', () => {
       () => {
         return {
           plans: new InitialPlanState({
+            currentPlanName: 'testplan',
             plansLoaded: true,
             all: Map({
               testplan: new Plan({
                 name: 'testplan'
               })
             })
-          }),
-          currentPlan: new CurrentPlanState({
-            currentPlanName: 'testplan'
           })
         };
       },
@@ -173,15 +170,13 @@ describe('nodesRegistrationFinished', () => {
       () => {
         return {
           plans: new InitialPlanState({
+            currentPlanName: 'testplan',
             plansLoaded: true,
             all: Map({
               testplan: new Plan({
                 name: 'testplan'
               })
             })
-          }),
-          currentPlan: new CurrentPlanState({
-            currentPlanName: 'testplan'
           })
         };
       },
