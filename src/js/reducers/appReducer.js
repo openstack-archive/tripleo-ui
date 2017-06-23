@@ -17,7 +17,6 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 
-import currentPlanReducer from './currentPlanReducer';
 import environmentConfigurationReducer from './environmentConfigurationReducer';
 import filtersReducer from './filtersReducer';
 import i18nReducer from './i18nReducer';
@@ -33,7 +32,6 @@ import validationsReducer from './validationsReducer';
 import workflowExecutionsReducer from './workflowExecutionsReducer';
 
 const appReducer = combineReducers({
-  currentPlan: currentPlanReducer,
   environmentConfiguration: environmentConfigurationReducer,
   executions: workflowExecutionsReducer,
   filters: filtersReducer,

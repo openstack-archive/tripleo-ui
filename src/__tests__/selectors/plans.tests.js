@@ -19,12 +19,12 @@ import { Map } from 'immutable';
 import { Plan } from '../../js/immutableRecords/plans';
 import { getAllPlansButCurrent } from '../../js/selectors/plans';
 import { InitialPlanState } from '../../js/immutableRecords/plans';
-import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
 
 describe('plans selectors', () => {
   describe('getAllPlansButCurrent()', () => {
     const state = {
       plans: new InitialPlanState({
+        currentPlanName: 'plan1',
         isFetchingPlans: false,
         all: Map({
           plan1: new Plan({
@@ -38,9 +38,6 @@ describe('plans selectors', () => {
             files: Map()
           })
         })
-      }),
-      currentPlan: new CurrentPlanState({
-        currentPlanName: 'plan1'
       })
     };
 
