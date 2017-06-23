@@ -16,6 +16,7 @@
 
 import { Map, List } from 'immutable';
 import store from '../store';
+import { LANGUAGE_NAMES } from '../constants/i18n';
 
 /**
  * Returns the public url of an openstack API,
@@ -60,4 +61,14 @@ export function getProjectId() {
 
 export function getAppConfig() {
   return window.tripleOUiConfig || {};
+}
+
+export function getEnabledLanguages() {
+  const excludedLanguages = getAppConfig().excludedLanguages || [];
+  let configLanguages = Object.assign({}, LANGUAGE_NAMES);
+  excludedLanguages.map(language => {
+    delete configLanguages[language];
+  });
+
+  return configLanguages;
 }

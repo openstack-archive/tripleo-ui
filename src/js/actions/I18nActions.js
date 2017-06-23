@@ -14,11 +14,11 @@
  * under the License.
  */
 
-import { getAppConfig } from '../services/utils';
+import { getEnabledLanguages } from '../services/utils';
 
 export default {
   detectLanguage(messages) {
-    const configLanguages = getAppConfig().languages;
+    const configLanguages = getEnabledLanguages();
     let language;
     // If the configuration contains only one language and there
     // are messages for it, return it;
