@@ -21,7 +21,6 @@ import {
   getCurrentStack,
   getOvercloudInfo
 } from '../../js/selectors/stacks';
-import { CurrentPlanState } from '../../js/immutableRecords/currentPlan';
 import { InitialPlanState, Plan } from '../../js/immutableRecords/plans';
 import { Stack, StacksState } from '../../js/immutableRecords/stacks';
 
@@ -43,15 +42,13 @@ describe('stacks selectors', () => {
         }),
         currentStackEnvironment: Map(),
         plans: new InitialPlanState({
+          currentPlanName: 'overcloud',
           plansLoaded: true,
           all: Map({
             overcloud: new Plan({
               name: 'overcloud'
             })
           })
-        }),
-        currentPlan: new CurrentPlanState({
-          currentPlanName: 'overcloud'
         })
       };
     });
@@ -128,15 +125,13 @@ describe('stacks selectors', () => {
         })
       }),
       plans: new InitialPlanState({
+        currentPlanName: 'overcloud',
         plansLoaded: true,
         all: Map({
           overcloud: new Plan({
             name: 'overcloud'
           })
         })
-      }),
-      currentPlan: new CurrentPlanState({
-        currentPlanName: 'overcloud'
       })
     };
 
@@ -163,15 +158,13 @@ describe('stacks selectors', () => {
           })
         }),
         plans: new InitialPlanState({
+          currentPlanName: 'overcloud',
           plansLoaded: true,
           all: Map({
             overcloud: new Plan({
               name: 'overcloud'
             })
           })
-        }),
-        currentPlan: new CurrentPlanState({
-          currentPlanName: 'overcloud'
         })
       };
       expect(getCurrentStackDeploymentInProgress(state)).toBe(true);
@@ -192,15 +185,13 @@ describe('stacks selectors', () => {
           })
         }),
         plans: new InitialPlanState({
+          currentplanname: 'overcloud',
           plansLoaded: true,
           all: Map({
             overcloud: new Plan({
               name: 'overcloud'
             })
           })
-        }),
-        currentPlan: new CurrentPlanState({
-          currentplanname: 'overcloud'
         })
       };
       expect(getCurrentStackDeploymentInProgress(state)).toBe(false);
@@ -217,15 +208,13 @@ describe('stacks selectors', () => {
           })
         }),
         plans: new InitialPlanState({
+          currentplanname: 'overcloud',
           plansLoaded: true,
           all: Map({
             overcloud: new Plan({
               name: 'overcloud'
             })
           })
-        }),
-        currentPlan: new CurrentPlanState({
-          currentplanname: 'overcloud'
         })
       };
       expect(getCurrentStackDeploymentInProgress(state)).toBe(false);
