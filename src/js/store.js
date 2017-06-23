@@ -20,12 +20,12 @@ import createLogger from 'redux-logger';
 import logger from './services/logger';
 
 import appReducer from './reducers/appReducer';
-import { CurrentPlanState } from './immutableRecords/currentPlan';
+import { InitialPlanState } from './immutableRecords/plans';
 import { getIntl } from './selectors/i18n';
 
 const hydrateStore = () => {
   return {
-    currentPlan: new CurrentPlanState({
+    plans: new InitialPlanState({
       currentPlanName: getStoredPlanName()
     })
   };
