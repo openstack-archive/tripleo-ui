@@ -14,107 +14,61 @@
  * under the License.
  */
 
+import ClassNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import {
   defineMessages,
-  FormattedMessage,
   injectIntl,
-  FormattedTime,
-  FormattedDate
+  FormattedDate,
+  FormattedTime
 } from 'react-intl';
+
 import Loader from '../../ui/Loader';
-import MenuItemLink from '../../ui/dropdown/MenuItemLink';
-import DropdownKebab from '../../ui/dropdown/DropdownKebab';
+import PlanActions from './PlanActions';
 import {
   stackStates,
   deploymentStatusMessages
 } from '../../../constants/StacksConstants';
 
 const messages = defineMessages({
-  deletingPlanName: {
-    id: 'ListPlans.deletingPlanName',
+  deleting: {
+    id: 'PlanCard.deletingPlanName',
     defaultMessage: 'Deleting {planName}...'
   },
-  edit: {
-    id: 'ListPlans.edit',
-    defaultMessage: 'Edit'
-  },
-  export: {
-    id: 'ListPlans.export',
-    defaultMessage: 'Export'
-  },
-  delete: {
-    id: 'ListPlans.delete',
-    defaultMessage: 'Delete'
-  },
   notDeployed: {
-    id: 'ListPlans.notDeployed',
+    id: 'PlanCard.notDeployed',
     defaultMessage: 'Not deployed'
   }
 });
 
 class PlanCard extends React.Component {
-  getActiveIcon() {
-    if (this.props.plan.name === this.props.currentPlanName) {
-      return <span className="pficon pficon-flag" />;
-    }
-    return false;
-  }
+  renderStackIcon() {
+    const { stack } = this.props;
+    if (stack) {
+      switch (stack.get('stack_status')) {
+        case stackStates.CREATE_IN_PROGRESS:
+        case stackStates.UPDATE_IN_PROGRESS:
+        case stackStates.DELETE_IN_PROGRESS:
+          return <Loader inline />;
 
-  renderPlanName() {
-    if (this.props.plan.transition === 'deleting') {
-      return (
-        <FormattedMessage
-          {...messages.deletingPlanName}
-          values={{ planName: <strong>{this.props.plan.name}</strong> }}
-        />
-      );
-    } else {
-      return (
-        <Link to={`/plans/${this.props.plan.name}`}>
-          {this.props.plan.name}
-        </Link>
-      );
+        case stackStates.CREATE_COMPLETE:
+        case stackStates.UPDATE_COMPLETE:
+          return <span className="pficon pficon-ok" />;
+
+        case stackStates.CREATE_FAILED:
+        case stackStates.UPDATE_FAILED:
+          return <span className="pficon pficon-error-circle-o" />;
+      }
     }
   }
 
-  _getIcon(stack) {
-    switch (stack.get('stack_status')) {
-      case stackStates.CREATE_IN_PROGRESS:
-      case stackStates.UPDATE_IN_PROGRESS:
-      case stackStates.DELETE_IN_PROGRESS:
-        return <Loader inline />;
-
-      case stackStates.CREATE_COMPLETE:
-      case stackStates.UPDATE_COMPLETE:
-        return <span className="pficon pficon-ok" />;
-
-      case stackStates.CREATE_FAILED:
-      case stackStates.UPDATE_FAILED:
-        return <span className="pficon pficon-error-circle-o" />;
-    }
-  }
-
-  _getStatus(stack) {
-    const { formatMessage } = this.props.intl;
-    return formatMessage(
+  getDeploymentStatus(stack) {
+    return this.props.intl.formatMessage(
       stack
         ? deploymentStatusMessages[stack.get('stack_status')]
         : messages.notDeployed
-    );
-  }
-
-  _renderStackInfoIcon(stack) {
-    const icon = stack
-      ? this._getIcon(stack)
-      : <span className="pficon pficon-info" />;
-    const status = this._getStatus(stack);
-    return (
-      <span data-tooltip={status} className="tooltip-right">
-        {icon}
-      </span>
     );
   }
 
@@ -126,7 +80,7 @@ class PlanCard extends React.Component {
       const time = stack.get('updated_time') || stack.get('creation_time');
       modified = (
         <span>
-          Last modified:
+          <strong>Last modified:</strong>
           &nbsp;
           <FormattedDate value={time} />
           &nbsp;
@@ -136,38 +90,61 @@ class PlanCard extends React.Component {
     }
 
     return (
-      <p>
-        {modified}
-        {this._renderStackInfoIcon(stack)}
-      </p>
+      <ul className="list-unstyled">
+        <li>
+          <strong>Status:</strong>
+          {' '}
+          {this.renderStackIcon(stack)}
+          {' '}
+          {this.getDeploymentStatus(stack)}
+        </li>
+        <li>
+          {modified}
+        </li>
+      </ul>
     );
   }
 
   render() {
-    const planName = this.props.plan.name;
+    const {
+      currentPlanName,
+      intl: { formatMessage },
+      history,
+      plan,
+      stack
+    } = this.props;
+    const cardClasses = ClassNames({
+      'plan-card card-pf card-pf-view card-pf-view-select card-pf-view-single-select': true,
+      active: plan.name === currentPlanName
+    });
+
     return (
       <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-        <div className="card-pf">
+        <div
+          className={cardClasses}
+          onClick={() => history.push(`/plans/${plan.name}`)}
+        >
+          <Loader
+            loaded={!plan.transition}
+            content={
+              plan.transition
+                ? formatMessage(messages[plan.transition], {
+                    planName: plan.name
+                  })
+                : ''
+            }
+            height={62}
+            overlay
+          />
           <h2 className="card-pf-title">
-            {this.renderPlanName()}
-            &nbsp;
-            {this.getActiveIcon()}
-            <div className="pull-right">
-              <DropdownKebab id={`card-actions-${planName}`} pullRight>
-                <MenuItemLink to={`/plans/manage/${planName}/edit`}>
-                  <FormattedMessage {...messages.edit} />
-                </MenuItemLink>
-                <MenuItemLink to={`/plans/manage/${planName}/export`}>
-                  <FormattedMessage {...messages.export} />
-                </MenuItemLink>
-                <MenuItemLink to={`/plans/manage/${planName}/delete`}>
-                  <FormattedMessage {...messages.delete} />
-                </MenuItemLink>
-              </DropdownKebab>
-            </div>
+            {plan.name}
+            <PlanActions planName={plan.name} stack={stack} />
           </h2>
-          <div className="card-pf-body">
-            {/* TODO(hpokorny): fetchPlans() doesn't provide description yet */}
+          {plan.description &&
+            <div className="card-pf-body">
+              {plan.description}
+            </div>}
+          <div className="card-pf-footer">
             {this.renderStackInfo()}
           </div>
         </div>
@@ -178,9 +155,10 @@ class PlanCard extends React.Component {
 
 PlanCard.propTypes = {
   currentPlanName: PropTypes.string,
-  intl: PropTypes.object,
-  plan: PropTypes.object,
+  history: PropTypes.object.isRequired,
+  intl: PropTypes.object.isRequired,
+  plan: PropTypes.object.isRequired,
   stack: PropTypes.object
 };
 
-export default injectIntl(PlanCard);
+export default withRouter(injectIntl(PlanCard));
