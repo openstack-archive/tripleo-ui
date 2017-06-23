@@ -14,6 +14,7 @@
  * under the License.
  */
 
+import ClassNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -56,13 +57,6 @@ const messages = defineMessages({
 });
 
 class PlanCard extends React.Component {
-  getActiveIcon() {
-    if (this.props.plan.name === this.props.currentPlanName) {
-      return <span className="pficon pficon-flag" />;
-    }
-    return false;
-  }
-
   renderPlanName() {
     if (this.props.plan.transition === 'deleting') {
       return (
@@ -89,11 +83,11 @@ class PlanCard extends React.Component {
 
       case stackStates.CREATE_COMPLETE:
       case stackStates.UPDATE_COMPLETE:
-        return <span className="pficon pficon-ok" />;
+        return <span className="fa fa-cloud text-success" />;
 
       case stackStates.CREATE_FAILED:
       case stackStates.UPDATE_FAILED:
-        return <span className="pficon pficon-error-circle-o" />;
+        return <span className="fa fa-cloud text-danger" />;
     }
   }
 
@@ -109,7 +103,7 @@ class PlanCard extends React.Component {
   _renderStackInfoIcon(stack) {
     const icon = stack
       ? this._getIcon(stack)
-      : <span className="pficon pficon-info" />;
+      : <span className="fa fa-cloud" />;
     const status = this._getStatus(stack);
     return (
       <span data-tooltip={status} className="tooltip-right">
@@ -139,19 +133,36 @@ class PlanCard extends React.Component {
       <p>
         {modified}
         {this._renderStackInfoIcon(stack)}
+        <br />
+        <strong>Status:</strong> {this._getStatus(stack)}
       </p>
     );
   }
 
+  renderStackIcon(stack) {
+    const icon = stack
+      ? this._getIcon(stack)
+      : <span className="fa fa-cloud" />;
+    const status = this._getStatus(stack);
+    return (
+      <span title={status}>
+        {icon}
+      </span>
+    );
+  }
+
   render() {
-    const planName = this.props.plan.name;
+    const { currentPlanName, plan: { name: planName }, stack } = this.props;
+    const cardClasses = ClassNames({
+      'plan-card card-pf card-pf-view card-pf-view-select card-pf-view-single-select': true,
+      active: planName === currentPlanName
+    });
     return (
       <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-        <div className="card-pf">
+        <div className={cardClasses}>
           <h2 className="card-pf-title">
+            {this.renderStackIcon(stack)}{' '}
             {this.renderPlanName()}
-            &nbsp;
-            {this.getActiveIcon()}
             <div className="pull-right">
               <DropdownKebab id={`card-actions-${planName}`} pullRight>
                 <MenuItemLink to={`/plans/manage/${planName}/edit`}>
@@ -166,8 +177,10 @@ class PlanCard extends React.Component {
               </DropdownKebab>
             </div>
           </h2>
-          <div className="card-pf-body">
-            {/* TODO(hpokorny): fetchPlans() doesn't provide description yet */}
+          {/* <div className="card-pf-body"> */}
+          {/* TODO(hpokorny): fetchPlans() doesn't provide description yet */}
+          {/* </div> */}
+          <div className="card-pf-footer">
             {this.renderStackInfo()}
           </div>
         </div>
@@ -178,8 +191,8 @@ class PlanCard extends React.Component {
 
 PlanCard.propTypes = {
   currentPlanName: PropTypes.string,
-  intl: PropTypes.object,
-  plan: PropTypes.object,
+  intl: PropTypes.object.isRequired,
+  plan: PropTypes.object.isRequired,
   stack: PropTypes.object
 };
 
