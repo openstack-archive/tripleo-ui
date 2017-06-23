@@ -14,7 +14,16 @@
  * under the License.
  */
 
-import { List, Record } from 'immutable';
+import { List, Map, Record, Set } from 'immutable';
+
+export const NodesState = Record({
+  isFetching: false,
+  isLoaded: false,
+  nodesInProgress: Set(),
+  all: Map(),
+  ports: Map(),
+  introspectionStatuses: Map()
+});
 
 export const NodeToRegister = Record({
   uuid: undefined,
@@ -52,4 +61,13 @@ export const Port = Record({
   uuid: undefined,
   address: undefined,
   node_uuid: undefined
+});
+
+export const IntrospectionStatus = Record({
+  error: undefined,
+  finished: false,
+  finished_at: undefined,
+  started_at: undefined,
+  state: 'not introspected',
+  uuid: undefined
 });

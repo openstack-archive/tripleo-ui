@@ -8,6 +8,7 @@ window.tripleOUiConfig = {
   //
   // 'heat': 'http://192.0.2.1:8004/v1/%(project_id)s',
   // 'ironic': 'http://192.0.2.1:6385',
+  // 'ironic-inspector': 'http://192.0.2.1:5050',
   // 'mistral': 'http://192.0.2.1:8989/v2',
   // 'swift': 'http://192.0.2.1:8080/v1/AUTH_%(project_id)s',
   // 'zaqar-websocket': 'ws://192.0.2.1:9000',

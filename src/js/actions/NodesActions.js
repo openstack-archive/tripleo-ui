@@ -16,15 +16,21 @@
 
 import { defineMessages } from 'react-intl';
 import { normalize, arrayOf } from 'normalizr';
+import when from 'when';
 
 import { getNodesByIds } from '../selectors/nodes';
 import IronicApiErrorHandler from '../services/IronicApiErrorHandler';
 import IronicApiService from '../services/IronicApiService';
+import IronicInspectorApiService from '../services/IronicInspectorApiService';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NodesConstants from '../constants/NodesConstants';
 import NotificationActions from './NotificationActions';
-import { nodeSchema, portSchema } from '../normalizrSchemas/nodes';
+import {
+  nodeSchema,
+  portSchema,
+  introspectionStatusSchema
+} from '../normalizrSchemas/nodes';
 import MistralConstants from '../constants/MistralConstants';
 import logger from '../services/logger';
 import { setNodeCapability } from '../utils/nodes';
@@ -82,15 +88,22 @@ export default {
   fetchNodes() {
     return (dispatch, getState) => {
       dispatch(this.requestNodes());
-      IronicApiService.getNodes()
+      when
+        .all([
+          IronicApiService.getNodes(),
+          IronicApiService.getPorts(),
+          IronicInspectorApiService.getIntrospectionStatuses()
+        ])
         .then(response => {
-          const nodes = normalize(response.nodes, arrayOf(nodeSchema)).entities
-            .nodes;
-          return IronicApiService.getPorts().then(response => {
-            const ports = normalize(response.ports, arrayOf(portSchema))
-              .entities.ports;
-            dispatch(this.receiveNodes({ nodes, ports }));
-          });
+          const nodes = normalize(response[0].nodes, arrayOf(nodeSchema))
+            .entities.nodes;
+          const ports = normalize(response[1].ports, arrayOf(portSchema))
+            .entities.ports;
+          const introspectionStatuses = normalize(
+            response[2].introspection,
+            arrayOf(introspectionStatusSchema)
+          ).entities.introspectionStatuses;
+          dispatch(this.receiveNodes({ nodes, ports, introspectionStatuses }));
         })
         .catch(error => {
           dispatch(this.receiveNodes({}));

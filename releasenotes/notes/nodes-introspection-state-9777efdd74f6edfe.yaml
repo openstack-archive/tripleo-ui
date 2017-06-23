@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Nodes listing page now includes information about node Introspection
+    status. Fetching nodes performance has been improved. New option to
+    filter nodes by introspection status has been added.
