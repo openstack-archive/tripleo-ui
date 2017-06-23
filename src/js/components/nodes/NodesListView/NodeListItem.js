@@ -16,11 +16,13 @@
 
 import ClassNames from 'classnames';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import React from 'react';
-import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import PropTypes from 'prop-types';
+import React from 'react';
 
+import DropdownKebab from '../../ui/dropdown/DropdownKebab';
 import {
+  ListViewActions,
   ListViewAdditionalInfo,
   ListViewAdditionalInfoItem,
   ListViewBody,
@@ -36,6 +38,7 @@ import {
   ListViewLeft,
   ListViewMainInfo
 } from '../../ui/ListView';
+import MenuItemLink from '../../ui/dropdown/MenuItemLink';
 import NodeExtendedInfo from './NodeExtendedInfo';
 import {
   NodeIntrospectionStatus,
@@ -62,6 +65,10 @@ const messages = defineMessages({
   disk: {
     id: 'NodeListItem.gbDisk',
     defaultMessage: 'GB Disk'
+  },
+  manageDrives: {
+    id: 'NodeListItem.actions.manageDrives',
+    defaultMessage: 'Manage Drives'
   }
 });
 
@@ -92,6 +99,14 @@ export default class NodeListItem extends React.Component {
             disabled={inProgress}
             name={`values.${node.get('uuid')}`}
           />
+          {node.getIn(['introspectionStatus', 'state']) === 'finished' &&
+            <ListViewActions>
+              <DropdownKebab id={`${node.get('uuid')}Actions`} pullRight>
+                <MenuItemLink to={`/nodes/${node.get('uuid')}/drives`}>
+                  <FormattedMessage {...messages.manageDrives} />
+                </MenuItemLink>
+              </DropdownKebab>
+            </ListViewActions>}
           <ListViewMainInfo>
             <ListViewLeft>
               <ListViewIcon size="sm" icon={iconClass} />
