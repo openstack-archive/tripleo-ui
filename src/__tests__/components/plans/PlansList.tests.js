@@ -19,12 +19,12 @@ import { Map } from 'immutable';
 import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 
-import ListPlans from '../../../js/components/plan/ListPlans';
+import PlansList from '../../../js/components/plan/PlansList';
 import FileList from '../../../js/components/plan/FileList';
 import { PlanFile } from '../../../js/immutableRecords/plans';
 import store from '../../../js/store';
 
-describe('ListPlans component', () => {
+describe('PlansList component', () => {
   let output;
 
   beforeEach(() => {
@@ -32,13 +32,13 @@ describe('ListPlans component', () => {
     const intlProvider = new IntlProvider({ locale: 'en' }, {});
     const { intl } = intlProvider.getChildContext();
     shallowRenderer.render(
-      <ListPlans.WrappedComponent store={store} intl={intl} />
+      <PlansList.WrappedComponent store={store} intl={intl} />
     );
     output = shallowRenderer.getRenderOutput();
   });
 
   it('renders a table of plan names', () => {
-    expect(output.type.name).toEqual('ListPlans');
+    expect(output.type.name).toEqual('PlansList');
   });
 });
 

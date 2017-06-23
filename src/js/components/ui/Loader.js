@@ -43,6 +43,24 @@ export default class Loader extends React.Component {
     );
   }
 
+  renderOverlayLoader(classes) {
+    return (
+      <div
+        style={{
+          paddingTop: `${this.props.height / 2}px`,
+          paddingBottom: `${this.props.height / 2}px`
+        }}
+        className="overlay-loader"
+        onClick={e => {
+          e.stopPropagation();
+        }}
+      >
+        <div className={classes} />
+        <div className="text-center">{this.props.content}</div>
+      </div>
+    );
+  }
+
   renderDefaultLoader(classes) {
     return (
       <div
@@ -75,6 +93,8 @@ export default class Loader extends React.Component {
         return this.renderGlobalLoader(classes);
       } else if (this.props.inline) {
         return this.renderInlineLoader(classes);
+      } else if (this.props.overlay) {
+        return this.renderOverlayLoader(classes);
       } else {
         return this.renderDefaultLoader(classes);
       }
@@ -100,6 +120,7 @@ Loader.propTypes = {
   inline: PropTypes.bool,
   inverse: PropTypes.bool,
   loaded: PropTypes.bool,
+  overlay: PropTypes.bool.isRequired,
   size: PropTypes.oneOf(['xs', 'sm', 'lg', 'xl'])
 };
 Loader.defaultProps = {
@@ -108,5 +129,6 @@ Loader.defaultProps = {
   content: '',
   global: false,
   height: 10,
-  inline: false
+  inline: false,
+  overlay: false
 };

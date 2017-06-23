@@ -121,6 +121,7 @@ class NewPlan extends React.Component {
           <Loader
             loaded={!this.props.isTransitioningPlan}
             size="lg"
+            height={100}
             content={this.props.intl.formatMessage(messages.creatingPlanLoader)}
           >
             <ModalFormErrorList errors={this.props.planFormErrors.toJS()} />
