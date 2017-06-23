@@ -21,7 +21,11 @@ import React from 'react';
 const DropdownKebab = ({ children, id, pullRight }) => {
   return (
     <Dropdown className="dropdown-kebab-pf" id={id} pullRight={pullRight}>
-      <Dropdown.Toggle bsStyle="link" noCaret>
+      <Dropdown.Toggle
+        bsStyle="link"
+        noCaret
+        onClick={e => e.stopPropagation()}
+      >
         <span className="fa fa-ellipsis-v" />
       </Dropdown.Toggle>
       <Dropdown.Menu>
