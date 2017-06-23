@@ -14,6 +14,7 @@ import { getFilteredNodes, getNodes } from '../../../selectors/nodes';
 import { nodeColumnMessages } from '../messages';
 import NodesToolbarForm from './NodesToolbarForm';
 import NodesToolbarActions from './NodesToolbarActions';
+import { SelectAllButton } from '../../ui/Toolbar/SelectAll';
 import ToolbarFiltersForm from '../../ui/Toolbar/ToolbarFiltersForm';
 import {
   clearActiveFilters,
@@ -57,6 +58,7 @@ class NodesToolbar extends React.Component {
       activeFilters,
       clearActiveFilters,
       deleteActiveFilter,
+      filteredNodes,
       filteredNodesCount,
       nodesToolbarFilter,
       intl,
@@ -138,6 +140,12 @@ class NodesToolbar extends React.Component {
                 />
               ))}
           </ActiveFiltersList>
+          <p className="pull-right">
+            <SelectAllButton
+              form="nodesListForm"
+              items={filteredNodes.toList().toJS()}
+            />
+          </p>
         </ToolbarResults>
       </Toolbar>
     );
@@ -148,6 +156,7 @@ NodesToolbar.propTypes = {
   addActiveFilter: PropTypes.func.isRequired,
   clearActiveFilters: PropTypes.func.isRequired,
   deleteActiveFilter: PropTypes.func.isRequired,
+  filteredNodes: ImmutablePropTypes.map.isRequired,
   filteredNodesCount: PropTypes.number.isRequired,
   intl: PropTypes.object,
   nodesCount: PropTypes.number.isRequired,
@@ -169,6 +178,7 @@ const mapStateToProps = state => {
   return {
     activeFilters: getActiveFilters(state, 'nodesToolbar'),
     filteredNodesCount: getFilteredNodes(state).size,
+    filteredNodes: getFilteredNodes(state),
     nodesToolbarFilter: getFilterByName(state, 'nodesToolbar').delete(
       'activeFilters'
     ),
