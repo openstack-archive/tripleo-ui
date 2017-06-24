@@ -74,14 +74,11 @@
         "FileList.planFiles": "Plan \ud30c\uc77c",
         "HardwareStep.registerNodes": "\ub178\ub4dc \ub4f1\ub85d",
         "I18nDropdown.language": "\uc5b8\uc5b4",
-        "ListPlans.actions": "\uc791\uc5c5",
         "ListPlans.createNewPlan": "\uc0c8\ub85c\uc6b4 Plan \uc0dd\uc131",
         "ListPlans.delete": "\uc0ad\uc81c",
         "ListPlans.deletingPlanName": "{planName} \uc0ad\uc81c\uc911...",
         "ListPlans.edit": "\ud3b8\uc9d1",
         "ListPlans.export": "\ub0b4\ubcf4\ub0b4\uae30",
-        "ListPlans.name": "\uc774\ub984",
-        "ListPlans.noPlans": "\ub2e4\uc74c plan \uc774 \uc5c6\uc2b5\ub2c8\ub2e4",
         "ListPlans.plans": "Plans",
         "Login.description": "\uc774 \ud234\uc740 OpenStack \ud658\uacbd\uc744 \uad6c\uc131\ud558\uace0 \ubc30\ud3ec\ud558\ub294 \uacfc\uc815\uc744 \uc124\uba85\ud569\ub2c8\ub2e4.",
         "Login.login": "\ub85c\uadf8\uc778",
@@ -109,6 +106,7 @@
         "NodeColumns.powerState": "\uc804\uc6d0 \uc0c1\ud0dc",
         "NodeColumns.profile": "\ud504\ub85c\ud544",
         "NodeColumns.provisionState": "\ud504\ub85c\ube44\uc800\ub2dd \uc0c1\ud0dc",
+        "NodeDrives.close": "\ub2eb\uae30",
         "NodeMaintenanceState.maintenanceWarning": "\uc720\uc9c0\ubcf4\uc218",
         "Nodes.loadingNodes": "\ub178\ub4dc\ub97c \ubd88\ub7ec\uc624\ub294 \uc911...",
         "Nodes.nodes": "\ub178\ub4dc",
@@ -257,6 +255,7 @@
         "ValidationsList.refresh": "\uac31\uc2e0",
         "ValidationsList.validations": "Validations",
         "ValidationsToolbar.name": "\uc774\ub984",
+        "nodeExtendedinfo.productName": "\uc774\ub984",
         "reduxForm.validations.number": "\uac12\uc740 \uc22b\uc790\uc5ec\uc57c \ud569\ub2c8\ub2e4."
     }
 }
