@@ -3,7 +3,7 @@ Translation
 
 Tripleo UI uses the react-intl package for translation.
 
-Adding translateable strings
+Adding translatable strings
 ----------------------------
 
 Strings are prepared for translation using react-intl's ``defineMessages``
