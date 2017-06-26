@@ -31,6 +31,11 @@ const messages = defineMessages({
     defaultMessage: 'Add a Plan Name',
     description: 'Tooltip for "Plan Name" form field'
   },
+  addPlanDescription: {
+    id: 'PlanFormTabs.addPlanDescription',
+    defaultMessage: 'Add a Plan Description',
+    description: 'Tooltip for "Plan Description" form field'
+  },
   newPlan: {
     id: 'PlanFormTabs.newPlan',
     defaultMessage: 'New Plan'
@@ -50,6 +55,10 @@ const messages = defineMessages({
   planNameValidationError: {
     id: 'PlanFormTabs.planNameValidationError',
     defaultMessage: 'Please use only alphanumeric characters and hyphens (-).'
+  },
+  planDescription: {
+    id: 'PlanFormTabs.planDescription',
+    defaultMessage: 'Plan Description'
   },
   uploadType: {
     id: 'PlanFormTabs.uploadType',
@@ -95,6 +104,7 @@ export default class PlanFormTabs extends React.Component {
             active={this.isActiveTab('newPlan')}
             uploadType={this.props.uploadType}
             setUploadType={this.props.setUploadType}
+            description={this.props.description}
           />
           <PlanFilesTab
             active={this.isActiveTab('planFiles')}
@@ -106,6 +116,7 @@ export default class PlanFormTabs extends React.Component {
   }
 }
 PlanFormTabs.propTypes = {
+  description: PropTypes.string,
   selectedFiles: PropTypes.array,
   setUploadType: PropTypes.func.isRequired,
   uploadType: PropTypes.string.isRequired
@@ -132,6 +143,14 @@ class _PlanFormTab extends React.Component {
           validationError={formatMessage(messages.planNameValidationError)}
           required
         />
+        <HorizontalInput
+          name="planDescription"
+          title={formatMessage(messages.planDescription)}
+          inputColumnClasses="col-sm-7"
+          labelColumnClasses="col-sm-3"
+          placeholder={formatMessage(messages.addPlanDescription)}
+          value={this.props.description}
+        />
         <PlanUploadTypeRadios
           title={formatMessage(messages.uploadType)}
           inputColumnClasses="col-sm-7"
@@ -154,6 +173,7 @@ class _PlanFormTab extends React.Component {
 }
 _PlanFormTab.propTypes = {
   active: PropTypes.bool.isRequired,
+  description: PropTypes.string,
   intl: PropTypes.object,
   setUploadType: PropTypes.func.isRequired,
   uploadType: PropTypes.string.isRequired

@@ -42,3 +42,5 @@ export default keyMirror({
   EXPORT_PLAN_SUCCESS: null,
   EXPORT_PLAN_FAILED: null
 });
+
+export const PLAN_ENVIRONMENT = 'plan-environment.yaml';

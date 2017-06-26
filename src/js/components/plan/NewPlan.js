@@ -21,12 +21,14 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
+import yaml from 'js-yaml';
 
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import PlansActions from '../../actions/PlansActions';
 import PlanFormTabs from './PlanFormTabs';
 import Modal from '../ui/Modal';
 import Loader from '../ui/Loader';
+import { PLAN_ENVIRONMENT } from '../../constants/PlansConstants';
 
 const messages = defineMessages({
   cancel: {
@@ -54,7 +56,8 @@ class NewPlan extends React.Component {
       files: [],
       selectedFiles: undefined,
       canSubmit: false,
-      uploadType: 'tarball'
+      uploadType: 'tarball',
+      description: ''
     };
   }
 
@@ -68,6 +71,13 @@ class NewPlan extends React.Component {
     let files = currentValues.planFiles;
     if (files && files != []) {
       this.setState({ selectedFiles: currentValues.planFiles });
+      for (let i = 0; i < files.length; i++) {
+        if (files[i].name === PLAN_ENVIRONMENT) {
+          let description = yaml.safeLoad(files[i].content).description;
+          this.setState({ description: description});
+          break ;
+        }
+      }
     }
   }
 
@@ -76,6 +86,13 @@ class NewPlan extends React.Component {
     if (this.state.uploadType === 'folder') {
       this.state.selectedFiles.map(item => {
         planFiles[item.name] = {};
+        if (item.name === PLAN_ENVIRONMENT) {
+          let content = yaml.safeLoad(item.content);
+          if (content.description !== formData.planDescription) {
+            content.description = formData.planDescription;
+            item.content = yaml.safeDump(content);
+          }
+        }
         planFiles[item.name].contents = item.content;
       });
       this.props.createPlan(formData.planName, planFiles);
@@ -129,6 +146,7 @@ class NewPlan extends React.Component {
                 selectedFiles={this.state.selectedFiles}
                 setUploadType={this.setUploadType.bind(this)}
                 uploadType={this.state.uploadType}
+                description={this.state.description}
               />
             </div>
           </Loader>
