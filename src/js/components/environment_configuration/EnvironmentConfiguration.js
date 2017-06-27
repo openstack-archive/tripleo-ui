@@ -180,7 +180,10 @@ class EnvironmentConfiguration extends React.Component {
           <div className="container-fluid">
             <div className="row row-eq-height">
               <div className="col-sm-4 sidebar-pf sidebar-pf-left">
-                <ul className="nav nav-pills nav-stacked nav-arrows">
+                <ul
+                  id="DeploymentConfiguration__CategoriesList"
+                  className="nav nav-pills nav-stacked nav-arrows"
+                >
                   {topicTabs}
                 </ul>
               </div>
