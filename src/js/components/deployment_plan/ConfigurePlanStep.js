@@ -33,7 +33,10 @@ const ConfigurePlanStep = props => {
     <div>
       <DeploymentConfigurationSummary {...props} />
       &nbsp;
-      <Link to={`/plans/${props.planName}/configuration`}>
+      <Link
+        id="ConfigurePlanStep__EditDeploymentLink"
+        to={`/plans/${props.planName}/configuration`}
+      >
         <FormattedMessage {...messages.editConfigurationLink} />
       </Link>
     </div>
