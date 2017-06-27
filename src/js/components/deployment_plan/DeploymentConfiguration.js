@@ -45,7 +45,7 @@ class DeploymentConfiguration extends React.Component {
   render() {
     const { location } = this.props;
     return (
-      <Modal dialogClasses="modal-xl">
+      <Modal id="DeploymentConfiguration__ModalDialog" dialogClasses="modal-xl">
         <div className="modal-header">
           <Link to="/deployment-plan" type="button" className="close">
             <span aria-hidden="true" className="pficon pficon-close" />
@@ -58,12 +58,14 @@ class DeploymentConfiguration extends React.Component {
         <ul className="nav nav-tabs">
           <NavTab
             location={location}
+            id="DeploymentConfiguration__Overall"
             to="/deployment-plan/configuration/environment"
           >
             <FormattedMessage {...messages.overallSettings} />
           </NavTab>
           <NavTab
             location={location}
+            id="DeploymentConfiguration__Parameters"
             to="/deployment-plan/configuration/parameters"
           >
             <FormattedMessage {...messages.parameters} />

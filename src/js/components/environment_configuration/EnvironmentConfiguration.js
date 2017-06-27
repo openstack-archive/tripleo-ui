@@ -158,7 +158,11 @@ class EnvironmentConfiguration extends React.Component {
       .map((topic, index) => {
         let tabName = _.camelCase(topic.get('title'));
         return (
-          <Tab key={index} isActive={this.isTabActive(tabName)}>
+          <Tab
+            key={index}
+            isActive={this.isTabActive(tabName)}
+            data-automation-id="DeploymentConfiguration__CategoriesListItem"
+          >
             <a href="" onClick={this.activateTab.bind(this, tabName)}>
               {topic.get('title')}
             </a>
@@ -180,7 +184,10 @@ class EnvironmentConfiguration extends React.Component {
           <div className="container-fluid">
             <div className="row row-eq-height">
               <div className="col-sm-4 sidebar-pf sidebar-pf-left">
-                <ul className="nav nav-pills nav-stacked nav-arrows">
+                <ul
+                  id="DeploymentConfiguration__CategoriesList"
+                  className="nav nav-pills nav-stacked nav-arrows"
+                >
                   {topicTabs}
                 </ul>
               </div>
