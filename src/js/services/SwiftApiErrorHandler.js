@@ -53,10 +53,9 @@ export default class SwiftApiErrorHandler extends BaseHttpRequestErrorHandler {
         });
         break;
       case 404:
-        error = JSON.parse(errorObj.responseText).error;
         errors.push({
           title: 'Not found',
-          message: error.message
+          message: errorObj.responseText
         });
         break;
       default:

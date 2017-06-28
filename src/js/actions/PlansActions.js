@@ -252,29 +252,18 @@ export default {
    * Returns a promise which gets resolved when all files are uploaded
    * or rejected if >= 1 objects fail.
    * @container: String
-   * @files: Immutable Map
+   * @files: Object
    */
   _uploadFilesToContainer(container, files, dispatch) {
-    let uploadedFiles = 0;
-    return when.promise((resolve, reject) => {
-      files.forEach((value, key) => {
-        SwiftApiService.createObject(container, key, value.get('contents'))
-          .then(response => {
-            // On success increase nr of uploaded files.
-            // If this is the last file in the map, resolve the promise.
-            if (uploadedFiles === files.size - 1) {
-              resolve();
-            }
-            uploadedFiles += 1;
-          })
-          .catch(error => {
-            // Reject the promise on the first file that fails.
-            logger.error('Error in PlansActions.createPlan', error);
-            let errorHandler = new SwiftApiErrorHandler(error);
-            reject(errorHandler.errors);
-          });
-      });
-    });
+    return when.all(
+      Object.keys(files).map(fileName =>
+        SwiftApiService.createObject(
+          container,
+          fileName,
+          files[fileName].contents
+        )
+      )
+    );
   },
 
   createPlan(planName, planFiles) {
@@ -283,51 +272,28 @@ export default {
       MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
         container: planName
       })
+        .then(() => this._uploadFilesToContainer(planName, planFiles, dispatch))
+        .then(() =>
+          MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
+            container: planName
+          })
+        )
         .then(response => {
-          // Upload all files to container first.
-          this._uploadFilesToContainer(planName, fromJS(planFiles), dispatch)
-            .then(() => {
-              // Once all files are uploaded, start plan creation workflow.
-              MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
-                container: planName
+          if (response.state === 'ERROR') {
+            logger.error('Error in PlansActions.createPlan', response);
+            dispatch(
+              this.createPlanFailed({
+                title: 'Error',
+                message: response.state_info
               })
-                .then(response => {
-                  if (response.state === 'ERROR') {
-                    logger.error('Error in PlansActions.createPlan', response);
-                    dispatch(
-                      NotificationActions.notify({
-                        title: 'Error',
-                        message: response.state_info
-                      })
-                    );
-                    dispatch(this.createPlanFailed());
-                  }
-                })
-                .catch(error => {
-                  logger.error('Error in PlansActions.createPlan', error);
-                  let errorHandler = new MistralApiErrorHandler(error);
-                  errorHandler.errors.forEach(error => {
-                    dispatch(NotificationActions.notify(error));
-                  });
-                  dispatch(this.createPlanFailed());
-                });
-            })
-            .catch(errors => {
-              logger.error('Error in PlansActions.createPlan', errors);
-              // If the file upload fails, just notify the user
-              errors.forEach(error => {
-                dispatch(NotificationActions.notify(error));
-              });
-              dispatch(this.createPlanFailed());
-            });
+            );
+          }
         })
         .catch(error => {
+          debugger;
           logger.error('Error in PlansActions.createPlan', error);
           let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
-          dispatch(this.createPlanFailed());
+          dispatch(this.createPlanFailed(errorHandler.errors));
         });
     };
   },

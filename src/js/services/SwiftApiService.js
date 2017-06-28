@@ -29,6 +29,7 @@ class SwiftApiService {
           url: `${serviceUrl}${path}`,
           crossOrigin: true,
           method: 'GET',
+          type: 'json',
           headers: {
             'X-Auth-Token': getAuthTokenId()
           }
