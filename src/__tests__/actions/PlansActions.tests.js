@@ -137,9 +137,7 @@ describe('PlansActions', () => {
     });
   });
 
-  let apiResponse = {
-    output: '{ "result": [ "overcloud", "another-cloud" ] }'
-  };
+  let apiResponse = ['overcloud', 'another-cloud'];
 
   describe('fetchPlans', () => {
     beforeEach(done => {
