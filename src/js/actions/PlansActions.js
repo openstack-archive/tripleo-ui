@@ -15,19 +15,16 @@
  */
 
 import { defineMessages } from 'react-intl';
-import { fromJS } from 'immutable';
 import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
 import yaml from 'js-yaml';
 
-import logger from '../services/logger';
+import { handleErrors } from './ErrorActions';
 import MistralApiService from '../services/MistralApiService';
-import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NotificationActions from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
 import { planFileSchema } from '../normalizrSchemas/plans';
 import StackActions from '../actions/StacksActions';
-import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
 import MistralConstants from '../constants/MistralConstants';
 import { getAppConfig } from '../services/utils';
@@ -86,40 +83,34 @@ export default {
     return dispatch => {
       dispatch(this.requestPlans());
       MistralApiService.runAction(MistralConstants.PLAN_LIST)
-        .then(response => {
-          const planNames = JSON.parse(response.output).result;
+        // TODO(jtomasek): This block should be done on Mistral action side
+        .then(planNames =>
           when
             .all(
               planNames.map(name =>
                 SwiftApiService.getObject(name, PLAN_ENVIRONMENT)
               )
             )
-            .then(responses => {
-              const plans = responses.map(response => {
-                const { name, description } = yaml.safeLoad(
-                  response.responseText
+            .then(planEnvs =>
+              planNames.map(planName => {
+                const { name: title, description } = yaml.safeLoad(
+                  planEnvs[planName]
                 );
-                return { name, description };
-              });
-              dispatch(this.receivePlans(plans));
-            })
+                return { name: planName, title, description };
+              })
+            )
             .catch(error => {
-              logger.error(
-                'Error in PlansActions.fetchPlans',
-                error.stack || error
+              dispatch(
+                handleErrors(error, 'Plan descriptions could not be loaded')
               );
-              dispatch(this.receivePlans(planNames.map(name => ({ name }))));
-            });
+              return planNames.map(name => ({ name, title: name }));
+            })
+        )
+        .then(plans => {
+          dispatch(this.receivePlans(plans));
         })
         .catch(error => {
-          logger.error(
-            'Error in PlansActions.fetchPlans',
-            error.stack || error
-          );
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
+          dispatch(handleErrors(error, 'Plans could not be loaded'));
         });
     };
   },
@@ -145,22 +136,12 @@ export default {
       dispatch(this.requestPlan());
       SwiftApiService.getContainer(planName)
         .then(response => {
-          dispatch(
-            this.receivePlan(
-              planName,
-              normalize(response, arrayOf(planFileSchema)).entities.planFiles
-            )
-          );
+          const planFiles = normalize(response, arrayOf(planFileSchema))
+            .entities.planFiles || {};
+          dispatch(this.receivePlan(planName, planFiles));
         })
         .catch(error => {
-          logger.error(
-            'Error retrieving plan PlansActions.fetchPlan',
-            error.stack || error
-          );
-          let errorHandler = new SwiftApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
+          dispatch(handleErrors(error, 'Plan could not be loaded'));
         });
     };
   },
@@ -186,11 +167,12 @@ export default {
     };
   },
 
+  // TODO(jtomasek): this is broken, needs to use a workflow to regenerate templates
   updatePlan(planName, planFiles, history) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.updatePlanPending(planName));
-      this._uploadFilesToContainer(planName, fromJS(planFiles), dispatch)
+      this._uploadFilesToContainer('planName', planFiles)
         .then(() => {
           dispatch(this.updatePlanSuccess(planName));
           history.push('/plans/manage');
@@ -205,16 +187,14 @@ export default {
           );
           dispatch(this.fetchPlans());
         })
-        .catch(errors => {
-          logger.error('Error in PlansActions.updatePlan', errors);
-          errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
+        .catch(error => {
+          dispatch(handleErrors(error, 'Plan update failed'));
           dispatch(this.updatePlanFailed(planName));
         });
     };
   },
 
+  // TODO(jtomasek): this is broken, needs to use a workflow to regenerate templates
   updatePlanFromTarball(planName, file, history) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
@@ -235,11 +215,7 @@ export default {
           dispatch(this.fetchPlans());
         })
         .catch(error => {
-          logger.error('Error in PlansActions.updatePlanFromTarball', error);
-          let errorHandler = new SwiftApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
+          dispatch(handleErrors(error, 'Plan update failed'));
           dispatch(this.updatePlanFailed(planName));
         });
     };
@@ -275,29 +251,18 @@ export default {
    * Returns a promise which gets resolved when all files are uploaded
    * or rejected if >= 1 objects fail.
    * @container: String
-   * @files: Immutable Map
+   * @files: Object
    */
-  _uploadFilesToContainer(container, files, dispatch) {
-    let uploadedFiles = 0;
-    return when.promise((resolve, reject) => {
-      files.forEach((value, key) => {
-        SwiftApiService.createObject(container, key, value.get('contents'))
-          .then(response => {
-            // On success increase nr of uploaded files.
-            // If this is the last file in the map, resolve the promise.
-            if (uploadedFiles === files.size - 1) {
-              resolve();
-            }
-            uploadedFiles += 1;
-          })
-          .catch(error => {
-            // Reject the promise on the first file that fails.
-            logger.error('Error in PlansActions.createPlan', error);
-            let errorHandler = new SwiftApiErrorHandler(error);
-            reject(errorHandler.errors);
-          });
-      });
-    });
+  _uploadFilesToContainer(container, files) {
+    return when.all(
+      Object.keys(files).map(fileName =>
+        SwiftApiService.createObject(
+          container,
+          fileName,
+          files[fileName].contents
+        )
+      )
+    );
   },
 
   createPlan(planName, planFiles) {
@@ -306,51 +271,45 @@ export default {
       MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
         container: planName
       })
-        .then(response => {
-          // Upload all files to container first.
-          this._uploadFilesToContainer(planName, fromJS(planFiles), dispatch)
-            .then(() => {
-              // Once all files are uploaded, start plan creation workflow.
-              MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
-                container: planName
-              })
-                .then(response => {
-                  if (response.state === 'ERROR') {
-                    logger.error('Error in PlansActions.createPlan', response);
-                    dispatch(
-                      NotificationActions.notify({
-                        title: 'Error',
-                        message: response.state_info
-                      })
-                    );
-                    dispatch(this.createPlanFailed());
-                  }
-                })
-                .catch(error => {
-                  logger.error('Error in PlansActions.createPlan', error);
-                  let errorHandler = new MistralApiErrorHandler(error);
-                  errorHandler.errors.forEach(error => {
-                    dispatch(NotificationActions.notify(error));
-                  });
-                  dispatch(this.createPlanFailed());
-                });
-            })
-            .catch(errors => {
-              logger.error('Error in PlansActions.createPlan', errors);
-              // If the file upload fails, just notify the user
-              errors.forEach(error => {
-                dispatch(NotificationActions.notify(error));
-              });
-              dispatch(this.createPlanFailed());
-            });
-        })
+        .then(response =>
+          this._uploadFilesToContainer(planName, planFiles, dispatch)
+        )
+        .then(response =>
+          MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
+            container: planName
+          })
+        )
         .catch(error => {
-          logger.error('Error in PlansActions.createPlan', error);
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
-          dispatch(this.createPlanFailed());
+          dispatch(handleErrors(error, 'Plan creation failed', false));
+          dispatch(
+            this.createPlanFailed([
+              { title: 'Plan creation failed', message: error.message }
+            ])
+          );
+        });
+    };
+  },
+
+  createPlanFromTarball(planName, file) {
+    return dispatch => {
+      dispatch(this.createPlanPending());
+
+      MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
+        container: planName
+      })
+        .then(response => SwiftApiService.uploadTarball(planName, file))
+        .then(response =>
+          MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
+            container: planName
+          })
+        )
+        .catch(error => {
+          dispatch(handleErrors(error, 'Plan creation failed', false));
+          dispatch(
+            this.createPlanFailed([
+              { title: 'Plan creation failed', message: error.message }
+            ])
+          );
         });
     };
   },
@@ -374,64 +333,11 @@ export default {
         history.push('/plans/manage');
       } else {
         dispatch(
-          this.createPlanFailed([{ title: 'Error', message: payload.message }])
+          this.createPlanFailed([
+            { title: 'Plan creation failed', message: payload.message }
+          ])
         );
       }
-    };
-  },
-
-  createPlanFromTarball(planName, file) {
-    return dispatch => {
-      dispatch(this.createPlanPending());
-
-      MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
-        container: planName
-      })
-        .then(response => {
-          SwiftApiService.uploadTarball(planName, file)
-            .then(response => {
-              MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
-                container: planName
-              })
-                .then(response => {
-                  if (response.state === 'ERROR') {
-                    logger.error(
-                      'Error in PlansActions.createPlanFromTarball',
-                      response
-                    );
-                    dispatch(
-                      this.createPlanFailed([
-                        { title: 'Error', message: response.state_info }
-                      ])
-                    );
-                  }
-                })
-                .catch(error => {
-                  logger.error(
-                    'Error in workflow in PlansActions.createPlanFromTarball',
-                    error
-                  );
-                  let errorHandler = new MistralApiErrorHandler(error);
-                  dispatch(this.createPlanFailed(errorHandler.errors));
-                });
-            })
-            .catch(error => {
-              logger.error(
-                'Error in Swift in PlansActions.createPlanFromTarball',
-                error
-              );
-              let errorHandler = new SwiftApiErrorHandler(error);
-              dispatch(this.createPlanFailed(errorHandler.errors));
-            });
-        })
-        .catch(error => {
-          logger.error('Error in PlansActions.createPlan', error);
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
-          dispatch(this.createPlanFailed());
-        });
     };
   },
 
@@ -477,15 +383,10 @@ export default {
           );
         })
         .catch(error => {
-          logger.error(
-            'Error deleting plan MistralApiService.runAction',
-            error
+          dispatch(
+            handleErrors(error, `Plan ${planName} could not be deleted`)
           );
           dispatch(this.deletePlanFailed(planName));
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
         });
     };
   },
@@ -511,6 +412,25 @@ export default {
     };
   },
 
+  deployPlan(planName) {
+    return dispatch => {
+      dispatch(this.deployPlanPending(planName));
+      MistralApiService.runWorkflow(MistralConstants.DEPLOYMENT_DEPLOY_PLAN, {
+        container: planName,
+        timeout: 240
+      })
+        .then(response => {
+          dispatch(StackActions.fetchStacks());
+        })
+        .catch(error => {
+          dispatch(
+            handleErrors(error, `Plan ${planName} could not be deployed`)
+          );
+          dispatch(this.deployPlanFailed(planName));
+        });
+    };
+  },
+
   deployPlanFinished(payload) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
@@ -527,26 +447,6 @@ export default {
         dispatch(this.deployPlanSuccess(payload.execution.input.container));
         dispatch(StackActions.fetchStacks());
       }
-    };
-  },
-
-  deployPlan(planName) {
-    return dispatch => {
-      dispatch(this.deployPlanPending(planName));
-      MistralApiService.runWorkflow(MistralConstants.DEPLOYMENT_DEPLOY_PLAN, {
-        container: planName,
-        timeout: 240
-      })
-        .then(response => {
-          dispatch(StackActions.fetchStacks());
-        })
-        .catch(error => {
-          dispatch(this.deployPlanFailed(planName));
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
-        });
     };
   },
 
@@ -568,6 +468,18 @@ export default {
     return {
       type: PlansConstants.EXPORT_PLAN_FAILED,
       payload: planName
+    };
+  },
+
+  exportPlan(planName) {
+    return dispatch => {
+      dispatch(this.exportPlanPending(planName));
+      MistralApiService.runWorkflow(MistralConstants.PLAN_EXPORT, {
+        plan: planName
+      }).catch(error => {
+        dispatch(handleErrors(error, `Plan ${planName} could not be exported`));
+        dispatch(this.exportPlanFailed(planName));
+      });
     };
   },
 
@@ -593,29 +505,6 @@ export default {
           this.exportPlanSuccess(payload.tempurl.replace(url, swiftUrl))
         );
       }
-    };
-  },
-
-  exportPlan(planName) {
-    return dispatch => {
-      dispatch(this.exportPlanPending(planName));
-      MistralApiService.runWorkflow(MistralConstants.PLAN_EXPORT, {
-        plan: planName
-      })
-        .then(response => {
-          if (response.state === 'ERROR') {
-            logger.error('Error in PlansActions.exportPlan', response);
-            dispatch(this.exportPlanFailed(planName));
-          }
-        })
-        .catch(error => {
-          logger.error('Error in PlansActions.exportPlan', error);
-          dispatch(this.exportPlanFailed(planName));
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
-        });
     };
   }
 };
