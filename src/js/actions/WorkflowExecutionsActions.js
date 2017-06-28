@@ -16,15 +16,13 @@
 
 import { normalize, arrayOf } from 'normalizr';
 
+import { handleErrors } from './ErrorActions';
 import MistralApiService from '../services/MistralApiService';
-import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
-import NotificationActions from './NotificationActions';
 import WorkflowExecutionsConstants
   from '../constants/WorkflowExecutionsConstants';
 import {
   workflowExecutionSchema
 } from '../normalizrSchemas/workflowExecutions';
-import logger from '../services/logger';
 
 export default {
   fetchWorkflowExecutions() {
@@ -33,20 +31,15 @@ export default {
       MistralApiService.getWorkflowExecutions()
         .then(response => {
           const executions = normalize(
-            response.executions,
+            response,
             arrayOf(workflowExecutionSchema)
           ).entities.executions || {};
           dispatch(this.fetchWorkflowExecutionsSuccess(executions));
         })
         .catch(error => {
-          logger.error(
-            'Error in WorkflowExecutionsActions.fetchWorkflowExecutions',
-            error
+          dispatch(
+            handleErrors(error, 'Workflow Executions could not be loaded')
           );
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
           dispatch(this.fetchWorkflowExecutionsFailed());
         });
     };
@@ -86,14 +79,9 @@ export default {
           dispatch(this.addWorkflowExecution(response));
         })
         .catch(error => {
-          logger.error(
-            'Error in WorkflowExecutionsActions.updateWorkflowExecution',
-            error
+          dispatch(
+            handleErrors(error, 'Workflow Execution could not be updated')
           );
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
         });
     };
   },

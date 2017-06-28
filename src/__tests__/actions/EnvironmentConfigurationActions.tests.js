@@ -44,12 +44,26 @@ describe('EnvironmentConfigurationActions', () => {
       // Mock the service call.
       spyOn(MistralApiService, 'runAction').and.callFake(
         createResolvingPromise({
-          output: `{\"result\": {\"Basic Configuration\": {\"environment_groups\": [{\"description\":
-                 \"Enable basic configuration required for OpenStack Deployment\", \"environments\":
-                 [{\"enabled\": true, \"description\": null, \"file\":
-                 \"overcloud-resource-registry-puppet.yaml\", \"title\":
-                 \"Default Configuration\"}], \"title\": null}], \"description\": null,
-                 \"title\": \"Basic Configuration\"}}}`
+          output: {
+            'Basic Configuration': {
+              environment_groups: [
+                {
+                  description: 'Enable basic configuration required for OpenStack Deployment',
+                  environments: [
+                    {
+                      enabled: true,
+                      description: null,
+                      file: 'overcloud-resource-registry-puppet.yaml',
+                      title: 'Default Configuration'
+                    }
+                  ],
+                  title: null
+                }
+              ],
+              description: null,
+              title: 'Basic Configuration'
+            }
+          }
         })
       );
       EnvironmentConfigurationActions.fetchEnvironmentConfiguration(
@@ -81,10 +95,18 @@ describe('EnvironmentConfigurationActions', () => {
       // Mock the service call.
       spyOn(MistralApiService, 'runAction').and.callFake(
         createResolvingPromise({
-          output: `{\"result\": {\"template\": \"overcloud.yaml\", \"environments\": [{\"path\":
-                 \"overcloud-resource-registry-puppet.yaml\"}, {\"path\":
-                 \"environments/puppet-pacemaker.yaml\"}, {\"path\":
-                 \"environments/network-isolation.yaml\"}]}}`
+          template: 'overcloud.yaml',
+          environments: [
+            {
+              path: 'overcloud-resource-registry-puppet.yaml'
+            },
+            {
+              path: 'environments/puppet-pacemaker.yaml'
+            },
+            {
+              path: 'environments/network-isolation.yaml'
+            }
+          ]
         })
       );
       EnvironmentConfigurationActions.updateEnvironmentConfiguration(
