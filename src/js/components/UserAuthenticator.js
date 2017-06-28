@@ -15,7 +15,6 @@
  */
 
 import { connect } from 'react-redux';
-import cookie from 'react-cookie';
 import { defineMessages, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -48,16 +47,19 @@ class UserAuthenticator extends React.Component {
   }
 
   checkAuth(props) {
-    const { isAuthenticated, isAuthenticating } = props;
-    const keystoneAuthTokenId = cookie.load('keystoneAuthTokenId');
+    const { isAuthenticated, isAuthenticating, keystoneAuthTokenId } = props;
     if (!isAuthenticated && !isAuthenticating && keystoneAuthTokenId) {
       this.props.authenticateUserViaToken(keystoneAuthTokenId);
     }
   }
 
   render() {
-    const { isAuthenticating, isAuthenticated, location } = this.props;
-    const keystoneAuthTokenId = cookie.load('keystoneAuthTokenId');
+    const {
+      isAuthenticating,
+      isAuthenticated,
+      keystoneAuthTokenId,
+      location
+    } = this.props;
 
     if (isAuthenticated || isAuthenticating || keystoneAuthTokenId) {
       return (
@@ -84,13 +86,15 @@ UserAuthenticator.propTypes = {
   intl: PropTypes.object,
   isAuthenticated: PropTypes.bool.isRequired,
   isAuthenticating: PropTypes.bool.isRequired,
+  keystoneAuthTokenId: PropTypes.string,
   location: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => {
   return {
     isAuthenticated: state.login.isAuthenticated,
-    isAuthenticating: state.login.isAuthenticating
+    isAuthenticating: state.login.isAuthenticating,
+    keystoneAuthTokenId: state.login.tokenId
   };
 };
 
