@@ -140,7 +140,13 @@ describe('nodesRegistrationFinished', () => {
   it('handles failed nodes registration', () => {
     const messagePayload = {
       status: 'FAILED',
-      message: 'Nodes registration failed for some reason',
+      message: {
+        message: [
+          {
+            result: 'Nodes registration failed for some reason'
+          }
+        ]
+      },
       registered_nodes: [
         {
           uuid: 1,
@@ -159,7 +165,7 @@ describe('nodesRegistrationFinished', () => {
     const errors = [
       {
         title: 'Nodes Registration Failed',
-        message: JSON.stringify(messagePayload.message)
+        message: ['Nodes registration failed for some reason']
       }
     ];
 
