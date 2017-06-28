@@ -347,7 +347,6 @@ describe('nodesIntrospectionFinished', () => {
 
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
     expect(NotificationActions.notify).toHaveBeenCalledWith({
-      type: 'error',
       title: 'Nodes Introspection Failed',
       message: [
         'Nodes Introspection failed',
@@ -418,8 +417,7 @@ describe('provideNodesFinished', () => {
     expect(NodesActions.finishOperation).toHaveBeenCalled();
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
     expect(NotificationActions.notify).toHaveBeenCalledWith({
-      type: 'error',
-      title: 'Error',
+      title: 'Some Nodes could not be provided',
       message: ['Failed to set nodes to available.']
     });
   });

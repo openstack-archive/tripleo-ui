@@ -71,8 +71,4 @@ export default function workflowExecutionsReducer(
  * objects
  */
 const parseExecutionAttrs = execution =>
-  execution
-    .set('input', fromJS(JSON.parse(execution.get('input', '{}'))))
-    .set('output', fromJS(JSON.parse(execution.get('output', '{}'))))
-    .set('params', fromJS(JSON.parse(execution.get('params', '{}'))))
-    .set('updated_at', fromJS(Date.parse(execution.get('updated_at'))));
+  execution.set('updated_at', fromJS(Date.parse(execution.get('updated_at'))));

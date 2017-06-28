@@ -17,12 +17,11 @@
 import { defineMessages } from 'react-intl';
 import { startSubmit, stopSubmit } from 'redux-form';
 
+import { handleErrors } from './ErrorActions';
 import NotificationActions from '../actions/NotificationActions';
 import ParametersConstants from '../constants/ParametersConstants';
 import MistralApiService from '../services/MistralApiService';
-import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import MistralConstants from '../constants/MistralConstants';
-import logger from '../services/logger';
 
 const messages = defineMessages({
   parametersUpdatedNotficationTitle: {
@@ -62,11 +61,8 @@ export default {
         container: planName
       })
         .then(response => {
-          const { resources, parameters } = JSON.parse(
-            response.output
-          ).result.heat_resource_tree;
-          const mistralParameters = JSON.parse(response.output).result
-            .mistral_environment_parameters;
+          const { resources, parameters } = response.heat_resource_tree;
+          const mistralParameters = response.mistral_environment_parameters;
           dispatch(
             this.fetchParametersSuccess({
               resources,
@@ -80,14 +76,9 @@ export default {
           if (redirect) {
             redirect();
           }
-          logger.error(
-            'Error in ParametersActions.fetchParameters',
-            error.stack || error
+          dispatch(
+            handleErrors(error, 'Deployment parameters could not be loaded')
           );
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
         });
     };
   },
@@ -141,14 +132,28 @@ export default {
           }
         })
         .catch(error => {
-          logger.error('Error in ParametersActions.updateParameters', error);
-          let errorHandler = new MistralApiErrorHandler(error, inputFieldNames);
-          dispatch(stopSubmit('nodesAssignment', { _error: error }));
           dispatch(
-            this.updateParametersFailed(
-              errorHandler.errors,
-              errorHandler.formFieldErrors
+            handleErrors(
+              error,
+              'Deployment parameters could not be updated',
+              false
             )
+          );
+          dispatch(
+            stopSubmit('nodesAssignment', {
+              _error: {
+                title: 'Parameters could not be updated',
+                message: error.message
+              }
+            })
+          );
+          dispatch(
+            this.updateParametersFailed([
+              {
+                title: 'Parameters could not be updated',
+                message: error.message
+              }
+            ])
           );
         });
     };
