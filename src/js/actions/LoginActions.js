@@ -30,10 +30,8 @@ export default {
       KeystoneApiService.authenticateUserViaToken(keystoneAuthTokenId)
         .then(result => {
           const tokenId = result.request.getResponseHeader('X-Subject-Token');
-          let response = result.response;
-          response.token.id = tokenId;
           cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
-          dispatch(this.userAuthSuccess(response.token));
+          dispatch(this.userAuthSuccess(tokenId, result.response.token));
         })
         .catch(error => {
           logger.error(
@@ -53,10 +51,8 @@ export default {
       KeystoneApiService.authenticateUser(formData.username, formData.password)
         .then(result => {
           const tokenId = result.request.getResponseHeader('X-Subject-Token');
-          let response = result.response;
-          response.token.id = tokenId;
           cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
-          dispatch(this.userAuthSuccess(response.token));
+          dispatch(this.userAuthSuccess(tokenId, result.response.token));
         })
         .catch(error => {
           logger.error(
@@ -91,10 +87,10 @@ export default {
     };
   },
 
-  userAuthSuccess(token) {
+  userAuthSuccess(tokenId, token) {
     return {
       type: LoginConstants.USER_AUTH_SUCCESS,
-      payload: fromJS(token)
+      payload: { token, tokenId }
     };
   },
 

@@ -14,19 +14,24 @@
  * under the License.
  */
 
-import { createStore, applyMiddleware } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
+import cookie from 'react-cookie';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import logger from './services/logger';
 
 import appReducer from './reducers/appReducer';
 import { InitialPlanState } from './immutableRecords/plans';
+import { InitialLoginState } from './immutableRecords/login';
 import { getIntl } from './selectors/i18n';
 
 const hydrateStore = () => {
   return {
     plans: new InitialPlanState({
       currentPlanName: getStoredPlanName()
+    }),
+    login: new InitialLoginState({
+      tokenId: cookie.load('keystoneAuthTokenId')
     })
   };
 };

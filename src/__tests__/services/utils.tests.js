@@ -22,8 +22,8 @@ import store from '../../js/store';
 describe('utility functions', () => {
   const appState = {
     login: new InitialLoginState({
+      tokenId: 123456,
       token: Map({
-        id: 123456,
         project: Map({
           id: 778899
         }),
