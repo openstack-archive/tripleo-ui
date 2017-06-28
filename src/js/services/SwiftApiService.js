@@ -14,28 +14,25 @@
  * under the License.
  */
 
-import * as _ from 'lodash';
-import request from 'reqwest';
+import axios from 'axios';
 import when from 'when';
 
+import { AuthenticationError, SwiftApiError, ConnectionError } from './errors';
 import { getAuthTokenId, getServiceUrl } from '../services/utils';
-import logger from '../services/logger';
 
 class SwiftApiService {
   defaultRequest(path, additionalAttributes) {
     return when.try(getServiceUrl, 'swift').then(serviceUrl => {
-      let requestAttributes = _.merge(
+      let requestAttributes = Object.assign(
         {
-          url: `${serviceUrl}${path}`,
-          crossOrigin: true,
+          baseURL: serviceUrl,
+          url: path,
           method: 'GET',
-          headers: {
-            'X-Auth-Token': getAuthTokenId()
-          }
+          headers: { 'X-Auth-Token': getAuthTokenId() }
         },
         additionalAttributes
       );
-      return when(request(requestAttributes));
+      return axios(requestAttributes);
     });
   }
 
@@ -43,45 +40,74 @@ class SwiftApiService {
     return this.defaultRequest(`/${container}/${objectName}`, {
       method: 'PUT',
       data: data
-    });
+    }).catch(error => handleErrors(error));
   }
 
   getContainer(container) {
-    return this.defaultRequest(`/${container}?format=json`, {
-      method: 'GET'
-    });
+    return this.defaultRequest(`/${container}`, {
+      method: 'GET',
+      params: { format: 'json' }
+    })
+      .then(response => response.data)
+      .catch(error => handleErrors(error));
   }
 
   getObject(container, object) {
-    return this.defaultRequest(`/${container}/${object}?format=json`, {
-      method: 'GET'
-    });
+    return this.defaultRequest(`/${container}/${object}`, {
+      method: 'GET',
+      params: { format: 'json' }
+    })
+      .then(response => response.data)
+      .catch(error => handleErrors(error));
   }
 
   uploadTarball(planName, file) {
-    return this.defaultRequest(`/${planName}?extract-archive=tar.gz`, {
+    return this.defaultRequest(`/${planName}`, {
       method: 'PUT',
-      contentType: 'application/x-www-form-urlencoded',
-      processData: false,
-      data: file
+      data: file,
+      params: { 'extract-archive': 'tar.gz' }
     })
-      .then(response => {
-        return when.resolve(response);
-      })
-      .catch(xhr => {
+      .then(response => response.data)
+      .catch(error => {
         // Swift doesn't add CORS headers to sucessful PUT requests,
         // so a failed request is counted as success if *all* of the
         // following criteria a true:
         //   - status is 0
         //   - statusText is empty
         //   - timeout is false
-        if (xhr.status === 0 && xhr.statusText === '' && xhr.timeout === 0) {
-          return when.resolve(xhr);
+        if (
+          error.request.status === 0 &&
+          error.request.statusText === '' &&
+          error.request.timeout === 0
+        ) {
+          return when.resolve(error.data);
+        } else {
+          return handleErrors(error);
         }
-        logger.error('Tarball upload failed', xhr);
-        return when.reject(xhr);
       });
   }
 }
+
+const handleErrors = e => {
+  if (e.response) {
+    switch (e.response.status) {
+      case 401:
+        return when.reject(new AuthenticationError(e));
+      default:
+        return when.reject(
+          new SwiftApiError(
+            `Swift API Error: ${e.response.status} - ${e.response.data}`,
+            e
+          )
+        );
+    }
+  } else if (e.request) {
+    return when.reject(
+      new ConnectionError('Connection to Swift API could not be established', e)
+    );
+  } else {
+    return when.reject(e);
+  }
+};
 
 export default new SwiftApiService();

@@ -64,17 +64,13 @@ describe('ParametersActions', () => {
 
   describe('fetchParameters (success)', () => {
     let responseBody = {
-      output: `{
-        "result": {
-          "heat_resource_tree": {
-            "resources": {
-              "aaa": { "id": "aaa", "name": "Root" }
-            },
-            "parameters": {}
-          },
-          "mistral_environment_parameters": {}
-        }
-      }`
+      heat_resource_tree: {
+        resources: {
+          aaa: { id: 'aaa', name: 'Root' }
+        },
+        parameters: {}
+      },
+      mistral_environment_parameters: {}
     };
 
     beforeEach(done => {

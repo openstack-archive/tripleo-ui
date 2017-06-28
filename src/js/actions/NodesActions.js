@@ -19,13 +19,13 @@ import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
 
 import { getNodesByIds } from '../selectors/nodes';
+import { handleErrors } from './ErrorActions';
 import IronicApiErrorHandler from '../services/IronicApiErrorHandler';
 import IronicInspectorApiErrorHandler
   from '../services/IronicInspectorApiErrorHandler';
 import IronicApiService from '../services/IronicApiService';
 import IronicInspectorApiService from '../services/IronicInspectorApiService';
 import MistralApiService from '../services/MistralApiService';
-import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import NodesConstants from '../constants/NodesConstants';
 import NotificationActions from './NotificationActions';
 import {
@@ -179,29 +179,12 @@ export default {
       dispatch(this.pollNodeslistDuringProgress());
       MistralApiService.runWorkflow(MistralConstants.BAREMETAL_INTROSPECT, {
         node_uuids: nodeIds
-      })
-        .then(response => {
-          if (response.state === 'ERROR') {
-            dispatch(
-              NotificationActions.notify({
-                title: 'Error',
-                message: response.state_info
-              })
-            );
-            dispatch(this.finishOperation(nodeIds));
-          }
-        })
-        .catch(error => {
-          logger.error(
-            'Error in NodesActions.startNodesIntrospection',
-            error.stack || error
-          );
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
-          dispatch(this.finishOperation(nodeIds));
-        });
+      }).catch(error => {
+        dispatch(
+          handleErrors(error, 'Selected Nodes could not be introspected')
+        );
+        dispatch(this.finishOperation(nodeIds));
+      });
     };
   },
 
@@ -226,11 +209,12 @@ export default {
         case 'FAILED': {
           dispatch(
             NotificationActions.notify({
-              type: 'error',
               title: formatMessage(
                 messages.introspectionFailedNotificationTitle
               ),
-              message: messagePayload.message.map(m => m.message)
+              message: messagePayload.message
+                .filter(m => m.message)
+                .map(m => m.message)
             })
           );
           break;
@@ -271,29 +255,10 @@ export default {
       dispatch(this.pollNodeslistDuringProgress());
       MistralApiService.runWorkflow(MistralConstants.BAREMETAL_PROVIDE, {
         node_uuids: nodeIds
-      })
-        .then(response => {
-          if (response.state === 'ERROR') {
-            dispatch(
-              NotificationActions.notify({
-                title: 'Error',
-                message: response.state_info
-              })
-            );
-            dispatch(this.finishOperation(nodeIds));
-          }
-        })
-        .catch(error => {
-          logger.error(
-            'Error in NodesActions.startProvideNodes',
-            error.stack || error
-          );
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
-          dispatch(this.finishOperation(nodeIds));
-        });
+      }).catch(error => {
+        dispatch(handleErrors(error, 'Selected Nodes could not be provided'));
+        dispatch(this.finishOperation(nodeIds));
+      });
     };
   },
 
@@ -317,9 +282,10 @@ export default {
         case 'FAILED': {
           dispatch(
             NotificationActions.notify({
-              type: 'error',
-              title: 'Error',
-              message: messagePayload.message.map(message => message.result)
+              title: 'Some Nodes could not be provided',
+              message: messagePayload.message
+                .filter(message => message.result)
+                .map(message => message.result)
             })
           );
           break;
@@ -336,29 +302,10 @@ export default {
       dispatch(this.pollNodeslistDuringProgress());
       MistralApiService.runWorkflow(MistralConstants.BAREMETAL_MANAGE, {
         node_uuids: nodeIds
-      })
-        .then(response => {
-          if (response.state === 'ERROR') {
-            dispatch(
-              NotificationActions.notify({
-                title: 'Error',
-                message: response.state_info
-              })
-            );
-            dispatch(this.finishOperation(nodeIds));
-          }
-        })
-        .catch(error => {
-          logger.error(
-            'Error in NodesActions.startManageNodes',
-            error.stack || error
-          );
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
-          dispatch(this.finishOperation(nodeIds));
-        });
+      }).catch(error => {
+        dispatch(handleErrors(error, 'Selected Nodes could not be managed'));
+        dispatch(this.finishOperation(nodeIds));
+      });
     };
   },
 
@@ -382,9 +329,10 @@ export default {
         case 'FAILED': {
           dispatch(
             NotificationActions.notify({
-              type: 'error',
-              title: 'Error',
-              message: messagePayload.message.map(message => message.result)
+              title: 'Some Nodes could not be managed',
+              message: messagePayload.message
+                .filter(message => message.result)
+                .map(message => message.result)
             })
           );
           break;
