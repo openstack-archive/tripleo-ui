@@ -18,6 +18,7 @@ import { List, Map, Record } from 'immutable';
 
 export const InitialLoginState = Record({
   token: Map(),
+  tokenId: undefined,
   loginForm: Map({
     formErrors: List(),
     formFieldErrors: Map()
