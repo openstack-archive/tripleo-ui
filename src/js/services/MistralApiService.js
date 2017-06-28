@@ -14,50 +14,48 @@
  * under the License.
  */
 
-import * as _ from 'lodash';
-import request from 'reqwest';
+import axios from 'axios';
 import when from 'when';
 
+import {
+  AuthenticationError,
+  MistralExecutionError,
+  MistralApiError,
+  ConnectionError
+} from './errors';
 import { getServiceUrl, getAuthTokenId } from './utils';
+import MistralConstants from '../constants/MistralConstants';
 
 class MistralApiService {
   defaultRequest(path, additionalAttributes) {
     return when.try(getServiceUrl, 'mistral').then(serviceUrl => {
-      let requestAttributes = _.merge(
+      const requestAttributes = Object.assign(
         {
-          url: `${serviceUrl}${path}`,
-          headers: { 'X-Auth-Token': getAuthTokenId() },
-          crossOrigin: true,
-          contentType: 'application/json',
-          type: 'json',
-          method: 'GET'
+          baseURL: serviceUrl,
+          url: path,
+          method: 'GET',
+          headers: { 'X-Auth-Token': getAuthTokenId() }
         },
         additionalAttributes
       );
-      return when(request(requestAttributes));
+      return axios(requestAttributes);
     });
   }
 
   /**
    * Gets a Workflow executions
    * Mistral API: GET /v2/executions
-   * @param {string} mistralUrl - Mistral API service base url
-   * @param {string} authTokenId - keystone authentication token ID
    * @return {array} of Executions.
    */
   getWorkflowExecutions() {
-    return this.defaultRequest('/executions?include_output=true');
-  }
-
-  /**
-   * Gets a Workflow execution
-   * Mistral API: GET /v2/executions/:execution_id
-   * @param {string} mistralUrl - Mistral API service base url
-   * @param {string} authTokenId - keystone authentication token ID
-   * @return {object} Execution.
-   */
-  getWorkflowExecution(executionId) {
-    return this.defaultRequest('/executions/' + executionId);
+    return this.defaultRequest('/executions', {
+      params: { include_output: true }
+    })
+      .then(response => {
+        response.data.executions.map(parseExecutionAttrs);
+        return when.resolve(response.data.executions);
+      })
+      .catch(handleErrors);
   }
 
   /**
@@ -69,15 +67,18 @@ class MistralApiService {
   updateWorkflowExecution(executionId, patch) {
     return this.defaultRequest('/executions/' + executionId, {
       method: 'PUT',
-      data: JSON.stringify(patch)
-    });
+      data: patch
+    })
+      .then(response => {
+        const execution = parseExecutionAttrs(response.data);
+        return when.resolve(execution);
+      })
+      .catch(handleErrors);
   }
 
   /**
    * Starts a new Workflow execution
    * Mistral API: POST /v2/executions
-   * @param {string} mistralUrl - Mistral API service base url
-   * @param {string} authTokenId - keystone authentication token ID
    * @param {string} workflowName - Workflow name
    * @param {object} input - Workflow input object
    * @return {object} Execution.
@@ -85,18 +86,35 @@ class MistralApiService {
   runWorkflow(workflowName, input = {}) {
     return this.defaultRequest('/executions', {
       method: 'POST',
-      data: JSON.stringify({
+      data: {
         workflow_name: workflowName,
-        input: JSON.stringify(input)
+        input: input
+      }
+    })
+      .then(response => {
+        response.data = parseExecutionAttrs(response.data);
+
+        if (response.data.state === 'ERROR') {
+          return when.reject(new MistralExecutionError(response));
+        } else if (workflowName === MistralConstants.VALIDATIONS_RUN) {
+          // Running validation is special case when whole execution needs to be returned
+          return when.resolve(response.data);
+        } else {
+          return when.resolve(response.data.output.result);
+        }
       })
-    });
+      .catch(e => {
+        if (e.name === 'MistralExecutionError') {
+          return when.reject(e);
+        } else {
+          return handleErrors(e);
+        }
+      });
   }
 
   /**
    * Starts a new Action execution
    * Mistral API: POST /v2/action_executions
-   * @param {string} mistralUrl - Mistral API service base url
-   * @param {string} authTokenId - keystone authentication token ID
    * @param {string} actionName - Name of the Action to be executed
    * @param {object} input - Action input object
    * @return {object} Action Execution.
@@ -104,25 +122,56 @@ class MistralApiService {
   runAction(actionName, input = {}) {
     return this.defaultRequest('/action_executions', {
       method: 'POST',
-      data: JSON.stringify({
+      data: {
         name: actionName,
         input: input,
         params: {
           save_result: true,
           run_sync: true
         }
-      })
-    }).then(response => {
-      if (response.state === 'SUCCESS') {
-        return when.resolve(response);
-      } else {
-        return when.reject({
-          status: 'Action ERROR',
-          message: JSON.parse(response.output).result
-        });
       }
-    });
+    })
+      .then(response => {
+        response.data.output = JSON.parse(response.data.output).result;
+        if (response.data.state === 'ERROR') {
+          return when.reject(new MistralExecutionError(response));
+        } else {
+          return when.resolve(response.data.output);
+        }
+      })
+      .catch(e => {
+        if (e.name === 'MistralExecutionError') {
+          return when.reject(e);
+        } else {
+          return handleErrors(e);
+        }
+      });
   }
 }
+
+const handleErrors = e => {
+  if (e.response && e.response.status === 401) {
+    return when.reject(new AuthenticationError(e));
+  } else if (e.response) {
+    return when.reject(new MistralApiError(e));
+  } else if (e.request) {
+    return when.reject(
+      new ConnectionError(
+        'Connection to Mistral API could not be established',
+        e
+      )
+    );
+  } else {
+    return when.reject(e);
+  }
+};
+
+// input, output and params aren't parsed from Mistral
+const parseExecutionAttrs = execution => {
+  execution.input = JSON.parse(execution.input);
+  execution.output = JSON.parse(execution.output);
+  execution.params = JSON.parse(execution.params);
+  return execution;
+};
 
 export default new MistralApiService();

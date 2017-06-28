@@ -46,7 +46,7 @@ class EnvironmentParameters extends React.Component {
       >
         {environmentError
           ? <fieldset>
-              <InlineNotification title={environmentError.name} type="error">
+              <InlineNotification title={environmentError.title} type="error">
                 {environmentError.message}
               </InlineNotification>
             </fieldset>

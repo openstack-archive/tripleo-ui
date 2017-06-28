@@ -18,6 +18,8 @@ import { Map } from 'immutable';
 import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 
+// TODO(jtomasek): remove this import when store is correctly mocked
+import store from '../../../js/store'; // eslint-disable-line no-unused-vars
 import EnvironmentConfiguration
   from '../../../js/components/environment_configuration/EnvironmentConfiguration';
 

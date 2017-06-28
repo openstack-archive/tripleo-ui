@@ -23,6 +23,7 @@ import { List, Map, Record } from 'immutable';
  */
 export const Plan = Record({
   name: '',
+  title: undefined,
   description: undefined,
   transition: false,
   files: Map(),

@@ -144,10 +144,7 @@ class ValidationsList extends React.Component {
 
     return (
       <div className="col-sm-12 col-lg-3 sidebar-pf sidebar-pf-right fixed-container validations">
-        <div className="sidebar-header
-                        sidebar-header-bleed-left
-                        sidebar-header-bleed-right
-                        fixed-container-header">
+        <div className="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right fixed-container-header">
           <div className="actions pull-right">
             <Loader
               loaded={
