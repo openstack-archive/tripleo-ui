@@ -7,6 +7,9 @@ import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Formsy from 'formsy-react';
 
+// TODO(jtomasek): remove this import when store is correctly mocked
+import store from '../../../js/store'; // eslint-disable-line no-unused-vars
+
 import {
   getAvailableNodeProfiles,
   getFilteredNodes,

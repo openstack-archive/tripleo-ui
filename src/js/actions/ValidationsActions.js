@@ -17,14 +17,12 @@
 import { normalize, arrayOf } from 'normalizr';
 import { omit } from 'lodash';
 
+import { handleErrors } from './ErrorActions';
 import MistralApiService from '../services/MistralApiService';
-import NotificationActions from './NotificationActions';
 import WorkflowExecutionsActions from './WorkflowExecutionsActions';
-import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import ValidationsConstants from '../constants/ValidationsConstants';
 import { validationSchema } from '../normalizrSchemas/validations';
 import MistralConstants from '../constants/MistralConstants';
-import logger from '../services/logging/LoggingService';
 
 export default {
   fetchValidations() {
@@ -32,21 +30,13 @@ export default {
       dispatch(this.fetchValidationsPending());
       MistralApiService.runAction(MistralConstants.VALIDATIONS_LIST)
         .then(response => {
-          const actionResult = JSON.parse(response.output).result;
-          const validations = normalize(actionResult, arrayOf(validationSchema))
+          const validations = normalize(response, arrayOf(validationSchema))
             .entities.validations || {};
           dispatch(this.fetchValidationsSuccess(validations));
         })
         .catch(error => {
-          logger.error(
-            'Error in ValidationsActions.fetchValidations',
-            error.stack || error
-          );
+          dispatch(handleErrors(error, 'Validations could not be loaded'));
           dispatch(this.fetchValidationsFailed());
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
         });
     };
   },
@@ -77,27 +67,10 @@ export default {
         plan: currentPlanName
       })
         .then(response => {
-          if (response.state === 'ERROR') {
-            dispatch(
-              NotificationActions.notify({
-                title: 'Error running Validation',
-                message: response.state_info
-              })
-            );
-            dispatch(WorkflowExecutionsActions.addWorkflowExecution(response));
-          } else {
-            dispatch(WorkflowExecutionsActions.addWorkflowExecution(response));
-          }
+          dispatch(WorkflowExecutionsActions.addWorkflowExecution(response));
         })
         .catch(error => {
-          logger.error(
-            'Error in ValidationsActions.runValidation',
-            error.stack || error
-          );
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
+          dispatch(handleErrors(error, 'Error running validation'));
         });
     };
   },
@@ -107,8 +80,9 @@ export default {
       // convert messagePayload to execution-like response
       const execution = {
         id: messagePayload.execution.id,
-        input: JSON.stringify(messagePayload.execution.input),
-        output: JSON.stringify(omit(messagePayload, 'execution')),
+        input: messagePayload.execution.input,
+        output: omit(messagePayload, 'execution'),
+        params: messagePayload.execution.params,
         state: messagePayload.status,
         workflow_name: MistralConstants.VALIDATIONS_RUN
       };
@@ -121,27 +95,9 @@ export default {
       MistralApiService.runWorkflow(MistralConstants.VALIDATIONS_RUN_GROUPS, {
         group_names: groups,
         plan: currentPlanName
-      })
-        .then(response => {
-          if (response.state === 'ERROR') {
-            dispatch(
-              NotificationActions.notify({
-                title: 'Error running Validation',
-                message: response.state_info
-              })
-            );
-          }
-        })
-        .catch(error => {
-          logger.error(
-            'Error in ValidationsActions.runValidationGroups',
-            error.stack || error
-          );
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
-        });
+      }).catch(error => {
+        dispatch(handleErrors(error, 'Validation Group could not be started'));
+      });
     };
   }
 };

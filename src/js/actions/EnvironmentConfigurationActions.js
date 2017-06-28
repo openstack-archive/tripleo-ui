@@ -20,13 +20,11 @@ import yaml from 'js-yaml';
 
 import EnvironmentConfigurationConstants
   from '../constants/EnvironmentConfigurationConstants';
+import { handleErrors } from './ErrorActions';
 import MistralApiService from '../services/MistralApiService';
 import NotificationActions from '../actions/NotificationActions';
-import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import { topicSchema } from '../normalizrSchemas/environmentConfiguration';
 import MistralConstants from '../constants/MistralConstants';
-import logger from '../services/logging/LoggingService';
-import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
 
 const messages = defineMessages({
@@ -48,25 +46,18 @@ export default {
         container: planName
       })
         .then(response => {
-          const entities = normalize(
-            JSON.parse(response.output).result,
-            arrayOf(topicSchema)
-          ).entities || {};
+          const entities = normalize(response, arrayOf(topicSchema))
+            .entities || {};
           dispatch(this.fetchEnvironmentConfigurationSuccess(entities));
         })
         .catch(error => {
-          logger.error(
-            'Error retrieving EnvironmentConfigurationActions.fetchEnvironment',
-            error.stack || error
-          );
           if (redirect) {
             redirect();
           }
+          dispatch(
+            handleErrors(error, 'Deployment configuration could not be loaded')
+          );
           dispatch(this.fetchEnvironmentConfigurationFailed());
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
         });
     };
   },
@@ -99,9 +90,7 @@ export default {
         container: planName
       })
         .then(response => {
-          const enabledEnvs = JSON.parse(
-            response.output
-          ).result.environments.map(env => env.path);
+          const enabledEnvs = response.environments.map(env => env.path);
           dispatch(this.updateEnvironmentConfigurationSuccess(enabledEnvs));
           dispatch(
             NotificationActions.notify({
@@ -114,16 +103,20 @@ export default {
           );
         })
         .catch(error => {
-          logger.error(
-            'Error in EnvironmentConfigurationActions.updateEnvironment',
-            error.stack || error
-          );
-          let errorHandler = new MistralApiErrorHandler(error, formFields);
           dispatch(
-            this.updateEnvironmentConfigurationFailed(
-              errorHandler.errors,
-              errorHandler.formFieldErrors
+            handleErrors(
+              error,
+              'Deployment configuration could not be updated',
+              false
             )
+          );
+          dispatch(
+            this.updateEnvironmentConfigurationFailed([
+              {
+                title: 'Configuration could not be updated',
+                message: error.message
+              }
+            ])
           );
         });
     };
@@ -142,7 +135,7 @@ export default {
     };
   },
 
-  updateEnvironmentConfigurationFailed(formErrors, formFieldErrors) {
+  updateEnvironmentConfigurationFailed(formErrors = [], formFieldErrors = {}) {
     return {
       type: EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_FAILED,
       payload: {
@@ -160,7 +153,7 @@ export default {
           const {
             resource_registry,
             parameter_defaults
-          } = yaml.safeLoad(response.responseText, {
+          } = yaml.safeLoad(response, {
             filename: environmentPath,
             json: true
           });
@@ -173,21 +166,19 @@ export default {
           );
         })
         .catch(error => {
-          if (error.name && error.name === 'YAMLException') {
-            logger.error(`Error parsing ${environmentPath} to JSON`, error);
-            dispatch(this.fetchEnvironmentFailed(environmentPath, error));
-          } else {
-            logger.error(
-              `Error EnvironmentConfigurationActions.fetchEnvironment ${environmentPath}`,
+          dispatch(
+            handleErrors(
               error,
-              error.stack
-            );
-            dispatch(this.fetchEnvironmentFailed(environmentPath));
-            let errorHandler = new SwiftApiErrorHandler(error);
-            errorHandler.errors.forEach(error => {
-              dispatch(NotificationActions.notify(error));
-            });
-          }
+              `Environment ${environmentPath} could not be loaded`,
+              false
+            )
+          );
+          dispatch(
+            this.fetchEnvironmentFailed(environmentPath, {
+              title: `Environment ${environmentPath} could not be loaded`,
+              message: error.message
+            })
+          );
         });
     };
   },

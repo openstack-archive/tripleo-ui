@@ -137,9 +137,7 @@ describe('PlansActions', () => {
     });
   });
 
-  let apiResponseMistral = {
-    output: '{ "result": [ "overcloud", "another-cloud" ] }'
-  };
+  let apiResponseMistral = ['overcloud', 'another-cloud'];
 
   let apiResponseSwift = [
     { responseText: `description: Default deployment plan\nname: overcloud` },
@@ -179,8 +177,16 @@ describe('PlansActions', () => {
 
     it('dispatches receivePlans', () => {
       expect(PlansActions.receivePlans).toHaveBeenCalledWith([
-        { name: 'overcloud', description: 'Default deployment plan' },
-        { name: 'another-cloud', description: 'My custom plan' }
+        {
+          name: 'overcloud',
+          title: undefined,
+          description: undefined
+        },
+        {
+          name: 'another-cloud',
+          title: undefined,
+          description: undefined
+        }
       ]);
     });
   });

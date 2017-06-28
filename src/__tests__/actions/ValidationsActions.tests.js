@@ -86,7 +86,7 @@ describe('FetchValidations action', () => {
     spyOn(ValidationsActions, 'fetchValidationsSuccess');
 
     const response = {
-      output: '{"result": [{"id": "512e"}, {"id": "check-network-gateway"}]}'
+      output: [{ id: '512e' }, { id: 'check-network-gateway' }]
     };
     spyOn(MistralApiService, 'runAction').and.callFake(
       createResolvingPromise(response)

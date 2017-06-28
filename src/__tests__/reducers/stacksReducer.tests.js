@@ -16,6 +16,9 @@
 
 import { fromJS, Map, OrderedMap } from 'immutable';
 
+// TODO(jtomasek): remove this import when store is correctly mocked
+import store from '../../js/store'; // eslint-disable-line no-unused-vars
+
 import { StacksState, Stack } from '../../js/immutableRecords/stacks';
 import StacksActions from '../../js/actions/StacksActions';
 import stacksReducer from '../../js/reducers/stacksReducer';
