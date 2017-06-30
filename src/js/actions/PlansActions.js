@@ -18,6 +18,7 @@ import { defineMessages } from 'react-intl';
 import { fromJS } from 'immutable';
 import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
+import yaml from 'js-yaml';
 
 import logger from '../services/logger';
 import MistralApiService from '../services/MistralApiService';
@@ -30,6 +31,7 @@ import SwiftApiErrorHandler from '../services/SwiftApiErrorHandler';
 import SwiftApiService from '../services/SwiftApiService';
 import MistralConstants from '../constants/MistralConstants';
 import { getAppConfig } from '../services/utils';
+import { PLAN_ENVIRONMENT } from '../constants/PlansConstants';
 
 const messages = defineMessages({
   planCreatedNotificationTitle: {
@@ -85,8 +87,20 @@ export default {
       dispatch(this.requestPlans());
       MistralApiService.runAction(MistralConstants.PLAN_LIST)
         .then(response => {
-          let plans = JSON.parse(response.output).result || [];
-          dispatch(this.receivePlans(plans));
+          let names = JSON.parse(response.output).result;
+          let plan_envs = names.map(name => {
+            return SwiftApiService.getObject(name, PLAN_ENVIRONMENT);
+          });
+          when.all(plan_envs).then(responses => {
+            let plans = responses.map(response => {
+              let response_obj = yaml.safeLoad(response.responseText);
+              return {
+                name: response_obj.name,
+                description: response_obj.description
+              };
+            });
+            dispatch(this.receivePlans(plans));
+          });
         })
         .catch(error => {
           logger.error(
