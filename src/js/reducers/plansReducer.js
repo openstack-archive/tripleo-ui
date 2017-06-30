@@ -42,14 +42,13 @@ export default function plansReducer(state = initialState, action) {
       return state.set('isFetchingPlans', true);
 
     case PlansConstants.RECEIVE_PLANS: {
-      let planData = {};
-      action.payload.forEach(name => {
-        planData[name] = new Plan({ name: name });
-      });
       return state
         .set('isFetchingPlans', false)
         .set('plansLoaded', true)
-        .set('all', Map(planData));
+        .set(
+          'all',
+          Map(action.payload.map(plan => [plan.name, new Plan(plan)]))
+        );
     }
 
     case PlansConstants.PLAN_CHOSEN:
