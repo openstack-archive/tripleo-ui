@@ -43,8 +43,11 @@ export default function plansReducer(state = initialState, action) {
 
     case PlansConstants.RECEIVE_PLANS: {
       let planData = {};
-      action.payload.forEach(name => {
-        planData[name] = new Plan({ name: name });
+      action.payload.forEach(plan => {
+        planData[plan.name] = new Plan({
+          name: plan.name,
+          description: plan.description
+        });
       });
       return state
         .set('isFetchingPlans', false)
