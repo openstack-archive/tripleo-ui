@@ -18,6 +18,7 @@ import { defineMessages } from 'react-intl';
 import { fromJS } from 'immutable';
 import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
+import yaml from 'js-yaml';
 
 import logger from '../services/logger';
 import MistralApiService from '../services/MistralApiService';
@@ -85,8 +86,24 @@ export default {
       dispatch(this.requestPlans());
       MistralApiService.runAction(MistralConstants.PLAN_LIST)
         .then(response => {
-          let plans = JSON.parse(response.output).result || [];
-          dispatch(this.receivePlans(plans));
+          let names = JSON.parse(response.output).result;
+          let plans = [];
+          let plan_envs = names.map(name => {
+            return SwiftApiService.getObject(name, 'plan-environment.yaml');
+          });
+          when.all(plan_envs)
+            .then(responses => {
+              responses.map(response => {
+                let response_obj = yaml.safeLoad(response.responseText);
+                plans.push({
+                  name: response_obj.name,
+                  description: response_obj.description
+                })
+              })
+            })
+            .then(() => {
+              dispatch(this.receivePlans(plans));
+            });
         })
         .catch(error => {
           logger.error(
