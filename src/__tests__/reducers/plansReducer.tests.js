@@ -95,7 +95,10 @@ describe('plansReducer state', () => {
           isFetchingPlans: true,
           all: List()
         }),
-        PlansActions.receivePlans(['overcloud', 'another-cloud'])
+        PlansActions.receivePlans([
+          { name: 'overcloud', description: 'Default deployment plan' },
+          { name: 'another-cloud', description: 'My custom plan' }
+        ])
       );
     });
 
@@ -118,8 +121,14 @@ describe('plansReducer state', () => {
       state = plansReducer(
         Map({
           all: Map({
-            'some-cloud': new Plan({ name: 'some-cloud' }),
-            overcloud: new Plan({ name: 'overcloud' })
+            'some-cloud': new Plan({
+              name: 'some-cloud',
+              description: 'some cloud desc'
+            }),
+            overcloud: new Plan({
+              name: 'overcloud',
+              description: 'Default deployment plan'
+            })
           })
         }),
         PlansActions.receivePlan('overcloud', {
