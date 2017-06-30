@@ -164,8 +164,8 @@ describe('PlansActions', () => {
 
     it('dispatches receivePlans', () => {
       expect(PlansActions.receivePlans).toHaveBeenCalledWith([
-        'overcloud',
-        'another-cloud'
+        {name: 'overcloud', description: 'Default deployment plan'},
+        {name: 'another-cloud', description: 'My custom plane'}
       ]);
     });
   });
