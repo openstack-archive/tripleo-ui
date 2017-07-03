@@ -17,5 +17,14 @@
 set -e
 
 eslint --max-warnings 0 src
-prettier --single-quote --list-different 'src/**/*.js'
+
+prettier --single-quote --list-different 'src/**/*.js' \
+    || {
+    echo ""
+    echo "Prettier lint check failed."
+    echo "The above listed files don't conform to the prettier formatting style."
+    echo "Please run 'npm run prettier' to fix them."
+    exit 1;
+    }
+
 ./bin/verify-languages.js
