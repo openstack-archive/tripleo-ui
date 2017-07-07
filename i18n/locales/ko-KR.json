@@ -132,6 +132,7 @@
         "NodesTables.powerState": "\uc804\uc6d0 \uc0c1\ud0dc",
         "NodesTables.profile": "\ud504\ub85c\ud544",
         "NodesTables.provisionState": "\ud504\ub85c\ube44\uc800\ub2dd \uc0c1\ud0dc",
+        "NodesToolbar.filterStringPlaceholder": "\ud544\ud130 \ucd94\uac00",
         "NodesToolbarActions.deleteNodes": "\ub178\ub4dc \uc0ad\uc81c",
         "NodesToolbarActions.deleteNodesModalMessage": "\uc815\ub9d0\ub85c \uc120\ud0dd\ub41c \ub178\ub4dc\ub97c \uc0ad\uc81c\ud558\uc2dc\uaca0\uc2b5\ub2c8\uae4c?",
         "NodesToolbarActions.introspectNodes": "Introspect \ub178\ub4dc",
@@ -242,6 +243,8 @@
         "TagNodesForm.noProfileOption": "\ud504\ub85c\ud544 \uc5c6\uc74c (Untag)",
         "TagNodesForm.selectProfileLabel": "\ud504\ub85c\ud544 \uc120\ud0dd",
         "TagNodesModal.title": "\ub178\ub4dc\ub97c \ud504\ub85c\ud544\uc5d0 \ud0dc\uadf8",
+        "Toolbar.activeFilters": "\ud65c\uc131\ud654 \ub420 filter",
+        "Toolbar.clearAllActiveFilters": "\ubaa8\ub4e0 filter \uc81c\uac70",
         "UserAuthenticator.authenticating": "\uc778\uc99d\uc911...",
         "ValidationDetail.close": "\ub2eb\uae30",
         "ValidationDetail.description": "\uc124\uba85:",
@@ -254,7 +257,10 @@
         "ValidationsList.noValidationsMessage": "\uc9c0\uae08 validation \uc911\uc778 \uac83\uc774 \uc5c6\uc2b5\ub2c8\ub2e4.",
         "ValidationsList.refresh": "\uac31\uc2e0",
         "ValidationsList.validations": "Validations",
+        "ValidationsToolbar.filterStringPlaceholder": "\ud544\ud130 \ucd94\uac00",
         "ValidationsToolbar.name": "\uc774\ub984",
+        "nodeExtendedinfo.architecture": "\uad6c\uc870:",
+        "nodeExtendedinfo.bios": "Bios(\ubc14\uc774\uc624\uc2a4)",
         "nodeExtendedinfo.productName": "\uc774\ub984",
         "reduxForm.validations.number": "\uac12\uc740 \uc22b\uc790\uc5ec\uc57c \ud569\ub2c8\ub2e4."
     }
