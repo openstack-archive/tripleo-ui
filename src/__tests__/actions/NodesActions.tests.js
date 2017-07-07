@@ -330,8 +330,8 @@ describe('nodesIntrospectionFinished', () => {
       },
       status: 'FAILED',
       message: [
-        'Nodes Introspection failed',
-        'Some error occurred during introspection'
+        { message: 'Nodes Introspection failed' },
+        { message: 'Some error occurred during introspection' }
       ],
       introspected_nodes: {},
       execution_id: '622eb415-a522-4016-b5f6-6e9e0b3f687a',
