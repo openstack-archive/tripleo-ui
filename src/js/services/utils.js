@@ -15,6 +15,7 @@
  */
 
 import { Map, List } from 'immutable';
+import * as _ from 'lodash';
 import store from '../store';
 import { LANGUAGE_NAMES } from '../constants/i18n';
 
@@ -35,6 +36,8 @@ export function getServiceUrl(
   if (!serviceUrl) {
     throw Error(`URL for service ${serviceName} can not be found`);
   }
+
+  serviceUrl = _.trimEnd(serviceUrl, '/');
   return serviceUrl.replace('%(project_id)s', getProjectId());
 }
 

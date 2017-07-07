@@ -39,6 +39,16 @@ describe('utility functions', () => {
             ])
           }),
           Map({
+            name: 'nova-trailing',
+            endpoints: List([
+              Map({
+                id: '1',
+                interface: 'public',
+                url: 'http://someNovaPublicUrl/'
+              })
+            ])
+          }),
+          Map({
             name: 'fooservice',
             endpoints: List([
               Map({
@@ -75,6 +85,12 @@ describe('utility functions', () => {
   describe('getServiceUrl', () => {
     it('returns the publicURL of a service from the serviceCatalog by default', () => {
       expect(getServiceUrl('nova')).toEqual('http://someNovaPublicUrl');
+    });
+
+    it('returns the url without a trailing slash', () => {
+      expect(getServiceUrl('nova-trailing')).toEqual(
+        'http://someNovaPublicUrl'
+      );
     });
 
     it('returns another url type if specified', () => {
