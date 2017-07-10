@@ -21,6 +21,7 @@ export const NodesState = Record({
   isLoaded: false,
   nodesInProgress: Set(),
   all: Map(),
+  manageAndIntrospectNodes: Set(),
   ports: Map(),
   introspectionStatuses: Map(),
   introspectionData: Map()

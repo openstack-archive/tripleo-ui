@@ -15,6 +15,7 @@
  */
 
 import when from 'when';
+import { Map } from 'immutable';
 
 import IronicApiService from '../../js/services/IronicApiService';
 import IronicInspectorApiService
@@ -268,8 +269,17 @@ describe('Asynchronous Introspect Nodes Action', () => {
 
     const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
     // Call the action creator and the resulting action.
-    // In this case, dispatch and getState are just empty placeHolders.
-    NodesActions.startNodesIntrospection(nodeIds)(() => {}, () => {});
+    // In this case, dispatch is just an empty placeholder.
+    const getState = () => {
+      return {
+        nodes: Map({
+          all: Map({
+            'uuid-1': Map({})
+          })
+        })
+      };
+    };
+    NodesActions.startNodesIntrospection(nodeIds)(() => {}, getState);
     // Call `done` with a minimal timeout.
     setTimeout(() => {
       done();

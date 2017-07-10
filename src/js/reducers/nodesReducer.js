@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map, Set } from 'immutable';
 
 import NodesConstants from '../constants/NodesConstants';
 import {
@@ -94,6 +94,19 @@ export default function nodesReducer(state = initialState, action) {
       return state.update('nodesInProgress', nodesInProgress =>
         nodesInProgress.remove(action.payload)
       );
+
+    case NodesConstants.REGISTER_MANAGE_AND_INTROSPECT_NODES:
+      return state.set('manageAndIntrospectNodes', Set(action.payload));
+
+    case NodesConstants.CLEAR_MANAGE_AND_INTROSPECT_NODES:
+      const nodes = state.get('manageAndIntrospectNodes');
+      return nodes
+        .reduce((result, nodeUuid) => {
+          return result.updateIn(['all', nodeUuid], node =>
+            node.set('provision_state', 'manageable')
+          );
+        }, state)
+        .set('manageAndIntrospectNodes', Set());
 
     default:
       return state;

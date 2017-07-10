@@ -18,7 +18,11 @@ import { defineMessages } from 'react-intl';
 import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
 
-import { getNodesByIds } from '../selectors/nodes';
+import {
+  getNodesByIds,
+  getNonManageableNodes,
+  getManageAndIntrospectNodes
+} from '../selectors/nodes';
 import IronicApiErrorHandler from '../services/IronicApiErrorHandler';
 import IronicInspectorApiErrorHandler
   from '../services/IronicInspectorApiErrorHandler';
@@ -175,6 +179,13 @@ export default {
 
   startNodesIntrospection(nodeIds) {
     return (dispatch, getState) => {
+      const nodes = getNodesByIds(getState(), nodeIds);
+      const nonManageableNodes = getNonManageableNodes(nodes);
+
+      if (!nonManageableNodes.isEmpty()) {
+        return dispatch(this.startManageNodes(nodeIds, true));
+      }
+
       dispatch(this.startOperation(nodeIds));
       dispatch(this.pollNodeslistDuringProgress());
       MistralApiService.runWorkflow(MistralConstants.BAREMETAL_INTROSPECT, {
@@ -312,6 +323,105 @@ export default {
               message: messagePayload.message
             })
           );
+          break;
+        }
+        case 'FAILED': {
+          messagePayload.message.map(message => {
+            dispatch(
+              NotificationActions.notify({
+                type: 'error',
+                title: 'Error',
+                message: message.result
+              })
+            );
+          });
+          break;
+        }
+        default:
+          break;
+      }
+    };
+  },
+
+  registerManageAndIntrospectNodes(nodeIds) {
+    return {
+      type: NodesConstants.REGISTER_MANAGE_AND_INTROSPECT_NODES,
+      payload: nodeIds
+    };
+  },
+
+  clearManageAndIntrospectNodes() {
+    return {
+      type: NodesConstants.CLEAR_MANAGE_AND_INTROSPECT_NODES
+    };
+  },
+
+  startManageNodes(nodeIds, manageAndIntrospect = false, notify = true) {
+    return (dispatch, getState) => {
+      dispatch(this.startOperation(nodeIds));
+      dispatch(this.pollNodeslistDuringProgress());
+
+      if (manageAndIntrospect) {
+        dispatch(this.registerManageAndIntrospectNodes(nodeIds));
+      }
+
+      const nodes = getNodesByIds(getState(), nodeIds);
+      const nonManageableNodes = getNonManageableNodes(nodes);
+
+      return MistralApiService.runWorkflow(MistralConstants.BAREMETAL_MANAGE, {
+        node_uuids: nonManageableNodes.keySeq()
+      })
+        .then(response => {
+          if (response.state === 'ERROR') {
+            if (notify) {
+              dispatch(
+                NotificationActions.notify({
+                  title: 'Error',
+                  message: response.state_info
+                })
+              );
+            }
+            dispatch(this.finishOperation(nodeIds));
+          }
+        })
+        .catch(error => {
+          logger.error(
+            'Error in NodesActions.startManageNodes',
+            error.stack || error
+          );
+
+          if (notify) {
+            let errorHandler = new MistralApiErrorHandler(error);
+            errorHandler.errors.forEach(error => {
+              dispatch(NotificationActions.notify(error));
+            });
+          }
+          dispatch(this.finishOperation(nodeIds));
+        });
+    };
+  },
+
+  manageNodesFinished(messagePayload) {
+    return (dispatch, getState) => {
+      const nodeIds = messagePayload.execution.input.node_uuids;
+      const manageAndIntrospectNodes = getManageAndIntrospectNodes(getState());
+      dispatch(this.finishOperation(nodeIds));
+      dispatch(this.fetchNodes());
+      dispatch(this.clearManageAndIntrospectNodes());
+
+      switch (messagePayload.status) {
+        case 'SUCCESS': {
+          if (manageAndIntrospectNodes.isEmpty()) {
+            dispatch(
+              NotificationActions.notify({
+                type: 'success',
+                title: 'Nodes are manageable',
+                message: messagePayload.message
+              })
+            );
+          } else {
+            dispatch(this.startNodesIntrospection(manageAndIntrospectNodes));
+          }
           break;
         }
         case 'FAILED': {

@@ -14,22 +14,26 @@
  * under the License.
  */
 
-import keyMirror from 'keymirror';
+import { Map } from 'immutable';
+import * as selectors from '../../js/selectors/nodes';
 
-export default keyMirror({
-  REQUEST_NODES: null,
-  RECEIVE_NODES: null,
-  FETCH_NODE_MACS_SUCCESS: null,
-  FETCH_NODE_INTROSPECTION_DATA_SUCCESS: null,
-  FETCH_NODE_INTROSPECTION_DATA_FAILED: null,
-  START_NODES_OPERATION: null,
-  FINISH_NODES_OPERATION: null,
-  UPDATE_NODE_PENDING: null,
-  UPDATE_NODE_SUCCESS: null,
-  UPDATE_NODE_FAILED: null,
-  DELETE_NODE_SUCCESS: null,
-  DELETE_NODE_FAILED: null,
-  ADD_NODES: null,
-  REGISTER_MANAGE_AND_INTROSPECT_NODES: null,
-  CLEAR_MANAGE_AND_INTROSPECT_NODES: null
+describe('nodes selectors', () => {
+  const nodes = Map({
+    'node-uuid-1': Map({
+      provision_state: 'manageable'
+    }),
+    'node-uuid-2': Map({
+      provision_state: 'available'
+    })
+  });
+
+  it('selects non-manageable nodes', () => {
+    expect(selectors.getNonManageableNodes(nodes)).toEqual(
+      Map({
+        'node-uuid-2': Map({
+          provision_state: 'available'
+        })
+      })
+    );
+  });
 });

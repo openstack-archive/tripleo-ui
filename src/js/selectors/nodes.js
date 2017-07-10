@@ -185,3 +185,12 @@ export const getNodePropertyString = (node, propName) => {
       return node.getIn(propName.split('.')) || '';
   }
 };
+
+/**
+ * Given a list of nodes, return nodes that are not in 'manageable' state
+ */
+export const getNonManageableNodes = nodes =>
+  nodes.filter(node => node.get('provision_state') !== 'manageable');
+
+export const getManageAndIntrospectNodes = state =>
+  state.nodes.get('manageAndIntrospectNodes');
