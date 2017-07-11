@@ -16,6 +16,7 @@
 
 export default {
   BAREMETAL_INTROSPECT: 'tripleo.baremetal.v1.introspect',
+  BAREMETAL_MANAGE: 'tripleo.baremetal.v1.manage',
   BAREMETAL_PROVIDE: 'tripleo.baremetal.v1.provide',
   BAREMETAL_REGISTER_OR_UPDATE: 'tripleo.baremetal.v1.register_or_update',
   CAPABILITIES_GET: 'tripleo.heat_capabilities.get',

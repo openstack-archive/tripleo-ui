@@ -39,6 +39,12 @@ const messages = defineMessages({
     description: '"Providing" the nodes changes the provisioning state to "available" so that ' +
       'they can be used in a deployment.'
   },
+  manageNodes: {
+    id: 'NodesToolbarActions.manageNodes',
+    defaultMessage: 'Manage Nodes',
+    description: '"Managing" the nodes changes the provisioning state to "manageable" so that ' +
+      'they can be introspected.'
+  },
   deleteNodes: {
     id: 'NodesToolbarActions.deleteNodes',
     defaultMessage: 'Delete Nodes'
@@ -95,6 +101,12 @@ class NodesToolbarActions extends React.Component {
             onClick={this.submitForm.bind(this, 'provide')}
           >
             <FormattedMessage {...messages.provideNodes} />
+          </Button>
+          <Button
+            disabled={this.props.disabled}
+            onClick={this.submitForm.bind(this, 'manage')}
+          >
+            <FormattedMessage {...messages.manageNodes} />
           </Button>
           <DropdownKebab id="nodesActionsKebab" pullRight>
             <MenuItem

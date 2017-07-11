@@ -332,6 +332,73 @@ export default {
     };
   },
 
+  startManageNodes(nodeIds) {
+    return (dispatch, getState) => {
+      dispatch(this.startOperation(nodeIds));
+      dispatch(this.pollNodeslistDuringProgress());
+      MistralApiService.runWorkflow(MistralConstants.BAREMETAL_MANAGE, {
+        node_uuids: nodeIds
+      })
+        .then(response => {
+          if (response.state === 'ERROR') {
+            dispatch(
+              NotificationActions.notify({
+                title: 'Error',
+                message: response.state_info
+              })
+            );
+            dispatch(this.finishOperation(nodeIds));
+          }
+        })
+        .catch(error => {
+          logger.error(
+            'Error in NodesActions.startManageNodes',
+            error.stack || error
+          );
+          let errorHandler = new MistralApiErrorHandler(error);
+          errorHandler.errors.forEach(error => {
+            dispatch(NotificationActions.notify(error));
+          });
+          dispatch(this.finishOperation(nodeIds));
+        });
+    };
+  },
+
+  manageNodesFinished(messagePayload) {
+    return (dispatch, getState) => {
+      const nodeIds = messagePayload.execution.input.node_uuids;
+      dispatch(this.finishOperation(nodeIds));
+      dispatch(this.fetchNodes());
+
+      switch (messagePayload.status) {
+        case 'SUCCESS': {
+          dispatch(
+            NotificationActions.notify({
+              type: 'success',
+              title: 'Nodes are manageable',
+              message: messagePayload.message
+            })
+          );
+          break;
+        }
+        case 'FAILED': {
+          messagePayload.message.map(message => {
+            dispatch(
+              NotificationActions.notify({
+                type: 'error',
+                title: 'Error',
+                message: message.result
+              })
+            );
+          });
+          break;
+        }
+        default:
+          break;
+      }
+    };
+  },
+
   updateNode(nodePatch) {
     return (dispatch, getState) => {
       dispatch(this.updateNodePending(nodePatch.uuid));
