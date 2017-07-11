@@ -104,5 +104,11 @@ export default {
         dispatch(handleErrors(error, 'Validation Group could not be started'));
       });
     };
+  },
+
+  toggleValidations() {
+    return {
+      type: ValidationsConstants.TOGGLE_VALIDATIONS
+    };
   }
 };

@@ -14,20 +14,26 @@
   under the License.
  */
 
-.fixed-container.validations {
-  // Validations column goes to the bottom of the page for medium and smaller screens
-  @media(max-width: @screen-md-max) {
-    position: relative;
-    top: 0;
-  }
+.fixed-container.validations-sidebar {
+  transition: margin-left .2s cubic-bezier(.35,0,.25,1);
+  top: 42px;
+  border-top-left-radius: 2px;
+  z-index: 0;
   .sidebar-header {
     border-bottom: none;
-    margin: 37px 0 0;
+    margin-top: 0px;
+    margin-bottom: 0;
+    padding: 4px 0;
   }
 }
-.validation-list {
-  overflow-x: hidden;
+.list-group.validation-list {
   margin-bottom: 0;
+}
+
+.validations-toggle {
+  span.fa-play-circle {
+    font-size: 13px;
+  }
 }
 
 // Mostly reseting the media query specific styling for List View since it is applicable only when
@@ -145,6 +151,8 @@
     border-bottom: 1px solid @table-border-color;
     border-left: none;
     border-right: none;
+    margin-left: -20px;
+    margin-right: -20px;
   }
   .toolbar-pf {
     .form-group {
@@ -157,7 +165,7 @@
     }
   }
   .toolbar-pf-actions {
-    @media (min-width: @screen-lg-min) {
+    @media (min-width: @screen-sm-min) {
       .toolbar-pf-filter {
         padding-left: 0;
         width: 100%;

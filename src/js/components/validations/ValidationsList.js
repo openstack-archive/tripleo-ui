@@ -15,6 +15,7 @@
  */
 
 import { connect } from 'react-redux';
+import cx from 'classnames';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
@@ -140,31 +141,51 @@ class ValidationsList extends React.Component {
   }
 
   render() {
-    const { formatMessage } = this.props.intl;
+    const { intl: { formatMessage }, showValidations } = this.props;
 
     return (
-      <div className="col-sm-12 col-lg-3 sidebar-pf sidebar-pf-right fixed-container validations">
-        <div className="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right fixed-container-header">
-          <div className="actions pull-right">
-            <InlineLoader
-              loaded={
-                !(this.props.validationsLoaded &&
-                  this.props.isFetchingValidations)
-              }
-              content={formatMessage(messages.loadingValidations)}
-            >
-              <a
-                className="link refresh"
-                onClick={this.refreshValidations.bind(this)}
+      <div
+        className={cx(
+          'col-xs-12',
+          'col-xs-offset-12',
+          'col-sm-5',
+          'col-lg-3',
+          {
+            'col-xs-offset-0': showValidations,
+            'col-sm-offset-7': showValidations,
+            'col-lg-offset-9': showValidations
+          },
+          'sidebar-pf',
+          'sidebar-pf-right',
+          'fixed-container',
+          'validations-sidebar'
+        )}
+      >
+        <div className="sidebar-header sidebar-header-bleed-left">
+          <h2 className="h4">
+            <FormattedMessage {...messages.validations} />
+            <div className="actions pull-right">
+              <InlineLoader
+                loaded={
+                  !(this.props.validationsLoaded &&
+                    this.props.isFetchingValidations)
+                }
+                component="small"
+                content={formatMessage(messages.loadingValidations)}
               >
-                <span className="pficon pficon-refresh" />
-                {' '}
-                <FormattedMessage {...messages.refresh} />
-              </a>
-            </InlineLoader>
-          </div>
-          <h2 className="h4"><FormattedMessage {...messages.validations} /></h2>
+                <a
+                  className="link refresh"
+                  onClick={this.refreshValidations.bind(this)}
+                >
+                  <span className="pficon pficon-refresh" />
+                  {' '}
+                  <FormattedMessage {...messages.refresh} />
+                </a>
+              </InlineLoader>
+            </div>
+          </h2>
         </div>
+        <ValidationsToolbar />
         <Loader
           loaded={this.props.validationsLoaded && this.props.executionsLoaded}
           content={formatMessage(messages.loadingValidations)}
@@ -173,7 +194,6 @@ class ValidationsList extends React.Component {
           )}
           height={80}
         >
-          <ValidationsToolbar />
           <div className="list-group list-view-pf validation-list">
             {this.renderValidations()}
           </div>
@@ -192,6 +212,7 @@ ValidationsList.propTypes = {
   intl: PropTypes.object,
   isFetchingValidations: PropTypes.bool.isRequired,
   runValidation: PropTypes.func.isRequired,
+  showValidations: PropTypes.bool.isRequired,
   stopValidation: PropTypes.func.isRequired,
   validations: ImmutablePropTypes.map.isRequired,
   validationsLoaded: PropTypes.bool.isRequired
@@ -221,7 +242,8 @@ const mapStateToProps = state => {
     isFetchingValidations: state.validations.get('isFetching'),
     validations: getFilteredValidations(state),
     validationsLoaded: state.validations.get('validationsLoaded'),
-    currentPlanName: getCurrentPlanName(state)
+    currentPlanName: getCurrentPlanName(state),
+    showValidations: state.validations.showValidations
   };
 };
 
