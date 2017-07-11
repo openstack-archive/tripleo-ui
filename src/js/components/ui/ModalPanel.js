@@ -63,16 +63,25 @@ export const ModalPanelBackdrop = () => {
 };
 
 export class ModalPanel extends React.Component {
+  componentWillMount() {
+    document.body.classList.add('modal-panel-open');
+  }
+
+  // remove the modal-open class
+  componentWillUnmount() {
+    document.body.classList.remove('modal-panel-open');
+  }
+
   render() {
     return (
       <Motion
-        defaultStyle={{ opacity: 0, left: 2000 }}
-        style={{ opacity: 1, left: spring(0) }}
+        defaultStyle={{ opacity: 0.4, translateX: 500 }}
+        style={{ opacity: spring(1), translateX: spring(0) }}
       >
-        {interpolatingStyle => (
+        {({ opacity, translateX }) => (
           <div
-            style={interpolatingStyle}
-            className="fixed-container col-sm-12 col-md-11 col-md-offset-1 col-lg-8 modal-panel"
+            style={{ opacity, transform: `translateX(${translateX}px)` }}
+            className="fixed-container col-sm-12 col-md-11 col-md-offset-1 modal-panel"
           >
             {this.props.children}
           </div>
@@ -87,7 +96,7 @@ ModalPanel.propTypes = {
 
 export const ModalPanelHeader = ({ children }) => {
   return (
-    <div className="fixed-container-header row">
+    <div className="row">
       <div className="modal-panel-header col-sm-12">
         {children}
       </div>
@@ -111,7 +120,7 @@ ModalPanelBody.propTypes = {
 
 export const ModalPanelFooter = ({ children }) => {
   return (
-    <div className="fixed-container-footer row">
+    <div className="row">
       <div className="modal-panel-footer col-sm-12">
         {children}
       </div>

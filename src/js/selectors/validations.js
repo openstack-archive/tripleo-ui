@@ -105,6 +105,11 @@ export const getFilteredValidations = createSelector(
   }
 );
 
+export const getValidationStatusCounts = createSelector(
+  [getValidationsWithResults],
+  validations => validations.countBy(v => v.status).sortBy((v, k) => k)
+);
+
 /**
  * Helper function to get the most recent time a plan has been updated or
  * created.
