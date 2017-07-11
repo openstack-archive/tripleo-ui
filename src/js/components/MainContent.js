@@ -14,22 +14,28 @@
  * under the License.
  */
 
-import { List, Map, Record } from 'immutable';
+import cx from 'classnames';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-export const ValidationsState = Record({
-  showValidations: false,
-  validationsLoaded: false,
-  isFetching: false,
-  validations: Map()
-});
+const AppContent = ({ children, showValidations }) => (
+  <div className="wrapper-fixed-body container-fluid">
+    <div className="row">
+      <div
+        className={cx(
+          'col-sm-12',
+          { 'col-lg-9': showValidations },
+          'main-content'
+        )}
+      >
+        {children}
+      </div>
+    </div>
+  </div>
+);
+AppContent.propTypes = {
+  children: PropTypes.node,
+  showValidations: PropTypes.bool.isRequired
+};
 
-export const Validation = Record({
-  description: '',
-  groups: List(),
-  id: undefined,
-  metadata: undefined,
-  name: undefined,
-  results: Map(),
-  stateInfo: undefined,
-  status: undefined
-});
+export default AppContent;
