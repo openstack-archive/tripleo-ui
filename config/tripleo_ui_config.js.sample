@@ -4,14 +4,14 @@ window.tripleOUiConfig = {
   // A valid Keystone service URL is required. The other endpoints
   // will then be obtained automatically from the Keystone catalog.
   //
-  // 'keystone': 'http://192.0.2.1:5000/v3',
+  // 'keystone': 'https://192.168.24.2:443/keystone/v3',
   //
-  // 'heat': 'http://192.0.2.1:8004/v1/%(project_id)s',
-  // 'ironic': 'http://192.0.2.1:6385',
-  // 'ironic-inspector': 'http://192.0.2.1:5050',
-  // 'mistral': 'http://192.0.2.1:8989/v2',
-  // 'swift': 'http://192.0.2.1:8080/v1/AUTH_%(project_id)s',
-  // 'zaqar-websocket': 'ws://192.0.2.1:9000',
+  // 'heat': 'https://192.168.24.2:443/heat/v1/%(project_id)s',
+  // 'ironic': 'https://192.168.24.2:443/ironic',
+  // 'ironic-inspector': 'https://192.168.24.2:443/ironic',
+  // 'mistral': 'https://192.168.24.2:443/mistral/v2',
+  // 'swift': 'https://192.168.24.2:443/swift/v1/AUTH_%(project_id)s',
+  // 'zaqar-websocket': 'wss://192.168.24.2:443/zaqar',
 
   // Default websocket queue name
   // 'zaqar_default_queue': 'tripleo',
