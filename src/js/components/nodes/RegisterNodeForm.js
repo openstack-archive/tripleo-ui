@@ -22,7 +22,6 @@ import React from 'react';
 import HorizontalInput from '../ui/forms/HorizontalInput';
 import HorizontalArrayInput from '../ui/forms/HorizontalArrayInput';
 import HorizontalSelect from '../ui/forms/HorizontalSelect';
-import PXEAndSSHDriverFields from './driver_fields/PXEAndSSHDriverFields';
 import PXEAndIPMIToolDriverFields
   from './driver_fields/PXEAndIPMIToolDriverFields';
 import PXEAndDRACDriverFields from './driver_fields/PXEAndDRACDriverFields';
@@ -138,17 +137,15 @@ class RegisterNodeForm extends React.Component {
 
   renderDriverFields() {
     switch (this.props.selectedNode.pm_type) {
-      case 'pxe_ipmitool':
-        return <PXEAndIPMIToolDriverFields node={this.props.selectedNode} />;
       case 'pxe_drac':
         return <PXEAndDRACDriverFields node={this.props.selectedNode} />;
       default:
-        return <PXEAndSSHDriverFields node={this.props.selectedNode} />;
+        return <PXEAndIPMIToolDriverFields node={this.props.selectedNode} />;
     }
   }
 
   renderDriverOptions() {
-    return ['pxe_ipmitool', 'pxe_ssh', 'pxe_drac'].map((value, index) => (
+    return ['pxe_ipmitool', 'pxe_drac'].map((value, index) => (
       <option key={index}>{value}</option>
     ));
   }
