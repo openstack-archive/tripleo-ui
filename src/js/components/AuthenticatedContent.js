@@ -16,22 +16,19 @@
 
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 
+import MainContent from './MainContent';
 import DebugScreen from './debug/DebugScreen';
 import DeploymentPlan from './deployment_plan/DeploymentPlan';
 import { getCurrentPlanName } from '../selectors/plans';
-import { getEnabledLanguages } from '../selectors/i18n';
 import { GlobalLoader } from './ui/Loader';
-import LoginActions from '../actions/LoginActions';
 import NavBar from './NavBar';
 import Nodes from './nodes/Nodes';
 import Plans from './plan/Plans.js';
 import PlansActions from '../actions/PlansActions';
-import ValidationsList from './validations/ValidationsList';
 import WorkflowExecutionsActions from '../actions/WorkflowExecutionsActions';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 
@@ -50,42 +47,24 @@ class AuthenticatedContent extends React.Component {
   }
 
   render() {
-    const {
-      currentPlanName,
-      intl,
-      languages,
-      logoutUser,
-      plansLoaded,
-      user
-    } = this.props;
+    const { currentPlanName, intl, plansLoaded, showValidations } = this.props;
     return (
       <GlobalLoader
         loaded={plansLoaded}
         content={intl.formatMessage(messages.loadingDeployments)}
       >
-        <header>
-          <NavBar
-            user={user}
-            onLogout={logoutUser.bind(this)}
-            languages={languages}
-          />
-        </header>
-        <div className="wrapper-fixed-body container-fluid">
-          <div className="row">
-            <div className="col-sm-12 col-lg-9">
-              <Switch>
-                <Route path="/debug" component={DebugScreen} />
-                <Route path="/nodes" component={Nodes} />
-                <Route path="/plans/manage" component={Plans} />
-                <Route path="/plans/:planName" component={DeploymentPlan} />
-                {currentPlanName
-                  ? <Redirect from="/" to={`/plans/${currentPlanName}`} />
-                  : <Redirect from="/" to="/plans/manage" />}
-              </Switch>
-            </div>
-            <ValidationsList />
-          </div>
-        </div>
+        <NavBar />
+        <MainContent showValidations={showValidations}>
+          <Switch>
+            <Route path="/debug" component={DebugScreen} />
+            <Route path="/nodes" component={Nodes} />
+            <Route path="/plans/manage" component={Plans} />
+            <Route path="/plans/:planName" component={DeploymentPlan} />
+            {currentPlanName
+              ? <Redirect from="/" to={`/plans/${currentPlanName}`} />
+              : <Redirect from="/" to="/plans/manage" />}
+          </Switch>
+        </MainContent>
       </GlobalLoader>
     );
   }
@@ -98,14 +77,11 @@ AuthenticatedContent.propTypes = {
   fetchWorkflowExecutions: PropTypes.func,
   initializeZaqarConnection: PropTypes.func.isRequired,
   intl: PropTypes.object,
-  languages: ImmutablePropTypes.map.isRequired,
-  logoutUser: PropTypes.func.isRequired,
   plansLoaded: PropTypes.bool,
-  user: ImmutablePropTypes.map
+  showValidations: PropTypes.bool.isRequired
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  logoutUser: () => dispatch(LoginActions.logoutUser()),
   fetchPlans: () => dispatch(PlansActions.fetchPlans()),
   fetchWorkflowExecutions: () =>
     dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
@@ -114,10 +90,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 });
 
 const mapStateToProps = state => ({
-  languages: getEnabledLanguages(state),
   currentPlanName: getCurrentPlanName(state),
   plansLoaded: state.plans.get('plansLoaded'),
-  user: state.login.getIn(['token', 'user'])
+  showValidations: state.validations.showValidations
 });
 
 export default injectIntl(

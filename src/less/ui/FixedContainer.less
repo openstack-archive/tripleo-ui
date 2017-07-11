@@ -18,15 +18,10 @@
 .fixed-container {
   z-index: 1000;
   position: fixed;
-  right: 0;
   bottom: 0;
   top: @header-height;
   display: flex;
   flex-direction: column;
-
-  .fixed-container-header, .fixed-container-footer {
-    flex: 0;
-  }
 
   .fixed-container-body {
     display: flex;
@@ -58,18 +53,20 @@
     &:extend(.modal .modal-dialog .nav-tabs);
   }
 
-  .fixed-container-header {
-    .modal-panel-header {
-      &:extend(.modal .modal-header, .modal-header all);
-    }
+  .modal-panel-header {
+    &:extend(.modal .modal-header, .modal-header all);
   }
 
-  .fixed-container-footer {
-    .modal-panel-footer {
-      background-color: #f8f8f8;
-      border-top: 1px solid #e5e5e5;
-      padding-top: 10px;
-      padding-bottom: 10px;
-    }
+  .modal-panel-footer {
+    background-color: #f8f8f8;
+    border-top: 1px solid #e5e5e5;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+}
+
+body.modal-panel-open {
+  @media(min-width: @screen-lg-min) {
+    overflow: hidden;
   }
 }
