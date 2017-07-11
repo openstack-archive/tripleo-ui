@@ -14,16 +14,12 @@
  * under the License.
  */
 
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 
 import ValidationsConstants from '../constants/ValidationsConstants';
-import { Validation } from '../immutableRecords/validations';
+import { Validation, ValidationsState } from '../immutableRecords/validations';
 
-const initialState = Map({
-  validationsLoaded: false,
-  isFetching: false,
-  validations: Map()
-});
+const initialState = new ValidationsState();
 
 export default function validationsReducer(state = initialState, action) {
   switch (action.type) {
@@ -45,6 +41,9 @@ export default function validationsReducer(state = initialState, action) {
 
     case ValidationsConstants.FETCH_VALIDATIONS_FAILED:
       return state.set('isFetching', false).set('validationsLoaded', true);
+
+    case ValidationsConstants.TOGGLE_VALIDATIONS:
+      return state.set('showValidations', !state.showValidations);
 
     default:
       return state;
