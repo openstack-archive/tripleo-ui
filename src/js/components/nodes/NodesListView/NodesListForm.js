@@ -56,6 +56,9 @@ class NodesListForm extends React.Component {
       case 'provide':
         this.props.provideNodes(nodeIds);
         break;
+      case 'manage':
+        this.props.manageNodes(nodeIds);
+        break;
       case 'tag':
         this.props.tagNodes(nodeIds, formData.tag);
         break;
@@ -86,6 +89,7 @@ NodesListForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   intl: PropTypes.object,
   introspectNodes: PropTypes.func.isRequired,
+  manageNodes: PropTypes.func.isRequired,
   nodes: ImmutablePropTypes.map.isRequired,
   provideNodes: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
@@ -121,6 +125,7 @@ const mapDispatchToProps = dispatch => ({
   deleteNodes: nodeIds => dispatch(NodesActions.deleteNodes(nodeIds)),
   introspectNodes: nodeIds =>
     dispatch(NodesActions.startNodesIntrospection(nodeIds)),
+  manageNodes: nodeIds => dispatch(NodesActions.startManageNodes(nodeIds)),
   provideNodes: nodeIds => dispatch(NodesActions.startProvideNodes(nodeIds)),
   tagNodes: (nodeIds, tag) => dispatch(NodesActions.tagNodes(nodeIds, tag))
 });
