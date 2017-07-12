@@ -37,6 +37,7 @@ class ToolbarFiltersForm extends React.Component {
   renderFilterStringField() {
     return (
       <Field
+        id={this.props.id}
         validate={value => (value ? undefined : 'Required')}
         autoComplete="off"
         name="filterString"
@@ -75,6 +76,7 @@ ToolbarFiltersForm.propTypes = {
   form: PropTypes.string.isRequired,
   formatSelectValue: PropTypes.func,
   handleSubmit: PropTypes.func.isRequired,
+  id: PropTypes.string,
   initialValues: PropTypes.object,
   initialize: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,

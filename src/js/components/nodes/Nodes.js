@@ -67,6 +67,7 @@ class Nodes extends React.Component {
       ? <NodesTableView />
       : <NodesListForm>
           <NodesListView
+            id="Nodes_nodesList"
             fetchNodeIntrospectionData={this.props.fetchNodeIntrospectionData}
             nodes={this.props.nodes}
             nodesInProgress={this.props.nodesInProgress}
@@ -86,6 +87,7 @@ class Nodes extends React.Component {
               inline
             >
               <a
+                id="Nodes__refreshResultsLink"
                 className="link btn btn-link"
                 onClick={this.refreshResults.bind(this)}
               >
@@ -94,7 +96,11 @@ class Nodes extends React.Component {
               </a>
             </Loader>
             &nbsp;
-            <Link to="/nodes/register" className="btn btn-primary">
+            <Link
+              to="/nodes/register"
+              className="btn btn-primary"
+              id="Nodes__registerNodesLink"
+            >
               <span className="fa fa-plus" />&nbsp;
               <FormattedMessage {...messages.registerNodes} />
             </Link>

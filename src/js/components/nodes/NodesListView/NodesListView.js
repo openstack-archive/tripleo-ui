@@ -24,7 +24,7 @@ import NodeListItem from './NodeListItem';
 export default class NodesListView extends React.Component {
   render() {
     return (
-      <ListView>
+      <ListView id={this.props.id}>
         {this.props.nodes
           .toList()
           .map(node => (
@@ -41,6 +41,7 @@ export default class NodesListView extends React.Component {
 }
 NodesListView.propTypes = {
   fetchNodeIntrospectionData: PropTypes.func.isRequired,
+  id: PropTypes.string,
   nodes: ImmutablePropTypes.map.isRequired,
   nodesInProgress: ImmutablePropTypes.set.isRequired
 };
