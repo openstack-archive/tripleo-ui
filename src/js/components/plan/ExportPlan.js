@@ -68,7 +68,7 @@ class ExportPlan extends React.Component {
     return (
       <Modal dialogClasses="modal-sm" id="ExportPlan__exportPlanModal">
         <div className="modal-header">
-          <Link to="/plans" type="button" className="close">
+          <Link to="/plans/manage" type="button" className="close">
             <span aria-hidden="true" className="pficon pficon-close" />
           </Link>
           <h4 className="modal-title">
@@ -107,7 +107,7 @@ class ExportPlan extends React.Component {
         </div>
         <div className="modal-footer">
           <Link
-            to="/plans"
+            to="/plans/manage"
             type="button"
             className="btn btn-default"
             id="ExportPlan__cancelExportPlanModalButton"

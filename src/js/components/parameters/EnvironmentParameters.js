@@ -21,6 +21,7 @@ import React from 'react';
 
 import EnvironmentConfigurationActions
   from '../../actions/EnvironmentConfigurationActions';
+import { getCurrentPlanName } from '../../selectors/plans';
 import { getEnvironmentParameters } from '../../selectors/parameters';
 import { getEnvironment } from '../../selectors/environmentConfiguration';
 import InlineNotification from '../ui/InlineNotification';
@@ -65,7 +66,7 @@ EnvironmentParameters.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    currentPlanName: state.currentPlan.currentPlanName,
+    currentPlanName: getCurrentPlanName(state),
     environmentError: getEnvironment(state, ownProps.environment).error,
     parameters: getEnvironmentParameters(state, ownProps.environment),
     parametersLoaded: state.parameters.loaded,

@@ -32,7 +32,6 @@ import NodesListView from './NodesListView/NodesListView';
 import NodesToolbar from './NodesToolbar/NodesToolbar';
 import NodesTableView from './NodesTableView';
 import RegisterNodesDialog from './RegisterNodesDialog';
-import RolesActions from '../../actions/RolesActions';
 
 const messages = defineMessages({
   loadingNodes: {
@@ -56,13 +55,11 @@ const messages = defineMessages({
 class Nodes extends React.Component {
   componentDidMount() {
     this.props.fetchNodes();
-    this.props.fetchRoles(this.props.currentPlanName);
   }
 
   refreshResults(e) {
     e.preventDefault();
     this.props.fetchNodes();
-    this.props.fetchRoles(this.props.currentPlanName);
   }
 
   renderContentView() {
@@ -120,10 +117,8 @@ class Nodes extends React.Component {
 }
 Nodes.propTypes = {
   contentView: PropTypes.string.isRequired,
-  currentPlanName: PropTypes.string.isRequired,
   fetchNodeIntrospectionData: PropTypes.func.isRequired,
   fetchNodes: PropTypes.func.isRequired,
-  fetchRoles: PropTypes.func.isRequired,
   fetchingNodes: PropTypes.bool.isRequired,
   intl: PropTypes.object.isRequired,
   nodes: ImmutablePropTypes.map.isRequired,
@@ -136,7 +131,6 @@ const mapStateToProps = state => ({
     'contentView',
     'list'
   ),
-  currentPlanName: state.currentPlan.currentPlanName,
   fetchingNodes: state.nodes.get('isFetching'),
   nodes: getFilteredNodes(state),
   nodesInProgress: nodesInProgress(state),
@@ -146,9 +140,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchNodes: () => dispatch(NodesActions.fetchNodes()),
   fetchNodeIntrospectionData: nodeId =>
-    dispatch(NodesActions.fetchNodeIntrospectionData(nodeId)),
-  fetchRoles: currentPlanName =>
-    dispatch(RolesActions.fetchRoles(currentPlanName))
+    dispatch(NodesActions.fetchNodeIntrospectionData(nodeId))
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Nodes));
