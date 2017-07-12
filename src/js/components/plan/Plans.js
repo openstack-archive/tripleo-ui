@@ -17,7 +17,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import ListPlans from './ListPlans';
+import PlansList from './PlansList';
 import DeletePlan from './DeletePlan';
 import EditPlan from './EditPlan';
 import ExportPlan from './ExportPlan';
@@ -28,7 +28,7 @@ export default class Plans extends React.Component {
     return (
       <div className="row">
         <div className="col-sm-12">
-          <Route path="/plans/manage" component={ListPlans} />
+          <Route path="/plans/manage" component={PlansList} />
           <Switch>
             <Route path="/plans/manage/new" component={NewPlan} />
             <Route

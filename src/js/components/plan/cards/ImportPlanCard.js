@@ -14,28 +14,36 @@
  * under the License.
  */
 
+import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 
 const messages = defineMessages({
-  createNewPlan: {
-    id: 'ListPlans.createNewPlan',
-    defaultMessage: 'Create New Plan'
+  importPlan: {
+    id: 'ListPlans.importPlan',
+    defaultMessage: 'Import Plan'
   }
 });
 
-const CreatePlanCard = () => (
+const ImportPlanCard = ({ history }) => (
   <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-    <div className="card-pf">
+    <div
+      className="card-pf import-plan-card card-pf-view card-pf-view-select card-pf-view-single-select"
+      onClick={() => history.push(`/plans/manage/new`)}
+      id="ListPlans__importPlanLink"
+    >
       <div className="card-pf-body">
-        <span className="pficon pficon-add-circle-o" />&nbsp;
-        <Link to="/plans/manage/new" id="ListPlans__newPlanLink">
-          <FormattedMessage {...messages.createNewPlan} />
-        </Link>
+        <p className="text-center">
+          <span className="pficon pficon-add-circle-o" />&nbsp;
+          <FormattedMessage {...messages.importPlan} />
+        </p>
       </div>
     </div>
   </div>
 );
+ImportPlanCard.propTypes = {
+  history: PropTypes.object.isRequired
+};
 
-export default injectIntl(CreatePlanCard);
+export default withRouter(injectIntl(ImportPlanCard));
