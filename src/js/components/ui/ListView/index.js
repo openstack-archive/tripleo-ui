@@ -128,9 +128,10 @@ ListViewItemContainer.defaultProps = {
   expanded: false
 };
 
-export const ListViewCheckbox = ({ disabled, name }) => (
+export const ListViewCheckbox = ({ disabled, name, id }) => (
   <div className="list-view-pf-checkbox">
     <Field
+      id={id}
       name={name}
       type="checkbox"
       component="input"
@@ -141,25 +142,27 @@ export const ListViewCheckbox = ({ disabled, name }) => (
 );
 ListViewCheckbox.propTypes = {
   disabled: PropTypes.bool.isRequired,
+  id: PropTypes.string,
   name: PropTypes.string.isRequired
 };
 ListViewCheckbox.defaultProps = {
   disabled: false
 };
 
-export const ListViewExpand = ({ expanded }) => {
+export const ListViewExpand = ({ expanded, id }) => {
   const classes = ClassNames({
     'fa fa-angle-right': true,
     'fa-angle-down': expanded
   });
   return (
-    <a className="list-view-pf-expand">
+    <a className="list-view-pf-expand" id={id}>
       <span className={classes} />
     </a>
   );
 };
 ListViewExpand.propTypes = {
-  expanded: PropTypes.bool.isRequired
+  expanded: PropTypes.bool.isRequired,
+  id: PropTypes.string
 };
 ListViewExpand.defaultProps = {
   expanded: false
@@ -218,13 +221,14 @@ ListViewDescription.propTypes = {
   children: PropTypes.node
 };
 
-export const ListViewDescriptionHeading = ({ children }) => (
-  <div className="list-group-item-heading">
+export const ListViewDescriptionHeading = ({ children, id }) => (
+  <div className="list-group-item-heading" id={id}>
     {children}
   </div>
 );
 ListViewDescriptionHeading.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  id: PropTypes.string
 };
 
 export const ListViewDescriptionText = ({ children }) => (
@@ -245,11 +249,12 @@ ListViewAdditionalInfo.propTypes = {
   children: PropTypes.node
 };
 
-export const ListViewAdditionalInfoItem = ({ children }) => (
-  <div className="list-view-pf-additional-info-item">
+export const ListViewAdditionalInfoItem = ({ children, id }) => (
+  <div className="list-view-pf-additional-info-item" id={id}>
     {children}
   </div>
 );
 ListViewAdditionalInfoItem.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  id: PropTypes.string
 };
