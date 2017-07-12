@@ -48,9 +48,9 @@ class ToolbarFiltersForm extends React.Component {
   }
 
   render() {
-    const { formatSelectValue, handleSubmit, options } = this.props;
+    const { formatSelectValue, handleSubmit, options, ...rest } = this.props;
     return (
-      <form onSubmit={handleSubmit(this.submit.bind(this))}>
+      <form {...rest} onSubmit={handleSubmit(this.submit.bind(this))}>
         <FormGroup className="toolbar-pf-filter">
           {options
             ? <InputGroup>
