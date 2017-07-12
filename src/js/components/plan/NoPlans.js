@@ -27,9 +27,9 @@ const messages = defineMessages({
     id: 'NoPlans.noPlansAvailableMessage',
     defaultMessage: 'There are no Deployment Plans available. Please create one first.'
   },
-  createNewPlan: {
-    id: 'NoPlans.createNewPlan',
-    defaultMessage: 'Create New Plan'
+  importPlan: {
+    id: 'NoPlans.importPlan',
+    defaultMessage: 'Import Plan'
   }
 });
 
@@ -46,7 +46,7 @@ export default class NoPlans extends React.Component {
           <Link to="/plans/manage/new" className="btn btn-lg btn-primary">
             <span className="fa fa-plus" />
             {' '}
-            <FormattedMessage {...messages.createNewPlan} />
+            <FormattedMessage {...messages.importPlan} />
           </Link>
         </div>
       </div>
