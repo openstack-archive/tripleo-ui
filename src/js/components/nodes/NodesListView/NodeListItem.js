@@ -94,8 +94,12 @@ export default class NodeListItem extends React.Component {
     return (
       <ListViewItem expanded={this.state.expanded} stacked>
         <ListViewItemHeader toggleExpanded={this.toggleExpanded.bind(this)}>
-          <ListViewExpand expanded={this.state.expanded} />
+          <ListViewExpand
+            expanded={this.state.expanded}
+            id="NodeListItem__expand"
+          />
           <ListViewCheckbox
+            id="NodeListItem__checkbox"
             disabled={inProgress}
             name={`values.${node.get('uuid')}`}
           />
@@ -113,7 +117,7 @@ export default class NodeListItem extends React.Component {
             </ListViewLeft>
             <ListViewBody>
               <ListViewDescription>
-                <ListViewDescriptionHeading>
+                <ListViewDescriptionHeading id="NodeListItem__nodeName">
                   {node.get('name') || node.get('uuid')}
                 </ListViewDescriptionHeading>
                 <ListViewDescriptionText>
@@ -137,7 +141,7 @@ export default class NodeListItem extends React.Component {
                 </ListViewDescriptionText>
               </ListViewDescription>
               <ListViewAdditionalInfo>
-                <ListViewAdditionalInfoItem>
+                <ListViewAdditionalInfoItem id="NodeListItem__nodeProfile">
                   <span className="pficon pficon-flavor" />
                   <FormattedMessage {...messages.profile} />
                   &nbsp;
@@ -145,7 +149,7 @@ export default class NodeListItem extends React.Component {
                     node.getIn(['properties', 'capabilities'])
                   ).profile || '-'}
                 </ListViewAdditionalInfoItem>
-                <ListViewAdditionalInfoItem>
+                <ListViewAdditionalInfoItem id="NodeListItem__cpuCount">
                   <span className="pficon pficon-cpu" />
                   <strong>{node.getIn(['properties', 'cpus'], '-')}</strong>
                   &nbsp;
@@ -154,7 +158,7 @@ export default class NodeListItem extends React.Component {
                     values={{ cpuCores: node.getIn(['properties', 'cpus']) }}
                   />
                 </ListViewAdditionalInfoItem>
-                <ListViewAdditionalInfoItem>
+                <ListViewAdditionalInfoItem id="NodeListItem__memorySize">
                   <span className="pficon pficon-memory" />
                   <strong>
                     {node.getIn(['properties', 'memory_mb'], '-')}
@@ -162,7 +166,7 @@ export default class NodeListItem extends React.Component {
                   &nbsp;
                   <FormattedMessage {...messages.ram} />
                 </ListViewAdditionalInfoItem>
-                <ListViewAdditionalInfoItem>
+                <ListViewAdditionalInfoItem id="NodeListItem__diskSize">
                   <span className="fa fa-database" />
                   <strong>{node.getIn(['properties', 'local_gb'], '-')}</strong>
                   &nbsp;

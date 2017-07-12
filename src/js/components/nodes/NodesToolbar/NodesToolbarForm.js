@@ -83,8 +83,14 @@ const NodesToolbarForm = ({ handleSubmit, intl }) => (
         name="contentView"
         component={ContentViewSelectorInput}
         options={{
-          list: intl.formatMessage(messages.list),
-          table: intl.formatMessage(messages.table)
+          list: {
+            title: intl.formatMessage(messages.list),
+            id: 'NodesToolbarForm__listView'
+          },
+          table: {
+            title: intl.formatMessage(messages.table),
+            id: 'NodesToolbarForm__tableView'
+          }
         }}
       />
     </FormGroup>
