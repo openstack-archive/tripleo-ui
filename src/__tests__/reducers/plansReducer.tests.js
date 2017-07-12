@@ -16,6 +16,7 @@
 
 import { List, Map } from 'immutable';
 
+import CurrentPlanActions from '../../js/actions/CurrentPlanActions';
 import {
   InitialPlanState,
   Plan,
@@ -38,6 +39,10 @@ describe('plansReducer state', () => {
 
     it('`all` is empty', () => {
       expect(state.get('all').size).toEqual(0);
+    });
+
+    it('`currentPlanName` is undefined', () => {
+      expect(state.get('currentPlanName')).not.toBeDefined();
     });
   });
 
@@ -134,6 +139,21 @@ describe('plansReducer state', () => {
           'foo.yaml': new PlanFile({ name: 'foo.yaml' })
         })
       );
+    });
+  });
+
+  describe('PLAN_CHOSEN', () => {
+    let state;
+
+    beforeEach(() => {
+      state = plansReducer(
+        new InitialPlanState(),
+        CurrentPlanActions.planChosen('another-cloud')
+      );
+    });
+
+    it('sets the current planName', () => {
+      expect(state.get('currentPlanName')).toEqual('another-cloud');
     });
   });
 

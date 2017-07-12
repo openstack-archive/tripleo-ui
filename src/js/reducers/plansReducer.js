@@ -52,6 +52,9 @@ export default function plansReducer(state = initialState, action) {
         .set('all', Map(planData));
     }
 
+    case PlansConstants.PLAN_CHOSEN:
+      return state.set('currentPlanName', action.payload);
+
     case PlansConstants.DELETE_PLAN_PENDING: {
       return state.setIn(['all', action.payload, 'transition'], 'deleting');
     }

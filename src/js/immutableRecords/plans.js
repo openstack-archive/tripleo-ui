@@ -34,6 +34,7 @@ export const PlanFile = Record({
 });
 
 export const InitialPlanState = Record({
+  currentPlanName: undefined,
   isFetchingPlans: false,
   plansLoaded: false,
   isTransitioningPlan: false,
