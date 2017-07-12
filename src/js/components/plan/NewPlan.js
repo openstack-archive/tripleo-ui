@@ -33,9 +33,9 @@ const messages = defineMessages({
     id: 'NewPlan.cancel',
     defaultMessage: 'Cancel'
   },
-  createNewPlan: {
-    id: 'NewPlan.createNewPlan',
-    defaultMessage: 'Create New Plan'
+  importPlan: {
+    id: 'NewPlan.importPlan',
+    defaultMessage: 'Import Plan'
   },
   creatingPlanLoader: {
     id: 'NewPlan.creatingPlanLoader',
@@ -115,12 +115,13 @@ class NewPlan extends React.Component {
               <span aria-hidden="true" className="pficon pficon-close" />
             </Link>
             <h4 className="modal-title">
-              <FormattedMessage {...messages.createNewPlan} />
+              <FormattedMessage {...messages.importPlan} />
             </h4>
           </div>
           <Loader
             loaded={!this.props.isTransitioningPlan}
             size="lg"
+            height={100}
             content={this.props.intl.formatMessage(messages.creatingPlanLoader)}
           >
             <ModalFormErrorList errors={this.props.planFormErrors.toJS()} />
