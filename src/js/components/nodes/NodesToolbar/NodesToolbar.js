@@ -140,7 +140,7 @@ class NodesToolbar extends React.Component {
                 />
               ))}
           </ActiveFiltersList>
-          <p className="pull-right">
+          <p className="pull-right" id="NodesToolbar__selectAllButton">
             <SelectAllButton
               form="nodesListForm"
               items={filteredNodes.toList().toJS()}

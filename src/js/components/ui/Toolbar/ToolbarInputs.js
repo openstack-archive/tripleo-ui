@@ -58,7 +58,8 @@ export const ContentViewSelectorInput = ({
           key={k}
           type="button"
           bsStyle="link"
-          title={options[k]}
+          title={options[k]['title']}
+          id={options[k]['id']}
           onClick={() => onChange(k)}
         >
           <i className={getIconClass(k)} />
