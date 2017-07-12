@@ -50,7 +50,7 @@ class ToolbarFiltersForm extends React.Component {
   render() {
     const { formatSelectValue, handleSubmit, options } = this.props;
     return (
-      <form onSubmit={handleSubmit(this.submit.bind(this))}>
+      <form id={this.props.id} onSubmit={handleSubmit(this.submit.bind(this))}>
         <FormGroup className="toolbar-pf-filter">
           {options
             ? <InputGroup>
@@ -75,6 +75,7 @@ ToolbarFiltersForm.propTypes = {
   form: PropTypes.string.isRequired,
   formatSelectValue: PropTypes.func,
   handleSubmit: PropTypes.func.isRequired,
+  id: PropTypes.string,
   initialValues: PropTypes.object,
   initialize: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,

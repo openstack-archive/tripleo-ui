@@ -50,13 +50,14 @@ import PropTypes from 'prop-types';
 </ListView>
 */
 
-export const ListView = ({ children }) => (
-  <div className="list-group list-view-pf list-view-pf-view">
+export const ListView = ({ children, id }) => (
+  <div className="list-group list-view-pf list-view-pf-view" id={id}>
     {children}
   </div>
 );
 ListView.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  id: PropTypes.string
 };
 
 export const ListViewItem = ({ children, stacked, expanded }) => {
@@ -128,18 +129,20 @@ ListViewItemContainer.defaultProps = {
   expanded: false
 };
 
-export const ListViewCheckbox = ({ disabled, name }) => (
+export const ListViewCheckbox = props => (
   <div className="list-view-pf-checkbox">
     <Field
-      name={name}
+      data-automation={props['data-automation']}
+      name={props['name']}
       type="checkbox"
       component="input"
-      disabled={disabled}
+      disabled={props['disabled']}
       onClick={e => e.stopPropagation()}
     />
   </div>
 );
 ListViewCheckbox.propTypes = {
+  'data-automation': PropTypes.string,
   disabled: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired
 };
@@ -147,18 +150,22 @@ ListViewCheckbox.defaultProps = {
   disabled: false
 };
 
-export const ListViewExpand = ({ expanded }) => {
+export const ListViewExpand = props => {
   const classes = ClassNames({
     'fa fa-angle-right': true,
-    'fa-angle-down': expanded
+    'fa-angle-down': props['expanded']
   });
   return (
-    <a className="list-view-pf-expand">
+    <a
+      className="list-view-pf-expand"
+      data-automatin={props['data-automation']}
+    >
       <span className={classes} />
     </a>
   );
 };
 ListViewExpand.propTypes = {
+  'data-automation': PropTypes.string,
   expanded: PropTypes.bool.isRequired
 };
 ListViewExpand.defaultProps = {
@@ -218,12 +225,16 @@ ListViewDescription.propTypes = {
   children: PropTypes.node
 };
 
-export const ListViewDescriptionHeading = ({ children }) => (
-  <div className="list-group-item-heading">
-    {children}
+export const ListViewDescriptionHeading = props => (
+  <div
+    className="list-group-item-heading"
+    data-automation={props['data-automation']}
+  >
+    {props['children']}
   </div>
 );
 ListViewDescriptionHeading.propTypes = {
+  'data-automation': PropTypes.string,
   children: PropTypes.node
 };
 
@@ -245,11 +256,15 @@ ListViewAdditionalInfo.propTypes = {
   children: PropTypes.node
 };
 
-export const ListViewAdditionalInfoItem = ({ children }) => (
-  <div className="list-view-pf-additional-info-item">
-    {children}
+export const ListViewAdditionalInfoItem = props => (
+  <div
+    className="list-view-pf-additional-info-item"
+    data-automation={props['data-automation']}
+  >
+    {props['children']}
   </div>
 );
 ListViewAdditionalInfoItem.propTypes = {
+  'data-automation': PropTypes.string,
   children: PropTypes.node
 };

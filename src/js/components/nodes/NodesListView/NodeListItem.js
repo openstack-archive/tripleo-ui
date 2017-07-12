@@ -86,6 +86,7 @@ export default class NodeListItem extends React.Component {
 
   render() {
     const { fetchNodeIntrospectionData, node, inProgress } = this.props;
+    const nodeUUID = node.get('uuid');
 
     const iconClass = ClassNames({
       'pficon pficon-server': true,
@@ -94,15 +95,19 @@ export default class NodeListItem extends React.Component {
     return (
       <ListViewItem expanded={this.state.expanded} stacked>
         <ListViewItemHeader toggleExpanded={this.toggleExpanded.bind(this)}>
-          <ListViewExpand expanded={this.state.expanded} />
+          <ListViewExpand
+            expanded={this.state.expanded}
+            data-automation="NodeListItem__listViewExpand"
+          />
           <ListViewCheckbox
+            data-automation="NodeListItem__listViewCheckbox"
             disabled={inProgress}
-            name={`values.${node.get('uuid')}`}
+            name={`values.${nodeUUID}`}
           />
           {node.getIn(['introspectionStatus', 'state']) === 'finished' &&
             <ListViewActions>
-              <DropdownKebab id={`${node.get('uuid')}Actions`} pullRight>
-                <MenuItemLink to={`/nodes/${node.get('uuid')}/drives`}>
+              <DropdownKebab id={`${nodeUUID}Actions`} pullRight>
+                <MenuItemLink to={`/nodes/${nodeUUID}/drives`}>
                   <FormattedMessage {...messages.manageDrives} />
                 </MenuItemLink>
               </DropdownKebab>
@@ -113,8 +118,8 @@ export default class NodeListItem extends React.Component {
             </ListViewLeft>
             <ListViewBody>
               <ListViewDescription>
-                <ListViewDescriptionHeading>
-                  {node.get('name') || node.get('uuid')}
+                <ListViewDescriptionHeading data-automation="NodeListItem__nodeName">
+                  {node.get('name') || nodeUUID}
                 </ListViewDescriptionHeading>
                 <ListViewDescriptionText>
                   <NodePowerState
@@ -137,7 +142,7 @@ export default class NodeListItem extends React.Component {
                 </ListViewDescriptionText>
               </ListViewDescription>
               <ListViewAdditionalInfo>
-                <ListViewAdditionalInfoItem>
+                <ListViewAdditionalInfoItem data-automation="NodeListItem__nodeProfile">
                   <span className="pficon pficon-flavor" />
                   <FormattedMessage {...messages.profile} />
                   &nbsp;
@@ -145,7 +150,7 @@ export default class NodeListItem extends React.Component {
                     node.getIn(['properties', 'capabilities'])
                   ).profile || '-'}
                 </ListViewAdditionalInfoItem>
-                <ListViewAdditionalInfoItem>
+                <ListViewAdditionalInfoItem data-automation="NodeListItem__cpuCount">
                   <span className="pficon pficon-cpu" />
                   <strong>{node.getIn(['properties', 'cpus'], '-')}</strong>
                   &nbsp;
@@ -154,7 +159,7 @@ export default class NodeListItem extends React.Component {
                     values={{ cpuCores: node.getIn(['properties', 'cpus']) }}
                   />
                 </ListViewAdditionalInfoItem>
-                <ListViewAdditionalInfoItem>
+                <ListViewAdditionalInfoItem data-automation="NodeListItem__memorySize">
                   <span className="pficon pficon-memory" />
                   <strong>
                     {node.getIn(['properties', 'memory_mb'], '-')}
@@ -162,7 +167,7 @@ export default class NodeListItem extends React.Component {
                   &nbsp;
                   <FormattedMessage {...messages.ram} />
                 </ListViewAdditionalInfoItem>
-                <ListViewAdditionalInfoItem>
+                <ListViewAdditionalInfoItem data-automation="NodeListItem__diskSize">
                   <span className="fa fa-database" />
                   <strong>{node.getIn(['properties', 'local_gb'], '-')}</strong>
                   &nbsp;

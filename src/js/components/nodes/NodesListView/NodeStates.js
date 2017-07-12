@@ -61,7 +61,7 @@ const messages = defineMessages({
 export const NodeMaintenanceState = ({ maintenance, reason }) => {
   if (maintenance) {
     return (
-      <span title={reason}>
+      <span title={reason} data-automation="NodeStates__maintenanceState">
         {' | '}
         <span className="pficon pficon-warning-triangle-o" />
         &nbsp;
@@ -83,7 +83,7 @@ export const NodeProvisionState = ({
   provisionState,
   targetProvisionState
 }) => (
-  <span>
+  <span data-automation="NodeStates__provisionState">
     <strong><FormattedMessage {...messages.provisionState} /></strong>&nbsp;
     {targetProvisionState
       ? <span>
@@ -104,7 +104,7 @@ NodeProvisionState.propTypes = {
 export const NodeIntrospectionStatus = ({
   status: { finished, state, error }
 }) => (
-  <span title={error}>
+  <span title={error} data-automation="NodeStates__introspectionStatus">
     <strong><FormattedMessage {...messages.introspectionState} /></strong>&nbsp;
     {state}
   </span>
@@ -123,7 +123,7 @@ export class NodePowerState extends React.Component {
       'text-danger': powerState === 'power off'
     });
     return (
-      <span>
+      <span data-automation="NodeStates__powerState">
         <span className={iconClass} title="Power state" />
         &nbsp;
         <FormattedMessage {...messages[message]} />
