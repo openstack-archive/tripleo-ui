@@ -91,19 +91,22 @@ class NodesToolbarActions extends React.Component {
           }
         >
           <Button
+            id="NodesToolbarActions_introspectNodesAction"
             disabled={this.props.disabled}
             onClick={this.submitForm.bind(this, 'introspect')}
           >
             <FormattedMessage {...messages.introspectNodes} />
           </Button>
           <Button
+            id="NodesToolbarActions_provideNodesAction"
             disabled={this.props.disabled}
             onClick={this.submitForm.bind(this, 'provide')}
           >
             <FormattedMessage {...messages.provideNodes} />
           </Button>
-          <DropdownKebab id="nodesActionsKebab" pullRight>
+          <DropdownKebab id="NodesToolbarActions_nodesActionsKebab" pullRight>
             <MenuItem
+              id="NodesToolbarActions_tagNodesAction"
               disabled={this.props.disabled}
               onClick={this.submitForm.bind(this, 'manage')}
             >
@@ -116,6 +119,7 @@ class NodesToolbarActions extends React.Component {
               <FormattedMessage {...messages.tagNodes} />
             </MenuItem>
             <MenuItem
+              id="NodesToolbarActions_deleteNodesAction"
               className="bg-danger"
               disabled={this.props.disabled}
               onClick={() => this.setState({ showDeleteModal: true })}
