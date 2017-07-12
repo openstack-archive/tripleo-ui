@@ -58,10 +58,10 @@ const messages = defineMessages({
   }
 });
 
-export const NodeMaintenanceState = ({ maintenance, reason }) => {
+export const NodeMaintenanceState = ({ maintenance, reason, ...rest }) => {
   if (maintenance) {
     return (
-      <span title={reason}>
+      <span title={reason} {...rest}>
         {' | '}
         <span className="pficon pficon-warning-triangle-o" />
         &nbsp;
@@ -81,9 +81,10 @@ NodeMaintenanceState.defaultProps = {
 
 export const NodeProvisionState = ({
   provisionState,
-  targetProvisionState
+  targetProvisionState,
+  ...rest
 }) => (
-  <span>
+  <span {...rest}>
     <strong><FormattedMessage {...messages.provisionState} /></strong>&nbsp;
     {targetProvisionState
       ? <span>
@@ -102,9 +103,10 @@ NodeProvisionState.propTypes = {
 };
 
 export const NodeIntrospectionStatus = ({
-  status: { finished, state, error }
+  status: { finished, state, error },
+  ...rest
 }) => (
-  <span title={error}>
+  <span title={error} {...rest}>
     <strong><FormattedMessage {...messages.introspectionState} /></strong>&nbsp;
     {state}
   </span>
@@ -115,7 +117,7 @@ NodeIntrospectionStatus.propTypes = {
 
 export class NodePowerState extends React.Component {
   renderPowerState(message) {
-    const { powerState, targetPowerState } = this.props;
+    const { powerState, targetPowerState, ...rest } = this.props;
     const iconClass = ClassNames({
       'fa fa-power-off': true,
       'text-warning': targetPowerState,
@@ -123,7 +125,7 @@ export class NodePowerState extends React.Component {
       'text-danger': powerState === 'power off'
     });
     return (
-      <span>
+      <span {...rest}>
         <span className={iconClass} title="Power state" />
         &nbsp;
         <FormattedMessage {...messages[message]} />

@@ -24,7 +24,7 @@ import NodeListItem from './NodeListItem';
 export default class NodesListView extends React.Component {
   render() {
     return (
-      <ListView>
+      <ListView id="NodesListView_listView">
         {this.props.nodes
           .toList()
           .map(node => (
