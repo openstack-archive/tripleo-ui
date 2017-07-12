@@ -143,7 +143,7 @@ class NodeExtendedInfo extends React.Component {
       !bios.isEmpty() &&
       <div>
         <dt><FormattedMessage {...messages.bios} /></dt>
-        <dd>
+        <dd className="NodeExtendedInfo__bios">
           {bios
             .map((i, k) => <span key={k} title={startCase(k)}>{i} </span>)
             .toList()}
@@ -158,7 +158,7 @@ class NodeExtendedInfo extends React.Component {
       rootDisk &&
       <div>
         <dt><FormattedMessage {...messages.rootDisk} /></dt>
-        <dd>{rootDisk}</dd>
+        <dd className="NodeExtendedInfo__rootDisk">{rootDisk}</dd>
       </div>
     );
   }
@@ -170,15 +170,24 @@ class NodeExtendedInfo extends React.Component {
       <div>
         <dt><FormattedMessage {...messages.product} /></dt>
         <dd>
-          <span title={this.props.intl.formatMessage(messages.productName)}>
+          <span
+            className="NodeExtendedInfo__productName"
+            title={this.props.intl.formatMessage(messages.productName)}
+          >
             {product.get('name')}
           </span>
           {' '} - {' '}
-          <span title={this.props.intl.formatMessage(messages.productVendor)}>
+          <span
+            className="NodeExtendedInfo__productVendor"
+            title={this.props.intl.formatMessage(messages.productVendor)}
+          >
             {product.get('vendor')}
           </span>
           {' '} | {' '}
-          <span title={this.props.intl.formatMessage(messages.productVersion)}>
+          <span
+            className="NodeExtendedInfo__productVersion"
+            title={this.props.intl.formatMessage(messages.productVersion)}
+          >
             {product.get('version')}
           </span>
         </dd>
@@ -195,7 +204,9 @@ class NodeExtendedInfo extends React.Component {
       kernelVersion &&
       <div>
         <dt><FormattedMessage {...messages.kernel} /></dt>
-        <dd>{kernelVersion}</dd>
+        <dd className="NodeExtendedInfo__kernelVersion">
+          {kernelVersion}
+        </dd>
       </div>
     );
   }
@@ -203,19 +214,21 @@ class NodeExtendedInfo extends React.Component {
   render() {
     const { node } = this.props;
     return (
-      <Row>
+      <Row className="NodeExtendedInfo__extendedInfoRow">
         <Col lg={4} md={6}>
           <dl className="dl-horizontal dl-horizontal-condensed">
             <dt><FormattedMessage {...messages.uuid} /></dt>
-            <dd>{node.get('uuid')}</dd>
+            <dd className="NodeExtendedInfo__uuid">{node.get('uuid')}</dd>
             <dt><FormattedMessage {...messages.registered} /></dt>
-            <dd>
+            <dd className="NodeExtendedInfo__registered">
               <FormattedDate value={node.get('created_at')} />
               &nbsp;
               <FormattedTime value={node.get('created_at')} />
             </dd>
             <dt><FormattedMessage {...messages.architecture} /></dt>
-            <dd>{node.getIn(['properties', 'cpu_arch'])}</dd>
+            <dd className="NodeExtendedInfo__architecture">
+              {node.getIn(['properties', 'cpu_arch'])}
+            </dd>
             {this.renderRootDisk()}
             {this.renderBios()}
             {this.renderProduct()}
@@ -225,13 +238,15 @@ class NodeExtendedInfo extends React.Component {
         <Col lg={4} md={6}>
           <dl className="dl-horizontal dl-horizontal-condensed">
             <dt><FormattedMessage {...messages.driver} /></dt>
-            <dd>{node.get('driver')}</dd>
+            <dd className="NodeExtendedInfo__driver">
+              {node.get('driver')}
+            </dd>
             {node
               .get('driver_info')
               .map((dInfo, key) => (
                 <span key={key}>
                   <dt>{startCase(key)}:</dt>
-                  <dd>{dInfo}</dd>
+                  <dd className={`NodeExtendedInfo__${key}`}>{dInfo}</dd>
                 </span>
               ))
               .toList()}

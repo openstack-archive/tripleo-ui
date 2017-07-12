@@ -66,29 +66,31 @@ import PropTypes from 'prop-types';
 </ListView>
 */
 
-export const ListView = ({ children }) => (
-  <div className="list-group list-view-pf list-view-pf-view">
+export const ListView = ({ children, id }) => (
+  <div className="list-group list-view-pf list-view-pf-view" id={id}>
     {children}
   </div>
 );
 ListView.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  id: PropTypes.string
 };
 
-export const ListViewItem = ({ children, stacked, expanded }) => {
+export const ListViewItem = ({ children, stacked, expanded, className }) => {
   const classes = ClassNames({
     'list-group-item': true,
     'list-view-pf-expand-active': expanded,
     'list-view-pf-stacked': stacked
   });
   return (
-    <div className={classes}>
+    <div className={classes + ' ' + className}>
       {children}
     </div>
   );
 };
 ListViewItem.propTypes = {
   children: PropTypes.node,
+  className: PropTypes.string,
   expanded: PropTypes.bool.isRequired,
   stacked: PropTypes.bool.isRequired
 };
@@ -144,8 +146,8 @@ ListViewItemContainer.defaultProps = {
   expanded: false
 };
 
-export const ListViewCheckbox = ({ disabled, name }) => (
-  <div className="list-view-pf-checkbox">
+export const ListViewCheckbox = ({ disabled, name, className }) => (
+  <div className={`list-view-pf-checkbox ` + className}>
     <Field
       name={name}
       type="checkbox"
@@ -156,6 +158,7 @@ export const ListViewCheckbox = ({ disabled, name }) => (
   </div>
 );
 ListViewCheckbox.propTypes = {
+  className: PropTypes.string,
   disabled: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired
 };
@@ -163,18 +166,19 @@ ListViewCheckbox.defaultProps = {
   disabled: false
 };
 
-export const ListViewExpand = ({ expanded }) => {
+export const ListViewExpand = ({ expanded, className }) => {
   const classes = ClassNames({
     'fa fa-angle-right': true,
     'fa-angle-down': expanded
   });
   return (
     <a className="list-view-pf-expand">
-      <span className={classes} />
+      <span className={classes + ' ' + className} />
     </a>
   );
 };
 ListViewExpand.propTypes = {
+  className: PropTypes.string,
   expanded: PropTypes.bool.isRequired
 };
 ListViewExpand.defaultProps = {
@@ -234,13 +238,14 @@ ListViewDescription.propTypes = {
   children: PropTypes.node
 };
 
-export const ListViewDescriptionHeading = ({ children }) => (
-  <div className="list-group-item-heading">
+export const ListViewDescriptionHeading = ({ children, className }) => (
+  <div className={`list-group-item-heading ` + className}>
     {children}
   </div>
 );
 ListViewDescriptionHeading.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  className: PropTypes.string
 };
 
 export const ListViewDescriptionText = ({ children }) => (
@@ -261,11 +266,12 @@ ListViewAdditionalInfo.propTypes = {
   children: PropTypes.node
 };
 
-export const ListViewAdditionalInfoItem = ({ children }) => (
-  <div className="list-view-pf-additional-info-item">
+export const ListViewAdditionalInfoItem = ({ children, className }) => (
+  <div className={`list-view-pf-additional-info-item ` + className}>
     {children}
   </div>
 );
 ListViewAdditionalInfoItem.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  className: PropTypes.string
 };

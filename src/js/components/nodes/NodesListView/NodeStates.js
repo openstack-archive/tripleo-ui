@@ -58,10 +58,10 @@ const messages = defineMessages({
   }
 });
 
-export const NodeMaintenanceState = ({ maintenance, reason }) => {
+export const NodeMaintenanceState = ({ maintenance, reason, className }) => {
   if (maintenance) {
     return (
-      <span title={reason}>
+      <span title={reason} className={className}>
         {' | '}
         <span className="pficon pficon-warning-triangle-o" />
         &nbsp;
@@ -72,6 +72,7 @@ export const NodeMaintenanceState = ({ maintenance, reason }) => {
   return null;
 };
 NodeMaintenanceState.propTypes = {
+  className: PropTypes.string,
   maintenance: PropTypes.bool.isRequired,
   reason: PropTypes.string
 };
@@ -81,9 +82,10 @@ NodeMaintenanceState.defaultProps = {
 
 export const NodeProvisionState = ({
   provisionState,
-  targetProvisionState
+  targetProvisionState,
+  className
 }) => (
-  <span>
+  <span className={className}>
     <strong><FormattedMessage {...messages.provisionState} /></strong>&nbsp;
     {targetProvisionState
       ? <span>
@@ -97,25 +99,28 @@ export const NodeProvisionState = ({
   </span>
 );
 NodeProvisionState.propTypes = {
+  className: PropTypes.string,
   provisionState: PropTypes.string.isRequired,
   targetProvisionState: PropTypes.string
 };
 
 export const NodeIntrospectionStatus = ({
-  status: { finished, state, error }
+  status: { finished, state, error },
+  className
 }) => (
-  <span title={error}>
+  <span title={error} className={className}>
     <strong><FormattedMessage {...messages.introspectionState} /></strong>&nbsp;
     {state}
   </span>
 );
 NodeIntrospectionStatus.propTypes = {
+  className: PropTypes.string,
   status: PropTypes.object.isRequired
 };
 
 export class NodePowerState extends React.Component {
   renderPowerState(message) {
-    const { powerState, targetPowerState } = this.props;
+    const { powerState, targetPowerState, className } = this.props;
     const iconClass = ClassNames({
       'fa fa-power-off': true,
       'text-warning': targetPowerState,
@@ -123,7 +128,7 @@ export class NodePowerState extends React.Component {
       'text-danger': powerState === 'power off'
     });
     return (
-      <span>
+      <span className={className}>
         <span className={iconClass} title="Power state" />
         &nbsp;
         <FormattedMessage {...messages[message]} />
@@ -149,6 +154,7 @@ export class NodePowerState extends React.Component {
   }
 }
 NodePowerState.propTypes = {
+  className: PropTypes.string,
   powerState: PropTypes.string,
   targetPowerState: PropTypes.string
 };

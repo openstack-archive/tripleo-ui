@@ -84,6 +84,7 @@ class ValidationsToolbar extends React.Component {
         <Toolbar tableView>
           <ToolbarActions>
             <ToolbarFiltersForm
+              id="ValidationsToolbar_validationsToolbarFiltersForm"
               form="validationsToolbarFilter"
               formatSelectValue={value => intl.formatMessage(messages[value])}
               initialValues={{ filterBy: 'name' }}
