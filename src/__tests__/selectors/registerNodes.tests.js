@@ -28,14 +28,14 @@ describe('registerNodes selectors', () => {
           uuid: 1,
           name: 'Undefined Node',
           mac: List(),
-          pm_type: 'pxe_ssh',
+          pm_type: 'pxe_ipmitool',
           valid: false
         }),
         2: new NodeToRegister({
           uuid: 2,
           name: 'Undefined Node',
           mac: List(),
-          pm_type: 'pxe_ssh',
+          pm_type: 'pxe_ipmitool',
           valid: false
         })
       })
@@ -52,7 +52,7 @@ describe('registerNodes selectors', () => {
         uuid: 1,
         name: 'Undefined Node',
         mac: List(),
-        pm_type: 'pxe_ssh',
+        pm_type: 'pxe_ipmitool',
         pm_user: undefined,
         pm_addr: undefined,
         pm_password: undefined,
@@ -65,7 +65,7 @@ describe('registerNodes selectors', () => {
         uuid: 2,
         name: 'Undefined Node',
         mac: List(),
-        pm_type: 'pxe_ssh',
+        pm_type: 'pxe_ipmitool',
         pm_user: undefined,
         pm_addr: undefined,
         pm_password: undefined,
