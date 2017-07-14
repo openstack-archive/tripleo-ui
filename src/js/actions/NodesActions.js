@@ -224,16 +224,13 @@ export default {
           break;
         }
         case 'FAILED': {
-          let message = messagePayload.message
-            .map(msg => msg.message)
-            .join(', ');
           dispatch(
             NotificationActions.notify({
               type: 'error',
               title: formatMessage(
                 messages.introspectionFailedNotificationTitle
               ),
-              message
+              message: messagePayload.message.map(m => m.message)
             })
           );
           break;
@@ -318,15 +315,13 @@ export default {
           break;
         }
         case 'FAILED': {
-          messagePayload.message.map(message => {
-            dispatch(
-              NotificationActions.notify({
-                type: 'error',
-                title: 'Error',
-                message: message.result
-              })
-            );
-          });
+          dispatch(
+            NotificationActions.notify({
+              type: 'error',
+              title: 'Error',
+              message: messagePayload.message.map(message => message.result)
+            })
+          );
           break;
         }
         default:
@@ -385,15 +380,13 @@ export default {
           break;
         }
         case 'FAILED': {
-          messagePayload.message.map(message => {
-            dispatch(
-              NotificationActions.notify({
-                type: 'error',
-                title: 'Error',
-                message: message.result
-              })
-            );
-          });
+          dispatch(
+            NotificationActions.notify({
+              type: 'error',
+              title: 'Error',
+              message: messagePayload.message.map(message => message.result)
+            })
+          );
           break;
         }
         default:

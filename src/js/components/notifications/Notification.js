@@ -56,6 +56,18 @@ export default class Notification extends React.Component {
     }
   }
 
+  renderMessage(message) {
+    if (typeof message === 'object') {
+      return (
+        <ul>
+          {message.map((msg, i) => <li key={i}>{msg}</li>)}
+        </ul>
+      );
+    } else {
+      return <p>{message}</p>;
+    }
+  }
+
   render() {
     let classes = ClassNames({
       'toast-pf alert pull-right': true,
@@ -89,7 +101,7 @@ export default class Notification extends React.Component {
               </button>
             : false}
           <strong>{this.props.title}</strong>
-          <p>{this.props.message}</p>
+          {this.renderMessage(this.props.message)}
         </div>
       </div>
     );
@@ -98,7 +110,10 @@ export default class Notification extends React.Component {
 
 Notification.propTypes = {
   dismissable: PropTypes.bool.isRequired,
-  message: PropTypes.string.isRequired,
+  message: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string)
+  ]).isRequired,
   removeNotification: PropTypes.func,
   timeoutable: PropTypes.bool.isRequired,
   timerPaused: PropTypes.bool,
