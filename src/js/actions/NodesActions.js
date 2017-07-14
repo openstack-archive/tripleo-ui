@@ -224,13 +224,16 @@ export default {
           break;
         }
         case 'FAILED': {
+          let message = messagePayload.message
+            .map(msg => msg.message)
+            .join(', ');
           dispatch(
             NotificationActions.notify({
               type: 'error',
               title: formatMessage(
                 messages.introspectionFailedNotificationTitle
               ),
-              message: messagePayload.message.join(', ')
+              message
             })
           );
           break;
