@@ -349,7 +349,10 @@ describe('nodesIntrospectionFinished', () => {
     expect(NotificationActions.notify).toHaveBeenCalledWith({
       type: 'error',
       title: 'Nodes Introspection Failed',
-      message: 'Nodes Introspection failed, Some error occurred during introspection'
+      message: [
+        'Nodes Introspection failed',
+        'Some error occurred during introspection'
+      ]
     });
   });
 });
@@ -417,7 +420,7 @@ describe('provideNodesFinished', () => {
     expect(NotificationActions.notify).toHaveBeenCalledWith({
       type: 'error',
       title: 'Error',
-      message: 'Failed to set nodes to available.'
+      message: ['Failed to set nodes to available.']
     });
   });
 });
