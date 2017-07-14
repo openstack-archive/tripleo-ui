@@ -20,7 +20,7 @@ import { List } from 'immutable';
 const topics = state => state.environmentConfiguration.topics;
 const environmentGroups = state =>
   state.environmentConfiguration.environmentGroups;
-const environments = state =>
+export const getEnvironments = state =>
   state.environmentConfiguration.environments.sortBy(e =>
     e.title.toLowerCase()
   );
@@ -29,7 +29,7 @@ export const getEnvironment = (state, environmentFileName) =>
   state.environmentConfiguration.environments.get(environmentFileName);
 
 export const getEnabledEnvironments = createSelector(
-  environments,
+  getEnvironments,
   environments => {
     return environments.filter(environment => environment.get('enabled'));
   }
@@ -49,7 +49,7 @@ export const getEnvironmentConfigurationSummary = createSelector(
  * Returns Map of Topics with nested Environment Groups and Environments
  */
 export const getTopicsTree = createSelector(
-  [topics, environmentGroups, environments],
+  [topics, environmentGroups, getEnvironments],
   (topics, environmentGroups, environments) => {
     return topics.map(topic => {
       return topic.update('environment_groups', envGroups => {

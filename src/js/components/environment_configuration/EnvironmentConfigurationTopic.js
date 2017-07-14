@@ -30,19 +30,24 @@ export default class EnvironmentConfigurationTopic extends React.Component {
             key={index}
             title={envGroup.get('title')}
             description={envGroup.get('description')}
+            allEnvironments={this.props.allEnvironments}
             environments={envGroup.get('environments')}
+            mutuallyExclusive={envGroup.get('mutually_exclusive')}
           />
         );
       });
 
+    const { description } = this.props;
     return (
       <fieldset className="environment-topic">
+        {description && <p><i>{description}</i></p>}
         {environmentGroups}
       </fieldset>
     );
   }
 }
 EnvironmentConfigurationTopic.propTypes = {
+  allEnvironments: ImmutablePropTypes.map.isRequired,
   description: PropTypes.string,
   environmentGroups: ImmutablePropTypes.list,
   title: PropTypes.string.isRequired

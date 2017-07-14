@@ -42,6 +42,6 @@ describe('EnvironmentConfigurationTopic component', () => {
   it('should render list of EnvironmentGroups in fieldset', () => {
     expect(EnvConfTopicVdom.type).toEqual('fieldset');
     expect(EnvConfTopicVdom.props.className).toContain('environment-topic');
-    expect(EnvConfTopicVdom.props.children.size).toEqual(2);
+    expect(EnvConfTopicVdom.props.children.length).toEqual(2);
   });
 });
