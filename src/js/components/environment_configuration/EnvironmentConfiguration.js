@@ -28,7 +28,10 @@ import EnvironmentConfigurationActions
 import EnvironmentConfigurationTopic from './EnvironmentConfigurationTopic';
 import { getCurrentPlanName } from '../../selectors/plans';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
-import { getTopicsTree } from '../../selectors/environmentConfiguration';
+import {
+  getEnvironments,
+  getTopicsTree
+} from '../../selectors/environmentConfiguration';
 import Loader from '../ui/Loader';
 import Tab from '../ui/Tab';
 import TabPane from '../ui/TabPane';
@@ -153,6 +156,7 @@ class EnvironmentConfiguration extends React.Component {
               key={index}
               title={topic.get('title')}
               description={topic.get('description')}
+              allEnvironments={this.props.allEnvironments}
               environmentGroups={topic.get('environment_groups')}
             />
           </TabPane>
@@ -231,6 +235,7 @@ class EnvironmentConfiguration extends React.Component {
   }
 }
 EnvironmentConfiguration.propTypes = {
+  allEnvironments: ImmutablePropTypes.map.isRequired,
   currentPlanName: PropTypes.string,
   environmentConfigurationTopics: ImmutablePropTypes.map.isRequired,
   fetchEnvironment: PropTypes.func,
@@ -246,6 +251,7 @@ EnvironmentConfiguration.propTypes = {
 function mapStateToProps(state) {
   return {
     currentPlanName: getCurrentPlanName(state),
+    allEnvironments: getEnvironments(state),
     environmentConfigurationTopics: getTopicsTree(state),
     formErrors: state.environmentConfiguration.getIn(['form', 'formErrors']),
     formFieldErrors: state.environmentConfiguration.getIn([

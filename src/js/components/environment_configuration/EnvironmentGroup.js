@@ -25,7 +25,7 @@ import GroupedCheckBox from '../ui/forms/GroupedCheckBox';
 const messages = defineMessages({
   requiredEnvironments: {
     id: 'EnvironmentGroup.requiredEnvironments',
-    defaultMessage: 'This environment requires {requiredEnvironments}.'
+    defaultMessage: 'This option requires {requiredEnvironments} to be enabled.'
   }
 });
 
@@ -52,56 +52,62 @@ class EnvironmentGroup extends React.Component {
     this.setState({ checkedEnvironment: checked ? environmentFile : null });
   }
 
-  _generateInputs() {
-    const { environments } = this.props;
-    const { formatMessage } = this.props.intl;
+  getRequiredEnvironmentsNames(environment) {
+    return environment.requires
+      .map(env => this.props.allEnvironments.getIn([env, 'title'], env))
+      .toArray();
+  }
 
-    if (environments.size > 1) {
-      return environments.toList().map((environment, index) => {
-        let checkBoxValue =
-          this.state.checkedEnvironment === environment.get('file');
-        let requiredEnvironments = environment.get('requires')
-          ? environment.get('requires').toArray()
-          : undefined;
+  generateInputs() {
+    const {
+      environments,
+      intl: { formatMessage },
+      mutuallyExclusive
+    } = this.props;
+
+    return environments.toList().map((environment, index) => {
+      const requiredEnvironments = environment.requires.toArray();
+      const requiredEnvironmentNames = this.getRequiredEnvironmentsNames(
+        environment
+      );
+      if (mutuallyExclusive) {
+        let checkBoxValue = this.state.checkedEnvironment === environment.file;
         return (
           <GroupedCheckBox
-            key={index}
-            name={environment.get('file')}
-            id={environment.get('file')}
-            title={environment.get('title')}
+            key={environment.file}
+            name={environment.file}
+            id={environment.file}
+            title={environment.title}
             value={checkBoxValue}
             validations={{ requiredEnvironments: requiredEnvironments }}
             validationError={formatMessage(messages.requiredEnvironments, {
-              requiredEnvironments: requiredEnvironments
+              requiredEnvironments: requiredEnvironmentNames
             })}
             onChange={this.onGroupedCheckBoxChange.bind(this)}
-            description={environment.get('description')}
+            description={environment.description}
           />
         );
-      });
-    } else if (environments.size === 1) {
-      let environment = environments.first();
-      let requiredEnvironments = environment.get('requires')
-        ? environment.get('requires').toArray()
-        : undefined;
-      return (
-        <GenericCheckBox
-          name={environment.get('file')}
-          id={environment.get('file')}
-          title={environment.get('title')}
-          value={environment.get('enabled') || false}
-          validations={{ requiredEnvironments: requiredEnvironments }}
-          validationError={formatMessage(messages.requiredEnvironments, {
-            requiredEnvironments: requiredEnvironments
-          })}
-          description={environment.get('description')}
-        />
-      );
-    }
+      } else {
+        return (
+          <GenericCheckBox
+            key={environment.file}
+            name={environment.file}
+            id={environment.file}
+            title={environment.title}
+            value={environment.get('enabled', false)}
+            validations={{ requiredEnvironments: requiredEnvironments }}
+            validationError={formatMessage(messages.requiredEnvironments, {
+              requiredEnvironments: requiredEnvironmentNames
+            })}
+            description={environment.description}
+          />
+        );
+      }
+    });
   }
 
   render() {
-    let environments = this._generateInputs();
+    let environments = this.generateInputs();
 
     return (
       <div className="environment-group">
@@ -115,10 +121,15 @@ class EnvironmentGroup extends React.Component {
   }
 }
 EnvironmentGroup.propTypes = {
+  allEnvironments: ImmutablePropTypes.map.isRequired,
   description: PropTypes.string,
   environments: ImmutablePropTypes.map,
   intl: PropTypes.object,
+  mutuallyExclusive: PropTypes.bool.isRequired,
   title: PropTypes.string
+};
+EnvironmentGroup.defaultProps = {
+  mutuallyExclusive: false
 };
 
 export default injectIntl(EnvironmentGroup);
