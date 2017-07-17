@@ -90,7 +90,7 @@ const messages = defineMessages({
   },
   macAddressesDescription: {
     id: 'RegisterNodeForm.macAddressesDescription',
-    defaultMessage: 'Comma separated list of MAC Addresses'
+    defaultMessage: 'If you are specifying multiple MAC Addresses, please enter a comma separated list. (e.g. aa:bb:cc:dd:ee:ff,12:34:56:78:90:xx,do:re:mi:fa:so:ra)'
   }
 });
 
