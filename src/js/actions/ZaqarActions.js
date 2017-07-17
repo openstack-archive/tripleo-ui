@@ -46,6 +46,10 @@ export default {
           dispatch(NodesActions.provideNodesFinished(payload));
           break;
 
+        case MistralConstants.BAREMETAL_MANAGE:
+          dispatch(NodesActions.manageNodesFinished(payload));
+          break;
+
         case MistralConstants.VALIDATIONS_RUN: {
           dispatch(ValidationsActions.runValidationMessage(payload));
           break;
