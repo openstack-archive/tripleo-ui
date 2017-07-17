@@ -22,9 +22,9 @@ import React from 'react';
 import Dropdown from '../ui/dropdown/Dropdown';
 import DropdownToggle from '../ui/dropdown/DropdownToggle';
 import DropdownItem from '../ui/dropdown/DropdownItem';
-import { getEnabledLanguages } from '../../services/utils';
 import I18nActions from '../../actions/I18nActions';
 import { MESSAGES } from './messages';
+import { getEnabledLanguages } from '../../services/utils';
 
 const messages = defineMessages({
   language: {
@@ -35,25 +35,21 @@ const messages = defineMessages({
 
 class I18nDropdown extends React.Component {
   _renderDropdownItems() {
-    const configLanguages = getEnabledLanguages();
-    const langList = Object.keys(configLanguages).sort(
-      (a, b) => configLanguages[a] > configLanguages[b]
-    );
-
     const enabledLang = this.props.language;
-
-    return langList.map(lang => {
-      const active = enabledLang === lang;
-      return MESSAGES[lang] || lang === 'en'
-        ? <DropdownItem
-            key={`lang-${lang}`}
-            active={active}
-            onClick={this.props.chooseLanguage.bind(this, lang)}
-          >
-            {configLanguages[lang]}
-          </DropdownItem>
-        : null;
-    });
+    return getEnabledLanguages()
+      .map((langName, langKey) => {
+        const active = enabledLang === langKey;
+        return MESSAGES[langKey] || langKey === 'en'
+          ? <DropdownItem
+              key={`lang-${langKey}`}
+              active={active}
+              onClick={this.props.chooseLanguage.bind(this, langKey)}
+            >
+              {langName}
+            </DropdownItem>
+          : null;
+      })
+      .toList();
   }
 
   render() {

@@ -23,14 +23,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Redirect } from 'react-router-dom';
 
-import FormErrorList from './ui/forms/FormErrorList';
-import Loader from './ui/Loader';
-import LoginInput from './ui/forms/LoginInput';
-import LoginActions from '../actions/LoginActions';
-import NotificationsToaster from './notifications/NotificationsToaster';
+import FormErrorList from '../ui/forms/FormErrorList';
+import I18nActions from '../../actions/I18nActions';
+import Loader from '../ui/Loader';
+import LoginInput from '../ui/forms/LoginInput';
+import LanguageInput from './LanguageInput';
+import LoginActions from '../../actions/LoginActions';
+import NotificationsToaster from '../notifications/NotificationsToaster';
 
-import LogoSvg from '../../img/logo.svg';
-import TripleoOwlSvg from '../../img/tripleo-owl.svg';
+import LogoSvg from '../../../img/logo.svg';
+import TripleoOwlSvg from '../../../img/tripleo-owl.svg';
 
 const messages = defineMessages({
   authenticating: {
@@ -103,7 +105,7 @@ class Login extends React.Component {
 
   handleLogin(formData, resetForm, invalidateForm) {
     const formFields = Object.keys(this.refs.form.inputs);
-    this.props.dispatch(LoginActions.authenticateUser(formData, formFields));
+    this.props.authenticateUser(formData, formFields);
   }
 
   render() {
@@ -143,6 +145,11 @@ class Login extends React.Component {
                   onValid={this._enableButton.bind(this)}
                   onInvalid={this._disableButton.bind(this)}
                 >
+                  <LanguageInput
+                    name="language"
+                    chooseLanguage={this.props.chooseLanguage}
+                    language={this.props.language}
+                  />
                   <LoginInput
                     name="username"
                     placeholder={formatMessage(messages.username)}
@@ -192,13 +199,16 @@ class Login extends React.Component {
   }
 }
 Login.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  authenticateUser: PropTypes.func.isRequired,
+  chooseLanguage: PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
   intl: PropTypes.object,
   isAuthenticated: PropTypes.bool.isRequired,
   isAuthenticating: PropTypes.bool.isRequired,
-  location: PropTypes.object
+  language: PropTypes.string,
+  location: PropTypes.object,
+  userLoggedIn: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
@@ -206,8 +216,18 @@ function mapStateToProps(state) {
     formErrors: state.login.getIn(['loginForm', 'formErrors']),
     formFieldErrors: state.login.getIn(['loginForm', 'formFieldErrors']),
     isAuthenticated: state.login.isAuthenticated,
-    isAuthenticating: state.login.isAuthenticating
+    isAuthenticating: state.login.get('isAuthenticating'),
+    language: state.i18n.get('language', 'en'),
+    userLoggedIn: state.login.hasIn(['keystoneAccess', 'user'])
   };
 }
 
-export default injectIntl(connect(mapStateToProps)(Login));
+const mapDispatchToProps = dispatch => {
+  return {
+    chooseLanguage: language => dispatch(I18nActions.chooseLanguage(language)),
+    authenticateUser: (formData, formFields, nextPath) =>
+      dispatch(LoginActions.authenticateUser(formData, formFields, nextPath))
+  };
+};
+
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Login));
