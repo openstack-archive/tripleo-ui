@@ -204,7 +204,6 @@
         "RegisterNodeForm.driver": "S\u00fcr\u00fcc\u00fc",
         "RegisterNodeForm.enterValidMacAddress": "L\u00fctfen ge\u00e7erli bir MAC Adresi girin.",
         "RegisterNodeForm.hardware": "Donan\u0131m",
-        "RegisterNodeForm.macAddressesDescription": "MAC Adreslerinin virg\u00fclle ayr\u0131lm\u0131\u015f listesi",
         "RegisterNodeForm.management": "Y\u00f6netim",
         "RegisterNodeForm.memoryMb": "Haf\u0131za (MB)",
         "RegisterNodeForm.name": "\u0130sim",

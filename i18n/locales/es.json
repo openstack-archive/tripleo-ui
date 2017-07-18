@@ -220,7 +220,6 @@
         "RegisterNodeForm.driver": "Controlador",
         "RegisterNodeForm.enterValidMacAddress": "Introduzca una direcci\u00f3n MAC v\u00e1lida.",
         "RegisterNodeForm.hardware": "Hardware",
-        "RegisterNodeForm.macAddressesDescription": "Lista de direcciones MAC separada por comas",
         "RegisterNodeForm.management": "Administraci\u00f3n",
         "RegisterNodeForm.memoryMb": "Memoria (MB)",
         "RegisterNodeForm.name": "Nombre",

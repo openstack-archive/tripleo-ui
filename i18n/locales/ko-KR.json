@@ -180,7 +180,6 @@
         "RegisterNodeForm.driver": "\ub4dc\ub77c\uc774\ubc84",
         "RegisterNodeForm.enterValidMacAddress": "\uc720\ud6a8\ud55c MAC \uc8fc\uc18c\ub97c \uc785\ub825\ud574 \uc8fc\uc138\uc694.",
         "RegisterNodeForm.hardware": "\ud558\ub4dc\uc6e8\uc5b4",
-        "RegisterNodeForm.macAddressesDescription": "\ucf64\ub9c8\ub85c \uad6c\ubd84\ub41c MAC \uc8fc\uc18c \ub9ac\uc2a4\ud2b8",
         "RegisterNodeForm.management": "\uad00\ub9ac",
         "RegisterNodeForm.memoryMb": "\uba54\ubaa8\ub9ac (MB)",
         "RegisterNodeForm.name": "\uc774\ub984",

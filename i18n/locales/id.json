@@ -221,7 +221,6 @@
         "RegisterNodeForm.driver": "Driver",
         "RegisterNodeForm.enterValidMacAddress": "Please enter (masukkan) MAC Address yang valid.",
         "RegisterNodeForm.hardware": "Hardware",
-        "RegisterNodeForm.macAddressesDescription": "Comma separated list of MAC Addresses",
         "RegisterNodeForm.management": "Management",
         "RegisterNodeForm.memoryMb": "Memory (MB)",
         "RegisterNodeForm.name": "Name",
