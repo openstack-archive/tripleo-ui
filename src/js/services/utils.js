@@ -52,7 +52,7 @@ function getFromServiceCatalog(serviceName, urlType) {
  * Returns Keystone Auth Token ID
  */
 export function getAuthTokenId() {
-  return store.getState().login.getIn(['token', 'id']);
+  return store.getState().login.tokenId;
 }
 
 export function getProjectId() {
