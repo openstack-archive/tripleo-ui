@@ -20,7 +20,6 @@ import when from 'when';
 
 import { getNodesByIds } from '../selectors/nodes';
 import { handleErrors } from './ErrorActions';
-import IronicApiErrorHandler from '../services/IronicApiErrorHandler';
 import IronicInspectorApiErrorHandler
   from '../services/IronicInspectorApiErrorHandler';
 import IronicApiService from '../services/IronicApiService';
@@ -108,15 +107,8 @@ export default {
           dispatch(this.receiveNodes({ nodes, ports, introspectionStatuses }));
         })
         .catch(error => {
+          dispatch(handleErrors(error, 'Nodes could not be loaded'));
           dispatch(this.receiveNodes({}));
-          logger.error(
-            'Error in NodesActions.fetchNodes',
-            error.stack || error
-          );
-          let errorHandler = new IronicApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
         });
     };
   },
@@ -351,15 +343,8 @@ export default {
           dispatch(this.updateNodeSuccess(response));
         })
         .catch(error => {
+          dispatch(handleErrors(error, 'Node could not be updated'));
           dispatch(this.updateNodeFailed(nodePatch.uuid));
-          logger.error(
-            'Error in NodesActions.UpdateNode',
-            error.stack || error
-          );
-          let errorHandler = new IronicApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
         });
     };
   },
@@ -394,15 +379,8 @@ export default {
             dispatch(this.deleteNodeSuccess(nodeId));
           })
           .catch(error => {
+            dispatch(handleErrors(error, 'Node could not be deleted'));
             dispatch(this.deleteNodeFailed(nodeId));
-            logger.error(
-              'Error in NodesActions.DeleteNodes',
-              error.stack || error
-            );
-            let errorHandler = new IronicApiErrorHandler(error);
-            errorHandler.errors.forEach(error => {
-              dispatch(NotificationActions.notify(error));
-            });
           });
       });
     };
