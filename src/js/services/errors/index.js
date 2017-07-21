@@ -65,6 +65,13 @@ class IronicInspectorApiError extends BaseAxiosError {
   }
 }
 
+class HeatApiError extends BaseAxiosError {
+  constructor(e) {
+    const { data } = e.response;
+    super(data.message || data.error.message, e);
+  }
+}
+
 export {
   BaseAxiosError,
   AuthenticationError,
@@ -73,5 +80,6 @@ export {
   MistralExecutionError,
   SwiftApiError,
   IronicApiError,
-  IronicInspectorApiError
+  IronicInspectorApiError,
+  HeatApiError
 };
