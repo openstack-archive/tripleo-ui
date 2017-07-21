@@ -16,11 +16,9 @@
 
 import { Map, fromJS } from 'immutable';
 
-import KeystoneApiErrorHandler from '../services/KeystoneApiErrorHandler';
 import KeystoneApiService from '../services/KeystoneApiService';
 import LoginConstants from '../constants/LoginConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
-import logger from '../services/logger';
 import cookie from 'react-cookie';
 
 export default {
@@ -28,19 +26,28 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.userAuthStarted());
       KeystoneApiService.authenticateUserViaToken(keystoneAuthTokenId)
-        .then(result => {
-          const tokenId = result.request.getResponseHeader('X-Subject-Token');
+        .then(response => {
+          const {
+            data: { token },
+            headers: { 'x-subject-token': tokenId }
+          } = response;
           cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
-          dispatch(this.userAuthSuccess(tokenId, result.response.token));
+          dispatch(this.userAuthSuccess(tokenId, token));
         })
         .catch(error => {
-          logger.error(
-            'Error in LoginActions.authenticateUserViaToken',
-            error.stack || error
+          dispatch(
+            this.userAuthFailure([
+              {
+                title: 'Unauthorized',
+                message: error.message
+              }
+            ])
           );
-          let errorHandler = new KeystoneApiErrorHandler(error);
-          cookie.remove('keystoneAuthTokenId');
-          dispatch(this.userAuthFailure(errorHandler.errors));
+          logger.error(
+            'Could not authenticate user via token',
+            error,
+            error.stack
+          );
         });
     };
   },
@@ -49,23 +56,24 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.userAuthStarted());
       KeystoneApiService.authenticateUser(formData.username, formData.password)
-        .then(result => {
-          const tokenId = result.request.getResponseHeader('X-Subject-Token');
+        .then(response => {
+          const {
+            data: { token },
+            headers: { 'x-subject-token': tokenId }
+          } = response;
           cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
-          dispatch(this.userAuthSuccess(tokenId, result.response.token));
+          dispatch(this.userAuthSuccess(tokenId, token));
         })
         .catch(error => {
-          logger.error(
-            'Error in LoginActions.authenticateUser',
-            error.stack || error
-          );
-          let errorHandler = new KeystoneApiErrorHandler(error, formFields);
           dispatch(
-            this.userAuthFailure(
-              errorHandler.errors,
-              errorHandler.formFieldErrors
-            )
+            this.userAuthFailure([
+              {
+                title: 'Unauthorized',
+                message: error.message
+              }
+            ])
           );
+          logger.error('Could not authenticate user', error, error.stack);
         });
     };
   },
