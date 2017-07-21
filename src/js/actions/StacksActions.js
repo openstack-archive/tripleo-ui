@@ -16,12 +16,10 @@
 
 import { normalize, arrayOf } from 'normalizr';
 
-import HeatApiErrorHandler from '../services/HeatApiErrorHandler';
+import { handleErrors } from './ErrorActions';
 import HeatApiService from '../services/HeatApiService';
-import NotificationActions from '../actions/NotificationActions';
 import StacksConstants from '../constants/StacksConstants';
 import { stackSchema, stackResourceSchema } from '../normalizrSchemas/stacks';
-import logger from '../services/logger';
 
 export default {
   fetchStacksPending() {
@@ -37,7 +35,7 @@ export default {
     };
   },
 
-  fetchStacksFailed(error) {
+  fetchStacksFailed() {
     return {
       type: StacksConstants.FETCH_STACKS_FAILED
     };
@@ -53,15 +51,8 @@ export default {
           dispatch(this.fetchStacksSuccess(stacks));
         })
         .catch(error => {
-          logger.error(
-            'Error retrieving stacks StackActions.fetchStacks',
-            error
-          );
-          let errorHandler = new HeatApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
-          dispatch(this.fetchStacksFailed(error));
+          dispatch(handleErrors(error, 'Stacks could not be loaded'));
+          dispatch(this.fetchStacksFailed());
         });
     };
   },
@@ -95,15 +86,8 @@ export default {
           dispatch(this.fetchResourcesSuccess(res));
         })
         .catch(error => {
-          logger.error(
-            'Error retrieving resources StackActions.fetchResources',
-            error
-          );
-          let errorHandler = new HeatApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
-          dispatch(this.fetchResourcesFailed(error));
+          dispatch(handleErrors(error, 'Stack Resources could not be loaded'));
+          dispatch(this.fetchResourcesFailed());
         });
     };
   },
@@ -136,14 +120,7 @@ export default {
           dispatch(this.fetchResourceSuccess(resource));
         })
         .catch(error => {
-          logger.error(
-            'Error retrieving resource StackActions.fetchResource',
-            error
-          );
-          let errorHandler = new HeatApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
+          dispatch(handleErrors(error, 'Stack Resource could not be loaded'));
           dispatch(this.fetchResourceFailed(resourceName));
         });
     };
@@ -152,28 +129,21 @@ export default {
   fetchEnvironmentSuccess(stack, environment) {
     return {
       type: StacksConstants.FETCH_STACK_ENVIRONMENT_SUCCESS,
-      payload: {
-        environment,
-        stack
-      }
+      payload: { environment, stack }
     };
   },
 
   fetchEnvironmentFailed(stack) {
     return {
       type: StacksConstants.FETCH_STACK_ENVIRONMENT_FAILED,
-      payload: {
-        stack
-      }
+      payload: { stack }
     };
   },
 
   fetchEnvironmentPending(stack) {
     return {
       type: StacksConstants.FETCH_STACK_ENVIRONMENT_PENDING,
-      payload: {
-        stack
-      }
+      payload: { stack }
     };
   },
 
@@ -185,15 +155,10 @@ export default {
           dispatch(this.fetchEnvironmentSuccess(stack, response));
         })
         .catch(error => {
-          logger.error(
-            'Error retrieving environment StackActions.fetchEnvironment',
-            error
+          dispatch(
+            handleErrors(error, 'Stack Environment could not be loaded')
           );
-          let errorHandler = new HeatApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
-          dispatch(this.fetchEnvironmentFailed(error));
+          dispatch(this.fetchEnvironmentFailed(stack));
         });
     };
   },
@@ -228,11 +193,7 @@ export default {
           dispatch(this.deleteStackSuccess(stack.stack_name));
         })
         .catch(error => {
-          logger.error('Error deleting stack StackActions.deleteStack', error);
-          let errorHandler = new HeatApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
+          dispatch(handleErrors(error, 'Stack could not be deleted'));
           dispatch(this.deleteStackFailed());
         });
     };
