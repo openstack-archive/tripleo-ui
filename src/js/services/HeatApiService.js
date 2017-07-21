@@ -14,63 +14,85 @@
  * under the License.
  */
 
-import * as _ from 'lodash';
-import request from 'reqwest';
+import axios from 'axios';
 import when from 'when';
 
+import { AuthenticationError, HeatApiError, ConnectionError } from './errors';
 import { getAuthTokenId, getServiceUrl } from '../services/utils';
 
 class HeatApiService {
-  request() {
-    return request.apply(this, arguments);
-  }
-
   defaultRequest(path, additionalAttributes) {
     return when.try(getServiceUrl, 'heat').then(serviceUrl => {
-      let requestAttributes = _.merge(
+      let requestAttributes = Object.assign(
         {
-          url: `${serviceUrl}${path}`,
-          headers: { 'X-Auth-Token': getAuthTokenId() },
-          crossOrigin: true,
-          contentType: 'application/json',
-          type: 'json',
-          method: 'GET'
+          baseURL: serviceUrl,
+          url: path,
+          method: 'GET',
+          headers: {
+            'X-Auth-Token': getAuthTokenId()
+          }
         },
         additionalAttributes
       );
-      return when(this.request(requestAttributes));
+      return axios(requestAttributes);
     });
   }
 
   getStacks() {
-    return this.defaultRequest('/stacks');
+    return this.defaultRequest('/stacks')
+      .then(response => response.data)
+      .catch(handleErrors);
   }
 
   getStack(stackName, stackId) {
-    return this.defaultRequest(`/stacks/${stackName}/${stackId}`);
+    return this.defaultRequest(`/stacks/${stackName}/${stackId}`)
+      .then(response => response.data)
+      .catch(handleErrors);
   }
 
   getResources(stackName, stackId) {
-    return this.defaultRequest(
-      `/stacks/${stackName}/${stackId}/resources?nested_depth=3`
-    );
+    return this.defaultRequest(`/stacks/${stackName}/${stackId}/resources`, {
+      params: { nested_depth: 3 }
+    })
+      .then(response => response.data)
+      .catch(handleErrors);
   }
 
   getResource(stack, resourceName) {
     return this.defaultRequest(
       `/stacks/${stack.stack_name}/${stack.id}/resources/${resourceName}`
-    );
+    )
+      .then(response => response.data)
+      .catch(handleErrors);
   }
 
   getEnvironment(stack) {
     return this.defaultRequest(
       `/stacks/${stack.stack_name}/${stack.id}/environment`
-    );
+    )
+      .then(response => response.data)
+      .catch(handleErrors);
   }
 
   deleteStack(name, id) {
-    return this.defaultRequest(`/stacks/${name}/${id}`, { method: 'DELETE' });
+    return this.defaultRequest(`/stacks/${name}/${id}`, { method: 'DELETE' })
+      .then(response => response.data)
+      .catch(handleErrors);
   }
 }
+
+const handleErrors = e => {
+  if (e.response && e.response.status === 401) {
+    return when.reject(new AuthenticationError(e));
+  } else if (e.response) {
+    return when.reject(new HeatApiError(e));
+  } else if (e.request) {
+    return when.reject(
+      new ConnectionError('Connection to Heat API could not be established', e)
+    );
+  } else {
+    return when.reject(e);
+  }
+};
 
 export default new HeatApiService();
