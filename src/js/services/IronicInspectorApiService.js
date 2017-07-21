@@ -14,29 +14,31 @@
  * under the License.
  */
 
-import * as _ from 'lodash';
-import request from 'reqwest';
+import axios from 'axios';
 import when from 'when';
 
+import {
+  AuthenticationError,
+  IronicInspectorApiError,
+  ConnectionError
+} from './errors';
 import { getServiceUrl, getAuthTokenId } from './utils';
 
 class IronicInspectorApiService {
   defaultRequest(path, additionalAttributes) {
     return when.try(getServiceUrl, 'ironic-inspector').then(serviceUrl => {
-      let requestAttributes = _.merge(
+      let requestAttributes = Object.assign(
         {
-          url: `${serviceUrl}/v1${path}`,
+          baseURL: `${serviceUrl}/v1`,
+          url: path,
+          method: 'GET',
           headers: {
             'X-Auth-Token': getAuthTokenId()
-          },
-          crossOrigin: true,
-          contentType: 'application/json',
-          type: 'json',
-          method: 'GET'
+          }
         },
         additionalAttributes
       );
-      return when(request(requestAttributes));
+      return axios(requestAttributes);
     });
   }
 
@@ -45,7 +47,9 @@ class IronicInspectorApiService {
    * @returns {object} introspection statuses
    */
   getIntrospectionStatuses() {
-    return this.defaultRequest(`/introspection`);
+    return this.defaultRequest(`/introspection`)
+      .then(response => response.data)
+      .catch(error => handleErrors(error));
   }
 
   /**
@@ -53,8 +57,27 @@ class IronicInspectorApiService {
    * @returns {object} introspection data
    */
   getIntrospectionData(nodeId) {
-    return this.defaultRequest(`/introspection/${nodeId}/data`);
+    return this.defaultRequest(`/introspection/${nodeId}/data`)
+      .then(response => response.data)
+      .catch(error => handleErrors(error));
   }
 }
+
+const handleErrors = e => {
+  if (e.response && e.response.status === 401) {
+    return when.reject(new AuthenticationError(e));
+  } else if (e.response) {
+    return when.reject(new IronicInspectorApiError(e));
+  } else if (e.request) {
+    return when.reject(
+      new ConnectionError(
+        'Connection to Ironic Inspector API could not be established',
+        e
+      )
+    );
+  } else {
+    return when.reject(e);
+  }
+};
 
 export default new IronicInspectorApiService();
