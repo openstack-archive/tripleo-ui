@@ -14,30 +14,28 @@
  * under the License.
  */
 
-import * as _ from 'lodash';
-import request from 'reqwest';
+import axios from 'axios';
 import when from 'when';
 
+import { AuthenticationError, IronicApiError, ConnectionError } from './errors';
 import { getServiceUrl, getAuthTokenId } from './utils';
 
 class IronicApiService {
   defaultRequest(path, additionalAttributes) {
     return when.try(getServiceUrl, 'ironic').then(serviceUrl => {
-      let requestAttributes = _.merge(
+      let requestAttributes = Object.assign(
         {
-          url: `${serviceUrl}${path}`,
+          baseURL: serviceUrl,
+          url: path,
+          method: 'GET',
           headers: {
             'X-Auth-Token': getAuthTokenId(),
             'X-OpenStack-Ironic-API-Version': '1.14'
-          },
-          crossOrigin: true,
-          contentType: 'application/json',
-          type: 'json',
-          method: 'GET'
+          }
         },
         additionalAttributes
       );
-      return when(request(requestAttributes));
+      return axios(requestAttributes);
     });
   }
 
@@ -46,33 +44,50 @@ class IronicApiService {
    * @returns {array} of nodes with complete details
    */
   getNodes() {
-    return this.defaultRequest('/nodes/detail');
-  }
-
-  /**
-   * Ironic API: GET /v1/nodes/<uuid>
-   * @returns node object.
-   */
-  getNode(nodeId) {
-    return this.defaultRequest('/nodes/' + nodeId);
+    return this.defaultRequest('/nodes/detail')
+      .then(response => response.data)
+      .catch(handleErrors);
   }
 
   getPorts() {
-    return this.defaultRequest('/ports/detail');
+    return this.defaultRequest('/ports/detail')
+      .then(response => response.data)
+      .catch(handleErrors);
   }
 
   patchNode(nodePatch) {
     return this.defaultRequest('/nodes/' + nodePatch.uuid, {
       method: 'PATCH',
-      data: JSON.stringify(nodePatch.patches)
-    });
+      data: nodePatch.patches
+    })
+      .then(response => response.data)
+      .catch(handleErrors);
   }
 
   deleteNode(nodeId) {
     return this.defaultRequest('/nodes/' + nodeId, {
       method: 'DELETE'
-    });
+    })
+      .then(response => response.data)
+      .catch(handleErrors);
   }
 }
+
+const handleErrors = e => {
+  if (e.response && e.response.status === 401) {
+    return when.reject(new AuthenticationError(e));
+  } else if (e.response) {
+    return when.reject(new IronicApiError(e));
+  } else if (e.request) {
+    return when.reject(
+      new ConnectionError(
+        'Connection to Ironic API could not be established',
+        e
+      )
+    );
+  } else {
+    return when.reject(e);
+  }
+};
 
 export default new IronicApiService();
