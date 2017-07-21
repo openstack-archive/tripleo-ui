@@ -216,10 +216,11 @@ describe('Fetching Introspection data success', () => {
 
 describe('Fetching Introspection data error', () => {
   const nodeId = '598612eb-f21b-435e-a868-7bb74e576cc2';
-  const message = 'Data for specified node not available';
   const error = {
-    status: 404,
-    responseText: `{ "error": { "message": "${message}" } }`
+    response: {
+      data: { error: { message: 'some error message' } },
+      status: 404
+    }
   };
 
   beforeEach(done => {
@@ -244,10 +245,6 @@ describe('Fetching Introspection data error', () => {
     expect(NodesActions.fetchNodeIntrospectionDataFailed).toHaveBeenCalledWith(
       nodeId
     );
-    expect(NotificationActions.notify).toHaveBeenCalledWith({
-      title: 'Introspection data not found',
-      message: message
-    });
   });
 });
 
