@@ -14,99 +14,98 @@
  * under the License.
  */
 
-import * as _ from 'lodash';
-import request from 'reqwest';
+import axios from 'axios';
 import when from 'when';
 
-import { AUTH_URL } from '../constants/KeystoneApiConstants';
+import {
+  AuthenticationError,
+  KeystoneApiError,
+  ConnectionError
+} from './errors';
+import { KEYSTONE_URL } from '../constants/KeystoneApiConstants';
 
 class KeystoneApiService {
   defaultRequest(additionalAttributes) {
-    return _.merge(
-      {
-        url: AUTH_URL,
-        method: 'POST',
-        crossOrigin: true,
-        contentType: 'application/json',
-        type: 'json'
-      },
-      additionalAttributes
+    return axios(
+      Object.assign(
+        {
+          baseURL: KEYSTONE_URL,
+          url: '/auth/tokens',
+          method: 'POST'
+        },
+        additionalAttributes
+      )
     );
   }
 
   authenticateUser(username, password) {
-    let req = request(
-      this.defaultRequest({
-        data: JSON.stringify({
-          auth: {
-            identity: {
-              methods: ['password'],
-              password: {
-                user: {
-                  name: username,
-                  domain: {
-                    name: 'Default'
-                  },
-                  password: password
-                }
-              }
-            },
-            scope: {
-              project: {
-                name: 'admin',
+    return this.defaultRequest({
+      data: {
+        auth: {
+          identity: {
+            methods: ['password'],
+            password: {
+              user: {
+                name: username,
                 domain: {
                   name: 'Default'
-                }
+                },
+                password: password
+              }
+            }
+          },
+          scope: {
+            project: {
+              name: 'admin',
+              domain: {
+                name: 'Default'
               }
             }
           }
-        })
-      })
-    );
-
-    // We're passing the req object to the next handler in the chain so that we
-    // can inspect response headers later.
-    return when(req, response => {
-      return {
-        request: req.request,
-        response
-      };
-    });
+        }
+      }
+    }).catch(handleErrors);
   }
 
   authenticateUserViaToken(keystoneAuthTokenId) {
-    let req = request(
-      this.defaultRequest({
-        data: JSON.stringify({
-          auth: {
-            identity: {
-              methods: ['token'],
-              token: {
-                id: keystoneAuthTokenId
-              }
-            },
-            scope: {
-              project: {
-                name: 'admin',
-                domain: {
-                  name: 'Default'
-                }
+    return this.defaultRequest({
+      data: {
+        auth: {
+          identity: {
+            methods: ['token'],
+            token: {
+              id: keystoneAuthTokenId
+            }
+          },
+          scope: {
+            project: {
+              name: 'admin',
+              domain: {
+                name: 'Default'
               }
             }
           }
-        })
-      })
-    );
-
-    // We're passing the req object to the next handler in the chain so that we
-    // can inspect response headers later.
-    return when(req, response => {
-      return {
-        request: req.request,
-        response
-      };
-    });
+        }
+      }
+    }).catch(handleErrors);
   }
 }
+
+const handleErrors = e => {
+  if (e.response && e.response.status === 401) {
+    return when.reject(new AuthenticationError(e));
+  } else if (e.response) {
+    return when.reject(new KeystoneApiError(e));
+  } else if (e.request) {
+    return when.reject(
+      new ConnectionError(
+        'Connection to Keystone API could not be established',
+        e
+      )
+    );
+  } else {
+    return when.reject(e);
+  }
+};
 
 export default new KeystoneApiService();

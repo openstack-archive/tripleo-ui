@@ -27,7 +27,7 @@ class BaseAxiosError extends ExtendableError {
 
 class AuthenticationError extends BaseAxiosError {
   constructor(e) {
-    super('Authentication failed, please log in', e);
+    super('Authentication failed, please log in again', e);
   }
 }
 
@@ -72,6 +72,12 @@ class HeatApiError extends BaseAxiosError {
   }
 }
 
+class KeystoneApiError extends BaseAxiosError {
+  constructor(e) {
+    super(e.response.data.error.message, e);
+  }
+}
+
 export {
   BaseAxiosError,
   AuthenticationError,
@@ -81,5 +87,6 @@ export {
   SwiftApiError,
   IronicApiError,
   IronicInspectorApiError,
-  HeatApiError
+  HeatApiError,
+  KeystoneApiError
 };
