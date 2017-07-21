@@ -52,11 +52,19 @@ class MistralExecutionError extends ExtendableError {
 
 class SwiftApiError extends BaseAxiosError {}
 
+class IronicApiError extends BaseAxiosError {
+  constructor(e) {
+    const message = JSON.parse(e.response.data.error_message);
+    super(message.faultstring, e);
+  }
+}
+
 export {
   BaseAxiosError,
   AuthenticationError,
   ConnectionError,
   MistralApiError,
   MistralExecutionError,
-  SwiftApiError
+  SwiftApiError,
+  IronicApiError
 };

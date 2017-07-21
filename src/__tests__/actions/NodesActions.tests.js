@@ -137,11 +137,6 @@ describe('Asynchronous Nodes Actions', () => {
     spyOn(IronicApiService, 'getNodes').and.callFake(
       createResolvingPromise({ nodes: [{ uuid: '123' }] })
     );
-    // Note that `getNode` is called multiple times but always returns the same response
-    // to keep the test simple.
-    spyOn(IronicApiService, 'getNode').and.callFake(
-      createResolvingPromise({ uuid: 'uuid' })
-    );
     spyOn(IronicApiService, 'getPorts').and.callFake(
       createResolvingPromise({
         ports: [{ uuid: 'port1', address: 'mac', node_uuid: '123' }]
