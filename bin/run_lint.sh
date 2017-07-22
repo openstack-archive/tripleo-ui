@@ -17,5 +17,4 @@
 set -e
 
 eslint --max-warnings 0 src
-prettier --single-quote --list-different 'src/**/*.js'
 ./bin/verify-languages.js
