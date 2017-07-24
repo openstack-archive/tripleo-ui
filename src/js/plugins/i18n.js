@@ -24,6 +24,7 @@
  */
 
 var fs = require('fs');
+var prettier = require('prettier');
 
 var I18nPlugin = function(options) {
   this.options = options;
@@ -91,6 +92,7 @@ I18nPlugin.prototype.apply = function(compiler) {
     '\n\n' +
     localeDataObj;
 
+  file = prettier.format(file, { singleQuote: true });
   fs.writeFileSync('src/js/components/i18n/messages.js', file);
 };
 
