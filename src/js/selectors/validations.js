@@ -118,6 +118,11 @@ const getValidationStatus = validationResults => {
     case validationResults.last().state === 'RUNNING':
       return 'running';
     case validationResults.last().output.get('status') === 'SUCCESS':
+      if (
+        validationResults.last().output.get('stdout', '').includes('Warnings:')
+      ) {
+        return 'warning';
+      }
       return 'success';
     case validationResults.last().output.get('status') === 'FAILED':
       return 'failed';
