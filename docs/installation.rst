@@ -17,7 +17,7 @@ Do these steps on the virt host.
 Follow the `official docs`_ to install and configure TripleO (follow the step up to
 and including the Undercloud installation).
 
-.. _official docs: http://docs.openstack.org/developer/tripleo-docs/index.html
+.. _official docs: https://docs.openstack.org/tripleo-docs/latest/
 
 Once the undercloud is installed, you will need to create a tunnel on your virt
 host, to make the services running on undercloud available to the UI. The tunnel
