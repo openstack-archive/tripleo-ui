@@ -186,7 +186,7 @@
         "RegisterNodeForm.nicMacAddresses": "NIC MAC Addresses",
         "RegisterNodeForm.nodeDetail": "Node Detail",
         "RegisterNodeForm.nodeNameMaxLength": "Node name can have up to 255 characters.",
-        "RegisterNodeForm.nodeNameRegexp": "Name may only consist of RFC3986 unreserved characters, to wit: ALPHA / DIGIT / \"-\" / \".\" / \"_\" / \"~\".",
+        "RegisterNodeForm.nodeNameRegexp": "Name may only consist of alphanumeric, hyphen (-), period (.), underscore (_) and tilde (~) characters.",
         "RegisterNodesActions.registrationNotificationMessage": "The nodes were successfully registered.",
         "RegisterNodesActions.registrationNotificationTitle": "Nodes Registration Complete",
         "RegisterNodesDialog.addANodeManually": "Add a node manually or upload nodes from a file.",

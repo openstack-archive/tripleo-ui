@@ -33,8 +33,8 @@ const messages = defineMessages({
   },
   nodeNameRegexp: {
     id: 'RegisterNodeForm.nodeNameRegexp',
-    defaultMessage: 'Name may only consist of RFC3986 unreserved characters, to wit: ' +
-      'ALPHA / DIGIT / "-" / "." / "_" / "~".'
+    defaultMessage: 'Name may only consist of alphanumeric, hyphen (-),' +
+      ' period (.), underscore (_) and tilde (~) characters.'
   },
   nodeNameMaxLength: {
     id: 'RegisterNodeForm.nodeNameMaxLength',
