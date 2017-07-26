@@ -49,13 +49,10 @@ class NotificationsToaster extends React.Component {
           title={notification.title}
           message={notification.message}
           type={notification.type}
-          dismissable={notification.dismissable}
-          timeoutable={notification.timeoutable}
+          timeoutable={notification.type !== 'error'}
           timerPaused={this.state.isHovered}
-          removeNotification={this.props.removeNotification.bind(
-            this,
-            notification.id
-          )}
+          removeNotification={() =>
+            this.props.removeNotification(notification.id)}
         />
       );
     });
@@ -64,7 +61,7 @@ class NotificationsToaster extends React.Component {
   render() {
     return (
       <div
-        className="toast-pf-max-width toast-pf-top-right"
+        className="toast-notifications-list-pf"
         onMouseEnter={this._handleMouseEnter.bind(this)}
         onMouseLeave={this._handleMouseLeave.bind(this)}
       >
