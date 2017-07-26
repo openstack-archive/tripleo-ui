@@ -51,6 +51,10 @@ const messages = defineMessages({
   cancel: {
     id: 'Parameters.cancel',
     defaultMessage: 'Cancel'
+  },
+  general: {
+    id: 'Parameters.general',
+    defaultMessage: 'General'
   }
 });
 
@@ -222,7 +226,7 @@ class Parameters extends React.Component {
                     className="link"
                     onClick={this.selectTab.bind(this, 'general')}
                   >
-                    General
+                    <FormattedMessage {...messages.general} />
                   </a>
                 </Tab>
                 <li className="spacer" />
