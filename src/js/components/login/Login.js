@@ -29,7 +29,6 @@ import Loader from '../ui/Loader';
 import LoginInput from '../ui/forms/LoginInput';
 import LanguageInput from './LanguageInput';
 import LoginActions from '../../actions/LoginActions';
-import NotificationsToaster from '../notifications/NotificationsToaster';
 
 import LogoSvg from '../../../img/logo.svg';
 import TripleoOwlSvg from '../../../img/tripleo-owl.svg';
@@ -190,7 +189,6 @@ class Login extends React.Component {
               </div>
             </div>
           </div>
-          <NotificationsToaster />
         </div>
       );
     } else {
