@@ -22,10 +22,7 @@ import React from 'react';
 
 import DropdownSelect from '../../ui/reduxForm/DropdownSelect';
 import { nodeColumnMessages } from '../messages';
-import {
-  ContentViewSelectorInput,
-  SortDirectionInput
-} from '../../ui/Toolbar/ToolbarInputs';
+import { SortDirectionInput } from '../../ui/Toolbar/ToolbarInputs';
 
 const messages = defineMessages({
   table: {
@@ -78,6 +75,12 @@ const NodesToolbarForm = ({ handleSubmit, intl }) => (
         component={SortDirectionInput}
       />
     </FormGroup>
+    {/*
+    TODO(akrivoka): Hiding the view switcher for now, as the table view is buggy. Once the blueprint
+    https://blueprints.launchpad.net/tripleo/+spec/ui-rework-nodestableview
+    is implemented, we can show the view switcher again.
+    */}
+    {/*
     <FormGroup className="pull-right">
       <Field
         name="contentView"
@@ -88,6 +91,7 @@ const NodesToolbarForm = ({ handleSubmit, intl }) => (
         }}
       />
     </FormGroup>
+    */}
   </form>
 );
 NodesToolbarForm.propTypes = {
