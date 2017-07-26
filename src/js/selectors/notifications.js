@@ -21,6 +21,6 @@ const notifications = state => state.notifications.get('all');
 export const getNonViewedNotifications = createSelector(
   notifications,
   notifications => {
-    return notifications.filterNot(notification => notification.get('viewed'));
+    return notifications.filterNot(notification => notification.viewed);
   }
 );
