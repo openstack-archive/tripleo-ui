@@ -182,11 +182,11 @@ class CurrentPlan extends React.Component {
         <div className="col-sm-12">
           <ol className="breadcrumb">
             <li>
-              <Link to="/plans/manage">
+              <Link to="/plans/manage" id="CurrentPlan_allPlans">
                 <FormattedMessage {...messages.backToAllPlans} />
               </Link>
             </li>
-            <li className="active">
+            <li className="active" id="CurrentPlan_breadcrumb">
               {currentPlanName}
             </li>
           </ol>
