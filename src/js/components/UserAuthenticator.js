@@ -23,7 +23,6 @@ import { Redirect } from 'react-router-dom';
 import AuthenticatedContent from './AuthenticatedContent';
 import Loader from './ui/Loader';
 import LoginActions from '../actions/LoginActions';
-import NotificationsToaster from './notifications/NotificationsToaster';
 
 const messages = defineMessages({
   authenticating: {
@@ -71,7 +70,6 @@ class UserAuthenticator extends React.Component {
           >
             <AuthenticatedContent />
           </Loader>
-          <NotificationsToaster />
         </div>
       );
     } else {
