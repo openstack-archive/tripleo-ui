@@ -51,6 +51,14 @@ const messages = defineMessages({
   cancel: {
     id: 'Parameters.cancel',
     defaultMessage: 'Cancel'
+  },
+  generalTitle: {
+    id: 'Parameters.generalTitle',
+    defaultMessage: 'General'
+  },
+  generalMessage: {
+    id: 'Parameters.generalMessage',
+    defaultMessage: 'General'
   }
 });
 
@@ -215,14 +223,14 @@ class Parameters extends React.Component {
               <ul className="nav nav-pills nav-stacked nav-arrows">
                 <Tab
                   key="general"
-                  title="General"
+		  title="this.props.intl.formatMessage(messages.generalTitle)"
                   isActive={'general' === this.state.selectedTab}
                 >
                   <a
                     className="link"
                     onClick={this.selectTab.bind(this, 'general')}
                   >
-                    General
+                    <FormattedMessage {...messages.generalMessage} />
                   </a>
                 </Tab>
                 <li className="spacer" />
@@ -281,6 +289,7 @@ Parameters.propTypes = {
   formErrors: ImmutablePropTypes.list,
   formFieldErrors: ImmutablePropTypes.map,
   history: PropTypes.object,
+  intl: PropTypes.object,
   isFetchingParameters: PropTypes.bool.isRequired,
   mistralParameters: ImmutablePropTypes.map.isRequired,
   parameters: ImmutablePropTypes.map.isRequired,
