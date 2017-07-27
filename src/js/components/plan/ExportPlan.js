@@ -89,10 +89,9 @@ class ExportPlan extends React.Component {
           >
             {this.props.planExportUrl
               ? <div>
-                  <div>
+                  <p>
                     <FormattedMessage {...messages.downloadPlanExportMessage} />
-                  </div>
-                  <br />
+                  </p>
                   <a
                     href={this.props.planExportUrl}
                     className="btn btn-success"
