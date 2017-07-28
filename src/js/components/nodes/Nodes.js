@@ -32,6 +32,7 @@ import NodesListView from './NodesListView/NodesListView';
 import NodesToolbar from './NodesToolbar/NodesToolbar';
 import NodesTableView from './NodesTableView';
 import RegisterNodesDialog from './RegisterNodesDialog';
+import DiscoverAndEnrollNodesDialog from './DiscoverAndEnrollNodesDialog';
 
 const messages = defineMessages({
   loadingNodes: {
@@ -45,6 +46,10 @@ const messages = defineMessages({
   registerNodes: {
     id: 'Nodes.registerNodes',
     defaultMessage: 'Register Nodes'
+  },
+  discoverAndEnrollNodes: {
+    id: 'Nodes.discoverAndEnrollNodes',
+    defaultMessage: 'Discover And Enroll Nodes'
   },
   nodes: {
     id: 'Nodes.nodes',
@@ -98,6 +103,11 @@ class Nodes extends React.Component {
               <span className="fa fa-plus" />&nbsp;
               <FormattedMessage {...messages.registerNodes} />
             </Link>
+            &nbsp;
+            <Link to="/nodes/discover" className="btn btn-primary">
+              <span className="fa fa-plus" />&nbsp;
+              <FormattedMessage {...messages.discoverAndEnrollNodes} />
+            </Link>
           </div>
           <h1><FormattedMessage {...messages.nodes} /></h1>
         </div>
@@ -110,6 +120,10 @@ class Nodes extends React.Component {
           {this.renderContentView()}
         </Loader>
         <Route path="/nodes/register" component={RegisterNodesDialog} />
+        <Route
+          path="/nodes/discover"
+          component={DiscoverAndEnrollNodesDialog}
+        />
         <Route path="/nodes/:nodeId/drives" component={NodeDrives} />
       </div>
     );
