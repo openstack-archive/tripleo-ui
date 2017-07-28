@@ -45,6 +45,10 @@ const messages = defineMessages({
     id: 'PlansActions.planUpdatedNotificationMessage',
     defaultMessage: 'The plan {planName} was successfully updated.'
   },
+  planUpdateFailed: {
+    id: 'PlansActions.planUpdateFailedNotificationMessage',
+    defaultMessage: 'Plan update failed'
+  },
   planDeletedNotificationTitle: {
     id: 'PlansActions.planDeletedNotificationTitle',
     defaultMessage: 'Plan Deleted'
@@ -135,64 +139,91 @@ export default {
     };
   },
 
-  updatePlanFailed(planName) {
+  updatePlanFailed(planName, errors) {
     return {
       type: PlansConstants.UPDATE_PLAN_FAILED,
-      payload: planName
+      payload: {
+        planName,
+        errors
+      }
     };
   },
 
-  // TODO(jtomasek): this is broken, needs to use a workflow to regenerate templates
   updatePlan(planName, planFiles, history) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.updatePlanPending(planName));
-      this._uploadFilesToContainer('planName', planFiles)
-        .then(() => {
-          dispatch(this.updatePlanSuccess(planName));
-          history.push('/plans/manage');
-          dispatch(
-            NotificationActions.notify({
-              title: formatMessage(messages.planUpdatedNotificationTitle),
-              message: formatMessage(messages.planUpdatedNotificationMessage, {
-                planName: planName
-              }),
-              type: 'success'
-            })
-          );
-          dispatch(this.fetchPlans());
-        })
+      uploadFilesToContainer(planName, planFiles)
+        .then(response =>
+          MistralApiService.runWorkflow(MistralConstants.PLAN_UPDATE, {
+            container: planName
+          })
+        )
         .catch(error => {
-          dispatch(handleErrors(error, 'Plan update failed'));
-          dispatch(this.updatePlanFailed(planName));
+          dispatch(handleErrors(error, 'Plan update failed', false));
+          dispatch(
+            this.updatePlanFailed(planName, [
+              {
+                title: formatMessage(messages.planUpdateFailed),
+                message: error.message
+              }
+            ])
+          );
         });
     };
   },
 
-  // TODO(jtomasek): this is broken, needs to use a workflow to regenerate templates
   updatePlanFromTarball(planName, file, history) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.updatePlanPending(planName));
       SwiftApiService.uploadTarball(planName, file)
         .then(response => {
-          dispatch(this.updatePlanSuccess(planName));
-          history.push('/plans/manage');
-          dispatch(
-            NotificationActions.notify({
-              title: formatMessage(messages.planUpdatedNotificationTitle),
-              message: formatMessage(messages.planUpdatedNotificationMessage, {
-                planName: planName
-              }),
-              type: 'success'
-            })
-          );
-          dispatch(this.fetchPlans());
+          MistralApiService.runWorkflow(MistralConstants.PLAN_UPDATE, {
+            container: planName
+          });
         })
         .catch(error => {
-          dispatch(handleErrors(error, 'Plan update failed'));
-          dispatch(this.updatePlanFailed(planName));
+          dispatch(handleErrors(error, 'Plan update failed', false));
+          dispatch(
+            this.updatePlanFailed(planName, [
+              {
+                title: formatMessage(messages.planUpdateFailed),
+                message: error.message
+              }
+            ])
+          );
         });
+    };
+  },
+
+  updatePlanFinished(payload, history) {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
+      const planName = payload.execution.input.container;
+      if (payload.status === 'SUCCESS') {
+        dispatch(this.updatePlanSuccess(planName));
+        dispatch(
+          NotificationActions.notify({
+            title: formatMessage(messages.planUpdatedNotificationTitle),
+            message: formatMessage(messages.planUpdatedNotificationMessage, {
+              planName: planName
+            }),
+            type: 'success'
+          })
+        );
+        dispatch(this.fetchPlans());
+        history.push('/plans/manage');
+      } else {
+        dispatch(
+          this.updatePlanFailed(planName, [
+            {
+              title: formatMessage(messages.planUpdateFailed),
+              message: payload.message
+            }
+          ])
+        );
+      }
     };
   },
 
@@ -221,34 +252,13 @@ export default {
     };
   },
 
-  /*
-   * Uploads a number of files to a container.
-   * Returns a promise which gets resolved when all files are uploaded
-   * or rejected if >= 1 objects fail.
-   * @container: String
-   * @files: Object
-   */
-  _uploadFilesToContainer(container, files) {
-    return when.all(
-      Object.keys(files).map(fileName =>
-        SwiftApiService.createObject(
-          container,
-          fileName,
-          files[fileName].contents
-        )
-      )
-    );
-  },
-
   createPlan(planName, planFiles) {
-    return (dispatch, getState) => {
+    return dispatch => {
       dispatch(this.createPlanPending());
       MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
         container: planName
       })
-        .then(response =>
-          this._uploadFilesToContainer(planName, planFiles, dispatch)
-        )
+        .then(response => uploadFilesToContainer(planName, planFiles))
         .then(response =>
           MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
             container: planName
@@ -268,7 +278,6 @@ export default {
   createPlanFromTarball(planName, file) {
     return dispatch => {
       dispatch(this.createPlanPending());
-
       MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
         container: planName
       })
@@ -483,3 +492,21 @@ export default {
     };
   }
 };
+
+/*
+  * Uploads a number of files to a container.
+  * Returns a promise which gets resolved when all files are uploaded
+  * or rejected if >= 1 objects fail.
+  * @container: String
+  * @files: Object
+  */
+export const uploadFilesToContainer = (container, files) =>
+  when.all(
+    Object.keys(files).map(fileName =>
+      SwiftApiService.createObject(
+        container,
+        fileName,
+        files[fileName].contents
+      )
+    )
+  );

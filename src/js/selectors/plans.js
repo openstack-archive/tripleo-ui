@@ -17,6 +17,8 @@
 import { createSelector } from 'reselect';
 
 export const plans = state => state.plans.get('all').sortBy(plan => plan.name);
+export const getPlan = (state, planName) =>
+  state.plans.getIn(['all', planName]);
 export const currentPlanName = state => state.plans.currentPlanName;
 
 export const getCurrentPlan = createSelector(

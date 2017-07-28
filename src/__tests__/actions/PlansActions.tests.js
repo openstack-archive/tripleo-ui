@@ -21,18 +21,12 @@ import MistralApiService from '../../js/services/MistralApiService';
 import mockHistory from '../mocks/history';
 import { mockGetIntl } from './utils';
 import PlansActions from '../../js/actions/PlansActions';
+// hacky solution to be able to spy on named export function
+import * as PlansActionsModule from '../../js/actions/PlansActions';
 import SwiftApiService from '../../js/services/SwiftApiService';
 import storage from '../mocks/storage';
 
 window.localStorage = window.sessionStorage = storage;
-
-// Use these to mock asynchronous functions which return a promise.
-// The promise will immediately resolve/reject with `data`.
-let createResolvingPromise = data => {
-  return () => {
-    return when.resolve(data);
-  };
-};
 
 describe('PlansActions', () => {
   beforeEach(() => {
@@ -44,18 +38,19 @@ describe('PlansActions', () => {
       spyOn(PlansActions, 'updatePlanPending');
       spyOn(PlansActions, 'updatePlanSuccess');
       spyOn(PlansActions, 'fetchPlans');
-      // Mock the service call.
-      spyOn(PlansActions, '_uploadFilesToContainer').and.callFake(
-        createResolvingPromise()
+      spyOn(PlansActionsModule, 'uploadFilesToContainer').and.callFake(
+        when.resolve
       );
-      // Call the action creator and the resulting action.
-      // In this case, dispatch and getState are just empty placeHolders.
+      spyOn(MistralApiService, 'runWorkflow').and.callFake(() =>
+        when.resolve({ state: 'SUCCESS' })
+      );
+
       PlansActions.updatePlan('somecloud', {}, mockHistory)(
         () => {},
         () => {},
         mockGetIntl
       );
-      // Call done with a minimal timeout.
+
       setTimeout(() => {
         done();
       }, 1);
@@ -64,14 +59,6 @@ describe('PlansActions', () => {
     it('dispatches updatePlanPending', () => {
       expect(PlansActions.updatePlanPending).toHaveBeenCalledWith('somecloud');
     });
-
-    it('dispatches updatePlanSuccess', () => {
-      expect(PlansActions.updatePlanSuccess).toHaveBeenCalledWith('somecloud');
-    });
-
-    it('dispatches fetchPlans', () => {
-      expect(PlansActions.fetchPlans).toHaveBeenCalled();
-    });
   });
 
   describe('createPlan', () => {
@@ -79,14 +66,12 @@ describe('PlansActions', () => {
       spyOn(PlansActions, 'createPlanPending');
       spyOn(PlansActions, 'createPlanSuccess');
       // Mock the service call.
-      spyOn(PlansActions, '_uploadFilesToContainer').and.callFake(
-        createResolvingPromise()
+      spyOn(PlansActionsModule, 'uploadFilesToContainer').and.callFake(
+        when.resolve
       );
-      spyOn(MistralApiService, 'runAction').and.callFake(
-        createResolvingPromise()
-      );
-      spyOn(MistralApiService, 'runWorkflow').and.callFake(
-        createResolvingPromise({ state: 'SUCCESS' })
+      spyOn(MistralApiService, 'runAction').and.callFake(when.resolve);
+      spyOn(MistralApiService, 'runWorkflow').and.callFake(() =>
+        when.resolve({ state: 'SUCCESS' })
       );
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
@@ -108,9 +93,7 @@ describe('PlansActions', () => {
       spyOn(PlansActions, 'deletePlanSuccess');
       spyOn(PlansActions, 'fetchPlans');
       // Mock the service call.
-      spyOn(MistralApiService, 'runAction').and.callFake(
-        createResolvingPromise()
-      );
+      spyOn(MistralApiService, 'runAction').and.callFake(when.resolve);
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
       PlansActions.deletePlan('somecloud', mockHistory)(
@@ -143,8 +126,8 @@ describe('PlansActions', () => {
     beforeEach(done => {
       spyOn(PlansActions, 'requestPlans');
       spyOn(PlansActions, 'receivePlans');
-      spyOn(MistralApiService, 'runAction').and.callFake(
-        createResolvingPromise(apiResponse)
+      spyOn(MistralApiService, 'runAction').and.callFake(() =>
+        when.resolve(apiResponse)
       );
       // Mock the service call.
       // Call the action creator and the resulting action.
@@ -175,8 +158,8 @@ describe('PlansActions', () => {
     ];
 
     beforeEach(done => {
-      spyOn(SwiftApiService, 'getContainer').and.callFake(
-        createResolvingPromise(apiResponse)
+      spyOn(SwiftApiService, 'getContainer').and.callFake(() =>
+        when.resolve(apiResponse)
       );
       spyOn(PlansActions, 'requestPlan');
       spyOn(PlansActions, 'receivePlan');
