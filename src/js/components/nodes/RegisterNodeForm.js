@@ -25,6 +25,7 @@ import HorizontalSelect from '../ui/forms/HorizontalSelect';
 import PXEAndIPMIToolDriverFields
   from './driver_fields/PXEAndIPMIToolDriverFields';
 import PXEAndDRACDriverFields from './driver_fields/PXEAndDRACDriverFields';
+import { macAddressRegex } from '../../utils/regex';
 
 const messages = defineMessages({
   enterValidMacAddress: {
@@ -98,7 +99,7 @@ class RegisterNodeForm extends React.Component {
   constructor(props) {
     super(props);
     this.macAddressValidator = {
-      matchRegexp: /^([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}(,([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2})*$/
+      matchRegexp: macAddressRegex
     };
     this.macAddressValidatorMessage = this.props.intl.formatMessage(
       messages.enterValidMacAddress
