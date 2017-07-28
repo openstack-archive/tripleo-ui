@@ -83,7 +83,8 @@ export default function plansReducer(state = initialState, action) {
     case PlansConstants.UPDATE_PLAN_PENDING:
       return state
         .setIn(['all', action.payload, 'transition'], 'updating')
-        .set('isTransitioningPlan', true);
+        .set('isTransitioningPlan', true)
+        .set('planFormErrors', List());
 
     case PlansConstants.UPDATE_PLAN_SUCCESS:
       return state
@@ -92,8 +93,9 @@ export default function plansReducer(state = initialState, action) {
 
     case PlansConstants.UPDATE_PLAN_FAILED:
       return state
-        .setIn(['all', action.payload, 'transition'], false)
-        .set('isTransitioningPlan', false);
+        .setIn(['all', action.payload.planName, 'transition'], false)
+        .set('isTransitioningPlan', false)
+        .set('planFormErrors', List(action.payload.errors));
 
     case PlansConstants.START_DEPLOYMENT_PENDING:
       return state.setIn(

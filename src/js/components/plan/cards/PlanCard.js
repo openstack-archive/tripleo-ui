@@ -34,8 +34,12 @@ import {
 
 const messages = defineMessages({
   deleting: {
-    id: 'PlanCard.deletingPlanName',
+    id: 'PlanCard.deletingPlan',
     defaultMessage: 'Deleting {planName}...'
+  },
+  updating: {
+    id: 'PlanCard.updatingPlan',
+    defaultMessage: 'Updating {planName}...'
   },
   notDeployed: {
     id: 'PlanCard.notDeployed',
