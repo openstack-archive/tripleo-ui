@@ -19,6 +19,10 @@ import { Link } from 'react-router-dom';
 import React from 'react';
 
 const messages = defineMessages({
+  discoverNodes: {
+    id: 'HardwareStep.discoverNodes',
+    defaultMessage: 'Discover Nodes'
+  },
   registerNodes: {
     id: 'HardwareStep.registerNodes',
     defaultMessage: 'Register Nodes'
@@ -27,10 +31,17 @@ const messages = defineMessages({
 
 const HardwareStep = () => {
   return (
-    <Link className="btn btn-default" to="/nodes/register">
-      <span className="fa fa-plus" />&nbsp;
-      <FormattedMessage {...messages.registerNodes} />
-    </Link>
+    <p>
+      <Link className="btn btn-default" to="/nodes/register">
+        <span className="fa fa-plus" />&nbsp;
+        <FormattedMessage {...messages.registerNodes} />
+      </Link>
+      &nbsp;
+      <Link className="btn btn-default" to="/nodes/discover">
+        <span className="fa fa-plus" />&nbsp;
+        <FormattedMessage {...messages.discoverNodes} />
+      </Link>
+    </p>
   );
 };
 

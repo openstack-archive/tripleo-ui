@@ -15,6 +15,8 @@
  */
 
 export default {
+  BAREMETAL_DISCOVER: 'tripleo.baremetal.v1.discover_nodes',
+  BAREMETAL_DISCOVER_AND_ENROLL: 'tripleo.baremetal.v1.discover_and_enroll_nodes',
   BAREMETAL_INTROSPECT: 'tripleo.baremetal.v1.introspect',
   BAREMETAL_MANAGE: 'tripleo.baremetal.v1.manage',
   BAREMETAL_PROVIDE: 'tripleo.baremetal.v1.provide',
