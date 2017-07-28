@@ -390,5 +390,52 @@ export default {
       type: NodesConstants.DELETE_NODE_FAILED,
       payload: nodeId
     };
+  },
+
+  startDiscoverAndEnrollNodes(username, password, subnet) {
+    return (dispatch, getState) => {
+      dispatch(this.startOperation(subnet));
+      MistralApiService.runWorkflow(
+        MistralConstants.BAREMETAL_DISCOVER_AND_ENROLL,
+        {
+          credentials: [[username, password]],
+          ip_addresses: subnet
+        }
+      ).catch(error => {
+        dispatch(handleErrors(error, 'Could not discover nodes'));
+        dispatch(this.finishOperation(subnet));
+      });
+    };
+  },
+
+  discoverAndEnrollNodesFinished(messagePayload) {
+    return (dispatch, getState) => {
+      const nodeIds = messagePayload.registered_nodes;
+      dispatch(this.finishOperation(nodeIds));
+      dispatch(this.fetchNodes());
+
+      switch (messagePayload.status) {
+        case 'SUCCESS': {
+          dispatch(
+            NotificationActions.notify({
+              type: 'success',
+              title: 'Nodes enrolled'
+            })
+          );
+          break;
+        }
+      case 'FAILED': {
+        dispatch(
+          NotificationActions.notify({
+            title: 'Nodes could not be discovered',
+            message: messagePayload.message
+          })
+        );
+        break;
+      }
+        default:
+          break;
+      }
+    };
   }
 };

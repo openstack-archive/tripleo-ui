@@ -38,6 +38,10 @@ export default {
           );
           break;
 
+        case MistralConstants.BAREMETAL_DISCOVER_AND_ENROLL:
+          dispatch(NodesActions.discoverAndEnrollNodesFinished(payload));
+          break;
+
         case MistralConstants.BAREMETAL_INTROSPECT:
           dispatch(NodesActions.nodesIntrospectionFinished(payload));
           break;
