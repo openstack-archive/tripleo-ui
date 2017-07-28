@@ -21,8 +21,10 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 
-import ModalFormErrorList from '../ui/forms/FormErrorList';
+import { getPlan } from '../../selectors/plans';
+import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import PlanEditFormTabs from './PlanEditFormTabs';
 import PlansActions from '../../actions/PlansActions';
 import Modal from '../ui/Modal';
@@ -58,7 +60,7 @@ class EditPlan extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchPlan(this.getNameFromUrl());
+    this.props.fetchPlan(this.props.match.params.planName);
   }
 
   setUploadType(e) {
@@ -80,10 +82,10 @@ class EditPlan extends React.Component {
         planFiles[item.name] = {};
         planFiles[item.name].contents = item.content;
       });
-      this.props.updatePlan(this.getNameFromUrl(), planFiles);
+      this.props.updatePlan(this.props.plan.name, planFiles);
     } else {
       let file = this.state.selectedFiles[0].file;
-      this.props.updatePlanFromTarball(this.getNameFromUrl(), file);
+      this.props.updatePlanFromTarball(this.props.plan.name, file);
     }
   }
 
@@ -95,69 +97,69 @@ class EditPlan extends React.Component {
     this.setState({ canSubmit: false });
   }
 
-  getNameFromUrl() {
-    let planName = this.props.match.params.planName || '';
-    return planName.replace(/[^A-Za-z0-9_-]*/g, '');
-  }
-
   render() {
-    let plan = this.props.plans.get(this.getNameFromUrl());
-    let planFiles = plan ? plan.files : undefined;
+    const { plan } = this.props;
 
-    return (
-      <Modal dialogClasses="modal-lg">
-        <Formsy.Form
-          ref="EditPlanForm"
-          role="form"
-          className="form-horizontal"
-          onChange={this.onPlanFilesChange.bind(this)}
-          onValidSubmit={this.onFormSubmit.bind(this)}
-          onValid={this.onFormValid.bind(this)}
-          onInvalid={this.onFormInvalid.bind(this)}
-        >
-          <div className="modal-header">
-            <Link to="/plans/manage" type="button" className="close">
-              <span aria-hidden="true" className="pficon pficon-close" />
-            </Link>
-            <h4>
-              <FormattedMessage
-                {...messages.updatePlanNameFiles}
-                values={{ planName: this.getNameFromUrl() }}
-              />
-            </h4>
-          </div>
-          <Loader
-            loaded={!this.props.isTransitioningPlan}
-            size="lg"
-            height={60}
-            content={this.props.intl.formatMessage(messages.updatingPlanLoader)}
+    return plan
+      ? <Modal dialogClasses="modal-lg">
+          <Formsy.Form
+            ref="EditPlanForm"
+            role="form"
+            className="form-horizontal"
+            onChange={this.onPlanFilesChange.bind(this)}
+            onValidSubmit={this.onFormSubmit.bind(this)}
+            onValid={this.onFormValid.bind(this)}
+            onInvalid={this.onFormInvalid.bind(this)}
           >
-            <ModalFormErrorList errors={this.props.planFormErrors.toJS()} />
-            <div className="modal-body">
-              <PlanEditFormTabs
-                selectedFiles={this.state.selectedFiles}
-                planName={this.getNameFromUrl()}
-                planFiles={planFiles}
-                setUploadType={this.setUploadType.bind(this)}
-                uploadType={this.state.uploadType}
-              />
+            <div className="modal-header">
+              <Link to="/plans/manage" type="button" className="close">
+                <span aria-hidden="true" className="pficon pficon-close" />
+              </Link>
+              <h4>
+                <FormattedMessage
+                  {...messages.updatePlanNameFiles}
+                  values={{ planName: plan.name }}
+                />
+              </h4>
             </div>
-          </Loader>
-          <div className="modal-footer">
-            <button
-              disabled={!this.state.canSubmit}
-              className="btn btn-primary"
-              type="submit"
+            <Loader
+              loaded={!this.props.isTransitioningPlan}
+              size="lg"
+              height={60}
+              content={this.props.intl.formatMessage(
+                messages.updatingPlanLoader
+              )}
             >
-              <FormattedMessage {...messages.uploadAndUpdate} />
-            </button>
-            <Link to="/plans/manage" type="button" className="btn btn-default">
-              <FormattedMessage {...messages.cancel} />
-            </Link>
-          </div>
-        </Formsy.Form>
-      </Modal>
-    );
+              <ModalFormErrorList errors={this.props.planFormErrors.toJS()} />
+              <div className="modal-body">
+                <PlanEditFormTabs
+                  selectedFiles={this.state.selectedFiles}
+                  planName={plan.name}
+                  planFiles={plan.files}
+                  setUploadType={this.setUploadType.bind(this)}
+                  uploadType={this.state.uploadType}
+                />
+              </div>
+            </Loader>
+            <div className="modal-footer">
+              <button
+                disabled={!this.state.canSubmit}
+                className="btn btn-primary"
+                type="submit"
+              >
+                <FormattedMessage {...messages.uploadAndUpdate} />
+              </button>
+              <Link
+                to="/plans/manage"
+                type="button"
+                className="btn btn-default"
+              >
+                <FormattedMessage {...messages.cancel} />
+              </Link>
+            </div>
+          </Formsy.Form>
+        </Modal>
+      : <Redirect to="/plans" />;
   }
 }
 
@@ -168,17 +170,17 @@ EditPlan.propTypes = {
   isTransitioningPlan: PropTypes.bool,
   match: PropTypes.object,
   params: PropTypes.object,
+  plan: ImmutablePropTypes.record,
   planFormErrors: ImmutablePropTypes.list,
-  plans: ImmutablePropTypes.map,
   updatePlan: PropTypes.func,
   updatePlanFromTarball: PropTypes.func
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
     isTransitioningPlan: state.plans.isTransitioningPlan,
     planFormErrors: state.plans.planFormErrors,
-    plans: state.plans.get('all')
+    plan: getPlan(state, ownProps.match.params.planName)
   };
 }
 
