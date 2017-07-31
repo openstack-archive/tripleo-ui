@@ -14,6 +14,7 @@ Welcome to Tripleo UI's developer documentation!
    overview
    testing
    translation
+   logging
    packaging
    contributing
 
