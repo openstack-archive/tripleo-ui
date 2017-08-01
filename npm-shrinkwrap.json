@@ -22,6 +22,11 @@
       "from": "asap@>=2.0.3 <2.1.0",
       "resolved": "https://registry.npmjs.org/asap/-/asap-2.0.5.tgz"
     },
+    "axios": {
+      "version": "0.16.2",
+      "from": "axios@latest",
+      "resolved": "https://registry.npmjs.org/axios/-/axios-0.16.2.tgz"
+    },
     "babel-code-frame": {
       "version": "6.20.0",
       "from": "babel-code-frame@>=6.20.0 <7.0.0",
@@ -514,7 +519,7 @@
     },
     "es6-error": {
       "version": "4.0.2",
-      "from": "es6-error@>=4.0.0 <5.0.0",
+      "from": "https://registry.npmjs.org/es6-error/-/es6-error-4.0.2.tgz",
       "resolved": "https://registry.npmjs.org/es6-error/-/es6-error-4.0.2.tgz"
     },
     "escape-string-regexp": {
@@ -543,6 +548,11 @@
           "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.7.tgz"
         }
       }
+    },
+    "follow-redirects": {
+      "version": "1.2.4",
+      "from": "follow-redirects@>=1.2.3 <2.0.0",
+      "resolved": "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.2.4.tgz"
     },
     "form-data-to-object": {
       "version": "0.2.0",
@@ -618,6 +628,11 @@
       "version": "2.2.2",
       "from": "invariant@>=2.2.1 <2.3.0",
       "resolved": "https://registry.npmjs.org/invariant/-/invariant-2.2.2.tgz"
+    },
+    "is-buffer": {
+      "version": "1.1.5",
+      "from": "is-buffer@>=1.1.5 <2.0.0",
+      "resolved": "https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.5.tgz"
     },
     "is-finite": {
       "version": "1.0.2",
@@ -909,7 +924,7 @@
     },
     "query-string": {
       "version": "3.0.3",
-      "from": "query-string@>=3.0.0 <4.0.0",
+      "from": "https://registry.npmjs.org/query-string/-/query-string-3.0.3.tgz",
       "resolved": "https://registry.npmjs.org/query-string/-/query-string-3.0.3.tgz"
     },
     "raf": {
