@@ -137,17 +137,32 @@ describe('PlansActions', () => {
     });
   });
 
-  let apiResponse = {
+  let apiResponseMistral = {
     output: '{ "result": [ "overcloud", "another-cloud" ] }'
   };
 
+  let apiResponseSwift = [
+    { responseText: `description: Default deployment plan\nname: overcloud` },
+    { responseText: `description: My custom plan\nname: another-cloud` }
+  ];
+
   describe('fetchPlans', () => {
     beforeEach(done => {
+      let swiftAlreadyCalled = false;
       spyOn(PlansActions, 'requestPlans');
       spyOn(PlansActions, 'receivePlans');
       spyOn(MistralApiService, 'runAction').and.callFake(
-        createResolvingPromise(apiResponse)
+        createResolvingPromise(apiResponseMistral)
       );
+      spyOn(SwiftApiService, 'getObject').and.callFake(() => {
+        if (swiftAlreadyCalled) {
+          return apiResponseSwift[1];
+        } else {
+          swiftAlreadyCalled = true;
+          return apiResponseSwift[0];
+        }
+      });
+
       // Mock the service call.
       // Call the action creator and the resulting action.
       // In this case, dispatch and getState are just empty placeHolders.
@@ -164,8 +179,8 @@ describe('PlansActions', () => {
 
     it('dispatches receivePlans', () => {
       expect(PlansActions.receivePlans).toHaveBeenCalledWith([
-        'overcloud',
-        'another-cloud'
+        { name: 'overcloud', description: 'Default deployment plan' },
+        { name: 'another-cloud', description: 'My custom plan' }
       ]);
     });
   });
