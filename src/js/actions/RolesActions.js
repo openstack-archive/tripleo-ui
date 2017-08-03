@@ -19,7 +19,7 @@ import RolesConstants from '../constants/RolesConstants';
 import MistralApiService from '../services/MistralApiService';
 import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import MistralConstants from '../constants/MistralConstants';
-import logger from '../services/logger';
+import logger from '../services/logging/LoggingService';
 
 export default {
   fetchRoles(planName) {
