@@ -14,17 +14,12 @@
  * under the License.
  */
 
-import { Record } from 'immutable';
+import { AppConfig } from '../immutableRecords/appConfig';
 
-const InitialState = Record({
-  language: 'en'
-});
+const initialState = new AppConfig();
 
-export default function i18nReducer(state = new InitialState(), action) {
+export default function appConfig(state = initialState, action) {
   switch (action.type) {
-    case 'CHOOSE_LANGUAGE':
-      return state.set('language', action.payload);
-
     default:
       return state;
   }

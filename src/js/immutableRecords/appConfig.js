@@ -14,18 +14,11 @@
  * under the License.
  */
 
-import { Record } from 'immutable';
+import { List, Map, Record } from 'immutable';
 
-const InitialState = Record({
-  language: 'en'
+export const AppConfig = Record({
+  endpoints: Map(),
+  zaqarDefaultQueue: 'tripleo',
+  excludedLanguages: List(),
+  loggers: List(['console'])
 });
-
-export default function i18nReducer(state = new InitialState(), action) {
-  switch (action.type) {
-    case 'CHOOSE_LANGUAGE':
-      return state.set('language', action.payload);
-
-    default:
-      return state;
-  }
-}

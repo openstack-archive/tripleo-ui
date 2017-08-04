@@ -24,6 +24,7 @@ import ReactDOM from 'react-dom';
 import { Redirect } from 'react-router-dom';
 
 import FormErrorList from '../ui/forms/FormErrorList';
+import { getCurrentLanguage, getEnabledLanguages } from '../../selectors/i18n';
 import I18nActions from '../../actions/I18nActions';
 import Loader from '../ui/Loader';
 import LoginInput from '../ui/forms/LoginInput';
@@ -148,6 +149,7 @@ class Login extends React.Component {
                     name="language"
                     chooseLanguage={this.props.chooseLanguage}
                     language={this.props.language}
+                    languages={this.props.languages}
                   />
                   <LoginInput
                     name="username"
@@ -205,6 +207,7 @@ Login.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
   isAuthenticating: PropTypes.bool.isRequired,
   language: PropTypes.string,
+  languages: ImmutablePropTypes.map.isRequired,
   location: PropTypes.object,
   userLoggedIn: PropTypes.bool.isRequired
 };
@@ -215,7 +218,8 @@ function mapStateToProps(state) {
     formFieldErrors: state.login.getIn(['loginForm', 'formFieldErrors']),
     isAuthenticated: state.login.isAuthenticated,
     isAuthenticating: state.login.get('isAuthenticating'),
-    language: state.i18n.get('language', 'en'),
+    language: getCurrentLanguage(state),
+    languages: getEnabledLanguages(state),
     userLoggedIn: state.login.hasIn(['keystoneAccess', 'user'])
   };
 }
