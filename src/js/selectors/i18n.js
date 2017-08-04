@@ -16,29 +16,40 @@
 
 import { createSelector } from 'reselect';
 import { IntlProvider } from 'react-intl';
+import { Map } from 'immutable';
 
-const languageSelector = state => state.i18n.get('language');
+import { LANGUAGE_NAMES } from '../constants/i18n';
+// TODO(jtomasek): This should rather be in /constants
+import { MESSAGES } from '../components/i18n/messages';
 
-const messagesSelector = state => state.i18n.get('messages');
+const getMessages = () => MESSAGES;
+const getAvailableLanguages = () => LANGUAGE_NAMES;
+export const getAppConfig = state => state.appConfig;
+export const getCurrentLanguage = state => state.i18n.language;
 
-export const getLanguage = createSelector(
-  [languageSelector],
-  language => language
-);
-
-export const getMessages = createSelector(
-  [languageSelector, messagesSelector],
+export const getCurrentLanguageMessages = createSelector(
+  [getCurrentLanguage, getMessages],
   (language, messages) => messages[language]
 );
 
 export const getIntl = createSelector(
-  [languageSelector, messagesSelector],
+  [getCurrentLanguage, getCurrentLanguageMessages],
   (language, messages) => {
     const intlProvider = new IntlProvider(
-      { locale: language, messages: messages[language] },
+      { locale: language, messages: messages },
       {}
     );
     const { intl } = intlProvider.getChildContext();
     return intl;
   }
+);
+
+export const getEnabledLanguages = createSelector(
+  [getAppConfig, getAvailableLanguages],
+  (appConfig, languages) =>
+    // with immutablejs v 4.0.0 this can be replaced with
+    // Map(languages).deleteAll(appConfig.excludedLanguages).sort();
+    Map(languages)
+      .filterNot((language, key) => appConfig.excludedLanguages.includes(key))
+      .sort()
 );

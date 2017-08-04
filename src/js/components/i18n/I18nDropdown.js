@@ -16,15 +16,16 @@
 
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import Dropdown from '../ui/dropdown/Dropdown';
 import DropdownToggle from '../ui/dropdown/DropdownToggle';
 import DropdownItem from '../ui/dropdown/DropdownItem';
+import { getEnabledLanguages, getCurrentLanguage } from '../../selectors/i18n';
 import I18nActions from '../../actions/I18nActions';
 import { MESSAGES } from './messages';
-import { getEnabledLanguages } from '../../services/utils';
 
 const messages = defineMessages({
   language: {
@@ -35,10 +36,10 @@ const messages = defineMessages({
 
 class I18nDropdown extends React.Component {
   _renderDropdownItems() {
-    const enabledLang = this.props.language;
-    return getEnabledLanguages()
+    const { currentLanguage, languages } = this.props;
+    return languages
       .map((langName, langKey) => {
-        const active = enabledLang === langKey;
+        const active = currentLanguage === langKey;
         return MESSAGES[langKey] || langKey === 'en'
           ? <DropdownItem
               key={`lang-${langKey}`}
@@ -66,12 +67,14 @@ class I18nDropdown extends React.Component {
 
 I18nDropdown.propTypes = {
   chooseLanguage: PropTypes.func.isRequired,
-  language: PropTypes.string
+  currentLanguage: PropTypes.string,
+  languages: ImmutablePropTypes.map.isRequired
 };
 
 const mapStateToProps = state => {
   return {
-    language: state.i18n.get('language', 'en')
+    languages: getEnabledLanguages(state),
+    currentLanguage: getCurrentLanguage(state)
   };
 };
 

@@ -14,20 +14,14 @@
  * under the License.
  */
 
-import { Map } from 'immutable';
+import { Record } from 'immutable';
 
-const initialState = Map({
-  language: 'en',
-  messages: {}
+const InitialState = Record({
+  language: 'en'
 });
 
-export default function i18nReducer(state = initialState, action) {
+export default function i18nReducer(state = new InitialState(), action) {
   switch (action.type) {
-    case 'DETECT_LANGUAGE':
-      return state
-        .set('language', action.payload.language)
-        .set('messages', action.payload.messages);
-
     case 'CHOOSE_LANGUAGE':
       return state.set('language', action.payload);
 
