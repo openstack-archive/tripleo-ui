@@ -16,12 +16,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl } from 'react-intl';
-import { getEnabledLanguages } from '../../services/utils';
 
 class LanguageInput extends React.Component {
   _renderOptions() {
-    return getEnabledLanguages()
+    return this.props.languages
       .map((langName, langKey) => {
         return (
           <option key={`lang-${langKey}`} value={langKey}>
@@ -63,6 +63,7 @@ LanguageInput.propTypes = {
   autoFocus: PropTypes.bool,
   chooseLanguage: PropTypes.func.isRequired,
   language: PropTypes.string,
+  languages: ImmutablePropTypes.map.isRequired,
   name: PropTypes.string.isRequired
 };
 
