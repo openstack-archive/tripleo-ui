@@ -24,6 +24,7 @@ import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import DebugScreen from './debug/DebugScreen';
 import DeploymentPlan from './deployment_plan/DeploymentPlan';
 import { getCurrentPlanName } from '../selectors/plans';
+import { getEnabledLanguages } from '../selectors/i18n';
 import Loader from './ui/Loader';
 import LoginActions from '../actions/LoginActions';
 import NavBar from './NavBar';
@@ -49,7 +50,14 @@ class AuthenticatedContent extends React.Component {
   }
 
   render() {
-    const { currentPlanName, intl, logoutUser, plansLoaded, user } = this.props;
+    const {
+      currentPlanName,
+      intl,
+      languages,
+      logoutUser,
+      plansLoaded,
+      user
+    } = this.props;
     return (
       <Loader
         loaded={plansLoaded}
@@ -57,7 +65,11 @@ class AuthenticatedContent extends React.Component {
         global
       >
         <header>
-          <NavBar user={user} onLogout={logoutUser.bind(this)} />
+          <NavBar
+            user={user}
+            onLogout={logoutUser.bind(this)}
+            languages={languages}
+          />
         </header>
         <div className="wrapper-fixed-body container-fluid">
           <div className="row">
@@ -87,6 +99,7 @@ AuthenticatedContent.propTypes = {
   fetchWorkflowExecutions: PropTypes.func,
   initializeZaqarConnection: PropTypes.func.isRequired,
   intl: PropTypes.object,
+  languages: ImmutablePropTypes.map.isRequired,
   logoutUser: PropTypes.func.isRequired,
   plansLoaded: PropTypes.bool,
   user: ImmutablePropTypes.map
@@ -102,6 +115,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 });
 
 const mapStateToProps = state => ({
+  languages: getEnabledLanguages(state),
   currentPlanName: getCurrentPlanName(state),
   plansLoaded: state.plans.get('plansLoaded'),
   user: state.login.getIn(['token', 'user'])
