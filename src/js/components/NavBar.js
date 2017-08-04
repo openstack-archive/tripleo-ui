@@ -20,7 +20,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
-import { getEnabledLanguages } from '../services/utils';
 import NavTab from './ui/NavTab';
 import I18nDropdown from './i18n/I18nDropdown';
 
@@ -52,11 +51,9 @@ export default class NavBar extends React.Component {
   }
 
   _renderLanguageDropdown() {
-    const languages = getEnabledLanguages();
-
     // Only include the I18nDropdown if there's more than one
     // language to choose from.
-    return Object.keys(languages).length > 1
+    return this.props.languages.size > 1
       ? <li>
           <I18nDropdown />
         </li>
@@ -121,6 +118,7 @@ export default class NavBar extends React.Component {
   }
 }
 NavBar.propTypes = {
+  languages: ImmutablePropTypes.map.isRequired,
   onLogout: PropTypes.func.isRequired,
   user: ImmutablePropTypes.map
 };
