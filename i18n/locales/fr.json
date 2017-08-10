@@ -60,7 +60,6 @@
         "EnvironmentConfiguration.saveChanges": "Enregistrer les changements",
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationMessage": "La configuration de l'environnement \u00e0 \u00e9t\u00e9 mise \u00e0 jour avec succ\u00e8s.",
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationTitle": "Configuration de l\u2019environnement mise \u00e0 jour",
-        "EnvironmentGroup.requiredEnvironments": "L\u2019environnement requiert {requiredEnvironments}.",
         "ExportPlan.cancel": "Annuler",
         "ExportPlan.download": "T\u00e9l\u00e9charger l'export",
         "ExportPlan.error": "Une erreur s'est produite lors de l'export du plan",

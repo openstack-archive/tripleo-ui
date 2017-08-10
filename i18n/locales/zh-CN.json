@@ -67,7 +67,6 @@
         "EnvironmentConfiguration.saveChanges": "\u4fdd\u5b58\u53d8\u66f4",
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationMessage": "\u73af\u5883\u914d\u7f6e\u5df2\u88ab\u6210\u529f\u66f4\u65b0\u3002",
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationTitle": "\u73af\u5883\u914d\u7f6e\u88ab\u66f4\u65b0",
-        "EnvironmentGroup.requiredEnvironments": "\u8fd9\u4e2a\u73af\u5883\u9700\u8981 {requiredEnvironments}\u3002",
         "ExportPlan.cancel": "\u53d6\u6d88",
         "ExportPlan.download": "\u4e0b\u8f7d\u5bfc\u51fa",
         "ExportPlan.downloadMessage": "\u4f60\u8bf7\u6c42\u7684\u5bfc\u51fa\u8ba1\u5212\u5df2\u7ecf\u5c31\u7eea\u3002\u8bf7\u70b9\u51fb\u4e0b\u9762\u7684\u6309\u94ae\u4e0b\u8f7d\u8be5\u5bfc\u51fa\u3002\u4f60\u9700\u8981\u70b9\u51fb\u53f3\u952e\uff0c\u5e76\u9009\u62e9\u201c\u4fdd\u5b58\u94fe\u63a5\u4e3a...\u201d\u3002",

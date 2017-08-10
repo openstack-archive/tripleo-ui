@@ -66,7 +66,6 @@
         "EnvironmentConfiguration.saveChanges": "De\u011fi\u015fiklikleri Kaydet",
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationMessage": "Ortam Yap\u0131land\u0131rmas\u0131 ba\u015far\u0131yla g\u00fcncellendi.",
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationTitle": "Ortam Yap\u0131land\u0131rmas\u0131 g\u00fcncellendi",
-        "EnvironmentGroup.requiredEnvironments": "Bu ortam {requiredEnvironments} gerektirir.",
         "ExportPlan.cancel": "\u0130ptal",
         "ExportPlan.download": "D\u0131\u015fa Aktar\u0131m\u0131 \u0130ndir",
         "ExportPlan.downloadMessage": "\u0130stedi\u011finiz plan d\u0131\u015fa aktar\u0131m\u0131 haz\u0131r. L\u00fctfen d\u0131\u015fa aktar\u0131m\u0131 indirmek i\u00e7in a\u015fa\u011f\u0131daki d\u00fc\u011fmeye t\u0131klay\u0131n. D\u00fc\u011fmeye sa\u011f t\u0131klayarak \"Ba\u011flant\u0131y\u0131 farkl\u0131 kaydet...\" demeniz gerekebilir.",
