@@ -18,15 +18,19 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import Login from './login/Login';
+import NotificationsToaster from './notifications/NotificationsToaster';
 import UserAuthenticator from './UserAuthenticator';
 
 export default class App extends React.Component {
   render() {
     return (
-      <Switch>
-        <Route path="/login" component={Login} />
-        <Route path="/" component={UserAuthenticator} />
-      </Switch>
+      <div>
+        <NotificationsToaster />
+        <Switch>
+          <Route path="/login" component={Login} />
+          <Route path="/" component={UserAuthenticator} />
+        </Switch>
+      </div>
     );
   }
 }

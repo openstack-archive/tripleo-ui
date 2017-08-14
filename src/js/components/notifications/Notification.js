@@ -95,7 +95,7 @@ export default class Notification extends React.Component {
                 type="button"
                 className="close"
                 aria-label="Close"
-                onClick={this._hideNotification.bind(this)}
+                onClick={this.props.removeNotification}
               >
                 <span className="pficon pficon-close" aria-hidden="true" />
               </button>
@@ -122,7 +122,9 @@ Notification.propTypes = {
 };
 
 Notification.defaultProps = {
+  dismissable: true,
   message: '',
   title: '',
+  timeoutable: true,
   type: 'error'
 };
