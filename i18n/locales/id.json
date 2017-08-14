@@ -67,6 +67,7 @@
         "EnvironmentConfiguration.saveChanges": "Save Changes",
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationMessage": "The Environment Configuration (konfigurasi lingkungan) telah berhasil diperbarui.",
         "EnvironmentConfigurationActions.envConfigUpdatedNotificationTitle": "Konfigurasi Lingkungan diperbarui",
+        "EnvironmentGroup.requiredEnvironments": "Pilihan ini mewajibkan {requiredEnvironments} untuk diaktifkan.",
         "ExportPlan.cancel": "Cancel",
         "ExportPlan.download": "Download Export",
         "ExportPlan.downloadMessage": "The plan export (ekspor rencana) yang Anda minta sudah siap. Silakan klik tombol di bawah untuk mendownload ekspor. Anda mungkin perlu klik kanan tombol dan pilih \"Save link as ...\".",
