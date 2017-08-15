@@ -72,3 +72,7 @@ export function getEnabledLanguages() {
 
   return Map(configLanguages).sort();
 }
+
+export function getLogLevel(level) {
+  return getAppConfig().logLevel || 'default';
+}

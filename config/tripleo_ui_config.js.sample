@@ -24,6 +24,9 @@ window.tripleOUiConfig = {
   // 'excludedLanguages': ['de', 'ja'],
 
   // Logging
-  // 'loggers': ['console', 'zaqar']
-  // 'logger-zaqar-queue': 'tripleo-ui-logging'
+  // 'loggers': ['console', 'zaqar'],
+  // 'logger-zaqar-queue': 'tripleo-ui-logging',
+  //
+  // 'default' excludes application state, 'full' logs everything
+  // 'logLevel': 'default'
 };
