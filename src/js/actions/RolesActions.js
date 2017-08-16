@@ -14,12 +14,10 @@
  * under the License.
  */
 
-import NotificationActions from './NotificationActions';
+import { handleErrors } from './ErrorActions';
 import RolesConstants from '../constants/RolesConstants';
 import MistralApiService from '../services/MistralApiService';
-import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import MistralConstants from '../constants/MistralConstants';
-import logger from '../services/logging/LoggingService';
 
 export default {
   fetchRoles(planName) {
@@ -30,15 +28,11 @@ export default {
         container: planName
       })
         .then(response => {
-          dispatch(this.fetchRolesSuccess(JSON.parse(response.output).result));
+          dispatch(this.fetchRolesSuccess(response));
         })
         .catch(error => {
-          logger.error('Error in RolesAction.fetchRoles', error.stack || error);
+          dispatch(handleErrors(error, 'Roles could not be loaded'));
           dispatch(this.fetchRolesFailed());
-          let errorHandler = new MistralApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
         });
     };
   },

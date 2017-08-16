@@ -19,8 +19,9 @@ import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 import { List, Map, Set } from 'immutable';
 
-import NodesTableView from '../../../js/components/nodes/NodesTableView';
+// TODO(jtomasek): remove this import when store is correctly mocked
 import store from '../../../js/store';
+import NodesTableView from '../../../js/components/nodes/NodesTableView';
 
 let nodes = Map({
   1: { uuid: 1 },

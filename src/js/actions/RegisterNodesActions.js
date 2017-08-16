@@ -19,15 +19,14 @@ import { normalize, arrayOf } from 'normalizr';
 import { Map } from 'immutable';
 
 import { getCurrentPlanName } from '../selectors/plans';
+import { handleErrors } from './ErrorActions';
 import RegisterNodesConstants from '../constants/RegisterNodesConstants';
-import MistralApiErrorHandler from '../services/MistralApiErrorHandler';
 import MistralApiService from '../services/MistralApiService';
 import NotificationActions from './NotificationActions';
 import NodesActions from './NodesActions';
 import { nodeSchema } from '../normalizrSchemas/nodes';
 import ValidationsActions from './ValidationsActions';
 import MistralConstants from '../constants/MistralConstants';
-import logger from '../services/logging/LoggingService';
 
 const messages = defineMessages({
   registrationNotificationTitle: {
@@ -81,25 +80,15 @@ export default {
         }
       )
         .then(response => {
-          if (response.state === 'ERROR') {
-            const errors = [
-              {
-                title: 'Nodes Registration Failed',
-                message: response.state_info
-              }
-            ];
-            dispatch(this.startNodesRegistrationFailed(errors));
-          } else {
-            dispatch(this.startNodesRegistrationSuccess());
-          }
+          dispatch(this.startNodesRegistrationSuccess());
         })
         .catch(error => {
-          logger.error(
-            'Error in RegisterNodesActions.startNodesRegistration',
-            error
+          dispatch(handleErrors(error, 'Nodes registration failed', false));
+          dispatch(
+            this.startNodesRegistrationFailed([
+              { title: 'Nodes registration failed', message: error.message }
+            ])
           );
-          let errorHandler = new MistralApiErrorHandler(error);
-          dispatch(this.startNodesRegistrationFailed(errorHandler.errors));
         });
     };
   },
@@ -159,7 +148,9 @@ export default {
           const errors = [
             {
               title: 'Nodes Registration Failed',
-              message: JSON.stringify(messagePayload.message)
+              message: messagePayload.message.message
+                .filter(m => m.result)
+                .map(m => m.result)
             }
           ];
           history.push('/nodes/register');

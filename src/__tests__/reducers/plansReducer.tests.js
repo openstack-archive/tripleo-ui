@@ -16,6 +16,8 @@
 
 import { List, Map } from 'immutable';
 
+// TODO(jtomasek): remove this import when store is correctly mocked
+import store from '../../js/store'; // eslint-disable-line no-unused-vars
 import CurrentPlanActions from '../../js/actions/CurrentPlanActions';
 import {
   InitialPlanState,
