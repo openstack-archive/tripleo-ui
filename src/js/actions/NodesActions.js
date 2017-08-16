@@ -20,8 +20,6 @@ import when from 'when';
 
 import { getNodesByIds } from '../selectors/nodes';
 import { handleErrors } from './ErrorActions';
-import IronicInspectorApiErrorHandler
-  from '../services/IronicInspectorApiErrorHandler';
 import IronicApiService from '../services/IronicApiService';
 import IronicInspectorApiService from '../services/IronicInspectorApiService';
 import MistralApiService from '../services/MistralApiService';
@@ -33,7 +31,6 @@ import {
   introspectionStatusSchema
 } from '../normalizrSchemas/nodes';
 import MistralConstants from '../constants/MistralConstants';
-import logger from '../services/logging/LoggingService';
 import { setNodeCapability } from '../utils/nodes';
 
 const messages = defineMessages({
@@ -134,15 +131,10 @@ export default {
           dispatch(this.fetchNodeIntrospectionDataSuccess(nodeId, response));
         })
         .catch(error => {
-          dispatch(this.fetchNodeIntrospectionDataFailed(nodeId));
-          logger.error(
-            'Error in NodesActions.fetchNodeIntrospectionData',
-            error.stack || error
+          dispatch(
+            handleErrors(error, 'Node introspection data could not be loaded')
           );
-          let errorHandler = new IronicInspectorApiErrorHandler(error);
-          errorHandler.errors.forEach(error => {
-            dispatch(NotificationActions.notify(error));
-          });
+          dispatch(this.fetchNodeIntrospectionDataFailed(nodeId));
         });
     };
   },
