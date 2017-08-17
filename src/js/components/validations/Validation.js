@@ -53,9 +53,18 @@ export default class Validation extends React.Component {
     return this.props.groups.map(group => {
       return (
         <div key={group} className="list-view-pf-additional-info-item">
-          <small>
-            <span className="label label-default">{group}</span>
-          </small>
+          <span
+            className="label label-default"
+            onClick={() =>
+              this.props.addActiveFilter({
+                filterBy: 'group',
+                filterString: group
+              })}
+          >
+            <small>
+              {group}
+            </small>
+          </span>
         </div>
       );
     });
@@ -99,6 +108,7 @@ export default class Validation extends React.Component {
 }
 
 Validation.propTypes = {
+  addActiveFilter: PropTypes.func.isRequired,
   description: PropTypes.string,
   groups: ImmutablePropTypes.list.isRequired,
   id: PropTypes.string.isRequired,
