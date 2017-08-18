@@ -27,6 +27,7 @@ export default {
   PARAMETERS_GET: 'tripleo.parameters.get_flatten',
   PARAMETERS_UPDATE: 'tripleo.parameters.update',
   PLAN_CREATE: 'tripleo.plan_management.v1.create_deployment_plan',
+  PLAN_UPDATE: 'tripleo.plan_management.v1.update_deployment_plan',
   PLAN_DELETE: 'tripleo.plan.delete',
   PLAN_LIST: 'tripleo.plan.list',
   PLAN_EXPORT: 'tripleo.plan_management.v1.export_deployment_plan',

@@ -72,6 +72,11 @@ export default {
           break;
         }
 
+        case MistralConstants.PLAN_UPDATE: {
+          dispatch(PlansActions.updatePlanFinished(payload, history));
+          break;
+        }
+
         case MistralConstants.DEPLOYMENT_DEPLOY_PLAN: {
           dispatch(PlansActions.deployPlanFinished(payload));
           break;
