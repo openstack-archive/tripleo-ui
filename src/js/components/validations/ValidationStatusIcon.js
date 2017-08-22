@@ -25,7 +25,7 @@ export const ValidationStatusIcon = ({ status, triggerValidationAction }) => {
     'running fa fa-stop-circle': status === 'running',
     'pficon pficon-error-circle-o front': status === 'failed',
     'pficon pficon-ok front': status === 'success',
-    'pficon pficon-warning-triangle-o': status === 'warning',
+    'pficon pficon-warning-triangle-o front': status === 'warning',
     'fa fa-play-circle': includes(['new', 'paused'], status),
     'pficon pficon-help': status === 'error'
   });
