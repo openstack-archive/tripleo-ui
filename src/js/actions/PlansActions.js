@@ -97,10 +97,12 @@ export default {
             )
             .then(planEnvs =>
               planNames.map(planName => {
-                const { name: title, description } = yaml.safeLoad(
-                  planEnvs[planName]
-                );
-                return { name: planName, title, description };
+                for (let i = 0; i < planEnvs.length; i++) {
+                  const { name, description } = yaml.safeLoad(planEnvs[i]);
+                  if (name === planName) {
+                    return { name, description };
+                  }
+                }
               })
             )
             .catch(error => {
