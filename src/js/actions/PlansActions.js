@@ -97,17 +97,20 @@ export default {
             )
             .then(planEnvs =>
               planNames.map(planName => {
-                const { name: title, description } = yaml.safeLoad(
-                  planEnvs[planName]
-                );
-                return { name: planName, title, description };
+                for (let i = 0; i < planEnvs.length; i++) {
+                  const { name, description } = yaml.safeLoad(planEnvs[i]);
+                  if (name === planName) {
+                    return { name, description };
+                  }
+                }
+                return { name: planName };
               })
             )
             .catch(error => {
               dispatch(
                 handleErrors(error, 'Plan descriptions could not be loaded')
               );
-              return planNames.map(name => ({ name, title: name }));
+              return planNames.map(name => ({ name }));
             })
         )
         .then(plans => {
