@@ -20,9 +20,9 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { ListView } from 'patternfly-react';
 
 import { getNodeDrives } from '../../../selectors/nodes';
-import { ListView } from '../../ui/ListView';
 import Modal from '../../ui/Modal';
 import NodeDrive from './NodeDrive';
 import NodesActions from '../../../actions/NodesActions';
