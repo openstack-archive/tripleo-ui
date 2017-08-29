@@ -14,13 +14,13 @@
  * under the License.
  */
 
-import Formsy from 'formsy-react';
-import PropTypes from 'prop-types';
-import React from 'react';
+import Formsy from 'formsy-react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 class TableCheckBox extends React.Component {
   changeValue(event) {
-    this.props.setValue(event.target.checked);
+    this.props.setValue(event.target.checked)
   }
 
   render() {
@@ -35,7 +35,7 @@ class TableCheckBox extends React.Component {
         checked={!!this.props.getValue()}
         value={this.props.getValue()}
       />
-    );
+    )
   }
 }
 TableCheckBox.propTypes = {
@@ -45,9 +45,9 @@ TableCheckBox.propTypes = {
   name: PropTypes.string.isRequired,
   setValue: PropTypes.func,
   type: PropTypes.string
-};
+}
 TableCheckBox.defaultProps = {
   disabled: false,
   type: 'checkbox'
-};
-export default Formsy.HOC(TableCheckBox);
+}
+export default Formsy.HOC(TableCheckBox)

@@ -14,10 +14,10 @@
  * under the License.
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
-import { getEnabledLanguages } from '../../services/utils';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { injectIntl } from 'react-intl'
+import { getEnabledLanguages } from '../../services/utils'
 
 class LanguageInput extends React.Component {
   _renderOptions() {
@@ -27,13 +27,13 @@ class LanguageInput extends React.Component {
           <option key={`lang-${langKey}`} value={langKey}>
             {langName}
           </option>
-        );
+        )
       })
-      .toList();
+      .toList()
   }
 
   _onChange(event) {
-    this.props.chooseLanguage(event.currentTarget.value);
+    this.props.chooseLanguage(event.currentTarget.value)
   }
 
   render() {
@@ -55,7 +55,7 @@ class LanguageInput extends React.Component {
           </select>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -64,10 +64,10 @@ LanguageInput.propTypes = {
   chooseLanguage: PropTypes.func.isRequired,
   language: PropTypes.string,
   name: PropTypes.string.isRequired
-};
+}
 
 LanguageInput.defaultProps = {
   autoFocus: false
-};
+}
 
-export default injectIntl(LanguageInput);
+export default injectIntl(LanguageInput)

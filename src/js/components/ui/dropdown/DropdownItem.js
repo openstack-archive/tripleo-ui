@@ -14,27 +14,27 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ClassNames from 'classnames'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 export default class DropdownItem extends React.Component {
   handleClick(e) {
-    e.preventDefault();
-    this.props.onClick(e);
-    this.props.toggleDropdown(e);
+    e.preventDefault()
+    this.props.onClick(e)
+    this.props.toggleDropdown(e)
   }
 
   render() {
     if (this.props.divider) {
-      return <li className="divider" />;
+      return <li className="divider" />
     }
 
     const classes = {
       disabled: this.props.disabled,
       active: this.props.active
-    };
+    }
 
     if (this.props.to) {
       return (
@@ -43,7 +43,7 @@ export default class DropdownItem extends React.Component {
             {this.props.children}
           </Link>
         </li>
-      );
+      )
     }
 
     if (this.props.onClick) {
@@ -53,14 +53,14 @@ export default class DropdownItem extends React.Component {
             {this.props.children}
           </a>
         </li>
-      );
+      )
     }
 
     return (
       <li className={ClassNames(this.props.className, classes)}>
         <a className="link">{this.props.children}</a>
       </li>
-    );
+    )
   }
 }
 DropdownItem.propTypes = {
@@ -75,9 +75,9 @@ DropdownItem.propTypes = {
   onClick: PropTypes.func,
   to: PropTypes.string,
   toggleDropdown: PropTypes.func
-};
+}
 DropdownItem.defaultProps = {
   active: false,
   disabled: false,
   divider: false
-};
+}

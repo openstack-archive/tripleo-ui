@@ -14,34 +14,34 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import Formsy from 'formsy-react';
-import { fromJS, is } from 'immutable';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { isObjectLike, mapValues } from 'lodash';
-import { Link, Redirect, Route, Switch } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { connect } from 'react-redux'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import Formsy from 'formsy-react'
+import { fromJS, is } from 'immutable'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { isObjectLike, mapValues } from 'lodash'
+import { Link, Redirect, Route, Switch } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
-import { getCurrentPlanName } from '../../selectors/plans';
-import { getRole } from '../../selectors/roles';
-import { getRoleServices } from '../../selectors/parameters';
-import Loader from '../ui/Loader';
-import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
+import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC'
+import { getCurrentPlanName } from '../../selectors/plans'
+import { getRole } from '../../selectors/roles'
+import { getRoleServices } from '../../selectors/parameters'
+import Loader from '../ui/Loader'
+import ModalFormErrorList from '../ui/forms/ModalFormErrorList'
 import {
   ModalPanelBackdrop,
   ModalPanel,
   ModalPanelHeader,
   ModalPanelBody,
   ModalPanelFooter
-} from '../ui/ModalPanel';
-import NavTab from '../ui/NavTab';
-import ParametersActions from '../../actions/ParametersActions';
-import RoleNetworkConfig from './RoleNetworkConfig';
-import RoleParameters from './RoleParameters';
-import RoleServices from './RoleServices';
+} from '../ui/ModalPanel'
+import NavTab from '../ui/NavTab'
+import ParametersActions from '../../actions/ParametersActions'
+import RoleNetworkConfig from './RoleNetworkConfig'
+import RoleParameters from './RoleParameters'
+import RoleServices from './RoleServices'
 
 const messages = defineMessages({
   networkConfiguration: {
@@ -68,31 +68,31 @@ const messages = defineMessages({
     id: 'RoleDetail.services',
     defaultMessage: 'Services'
   }
-});
+})
 
 class RoleDetail extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       canSubmit: false
-    };
+    }
   }
 
   componentDidMount() {
-    const { currentPlanName } = this.props;
-    this.props.fetchParameters(currentPlanName, `/plans/${currentPlanName}`);
+    const { currentPlanName } = this.props
+    this.props.fetchParameters(currentPlanName, `/plans/${currentPlanName}`)
   }
 
   componentDidUpdate() {
-    this.invalidateForm(this.props.formFieldErrors.toJS());
+    this.invalidateForm(this.props.formFieldErrors.toJS())
   }
 
   enableButton() {
-    this.setState({ canSubmit: true });
+    this.setState({ canSubmit: true })
   }
 
   disableButton() {
-    this.setState({ canSubmit: false });
+    this.setState({ canSubmit: false })
   }
 
   /**
@@ -102,9 +102,9 @@ class RoleDetail extends React.Component {
   _filterFormData(formData) {
     return fromJS(formData)
       .filterNot((value, key) => {
-        return is(fromJS(this.props.allParameters.get(key).default), value);
+        return is(fromJS(this.props.allParameters.get(key).default), value)
       })
-      .toJS();
+      .toJS()
   }
 
   /**
@@ -114,29 +114,29 @@ class RoleDetail extends React.Component {
   _jsonParseFormData(formData) {
     return mapValues(formData, value => {
       try {
-        const parsedValue = JSON.parse(value);
+        const parsedValue = JSON.parse(value)
         if (isObjectLike(parsedValue)) {
-          return parsedValue;
+          return parsedValue
         }
-        return value;
+        return value
       } catch (e) {
-        return value === undefined ? null : value;
+        return value === undefined ? null : value
       }
-    });
+    })
   }
 
   invalidateForm(formFieldErrors) {
-    this.refs.roleParametersForm.updateInputsWithError(formFieldErrors);
+    this.refs.roleParametersForm.updateInputsWithError(formFieldErrors)
   }
 
   handleSubmit(formData, resetForm, invalidateForm) {
-    this.disableButton();
+    this.disableButton()
 
     this.props.updateParameters(
       this.props.currentPlanName,
       this._filterFormData(this._jsonParseFormData(formData)),
       Object.keys(this.refs.roleParametersForm.inputs)
-    );
+    )
   }
 
   renderRoleTabs() {
@@ -146,7 +146,7 @@ class RoleDetail extends React.Component {
       match: { params: urlParams },
       parametersLoaded,
       rolesLoaded
-    } = this.props;
+    } = this.props
     if (rolesLoaded && parametersLoaded) {
       return (
         <div className="row">
@@ -169,19 +169,19 @@ class RoleDetail extends React.Component {
           </ul>
           <ModalFormErrorList errors={formErrors.toJS()} />
         </div>
-      );
+      )
     }
   }
 
   render() {
-    const dataLoaded = this.props.rolesLoaded && this.props.parametersLoaded;
-    const roleName = this.props.role ? this.props.role.name : null;
+    const dataLoaded = this.props.rolesLoaded && this.props.parametersLoaded
+    const roleName = this.props.role ? this.props.role.name : null
     const {
       currentPlanName,
       intl,
       location,
       match: { params: urlParams }
-    } = this.props;
+    } = this.props
 
     return (
       <Formsy.Form
@@ -249,7 +249,7 @@ class RoleDetail extends React.Component {
             : null}
         </ModalPanel>
       </Formsy.Form>
-    );
+    )
   }
 }
 RoleDetail.propTypes = {
@@ -265,7 +265,7 @@ RoleDetail.propTypes = {
   role: ImmutablePropTypes.record,
   rolesLoaded: PropTypes.bool.isRequired,
   updateParameters: PropTypes.func
-};
+}
 
 function mapStateToProps(state, props) {
   return {
@@ -277,15 +277,13 @@ function mapStateToProps(state, props) {
     role: getRole(state, props.match.params.roleIdentifier),
     roleServices: getRoleServices(state, props.match.params.roleIdentifier),
     rolesLoaded: state.roles.get('loaded')
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchParameters: (currentPlanName, redirectPath) => {
-      dispatch(
-        ParametersActions.fetchParameters(currentPlanName, redirectPath)
-      );
+      dispatch(ParametersActions.fetchParameters(currentPlanName, redirectPath))
     },
     updateParameters: (currentPlanName, data, inputFields, redirectPath) => {
       dispatch(
@@ -295,11 +293,11 @@ function mapDispatchToProps(dispatch) {
           inputFields,
           redirectPath
         )
-      );
+      )
     }
-  };
+  }
 }
 
 export default checkRunningDeployment(
   injectIntl(connect(mapStateToProps, mapDispatchToProps)(RoleDetail))
-);
+)

@@ -14,37 +14,35 @@
  * under the License.
  */
 
-import { List } from 'immutable';
-import { InitialLoggerState } from '../immutableRecords/logger';
-import LoggerConstants from '../constants/LoggerConstants';
+import { List } from 'immutable'
+import { InitialLoggerState } from '../immutableRecords/logger'
+import LoggerConstants from '../constants/LoggerConstants'
 
-const initialState = new InitialLoggerState();
+const initialState = new InitialLoggerState()
 
 export default function loggerReduder(state = initialState, action) {
   switch (action.type) {
     case LoggerConstants.QUEUE_MESSAGE:
-      return state.update('messages', messages =>
-        messages.push(action.payload)
-      );
+      return state.update('messages', messages => messages.push(action.payload))
 
     case LoggerConstants.WS_AUTHENTICATION_SUCCESS:
-      return state.set('authenticated', true);
+      return state.set('authenticated', true)
 
     case LoggerConstants.FLUSH_MESSAGES_SUCCESS:
-      return state.set('messages', List());
+      return state.set('messages', List())
 
     case LoggerConstants.DOWNLOAD_LOGS_PENDING:
-      return state.set('isDownloadingLogs', true);
+      return state.set('isDownloadingLogs', true)
 
     case LoggerConstants.DOWNLOAD_LOGS_FAILED:
-      return state.set('isDownloadingLogs', false);
+      return state.set('isDownloadingLogs', false)
 
     case LoggerConstants.DOWNLOAD_LOGS_SUCCESS:
       return state
         .set('isDownloadingLogs', false)
-        .set('logsUrl', action.payload);
+        .set('logsUrl', action.payload)
 
     default:
-      return state;
+      return state
   }
 }

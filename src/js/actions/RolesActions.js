@@ -14,45 +14,45 @@
  * under the License.
  */
 
-import { handleErrors } from './ErrorActions';
-import RolesConstants from '../constants/RolesConstants';
-import MistralApiService from '../services/MistralApiService';
-import MistralConstants from '../constants/MistralConstants';
+import { handleErrors } from './ErrorActions'
+import RolesConstants from '../constants/RolesConstants'
+import MistralApiService from '../services/MistralApiService'
+import MistralConstants from '../constants/MistralConstants'
 
 export default {
   fetchRoles(planName) {
     return (dispatch, getState) => {
-      dispatch(this.fetchRolesPending());
+      dispatch(this.fetchRolesPending())
 
       MistralApiService.runAction(MistralConstants.ROLE_LIST, {
         container: planName
       })
         .then(response => {
-          dispatch(this.fetchRolesSuccess(response));
+          dispatch(this.fetchRolesSuccess(response))
         })
         .catch(error => {
-          dispatch(handleErrors(error, 'Roles could not be loaded'));
-          dispatch(this.fetchRolesFailed());
-        });
-    };
+          dispatch(handleErrors(error, 'Roles could not be loaded'))
+          dispatch(this.fetchRolesFailed())
+        })
+    }
   },
 
   fetchRolesPending() {
     return {
       type: RolesConstants.FETCH_ROLES_PENDING
-    };
+    }
   },
 
   fetchRolesSuccess(roles) {
     return {
       type: RolesConstants.FETCH_ROLES_SUCCESS,
       payload: roles
-    };
+    }
   },
 
   fetchRolesFailed() {
     return {
       type: RolesConstants.FETCH_ROLES_FAILED
-    };
+    }
   }
-};
+}

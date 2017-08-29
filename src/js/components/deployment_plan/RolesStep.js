@@ -14,13 +14,13 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import Loader from '../ui/Loader';
-import Roles from './Roles';
+import Loader from '../ui/Loader'
+import Roles from './Roles'
 
 const messages = defineMessages({
   loadingNodes: {
@@ -35,7 +35,7 @@ const messages = defineMessages({
     id: 'RolesStep.nodesAvailableToAssign',
     defaultMessage: '{nodesCount} Nodes available to assign'
   }
-});
+})
 
 const RolesStep = ({
   availableNodesCount,
@@ -56,7 +56,7 @@ const RolesStep = ({
     <strong>
       {Math.max(0, availableNodesCount - totalAssignedNodesCount)}
     </strong>
-  );
+  )
   return (
     <div>
       <p>
@@ -91,8 +91,8 @@ const RolesStep = ({
         loaded={rolesLoaded}
       />
     </div>
-  );
-};
+  )
+}
 RolesStep.propTypes = {
   availableNodesCount: PropTypes.number.isRequired,
   availableNodesCountsByRole: ImmutablePropTypes.map.isRequired,
@@ -107,6 +107,6 @@ RolesStep.propTypes = {
   roles: ImmutablePropTypes.map.isRequired,
   rolesLoaded: PropTypes.bool.isRequired,
   totalAssignedNodesCount: PropTypes.number.isRequired
-};
+}
 
-export default injectIntl(RolesStep);
+export default injectIntl(RolesStep)

@@ -14,17 +14,17 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { Link, Redirect, Route, Switch } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl'
+import { Link, Redirect, Route, Switch } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
+import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC'
 import EnvironmentConfiguration
-  from '../environment_configuration/EnvironmentConfiguration';
-import NavTab from '../ui/NavTab';
-import Modal from '../ui/Modal';
-import Parameters from '../parameters/Parameters';
+  from '../environment_configuration/EnvironmentConfiguration'
+import NavTab from '../ui/NavTab'
+import Modal from '../ui/Modal'
+import Parameters from '../parameters/Parameters'
 
 const messages = defineMessages({
   deploymentConfiguration: {
@@ -39,11 +39,11 @@ const messages = defineMessages({
     id: 'DeploymentConfiguration.parameters',
     defaultMessage: 'Parameters'
   }
-});
+})
 
 class DeploymentConfiguration extends React.Component {
   render() {
-    const { location, match } = this.props;
+    const { location, match } = this.props
     return (
       <Modal id="DeploymentConfiguration__ModalDialog" dialogClasses="modal-xl">
         <div className="modal-header">
@@ -89,12 +89,12 @@ class DeploymentConfiguration extends React.Component {
           />
         </Switch>
       </Modal>
-    );
+    )
   }
 }
 DeploymentConfiguration.propTypes = {
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired
-};
+}
 
-export default checkRunningDeployment(DeploymentConfiguration);
+export default checkRunningDeployment(DeploymentConfiguration)

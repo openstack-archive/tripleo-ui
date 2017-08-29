@@ -14,41 +14,41 @@
  * under the License.
  */
 
-import { List, Map } from 'immutable';
+import { List, Map } from 'immutable'
 
 // TODO(hpokorny): remove this import when store is correctly mocked
-import store from '../../js/store'; // eslint-disable-line no-unused-vars
+import store from '../../js/store' // eslint-disable-line no-unused-vars
 
-import { InitialLoggerState } from '../../js/immutableRecords/logger';
-import LoggerActions from '../../js/actions/LoggerActions';
-import loggerReducer from '../../js/reducers/loggerReducer';
+import { InitialLoggerState } from '../../js/immutableRecords/logger'
+import LoggerActions from '../../js/actions/LoggerActions'
+import loggerReducer from '../../js/reducers/loggerReducer'
 
 describe('loggerReducer state', () => {
   describe('default state', () => {
-    let state;
+    let state
 
     beforeEach(() => {
-      state = loggerReducer(undefined, { type: 'undefined-action' });
-    });
+      state = loggerReducer(undefined, { type: 'undefined-action' })
+    })
 
     it('`authenticated` is false', () => {
-      expect(state.get('authenticated')).toBe(false);
-    });
+      expect(state.get('authenticated')).toBe(false)
+    })
 
     it('`messages` is empty', () => {
-      expect(state.get('messages').isEmpty()).toBe(true);
-    });
-  });
+      expect(state.get('messages').isEmpty()).toBe(true)
+    })
+  })
 
   describe('QUEUE_MESSAGE', () => {
     it('enqueues a messages', () => {
       let state = loggerReducer(
         new InitialLoggerState(),
         LoggerActions.queueMessage(1)
-      );
-      expect(state.get('messages').size).toEqual(1);
-    });
-  });
+      )
+      expect(state.get('messages').size).toEqual(1)
+    })
+  })
 
   describe('FLUSH_MESSAGES_SUCCESS', () => {
     it('flushes messages', () => {
@@ -58,9 +58,9 @@ describe('loggerReducer state', () => {
           authenticated: true
         }),
         LoggerActions.flushMessagesSuccess()
-      );
+      )
 
-      expect(state.get('messages').isEmpty()).toBe(true);
-    });
-  });
-});
+      expect(state.get('messages').isEmpty()).toBe(true)
+    })
+  })
+})

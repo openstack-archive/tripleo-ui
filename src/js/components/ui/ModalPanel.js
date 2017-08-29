@@ -14,9 +14,9 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import { spring, Motion } from 'react-motion';
+import PropTypes from 'prop-types'
+import React from 'react'
+import { spring, Motion } from 'react-motion'
 
 /**
  * ModalPanel component is a Modal-like component with specific behavior
@@ -59,8 +59,8 @@ export const ModalPanelBackdrop = () => {
         />
       )}
     </Motion>
-  );
-};
+  )
+}
 
 export class ModalPanel extends React.Component {
   render() {
@@ -78,12 +78,12 @@ export class ModalPanel extends React.Component {
           </div>
         )}
       </Motion>
-    );
+    )
   }
 }
 ModalPanel.propTypes = {
   children: PropTypes.node
-};
+}
 
 export const ModalPanelHeader = ({ children }) => {
   return (
@@ -92,22 +92,22 @@ export const ModalPanelHeader = ({ children }) => {
         {children}
       </div>
     </div>
-  );
-};
+  )
+}
 ModalPanelHeader.propTypes = {
   children: PropTypes.node
-};
+}
 
 export const ModalPanelBody = ({ children }) => {
   return (
     <div className="fixed-container-body row">
       {children}
     </div>
-  );
-};
+  )
+}
 ModalPanelBody.propTypes = {
   children: PropTypes.node
-};
+}
 
 export const ModalPanelFooter = ({ children }) => {
   return (
@@ -116,8 +116,8 @@ export const ModalPanelFooter = ({ children }) => {
         {children}
       </div>
     </div>
-  );
-};
+  )
+}
 ModalPanelFooter.propTypes = {
   children: PropTypes.node
-};
+}

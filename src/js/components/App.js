@@ -14,12 +14,12 @@
  * under the License.
  */
 
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
 
-import Login from './login/Login';
-import NotificationsToaster from './notifications/NotificationsToaster';
-import UserAuthenticator from './UserAuthenticator';
+import Login from './login/Login'
+import NotificationsToaster from './notifications/NotificationsToaster'
+import UserAuthenticator from './UserAuthenticator'
 
 export default class App extends React.Component {
   render() {
@@ -31,6 +31,6 @@ export default class App extends React.Component {
           <Route path="/" component={UserAuthenticator} />
         </Switch>
       </div>
-    );
+    )
   }
 }

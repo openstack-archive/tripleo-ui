@@ -14,25 +14,25 @@
  * under the License.
  */
 
-import { ZAQAR_LOGGING_QUEUE } from '../../../constants/ZaqarConstants';
-import ZaqarActions from '../../../actions/ZaqarActions';
-import Adapter from './BaseAdapter';
+import { ZAQAR_LOGGING_QUEUE } from '../../../constants/ZaqarConstants'
+import ZaqarActions from '../../../actions/ZaqarActions'
+import Adapter from './BaseAdapter'
 
 export default class ZaqarAdapter extends Adapter {
   constructor(dispatch) {
-    super(dispatch);
-    this.indent = 0;
-    this.buffer = [];
+    super(dispatch)
+    this.indent = 0
+    this.buffer = []
   }
 
   shouldLog(...args) {
     if (args.length && args.length === 2) {
       if (args[0] === 'prev state' || args[0] === 'next state') {
-        return false;
+        return false
       }
     }
 
-    return true;
+    return true
   }
 
   _formatMessage(level, ...message) {
@@ -40,61 +40,61 @@ export default class ZaqarAdapter extends Adapter {
       message,
       level,
       timestamp: Date.now()
-    };
+    }
   }
 
   _send(level, ...message) {
     if (!this.shouldLog(...message)) {
-      return;
+      return
     }
 
     if (this.indent !== 0) {
       this.buffer.push({
         message,
         level
-      });
-      return;
+      })
+      return
     }
 
-    const msg = this._formatMessage(level, ...message);
-    this._dispatch(ZaqarActions.postMessage(ZAQAR_LOGGING_QUEUE, msg));
+    const msg = this._formatMessage(level, ...message)
+    this._dispatch(ZaqarActions.postMessage(ZAQAR_LOGGING_QUEUE, msg))
   }
 
   debug(...args) {
-    this._send('debug', ...args);
+    this._send('debug', ...args)
   }
 
   info(...args) {
-    this._send('info', ...args);
+    this._send('info', ...args)
   }
 
   warn(...args) {
-    this._send('warn', ...args);
+    this._send('warn', ...args)
   }
 
   error(...args) {
-    this._send('error', ...args);
+    this._send('error', ...args)
   }
 
   group(...args) {
-    this.indent++;
+    this.indent++
   }
 
   groupCollapsed(...args) {
-    this.indent++;
+    this.indent++
   }
 
   groupEnd(...args) {
-    this.indent--;
+    this.indent--
 
     this.buffer.map(m => {
-      this._send(m.level, ...m.message);
-    });
+      this._send(m.level, ...m.message)
+    })
 
-    this.buffer = [];
+    this.buffer = []
   }
 
   log(...args) {
-    this.info(...args);
+    this.info(...args)
   }
 }

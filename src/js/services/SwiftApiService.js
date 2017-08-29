@@ -14,11 +14,11 @@
  * under the License.
  */
 
-import axios from 'axios';
-import when from 'when';
+import axios from 'axios'
+import when from 'when'
 
-import { AuthenticationError, SwiftApiError, ConnectionError } from './errors';
-import { getAuthTokenId, getServiceUrl } from '../services/utils';
+import { AuthenticationError, SwiftApiError, ConnectionError } from './errors'
+import { getAuthTokenId, getServiceUrl } from '../services/utils'
 
 class SwiftApiService {
   defaultRequest(path, additionalAttributes) {
@@ -31,16 +31,16 @@ class SwiftApiService {
           headers: { 'X-Auth-Token': getAuthTokenId() }
         },
         additionalAttributes
-      );
-      return axios(requestAttributes);
-    });
+      )
+      return axios(requestAttributes)
+    })
   }
 
   createObject(container, objectName, data) {
     return this.defaultRequest(`/${container}/${objectName}`, {
       method: 'PUT',
       data: data
-    }).catch(error => handleErrors(error));
+    }).catch(error => handleErrors(error))
   }
 
   getContainer(container) {
@@ -49,7 +49,7 @@ class SwiftApiService {
       params: { format: 'json' }
     })
       .then(response => response.data)
-      .catch(error => handleErrors(error));
+      .catch(error => handleErrors(error))
   }
 
   getObject(container, object) {
@@ -58,7 +58,7 @@ class SwiftApiService {
       params: { format: 'json' }
     })
       .then(response => response.data)
-      .catch(error => handleErrors(error));
+      .catch(error => handleErrors(error))
   }
 
   uploadTarball(planName, file) {
@@ -80,11 +80,11 @@ class SwiftApiService {
           error.request.statusText === '' &&
           error.request.timeout === 0
         ) {
-          return when.resolve(error.data);
+          return when.resolve(error.data)
         } else {
-          return handleErrors(error);
+          return handleErrors(error)
         }
-      });
+      })
   }
 }
 
@@ -92,22 +92,22 @@ const handleErrors = e => {
   if (e.response) {
     switch (e.response.status) {
       case 401:
-        return when.reject(new AuthenticationError(e));
+        return when.reject(new AuthenticationError(e))
       default:
         return when.reject(
           new SwiftApiError(
             `Swift API Error: ${e.response.status} - ${e.response.data}`,
             e
           )
-        );
+        )
     }
   } else if (e.request) {
     return when.reject(
       new ConnectionError('Connection to Swift API could not be established', e)
-    );
+    )
   } else {
-    return when.reject(e);
+    return when.reject(e)
   }
-};
+}
 
-export default new SwiftApiService();
+export default new SwiftApiService()

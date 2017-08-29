@@ -14,76 +14,74 @@
  * under the License.
  */
 
-import { normalize, arrayOf } from 'normalizr';
+import { normalize, arrayOf } from 'normalizr'
 
-import { handleErrors } from './ErrorActions';
-import MistralApiService from '../services/MistralApiService';
+import { handleErrors } from './ErrorActions'
+import MistralApiService from '../services/MistralApiService'
 import WorkflowExecutionsConstants
-  from '../constants/WorkflowExecutionsConstants';
-import {
-  workflowExecutionSchema
-} from '../normalizrSchemas/workflowExecutions';
+  from '../constants/WorkflowExecutionsConstants'
+import { workflowExecutionSchema } from '../normalizrSchemas/workflowExecutions'
 
 export default {
   fetchWorkflowExecutions() {
     return (dispatch, getState) => {
-      dispatch(this.fetchWorkflowExecutionsPending());
+      dispatch(this.fetchWorkflowExecutionsPending())
       MistralApiService.getWorkflowExecutions()
         .then(response => {
           const executions = normalize(
             response,
             arrayOf(workflowExecutionSchema)
-          ).entities.executions || {};
-          dispatch(this.fetchWorkflowExecutionsSuccess(executions));
+          ).entities.executions || {}
+          dispatch(this.fetchWorkflowExecutionsSuccess(executions))
         })
         .catch(error => {
           dispatch(
             handleErrors(error, 'Workflow Executions could not be loaded')
-          );
-          dispatch(this.fetchWorkflowExecutionsFailed());
-        });
-    };
+          )
+          dispatch(this.fetchWorkflowExecutionsFailed())
+        })
+    }
   },
 
   fetchWorkflowExecutionsPending() {
     return {
       type: WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_PENDING
-    };
+    }
   },
 
   fetchWorkflowExecutionsSuccess(executions) {
     return {
       type: WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_SUCCESS,
       payload: executions
-    };
+    }
   },
 
   fetchWorkflowExecutionsFailed() {
     return {
       type: WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_FAILED
-    };
+    }
   },
 
   addWorkflowExecution(execution) {
     return {
       type: WorkflowExecutionsConstants.ADD_WORKFLOW_EXECUTION,
       payload: execution
-    };
+    }
   },
 
   updateWorkflowExecution(id, patch) {
     return (dispatch, getState) => {
-      dispatch(this.updateWorkflowExecutionPending(id, patch));
+      dispatch(this.updateWorkflowExecutionPending(id, patch))
       MistralApiService.updateWorkflowExecution(id, patch)
         .then(response => {
-          dispatch(this.addWorkflowExecution(response));
+          dispatch(this.addWorkflowExecution(response))
         })
         .catch(error => {
           dispatch(
             handleErrors(error, 'Workflow Execution could not be updated')
-          );
-        });
-    };
+          )
+        })
+    }
   },
 
   updateWorkflowExecutionPending(id, patch) {
@@ -93,6 +91,6 @@ export default {
         id,
         patch
       }
-    };
+    }
   }
-};
+}

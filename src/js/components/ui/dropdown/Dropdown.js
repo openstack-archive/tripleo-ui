@@ -14,33 +14,33 @@
  * under the License.
  */
 
-import * as _ from 'lodash';
-import ClassNames from 'classnames';
-import PropTypes from 'prop-types';
-import React from 'react';
+import * as _ from 'lodash'
+import ClassNames from 'classnames'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import DropdownButton from './DropdownButton';
-import DropdownItem from './DropdownItem';
-import DropdownToggle from './DropdownToggle';
+import DropdownButton from './DropdownButton'
+import DropdownItem from './DropdownItem'
+import DropdownToggle from './DropdownToggle'
 
 export default class Dropdown extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       isOpen: false
-    };
+    }
   }
 
   toggleDropdown() {
-    this.setState({ isOpen: !this.state.isOpen });
+    this.setState({ isOpen: !this.state.isOpen })
   }
 
   render() {
-    const children = React.Children.toArray(this.props.children);
+    const children = React.Children.toArray(this.props.children)
 
     const toggle = _.first(children, child =>
       _.includes([DropdownButton, DropdownToggle], child.type)
-    );
+    )
 
     const items = _.map(
       _.filter(children, child => child.type === DropdownItem),
@@ -48,16 +48,16 @@ export default class Dropdown extends React.Component {
         React.cloneElement(item, {
           toggleDropdown: this.toggleDropdown.bind(this)
         })
-    );
+    )
 
     // Any other children are prepended to DropdownButton.
     // This can be used to add buttons to Dropdown button group
     const otherChildren = _.reject(children, child =>
       _.includes([DropdownButton, DropdownToggle, DropdownItem], child.type)
-    );
+    )
     const dropdownClasses = {
       open: this.state.isOpen
-    };
+    }
 
     return (
       <span className="dropdown-wrapper">
@@ -83,11 +83,11 @@ export default class Dropdown extends React.Component {
             />
           : null}
       </span>
-    );
+    )
   }
 }
 Dropdown.propTypes = {
   active: PropTypes.bool,
   children: PropTypes.node,
   className: PropTypes.string
-};
+}

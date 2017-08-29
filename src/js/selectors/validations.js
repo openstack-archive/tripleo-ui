@@ -14,16 +14,16 @@
  * under the License.
  */
 
-import { createSelector } from 'reselect';
+import { createSelector } from 'reselect'
 
-import { getCurrentPlanName } from './plans';
-import { getFilterByName } from './filters';
-import MistralConstants from '../constants/MistralConstants';
+import { getCurrentPlanName } from './plans'
+import { getFilterByName } from './filters'
+import MistralConstants from '../constants/MistralConstants'
 
-const validations = state => state.validations.get('validations');
-const executions = state => state.executions.get('executions');
+const validations = state => state.validations.get('validations')
+const executions = state => state.executions.get('executions')
 const validationsToolbarFilter = state =>
-  getFilterByName(state, 'validationsToolbar');
+  getFilterByName(state, 'validationsToolbar')
 
 /**
  * Filter workflow executions only to validations and current plan
@@ -35,9 +35,9 @@ export const getValidationExecutionsForCurrentPlan = createSelector(
       execution =>
         execution.get('workflow_name') === MistralConstants.VALIDATIONS_RUN &&
         execution.getIn(['input', 'plan']) === currentPlanName
-    );
+    )
   }
-);
+)
 
 /**
  * Adds map of validation results to each validation
@@ -46,13 +46,13 @@ export const getValidationsWithResults = createSelector(
   [validations, getValidationExecutionsForCurrentPlan],
   (validations, results) => {
     return validations.map(validation => {
-      const validationResults = getValidationResults(validation.id, results);
+      const validationResults = getValidationResults(validation.id, results)
       return validation
         .set('results', validationResults)
-        .set('status', getValidationStatus(validationResults));
-    });
+        .set('status', getValidationStatus(validationResults))
+    })
   }
-);
+)
 
 /**
  * Filter validations using the active Toolbar filters
@@ -60,7 +60,7 @@ export const getValidationsWithResults = createSelector(
 export const getFilteredValidations = createSelector(
   [getValidationsWithResults, validationsToolbarFilter],
   (validations, validationsToolbarFilter) => {
-    const activeFilters = validationsToolbarFilter.get('activeFilters');
+    const activeFilters = validationsToolbarFilter.get('activeFilters')
     return activeFilters
       .reduce(
         (filteredValidations, filter) =>
@@ -69,7 +69,7 @@ export const getFilteredValidations = createSelector(
               case 'name':
                 return validation.name
                   .toLowerCase()
-                  .includes(filter.filterString.toLowerCase());
+                  .includes(filter.filterString.toLowerCase())
               case 'group': {
                 return validation.groups.reduce(
                   (result, group) =>
@@ -79,10 +79,10 @@ export const getFilteredValidations = createSelector(
                           .toLowerCase()
                           .includes(filter.filterString.toLowerCase()),
                   false
-                );
+                )
               }
               default:
-                return false;
+                return false
             }
           }),
         validations
@@ -95,9 +95,9 @@ export const getFilteredValidations = createSelector(
           validationsToolbarFilter.get('sortDir') === 'desc'
             ? validations.reverse()
             : validations
-      );
+      )
   }
-);
+)
 
 /**
  * Helper function to get a validation results by validation name
@@ -105,8 +105,8 @@ export const getFilteredValidations = createSelector(
 const getValidationResults = (validationId, results) => {
   return results.filter(
     result => result.getIn(['input', 'validation_name']) === validationId
-  );
-};
+  )
+}
 
 /**
  * Helper function to determine validation status based on validation's results
@@ -114,24 +114,24 @@ const getValidationResults = (validationId, results) => {
 const getValidationStatus = validationResults => {
   switch (true) {
     case validationResults.isEmpty():
-      return 'new';
+      return 'new'
     case validationResults.last().state === 'RUNNING':
-      return 'running';
+      return 'running'
     case validationResults.last().output.get('status') === 'SUCCESS':
       if (
         validationResults.last().output.get('stdout', '').includes('Warnings:')
       ) {
-        return 'warning';
+        return 'warning'
       }
-      return 'success';
+      return 'success'
     case validationResults.last().output.get('status') === 'FAILED':
-      return 'failed';
+      return 'failed'
     case validationResults.last().state === 'PAUSED':
-      return 'paused';
+      return 'paused'
     default:
-      return 'error';
+      return 'error'
   }
-};
+}
 
 /**
  * Selects pre deployment validations
@@ -143,16 +143,16 @@ export const getPreDeploymentValidationsWithResults = createSelector(
       'pre-deployment',
       'pre',
       'pre-introspection'
-    ];
+    ]
     return validations.filter(
       validation =>
         !validation.groups
           .toSet()
           .intersect(preDeploymentValidationGroups)
           .isEmpty()
-    );
+    )
   }
-);
+)
 
 /**
  * Provides aggregate counts of pre-deployment validations by their status
@@ -160,7 +160,7 @@ export const getPreDeploymentValidationsWithResults = createSelector(
 export const getPreDeploymentValidationsStatusCounts = createSelector(
   getPreDeploymentValidationsWithResults,
   validations => validations.countBy(validation => validation.status)
-);
+)
 
 /**
  * Provides aggregate counts of pre-deployment validations by their status
@@ -173,4 +173,4 @@ export const allPreDeploymentValidationsSuccessful = createSelector(
       .toSet()
       .intersect(['new', 'running', 'failed', 'paused', 'error'])
       .isEmpty()
-);
+)

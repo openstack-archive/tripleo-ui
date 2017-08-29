@@ -14,14 +14,14 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { connect } from 'react-redux'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import ParameterInputList from '../parameters/ParameterInputList';
-import { getRoleNetworkConfig } from '../../selectors/parameters';
-import { getRole } from '../../selectors/roles';
+import ParameterInputList from '../parameters/ParameterInputList'
+import { getRoleNetworkConfig } from '../../selectors/parameters'
+import { getRole } from '../../selectors/roles'
 
 class RoleNetworkConfig extends React.Component {
   render() {
@@ -33,14 +33,14 @@ class RoleNetworkConfig extends React.Component {
           mistralParameters={this.props.mistralParameters}
         />
       </div>
-    );
+    )
   }
 }
 RoleNetworkConfig.propTypes = {
   description: PropTypes.string,
   mistralParameters: ImmutablePropTypes.map.isRequired,
   parameters: ImmutablePropTypes.map.isRequired
-};
+}
 
 function mapStateToProps(state, props) {
   return {
@@ -50,7 +50,7 @@ function mapStateToProps(state, props) {
     parameters: getRoleNetworkConfig(state, props.match.params.roleIdentifier)
       .parameters,
     role: getRole(state, props.match.params.roleIdentifier)
-  };
+  }
 }
 
-export default connect(mapStateToProps)(RoleNetworkConfig);
+export default connect(mapStateToProps)(RoleNetworkConfig)

@@ -14,30 +14,30 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import Formsy from 'formsy-react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { isObjectLike, mapValues } from 'lodash';
-import { Link } from 'react-router-dom';
-import { fromJS, is } from 'immutable';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { connect } from 'react-redux'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import Formsy from 'formsy-react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { isObjectLike, mapValues } from 'lodash'
+import { Link } from 'react-router-dom'
+import { fromJS, is } from 'immutable'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 import EnvironmentConfigurationActions
-  from '../../actions/EnvironmentConfigurationActions';
-import EnvironmentParameters from './EnvironmentParameters';
-import { getCurrentPlanName } from '../../selectors/plans';
-import { getRootParameters } from '../../selectors/parameters';
+  from '../../actions/EnvironmentConfigurationActions'
+import EnvironmentParameters from './EnvironmentParameters'
+import { getCurrentPlanName } from '../../selectors/plans'
+import { getRootParameters } from '../../selectors/parameters'
 import {
   getEnabledEnvironments
-} from '../../selectors/environmentConfiguration';
-import Loader from '../ui/Loader';
-import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
-import ParametersActions from '../../actions/ParametersActions';
-import ParameterInputList from './ParameterInputList';
-import Tab from '../ui/Tab';
-import TabPane from '../ui/TabPane';
+} from '../../selectors/environmentConfiguration'
+import Loader from '../ui/Loader'
+import ModalFormErrorList from '../ui/forms/ModalFormErrorList'
+import ParametersActions from '../../actions/ParametersActions'
+import ParameterInputList from './ParameterInputList'
+import Tab from '../ui/Tab'
+import TabPane from '../ui/TabPane'
 
 const messages = defineMessages({
   saveChanges: {
@@ -56,16 +56,16 @@ const messages = defineMessages({
     id: 'Parameters.general',
     defaultMessage: 'General'
   }
-});
+})
 
 class Parameters extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       canSubmit: false,
       closeOnSubmit: false,
       selectedTab: 'general'
-    };
+    }
   }
 
   componentDidMount() {
@@ -74,21 +74,21 @@ class Parameters extends React.Component {
       fetchEnvironmentConfiguration,
       fetchParameters,
       isFetchingParameters
-    } = this.props;
-    fetchEnvironmentConfiguration(currentPlanName);
-    !isFetchingParameters && fetchParameters(currentPlanName);
+    } = this.props
+    fetchEnvironmentConfiguration(currentPlanName)
+    !isFetchingParameters && fetchParameters(currentPlanName)
   }
 
   componentDidUpdate() {
-    this.invalidateForm(this.props.formFieldErrors.toJS());
+    this.invalidateForm(this.props.formFieldErrors.toJS())
   }
 
   enableButton() {
-    this.setState({ canSubmit: true });
+    this.setState({ canSubmit: true })
   }
 
   disableButton() {
-    this.setState({ canSubmit: false });
+    this.setState({ canSubmit: false })
   }
 
   /**
@@ -98,9 +98,9 @@ class Parameters extends React.Component {
   _filterFormData(formData) {
     return fromJS(formData)
       .filterNot((value, key) => {
-        return is(fromJS(this.props.allParameters.get(key).default), value);
+        return is(fromJS(this.props.allParameters.get(key).default), value)
       })
-      .toJS();
+      .toJS()
   }
 
   /**
@@ -110,36 +110,36 @@ class Parameters extends React.Component {
   _jsonParseFormData(formData) {
     return mapValues(formData, value => {
       try {
-        const parsedValue = JSON.parse(value);
+        const parsedValue = JSON.parse(value)
         if (isObjectLike(parsedValue)) {
-          return parsedValue;
+          return parsedValue
         }
-        return value;
+        return value
       } catch (e) {
-        return value === undefined ? null : value;
+        return value === undefined ? null : value
       }
-    });
+    })
   }
 
   invalidateForm(formFieldErrors) {
-    this.refs.parameterConfigurationForm.updateInputsWithError(formFieldErrors);
+    this.refs.parameterConfigurationForm.updateInputsWithError(formFieldErrors)
   }
 
   handleSubmit(formData, resetForm, invalidateForm) {
-    this.disableButton();
+    this.disableButton()
 
     this.props.updateParameters(
       this.props.currentPlanName,
       this._filterFormData(this._jsonParseFormData(formData)),
       Object.keys(this.refs.parameterConfigurationForm.inputs)
-    );
+    )
 
     if (this.state.closeOnSubmit) {
       this.setState({
         closeOnSubmit: false
-      });
+      })
 
-      this.props.history.push(`/plans/${this.props.currentPlanName}`);
+      this.props.history.push(`/plans/${this.props.currentPlanName}`)
     }
   }
 
@@ -149,13 +149,13 @@ class Parameters extends React.Component {
         closeOnSubmit: true
       },
       this.refs.parameterConfigurationForm.submit
-    );
+    )
   }
 
   selectTab(tabName) {
     this.setState({
       selectedTab: tabName
-    });
+    })
   }
 
   renderTabs() {
@@ -173,8 +173,8 @@ class Parameters extends React.Component {
             {environment.title}
           </a>
         </Tab>
-      );
-    });
+      )
+    })
   }
 
   renderTabPanes() {
@@ -186,7 +186,7 @@ class Parameters extends React.Component {
             mistralParameters={this.props.mistralParameters}
           />
         </TabPane>
-      );
+      )
     } else {
       return this.props.enabledEnvironments.toList().map(environment => {
         return (
@@ -197,8 +197,8 @@ class Parameters extends React.Component {
           >
             <EnvironmentParameters environment={environment.file} />
           </TabPane>
-        );
-      });
+        )
+      })
     }
   }
 
@@ -273,7 +273,7 @@ class Parameters extends React.Component {
           </Link>
         </div>
       </Formsy.Form>
-    );
+    )
   }
 }
 Parameters.propTypes = {
@@ -291,7 +291,7 @@ Parameters.propTypes = {
   parameters: ImmutablePropTypes.map.isRequired,
   parametersLoaded: PropTypes.bool,
   updateParameters: PropTypes.func
-};
+}
 
 function mapStateToProps(state, ownProps) {
   return {
@@ -305,7 +305,7 @@ function mapStateToProps(state, ownProps) {
     mistralParameters: state.parameters.mistralParameters,
     parameters: getRootParameters(state),
     parametersLoaded: state.parameters.loaded
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
@@ -316,14 +316,14 @@ function mapDispatchToProps(dispatch, ownProps) {
           currentPlanName,
           () => ownProps.history.push(`/plans/${currentPlanName}`)
         )
-      );
+      )
     },
     fetchParameters: currentPlanName => {
       dispatch(
         ParametersActions.fetchParameters(currentPlanName, () =>
           ownProps.history.push(`/plans/${currentPlanName}`)
         )
-      );
+      )
     },
     updateParameters: (currentPlanName, data, inputFields, redirect) => {
       dispatch(
@@ -333,11 +333,11 @@ function mapDispatchToProps(dispatch, ownProps) {
           inputFields,
           redirect
         )
-      );
+      )
     }
-  };
+  }
 }
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(Parameters)
-);
+)

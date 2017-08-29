@@ -14,28 +14,28 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
-import Formsy from 'formsy-react';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ClassNames from 'classnames'
+import Formsy from 'formsy-react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import InputDescription from './InputDescription';
-import InputErrorMessage from './InputErrorMessage';
+import InputDescription from './InputDescription'
+import InputErrorMessage from './InputErrorMessage'
 
 class HorizontalInput extends React.Component {
   changeValue(event) {
-    event.stopPropagation(); // https://github.com/christianalfoni/formsy-react/issues/203
+    event.stopPropagation() // https://github.com/christianalfoni/formsy-react/issues/203
     this.props.setValue(
       event.target.value === '' ? undefined : event.target.value
-    );
+    )
   }
 
   // https://github.com/christianalfoni/formsy-react/issues/332
   getValue() {
     if (this.props.getValue() || this.props.getValue() === 0) {
-      return this.props.getValue();
+      return this.props.getValue()
     }
-    return '';
+    return ''
   }
 
   render() {
@@ -44,7 +44,7 @@ class HorizontalInput extends React.Component {
       'has-error': this.props.showError(),
       // 'has-success': this.props.isValid(),
       required: this.props.isRequired()
-    });
+    })
 
     return (
       <div className={divClasses}>
@@ -72,7 +72,7 @@ class HorizontalInput extends React.Component {
           <InputDescription description={this.props.description} />
         </div>
       </div>
-    );
+    )
   }
 }
 HorizontalInput.propTypes = {
@@ -92,10 +92,10 @@ HorizontalInput.propTypes = {
   showError: PropTypes.func,
   title: PropTypes.string.isRequired,
   type: PropTypes.string
-};
+}
 HorizontalInput.defaultProps = {
   inputColumnClasses: 'col-sm-10',
   labelColumnClasses: 'col-sm-2',
   type: 'text'
-};
-export default Formsy.HOC(HorizontalInput);
+}
+export default Formsy.HOC(HorizontalInput)

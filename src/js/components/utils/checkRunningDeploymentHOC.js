@@ -14,14 +14,14 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
-import React from 'react';
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { Redirect } from 'react-router-dom'
+import React from 'react'
 
-import { getCurrentPlanName } from '../../selectors/plans';
-import { getCurrentStackDeploymentInProgress } from '../../selectors/stacks';
-import NotificationActions from '../../actions/NotificationActions';
+import { getCurrentPlanName } from '../../selectors/plans'
+import { getCurrentStackDeploymentInProgress } from '../../selectors/stacks'
+import NotificationActions from '../../actions/NotificationActions'
 
 export const checkRunningDeployment = WrappedComponent => {
   class CheckRunningDeploymentHOC extends React.Component {
@@ -31,32 +31,30 @@ export const checkRunningDeployment = WrappedComponent => {
           title: 'Not allowed',
           message: `A deployment for the plan ${this.props.currentPlanName} is already in progress.`,
           type: 'warning'
-        });
+        })
       }
     }
 
     render() {
       return this.props.currentStackDeploymentInProgress
         ? <Redirect to={`/plans/${this.props.currentPlanName}`} />
-        : <WrappedComponent {...this.props} />;
+        : <WrappedComponent {...this.props} />
     }
   }
   CheckRunningDeploymentHOC.propTypes = {
     currentPlanName: PropTypes.string,
     currentStackDeploymentInProgress: PropTypes.bool.isRequired,
     notify: PropTypes.func.isRequired
-  };
+  }
 
   const mapStateToProps = state => ({
     currentPlanName: getCurrentPlanName(state),
     currentStackDeploymentInProgress: getCurrentStackDeploymentInProgress(state)
-  });
+  })
 
   const mapDispatchToProps = dispatch => ({
     notify: notification => dispatch(NotificationActions.notify(notification))
-  });
+  })
 
-  return connect(mapStateToProps, mapDispatchToProps)(
-    CheckRunningDeploymentHOC
-  );
-};
+  return connect(mapStateToProps, mapDispatchToProps)(CheckRunningDeploymentHOC)
+}

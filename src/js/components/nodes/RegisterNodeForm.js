@@ -14,17 +14,17 @@
  * under the License.
  */
 
-import Formsy from 'formsy-react';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
+import Formsy from 'formsy-react'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import HorizontalInput from '../ui/forms/HorizontalInput';
-import HorizontalArrayInput from '../ui/forms/HorizontalArrayInput';
-import HorizontalSelect from '../ui/forms/HorizontalSelect';
+import HorizontalInput from '../ui/forms/HorizontalInput'
+import HorizontalArrayInput from '../ui/forms/HorizontalArrayInput'
+import HorizontalSelect from '../ui/forms/HorizontalSelect'
 import PXEAndIPMIToolDriverFields
-  from './driver_fields/PXEAndIPMIToolDriverFields';
-import PXEAndDRACDriverFields from './driver_fields/PXEAndDRACDriverFields';
+  from './driver_fields/PXEAndIPMIToolDriverFields'
+import PXEAndDRACDriverFields from './driver_fields/PXEAndDRACDriverFields'
 
 const messages = defineMessages({
   enterValidMacAddress: {
@@ -92,68 +92,68 @@ const messages = defineMessages({
     id: 'RegisterNodeForm.macAddressesDescription',
     defaultMessage: 'If you are specifying multiple MAC Addresses, please enter a comma separated list. (e.g. aa:bb:cc:dd:ee:ff,12:34:56:78:90:xx,do:re:mi:fa:so:ra)'
   }
-});
+})
 
 class RegisterNodeForm extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.macAddressValidator = {
       matchRegexp: /^([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}(,([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2})*$/
-    };
+    }
     this.macAddressValidatorMessage = this.props.intl.formatMessage(
       messages.enterValidMacAddress
-    );
+    )
     this.nodeNameValidations = {
       matchRegexp: /^[A-Z0-9-._~]+$/i,
       maxLength: 255
-    };
+    }
     this.nodeNameValidationErrors = {
       matchRegexp: this.props.intl.formatMessage(messages.nodeNameRegexp),
       maxLength: this.props.intl.formatMessage(messages.nodeNameMaxLength)
-    };
+    }
   }
 
   onNodeFormValidSubmit(formData, resetForm, invalidateForm) {
-    let updatedNode = formData;
-    updatedNode.uuid = this.props.selectedNode.uuid;
-    updatedNode.valid = true;
-    this.props.onUpdateNode(updatedNode);
+    let updatedNode = formData
+    updatedNode.uuid = this.props.selectedNode.uuid
+    updatedNode.valid = true
+    this.props.onUpdateNode(updatedNode)
   }
 
   onNodeFormInvalidSubmit(formData, resetForm, invalidateForm) {
-    let updatedNode = formData;
-    updatedNode.uuid = this.props.selectedNode.uuid;
-    updatedNode.valid = false;
-    this.props.onUpdateNode(updatedNode);
+    let updatedNode = formData
+    updatedNode.uuid = this.props.selectedNode.uuid
+    updatedNode.valid = false
+    this.props.onUpdateNode(updatedNode)
   }
 
   onValid() {
-    this.refs.nodeForm.submit();
+    this.refs.nodeForm.submit()
   }
 
   onInvalid() {
-    this.refs.nodeForm.submit();
+    this.refs.nodeForm.submit()
   }
 
   renderDriverFields() {
     switch (this.props.selectedNode.pm_type) {
       case 'pxe_drac':
-        return <PXEAndDRACDriverFields node={this.props.selectedNode} />;
+        return <PXEAndDRACDriverFields node={this.props.selectedNode} />
       default:
-        return <PXEAndIPMIToolDriverFields node={this.props.selectedNode} />;
+        return <PXEAndIPMIToolDriverFields node={this.props.selectedNode} />
     }
   }
 
   renderDriverOptions() {
     return ['pxe_ipmitool', 'pxe_drac'].map((value, index) => (
       <option key={index}>{value}</option>
-    ));
+    ))
   }
 
   renderArchitectureOptions() {
     return [undefined, 'x86_64', 'i386'].map((value, index) => (
       <option key={index} value={value}>{value}</option>
-    ));
+    ))
   }
 
   render() {
@@ -251,13 +251,13 @@ class RegisterNodeForm extends React.Component {
           </fieldset>
         </Formsy.Form>
       </div>
-    );
+    )
   }
 }
 RegisterNodeForm.propTypes = {
   intl: PropTypes.object,
   onUpdateNode: PropTypes.func,
   selectedNode: PropTypes.object
-};
+}
 
-export default injectIntl(RegisterNodeForm);
+export default injectIntl(RegisterNodeForm)

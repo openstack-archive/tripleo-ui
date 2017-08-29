@@ -14,11 +14,11 @@
  * under the License.
  */
 
-import { defineMessages, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, injectIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import DriverFields from './DriverFields';
+import DriverFields from './DriverFields'
 
 const messages = defineMessages({
   addr_title: {
@@ -37,7 +37,7 @@ const messages = defineMessages({
     id: 'PXEAndDRACDriverFields.pwd_title',
     defaultMessage: 'DRAC Password'
   }
-});
+})
 
 class PXEAndDRACDriverFields extends React.Component {
   render() {
@@ -49,12 +49,12 @@ class PXEAndDRACDriverFields extends React.Component {
         port_title={this.props.intl.formatMessage(messages.port_title)}
         pwd_title={this.props.intl.formatMessage(messages.pwd_title)}
       />
-    );
+    )
   }
 }
 
 PXEAndDRACDriverFields.propTypes = {
   intl: PropTypes.object
-};
+}
 
-export default injectIntl(PXEAndDRACDriverFields);
+export default injectIntl(PXEAndDRACDriverFields)

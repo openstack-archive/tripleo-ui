@@ -14,30 +14,30 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
-import Formsy from 'formsy-react';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ClassNames from 'classnames'
+import Formsy from 'formsy-react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import InputDescription from './InputDescription';
-import InputErrorMessage from './InputErrorMessage';
+import InputDescription from './InputDescription'
+import InputErrorMessage from './InputErrorMessage'
 
 class HorizontalNumberInput extends React.Component {
   changeValue(event) {
-    event.stopPropagation(); // https://github.com/christianalfoni/formsy-react/issues/203
+    event.stopPropagation() // https://github.com/christianalfoni/formsy-react/issues/203
     this.props.setValue(
       isNaN(parseInt(event.target.value))
         ? undefined
         : parseInt(event.target.value)
-    );
+    )
   }
 
   // https://github.com/christianalfoni/formsy-react/issues/332
   getValue() {
     if (this.props.getValue()) {
-      return this.props.getValue();
+      return this.props.getValue()
     }
-    return 0;
+    return 0
   }
 
   render() {
@@ -45,7 +45,7 @@ class HorizontalNumberInput extends React.Component {
       'form-group': true,
       'has-error': this.props.showError(),
       required: this.props.isRequired()
-    });
+    })
 
     return (
       <div className={divClasses}>
@@ -73,7 +73,7 @@ class HorizontalNumberInput extends React.Component {
           <InputDescription description={this.props.description} />
         </div>
       </div>
-    );
+    )
   }
 }
 HorizontalNumberInput.propTypes = {
@@ -92,9 +92,9 @@ HorizontalNumberInput.propTypes = {
   setValue: PropTypes.func,
   showError: PropTypes.func,
   title: PropTypes.string.isRequired
-};
+}
 HorizontalNumberInput.defaultProps = {
   inputColumnClasses: 'col-sm-10',
   labelColumnClasses: 'col-sm-2'
-};
-export default Formsy.HOC(HorizontalNumberInput);
+}
+export default Formsy.HOC(HorizontalNumberInput)

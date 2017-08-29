@@ -14,8 +14,8 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 
 export default class BlankSlate extends React.Component {
   render() {
@@ -27,7 +27,7 @@ export default class BlankSlate extends React.Component {
         <h1>{this.props.title}</h1>
         {this.props.children}
       </div>
-    );
+    )
   }
 }
 
@@ -35,8 +35,8 @@ BlankSlate.propTypes = {
   children: PropTypes.node,
   iconClass: PropTypes.string,
   title: PropTypes.string
-};
+}
 BlankSlate.defaultProps = {
   iconClass: 'fa fa-ban',
   title: ''
-};
+}

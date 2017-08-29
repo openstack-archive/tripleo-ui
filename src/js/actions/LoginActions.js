@@ -14,26 +14,26 @@
  * under the License.
  */
 
-import { Map, fromJS } from 'immutable';
+import { Map, fromJS } from 'immutable'
 
-import KeystoneApiService from '../services/KeystoneApiService';
-import LoginConstants from '../constants/LoginConstants';
-import logger from '../services/logging/LoggingService';
-import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
-import cookie from 'react-cookie';
+import KeystoneApiService from '../services/KeystoneApiService'
+import LoginConstants from '../constants/LoginConstants'
+import logger from '../services/logging/LoggingService'
+import ZaqarWebSocketService from '../services/ZaqarWebSocketService'
+import cookie from 'react-cookie'
 
 export default {
   authenticateUserViaToken(keystoneAuthTokenId, nextPath) {
     return (dispatch, getState) => {
-      dispatch(this.userAuthStarted());
+      dispatch(this.userAuthStarted())
       KeystoneApiService.authenticateUserViaToken(keystoneAuthTokenId)
         .then(response => {
           const {
             data: { token },
             headers: { 'x-subject-token': tokenId }
-          } = response;
-          cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
-          dispatch(this.userAuthSuccess(tokenId, token));
+          } = response
+          cookie.save('keystoneAuthTokenId', tokenId, { path: '/' })
+          dispatch(this.userAuthSuccess(tokenId, token))
         })
         .catch(error => {
           dispatch(
@@ -43,27 +43,27 @@ export default {
                 message: error.message
               }
             ])
-          );
+          )
           logger.error(
             'Could not authenticate user via token',
             error,
             error.stack
-          );
-        });
-    };
+          )
+        })
+    }
   },
 
   authenticateUser(formData, formFields, nextPath) {
     return (dispatch, getState) => {
-      dispatch(this.userAuthStarted());
+      dispatch(this.userAuthStarted())
       KeystoneApiService.authenticateUser(formData.username, formData.password)
         .then(response => {
           const {
             data: { token },
             headers: { 'x-subject-token': tokenId }
-          } = response;
-          cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
-          dispatch(this.userAuthSuccess(tokenId, token));
+          } = response
+          cookie.save('keystoneAuthTokenId', tokenId, { path: '/' })
+          dispatch(this.userAuthSuccess(tokenId, token))
         })
         .catch(error => {
           dispatch(
@@ -73,16 +73,16 @@ export default {
                 message: error.message
               }
             ])
-          );
-          logger.error('Could not authenticate user', error, error.stack);
-        });
-    };
+          )
+          logger.error('Could not authenticate user', error, error.stack)
+        })
+    }
   },
 
   userAuthStarted() {
     return {
       type: LoginConstants.USER_AUTH_STARTED
-    };
+    }
   },
 
   userAuthFailure(errors, formFieldErrors = {}) {
@@ -93,27 +93,27 @@ export default {
         formFieldErrors: fromJS(formFieldErrors)
       }),
       error: true
-    };
+    }
   },
 
   userAuthSuccess(tokenId, token) {
     return {
       type: LoginConstants.USER_AUTH_SUCCESS,
       payload: { token, tokenId }
-    };
+    }
   },
 
   logoutUser() {
     return dispatch => {
-      cookie.remove('keystoneAuthTokenId');
-      ZaqarWebSocketService.close();
-      dispatch(this.logoutUserSuccess());
-    };
+      cookie.remove('keystoneAuthTokenId')
+      ZaqarWebSocketService.close()
+      dispatch(this.logoutUserSuccess())
+    }
   },
 
   logoutUserSuccess() {
     return {
       type: LoginConstants.LOGOUT_USER_SUCCESS
-    };
+    }
   }
-};
+}

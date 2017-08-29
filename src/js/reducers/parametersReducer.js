@@ -14,29 +14,29 @@
  * under the License.
  */
 
-import { fromJS, List, Map } from 'immutable';
+import { fromJS, List, Map } from 'immutable'
 
 import EnvironmentConfigurationConstants
-  from '../constants/EnvironmentConfigurationConstants';
-import ParametersConstants from '../constants/ParametersConstants';
-import PlansConstants from '../constants/PlansConstants';
+  from '../constants/EnvironmentConfigurationConstants'
+import ParametersConstants from '../constants/ParametersConstants'
+import PlansConstants from '../constants/PlansConstants'
 import {
   ParametersDefaultState,
   Resource,
   Parameter
-} from '../immutableRecords/parameters';
+} from '../immutableRecords/parameters'
 
-const initialState = new ParametersDefaultState();
+const initialState = new ParametersDefaultState()
 
 export default function parametersReducer(state = initialState, action) {
   switch (action.type) {
     case ParametersConstants.FETCH_PARAMETERS_PENDING:
       return state
         .set('isFetching', true)
-        .set('form', Map({ formErrors: List(), formFieldErrors: Map() }));
+        .set('form', Map({ formErrors: List(), formFieldErrors: Map() }))
 
     case ParametersConstants.FETCH_PARAMETERS_SUCCESS: {
-      const { resources, parameters, mistralParameters } = action.payload;
+      const { resources, parameters, mistralParameters } = action.payload
       return state
         .set('loaded', true)
         .set('isFetching', false)
@@ -55,7 +55,7 @@ export default function parametersReducer(state = initialState, action) {
           'parameters',
           Map(parameters).map(parameter => new Parameter(parameter))
         )
-        .set('mistralParameters', fromJS(mistralParameters) || Map());
+        .set('mistralParameters', fromJS(mistralParameters) || Map())
     }
 
     case ParametersConstants.FETCH_PARAMETERS_FAILED:
@@ -65,13 +65,13 @@ export default function parametersReducer(state = initialState, action) {
           formErrors: List(),
           formFieldErrors: Map()
         })
-      );
+      )
 
     case ParametersConstants.UPDATE_PARAMETERS_PENDING:
-      return state.set('isFetching', true);
+      return state.set('isFetching', true)
 
     case ParametersConstants.UPDATE_PARAMETERS_SUCCESS: {
-      const updatedParameters = action.payload;
+      const updatedParameters = action.payload
       return state
         .set('isFetching', false)
         .set(
@@ -87,8 +87,8 @@ export default function parametersReducer(state = initialState, action) {
               Object.keys(updatedParameters).includes(parameter.name)
                 ? parameter.set('default', updatedParameters[parameter.name])
                 : parameter
-          );
-        });
+          )
+        })
     }
 
     case ParametersConstants.UPDATE_PARAMETERS_FAILED:
@@ -98,15 +98,15 @@ export default function parametersReducer(state = initialState, action) {
           formErrors: List.of(...action.payload.formErrors),
           formFieldErrors: Map(action.payload.formFieldErrors)
         })
-      );
+      )
 
     case EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS:
-      return state.set('loaded', false);
+      return state.set('loaded', false)
 
     case PlansConstants.PLAN_CHOSEN:
-      return initialState;
+      return initialState
 
     default:
-      return state;
+      return state
   }
 }

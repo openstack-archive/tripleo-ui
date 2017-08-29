@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import Formsy from 'formsy-react';
+import Formsy from 'formsy-react'
 
 /*
  * Custom validation rules used throughout the app.
@@ -26,9 +26,9 @@ export default function initFormsy() {
    */
   Formsy.addValidationRule('isJson', (values, value, otherField) => {
     try {
-      return value === '' ? true : !!JSON.parse(value);
+      return value === '' ? true : !!JSON.parse(value)
     } catch (e) {
-      return false;
+      return false
     }
-  });
+  })
 }

@@ -14,18 +14,18 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { List } from 'immutable';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ClassNames from 'classnames'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { List } from 'immutable'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import HorizontalStaticText from '../ui/forms/HorizontalStaticText';
-import Tab from '../ui/Tab';
-import PlanFileInput from './PlanFileInput';
-import PlanFilesTab from './PlanFilesTab';
-import PlanUploadTypeRadios from './PlanUploadTypeRadios';
+import HorizontalStaticText from '../ui/forms/HorizontalStaticText'
+import Tab from '../ui/Tab'
+import PlanFileInput from './PlanFileInput'
+import PlanFilesTab from './PlanFilesTab'
+import PlanUploadTypeRadios from './PlanUploadTypeRadios'
 
 const messages = defineMessages({
   files: {
@@ -48,30 +48,30 @@ const messages = defineMessages({
     id: 'PlanEditFormTabs.uploadType',
     defaultMessage: 'Upload Type'
   }
-});
+})
 
 export default class PlanEditFormTabs extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       activeTab: 'editPlan'
-    };
+    }
   }
 
   setActiveTab(tabName) {
-    this.setState({ activeTab: tabName });
+    this.setState({ activeTab: tabName })
   }
 
   isActiveTab(tabName) {
-    return this.state.activeTab === tabName;
+    return this.state.activeTab === tabName
   }
 
   getFileCount() {
-    let planFiles = this.props.planFiles || List();
-    let selectedFiles = this.props.selectedFiles || [];
+    let planFiles = this.props.planFiles || List()
+    let selectedFiles = this.props.selectedFiles || []
     return selectedFiles.length > planFiles.size
       ? selectedFiles.length
-      : planFiles.size;
+      : planFiles.size
   }
 
   render() {
@@ -105,7 +105,7 @@ export default class PlanEditFormTabs extends React.Component {
           />
         </div>
       </div>
-    );
+    )
   }
 }
 PlanEditFormTabs.propTypes = {
@@ -114,14 +114,14 @@ PlanEditFormTabs.propTypes = {
   selectedFiles: PropTypes.array,
   setUploadType: PropTypes.func.isRequired,
   uploadType: PropTypes.string.isRequired
-};
+}
 PlanEditFormTabs.defaultProps = {
   currentTtab: 'editPlan'
-};
+}
 
 class _PlanFormTab extends React.Component {
   render() {
-    const { formatMessage } = this.props.intl;
+    const { formatMessage } = this.props.intl
     return (
       <div
         className={ClassNames({ 'tab-pane': true, active: this.props.active })}
@@ -149,7 +149,7 @@ class _PlanFormTab extends React.Component {
           required
         />
       </div>
-    );
+    )
   }
 }
 _PlanFormTab.propTypes = {
@@ -158,7 +158,7 @@ _PlanFormTab.propTypes = {
   planName: PropTypes.string,
   setUploadType: PropTypes.func.isRequired,
   uploadType: PropTypes.string.isRequired
-};
-_PlanFormTab.defaultProps = { active: false };
+}
+_PlanFormTab.defaultProps = { active: false }
 
-const PlanFormTab = injectIntl(_PlanFormTab);
+const PlanFormTab = injectIntl(_PlanFormTab)

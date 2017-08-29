@@ -14,11 +14,11 @@
  * under the License.
  */
 
-import axios from 'axios';
-import when from 'when';
+import axios from 'axios'
+import when from 'when'
 
-import { AuthenticationError, IronicApiError, ConnectionError } from './errors';
-import { getServiceUrl, getAuthTokenId } from './utils';
+import { AuthenticationError, IronicApiError, ConnectionError } from './errors'
+import { getServiceUrl, getAuthTokenId } from './utils'
 
 class IronicApiService {
   defaultRequest(path, additionalAttributes) {
@@ -34,9 +34,9 @@ class IronicApiService {
           }
         },
         additionalAttributes
-      );
-      return axios(requestAttributes);
-    });
+      )
+      return axios(requestAttributes)
+    })
   }
 
   /**
@@ -46,13 +46,13 @@ class IronicApiService {
   getNodes() {
     return this.defaultRequest('/nodes/detail')
       .then(response => response.data)
-      .catch(handleErrors);
+      .catch(handleErrors)
   }
 
   getPorts() {
     return this.defaultRequest('/ports/detail')
       .then(response => response.data)
-      .catch(handleErrors);
+      .catch(handleErrors)
   }
 
   patchNode(nodePatch) {
@@ -61,7 +61,7 @@ class IronicApiService {
       data: nodePatch.patches
     })
       .then(response => response.data)
-      .catch(handleErrors);
+      .catch(handleErrors)
   }
 
   deleteNode(nodeId) {
@@ -69,25 +69,25 @@ class IronicApiService {
       method: 'DELETE'
     })
       .then(response => response.data)
-      .catch(handleErrors);
+      .catch(handleErrors)
   }
 }
 
 const handleErrors = e => {
   if (e.response && e.response.status === 401) {
-    return when.reject(new AuthenticationError(e));
+    return when.reject(new AuthenticationError(e))
   } else if (e.response) {
-    return when.reject(new IronicApiError(e));
+    return when.reject(new IronicApiError(e))
   } else if (e.request) {
     return when.reject(
       new ConnectionError(
         'Connection to Ironic API could not be established',
         e
       )
-    );
+    )
   } else {
-    return when.reject(e);
+    return when.reject(e)
   }
-};
+}
 
-export default new IronicApiService();
+export default new IronicApiService()

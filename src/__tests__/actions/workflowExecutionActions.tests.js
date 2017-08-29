@@ -14,22 +14,22 @@
  * under the License.
  */
 
-import when from 'when';
+import when from 'when'
 
-import MistralApiService from '../../js/services/MistralApiService';
+import MistralApiService from '../../js/services/MistralApiService'
 import WorkflowExecutionsActions
-  from '../../js/actions/WorkflowExecutionsActions';
+  from '../../js/actions/WorkflowExecutionsActions'
 
 let createResolvingPromise = data => {
   return () => {
-    return when.resolve(data);
-  };
-};
+    return when.resolve(data)
+  }
+}
 
 describe('fetchWorkflowExecutions action', () => {
   beforeEach(done => {
-    spyOn(WorkflowExecutionsActions, 'fetchWorkflowExecutionsPending');
-    spyOn(WorkflowExecutionsActions, 'fetchWorkflowExecutionsSuccess');
+    spyOn(WorkflowExecutionsActions, 'fetchWorkflowExecutionsPending')
+    spyOn(WorkflowExecutionsActions, 'fetchWorkflowExecutionsSuccess')
 
     const response = {
       executions: [
@@ -41,53 +41,53 @@ describe('fetchWorkflowExecutions action', () => {
           id: '1a'
         }
       ]
-    };
+    }
 
     spyOn(MistralApiService, 'getWorkflowExecutions').and.callFake(
       createResolvingPromise(response)
-    );
+    )
 
-    WorkflowExecutionsActions.fetchWorkflowExecutions()(() => {}, () => {});
+    WorkflowExecutionsActions.fetchWorkflowExecutions()(() => {}, () => {})
     setTimeout(() => {
-      done();
-    }, 1);
-  });
+      done()
+    }, 1)
+  })
 
   it('dispatches appropriate actions and normalizes the response', () => {
     expect(
       WorkflowExecutionsActions.fetchWorkflowExecutionsPending
-    ).toHaveBeenCalled();
-    expect(MistralApiService.getWorkflowExecutions).toHaveBeenCalled();
+    ).toHaveBeenCalled()
+    expect(MistralApiService.getWorkflowExecutions).toHaveBeenCalled()
     expect(
       WorkflowExecutionsActions.fetchWorkflowExecutionsSuccess
-    ).toHaveBeenCalled();
-  });
-});
+    ).toHaveBeenCalled()
+  })
+})
 
 describe('updateWorkflowExecution action', () => {
   beforeEach(done => {
-    spyOn(WorkflowExecutionsActions, 'updateWorkflowExecutionPending');
-    spyOn(WorkflowExecutionsActions, 'addWorkflowExecution');
+    spyOn(WorkflowExecutionsActions, 'updateWorkflowExecutionPending')
+    spyOn(WorkflowExecutionsActions, 'addWorkflowExecution')
 
     spyOn(MistralApiService, 'updateWorkflowExecution').and.callFake(
       createResolvingPromise()
-    );
+    )
 
     WorkflowExecutionsActions.updateWorkflowExecution('512e', {
       state: 'PAUSED'
-    })(() => {}, () => {});
+    })(() => {}, () => {})
     setTimeout(() => {
-      done();
-    }, 1);
-  });
+      done()
+    }, 1)
+  })
 
   it('dispatches appropriate actions', () => {
     expect(
       WorkflowExecutionsActions.updateWorkflowExecutionPending
-    ).toHaveBeenCalledWith('512e', { state: 'PAUSED' });
+    ).toHaveBeenCalledWith('512e', { state: 'PAUSED' })
     expect(
       MistralApiService.updateWorkflowExecution
-    ).toHaveBeenCalledWith('512e', { state: 'PAUSED' });
-    expect(WorkflowExecutionsActions.addWorkflowExecution).toHaveBeenCalled();
-  });
-});
+    ).toHaveBeenCalledWith('512e', { state: 'PAUSED' })
+    expect(WorkflowExecutionsActions.addWorkflowExecution).toHaveBeenCalled()
+  })
+})

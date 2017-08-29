@@ -14,12 +14,12 @@
  * under the License.
  */
 
-import { createSelector } from 'reselect';
-import { getFormValues } from 'redux-form';
+import { createSelector } from 'reselect'
+import { getFormValues } from 'redux-form'
 
-import { getNodes, getNodeCapabilities } from './nodes';
-import { getParameters } from './parameters';
-import { getRoles } from './roles';
+import { getNodes, getNodeCapabilities } from './nodes'
+import { getParameters } from './parameters'
+import { getRoles } from './roles'
 
 /**
  *  Return Nodes which are either available or deployed (active) with current Plan
@@ -30,13 +30,13 @@ export const getAvailableNodes = createSelector(getNodes, nodes =>
       ['available', 'active'].includes(node.get('provision_state'))
     )
     .filter(node => !node.get('maintenance'))
-);
+)
 
 export const getUntaggedAvailableNodes = createSelector(
   getAvailableNodes,
   availableNodes =>
     availableNodes.filterNot(node => getNodeCapabilities(node).profile)
-);
+)
 
 /**
  *  Returns <RoleName>Count parameters for each Role
@@ -44,7 +44,7 @@ export const getUntaggedAvailableNodes = createSelector(
 export const getNodeCountParametersByRole = createSelector(
   [getRoles, getParameters],
   (roles, parameters) => roles.map(role => parameters.get(`${role.name}Count`))
-);
+)
 
 /**
  *  Returns <RoleName>Count parameters for each Role combined with values from
@@ -63,7 +63,7 @@ export const getNodeCountParametersByRoleFromFormValues = createSelector(
             : parameter.default
         )
     )
-);
+)
 
 /**
  *  Returns sum of untagged assigned Nodes counts across all Roles
@@ -74,15 +74,15 @@ export const getTotalUntaggedAssignedNodesCount = createSelector(
     roles.reduce((total, role) => {
       const taggedCount = nodes.filter(
         node => getNodeCapabilities(node).profile === role.identifier
-      ).size;
+      ).size
       const assignedCount = parametersByRole.getIn(
         [role.identifier, 'default'],
         0
-      );
-      const remainder = Math.max(0, assignedCount - taggedCount);
-      return total + remainder;
+      )
+      const remainder = Math.max(0, assignedCount - taggedCount)
+      return total + remainder
     }, 0)
-);
+)
 
 /**
  *  Returns maximum Nodes count available to assign by each Role
@@ -99,12 +99,12 @@ export const getAvailableNodesCountsByRole = createSelector(
     roles.map(role => {
       const taggedCount = nodes.filter(
         node => getNodeCapabilities(node).profile === role.identifier
-      ).size;
+      ).size
       const assignedCount = parametersByRole.getIn(
         [role.identifier, 'default'],
         0
-      );
-      const untaggedCount = untaggedNodes.size;
+      )
+      const untaggedCount = untaggedNodes.size
       return (
         taggedCount +
         Math.max(
@@ -113,9 +113,9 @@ export const getAvailableNodesCountsByRole = createSelector(
             untaggedAssignedCount +
             Math.max(0, assignedCount - taggedCount)
         )
-      );
+      )
     })
-);
+)
 
 /**
  *  Returns 'default' value of <RoleName>Count parameter for each Role
@@ -128,7 +128,7 @@ export const getAssignedNodesCountsByRole = createSelector(
       ([role, parameter]) =>
         parameter ? [parameter.name, parameter.default] : undefined
     )
-);
+)
 
 export const getTotalAssignedNodesCount = createSelector(
   getNodeCountParametersByRole,
@@ -138,4 +138,4 @@ export const getTotalAssignedNodesCount = createSelector(
         parameter ? total + parseInt(parameter.default) : total,
       0
     )
-);
+)

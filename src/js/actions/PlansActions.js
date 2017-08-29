@@ -14,21 +14,21 @@
  * under the License.
  */
 
-import { defineMessages } from 'react-intl';
-import { normalize, arrayOf } from 'normalizr';
-import when from 'when';
-import yaml from 'js-yaml';
+import { defineMessages } from 'react-intl'
+import { normalize, arrayOf } from 'normalizr'
+import when from 'when'
+import yaml from 'js-yaml'
 
-import { handleErrors } from './ErrorActions';
-import MistralApiService from '../services/MistralApiService';
-import NotificationActions from '../actions/NotificationActions';
-import PlansConstants from '../constants/PlansConstants';
-import { planFileSchema } from '../normalizrSchemas/plans';
-import StackActions from '../actions/StacksActions';
-import SwiftApiService from '../services/SwiftApiService';
-import MistralConstants from '../constants/MistralConstants';
-import { PLAN_ENVIRONMENT } from '../constants/PlansConstants';
-import { getServiceUrl } from '../services/utils';
+import { handleErrors } from './ErrorActions'
+import MistralApiService from '../services/MistralApiService'
+import NotificationActions from '../actions/NotificationActions'
+import PlansConstants from '../constants/PlansConstants'
+import { planFileSchema } from '../normalizrSchemas/plans'
+import StackActions from '../actions/StacksActions'
+import SwiftApiService from '../services/SwiftApiService'
+import MistralConstants from '../constants/MistralConstants'
+import { PLAN_ENVIRONMENT } from '../constants/PlansConstants'
+import { getServiceUrl } from '../services/utils'
 
 const messages = defineMessages({
   planCreatedNotificationTitle: {
@@ -67,25 +67,25 @@ const messages = defineMessages({
     id: 'PlansActions.exportFailedNotificationTitle',
     defaultMessage: 'Export Failed'
   }
-});
+})
 
 export default {
   requestPlans() {
     return {
       type: PlansConstants.REQUEST_PLANS
-    };
+    }
   },
 
   receivePlans(plans) {
     return {
       type: PlansConstants.RECEIVE_PLANS,
       payload: plans
-    };
+    }
   },
 
   fetchPlans() {
     return dispatch => {
-      dispatch(this.requestPlans());
+      dispatch(this.requestPlans())
       MistralApiService.runAction(MistralConstants.PLAN_LIST)
         // TODO(jtomasek): This block should be done on Mistral action side
         .then(planNames =>
@@ -99,30 +99,30 @@ export default {
               planNames.map(planName => {
                 const { name: title, description } = yaml.safeLoad(
                   planEnvs[planName]
-                );
-                return { name: planName, title, description };
+                )
+                return { name: planName, title, description }
               })
             )
             .catch(error => {
               dispatch(
                 handleErrors(error, 'Plan descriptions could not be loaded')
-              );
-              return planNames.map(name => ({ name, title: name }));
+              )
+              return planNames.map(name => ({ name, title: name }))
             })
         )
         .then(plans => {
-          dispatch(this.receivePlans(plans));
+          dispatch(this.receivePlans(plans))
         })
         .catch(error => {
-          dispatch(handleErrors(error, 'Plans could not be loaded'));
-        });
-    };
+          dispatch(handleErrors(error, 'Plans could not be loaded'))
+        })
+    }
   },
 
   requestPlan() {
     return {
       type: PlansConstants.REQUEST_PLAN
-    };
+    }
   },
 
   receivePlan(planName, planFiles) {
@@ -132,36 +132,36 @@ export default {
         planName: planName,
         planFiles: planFiles
       }
-    };
+    }
   },
 
   fetchPlan(planName) {
     return dispatch => {
-      dispatch(this.requestPlan());
+      dispatch(this.requestPlan())
       SwiftApiService.getContainer(planName)
         .then(response => {
           const planFiles = normalize(response, arrayOf(planFileSchema))
-            .entities.planFiles || {};
-          dispatch(this.receivePlan(planName, planFiles));
+            .entities.planFiles || {}
+          dispatch(this.receivePlan(planName, planFiles))
         })
         .catch(error => {
-          dispatch(handleErrors(error, 'Plan could not be loaded'));
-        });
-    };
+          dispatch(handleErrors(error, 'Plan could not be loaded'))
+        })
+    }
   },
 
   updatePlanPending(planName) {
     return {
       type: PlansConstants.UPDATE_PLAN_PENDING,
       payload: planName
-    };
+    }
   },
 
   updatePlanSuccess(planName) {
     return {
       type: PlansConstants.UPDATE_PLAN_SUCCESS,
       payload: planName
-    };
+    }
   },
 
   updatePlanFailed(planName, errors) {
@@ -171,13 +171,13 @@ export default {
         planName,
         errors
       }
-    };
+    }
   },
 
   updatePlan(planName, planFiles, history) {
     return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      dispatch(this.updatePlanPending(planName));
+      const { formatMessage } = getIntl(getState())
+      dispatch(this.updatePlanPending(planName))
       uploadFilesToContainer(planName, planFiles)
         .then(response =>
           MistralApiService.runWorkflow(MistralConstants.PLAN_UPDATE, {
@@ -185,7 +185,7 @@ export default {
           })
         )
         .catch(error => {
-          dispatch(handleErrors(error, 'Plan update failed', false));
+          dispatch(handleErrors(error, 'Plan update failed', false))
           dispatch(
             this.updatePlanFailed(planName, [
               {
@@ -193,23 +193,23 @@ export default {
                 message: error.message
               }
             ])
-          );
-        });
-    };
+          )
+        })
+    }
   },
 
   updatePlanFromTarball(planName, file, history) {
     return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      dispatch(this.updatePlanPending(planName));
+      const { formatMessage } = getIntl(getState())
+      dispatch(this.updatePlanPending(planName))
       SwiftApiService.uploadTarball(planName, file)
         .then(response => {
           MistralApiService.runWorkflow(MistralConstants.PLAN_UPDATE, {
             container: planName
-          });
+          })
         })
         .catch(error => {
-          dispatch(handleErrors(error, 'Plan update failed', false));
+          dispatch(handleErrors(error, 'Plan update failed', false))
           dispatch(
             this.updatePlanFailed(planName, [
               {
@@ -217,17 +217,17 @@ export default {
                 message: error.message
               }
             ])
-          );
-        });
-    };
+          )
+        })
+    }
   },
 
   updatePlanFinished(payload, history) {
     return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      const planName = payload.execution.input.container;
+      const { formatMessage } = getIntl(getState())
+      const planName = payload.execution.input.container
       if (payload.status === 'SUCCESS') {
-        dispatch(this.updatePlanSuccess(planName));
+        dispatch(this.updatePlanSuccess(planName))
         dispatch(
           NotificationActions.notify({
             title: formatMessage(messages.planUpdatedNotificationTitle),
@@ -236,9 +236,9 @@ export default {
             }),
             type: 'success'
           })
-        );
-        dispatch(this.fetchPlans());
-        history.push('/plans/manage');
+        )
+        dispatch(this.fetchPlans())
+        history.push('/plans/manage')
       } else {
         dispatch(
           this.updatePlanFailed(planName, [
@@ -247,39 +247,39 @@ export default {
               message: payload.message
             }
           ])
-        );
+        )
       }
-    };
+    }
   },
 
   cancelCreatePlan() {
     return {
       type: PlansConstants.CANCEL_CREATE_PLAN
-    };
+    }
   },
 
   createPlanPending() {
     return {
       type: PlansConstants.CREATE_PLAN_PENDING
-    };
+    }
   },
 
   createPlanSuccess() {
     return {
       type: PlansConstants.CREATE_PLAN_SUCCESS
-    };
+    }
   },
 
   createPlanFailed(errors) {
     return {
       type: PlansConstants.CREATE_PLAN_FAILED,
       payload: errors
-    };
+    }
   },
 
   createPlan(planName, planFiles) {
     return dispatch => {
-      dispatch(this.createPlanPending());
+      dispatch(this.createPlanPending())
       MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
         container: planName
       })
@@ -290,19 +290,19 @@ export default {
           })
         )
         .catch(error => {
-          dispatch(handleErrors(error, 'Plan creation failed', false));
+          dispatch(handleErrors(error, 'Plan creation failed', false))
           dispatch(
             this.createPlanFailed([
               { title: 'Plan creation failed', message: error.message }
             ])
-          );
-        });
-    };
+          )
+        })
+    }
   },
 
   createPlanFromTarball(planName, file) {
     return dispatch => {
-      dispatch(this.createPlanPending());
+      dispatch(this.createPlanPending())
       MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
         container: planName
       })
@@ -313,22 +313,22 @@ export default {
           })
         )
         .catch(error => {
-          dispatch(handleErrors(error, 'Plan creation failed', false));
+          dispatch(handleErrors(error, 'Plan creation failed', false))
           dispatch(
             this.createPlanFailed([
               { title: 'Plan creation failed', message: error.message }
             ])
-          );
-        });
-    };
+          )
+        })
+    }
   },
 
   createPlanFinished(payload, history) {
     return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
+      const { formatMessage } = getIntl(getState())
       if (payload.status === 'SUCCESS') {
-        const planName = payload.execution.input.container;
-        dispatch(this.createPlanSuccess());
+        const planName = payload.execution.input.container
+        dispatch(this.createPlanSuccess())
         dispatch(
           NotificationActions.notify({
             type: 'success',
@@ -337,50 +337,50 @@ export default {
               planName: planName
             })
           })
-        );
-        dispatch(this.fetchPlans());
-        history.push('/plans/manage');
+        )
+        dispatch(this.fetchPlans())
+        history.push('/plans/manage')
       } else {
         dispatch(
           this.createPlanFailed([
             { title: 'Plan creation failed', message: payload.message }
           ])
-        );
+        )
       }
-    };
+    }
   },
 
   deletePlanPending(planName) {
     return {
       type: PlansConstants.DELETE_PLAN_PENDING,
       payload: planName
-    };
+    }
   },
 
   deletePlanSuccess(planName) {
     return {
       type: PlansConstants.DELETE_PLAN_SUCCESS,
       payload: planName
-    };
+    }
   },
 
   deletePlanFailed(planName) {
     return {
       type: PlansConstants.DELETE_PLAN_FAILED,
       payload: planName
-    };
+    }
   },
 
   deletePlan(planName, history) {
     return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      dispatch(this.deletePlanPending(planName));
-      history.push('/plans/manage');
+      const { formatMessage } = getIntl(getState())
+      dispatch(this.deletePlanPending(planName))
+      history.push('/plans/manage')
       MistralApiService.runAction(MistralConstants.PLAN_DELETE, {
         container: planName
       })
         .then(response => {
-          dispatch(this.deletePlanSuccess(planName));
+          dispatch(this.deletePlanSuccess(planName))
           dispatch(
             NotificationActions.notify({
               title: formatMessage(messages.planDeletedNotificationTitle),
@@ -389,134 +389,130 @@ export default {
               }),
               type: 'success'
             })
-          );
+          )
         })
         .catch(error => {
-          dispatch(
-            handleErrors(error, `Plan ${planName} could not be deleted`)
-          );
-          dispatch(this.deletePlanFailed(planName));
-        });
-    };
+          dispatch(handleErrors(error, `Plan ${planName} could not be deleted`))
+          dispatch(this.deletePlanFailed(planName))
+        })
+    }
   },
 
   deployPlanPending(planName) {
     return {
       type: PlansConstants.START_DEPLOYMENT_PENDING,
       payload: planName
-    };
+    }
   },
 
   deployPlanSuccess(planName) {
     return {
       type: PlansConstants.START_DEPLOYMENT_SUCCESS,
       payload: planName
-    };
+    }
   },
 
   deployPlanFailed(planName) {
     return {
       type: PlansConstants.START_DEPLOYMENT_FAILED,
       payload: planName
-    };
+    }
   },
 
   deployPlan(planName) {
     return dispatch => {
-      dispatch(this.deployPlanPending(planName));
+      dispatch(this.deployPlanPending(planName))
       MistralApiService.runWorkflow(MistralConstants.DEPLOYMENT_DEPLOY_PLAN, {
         container: planName,
         timeout: 240
       })
         .then(response => {
-          dispatch(StackActions.fetchStacks());
+          dispatch(StackActions.fetchStacks())
         })
         .catch(error => {
           dispatch(
             handleErrors(error, `Plan ${planName} could not be deployed`)
-          );
-          dispatch(this.deployPlanFailed(planName));
-        });
-    };
+          )
+          dispatch(this.deployPlanFailed(planName))
+        })
+    }
   },
 
   deployPlanFinished(payload) {
     return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
+      const { formatMessage } = getIntl(getState())
       if (payload.status === 'FAILED') {
-        dispatch(this.deployPlanFailed(payload.execution.input.container));
+        dispatch(this.deployPlanFailed(payload.execution.input.container))
         dispatch(
           NotificationActions.notify({
             title: formatMessage(messages.deploymentFailedNotificationTitle),
             message: payload.message,
             type: 'error'
           })
-        );
+        )
       } else {
-        dispatch(this.deployPlanSuccess(payload.execution.input.container));
-        dispatch(StackActions.fetchStacks());
+        dispatch(this.deployPlanSuccess(payload.execution.input.container))
+        dispatch(StackActions.fetchStacks())
       }
-    };
+    }
   },
 
   exportPlanPending(planName) {
     return {
       type: PlansConstants.EXPORT_PLAN_PENDING,
       payload: planName
-    };
+    }
   },
 
   exportPlanSuccess(planExportUrl) {
     return {
       type: PlansConstants.EXPORT_PLAN_SUCCESS,
       payload: planExportUrl
-    };
+    }
   },
 
   exportPlanFailed(planName) {
     return {
       type: PlansConstants.EXPORT_PLAN_FAILED,
       payload: planName
-    };
+    }
   },
 
   exportPlan(planName) {
     return dispatch => {
-      dispatch(this.exportPlanPending(planName));
+      dispatch(this.exportPlanPending(planName))
       MistralApiService.runWorkflow(MistralConstants.PLAN_EXPORT, {
         plan: planName
       }).catch(error => {
-        dispatch(handleErrors(error, `Plan ${planName} could not be exported`));
-        dispatch(this.exportPlanFailed(planName));
-      });
-    };
+        dispatch(handleErrors(error, `Plan ${planName} could not be exported`))
+        dispatch(this.exportPlanFailed(planName))
+      })
+    }
   },
 
   exportPlanFinished(payload) {
     return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
+      const { formatMessage } = getIntl(getState())
       if (payload.status === 'FAILED' || !payload.tempurl) {
-        dispatch(this.exportPlanFailed(payload.execution.input.plan));
+        dispatch(this.exportPlanFailed(payload.execution.input.plan))
         dispatch(
           NotificationActions.notify({
             title: formatMessage(messages.exportFailedNotificationTitle),
             message: payload.message,
             type: 'error'
           })
-        );
+        )
       } else {
-        let urlParser = document.createElement('a');
-        urlParser.href = payload.tempurl;
-        let url = urlParser.hostname;
-        urlParser.href = getServiceUrl('swift');
-        let swiftUrl = urlParser.hostname;
-        dispatch(
-          this.exportPlanSuccess(payload.tempurl.replace(url, swiftUrl))
-        );
+        let urlParser = document.createElement('a')
+        urlParser.href = payload.tempurl
+        let url = urlParser.hostname
+        urlParser.href = getServiceUrl('swift')
+        let swiftUrl = urlParser.hostname
+        dispatch(this.exportPlanSuccess(payload.tempurl.replace(url, swiftUrl)))
       }
-    };
+    }
   }
-};
+}
 
 /*
   * Uploads a number of files to a container.
@@ -534,4 +530,4 @@ export const uploadFilesToContainer = (container, files) =>
         files[fileName].contents
       )
     )
-  );
+  )

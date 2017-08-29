@@ -14,8 +14,8 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 
 export default class HorizontalStaticText extends React.Component {
   render() {
@@ -28,7 +28,7 @@ export default class HorizontalStaticText extends React.Component {
           <p className="form-control-static">{this.props.text}</p>
         </div>
       </div>
-    );
+    )
   }
 }
 HorizontalStaticText.propTypes = {
@@ -36,4 +36,4 @@ HorizontalStaticText.propTypes = {
   labelColumnClasses: PropTypes.string,
   text: PropTypes.string,
   title: PropTypes.string
-};
+}

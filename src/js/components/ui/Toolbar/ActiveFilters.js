@@ -14,8 +14,8 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 
 export const ActiveFiltersList = ({
   children,
@@ -36,21 +36,21 @@ export const ActiveFiltersList = ({
           </a>
         </p>
       </span>
-    );
+    )
   } else {
-    return null;
+    return null
   }
-};
+}
 ActiveFiltersList.propTypes = {
   children: PropTypes.node,
   clearAllLabel: PropTypes.string.isRequired,
   handleClearAll: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired
-};
+}
 ActiveFiltersList.defaultProps = {
   clearAllLabel: 'Clear All Filters',
   label: 'Active Filters:'
-};
+}
 
 export const ActiveFilter = ({ filterBy, filterString, onRemove }) => (
   <li>
@@ -61,9 +61,9 @@ export const ActiveFilter = ({ filterBy, filterString, onRemove }) => (
       </a>
     </span>
   </li>
-);
+)
 ActiveFilter.propTypes = {
   filterBy: PropTypes.string,
   filterString: PropTypes.string.isRequired,
   onRemove: PropTypes.func.isRequired
-};
+}

@@ -14,14 +14,14 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { includes } from 'lodash';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { includes } from 'lodash'
 
-import Modal from '../ui/Modal';
-import { ValidationStatusIcon } from './ValidationStatusIcon';
+import Modal from '../ui/Modal'
+import { ValidationStatusIcon } from './ValidationStatusIcon'
 
 const messages = defineMessages({
   close: {
@@ -48,16 +48,16 @@ const messages = defineMessages({
     id: 'ValidationDetail.validationDetail',
     defaultMessage: 'Validation Detail'
   }
-});
+})
 
 class ValidationDetail extends React.Component {
   constructor() {
-    super();
-    this.state = { isPending: false };
+    super()
+    this.state = { isPending: false }
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ isPending: false });
+    this.setState({ isPending: false })
   }
 
   /**
@@ -65,17 +65,17 @@ class ValidationDetail extends React.Component {
    * started) no action can be run
    */
   triggerValidationAction() {
-    this.setState({ isPending: true });
+    this.setState({ isPending: true })
 
     switch (true) {
       case this.state.isPending:
-        break;
+        break
       case this.props.status === 'running':
-        this.props.stopValidation(this.props.results.last().id);
-        break;
+        this.props.stopValidation(this.props.results.last().id)
+        break
       default:
-        this.props.runValidation();
-        break;
+        this.props.runValidation()
+        break
     }
   }
 
@@ -86,12 +86,12 @@ class ValidationDetail extends React.Component {
           <span className="label label-default">{group}</span>
           &nbsp;
         </small>
-      );
-    });
+      )
+    })
   }
 
   renderValidationOutput() {
-    const lastResult = this.props.results.last();
+    const lastResult = this.props.results.last()
     if (lastResult && !includes(['running', 'paused'], this.props.status)) {
       return (
         <div>
@@ -100,7 +100,7 @@ class ValidationDetail extends React.Component {
             {lastResult.output.get('stdout', lastResult.output.get('result'))}
           </pre>
         </div>
-      );
+      )
     }
   }
 
@@ -151,7 +151,7 @@ class ValidationDetail extends React.Component {
           {this.renderValidationOutput()}
         </div>
       </Modal>
-    );
+    )
   }
 }
 
@@ -165,6 +165,6 @@ ValidationDetail.propTypes = {
   runValidation: PropTypes.func.isRequired,
   status: PropTypes.string.isRequired,
   stopValidation: PropTypes.func.isRequired
-};
+}
 
-export default injectIntl(ValidationDetail);
+export default injectIntl(ValidationDetail)

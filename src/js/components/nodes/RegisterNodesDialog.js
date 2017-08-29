@@ -14,30 +14,30 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import ClassNames from 'classnames';
-import { Link } from 'react-router-dom';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
-import uuid from 'node-uuid';
+import { connect } from 'react-redux'
+import { fromJS } from 'immutable'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import ClassNames from 'classnames'
+import { Link } from 'react-router-dom'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
+import uuid from 'node-uuid'
 
-import BlankSlate from '../ui/BlankSlate';
+import BlankSlate from '../ui/BlankSlate'
 import {
   allNodesToRegisterAreValid,
   getIronicNodesfromNodesToRegister
-} from '../../selectors/registerNodes';
-import { NodeToRegister } from '../../immutableRecords/nodes';
-import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
-import Loader from '../ui/Loader';
-import NotificationActions from '../../actions/NotificationActions';
-import RegisterNodesActions from '../../actions/RegisterNodesActions';
-import RegisterNodeForm from './RegisterNodeForm';
-import Tab from '../ui/Tab';
-import TabPane from '../ui/TabPane';
-import Modal from '../ui/Modal';
+} from '../../selectors/registerNodes'
+import { NodeToRegister } from '../../immutableRecords/nodes'
+import ModalFormErrorList from '../ui/forms/ModalFormErrorList'
+import Loader from '../ui/Loader'
+import NotificationActions from '../../actions/NotificationActions'
+import RegisterNodesActions from '../../actions/RegisterNodesActions'
+import RegisterNodeForm from './RegisterNodeForm'
+import Tab from '../ui/Tab'
+import TabPane from '../ui/TabPane'
+import Modal from '../ui/Modal'
 
 const messages = defineMessages({
   invalidJson: {
@@ -98,28 +98,28 @@ const messages = defineMessages({
     id: 'RegisterNodesDialog.cancel',
     defaultMessage: 'Cancel'
   }
-});
+})
 
 class RegisterNodesDialog extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       jsonErrors: []
-    };
+    }
   }
 
   onNodeChange(updatedNode) {
-    this.props.updateNode(updatedNode);
+    this.props.updateNode(updatedNode)
   }
 
   addNodesFromInstackenvJSON(fileContents) {
-    this.setState({ jsonErrors: [] });
+    this.setState({ jsonErrors: [] })
     try {
-      let nodes = JSON.parse(fileContents).nodes;
+      let nodes = JSON.parse(fileContents).nodes
       nodes.forEach(node => {
-        node.uuid = uuid.v4();
-        this.addNode(new NodeToRegister(fromJS(node)));
-      });
+        node.uuid = uuid.v4()
+        this.addNode(new NodeToRegister(fromJS(node)))
+      })
     } catch (e) {
       this.setState({
         jsonErrors: [
@@ -128,18 +128,18 @@ class RegisterNodesDialog extends React.Component {
             message: e.toString()
           }
         ]
-      });
+      })
     }
   }
 
   uploadFromFile(event) {
-    let file = event.target.files[0];
+    let file = event.target.files[0]
 
-    let reader = new FileReader();
+    let reader = new FileReader()
     reader.onload = (f => {
       return e => {
         if (file.name.match(/(\.json)$/)) {
-          this.addNodesFromInstackenvJSON(e.target.result);
+          this.addNodesFromInstackenvJSON(e.target.result)
         } else if (file.name.match(/(\.csv)$/)) {
           // TODO(jtomasek): add CSV file support
           // this.addNodesFromCSV(e.target.result);
@@ -148,7 +148,7 @@ class RegisterNodesDialog extends React.Component {
             message: this.props.intl.formatMessage(
               messages.selectedFileUnsupported
             )
-          });
+          })
         } else {
           this.props.notify({
             title: this.props.intl.formatMessage(
@@ -157,49 +157,49 @@ class RegisterNodesDialog extends React.Component {
             message: this.props.intl.formatMessage(
               messages.provideCsvOrInstackenvJson
             )
-          });
+          })
         }
-      };
-    })(file);
-    reader.readAsText(file);
-    this.refs.regNodesUploadFileForm.reset();
+      }
+    })(file)
+    reader.readAsText(file)
+    this.refs.regNodesUploadFileForm.reset()
   }
 
   selectFile() {
-    this.refs.regNodesUploadFileInput.click();
+    this.refs.regNodesUploadFileInput.click()
   }
 
   onAddNewClick(e) {
     // Remove error message from a previous failed parsing of instackenv.json
-    this.setState({ jsonErrors: [] });
-    e.preventDefault();
-    this.addNode();
+    this.setState({ jsonErrors: [] })
+    e.preventDefault()
+    this.addNode()
   }
 
   addNode(newNode = new NodeToRegister({ uuid: uuid.v4() })) {
-    this.props.addNode(newNode);
-    this.props.selectNode(newNode.uuid);
+    this.props.addNode(newNode)
+    this.props.selectNode(newNode.uuid)
   }
 
   removeNode(uuid, e) {
-    e.preventDefault();
-    e.stopPropagation();
-    this.props.removeNode(uuid);
+    e.preventDefault()
+    e.stopPropagation()
+    this.props.removeNode(uuid)
   }
 
   selectNode(uuid) {
-    this.props.selectNode(uuid);
+    this.props.selectNode(uuid)
   }
 
   renderNode(node, index) {
     let nodeName =
       node.name ||
       node.pm_addr ||
-      this.props.intl.formatMessage(messages.undefinedNode);
+      this.props.intl.formatMessage(messages.undefinedNode)
     let validationIconClasses = ClassNames({
       pficon: true,
       'pficon-error-circle-o': !node.valid
-    });
+    })
 
     return (
       <Tab key={index} isActive={node.uuid === this.props.selectedNodeId}>
@@ -211,14 +211,14 @@ class RegisterNodesDialog extends React.Component {
           />
         </a>
       </Tab>
-    );
+    )
   }
 
   renderNodeTabs() {
-    let renderNode = this.renderNode.bind(this);
+    let renderNode = this.renderNode.bind(this)
     return this.props.nodesToRegister.toList().map(function(node, i) {
-      return renderNode(node, i);
-    });
+      return renderNode(node, i)
+    })
   }
 
   renderTabPanes() {
@@ -235,8 +235,8 @@ class RegisterNodesDialog extends React.Component {
               onUpdateNode={this.onNodeChange.bind(this)}
             />
           </TabPane>
-        );
-      });
+        )
+      })
     } else {
       return (
         <BlankSlate
@@ -245,12 +245,12 @@ class RegisterNodesDialog extends React.Component {
         >
           <p><FormattedMessage {...messages.addANodeManually} /></p>
         </BlankSlate>
-      );
+      )
     }
   }
 
   getErrors() {
-    return this.props.registrationErrors.toJS().concat(this.state.jsonErrors);
+    return this.props.registrationErrors.toJS().concat(this.state.jsonErrors)
   }
 
   render() {
@@ -336,7 +336,7 @@ class RegisterNodesDialog extends React.Component {
           </button>
         </div>
       </Modal>
-    );
+    )
   }
 }
 RegisterNodesDialog.propTypes = {
@@ -354,7 +354,7 @@ RegisterNodesDialog.propTypes = {
   selectNode: PropTypes.func.isRequired,
   selectedNodeId: PropTypes.string,
   updateNode: PropTypes.func.isRequired
-};
+}
 
 function mapStateToProps(state) {
   return {
@@ -365,7 +365,7 @@ function mapStateToProps(state) {
     registrationErrors: state.registerNodes.get('registrationErrors'),
     selectedNodeId: state.registerNodes.get('selectedNodeId'),
     ironicNodes: getIronicNodesfromNodesToRegister(state)
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -375,16 +375,14 @@ function mapDispatchToProps(dispatch) {
       dispatch(RegisterNodesActions.cancelNodesRegistration()),
     selectNode: nodeId => dispatch(RegisterNodesActions.selectNode(nodeId)),
     registerNodes: (nodes, redirectPath) => {
-      dispatch(
-        RegisterNodesActions.startNodesRegistration(nodes, redirectPath)
-      );
+      dispatch(RegisterNodesActions.startNodesRegistration(nodes, redirectPath))
     },
     removeNode: nodeId => dispatch(RegisterNodesActions.removeNode(nodeId)),
     updateNode: node => dispatch(RegisterNodesActions.updateNode(node)),
     notify: notification => dispatch(NotificationActions.notify(notification))
-  };
+  }
 }
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(RegisterNodesDialog)
-);
+)

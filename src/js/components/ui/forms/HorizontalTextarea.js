@@ -14,17 +14,17 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
-import Formsy from 'formsy-react';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ClassNames from 'classnames'
+import Formsy from 'formsy-react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import InputDescription from './InputDescription';
-import InputErrorMessage from './InputErrorMessage';
+import InputDescription from './InputDescription'
+import InputErrorMessage from './InputErrorMessage'
 
 class HorizontalTextarea extends React.Component {
   changeValue(event) {
-    this.props.setValue(event.target.value);
+    this.props.setValue(event.target.value)
   }
 
   render() {
@@ -33,7 +33,7 @@ class HorizontalTextarea extends React.Component {
       'has-error': this.props.showError(),
       // 'has-success': this.props.isValid(),
       required: this.props.isRequired()
-    });
+    })
 
     return (
       <div className={divClasses}>
@@ -60,7 +60,7 @@ class HorizontalTextarea extends React.Component {
           <InputDescription description={this.props.description} />
         </div>
       </div>
-    );
+    )
   }
 }
 HorizontalTextarea.propTypes = {
@@ -79,11 +79,11 @@ HorizontalTextarea.propTypes = {
   showError: PropTypes.func,
   title: PropTypes.string.isRequired,
   type: PropTypes.string
-};
+}
 HorizontalTextarea.defaultProps = {
   inputColumnClasses: 'col-sm-10',
   labelColumnClasses: 'col-sm-2',
   rows: 3,
   type: 'text'
-};
-export default Formsy.HOC(HorizontalTextarea);
+}
+export default Formsy.HOC(HorizontalTextarea)

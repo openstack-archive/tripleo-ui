@@ -14,37 +14,37 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
-import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import { Redirect } from 'react-router-dom'
+import React, { Component } from 'react'
 
-import CurrentPlanActions from '../../actions/CurrentPlanActions';
-import CurrentPlan from './CurrentPlan';
-import { getPlans } from '../../selectors/plans';
+import CurrentPlanActions from '../../actions/CurrentPlanActions'
+import CurrentPlan from './CurrentPlan'
+import { getPlans } from '../../selectors/plans'
 
 class DeploymentPlan extends Component {
   componentWillMount() {
-    this.props.choosePlan(this.props.match.params.planName);
+    this.props.choosePlan(this.props.match.params.planName)
   }
 
   render() {
-    return this.props.currentPlan ? <CurrentPlan /> : <Redirect to="/plans" />;
+    return this.props.currentPlan ? <CurrentPlan /> : <Redirect to="/plans" />
   }
 }
 DeploymentPlan.propTypes = {
   choosePlan: PropTypes.func.isRequired,
   currentPlan: ImmutablePropTypes.record,
   match: PropTypes.object.isRequired
-};
+}
 
 const mapStateToProps = (state, props) => ({
   currentPlan: getPlans(state).get(props.match.params.planName)
-});
+})
 
 const mapDispatchToProps = (dispatch, props) => ({
   choosePlan: planName => dispatch(CurrentPlanActions.choosePlan(planName))
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(DeploymentPlan);
+export default connect(mapStateToProps, mapDispatchToProps)(DeploymentPlan)

@@ -14,13 +14,13 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 
 export default class Tab extends React.Component {
   render() {
-    let className = this.props.isActive ? 'active' : '';
-    return <li className={className}>{this.props.children}</li>;
+    let className = this.props.isActive ? 'active' : ''
+    return <li className={className}>{this.props.children}</li>
   }
 }
 Tab.propTypes = {
@@ -29,4 +29,4 @@ Tab.propTypes = {
     PropTypes.node
   ]),
   isActive: PropTypes.bool.isRequired
-};
+}

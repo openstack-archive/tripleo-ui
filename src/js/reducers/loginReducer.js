@@ -13,24 +13,24 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { fromJS } from 'immutable';
+import { fromJS } from 'immutable'
 
-import LoginConstants from '../constants/LoginConstants';
-import { InitialLoginState } from '../immutableRecords/login';
+import LoginConstants from '../constants/LoginConstants'
+import { InitialLoginState } from '../immutableRecords/login'
 
-const initialState = new InitialLoginState();
+const initialState = new InitialLoginState()
 
 export default function loginReducer(state = initialState, action) {
   switch (action.type) {
     case LoginConstants.USER_AUTH_STARTED:
-      return state.set('isAuthenticating', true);
+      return state.set('isAuthenticating', true)
 
     case LoginConstants.USER_AUTH_SUCCESS:
       return state
         .set('token', fromJS(action.payload.token))
         .set('tokenId', action.payload.tokenId)
         .set('isAuthenticating', false)
-        .set('isAuthenticated', true);
+        .set('isAuthenticated', true)
 
     case LoginConstants.USER_AUTH_FAILURE:
       return state
@@ -38,12 +38,12 @@ export default function loginReducer(state = initialState, action) {
         .set('isAuthenticating', false)
         .set('isAuthenticated', false)
         .delete('tokenId')
-        .delete('token');
+        .delete('token')
 
     case LoginConstants.LOGOUT_USER_SUCCESS:
-      return initialState;
+      return initialState
 
     default:
-      return state;
+      return state
   }
 }

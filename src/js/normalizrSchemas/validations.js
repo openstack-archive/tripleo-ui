@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { Schema } from 'normalizr';
+import { Schema } from 'normalizr'
 
 // export const validationStageSchema = new Schema('validationStages', { idAttribute: 'uuid' });
 // export const validationSchema = new Schema('validations', { idAttribute: 'uuid' });
@@ -30,4 +30,4 @@ import { Schema } from 'normalizr';
 
 export const validationSchema = new Schema('validations', {
   idAttribute: 'id'
-});
+})

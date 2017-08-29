@@ -14,13 +14,13 @@
  * under the License.
  */
 
-import { Map, Record } from 'immutable';
+import { Map, Record } from 'immutable'
 
 export const ActiveFilter = Record({
   uuid: undefined,
   filterBy: '',
   filterString: ''
-});
+})
 
 export const FiltersInitialState = Record({
   nodesToolbar: Map({
@@ -35,4 +35,4 @@ export const FiltersInitialState = Record({
     sortDir: 'asc',
     contentView: 'list'
   })
-});
+})

@@ -14,15 +14,15 @@
  * under the License.
  */
 
-import axios from 'axios';
-import when from 'when';
+import axios from 'axios'
+import when from 'when'
 
 import {
   AuthenticationError,
   KeystoneApiError,
   ConnectionError
-} from './errors';
-import { KEYSTONE_URL } from '../constants/KeystoneApiConstants';
+} from './errors'
+import { KEYSTONE_URL } from '../constants/KeystoneApiConstants'
 
 class KeystoneApiService {
   defaultRequest(additionalAttributes) {
@@ -35,7 +35,7 @@ class KeystoneApiService {
         },
         additionalAttributes
       )
-    );
+    )
   }
 
   authenticateUser(username, password) {
@@ -64,7 +64,7 @@ class KeystoneApiService {
           }
         }
       }
-    }).catch(handleErrors);
+    }).catch(handleErrors)
   }
 
   authenticateUserViaToken(keystoneAuthTokenId) {
@@ -87,25 +87,25 @@ class KeystoneApiService {
           }
         }
       }
-    }).catch(handleErrors);
+    }).catch(handleErrors)
   }
 }
 
 const handleErrors = e => {
   if (e.response && e.response.status === 401) {
-    return when.reject(new AuthenticationError(e));
+    return when.reject(new AuthenticationError(e))
   } else if (e.response) {
-    return when.reject(new KeystoneApiError(e));
+    return when.reject(new KeystoneApiError(e))
   } else if (e.request) {
     return when.reject(
       new ConnectionError(
         'Connection to Keystone API could not be established',
         e
       )
-    );
+    )
   } else {
-    return when.reject(e);
+    return when.reject(e)
   }
-};
+}
 
-export default new KeystoneApiService();
+export default new KeystoneApiService()

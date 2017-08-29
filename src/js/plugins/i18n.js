@@ -23,65 +23,65 @@
  * export const LOCALE_DATA = [...de, ...es];
  */
 
-var fs = require('fs');
-var prettier = require('prettier');
+var fs = require('fs')
+var prettier = require('prettier')
 
 var I18nPlugin = function(options) {
-  this.options = options;
-};
+  this.options = options
+}
 
 I18nPlugin.prototype.apply = function(compiler) {
-  var files = fs.readdirSync(this.options.localePath);
+  var files = fs.readdirSync(this.options.localePath)
   var locales = files.map(function(file) {
-    return file.replace('.json', '');
-  });
+    return file.replace('.json', '')
+  })
 
   var localesLower = locales.map(function(locale) {
-    return locale.toLowerCase().replace('-', '');
-  });
+    return locale.toLowerCase().replace('-', '')
+  })
 
   var localesSimple = locales.map(function(locale) {
-    return locale.split('-')[0];
-  });
+    return locale.split('-')[0]
+  })
 
   var messagesImport = localesSimple
     .map(function(locale, index) {
-      var lower = localesLower[index];
-      var full = locales[index];
+      var lower = localesLower[index]
+      var full = locales[index]
       return (
         'import ' +
         lower +
         "Messages from '../../../../i18n/locales/" +
         full +
         ".json';"
-      );
+      )
     })
-    .join('\n');
+    .join('\n')
 
   var reactIntlImport = localesSimple
     .map(function(locale, index) {
       return (
         'import ' + locale + " from 'react-intl/locale-data/" + locale + "';"
-      );
+      )
     })
-    .join('\n');
+    .join('\n')
 
   var messages = locales
     .map(function(locale, index) {
-      var lower = localesLower[index];
-      return "'" + locale + "': " + lower + "Messages['" + locale + "']";
+      var lower = localesLower[index]
+      return "'" + locale + "': " + lower + "Messages['" + locale + "']"
     })
-    .join(',\n  ');
+    .join(',\n  ')
 
-  var messagesObj = 'export const MESSAGES = {\n  ' + messages + '\n}';
+  var messagesObj = 'export const MESSAGES = {\n  ' + messages + '\n}'
 
   var localeData = localesSimple
     .map(function(locale) {
-      return '...' + locale;
+      return '...' + locale
     })
-    .join(', ');
+    .join(', ')
 
-  var localeDataObj = 'export const LOCALE_DATA = [' + localeData + '];';
+  var localeDataObj = 'export const LOCALE_DATA = [' + localeData + '];'
 
   var file =
     messagesImport +
@@ -90,10 +90,10 @@ I18nPlugin.prototype.apply = function(compiler) {
     '\n\n' +
     messagesObj +
     '\n\n' +
-    localeDataObj;
+    localeDataObj
 
-  file = prettier.format(file, { singleQuote: true });
-  fs.writeFileSync('src/js/components/i18n/messages.js', file);
-};
+  file = prettier.format(file, { singleQuote: true, semi: false })
+  fs.writeFileSync('src/js/components/i18n/messages.js', file)
+}
 
-module.exports = I18nPlugin;
+module.exports = I18nPlugin

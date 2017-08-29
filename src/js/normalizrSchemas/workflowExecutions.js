@@ -14,8 +14,8 @@
  * under the License.
  */
 
-import { Schema } from 'normalizr';
+import { Schema } from 'normalizr'
 
 export const workflowExecutionSchema = new Schema('executions', {
   idAttribute: 'id'
-});
+})

@@ -14,18 +14,18 @@
  * under the License.
  */
 
-import { List, Map } from 'immutable';
+import { List, Map } from 'immutable'
 
-import { Validation } from '../../js/immutableRecords/validations';
-import ValidationsConstants from '../../js/constants/ValidationsConstants';
-import validationsReducer from '../../js/reducers/validationsReducer';
+import { Validation } from '../../js/immutableRecords/validations'
+import ValidationsConstants from '../../js/constants/ValidationsConstants'
+import validationsReducer from '../../js/reducers/validationsReducer'
 
 describe('validationsReducer', () => {
   const initialState = Map({
     validationsLoaded: false,
     isFetching: false,
     validations: Map()
-  });
+  })
 
   const updatedState = Map({
     isFetching: false,
@@ -52,19 +52,19 @@ describe('validationsReducer', () => {
         stateInfo: undefined
       })
     })
-  });
+  })
 
   it('should return initial state', () => {
-    expect(validationsReducer(initialState, {})).toEqual(initialState);
-  });
+    expect(validationsReducer(initialState, {})).toEqual(initialState)
+  })
 
   it('should handle FETCH_VALIDATIONS_PENDING', () => {
     const action = {
       type: ValidationsConstants.FETCH_VALIDATIONS_PENDING
-    };
-    const newState = validationsReducer(initialState, action);
-    expect(newState.get('isFetching')).toEqual(true);
-  });
+    }
+    const newState = validationsReducer(initialState, action)
+    expect(newState.get('isFetching')).toEqual(true)
+  })
 
   it('should handle FETCH_VALIDATIONS_SUCCESS', () => {
     const action = {
@@ -85,19 +85,17 @@ describe('validationsReducer', () => {
           name: 'Check network_gateway on the provisioning network'
         }
       }
-    };
-    const newState = validationsReducer(initialState, action);
-    expect(newState.get('validations')).toEqual(
-      updatedState.get('validations')
-    );
-  });
+    }
+    const newState = validationsReducer(initialState, action)
+    expect(newState.get('validations')).toEqual(updatedState.get('validations'))
+  })
 
   it('should handle FETCH_VALIDATIONS_FAILED', () => {
     const action = {
       type: ValidationsConstants.FETCH_VALIDATIONS_FAILED
-    };
-    const newState = validationsReducer(initialState, action);
-    expect(newState.get('isFetching')).toEqual(false);
-    expect(newState.get('validationsLoaded')).toEqual(true);
-  });
-});
+    }
+    const newState = validationsReducer(initialState, action)
+    expect(newState.get('isFetching')).toEqual(false)
+    expect(newState.get('validationsLoaded')).toEqual(true)
+  })
+})

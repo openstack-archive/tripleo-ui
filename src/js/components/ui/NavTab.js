@@ -14,9 +14,9 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Link, Route } from 'react-router-dom';
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Link, Route } from 'react-router-dom'
 
 const NavTab = ({ activeClassName, children, to, exact, location, id }) => {
   return (
@@ -30,8 +30,8 @@ const NavTab = ({ activeClassName, children, to, exact, location, id }) => {
         </li>
       )}
     />
-  );
-};
+  )
+}
 NavTab.propTypes = {
   activeClassName: PropTypes.string.isRequired,
   children: PropTypes.node,
@@ -39,10 +39,10 @@ NavTab.propTypes = {
   id: PropTypes.string,
   location: PropTypes.object,
   to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired
-};
+}
 NavTab.defaultProps = {
   activeClassName: 'active',
   exact: false
-};
+}
 
-export default NavTab;
+export default NavTab

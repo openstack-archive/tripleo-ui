@@ -14,23 +14,23 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import ClassNames from 'classnames'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 import {
   defineMessages,
   injectIntl,
   FormattedDate,
   FormattedTime
-} from 'react-intl';
+} from 'react-intl'
 
-import Loader from '../../ui/Loader';
-import PlanActions from './PlanActions';
+import Loader from '../../ui/Loader'
+import PlanActions from './PlanActions'
 import {
   stackStates,
   deploymentStatusMessages
-} from '../../../constants/StacksConstants';
+} from '../../../constants/StacksConstants'
 
 const messages = defineMessages({
   deleting: {
@@ -45,25 +45,25 @@ const messages = defineMessages({
     id: 'PlanCard.notDeployed',
     defaultMessage: 'Not deployed'
   }
-});
+})
 
 class PlanCard extends React.Component {
   renderStackIcon() {
-    const { stack } = this.props;
+    const { stack } = this.props
     if (stack) {
       switch (stack.get('stack_status')) {
         case stackStates.CREATE_IN_PROGRESS:
         case stackStates.UPDATE_IN_PROGRESS:
         case stackStates.DELETE_IN_PROGRESS:
-          return <Loader inline />;
+          return <Loader inline />
 
         case stackStates.CREATE_COMPLETE:
         case stackStates.UPDATE_COMPLETE:
-          return <span className="pficon pficon-ok" />;
+          return <span className="pficon pficon-ok" />
 
         case stackStates.CREATE_FAILED:
         case stackStates.UPDATE_FAILED:
-          return <span className="pficon pficon-error-circle-o" />;
+          return <span className="pficon pficon-error-circle-o" />
       }
     }
   }
@@ -73,15 +73,15 @@ class PlanCard extends React.Component {
       stack
         ? deploymentStatusMessages[stack.get('stack_status')]
         : messages.notDeployed
-    );
+    )
   }
 
   renderStackInfo() {
-    const { stack } = this.props;
-    let modified = null;
+    const { stack } = this.props
+    let modified = null
 
     if (stack) {
-      const time = stack.get('updated_time') || stack.get('creation_time');
+      const time = stack.get('updated_time') || stack.get('creation_time')
       modified = (
         <span>
           <strong>Last modified:</strong>
@@ -90,7 +90,7 @@ class PlanCard extends React.Component {
           &nbsp;
           <FormattedTime value={time} />
         </span>
-      );
+      )
     }
 
     return (
@@ -106,7 +106,7 @@ class PlanCard extends React.Component {
           {modified}
         </li>
       </ul>
-    );
+    )
   }
 
   render() {
@@ -116,11 +116,11 @@ class PlanCard extends React.Component {
       history,
       plan,
       stack
-    } = this.props;
+    } = this.props
     const cardClasses = ClassNames({
       'plan-card card-pf card-pf-view card-pf-view-select card-pf-view-single-select': true,
       active: plan.name === currentPlanName
-    });
+    })
 
     return (
       <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
@@ -153,7 +153,7 @@ class PlanCard extends React.Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -163,6 +163,6 @@ PlanCard.propTypes = {
   intl: PropTypes.object.isRequired,
   plan: PropTypes.object.isRequired,
   stack: PropTypes.object
-};
+}
 
-export default withRouter(injectIntl(PlanCard));
+export default withRouter(injectIntl(PlanCard))

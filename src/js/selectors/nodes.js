@@ -14,31 +14,31 @@
  * under the License.
  */
 
-import { createSelector } from 'reselect';
-import { List, Map, Set } from 'immutable';
+import { createSelector } from 'reselect'
+import { List, Map, Set } from 'immutable'
 
-import { getFilterByName } from './filters';
-import { getRoles } from './roles';
-import { IntrospectionStatus } from '../immutableRecords/nodes';
-import { parseNodeCapabilities } from '../utils/nodes';
+import { getFilterByName } from './filters'
+import { getRoles } from './roles'
+import { IntrospectionStatus } from '../immutableRecords/nodes'
+import { parseNodeCapabilities } from '../utils/nodes'
 
 export const getNodes = state =>
-  state.nodes.get('all').sortBy(n => n.get('uuid'));
+  state.nodes.get('all').sortBy(n => n.get('uuid'))
 export const getNodesByIds = (state, nodeIds) =>
   state.nodes
     .get('all')
     .filter((v, k) => nodeIds.includes(k))
-    .sortBy(n => n.get('uuid'));
-export const getPorts = state => state.nodes.get('ports');
+    .sortBy(n => n.get('uuid'))
+export const getPorts = state => state.nodes.get('ports')
 export const getIntrospectionData = state =>
-  state.nodes.get('introspectionData');
+  state.nodes.get('introspectionData')
 export const getNodeIntrospectionData = (state, nodeId) =>
-  state.nodes.introspectionData.get(nodeId, Map());
+  state.nodes.introspectionData.get(nodeId, Map())
 export const getIntrospectionStatuses = state =>
-  state.nodes.get('introspectionStatuses');
-export const nodesInProgress = state => state.nodes.get('nodesInProgress');
+  state.nodes.get('introspectionStatuses')
+export const nodesInProgress = state => state.nodes.get('nodesInProgress')
 export const nodesToolbarFilter = state =>
-  getFilterByName(state, 'nodesToolbar');
+  getFilterByName(state, 'nodesToolbar')
 
 /**
  *  Return Nodes including mac addresses as string at macs attribute
@@ -92,7 +92,7 @@ export const getDetailedNodes = createSelector(
           )
         )
     )
-);
+)
 
 /**
  *  Return Nodes with filters from nodesToolbar applied
@@ -107,7 +107,7 @@ export const getFilteredNodes = createSelector(
             filteredNodes.filter(node => {
               return getNodePropertyString(node, filter.filterBy)
                 .toLowerCase()
-                .includes(filter.filterString.toLowerCase());
+                .includes(filter.filterString.toLowerCase())
             }),
           nodes
         )
@@ -117,7 +117,7 @@ export const getFilteredNodes = createSelector(
         nodes =>
           nodesToolbarFilter.get('sortDir') === 'desc' ? nodes.reverse() : nodes
       )
-);
+)
 
 /**
  *  Return a list of profiles collected across all nodes
@@ -125,11 +125,11 @@ export const getFilteredNodes = createSelector(
 export const getProfilesList = createSelector(getNodes, nodes =>
   nodes
     .reduce((profiles, v, k) => {
-      const profile = getNodeCapabilities(v).profile;
-      return profile ? profiles.push(profile) : profiles;
+      const profile = getNodeCapabilities(v).profile
+      return profile ? profiles.push(profile) : profiles
     }, List())
     .sort()
-);
+)
 
 /**
  *  Return a list of profiles merged with role identifiers
@@ -137,7 +137,7 @@ export const getProfilesList = createSelector(getNodes, nodes =>
 export const getAvailableNodeProfiles = createSelector(
   [getProfilesList, getRoles],
   (profiles, roles) => Set.fromKeys(roles).union(profiles).toList().sort()
-);
+)
 
 /*
  * booleam, returns true if there are any nodes with operation in progress
@@ -145,7 +145,7 @@ export const getAvailableNodeProfiles = createSelector(
 export const getNodesOperationInProgress = createSelector(
   nodesInProgress,
   nodesInProgress => !nodesInProgress.isEmpty()
-);
+)
 
 export const getNodeDrives = createSelector(
   getNodeIntrospectionData,
@@ -159,7 +159,7 @@ export const getNodeDrives = createSelector(
             disk.get('name')
         )
       )
-);
+)
 
 /**
  * Helper function to get node capabilities object
@@ -167,7 +167,7 @@ export const getNodeDrives = createSelector(
  * @returns capabilities object
  */
 export const getNodeCapabilities = node =>
-  parseNodeCapabilities(node.getIn(['properties', 'capabilities'], ''));
+  parseNodeCapabilities(node.getIn(['properties', 'capabilities'], ''))
 
 /**
  * Helper function to get node property value
@@ -178,10 +178,10 @@ export const getNodeCapabilities = node =>
 export const getNodePropertyString = (node, propName) => {
   switch (propName) {
     case 'macs':
-      return node.get(propName).toString();
+      return node.get(propName).toString()
     case 'properties.capabilities.profile':
-      return getNodeCapabilities(node).profile || '';
+      return getNodeCapabilities(node).profile || ''
     default:
-      return node.getIn(propName.split('.')) || '';
+      return node.getIn(propName.split('.')) || ''
   }
-};
+}

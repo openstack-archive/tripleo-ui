@@ -14,48 +14,48 @@
  * under the License.
  */
 
-import { defineMessages, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import GenericCheckBox from '../ui/forms/GenericCheckBox';
-import GroupedCheckBox from '../ui/forms/GroupedCheckBox';
+import GenericCheckBox from '../ui/forms/GenericCheckBox'
+import GroupedCheckBox from '../ui/forms/GroupedCheckBox'
 
 const messages = defineMessages({
   requiredEnvironments: {
     id: 'EnvironmentGroup.requiredEnvironments',
     defaultMessage: 'This option requires {requiredEnvironments} to be enabled.'
   }
-});
+})
 
 class EnvironmentGroup extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       checkedEnvironment: null
-    };
+    }
   }
 
   componentWillMount() {
     const firstCheckedEnvironment = this.props.environments
       .filter(env => env.get('enabled') === true)
-      .first();
+      .first()
     this.setState({
       checkedEnvironment: firstCheckedEnvironment
         ? firstCheckedEnvironment.get('file')
         : null
-    });
+    })
   }
 
   onGroupedCheckBoxChange(checked, environmentFile) {
-    this.setState({ checkedEnvironment: checked ? environmentFile : null });
+    this.setState({ checkedEnvironment: checked ? environmentFile : null })
   }
 
   getRequiredEnvironmentsNames(environment) {
     return environment.requires
       .map(env => this.props.allEnvironments.getIn([env, 'title'], env))
-      .toArray();
+      .toArray()
   }
 
   generateInputs() {
@@ -63,15 +63,15 @@ class EnvironmentGroup extends React.Component {
       environments,
       intl: { formatMessage },
       mutuallyExclusive
-    } = this.props;
+    } = this.props
 
     return environments.toList().map((environment, index) => {
-      const requiredEnvironments = environment.requires.toArray();
+      const requiredEnvironments = environment.requires.toArray()
       const requiredEnvironmentNames = this.getRequiredEnvironmentsNames(
         environment
-      );
+      )
       if (mutuallyExclusive) {
-        let checkBoxValue = this.state.checkedEnvironment === environment.file;
+        let checkBoxValue = this.state.checkedEnvironment === environment.file
         return (
           <GroupedCheckBox
             key={environment.file}
@@ -86,7 +86,7 @@ class EnvironmentGroup extends React.Component {
             onChange={this.onGroupedCheckBoxChange.bind(this)}
             description={environment.description}
           />
-        );
+        )
       } else {
         return (
           <GenericCheckBox
@@ -101,13 +101,13 @@ class EnvironmentGroup extends React.Component {
             })}
             description={environment.description}
           />
-        );
+        )
       }
-    });
+    })
   }
 
   render() {
-    let environments = this.generateInputs();
+    let environments = this.generateInputs()
 
     return (
       <div className="environment-group">
@@ -117,7 +117,7 @@ class EnvironmentGroup extends React.Component {
         />
         {environments}
       </div>
-    );
+    )
   }
 }
 EnvironmentGroup.propTypes = {
@@ -127,12 +127,12 @@ EnvironmentGroup.propTypes = {
   intl: PropTypes.object,
   mutuallyExclusive: PropTypes.bool.isRequired,
   title: PropTypes.string
-};
+}
 EnvironmentGroup.defaultProps = {
   mutuallyExclusive: false
-};
+}
 
-export default injectIntl(EnvironmentGroup);
+export default injectIntl(EnvironmentGroup)
 
 class EnvironmentGroupHeading extends React.Component {
   render() {
@@ -142,15 +142,15 @@ class EnvironmentGroupHeading extends React.Component {
           {this.props.title}<br />
           <small>{this.props.description}</small>
         </h4>
-      );
+      )
     } else if (this.props.description) {
-      return <p>{this.props.description}</p>;
+      return <p>{this.props.description}</p>
     } else {
-      return false;
+      return false
     }
   }
 }
 EnvironmentGroupHeading.propTypes = {
   description: PropTypes.string,
   title: PropTypes.string
-};
+}

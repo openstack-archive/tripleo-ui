@@ -14,11 +14,11 @@
  * under the License.
  */
 
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import EnvironmentGroup from './EnvironmentGroup';
+import EnvironmentGroup from './EnvironmentGroup'
 
 export default class EnvironmentConfigurationTopic extends React.Component {
   render() {
@@ -34,16 +34,16 @@ export default class EnvironmentConfigurationTopic extends React.Component {
             environments={envGroup.get('environments')}
             mutuallyExclusive={envGroup.get('mutually_exclusive')}
           />
-        );
-      });
+        )
+      })
 
-    const { description } = this.props;
+    const { description } = this.props
     return (
       <fieldset className="environment-topic">
         {description && <p><i>{description}</i></p>}
         {environmentGroups}
       </fieldset>
-    );
+    )
   }
 }
 EnvironmentConfigurationTopic.propTypes = {
@@ -51,4 +51,4 @@ EnvironmentConfigurationTopic.propTypes = {
   description: PropTypes.string,
   environmentGroups: ImmutablePropTypes.list,
   title: PropTypes.string.isRequired
-};
+}

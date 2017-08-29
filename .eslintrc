@@ -9,7 +9,7 @@
     "no-unneeded-ternary": 1,
     "no-unused-vars": [1, {"vars": "local", "args": "none"}],
     "radix": 0,
-    "prettier/prettier": ["error", {"singleQuote": true}],
+    "prettier/prettier": ["error", {"singleQuote": true, "semi": false}],
     "react/jsx-boolean-value": [1, "never"],
     "react/jsx-no-duplicate-props": 1,
     "react/jsx-no-undef": 1,

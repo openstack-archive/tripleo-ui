@@ -14,16 +14,16 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ClassNames from 'classnames'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import HorizontalInput from '../ui/forms/HorizontalInput';
-import Tab from '../ui/Tab';
-import PlanFileInput from './PlanFileInput';
-import PlanFilesTab from './PlanFilesTab';
-import PlanUploadTypeRadios from './PlanUploadTypeRadios';
+import HorizontalInput from '../ui/forms/HorizontalInput'
+import Tab from '../ui/Tab'
+import PlanFileInput from './PlanFileInput'
+import PlanFilesTab from './PlanFilesTab'
+import PlanUploadTypeRadios from './PlanUploadTypeRadios'
 
 const messages = defineMessages({
   addPlanName: {
@@ -55,22 +55,22 @@ const messages = defineMessages({
     id: 'PlanFormTabs.uploadType',
     defaultMessage: 'Upload Type'
   }
-});
+})
 
 export default class PlanFormTabs extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       activeTab: 'newPlan'
-    };
+    }
   }
 
   setActiveTab(tabName) {
-    this.setState({ activeTab: tabName });
+    this.setState({ activeTab: tabName })
   }
 
   isActiveTab(tabName) {
-    return this.state.activeTab === tabName;
+    return this.state.activeTab === tabName
   }
 
   render() {
@@ -102,22 +102,22 @@ export default class PlanFormTabs extends React.Component {
           />
         </div>
       </div>
-    );
+    )
   }
 }
 PlanFormTabs.propTypes = {
   selectedFiles: PropTypes.array,
   setUploadType: PropTypes.func.isRequired,
   uploadType: PropTypes.string.isRequired
-};
+}
 PlanFormTabs.defaultProps = {
   currentTtab: 'newPlan',
   selectedFiles: []
-};
+}
 
 class _PlanFormTab extends React.Component {
   render() {
-    const { formatMessage } = this.props.intl;
+    const { formatMessage } = this.props.intl
     return (
       <div
         className={ClassNames({ 'tab-pane': true, active: this.props.active })}
@@ -149,7 +149,7 @@ class _PlanFormTab extends React.Component {
           required
         />
       </div>
-    );
+    )
   }
 }
 _PlanFormTab.propTypes = {
@@ -157,7 +157,7 @@ _PlanFormTab.propTypes = {
   intl: PropTypes.object,
   setUploadType: PropTypes.func.isRequired,
   uploadType: PropTypes.string.isRequired
-};
-_PlanFormTab.defaultProps = { active: false };
+}
+_PlanFormTab.defaultProps = { active: false }
 
-const PlanFormTab = injectIntl(_PlanFormTab);
+const PlanFormTab = injectIntl(_PlanFormTab)

@@ -14,13 +14,13 @@
  * under the License.
  */
 
-import { defineMessages, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, injectIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import ConfirmationModal from '../ui/ConfirmationModal';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import Loader from '../ui/Loader';
+import ConfirmationModal from '../ui/ConfirmationModal'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import Loader from '../ui/Loader'
 
 const messages = defineMessages({
   deleteDeployment: {
@@ -31,23 +31,23 @@ const messages = defineMessages({
     id: 'DeleteStackButton.deleteConfirmationQuestion',
     defaultMessage: 'Are you sure you want to delete the stack?'
   }
-});
+})
 
 class DeleteStackButton extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       showDeleteModal: false
-    };
+    }
   }
 
   confirmDelete() {
-    this.props.deleteStack(this.props.stack);
-    this.setState({ showDeleteModal: false });
+    this.props.deleteStack(this.props.stack)
+    this.setState({ showDeleteModal: false })
   }
 
   render() {
-    const { formatMessage } = this.props.intl;
+    const { formatMessage } = this.props.intl
 
     return (
       <div>
@@ -77,7 +77,7 @@ class DeleteStackButton extends React.Component {
           onCancel={() => this.setState({ showDeleteModal: false })}
         />
       </div>
-    );
+    )
   }
 }
 
@@ -90,9 +90,9 @@ DeleteStackButton.propTypes = {
   loaded: PropTypes.bool.isRequired,
   loaderContent: PropTypes.string.isRequired,
   stack: ImmutablePropTypes.record.isRequired
-};
+}
 DeleteStackButton.defaultProps = {
   buttonIconClass: 'pficon pficon-delete'
-};
+}
 
-export default injectIntl(DeleteStackButton);
+export default injectIntl(DeleteStackButton)

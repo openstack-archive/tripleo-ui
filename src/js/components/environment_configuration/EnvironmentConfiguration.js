@@ -14,27 +14,27 @@
  * under the License.
  */
 
-import * as _ from 'lodash';
-import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import Formsy from 'formsy-react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import React from 'react';
+import * as _ from 'lodash'
+import { connect } from 'react-redux'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import Formsy from 'formsy-react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 import EnvironmentConfigurationActions
-  from '../../actions/EnvironmentConfigurationActions';
-import EnvironmentConfigurationTopic from './EnvironmentConfigurationTopic';
-import { getCurrentPlanName } from '../../selectors/plans';
-import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
+  from '../../actions/EnvironmentConfigurationActions'
+import EnvironmentConfigurationTopic from './EnvironmentConfigurationTopic'
+import { getCurrentPlanName } from '../../selectors/plans'
+import ModalFormErrorList from '../ui/forms/ModalFormErrorList'
 import {
   getEnvironments,
   getTopicsTree
-} from '../../selectors/environmentConfiguration';
-import Loader from '../ui/Loader';
-import Tab from '../ui/Tab';
-import TabPane from '../ui/TabPane';
+} from '../../selectors/environmentConfiguration'
+import Loader from '../ui/Loader'
+import Tab from '../ui/Tab'
+import TabPane from '../ui/TabPane'
 
 const messages = defineMessages({
   cancel: {
@@ -49,16 +49,16 @@ const messages = defineMessages({
     id: 'EnvironmentConfiguration.saveAndClose',
     defaultMessage: 'Save And Close'
   }
-});
+})
 
 class EnvironmentConfiguration extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       canSubmit: false,
       closeOnSubmit: false,
       activeTab: undefined
-    };
+    }
   }
 
   componentDidMount() {
@@ -66,28 +66,28 @@ class EnvironmentConfiguration extends React.Component {
       currentPlanName,
       fetchEnvironmentConfiguration,
       history
-    } = this.props;
+    } = this.props
     fetchEnvironmentConfiguration(currentPlanName, () =>
       history.push(`/plans/${currentPlanName}`)
-    );
+    )
   }
 
   componentDidUpdate() {
-    this.invalidateForm(this.props.formFieldErrors.toJS());
+    this.invalidateForm(this.props.formFieldErrors.toJS())
   }
 
   enableButton() {
-    this.setState({ canSubmit: true });
+    this.setState({ canSubmit: true })
   }
 
   disableButton() {
-    this.setState({ canSubmit: false });
+    this.setState({ canSubmit: false })
   }
 
   invalidateForm(formFieldErrors) {
     this.refs.environmentConfigurationForm.updateInputsWithError(
       formFieldErrors
-    );
+    )
   }
 
   /*
@@ -97,29 +97,29 @@ class EnvironmentConfiguration extends React.Component {
   _convertFormData(formData) {
     return _.mapValues(
       _.mapKeys(formData, (value, key) => {
-        return key + '.yaml';
+        return key + '.yaml'
       }),
       value => {
-        return value.yaml;
+        return value.yaml
       }
-    );
+    )
   }
 
   handleSubmit(formData, resetForm, invalidateForm) {
-    const data = this._convertFormData(formData);
-    this.disableButton();
+    const data = this._convertFormData(formData)
+    this.disableButton()
     this.props.updateEnvironmentConfiguration(
       this.props.currentPlanName,
       data,
       Object.keys(this.refs.environmentConfigurationForm.inputs)
-    );
+    )
 
     if (this.state.closeOnSubmit) {
       this.setState({
         closeOnSubmit: false
-      });
+      })
 
-      this.props.history.push(`/plans/${this.props.currentPlanName}`);
+      this.props.history.push(`/plans/${this.props.currentPlanName}`)
     }
   }
 
@@ -129,27 +129,27 @@ class EnvironmentConfiguration extends React.Component {
         closeOnSubmit: true
       },
       this.refs.environmentConfigurationForm.submit
-    );
+    )
   }
 
   activateTab(tabName, e) {
-    e.preventDefault();
-    this.setState({ activeTab: tabName });
+    e.preventDefault()
+    this.setState({ activeTab: tabName })
   }
 
   isTabActive(tabName) {
     let firstTabName = _.camelCase(
       this.props.environmentConfigurationTopics.first().get('title')
-    );
-    let currentTab = this.state.activeTab || firstTabName;
-    return currentTab === tabName;
+    )
+    let currentTab = this.state.activeTab || firstTabName
+    return currentTab === tabName
   }
 
   render() {
     let topics = this.props.environmentConfigurationTopics
       .toList()
       .map((topic, index) => {
-        let tabName = _.camelCase(topic.get('title'));
+        let tabName = _.camelCase(topic.get('title'))
         return (
           <TabPane isActive={this.isTabActive(tabName)} key={index}>
             <EnvironmentConfigurationTopic
@@ -160,21 +160,21 @@ class EnvironmentConfiguration extends React.Component {
               environmentGroups={topic.get('environment_groups')}
             />
           </TabPane>
-        );
-      });
+        )
+      })
 
     let topicTabs = this.props.environmentConfigurationTopics
       .toList()
       .map((topic, index) => {
-        let tabName = _.camelCase(topic.get('title'));
+        let tabName = _.camelCase(topic.get('title'))
         return (
           <Tab key={index} isActive={this.isTabActive(tabName)}>
             <a href="" onClick={this.activateTab.bind(this, tabName)}>
               {topic.get('title')}
             </a>
           </Tab>
-        );
-      });
+        )
+      })
 
     return (
       <Formsy.Form
@@ -231,7 +231,7 @@ class EnvironmentConfiguration extends React.Component {
           </Link>
         </div>
       </Formsy.Form>
-    );
+    )
   }
 }
 EnvironmentConfiguration.propTypes = {
@@ -246,7 +246,7 @@ EnvironmentConfiguration.propTypes = {
   isFetching: PropTypes.bool,
   location: PropTypes.object,
   updateEnvironmentConfiguration: PropTypes.func
-};
+}
 
 function mapStateToProps(state) {
   return {
@@ -259,7 +259,7 @@ function mapStateToProps(state) {
       'formFieldErrors'
     ]),
     isFetching: state.environmentConfiguration.isFetching
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -267,7 +267,7 @@ function mapDispatchToProps(dispatch) {
     fetchEnvironmentConfiguration: planName => {
       dispatch(
         EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName)
-      );
+      )
     },
     updateEnvironmentConfiguration: (planName, data, inputFields) => {
       dispatch(
@@ -276,14 +276,14 @@ function mapDispatchToProps(dispatch) {
           data,
           inputFields
         )
-      );
+      )
     }
-  };
+  }
 }
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(EnvironmentConfiguration)
-);
+)
 
 /**
 * requiresEnvironments validation
@@ -299,9 +299,9 @@ Formsy.addValidationRule('requiredEnvironments', function(
     return !_.filter(
       _.values(_.pick(values, requiredEnvironmentFieldNames)),
       function(val) {
-        return val === false;
+        return val === false
       }
-    ).length;
+    ).length
   }
-  return true;
-});
+  return true
+})

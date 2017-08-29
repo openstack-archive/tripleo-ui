@@ -14,11 +14,11 @@
  * under the License.
  */
 
-import { List, Record } from 'immutable';
+import { List, Record } from 'immutable'
 
 export const InitialLoggerState = Record({
   messages: List(),
   authenticated: false,
   isDownloadingLogs: false,
   logsUrl: ''
-});
+})

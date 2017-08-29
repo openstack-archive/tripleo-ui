@@ -14,13 +14,13 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import { getFormValues, change } from 'redux-form';
-import { pickBy } from 'lodash';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl'
+import { Button } from 'react-bootstrap'
+import { connect } from 'react-redux'
+import { getFormValues, change } from 'redux-form'
+import { pickBy } from 'lodash'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 
 const messages = defineMessages({
   selectAll: {
@@ -31,7 +31,7 @@ const messages = defineMessages({
     id: 'SelectAll.deselectAllText',
     defaultMessage: 'Deselect All'
   }
-});
+})
 
 export const selectAll = WrappedComponent => {
   class SelectAllHOC extends Component {
@@ -41,16 +41,16 @@ export const selectAll = WrappedComponent => {
      * Deselect all item if at least one of them is selected
      */
     shouldSelectAll() {
-      const { formData, items } = this.props;
+      const { formData, items } = this.props
       return (
         Object.keys(pickBy(formData.values)).length < items.length ||
         items.length === 0
-      );
+      )
     }
 
     toggleSelectAll() {
-      const { items, itemProperty, selectItem } = this.props;
-      items.map(item => selectItem(item[itemProperty], this.shouldSelectAll()));
+      const { items, itemProperty, selectItem } = this.props
+      items.map(item => selectItem(item[itemProperty], this.shouldSelectAll()))
     }
 
     render() {
@@ -60,7 +60,7 @@ export const selectAll = WrappedComponent => {
           shouldSelectAll={this.shouldSelectAll()}
           toggleSelectAll={this.toggleSelectAll.bind(this)}
         />
-      );
+      )
     }
   }
   SelectAllHOC.propTypes = {
@@ -69,23 +69,23 @@ export const selectAll = WrappedComponent => {
     itemProperty: PropTypes.string.isRequired,
     items: PropTypes.array.isRequired,
     selectItem: PropTypes.func.isRequired
-  };
+  }
   SelectAllHOC.defaultProps = {
     formData: {},
     itemProperty: 'uuid'
-  };
+  }
 
   const mapStateToProps = (state, ownProps) => ({
     formData: getFormValues(ownProps.form)(state)
-  });
+  })
 
   const mapDispatchToProps = (dispatch, ownProps) => ({
     selectItem: (key, value) =>
       dispatch(change(ownProps.form, `values.${key}`, value))
-  });
+  })
 
-  return connect(mapStateToProps, mapDispatchToProps)(SelectAllHOC);
-};
+  return connect(mapStateToProps, mapDispatchToProps)(SelectAllHOC)
+}
 
 export const SelectAllButton = selectAll(
   ({ disabled, shouldSelectAll, toggleSelectAll }) => (
@@ -99,7 +99,7 @@ export const SelectAllButton = selectAll(
         : <FormattedMessage {...messages.deselectAll} />}
     </Button>
   )
-);
+)
 
 export const SelectAllCheckBox = selectAll(
   ({ disabled, shouldSelectAll, toggleSelectAll }) => (
@@ -110,4 +110,4 @@ export const SelectAllCheckBox = selectAll(
       onChange={toggleSelectAll}
     />
   )
-);
+)

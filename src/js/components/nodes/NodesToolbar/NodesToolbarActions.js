@@ -1,15 +1,15 @@
-import { Button, FormGroup, MenuItem } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
-import PropTypes from 'prop-types';
-import { change, submit, isInvalid } from 'redux-form';
+import { Button, FormGroup, MenuItem } from 'react-bootstrap'
+import { connect } from 'react-redux'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { change, submit, isInvalid } from 'redux-form'
 
-import ConfirmationModal from '../../ui/ConfirmationModal';
-import DropdownKebab from '../../ui/dropdown/DropdownKebab';
-import { getAvailableNodeProfiles } from '../../../selectors/nodes';
-import TagNodesModal from '../tag_nodes/TagNodesModal';
+import ConfirmationModal from '../../ui/ConfirmationModal'
+import DropdownKebab from '../../ui/dropdown/DropdownKebab'
+import { getAvailableNodeProfiles } from '../../../selectors/nodes'
+import TagNodesModal from '../tag_nodes/TagNodesModal'
 
 const messages = defineMessages({
   deleteNodesModalTitle: {
@@ -49,37 +49,37 @@ const messages = defineMessages({
     id: 'NodesToolbarActions.deleteNodes',
     defaultMessage: 'Delete Nodes'
   }
-});
+})
 
 class NodesToolbarActions extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       showDeleteModal: false,
       showTagNodesModal: false
-    };
+    }
   }
 
   submitForm(action) {
-    this.props.setSubmitAction(action);
+    this.props.setSubmitAction(action)
     // TODO(jtomasek): hacky way to submit with updated values
     // https://github.com/erikras/redux-form/issues/2818
-    setTimeout(() => this.props.submitForm());
+    setTimeout(() => this.props.submitForm())
   }
 
   deleteNodes(action) {
-    this.submitForm(action);
-    this.setState({ showDeleteModal: false });
+    this.submitForm(action)
+    this.setState({ showDeleteModal: false })
   }
 
   tagNodes(tag) {
-    this.props.setTag(tag);
-    this.submitForm('tag');
-    this.setState({ showTagNodesModal: false });
+    this.props.setTag(tag)
+    this.submitForm('tag')
+    this.setState({ showTagNodesModal: false })
   }
 
   render() {
-    const { disabled, intl } = this.props;
+    const { disabled, intl } = this.props
     return (
       // TODO(jtomasek): include proper error message from the form accessed via getFormSyncErrors
       // selector once the 'error' is available via selector
@@ -143,7 +143,7 @@ class NodesToolbarActions extends React.Component {
           />
         </FormGroup>
       )
-    );
+    )
   }
 }
 NodesToolbarActions.propTypes = {
@@ -153,20 +153,20 @@ NodesToolbarActions.propTypes = {
   setSubmitAction: PropTypes.func.isRequired,
   setTag: PropTypes.func.isRequired,
   submitForm: PropTypes.func.isRequired
-};
+}
 
 const mapStateToProps = state => ({
   availableProfiles: getAvailableNodeProfiles(state),
   disabled: isInvalid('nodesListForm')(state)
-});
+})
 
 const mapDispatchToProps = dispatch => ({
   setSubmitAction: action =>
     dispatch(change('nodesListForm', 'submitAction', action)),
   setTag: tag => dispatch(change('nodesListForm', 'tag', tag)),
   submitForm: () => dispatch(submit('nodesListForm'))
-});
+})
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(NodesToolbarActions)
-);
+)

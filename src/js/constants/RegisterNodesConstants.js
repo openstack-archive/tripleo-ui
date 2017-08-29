@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import keyMirror from 'keymirror';
+import keyMirror from 'keymirror'
 
 export default keyMirror({
   ADD_NODE: null,
@@ -27,4 +27,4 @@ export default keyMirror({
   NODES_REGISTRATION_SUCCESS: null,
   NODES_REGISTRATION_FAILED: null,
   CANCEL_NODES_REGISTRATION: null
-});
+})

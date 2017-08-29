@@ -14,17 +14,17 @@
  * under the License.
  */
 
-import axios from 'axios';
-import when from 'when';
+import axios from 'axios'
+import when from 'when'
 
 import {
   AuthenticationError,
   MistralExecutionError,
   MistralApiError,
   ConnectionError
-} from './errors';
-import { getServiceUrl, getAuthTokenId } from './utils';
-import MistralConstants from '../constants/MistralConstants';
+} from './errors'
+import { getServiceUrl, getAuthTokenId } from './utils'
+import MistralConstants from '../constants/MistralConstants'
 
 class MistralApiService {
   defaultRequest(path, additionalAttributes) {
@@ -37,9 +37,9 @@ class MistralApiService {
           headers: { 'X-Auth-Token': getAuthTokenId() }
         },
         additionalAttributes
-      );
-      return axios(requestAttributes);
-    });
+      )
+      return axios(requestAttributes)
+    })
   }
 
   /**
@@ -52,10 +52,10 @@ class MistralApiService {
       params: { include_output: true }
     })
       .then(response => {
-        response.data.executions.map(parseExecutionAttrs);
-        return when.resolve(response.data.executions);
+        response.data.executions.map(parseExecutionAttrs)
+        return when.resolve(response.data.executions)
       })
-      .catch(handleErrors);
+      .catch(handleErrors)
   }
 
   /**
@@ -70,10 +70,10 @@ class MistralApiService {
       data: patch
     })
       .then(response => {
-        const execution = parseExecutionAttrs(response.data);
-        return when.resolve(execution);
+        const execution = parseExecutionAttrs(response.data)
+        return when.resolve(execution)
       })
-      .catch(handleErrors);
+      .catch(handleErrors)
   }
 
   /**
@@ -92,24 +92,24 @@ class MistralApiService {
       }
     })
       .then(response => {
-        response.data = parseExecutionAttrs(response.data);
+        response.data = parseExecutionAttrs(response.data)
 
         if (response.data.state === 'ERROR') {
-          return when.reject(new MistralExecutionError(response));
+          return when.reject(new MistralExecutionError(response))
         } else if (workflowName === MistralConstants.VALIDATIONS_RUN) {
           // Running validation is special case when whole execution needs to be returned
-          return when.resolve(response.data);
+          return when.resolve(response.data)
         } else {
-          return when.resolve(response.data.output.result);
+          return when.resolve(response.data.output.result)
         }
       })
       .catch(e => {
         if (e.name === 'MistralExecutionError') {
-          return when.reject(e);
+          return when.reject(e)
         } else {
-          return handleErrors(e);
+          return handleErrors(e)
         }
-      });
+      })
   }
 
   /**
@@ -132,46 +132,46 @@ class MistralApiService {
       }
     })
       .then(response => {
-        response.data.output = JSON.parse(response.data.output).result;
+        response.data.output = JSON.parse(response.data.output).result
         if (response.data.state === 'ERROR') {
-          return when.reject(new MistralExecutionError(response));
+          return when.reject(new MistralExecutionError(response))
         } else {
-          return when.resolve(response.data.output);
+          return when.resolve(response.data.output)
         }
       })
       .catch(e => {
         if (e.name === 'MistralExecutionError') {
-          return when.reject(e);
+          return when.reject(e)
         } else {
-          return handleErrors(e);
+          return handleErrors(e)
         }
-      });
+      })
   }
 }
 
 const handleErrors = e => {
   if (e.response && e.response.status === 401) {
-    return when.reject(new AuthenticationError(e));
+    return when.reject(new AuthenticationError(e))
   } else if (e.response) {
-    return when.reject(new MistralApiError(e));
+    return when.reject(new MistralApiError(e))
   } else if (e.request) {
     return when.reject(
       new ConnectionError(
         'Connection to Mistral API could not be established',
         e
       )
-    );
+    )
   } else {
-    return when.reject(e);
+    return when.reject(e)
   }
-};
+}
 
 // input, output and params aren't parsed from Mistral
 const parseExecutionAttrs = execution => {
-  execution.input = JSON.parse(execution.input);
-  execution.output = JSON.parse(execution.output);
-  execution.params = JSON.parse(execution.params);
-  return execution;
-};
+  execution.input = JSON.parse(execution.input)
+  execution.output = JSON.parse(execution.output)
+  execution.params = JSON.parse(execution.params)
+  return execution
+}
 
-export default new MistralApiService();
+export default new MistralApiService()

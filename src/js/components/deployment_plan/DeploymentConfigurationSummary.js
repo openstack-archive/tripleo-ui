@@ -14,23 +14,23 @@
  * under the License.
  */
 
-import { defineMessages, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, injectIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import Loader from '../ui/Loader';
+import Loader from '../ui/Loader'
 
 const messages = defineMessages({
   loadingCurrentConfiguration: {
     id: 'DeploymentConfigurationSummary.loadingCurrentConfiguration',
     defaultMessage: 'Loading current Deployment Configuration...'
   }
-});
+})
 
 class DeploymentConfigurationSummary extends React.Component {
   componentDidMount() {
     if (this.props.planName) {
-      this.props.fetchEnvironmentConfiguration(this.props.planName);
+      this.props.fetchEnvironmentConfiguration(this.props.planName)
     }
   }
 
@@ -40,7 +40,7 @@ class DeploymentConfigurationSummary extends React.Component {
       this.props.isFetching === false &&
       this.props.planName
     ) {
-      this.props.fetchEnvironmentConfiguration(this.props.planName);
+      this.props.fetchEnvironmentConfiguration(this.props.planName)
     }
   }
 
@@ -56,7 +56,7 @@ class DeploymentConfigurationSummary extends React.Component {
       >
         <span>{this.props.summary}</span>
       </Loader>
-    );
+    )
   }
 }
 DeploymentConfigurationSummary.propTypes = {
@@ -66,6 +66,6 @@ DeploymentConfigurationSummary.propTypes = {
   loaded: PropTypes.bool.isRequired,
   planName: PropTypes.string,
   summary: PropTypes.string.isRequired
-};
+}
 
-export default injectIntl(DeploymentConfigurationSummary);
+export default injectIntl(DeploymentConfigurationSummary)

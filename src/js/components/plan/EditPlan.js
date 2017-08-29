@@ -14,21 +14,21 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import Formsy from 'formsy-react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import Formsy from 'formsy-react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Redirect } from 'react-router-dom'
 
-import { getPlan } from '../../selectors/plans';
-import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
-import PlanEditFormTabs from './PlanEditFormTabs';
-import PlansActions from '../../actions/PlansActions';
-import Modal from '../ui/Modal';
-import Loader from '../ui/Loader';
+import { getPlan } from '../../selectors/plans'
+import ModalFormErrorList from '../ui/forms/ModalFormErrorList'
+import PlanEditFormTabs from './PlanEditFormTabs'
+import PlansActions from '../../actions/PlansActions'
+import Modal from '../ui/Modal'
+import Loader from '../ui/Loader'
 
 const messages = defineMessages({
   cancel: {
@@ -47,58 +47,58 @@ const messages = defineMessages({
     id: 'EditPlan.uploadAndUpdate',
     defaultMessage: 'Upload Files and Update Plan'
   }
-});
+})
 
 class EditPlan extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       selectedFiles: undefined,
       canSubmit: false,
       uploadType: 'tarball'
-    };
+    }
   }
 
   componentDidMount() {
-    this.props.fetchPlan(this.props.match.params.planName);
+    this.props.fetchPlan(this.props.match.params.planName)
   }
 
   setUploadType(e) {
     this.setState({
       uploadType: e.target.value === 'folder' ? 'folder' : 'tarball'
-    });
+    })
   }
 
   onPlanFilesChange(currentValues) {
     if (currentValues && currentValues.planFiles) {
-      this.setState({ selectedFiles: currentValues.planFiles });
+      this.setState({ selectedFiles: currentValues.planFiles })
     }
   }
 
   onFormSubmit(form) {
-    let planFiles = {};
+    let planFiles = {}
     if (this.state.uploadType === 'folder') {
       this.state.selectedFiles.map(item => {
-        planFiles[item.name] = {};
-        planFiles[item.name].contents = item.content;
-      });
-      this.props.updatePlan(this.props.plan.name, planFiles);
+        planFiles[item.name] = {}
+        planFiles[item.name].contents = item.content
+      })
+      this.props.updatePlan(this.props.plan.name, planFiles)
     } else {
-      let file = this.state.selectedFiles[0].file;
-      this.props.updatePlanFromTarball(this.props.plan.name, file);
+      let file = this.state.selectedFiles[0].file
+      this.props.updatePlanFromTarball(this.props.plan.name, file)
     }
   }
 
   onFormValid() {
-    this.setState({ canSubmit: true });
+    this.setState({ canSubmit: true })
   }
 
   onFormInvalid() {
-    this.setState({ canSubmit: false });
+    this.setState({ canSubmit: false })
   }
 
   render() {
-    const { plan } = this.props;
+    const { plan } = this.props
 
     return plan
       ? <Modal dialogClasses="modal-lg">
@@ -159,7 +159,7 @@ class EditPlan extends React.Component {
             </div>
           </Formsy.Form>
         </Modal>
-      : <Redirect to="/plans" />;
+      : <Redirect to="/plans" />
   }
 }
 
@@ -174,32 +174,32 @@ EditPlan.propTypes = {
   planFormErrors: ImmutablePropTypes.list,
   updatePlan: PropTypes.func,
   updatePlanFromTarball: PropTypes.func
-};
+}
 
 function mapStateToProps(state, ownProps) {
   return {
     isTransitioningPlan: state.plans.isTransitioningPlan,
     planFormErrors: state.plans.planFormErrors,
     plan: getPlan(state, ownProps.match.params.planName)
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
     fetchPlan: planName => {
-      dispatch(PlansActions.fetchPlan(planName));
+      dispatch(PlansActions.fetchPlan(planName))
     },
     updatePlan: (planName, files) => {
-      dispatch(PlansActions.updatePlan(planName, files, ownProps.history));
+      dispatch(PlansActions.updatePlan(planName, files, ownProps.history))
     },
     updatePlanFromTarball: (planName, files) => {
       dispatch(
         PlansActions.updatePlanFromTarball(planName, files, ownProps.history)
-      );
+      )
     }
-  };
+  }
 }
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(EditPlan)
-);
+)

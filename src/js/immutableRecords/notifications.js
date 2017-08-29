@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { Record } from 'immutable';
+import { Record } from 'immutable'
 
 export const Notification = Record({
   id: undefined,
@@ -23,4 +23,4 @@ export const Notification = Record({
   viewed: false,
   type: 'error',
   timestamp: undefined
-});
+})

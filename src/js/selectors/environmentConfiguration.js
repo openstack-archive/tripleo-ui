@@ -14,36 +14,34 @@
  * under the License.
  */
 
-import { createSelector } from 'reselect';
-import { List } from 'immutable';
+import { createSelector } from 'reselect'
+import { List } from 'immutable'
 
-const topics = state => state.environmentConfiguration.topics;
+const topics = state => state.environmentConfiguration.topics
 const environmentGroups = state =>
-  state.environmentConfiguration.environmentGroups;
+  state.environmentConfiguration.environmentGroups
 export const getEnvironments = state =>
-  state.environmentConfiguration.environments.sortBy(e =>
-    e.title.toLowerCase()
-  );
+  state.environmentConfiguration.environments.sortBy(e => e.title.toLowerCase())
 
 export const getEnvironment = (state, environmentFileName) =>
-  state.environmentConfiguration.environments.get(environmentFileName);
+  state.environmentConfiguration.environments.get(environmentFileName)
 
 export const getEnabledEnvironments = createSelector(
   getEnvironments,
   environments => {
-    return environments.filter(environment => environment.get('enabled'));
+    return environments.filter(environment => environment.get('enabled'))
   }
-);
+)
 
 export const getEnvironmentConfigurationSummary = createSelector(
   getEnabledEnvironments,
   environments => {
     const titlesList = environments.reduce((titlesList, environment) => {
-      return titlesList.push(environment.get('title'));
-    }, List());
-    return titlesList.toArray().join(', ');
+      return titlesList.push(environment.get('title'))
+    }, List())
+    return titlesList.toArray().join(', ')
   }
-);
+)
 
 /**
  * Returns Map of Topics with nested Environment Groups and Environments
@@ -57,10 +55,10 @@ export const getTopicsTree = createSelector(
           return environmentGroups
             .get(envGroup)
             .update('environments', envs => {
-              return environments.filter((p, k) => envs.includes(k));
-            });
-        });
-      });
-    });
+              return environments.filter((p, k) => envs.includes(k))
+            })
+        })
+      })
+    })
   }
-);
+)

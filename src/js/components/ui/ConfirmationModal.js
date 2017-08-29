@@ -14,18 +14,18 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import Modal from '../ui/Modal';
+import Modal from '../ui/Modal'
 
 export default class ConfirmationModal extends React.Component {
   renderTitle() {
-    const iconClass = this.props.iconClass;
+    const iconClass = this.props.iconClass
     if (iconClass) {
-      return <span><span className={iconClass} /> {this.props.title}</span>;
+      return <span><span className={iconClass} /> {this.props.title}</span>
     } else {
-      return <span>{this.props.title}</span>;
+      return <span>{this.props.title}</span>
     }
   }
 
@@ -67,7 +67,7 @@ export default class ConfirmationModal extends React.Component {
           </button>
         </div>
       </Modal>
-    );
+    )
   }
 }
 ConfirmationModal.propTypes = {
@@ -79,7 +79,7 @@ ConfirmationModal.propTypes = {
   question: PropTypes.string.isRequired,
   show: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired
-};
+}
 ConfirmationModal.defaultProps = {
   question: 'Are you sure?'
-};
+}

@@ -1,23 +1,23 @@
-import { connect } from 'react-redux';
-import { defineMessages, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { startCase } from 'lodash';
-import React from 'react';
+import { connect } from 'react-redux'
+import { defineMessages, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { startCase } from 'lodash'
+import React from 'react'
 
-import { ActiveFilter, ActiveFiltersList } from '../ui/Toolbar/ActiveFilters';
+import { ActiveFilter, ActiveFiltersList } from '../ui/Toolbar/ActiveFilters'
 import {
   addActiveFilter,
   clearActiveFilters,
   deleteActiveFilter
-} from '../../actions/FiltersActions';
-import { getActiveFilters } from '../../selectors/filters';
+} from '../../actions/FiltersActions'
+import { getActiveFilters } from '../../selectors/filters'
 import {
   getFilteredValidations,
   getValidationsWithResults
-} from '../../selectors/validations';
-import { PropTypes } from 'prop-types';
-import { Toolbar, ToolbarResults, ToolbarActions } from '../ui/Toolbar';
-import ToolbarFiltersForm from '../ui/Toolbar/ToolbarFiltersForm';
+} from '../../selectors/validations'
+import { PropTypes } from 'prop-types'
+import { Toolbar, ToolbarResults, ToolbarActions } from '../ui/Toolbar'
+import ToolbarFiltersForm from '../ui/Toolbar/ToolbarFiltersForm'
 
 const messages = defineMessages({
   activeFilters: {
@@ -50,7 +50,7 @@ const messages = defineMessages({
     defaultMessage: '{totalCount, number} {totalCount, plural, one ' +
       '{Validation} other {Validations}}'
   }
-});
+})
 
 class ValidationsToolbar extends React.Component {
   render() {
@@ -62,7 +62,7 @@ class ValidationsToolbar extends React.Component {
       intl,
       addActiveFilter,
       validationsCount
-    } = this.props;
+    } = this.props
     return (
       <div className="validations-toolbar">
         <Toolbar tableView>
@@ -110,7 +110,7 @@ class ValidationsToolbar extends React.Component {
           </ToolbarResults>
         </Toolbar>
       </div>
-    );
+    )
   }
 }
 ValidationsToolbar.propTypes = {
@@ -121,7 +121,7 @@ ValidationsToolbar.propTypes = {
   filteredValidationsCount: PropTypes.number.isRequired,
   intl: PropTypes.object,
   validationsCount: PropTypes.number.isRequired
-};
+}
 const mapDispatchToProps = dispatch => {
   return {
     addActiveFilter: data =>
@@ -130,15 +130,15 @@ const mapDispatchToProps = dispatch => {
       dispatch(clearActiveFilters('validationsToolbar')),
     deleteActiveFilter: uuid =>
       dispatch(deleteActiveFilter('validationsToolbar', uuid))
-  };
-};
+  }
+}
 const mapStateToProps = state => {
   return {
     activeFilters: getActiveFilters(state, 'validationsToolbar'),
     filteredValidationsCount: getFilteredValidations(state).size,
     validationsCount: getValidationsWithResults(state).size
-  };
-};
+  }
+}
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(ValidationsToolbar)
-);
+)

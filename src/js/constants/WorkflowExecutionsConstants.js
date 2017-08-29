@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import keyMirror from 'keymirror';
+import keyMirror from 'keymirror'
 
 export default keyMirror({
   FETCH_WORKFLOW_EXECUTIONS_PENDING: null,
@@ -23,4 +23,4 @@ export default keyMirror({
   ADD_WORKFLOW_EXECUTION: null,
   ADD_WORKFLOW_EXECUTION_FROM_MESSAGE: null,
   UPDATE_WORKFLOW_EXECUTION_PENDING: null
-});
+})

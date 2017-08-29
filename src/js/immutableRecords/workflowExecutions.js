@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { Map, Record } from 'immutable';
+import { Map, Record } from 'immutable'
 
 export const WorkflowExecution = Record({
   description: undefined,
@@ -26,4 +26,4 @@ export const WorkflowExecution = Record({
   state_info: undefined,
   updated_at: undefined,
   workflow_name: undefined
-});
+})

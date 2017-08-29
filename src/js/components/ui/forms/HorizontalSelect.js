@@ -14,17 +14,17 @@
  * under the License.
  */
 
-import Formsy from 'formsy-react';
-import PropTypes from 'prop-types';
-import React from 'react';
+import Formsy from 'formsy-react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import InputDescription from './InputDescription';
-import InputErrorMessage from './InputErrorMessage';
+import InputDescription from './InputDescription'
+import InputErrorMessage from './InputErrorMessage'
 
 class HorizontalSelect extends React.Component {
   changeValue(event) {
-    event.stopPropagation();
-    this.props.setValue(event.target.value);
+    event.stopPropagation()
+    this.props.setValue(event.target.value)
   }
 
   render() {
@@ -51,7 +51,7 @@ class HorizontalSelect extends React.Component {
           <InputDescription description={this.props.description} />
         </div>
       </div>
-    );
+    )
   }
 }
 HorizontalSelect.propTypes = {
@@ -67,9 +67,9 @@ HorizontalSelect.propTypes = {
   name: PropTypes.string.isRequired,
   setValue: PropTypes.func,
   title: PropTypes.string.isRequired
-};
+}
 HorizontalSelect.defaultProps = {
   inputColumnClasses: 'col-sm-10',
   labelColumnClasses: 'col-sm-2'
-};
-export default Formsy.HOC(HorizontalSelect);
+}
+export default Formsy.HOC(HorizontalSelect)

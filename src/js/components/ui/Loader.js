@@ -14,11 +14,11 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ClassNames from 'classnames'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import Modal from '../ui/Modal';
+import Modal from '../ui/Modal'
 
 export default class Loader extends React.Component {
   renderGlobalLoader(classes) {
@@ -31,7 +31,7 @@ export default class Loader extends React.Component {
           </div>
         </Modal>
       </div>
-    );
+    )
   }
 
   renderInlineLoader(classes) {
@@ -40,7 +40,7 @@ export default class Loader extends React.Component {
         <span className={classes} />
         {this.props.content}
       </span>
-    );
+    )
   }
 
   renderOverlayLoader(classes) {
@@ -52,13 +52,13 @@ export default class Loader extends React.Component {
         }}
         className="overlay-loader"
         onClick={e => {
-          e.stopPropagation();
+          e.stopPropagation()
         }}
       >
         <div className={classes} />
         <div className="text-center">{this.props.content}</div>
       </div>
-    );
+    )
   }
 
   renderDefaultLoader(classes) {
@@ -73,7 +73,7 @@ export default class Loader extends React.Component {
         <div className={classes} />
         <div className="text-center">{this.props.content}</div>
       </div>
-    );
+    )
   }
 
   render() {
@@ -86,24 +86,24 @@ export default class Loader extends React.Component {
       'spinner-xl': this.props.size === 'xl',
       'spinner-inline': this.props.inline,
       'spinner-inverse': this.props.inverse
-    });
+    })
 
     if (!this.props.loaded) {
       if (this.props.global) {
-        return this.renderGlobalLoader(classes);
+        return this.renderGlobalLoader(classes)
       } else if (this.props.inline) {
-        return this.renderInlineLoader(classes);
+        return this.renderInlineLoader(classes)
       } else if (this.props.overlay) {
-        return this.renderOverlayLoader(classes);
+        return this.renderOverlayLoader(classes)
       } else {
-        return this.renderDefaultLoader(classes);
+        return this.renderDefaultLoader(classes)
       }
     }
     return React.createElement(
       this.props.component,
       this.props.componentProps,
       this.props.children
-    );
+    )
   }
 }
 Loader.propTypes = {
@@ -122,7 +122,7 @@ Loader.propTypes = {
   loaded: PropTypes.bool,
   overlay: PropTypes.bool.isRequired,
   size: PropTypes.oneOf(['xs', 'sm', 'lg', 'xl'])
-};
+}
 Loader.defaultProps = {
   component: 'div',
   componentProps: {},
@@ -131,4 +131,4 @@ Loader.defaultProps = {
   height: 10,
   inline: false,
   overlay: false
-};
+}

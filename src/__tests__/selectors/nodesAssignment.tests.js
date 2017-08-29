@@ -14,15 +14,15 @@
  * under the License.
  */
 
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map } from 'immutable'
 
-import * as selectors from '../../js/selectors/nodesAssignment';
-import { Port } from '../../js/immutableRecords/nodes';
-import { Role, RolesState } from '../../js/immutableRecords/roles';
+import * as selectors from '../../js/selectors/nodesAssignment'
+import { Port } from '../../js/immutableRecords/nodes'
+import { Role, RolesState } from '../../js/immutableRecords/roles'
 import {
   Parameter,
   ParametersDefaultState
-} from '../../js/immutableRecords/parameters';
+} from '../../js/immutableRecords/parameters'
 
 describe('Nodes Assignment selectors', () => {
   const state = {
@@ -155,11 +155,11 @@ describe('Nodes Assignment selectors', () => {
         })
       })
     })
-  };
+  }
 
   it('provides selector to list Introspected Nodes not assigned to a Role', () => {
-    expect(selectors.getUntaggedAvailableNodes(state).size).toEqual(2);
-  });
+    expect(selectors.getUntaggedAvailableNodes(state).size).toEqual(2)
+  })
 
   describe('provides getTotalUntaggedAssignedNodesCount selector', () => {
     beforeEach(function() {
@@ -172,7 +172,7 @@ describe('Nodes Assignment selectors', () => {
           uuid: 'node2',
           properties: { capabilities: 'boot_option:local,profile:control' }
         }
-      });
+      })
       this.roles = Map({
         control: new Role({
           name: 'Controller',
@@ -189,7 +189,7 @@ describe('Nodes Assignment selectors', () => {
           title: 'Block Storage',
           identifier: 'block-storage'
         })
-      });
+      })
       this.parametersByRole = Map({
         control: new Parameter({
           name: 'ControllerCount',
@@ -199,17 +199,17 @@ describe('Nodes Assignment selectors', () => {
           name: 'ComputeCount',
           default: 1
         })
-      });
-    });
+      })
+    })
 
     it('calculates untagged assigned nodes count', function() {
       const result = selectors.getTotalUntaggedAssignedNodesCount.resultFunc(
         this.nodes,
         this.roles,
         this.parametersByRole
-      );
-      expect(result).toEqual(1);
-    });
+      )
+      expect(result).toEqual(1)
+    })
 
     it('calculates properly when assigned count is less then tagged', function() {
       this.nodes = fromJS({
@@ -225,15 +225,15 @@ describe('Nodes Assignment selectors', () => {
           uuid: 'node3',
           properties: { capabilities: 'boot_option:local,profile:control' }
         }
-      });
+      })
       const result = selectors.getTotalUntaggedAssignedNodesCount.resultFunc(
         this.nodes,
         this.roles,
         this.parametersByRole
-      );
-      expect(result).toEqual(1);
-    });
-  });
+      )
+      expect(result).toEqual(1)
+    })
+  })
 
   describe('provides getAvailableNodesCountsByRole selector', () => {
     beforeEach(function() {
@@ -246,13 +246,13 @@ describe('Nodes Assignment selectors', () => {
           uuid: 'node2',
           properties: { capabilities: 'boot_option:local,profile:control' }
         }
-      });
+      })
       this.untaggedAvailableNodes = fromJS({
         node1: {
           uuid: 'node1',
           properties: { capabilities: 'boot_option:local' }
         }
-      });
+      })
       this.roles = Map({
         control: new Role({
           name: 'Controller',
@@ -269,7 +269,7 @@ describe('Nodes Assignment selectors', () => {
           title: 'Block Storage',
           identifier: 'block-storage'
         })
-      });
+      })
       this.nodeCountParametersByRole = Map({
         control: new Parameter({
           name: 'ControllerCount',
@@ -283,9 +283,9 @@ describe('Nodes Assignment selectors', () => {
           name: 'BlockStorageCount',
           default: 0
         })
-      });
-      this.totalUntaggedAssignedNodesCount = 1;
-    });
+      })
+      this.totalUntaggedAssignedNodesCount = 1
+    })
 
     it('calculates maximum available nodes count for each role', function() {
       const result = selectors.getAvailableNodesCountsByRole.resultFunc(
@@ -294,11 +294,11 @@ describe('Nodes Assignment selectors', () => {
         this.roles,
         this.nodeCountParametersByRole,
         this.totalUntaggedAssignedNodesCount
-      );
-      expect(result.get('control')).toEqual(1);
-      expect(result.get('compute')).toEqual(1);
-      expect(result.get('block-storage')).toEqual(0);
-    });
+      )
+      expect(result.get('control')).toEqual(1)
+      expect(result.get('compute')).toEqual(1)
+      expect(result.get('block-storage')).toEqual(0)
+    })
 
     it('handles cases when assigned count is higher then actual nodes available', function() {
       this.nodeCountParametersByRole = Map({
@@ -314,31 +314,31 @@ describe('Nodes Assignment selectors', () => {
           name: 'BlockStorageCount',
           default: 0
         })
-      });
-      this.totalUntaggedAssignedNodesCount = 4;
+      })
+      this.totalUntaggedAssignedNodesCount = 4
       const result = selectors.getAvailableNodesCountsByRole.resultFunc(
         this.availableNodes,
         this.untaggedAvailableNodes,
         this.roles,
         this.nodeCountParametersByRole,
         this.totalUntaggedAssignedNodesCount
-      );
-      expect(result.get('control')).toEqual(1);
-      expect(result.get('compute')).toEqual(0);
-      expect(result.get('block-storage')).toEqual(0);
-    });
-  });
+      )
+      expect(result.get('control')).toEqual(1)
+      expect(result.get('compute')).toEqual(0)
+      expect(result.get('block-storage')).toEqual(0)
+    })
+  })
 
   it('getRoleCountParameterByRole', () => {
     const nodeCountParametersByRole = selectors.getNodeCountParametersByRole(
       state
-    );
-    expect(nodeCountParametersByRole.get('control').default).toEqual(2);
-    expect(nodeCountParametersByRole.get('compute').default).toEqual(1);
-  });
+    )
+    expect(nodeCountParametersByRole.get('control').default).toEqual(2)
+    expect(nodeCountParametersByRole.get('compute').default).toEqual(1)
+  })
 
   it('getTotalAssignedNodesCount', () => {
-    const totalAssignedNodesCount = selectors.getTotalAssignedNodesCount(state);
-    expect(totalAssignedNodesCount).toEqual(3);
-  });
-});
+    const totalAssignedNodesCount = selectors.getTotalAssignedNodesCount(state)
+    expect(totalAssignedNodesCount).toEqual(3)
+  })
+})

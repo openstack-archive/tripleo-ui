@@ -14,9 +14,9 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 const messages = defineMessages({
   localFolder: {
@@ -27,7 +27,7 @@ const messages = defineMessages({
     id: 'PlanUploadTypeRadios.tarArchive',
     defaultMessage: 'Tar Archive (tar.gz)'
   }
-});
+})
 
 export default class PlanUploadTypeRadios extends React.Component {
   render() {
@@ -64,7 +64,7 @@ export default class PlanUploadTypeRadios extends React.Component {
           </label>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -74,4 +74,4 @@ PlanUploadTypeRadios.propTypes = {
   setUploadType: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   uploadType: PropTypes.string.isRequired
-};
+}

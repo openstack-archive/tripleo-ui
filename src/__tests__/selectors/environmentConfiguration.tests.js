@@ -14,13 +14,13 @@
  * under the License.
  */
 
-import { List, Map, OrderedMap } from 'immutable';
+import { List, Map, OrderedMap } from 'immutable'
 
-import * as selectors from '../../js/selectors/environmentConfiguration';
+import * as selectors from '../../js/selectors/environmentConfiguration'
 import {
   Environment,
   EnvironmentConfigurationState
-} from '../../js/immutableRecords/environmentConfiguration';
+} from '../../js/immutableRecords/environmentConfiguration'
 
 describe('Environment Configuration selectors', () => {
   const state = {
@@ -60,7 +60,7 @@ describe('Environment Configuration selectors', () => {
         formFieldErrors: Map()
       })
     })
-  };
+  }
 
   it('provides selector to get enabled environments', () => {
     expect(selectors.getEnabledEnvironments(state)).toEqual(
@@ -71,14 +71,14 @@ describe('Environment Configuration selectors', () => {
           enabled: true
         })
       })
-    );
-  });
+    )
+  })
 
   it('provides selector to get environment configuration summary string', () => {
     expect(selectors.getEnvironmentConfigurationSummary(state)).toEqual(
       'Environment1'
-    );
-  });
+    )
+  })
 
   it(`provides selector to get nested tree of Environment Configuration Topics,
       Environment Groups and Environments`, () => {
@@ -106,6 +106,6 @@ describe('Environment Configuration selectors', () => {
           ])
         })
       })
-    );
-  });
-});
+    )
+  })
+})

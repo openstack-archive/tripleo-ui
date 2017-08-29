@@ -14,14 +14,14 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ClassNames from 'classnames'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 export default class DropdownButton extends React.Component {
   handleClick(e) {
-    e.preventDefault();
-    this.props.toggleDropdown();
+    e.preventDefault()
+    this.props.toggleDropdown()
   }
 
   render() {
@@ -34,11 +34,11 @@ export default class DropdownButton extends React.Component {
         {this.props.children}
         <span className="caret" />
       </button>
-    );
+    )
   }
 }
 DropdownButton.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   toggleDropdown: PropTypes.func
-};
+}

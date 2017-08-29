@@ -14,15 +14,15 @@
  * under the License.
  */
 
-import { List, Map } from 'immutable';
+import { List, Map } from 'immutable'
 
-import * as selectors from '../../js/selectors/parameters';
+import * as selectors from '../../js/selectors/parameters'
 import {
   Resource,
   Parameter,
   ParametersDefaultState
-} from '../../js/immutableRecords/parameters';
-import { Role, RolesState } from '../../js/immutableRecords/roles';
+} from '../../js/immutableRecords/parameters'
+import { Role, RolesState } from '../../js/immutableRecords/roles'
 
 describe(' validations selectors', () => {
   const state = {
@@ -113,39 +113,39 @@ describe(' validations selectors', () => {
       }),
       mistralParameters: Map()
     })
-  };
+  }
 
   it('getParametersExclInternal', () => {
-    expect(selectors.getParametersExclInternal(state).size).toEqual(5);
-  });
+    expect(selectors.getParametersExclInternal(state).size).toEqual(5)
+  })
 
   it('getRootParameters', () => {
-    expect(selectors.getRootParameters(state).size).toEqual(1);
-  });
+    expect(selectors.getRootParameters(state).size).toEqual(1)
+  })
 
   it('getRoleResource', () => {
     expect(selectors.getRoleResource(state, 'control').name).toEqual(
       'RoleResource1'
-    );
-  });
+    )
+  })
 
   it('getRoleParameters', () => {
-    expect(selectors.getRoleParameters(state, 'control').size).toEqual(1);
-  });
+    expect(selectors.getRoleParameters(state, 'control').size).toEqual(1)
+  })
 
   it('getRoleServices', () => {
-    expect(selectors.getRoleServices(state, 'control').size).toEqual(1);
-  });
+    expect(selectors.getRoleServices(state, 'control').size).toEqual(1)
+  })
 
   it('includes nested resources parameters using _extractParameters in getRoleServices', () => {
     expect(
       selectors.getRoleServices(state, 'control').first().parameters.size
-    ).toEqual(3);
-  });
+    ).toEqual(3)
+  })
 
   it('getRoleNetworkConfig', () => {
     expect(selectors.getRoleNetworkConfig(state, 'control').name).toEqual(
       'NetworkConfigResource'
-    );
-  });
-});
+    )
+  })
+})

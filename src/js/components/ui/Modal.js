@@ -14,9 +14,9 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import Portal from 'react-portal';
+import PropTypes from 'prop-types'
+import React from 'react'
+import Portal from 'react-portal'
 
 export default class Modal extends React.Component {
   render() {
@@ -24,28 +24,28 @@ export default class Modal extends React.Component {
       <Portal isOpened={this.props.show}>
         <PortedModal {...this.props} />
       </Portal>
-    );
+    )
   }
 }
 Modal.propTypes = {
   show: PropTypes.bool.isRequired
-};
+}
 
 Modal.defaultProps = {
   show: true
-};
+}
 
 // This component is intended for internal use of Modal Component
 // It is used to mount Modal only when it should be shown
 class PortedModal extends React.Component {
   // add the modal-open class to the body of the page so scrollbars render properly.
   componentWillMount() {
-    document.body.classList.add('modal-open');
+    document.body.classList.add('modal-open')
   }
 
   // remove the modal-open class
   componentWillUnmount() {
-    document.body.classList.remove('modal-open');
+    document.body.classList.remove('modal-open')
   }
 
   render() {
@@ -63,15 +63,15 @@ class PortedModal extends React.Component {
         </div>
         <div className="modal-backdrop in" />
       </div>
-    );
+    )
   }
 }
 PortedModal.propTypes = {
   children: PropTypes.node,
   dialogClasses: PropTypes.string.isRequired,
   id: PropTypes.string
-};
+}
 
 PortedModal.defaultProps = {
   dialogClasses: ''
-};
+}

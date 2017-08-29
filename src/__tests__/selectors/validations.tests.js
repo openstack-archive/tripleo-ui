@@ -14,22 +14,20 @@
  * under the License.
  */
 
-import { List, Map, OrderedMap } from 'immutable';
+import { List, Map, OrderedMap } from 'immutable'
 
-import * as selectors from '../../js/selectors/validations';
-import { Validation } from '../../js/immutableRecords/validations';
+import * as selectors from '../../js/selectors/validations'
+import { Validation } from '../../js/immutableRecords/validations'
 import {
   ActiveFilter,
   FiltersInitialState
-} from '../../js/immutableRecords/filters';
-import { InitialPlanState, Plan } from '../../js/immutableRecords/plans';
-import {
-  WorkflowExecution
-} from '../../js/immutableRecords/workflowExecutions';
-import MistralConstants from '../../js/constants/MistralConstants';
+} from '../../js/immutableRecords/filters'
+import { InitialPlanState, Plan } from '../../js/immutableRecords/plans'
+import { WorkflowExecution } from '../../js/immutableRecords/workflowExecutions'
+import MistralConstants from '../../js/constants/MistralConstants'
 
 describe(' validations selectors', () => {
-  let state;
+  let state
   beforeEach(() => {
     state = {
       plans: new InitialPlanState({
@@ -128,35 +126,35 @@ describe(' validations selectors', () => {
           })
         })
       })
-    };
-  });
+    }
+  })
 
   it('provides selector to get validation executions for current plan', () => {
     expect(selectors.getValidationExecutionsForCurrentPlan(state).size).toEqual(
       2
-    );
+    )
     expect(selectors.getValidationExecutionsForCurrentPlan(state)).toEqual(
       state.executions.get('executions')
-    );
-  });
+    )
+  })
 
   it('provides selector to get validation combined with its results', () => {
-    const validationsWithResults = selectors.getValidationsWithResults(state);
-    expect(validationsWithResults.size).toEqual(3);
-    expect(validationsWithResults.get('512e').results.size).toEqual(0);
-    expect(validationsWithResults.get('512e').status).toEqual('new');
+    const validationsWithResults = selectors.getValidationsWithResults(state)
+    expect(validationsWithResults.size).toEqual(3)
+    expect(validationsWithResults.get('512e').results.size).toEqual(0)
+    expect(validationsWithResults.get('512e').status).toEqual('new')
     expect(
       validationsWithResults.get('check-network-gateway').results.size
-    ).toEqual(2);
+    ).toEqual(2)
     expect(validationsWithResults.get('check-network-gateway').status).toEqual(
       'success'
-    );
-  });
+    )
+  })
 
   describe('getFilteredValidations selector', () => {
     it('returns all validations if no filters are set', () => {
-      expect(selectors.getFilteredValidations(state).size).toEqual(3);
-    });
+      expect(selectors.getFilteredValidations(state).size).toEqual(3)
+    })
 
     it('filters validations by name', () => {
       state.filters = FiltersInitialState({
@@ -172,11 +170,11 @@ describe(' validations selectors', () => {
           sortDir: 'asc',
           contentView: 'list'
         })
-      });
-      const filtered = selectors.getFilteredValidations(state);
-      expect(filtered.size).toEqual(1);
-      expect(filtered.get('512e')).toBeDefined();
-    });
+      })
+      const filtered = selectors.getFilteredValidations(state)
+      expect(filtered.size).toEqual(1)
+      expect(filtered.get('512e')).toBeDefined()
+    })
 
     it('filters validations by group', () => {
       state.filters = FiltersInitialState({
@@ -192,11 +190,11 @@ describe(' validations selectors', () => {
           sortDir: 'asc',
           contentView: 'list'
         })
-      });
-      const filtered = selectors.getFilteredValidations(state);
-      expect(filtered.size).toEqual(1);
-      expect(filtered.get('foo-validation')).toBeDefined();
-    });
+      })
+      const filtered = selectors.getFilteredValidations(state)
+      expect(filtered.size).toEqual(1)
+      expect(filtered.get('foo-validation')).toBeDefined()
+    })
 
     it('filters validations by name and group', () => {
       state.filters = FiltersInitialState({
@@ -217,10 +215,10 @@ describe(' validations selectors', () => {
           sortDir: 'asc',
           contentView: 'list'
         })
-      });
-      const filtered = selectors.getFilteredValidations(state);
-      expect(filtered.size).toEqual(1);
-      expect(filtered.get('check-network-gateway')).toBeDefined();
-    });
-  });
-});
+      })
+      const filtered = selectors.getFilteredValidations(state)
+      expect(filtered.size).toEqual(1)
+      expect(filtered.get('check-network-gateway')).toBeDefined()
+    })
+  })
+})

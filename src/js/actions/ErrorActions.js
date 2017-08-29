@@ -14,9 +14,9 @@
  * under the License.
  */
 
-import logger from '../services/logging/LoggingService';
-import LoginActions from './LoginActions';
-import NotificationActions from './NotificationActions';
+import logger from '../services/logging/LoggingService'
+import LoginActions from './LoginActions'
+import NotificationActions from './NotificationActions'
 
 export const handleErrors = (
   error,
@@ -31,7 +31,7 @@ export const handleErrors = (
           message: error.message
         }
       ])
-    );
+    )
   } else {
     if (notify) {
       dispatch(
@@ -39,8 +39,8 @@ export const handleErrors = (
           title,
           message: error.message
         })
-      );
+      )
     }
   }
-  logger.error(title, error, error.stack);
-};
+  logger.error(title, error, error.stack)
+}

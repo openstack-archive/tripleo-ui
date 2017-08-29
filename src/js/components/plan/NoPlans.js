@@ -14,9 +14,9 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
-import React from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl'
+import { Link } from 'react-router-dom'
+import React from 'react'
 
 const messages = defineMessages({
   noPlansAvailable: {
@@ -31,7 +31,7 @@ const messages = defineMessages({
     id: 'NoPlans.importPlan',
     defaultMessage: 'Import Plan'
   }
-});
+})
 
 export default class NoPlans extends React.Component {
   render() {
@@ -50,6 +50,6 @@ export default class NoPlans extends React.Component {
           </Link>
         </div>
       </div>
-    );
+    )
   }
 }

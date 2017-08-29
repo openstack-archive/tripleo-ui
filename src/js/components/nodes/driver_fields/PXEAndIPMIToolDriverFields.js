@@ -14,11 +14,11 @@
  * under the License.
  */
 
-import { defineMessages, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, injectIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import DriverFields from './DriverFields';
+import DriverFields from './DriverFields'
 
 const messages = defineMessages({
   addr_title: {
@@ -37,7 +37,7 @@ const messages = defineMessages({
     id: 'PXEAndIPMIToolDriverFields.pwd_title',
     defaultMessage: 'IPMI Password'
   }
-});
+})
 
 class PXEAndIPMIToolDriverFields extends React.Component {
   render() {
@@ -49,12 +49,12 @@ class PXEAndIPMIToolDriverFields extends React.Component {
         port_title={this.props.intl.formatMessage(messages.port_title)}
         pwd_title={this.props.intl.formatMessage(messages.pwd_title)}
       />
-    );
+    )
   }
 }
 
 PXEAndIPMIToolDriverFields.propTypes = {
   intl: PropTypes.object
-};
+}
 
-export default injectIntl(PXEAndIPMIToolDriverFields);
+export default injectIntl(PXEAndIPMIToolDriverFields)

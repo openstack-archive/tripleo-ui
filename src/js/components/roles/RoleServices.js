@@ -14,17 +14,17 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { defineMessages, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Map } from 'immutable';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { connect } from 'react-redux'
+import { defineMessages, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { Map } from 'immutable'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import { getRoleServices } from '../../selectors/parameters';
-import { getRole } from '../../selectors/roles';
-import ParameterInputList from '../parameters/ParameterInputList';
-import Tab from '../ui/Tab';
+import { getRoleServices } from '../../selectors/parameters'
+import { getRole } from '../../selectors/roles'
+import ParameterInputList from '../parameters/ParameterInputList'
+import Tab from '../ui/Tab'
 
 const messages = defineMessages({
   noParameters: {
@@ -35,20 +35,20 @@ const messages = defineMessages({
     id: 'RoleServices.selectService',
     defaultMessage: 'Please select service to configure.'
   }
-});
+})
 
 class RoleServices extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       selectedService: undefined
-    };
+    }
   }
 
   selectService(serviceName) {
     this.setState({
       selectedService: serviceName
-    });
+    })
   }
 
   renderServiceTabs() {
@@ -66,12 +66,12 @@ class RoleServices extends React.Component {
             {service.type.split('::').pop()}
           </a>
         </Tab>
-      );
-    });
+      )
+    })
   }
 
   render() {
-    const { formatMessage } = this.props.intl;
+    const { formatMessage } = this.props.intl
     return (
       <div className="row-eq-height">
         <div className="col-sm-4 sidebar-pf sidebar-pf-left">
@@ -93,7 +93,7 @@ class RoleServices extends React.Component {
           />
         </div>
       </div>
-    );
+    )
   }
 }
 RoleServices.propTypes = {
@@ -101,14 +101,14 @@ RoleServices.propTypes = {
   mistralParameters: ImmutablePropTypes.map.isRequired,
   role: ImmutablePropTypes.record.isRequired,
   services: ImmutablePropTypes.map.isRequired
-};
+}
 
 function mapStateToProps(state, props) {
   return {
     mistralParameters: state.parameters.mistralParameters,
     role: getRole(state, props.match.params.roleIdentifier),
     services: getRoleServices(state, props.match.params.roleIdentifier)
-  };
+  }
 }
 
-export default injectIntl(connect(mapStateToProps)(RoleServices));
+export default injectIntl(connect(mapStateToProps)(RoleServices))

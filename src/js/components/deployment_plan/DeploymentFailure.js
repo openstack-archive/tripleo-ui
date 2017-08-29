@@ -14,15 +14,15 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router-dom';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { Link } from 'react-router-dom'
 
-import DeleteStackButton from './DeleteStackButton';
-import InlineNotification from '../ui/InlineNotification';
-import { deploymentStatusMessages } from '../../constants/StacksConstants';
+import DeleteStackButton from './DeleteStackButton'
+import InlineNotification from '../ui/InlineNotification'
+import { deploymentStatusMessages } from '../../constants/StacksConstants'
 
 const messages = defineMessages({
   deleteDeployment: {
@@ -37,7 +37,7 @@ const messages = defineMessages({
     id: 'DeploymentFailure.requestingDeletion',
     defaultMessage: 'Requesting Deletion of Deployment'
   }
-});
+})
 
 class DeploymentFailure extends React.Component {
   render() {
@@ -47,8 +47,8 @@ class DeploymentFailure extends React.Component {
       intl: { formatMessage },
       isRequestingStackDelete,
       stack
-    } = this.props;
-    const status = formatMessage(deploymentStatusMessages[stack.stack_status]);
+    } = this.props
+    const status = formatMessage(deploymentStatusMessages[stack.stack_status])
 
     return (
       <div>
@@ -70,7 +70,7 @@ class DeploymentFailure extends React.Component {
           stack={stack}
         />
       </div>
-    );
+    )
   }
 }
 
@@ -80,6 +80,6 @@ DeploymentFailure.propTypes = {
   intl: PropTypes.object,
   isRequestingStackDelete: PropTypes.bool,
   stack: ImmutablePropTypes.record.isRequired
-};
+}
 
-export default injectIntl(DeploymentFailure);
+export default injectIntl(DeploymentFailure)

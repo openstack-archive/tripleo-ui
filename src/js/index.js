@@ -14,20 +14,20 @@
  * under the License.
  */
 
-import 'babel-polyfill';
+import 'babel-polyfill'
 
-import { Provider } from 'react-redux';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Provider } from 'react-redux'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 
-import App from './components/App';
-import I18nProvider from './components/i18n/I18nProvider';
-import initFormsy from './components/utils/Formsy';
-import store from './store';
-import '../less/base.less';
+import App from './components/App'
+import I18nProvider from './components/i18n/I18nProvider'
+import initFormsy from './components/utils/Formsy'
+import store from './store'
+import '../less/base.less'
 
-initFormsy();
+initFormsy()
 
 ReactDOM.render(
   <Provider store={store}>
@@ -38,4 +38,4 @@ ReactDOM.render(
     </I18nProvider>
   </Provider>,
   document.getElementById('react-app-index')
-);
+)

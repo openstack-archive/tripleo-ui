@@ -14,24 +14,24 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Route } from 'react-router-dom';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import { connect } from 'react-redux'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Route } from 'react-router-dom'
 
-import { getFilterByName } from '../../selectors/filters';
-import { getFilteredNodes, nodesInProgress } from '../../selectors/nodes';
-import Loader from '../ui/Loader';
-import NodeDrives from './NodeDrives/NodeDrives';
-import NodesActions from '../../actions/NodesActions';
-import NodesListForm from './NodesListView/NodesListForm';
-import NodesListView from './NodesListView/NodesListView';
-import NodesToolbar from './NodesToolbar/NodesToolbar';
-import NodesTableView from './NodesTableView';
-import RegisterNodesDialog from './RegisterNodesDialog';
+import { getFilterByName } from '../../selectors/filters'
+import { getFilteredNodes, nodesInProgress } from '../../selectors/nodes'
+import Loader from '../ui/Loader'
+import NodeDrives from './NodeDrives/NodeDrives'
+import NodesActions from '../../actions/NodesActions'
+import NodesListForm from './NodesListView/NodesListForm'
+import NodesListView from './NodesListView/NodesListView'
+import NodesToolbar from './NodesToolbar/NodesToolbar'
+import NodesTableView from './NodesTableView'
+import RegisterNodesDialog from './RegisterNodesDialog'
 
 const messages = defineMessages({
   loadingNodes: {
@@ -50,16 +50,16 @@ const messages = defineMessages({
     id: 'Nodes.nodes',
     defaultMessage: 'Nodes'
   }
-});
+})
 
 class Nodes extends React.Component {
   componentDidMount() {
-    this.props.fetchNodes();
+    this.props.fetchNodes()
   }
 
   refreshResults(e) {
-    e.preventDefault();
-    this.props.fetchNodes();
+    e.preventDefault()
+    this.props.fetchNodes()
   }
 
   renderContentView() {
@@ -71,7 +71,7 @@ class Nodes extends React.Component {
             nodes={this.props.nodes}
             nodesInProgress={this.props.nodesInProgress}
           />
-        </NodesListForm>;
+        </NodesListForm>
   }
 
   render() {
@@ -112,7 +112,7 @@ class Nodes extends React.Component {
         <Route path="/nodes/register" component={RegisterNodesDialog} />
         <Route path="/nodes/:nodeId/drives" component={NodeDrives} />
       </div>
-    );
+    )
   }
 }
 Nodes.propTypes = {
@@ -124,7 +124,7 @@ Nodes.propTypes = {
   nodes: ImmutablePropTypes.map.isRequired,
   nodesInProgress: ImmutablePropTypes.set.isRequired,
   nodesLoaded: PropTypes.bool.isRequired
-};
+}
 
 const mapStateToProps = state => ({
   contentView: getFilterByName(state, 'nodesToolbar').get(
@@ -135,12 +135,12 @@ const mapStateToProps = state => ({
   nodes: getFilteredNodes(state),
   nodesInProgress: nodesInProgress(state),
   nodesLoaded: state.nodes.get('isLoaded')
-});
+})
 
 const mapDispatchToProps = dispatch => ({
   fetchNodes: () => dispatch(NodesActions.fetchNodes()),
   fetchNodeIntrospectionData: nodeId =>
     dispatch(NodesActions.fetchNodeIntrospectionData(nodeId))
-});
+})
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Nodes));
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Nodes))

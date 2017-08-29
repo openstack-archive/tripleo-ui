@@ -14,19 +14,19 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import Formsy from 'formsy-react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { connect } from 'react-redux'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import Formsy from 'formsy-react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
-import PlansActions from '../../actions/PlansActions';
-import PlanFormTabs from './PlanFormTabs';
-import Modal from '../ui/Modal';
-import Loader from '../ui/Loader';
+import ModalFormErrorList from '../ui/forms/ModalFormErrorList'
+import PlansActions from '../../actions/PlansActions'
+import PlanFormTabs from './PlanFormTabs'
+import Modal from '../ui/Modal'
+import Loader from '../ui/Loader'
 
 const messages = defineMessages({
   cancel: {
@@ -45,52 +45,52 @@ const messages = defineMessages({
     id: 'NewPlan.uploadAndCreate',
     defaultMessage: 'Upload Files and Create Plan'
   }
-});
+})
 
 class NewPlan extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       files: [],
       selectedFiles: undefined,
       canSubmit: false,
       uploadType: 'tarball'
-    };
+    }
   }
 
   setUploadType(e) {
     this.setState({
       uploadType: e.target.value === 'folder' ? 'folder' : 'tarball'
-    });
+    })
   }
 
   onPlanFilesChange(currentValues, isChanged) {
-    let files = currentValues.planFiles;
+    let files = currentValues.planFiles
     if (files && files != []) {
-      this.setState({ selectedFiles: currentValues.planFiles });
+      this.setState({ selectedFiles: currentValues.planFiles })
     }
   }
 
   onFormSubmit(formData, resetForm, invalidateForm) {
-    let planFiles = {};
+    let planFiles = {}
     if (this.state.uploadType === 'folder') {
       this.state.selectedFiles.map(item => {
-        planFiles[item.name] = {};
-        planFiles[item.name].contents = item.content;
-      });
-      this.props.createPlan(formData.planName, planFiles);
+        planFiles[item.name] = {}
+        planFiles[item.name].contents = item.content
+      })
+      this.props.createPlan(formData.planName, planFiles)
     } else {
-      let file = this.state.selectedFiles[0].file;
-      this.props.createPlanFromTarball(formData.planName, file);
+      let file = this.state.selectedFiles[0].file
+      this.props.createPlanFromTarball(formData.planName, file)
     }
   }
 
   onFormValid() {
-    this.setState({ canSubmit: true });
+    this.setState({ canSubmit: true })
   }
 
   onFormInvalid() {
-    this.setState({ canSubmit: false });
+    this.setState({ canSubmit: false })
   }
 
   render() {
@@ -154,7 +154,7 @@ class NewPlan extends React.Component {
           </div>
         </Formsy.Form>
       </Modal>
-    );
+    )
   }
 }
 NewPlan.propTypes = {
@@ -165,29 +165,27 @@ NewPlan.propTypes = {
   isTransitioningPlan: PropTypes.bool,
   location: PropTypes.object,
   planFormErrors: ImmutablePropTypes.list
-};
+}
 
 function mapStateToProps(state) {
   return {
     isTransitioningPlan: state.plans.isTransitioningPlan,
     planFormErrors: state.plans.planFormErrors
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     cancelCreatePlan: () => {
-      dispatch(PlansActions.cancelCreatePlan());
+      dispatch(PlansActions.cancelCreatePlan())
     },
     createPlan: (planName, files) => {
-      dispatch(PlansActions.createPlan(planName, files));
+      dispatch(PlansActions.createPlan(planName, files))
     },
     createPlanFromTarball: (planName, archiveContents) => {
-      dispatch(PlansActions.createPlanFromTarball(planName, archiveContents));
+      dispatch(PlansActions.createPlanFromTarball(planName, archiveContents))
     }
-  };
+  }
 }
 
-export default injectIntl(
-  connect(mapStateToProps, mapDispatchToProps)(NewPlan)
-);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(NewPlan))

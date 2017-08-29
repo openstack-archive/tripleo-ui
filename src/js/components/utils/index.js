@@ -15,36 +15,36 @@
  */
 
 export function Timer(callback, delay) {
-  var timerId;
-  var start;
-  var remaining = delay;
+  var timerId
+  var start
+  var remaining = delay
 
   this.pause = function() {
-    clearTimeout(timerId);
-    remaining -= new Date() - start;
-  };
+    clearTimeout(timerId)
+    remaining -= new Date() - start
+  }
 
   this.resume = function() {
-    start = new Date();
-    clearTimeout(timerId);
-    timerId = setTimeout(callback, remaining);
-  };
+    start = new Date()
+    clearTimeout(timerId)
+    timerId = setTimeout(callback, remaining)
+  }
 
   this.clear = function() {
-    clearTimeout(timerId);
-  };
+    clearTimeout(timerId)
+  }
 
-  this.resume();
+  this.resume()
 }
 
 /**
  * Utility function to format value in Bytes to human readable format
  */
 export const formatBytes = (bytes, decimals) => {
-  if (bytes == 0) return '0 Bytes';
+  if (bytes == 0) return '0 Bytes'
   var k = 1000,
     dm = decimals || 2,
     sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-    i = Math.floor(Math.log(bytes) / Math.log(k));
-  return [parseFloat((bytes / Math.pow(k, i)).toFixed(dm)), sizes[i]];
-};
+    i = Math.floor(Math.log(bytes) / Math.log(k))
+  return [parseFloat((bytes / Math.pow(k, i)).toFixed(dm)), sizes[i]]
+}

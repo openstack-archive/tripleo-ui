@@ -14,14 +14,14 @@
  * under the License.
  */
 
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
 
-import BlankSlate from '../ui/BlankSlate';
-import InlineNotification from '../ui/InlineNotification';
-import Loader from '../ui/Loader';
+import BlankSlate from '../ui/BlankSlate'
+import InlineNotification from '../ui/InlineNotification'
+import Loader from '../ui/Loader'
 
 const messages = defineMessages({
   deployButton: {
@@ -53,11 +53,11 @@ const messages = defineMessages({
     defaultMessage: 'It is highly recommended that you resolve all validation issues before ' +
       'continuing.'
   }
-});
+})
 
 class DeploymentConfirmation extends React.Component {
   componentDidMount() {
-    this.props.runPreDeploymentValidations(this.props.currentPlan.name);
+    this.props.runPreDeploymentValidations(this.props.currentPlan.name)
   }
 
   render() {
@@ -66,7 +66,7 @@ class DeploymentConfirmation extends React.Component {
       currentPlan,
       deployPlan,
       environmentSummary
-    } = this.props;
+    } = this.props
 
     return (
       <div className="col-sm-12 deployment-summary">
@@ -95,7 +95,7 @@ class DeploymentConfirmation extends React.Component {
           />
         </BlankSlate>
       </div>
-    );
+    )
   }
 }
 DeploymentConfirmation.propTypes = {
@@ -105,9 +105,9 @@ DeploymentConfirmation.propTypes = {
   environmentSummary: PropTypes.string.isRequired,
   intl: PropTypes.object,
   runPreDeploymentValidations: PropTypes.func.isRequired
-};
+}
 
-export default injectIntl(DeploymentConfirmation);
+export default injectIntl(DeploymentConfirmation)
 
 export const ValidationsWarning = injectIntl(
   ({ allValidationsSuccessful, intl }) => {
@@ -121,15 +121,15 @@ export const ValidationsWarning = injectIntl(
             <FormattedMessage {...messages.validationsWarningMessage} />
           </p>
         </InlineNotification>
-      );
+      )
     }
-    return null;
+    return null
   }
-);
+)
 ValidationsWarning.propTypes = {
   allValidationsSuccessful: PropTypes.bool.isRequired,
   intl: PropTypes.object
-};
+}
 
 export const DeployButton = injectIntl(
   ({ deploy, disabled, intl, isRequestingPlanDeploy }) => {
@@ -151,12 +151,12 @@ export const DeployButton = injectIntl(
           <FormattedMessage {...messages.deployButton} />
         </Loader>
       </button>
-    );
+    )
   }
-);
+)
 DeployButton.propTypes = {
   deploy: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   intl: PropTypes.object,
   isRequestingPlanDeploy: PropTypes.bool.isRequired
-};
+}

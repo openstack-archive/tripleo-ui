@@ -28,15 +28,15 @@
 //   import logger from 'src/js/services/logging/LoggingService';
 //   logger.log('Hello world!');
 
-import { includes, startsWith } from 'lodash';
-import LoggerConstants from '../../constants/LoggerConstants';
-import ConsoleAdapter from './adapters/ConsoleAdapter';
-import ZaqarAdapter from './adapters/ZaqarAdapter';
+import { includes, startsWith } from 'lodash'
+import LoggerConstants from '../../constants/LoggerConstants'
+import ConsoleAdapter from './adapters/ConsoleAdapter'
+import ZaqarAdapter from './adapters/ZaqarAdapter'
 
 const AVAILABLE_ADAPTERS = {
   console: ConsoleAdapter,
   zaqar: ZaqarAdapter
-};
+}
 
 class Logger {
   AVAILABLE_FUNCTIONS = [
@@ -48,74 +48,74 @@ class Logger {
     'groupCollapsed',
     'groupEnd',
     'log'
-  ];
+  ]
 
   constructor() {
-    this.adapters = [];
-    this.reduxDispatch = null;
+    this.adapters = []
+    this.reduxDispatch = null
 
     this.AVAILABLE_FUNCTIONS.forEach(fn => {
       this[fn] = function(...args) {
-        return this.dispatch(fn, ...args);
-      };
-    });
+        return this.dispatch(fn, ...args)
+      }
+    })
 
-    this.registerGlobalErrorHandler();
+    this.registerGlobalErrorHandler()
   }
 
   setReduxDispatch(dispatchFunction) {
-    this.reduxDispatch = dispatchFunction;
-    this.loadAdapters();
+    this.reduxDispatch = dispatchFunction
+    this.loadAdapters()
   }
 
   loadAdapters() {
     if (this.adapters.length) {
-      return;
+      return
     }
 
-    let enabledAdapters = (window.tripleOUiConfig || {}).loggers || ['console'];
+    let enabledAdapters = (window.tripleOUiConfig || {}).loggers || ['console']
 
     enabledAdapters.forEach(adapter => {
-      let instance = new AVAILABLE_ADAPTERS[adapter](this.reduxDispatch);
+      let instance = new AVAILABLE_ADAPTERS[adapter](this.reduxDispatch)
 
       if (instance === undefined) {
-        throw Error(`Adapter ${adapter} not defined`);
+        throw Error(`Adapter ${adapter} not defined`)
       }
 
-      this.adapters.push(instance);
-    });
+      this.adapters.push(instance)
+    })
   }
 
   dispatch(fn, ...args) {
     this.adapters.forEach(adapter => {
-      let f = adapter[fn];
+      let f = adapter[fn]
 
       if (f === undefined) {
-        throw Error(`Function ${fn} not defined in ${adapter}`);
+        throw Error(`Function ${fn} not defined in ${adapter}`)
       }
 
-      return adapter[fn](...args);
-    });
+      return adapter[fn](...args)
+    })
   }
 
   registerGlobalErrorHandler() {
     window.onerror = (messageOrEvent, source, lineno, colno, e) => {
-      this.error(e);
-      return true;
-    };
+      this.error(e)
+      return true
+    }
   }
 }
 
 const isLoggerAction = action => {
   if (startsWith(action.type, 'DOWNLOAD_LOGS_')) {
-    return false;
+    return false
   }
-  return includes(LoggerConstants, action.type);
-};
+  return includes(LoggerConstants, action.type)
+}
 
 // The `predicate` prevents redux-logger from logging logger messages
 // in order to avoid an infinite loop.  This function is used in `createLogger`
 // in store.js.
-export const predicate = (getState, action) => !isLoggerAction(action);
+export const predicate = (getState, action) => !isLoggerAction(action)
 
-export default new Logger();
+export default new Logger()

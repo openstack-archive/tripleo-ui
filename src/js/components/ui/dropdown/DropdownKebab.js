@@ -14,9 +14,9 @@
  * under the License.
  */
 
-import { Dropdown } from 'react-bootstrap';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { Dropdown } from 'react-bootstrap'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 const DropdownKebab = ({ children, id, pullRight }) => {
   return (
@@ -32,11 +32,11 @@ const DropdownKebab = ({ children, id, pullRight }) => {
         {children}
       </Dropdown.Menu>
     </Dropdown>
-  );
-};
+  )
+}
 DropdownKebab.propTypes = {
   children: PropTypes.node,
   id: PropTypes.string.isRequired,
   pullRight: PropTypes.bool
-};
-export default DropdownKebab;
+}
+export default DropdownKebab

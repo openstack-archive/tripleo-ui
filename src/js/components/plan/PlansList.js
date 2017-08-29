@@ -14,20 +14,20 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { connect } from 'react-redux'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import { getCurrentPlanName, getPlans } from '../../selectors/plans';
-import { PageHeader } from '../ui/PageHeader';
-import PlansActions from '../../actions/PlansActions';
-import StacksActions from '../../actions/StacksActions';
-import NoPlans from './NoPlans';
-import PlanCard from './cards/PlanCard';
-import ImportPlanCard from './cards/ImportPlanCard';
+import { getCurrentPlanName, getPlans } from '../../selectors/plans'
+import { PageHeader } from '../ui/PageHeader'
+import PlansActions from '../../actions/PlansActions'
+import StacksActions from '../../actions/StacksActions'
+import NoPlans from './NoPlans'
+import PlanCard from './cards/PlanCard'
+import ImportPlanCard from './cards/ImportPlanCard'
 
 const messages = defineMessages({
   importPlan: {
@@ -38,20 +38,20 @@ const messages = defineMessages({
     id: 'PlansList.plans',
     defaultMessage: 'Plans'
   }
-});
+})
 
 class PlansList extends React.Component {
   constructor() {
-    super();
+    super()
   }
 
   componentWillMount() {
-    this.props.fetchPlans();
-    this.props.fetchStacks();
+    this.props.fetchPlans()
+    this.props.fetchStacks()
   }
 
   renderCard(plan) {
-    const stack = this.props.stacks.get(plan.name);
+    const stack = this.props.stacks.get(plan.name)
     return (
       <PlanCard
         key={plan.name}
@@ -59,12 +59,12 @@ class PlansList extends React.Component {
         currentPlanName={this.props.currentPlanName}
         stack={stack}
       />
-    );
+    )
   }
 
   renderCards() {
-    let plans = this.props.plans.toArray();
-    return plans.map(plan => this.renderCard(plan));
+    let plans = this.props.plans.toArray()
+    return plans.map(plan => this.renderCard(plan))
   }
 
   render() {
@@ -90,7 +90,7 @@ class PlansList extends React.Component {
               </div>
             </div>}
       </div>
-    );
+    )
   }
 }
 
@@ -101,23 +101,23 @@ PlansList.propTypes = {
   fetchStacks: PropTypes.func,
   plans: ImmutablePropTypes.map,
   stacks: ImmutablePropTypes.map
-};
+}
 
 function mapStateToProps(state) {
   return {
     currentPlanName: getCurrentPlanName(state),
     plans: getPlans(state),
     stacks: state.stacks.get('stacks')
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchPlans: () => dispatch(PlansActions.fetchPlans()),
     fetchStacks: () => dispatch(StacksActions.fetchStacks())
-  };
+  }
 }
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(PlansList)
-);
+)

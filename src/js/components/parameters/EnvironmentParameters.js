@@ -14,30 +14,30 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { connect } from 'react-redux'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 import EnvironmentConfigurationActions
-  from '../../actions/EnvironmentConfigurationActions';
-import { getCurrentPlanName } from '../../selectors/plans';
-import { getEnvironmentParameters } from '../../selectors/parameters';
-import { getEnvironment } from '../../selectors/environmentConfiguration';
-import InlineNotification from '../ui/InlineNotification';
-import Loader from '../ui/Loader';
-import ParameterInputList from './ParameterInputList';
+  from '../../actions/EnvironmentConfigurationActions'
+import { getCurrentPlanName } from '../../selectors/plans'
+import { getEnvironmentParameters } from '../../selectors/parameters'
+import { getEnvironment } from '../../selectors/environmentConfiguration'
+import InlineNotification from '../ui/InlineNotification'
+import Loader from '../ui/Loader'
+import ParameterInputList from './ParameterInputList'
 
 class EnvironmentParameters extends React.Component {
   componentDidMount() {
     this.props.fetchEnvironment(
       this.props.currentPlanName,
       this.props.environment
-    );
+    )
   }
 
   render() {
-    const { environmentError, isFetchingEnvironment, parameters } = this.props;
+    const { environmentError, isFetchingEnvironment, parameters } = this.props
     return (
       <Loader
         height={120}
@@ -52,7 +52,7 @@ class EnvironmentParameters extends React.Component {
             </fieldset>
           : <ParameterInputList parameters={parameters.toList()} />}
       </Loader>
-    );
+    )
   }
 }
 EnvironmentParameters.propTypes = {
@@ -62,7 +62,7 @@ EnvironmentParameters.propTypes = {
   fetchEnvironment: PropTypes.func.isRequired,
   isFetchingEnvironment: PropTypes.bool.isRequired,
   parameters: ImmutablePropTypes.map.isRequired
-};
+}
 
 function mapStateToProps(state, ownProps) {
   return {
@@ -72,7 +72,7 @@ function mapStateToProps(state, ownProps) {
     parametersLoaded: state.parameters.loaded,
     isFetchingEnvironment: getEnvironment(state, ownProps.environment)
       .isFetching
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -83,11 +83,11 @@ function mapDispatchToProps(dispatch) {
           currentPlanName,
           environmentFileName
         )
-      );
+      )
     }
-  };
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   EnvironmentParameters
-);
+)

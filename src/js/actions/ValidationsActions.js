@@ -14,50 +14,50 @@
  * under the License.
  */
 
-import { normalize, arrayOf } from 'normalizr';
-import { omit } from 'lodash';
+import { normalize, arrayOf } from 'normalizr'
+import { omit } from 'lodash'
 
-import { handleErrors } from './ErrorActions';
-import MistralApiService from '../services/MistralApiService';
-import WorkflowExecutionsActions from './WorkflowExecutionsActions';
-import ValidationsConstants from '../constants/ValidationsConstants';
-import { validationSchema } from '../normalizrSchemas/validations';
-import MistralConstants from '../constants/MistralConstants';
+import { handleErrors } from './ErrorActions'
+import MistralApiService from '../services/MistralApiService'
+import WorkflowExecutionsActions from './WorkflowExecutionsActions'
+import ValidationsConstants from '../constants/ValidationsConstants'
+import { validationSchema } from '../normalizrSchemas/validations'
+import MistralConstants from '../constants/MistralConstants'
 
 export default {
   fetchValidations() {
     return (dispatch, getState) => {
-      dispatch(this.fetchValidationsPending());
+      dispatch(this.fetchValidationsPending())
       MistralApiService.runAction(MistralConstants.VALIDATIONS_LIST)
         .then(response => {
           const validations = normalize(response, arrayOf(validationSchema))
-            .entities.validations || {};
-          dispatch(this.fetchValidationsSuccess(validations));
+            .entities.validations || {}
+          dispatch(this.fetchValidationsSuccess(validations))
         })
         .catch(error => {
-          dispatch(handleErrors(error, 'Validations could not be loaded'));
-          dispatch(this.fetchValidationsFailed());
-        });
-    };
+          dispatch(handleErrors(error, 'Validations could not be loaded'))
+          dispatch(this.fetchValidationsFailed())
+        })
+    }
   },
 
   fetchValidationsPending() {
     return {
       type: ValidationsConstants.FETCH_VALIDATIONS_PENDING
-    };
+    }
   },
 
   fetchValidationsSuccess(validations) {
     return {
       type: ValidationsConstants.FETCH_VALIDATIONS_SUCCESS,
       payload: validations
-    };
+    }
   },
 
   fetchValidationsFailed() {
     return {
       type: ValidationsConstants.FETCH_VALIDATIONS_FAILED
-    };
+    }
   },
 
   runValidation(id, currentPlanName) {
@@ -67,12 +67,12 @@ export default {
         plan: currentPlanName
       })
         .then(response => {
-          dispatch(WorkflowExecutionsActions.addWorkflowExecution(response));
+          dispatch(WorkflowExecutionsActions.addWorkflowExecution(response))
         })
         .catch(error => {
-          dispatch(handleErrors(error, 'Error running validation'));
-        });
-    };
+          dispatch(handleErrors(error, 'Error running validation'))
+        })
+    }
   },
 
   runValidationMessage(messagePayload) {
@@ -85,9 +85,9 @@ export default {
         params: messagePayload.execution.params,
         state: messagePayload.status,
         workflow_name: MistralConstants.VALIDATIONS_RUN
-      };
-      dispatch(WorkflowExecutionsActions.addWorkflowExecution(execution));
-    };
+      }
+      dispatch(WorkflowExecutionsActions.addWorkflowExecution(execution))
+    }
   },
 
   runValidationGroups(groups, currentPlanName) {
@@ -96,8 +96,8 @@ export default {
         group_names: groups,
         plan: currentPlanName
       }).catch(error => {
-        dispatch(handleErrors(error, 'Validation Group could not be started'));
-      });
-    };
+        dispatch(handleErrors(error, 'Validation Group could not be started'))
+      })
+    }
   }
-};
+}

@@ -14,8 +14,8 @@
  * under the License.
  */
 
-import keyMirror from 'keymirror';
-import { defineMessages } from 'react-intl';
+import keyMirror from 'keymirror'
+import { defineMessages } from 'react-intl'
 
 export default keyMirror({
   DELETE_STACK_PENDING: null,
@@ -33,7 +33,7 @@ export default keyMirror({
   FETCH_STACKS_PENDING: null,
   FETCH_STACKS_SUCCESS: null,
   FETCH_STACKS_FAILED: null
-});
+})
 
 export const stackStates = keyMirror({
   CREATE_IN_PROGRESS: null,
@@ -45,7 +45,7 @@ export const stackStates = keyMirror({
   UPDATE_IN_PROGRESS: null,
   UPDATE_FAILED: null,
   UPDATE_COMPLETE: null
-});
+})
 
 export const deploymentStatusMessages = defineMessages({
   CREATE_IN_PROGRESS: {
@@ -80,4 +80,4 @@ export const deploymentStatusMessages = defineMessages({
     id: 'DeploymentStatus.updateComplete',
     defaultMessage: 'Update succeeded'
   }
-});
+})

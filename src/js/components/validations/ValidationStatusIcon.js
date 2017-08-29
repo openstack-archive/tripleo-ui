@@ -14,10 +14,10 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import { includes } from 'lodash';
-import ClassNames from 'classnames';
+import PropTypes from 'prop-types'
+import React from 'react'
+import { includes } from 'lodash'
+import ClassNames from 'classnames'
 
 export const ValidationStatusIcon = ({ status, triggerValidationAction }) => {
   const statusIconClass = ClassNames({
@@ -28,9 +28,9 @@ export const ValidationStatusIcon = ({ status, triggerValidationAction }) => {
     'pficon pficon-warning-triangle-o front': status === 'warning',
     'fa fa-play-circle': includes(['new', 'paused'], status),
     'pficon pficon-help': status === 'error'
-  });
+  })
 
-  const runValidationIconClass = 'list-view-pf-icon-md fa fa-play-circle back';
+  const runValidationIconClass = 'list-view-pf-icon-md fa fa-play-circle back'
 
   switch (true) {
     case includes(['new', 'running', 'paused'], status):
@@ -38,7 +38,7 @@ export const ValidationStatusIcon = ({ status, triggerValidationAction }) => {
         <a className="link" onClick={triggerValidationAction}>
           <span className={statusIconClass} />
         </a>
-      );
+      )
     case includes(['success', 'failed'], status):
       return (
         <a className="link flip-container" onClick={triggerValidationAction}>
@@ -47,7 +47,7 @@ export const ValidationStatusIcon = ({ status, triggerValidationAction }) => {
             <span className={runValidationIconClass} />
           </div>
         </a>
-      );
+      )
     default:
       return (
         <a className="link flip-container" onClick={triggerValidationAction}>
@@ -56,10 +56,10 @@ export const ValidationStatusIcon = ({ status, triggerValidationAction }) => {
             <span className={runValidationIconClass} />
           </div>
         </a>
-      );
+      )
   }
-};
+}
 ValidationStatusIcon.propTypes = {
   status: PropTypes.string,
   triggerValidationAction: PropTypes.func.isRequired
-};
+}

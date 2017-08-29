@@ -14,29 +14,29 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 import {
   deploymentStatusMessages as statusMessages,
   stackStates
-} from '../../constants/StacksConstants';
-import Loader from '../ui/Loader';
-import ProgressBar from '../ui/ProgressBar';
-import StackResourcesTable from './StackResourcesTable';
+} from '../../constants/StacksConstants'
+import Loader from '../ui/Loader'
+import ProgressBar from '../ui/ProgressBar'
+import StackResourcesTable from './StackResourcesTable'
 
 const messages = defineMessages({
   resources: {
     id: 'DeploymentSuccess.resources',
     defaultMessage: 'Resources'
   }
-});
+})
 
 export default class DeploymentProgress extends React.Component {
   componentDidMount() {
-    this.props.fetchStackResources(this.props.stack);
+    this.props.fetchStackResources(this.props.stack)
   }
 
   renderProgressBar() {
@@ -46,7 +46,7 @@ export default class DeploymentProgress extends React.Component {
           label={this.props.deploymentProgress + '%'}
           labelPosition="topRight"
         />
-      : null;
+      : null
   }
 
   render() {
@@ -54,7 +54,7 @@ export default class DeploymentProgress extends React.Component {
       <strong>
         <FormattedMessage {...statusMessages[this.props.stack.stack_status]} />
       </strong>
-    );
+    )
 
     return (
       <div className="col-sm-12 fixed-container-body-content">
@@ -68,7 +68,7 @@ export default class DeploymentProgress extends React.Component {
           resources={this.props.stackResources.reverse()}
         />
       </div>
-    );
+    )
   }
 }
 
@@ -78,4 +78,4 @@ DeploymentProgress.propTypes = {
   stack: ImmutablePropTypes.record.isRequired,
   stackResources: ImmutablePropTypes.map.isRequired,
   stackResourcesLoaded: PropTypes.bool.isRequired
-};
+}

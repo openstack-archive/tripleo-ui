@@ -14,9 +14,9 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Link, Route } from 'react-router-dom';
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Link, Route } from 'react-router-dom'
 
 const MenuItemLink = ({ children, to, exact, location }) => {
   return (
@@ -29,17 +29,17 @@ const MenuItemLink = ({ children, to, exact, location }) => {
         </li>
       )}
     />
-  );
-};
+  )
+}
 
 MenuItemLink.propTypes = {
   children: PropTypes.node,
   exact: PropTypes.bool.isRequired,
   location: PropTypes.object,
   to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired
-};
+}
 MenuItemLink.defaultProps = {
   exact: false
-};
+}
 
-export default MenuItemLink;
+export default MenuItemLink

@@ -14,18 +14,18 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { defineMessages, FormattedMessage } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 
-import { getNodeDrives } from '../../../selectors/nodes';
-import { ListView } from '../../ui/ListView';
-import Modal from '../../ui/Modal';
-import NodeDrive from './NodeDrive';
-import NodesActions from '../../../actions/NodesActions';
+import { getNodeDrives } from '../../../selectors/nodes'
+import { ListView } from '../../ui/ListView'
+import Modal from '../../ui/Modal'
+import NodeDrive from './NodeDrive'
+import NodesActions from '../../../actions/NodesActions'
 
 const messages = defineMessages({
   title: {
@@ -36,11 +36,11 @@ const messages = defineMessages({
     id: 'NodeDrives.close',
     defaultMessage: 'Close'
   }
-});
+})
 
 class NodeDrives extends Component {
   componentDidMount() {
-    this.props.fetchNodeIntrospectionData();
+    this.props.fetchNodeIntrospectionData()
   }
 
   render() {
@@ -70,21 +70,21 @@ class NodeDrives extends Component {
           </Link>
         </div>
       </Modal>
-    );
+    )
   }
 }
 NodeDrives.propTypes = {
   drives: ImmutablePropTypes.list.isRequired,
   fetchNodeIntrospectionData: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired
-};
+}
 
 const mapStateToProps = (state, props) => ({
   drives: getNodeDrives(state, props.match.params.nodeId)
-});
+})
 const mapDispatchToProps = (dispatch, props) => ({
   fetchNodeIntrospectionData: () =>
     dispatch(NodesActions.fetchNodeIntrospectionData(props.match.params.nodeId))
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(NodeDrives);
+export default connect(mapStateToProps, mapDispatchToProps)(NodeDrives)

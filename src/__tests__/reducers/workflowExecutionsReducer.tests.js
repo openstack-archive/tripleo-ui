@@ -14,26 +14,24 @@
  * under the License.
  */
 
-import { Map, OrderedMap } from 'immutable';
+import { Map, OrderedMap } from 'immutable'
 
-import {
-  WorkflowExecution
-} from '../../js/immutableRecords/workflowExecutions';
+import { WorkflowExecution } from '../../js/immutableRecords/workflowExecutions'
 import WorkflowExecutionsConstants
-  from '../../js/constants/WorkflowExecutionsConstants';
+  from '../../js/constants/WorkflowExecutionsConstants'
 import workflowExecutionsReducer
-  from '../../js/reducers/workflowExecutionsReducer';
-import MistralConstants from '../../js/constants/MistralConstants';
+  from '../../js/reducers/workflowExecutionsReducer'
+import MistralConstants from '../../js/constants/MistralConstants'
 
-const updatedAt = '1970-01-01T00:00:01Z';
-const updatedAtEpoch = Date.parse(updatedAt);
+const updatedAt = '1970-01-01T00:00:01Z'
+const updatedAtEpoch = Date.parse(updatedAt)
 
 describe('workflowExecutionsReducer', () => {
   const initialState = Map({
     executionsLoaded: false,
     isFetching: false,
     executions: OrderedMap()
-  });
+  })
 
   const updatedState = Map({
     isFetching: false,
@@ -58,19 +56,19 @@ describe('workflowExecutionsReducer', () => {
         workflow_name: MistralConstants.VALIDATIONS_RUN
       })
     })
-  });
+  })
 
   it('should return initial state', () => {
-    expect(workflowExecutionsReducer(initialState, {})).toEqual(initialState);
-  });
+    expect(workflowExecutionsReducer(initialState, {})).toEqual(initialState)
+  })
 
   it('should handle FETCH_WORKFLOW_EXECUTIONS_PENDING', () => {
     const action = {
       type: WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_PENDING
-    };
-    const newState = workflowExecutionsReducer(initialState, action);
-    expect(newState.get('isFetching')).toEqual(true);
-  });
+    }
+    const newState = workflowExecutionsReducer(initialState, action)
+    expect(newState.get('isFetching')).toEqual(true)
+  })
 
   it('should handle FETCH_WORKFLOW_EXECUTIONS_SUCCESS', () => {
     const action = {
@@ -95,19 +93,19 @@ describe('workflowExecutionsReducer', () => {
           workflow_name: MistralConstants.VALIDATIONS_RUN
         }
       }
-    };
-    const newState = workflowExecutionsReducer(initialState, action);
-    expect(newState.get('executions')).toEqual(updatedState.get('executions'));
-  });
+    }
+    const newState = workflowExecutionsReducer(initialState, action)
+    expect(newState.get('executions')).toEqual(updatedState.get('executions'))
+  })
 
   it('should handle FETCH_WORKFLOW_EXECUTIONS_FAILED', () => {
     const action = {
       type: WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_FAILED
-    };
-    const newState = workflowExecutionsReducer(initialState, action);
-    expect(newState.get('isFetching')).toEqual(false);
-    expect(newState.get('executionsLoaded')).toEqual(true);
-  });
+    }
+    const newState = workflowExecutionsReducer(initialState, action)
+    expect(newState.get('isFetching')).toEqual(false)
+    expect(newState.get('executionsLoaded')).toEqual(true)
+  })
 
   it('should handle ADD_WORKFLOW_EXECUTION', () => {
     const action = {
@@ -130,10 +128,10 @@ describe('workflowExecutionsReducer', () => {
         workflow_id: 'f8b280bb-5ba2-486b-9384-ddd79300d987',
         workflow_name: MistralConstants.VALIDATIONS_RUN
       }
-    };
-    const newState = workflowExecutionsReducer(initialState, action);
-    expect(newState.get('executions')).toEqual(updatedState.get('executions'));
-  });
+    }
+    const newState = workflowExecutionsReducer(initialState, action)
+    expect(newState.get('executions')).toEqual(updatedState.get('executions'))
+  })
 
   it('should handle UPDATE_WORKFLOW_EXECUTION_PENDING', () => {
     const action = {
@@ -142,8 +140,8 @@ describe('workflowExecutionsReducer', () => {
         id: '1a',
         patch: { state: 'PAUSED' }
       }
-    };
-    const newState = workflowExecutionsReducer(initialState, action);
-    expect(newState.getIn(['executions', '1a', 'state'])).toEqual('PAUSED');
-  });
-});
+    }
+    const newState = workflowExecutionsReducer(initialState, action)
+    expect(newState.getIn(['executions', '1a', 'state'])).toEqual('PAUSED')
+  })
+})

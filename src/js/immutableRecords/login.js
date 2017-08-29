@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { List, Map, Record } from 'immutable';
+import { List, Map, Record } from 'immutable'
 
 export const InitialLoginState = Record({
   token: Map(),
@@ -25,4 +25,4 @@ export const InitialLoginState = Record({
   }),
   isAuthenticating: false,
   isAuthenticated: false
-});
+})

@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { defineMessages } from 'react-intl';
+import { defineMessages } from 'react-intl'
 
 export const messages = defineMessages({
   maxValue: {
@@ -29,13 +29,13 @@ export const messages = defineMessages({
     id: 'reduxForm.validations.number',
     defaultMessage: 'Value needs to be a number.'
   }
-});
+})
 
 export const minValue = (min, message) => value =>
-  value && value < min ? message : undefined;
+  value && value < min ? message : undefined
 
 export const maxValue = (max, message) => value =>
-  value && value > max ? message : undefined;
+  value && value > max ? message : undefined
 
 export const number = message => value =>
-  value && isNaN(Number(value)) ? message : undefined;
+  value && isNaN(Number(value)) ? message : undefined

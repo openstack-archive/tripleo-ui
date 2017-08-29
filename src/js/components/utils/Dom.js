@@ -21,6 +21,6 @@ export function findClosestWithAttribute(element, attrName) {
     return (
       element[attrName] ||
       findClosestWithAttribute(element.parentElement, attrName)
-    );
+    )
   }
 }

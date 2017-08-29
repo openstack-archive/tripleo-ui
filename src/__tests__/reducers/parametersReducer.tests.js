@@ -14,14 +14,14 @@
  * under the License.
  */
 
-import { List, Map } from 'immutable';
+import { List, Map } from 'immutable'
 
 import {
   ParametersDefaultState,
   Parameter
-} from '../../js/immutableRecords/parameters';
-import ParametersConstants from '../../js/constants/ParametersConstants';
-import parametersReducer from '../../js/reducers/parametersReducer';
+} from '../../js/immutableRecords/parameters'
+import ParametersConstants from '../../js/constants/ParametersConstants'
+import parametersReducer from '../../js/reducers/parametersReducer'
 
 const parametersActionPayload = {
   mistralParameters: {
@@ -58,14 +58,14 @@ const parametersActionPayload = {
       id: '1d0e0c81-2dc6-4b39-a9a7-9ef4fab65ecf'
     }
   }
-};
+}
 
 describe('parametersReducer', () => {
   describe('FETCH_PARAMETERS_PENDING', () => {
-    let state;
+    let state
     const action = {
       type: ParametersConstants.FETCH_PARAMETERS_PENDING
-    };
+    }
 
     beforeEach(() => {
       state = parametersReducer(
@@ -77,12 +77,12 @@ describe('parametersReducer', () => {
           })
         }),
         action
-      );
-    });
+      )
+    })
 
     it('sets isFetching to `true`', () => {
-      expect(state.isFetching).toBe(true);
-    });
+      expect(state.isFetching).toBe(true)
+    })
 
     it('resets form', () => {
       expect(state.form).toEqual(
@@ -90,16 +90,16 @@ describe('parametersReducer', () => {
           formErrors: List(),
           formFieldErrors: Map()
         })
-      );
-    });
-  });
+      )
+    })
+  })
 
   describe('FETCH_PARAMETERS_SUCCESS', () => {
-    let state;
+    let state
     const action = {
       type: ParametersConstants.FETCH_PARAMETERS_SUCCESS,
       payload: parametersActionPayload
-    };
+    }
 
     beforeEach(() => {
       state = parametersReducer(
@@ -108,12 +108,12 @@ describe('parametersReducer', () => {
           form: Map({ some: 'value' })
         }),
         action
-      );
-    });
+      )
+    })
 
     it('sets isFetching to `false`', () => {
-      expect(state.isFetching).toBe(false);
-    });
+      expect(state.isFetching).toBe(false)
+    })
 
     it('resets form', () => {
       expect(state.form).toEqual(
@@ -121,38 +121,38 @@ describe('parametersReducer', () => {
           formErrors: List(),
           formFieldErrors: Map()
         })
-      );
-    });
+      )
+    })
 
     it('sets parameters', () => {
-      expect(state.parameters.size).toEqual(1);
+      expect(state.parameters.size).toEqual(1)
       expect(state.parameters.getIn(['parameter1', 'default'])).toEqual(
         '3PuRFRBdhHDD49Td4jHJYmD3n'
-      );
-      expect(Map.isMap(state.parameters)).toBe(true);
-    });
+      )
+      expect(Map.isMap(state.parameters)).toBe(true)
+    })
 
     it('sets resources', () => {
-      expect(state.resources.size).toEqual(1);
+      expect(state.resources.size).toEqual(1)
       expect(
         state.resources.getIn([
           '1d0e0c81-2dc6-4b39-a9a7-9ef4fab65ecf',
           'parameters'
         ]).size
-      ).toEqual(10);
-      expect(Map.isMap(state.resources)).toBe(true);
-    });
-  });
+      ).toEqual(10)
+      expect(Map.isMap(state.resources)).toBe(true)
+    })
+  })
 
   describe('UPDATE_PARAMETERS_FAILED', () => {
-    let state;
+    let state
     const action = {
       type: ParametersConstants.UPDATE_PARAMETERS_FAILED,
       payload: {
         formErrors: [{ foo: 'bar' }],
         formFieldErrors: { field1: 'fail' }
       }
-    };
+    }
 
     beforeEach(() => {
       state = parametersReducer(
@@ -160,12 +160,12 @@ describe('parametersReducer', () => {
           isFetching: true
         }),
         action
-      );
-    });
+      )
+    })
 
     it('sets `isFetching` to false', () => {
-      expect(state.isFetching).toBe(false);
-    });
+      expect(state.isFetching).toBe(false)
+    })
 
     it('sets errors in  `form`', () => {
       expect(state.form).toEqual(
@@ -173,15 +173,15 @@ describe('parametersReducer', () => {
           formErrors: List.of({ foo: 'bar' }),
           formFieldErrors: Map({ field1: 'fail' })
         })
-      );
-    });
-  });
+      )
+    })
+  })
 
   describe('UPDATE_PARAMETERS_PENDING', () => {
-    let state;
+    let state
     const action = {
       type: ParametersConstants.UPDATE_PARAMETERS_PENDING
-    };
+    }
 
     beforeEach(() => {
       state = parametersReducer(
@@ -189,20 +189,20 @@ describe('parametersReducer', () => {
           isFetching: false
         }),
         action
-      );
-    });
+      )
+    })
 
     it('sets `isFetching` to true', () => {
-      expect(state.isFetching).toBe(true);
-    });
-  });
+      expect(state.isFetching).toBe(true)
+    })
+  })
 
   describe('UPDATE_PARAMETERS_SUCCESS', () => {
-    let state;
+    let state
     const action = {
       type: ParametersConstants.UPDATE_PARAMETERS_SUCCESS,
       payload: { foo: 'bar' }
-    };
+    }
 
     beforeEach(() => {
       state = parametersReducer(
@@ -216,12 +216,12 @@ describe('parametersReducer', () => {
           })
         }),
         action
-      );
-    });
+      )
+    })
 
     it('sets isFetching to `false`', () => {
-      expect(state.isFetching).toBe(false);
-    });
+      expect(state.isFetching).toBe(false)
+    })
 
     it('resets form', () => {
       expect(state.form).toEqual(
@@ -229,11 +229,11 @@ describe('parametersReducer', () => {
           formErrors: List(),
           formFieldErrors: Map()
         })
-      );
-    });
+      )
+    })
 
     it('updates parameters in state with new values', () => {
-      expect(state.parameters.get('foo').default).toEqual('bar');
-    });
-  });
-});
+      expect(state.parameters.get('foo').default).toEqual('bar')
+    })
+  })
+})

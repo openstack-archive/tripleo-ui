@@ -14,12 +14,12 @@
  * under the License.
  */
 
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import { ListView } from '../../ui/ListView';
-import NodeListItem from './NodeListItem';
+import { ListView } from '../../ui/ListView'
+import NodeListItem from './NodeListItem'
 
 export default class NodesListView extends React.Component {
   render() {
@@ -36,11 +36,11 @@ export default class NodesListView extends React.Component {
             />
           ))}
       </ListView>
-    );
+    )
   }
 }
 NodesListView.propTypes = {
   fetchNodeIntrospectionData: PropTypes.func.isRequired,
   nodes: ImmutablePropTypes.map.isRequired,
   nodesInProgress: ImmutablePropTypes.set.isRequired
-};
+}

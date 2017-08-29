@@ -14,14 +14,14 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { connect } from 'react-redux'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
-import PlansActions from '../../actions/PlansActions';
-import Modal from '../ui/Modal';
+import PlansActions from '../../actions/PlansActions'
+import Modal from '../ui/Modal'
 
 const messages = defineMessages({
   deletePlan: {
@@ -40,18 +40,18 @@ const messages = defineMessages({
     id: 'DeletePlan.cancel',
     defaultMessage: 'Cancel'
   }
-});
+})
 
 class DeletePlan extends React.Component {
   getNameFromUrl() {
-    let planName = this.props.match.params.planName || '';
-    return planName.replace(/[^A-Za-z0-9_-]*/g, '');
+    let planName = this.props.match.params.planName || ''
+    return planName.replace(/[^A-Za-z0-9_-]*/g, '')
   }
 
   onDeleteClick() {
-    let planName = this.getNameFromUrl();
+    let planName = this.getNameFromUrl()
     if (planName) {
-      this.props.deletePlan(planName);
+      this.props.deletePlan(planName)
     }
   }
 
@@ -106,7 +106,7 @@ class DeletePlan extends React.Component {
           </Link>
         </div>
       </Modal>
-    );
+    )
   }
 }
 
@@ -114,14 +114,14 @@ DeletePlan.propTypes = {
   deletePlan: PropTypes.func,
   match: PropTypes.object,
   params: PropTypes.object
-};
+}
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
     deletePlan: planName => {
-      dispatch(PlansActions.deletePlan(planName, ownProps.history));
+      dispatch(PlansActions.deletePlan(planName, ownProps.history))
     }
-  };
+  }
 }
 
-export default injectIntl(connect(null, mapDispatchToProps)(DeletePlan));
+export default injectIntl(connect(null, mapDispatchToProps)(DeletePlan))

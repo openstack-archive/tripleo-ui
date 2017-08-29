@@ -14,13 +14,13 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import Formsy from 'formsy-react';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import Formsy from 'formsy-react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import HorizontalSelect from '../../ui/forms/HorizontalSelect';
-import HorizontalInput from '../../ui/forms/HorizontalInput';
+import HorizontalSelect from '../../ui/forms/HorizontalSelect'
+import HorizontalInput from '../../ui/forms/HorizontalInput'
 
 const messages = defineMessages({
   confirm: {
@@ -55,36 +55,36 @@ const messages = defineMessages({
     id: 'TagNodesForm.customProfileErrorMessage',
     defaultMessage: 'Must be lowercase with dashes as a separator'
   }
-});
+})
 
 class TagNodesForm extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       canSubmit: false,
       showCustomInput: false
-    };
+    }
   }
 
   enableButton() {
-    this.setState({ canSubmit: true });
+    this.setState({ canSubmit: true })
   }
 
   disableButton() {
-    this.setState({ canSubmit: false });
+    this.setState({ canSubmit: false })
   }
 
   checkSelectedProfile(currentValues, isChanged) {
     if (currentValues.profile === 'custom') {
-      this.setState({ showCustomInput: true });
+      this.setState({ showCustomInput: true })
     } else {
-      this.setState({ showCustomInput: false });
+      this.setState({ showCustomInput: false })
     }
   }
 
   handleSubmit(formData, resetForm, invalidateForm) {
-    const { customProfile, profile } = formData;
-    this.props.onSubmit(profile === 'custom' ? customProfile : profile);
+    const { customProfile, profile } = formData
+    this.props.onSubmit(profile === 'custom' ? customProfile : profile)
   }
 
   renderOptions() {
@@ -98,11 +98,11 @@ class TagNodesForm extends React.Component {
         <option key="custom" value="custom">
           {this.props.intl.formatMessage(messages.customProfileOption)}
         </option>
-      ]);
+      ])
   }
 
   render() {
-    const { formatMessage } = this.props.intl;
+    const { formatMessage } = this.props.intl
     return (
       <Formsy.Form
         ref="tagNodesForm"
@@ -159,7 +159,7 @@ class TagNodesForm extends React.Component {
           </button>
         </div>
       </Formsy.Form>
-    );
+    )
   }
 }
 TagNodesForm.propTypes = {
@@ -167,5 +167,5 @@ TagNodesForm.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   profiles: PropTypes.array.isRequired
-};
-export default injectIntl(TagNodesForm);
+}
+export default injectIntl(TagNodesForm)

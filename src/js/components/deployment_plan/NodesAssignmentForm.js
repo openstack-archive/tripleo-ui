@@ -14,22 +14,22 @@
  * under the License.
  */
 
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { connect } from 'react-redux';
-import { debounce } from 'lodash';
-import { Form, reduxForm, submit } from 'redux-form';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { connect } from 'react-redux'
+import { debounce } from 'lodash'
+import { Form, reduxForm, submit } from 'redux-form'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import { getAssignedNodesCountsByRole } from '../../selectors/nodesAssignment';
-import { getCurrentPlan } from '../../selectors/plans';
-import ParametersActions from '../../actions/ParametersActions';
-import FormErrorList from '../ui/forms/FormErrorList';
+import { getAssignedNodesCountsByRole } from '../../selectors/nodesAssignment'
+import { getCurrentPlan } from '../../selectors/plans'
+import ParametersActions from '../../actions/ParametersActions'
+import FormErrorList from '../ui/forms/FormErrorList'
 
 class NodesAssignmentForm extends React.Component {
   constructor(props) {
-    super(props);
-    this.debouncedUpdate = debounce(this.update.bind(this), 1000);
+    super(props)
+    this.debouncedUpdate = debounce(this.update.bind(this), 1000)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -38,24 +38,24 @@ class NodesAssignmentForm extends React.Component {
     // make sure debouncing works properly
     if (nextProps.dirty && nextProps.valid && !nextProps.submitting) {
       // nextProps.submit();
-      nextProps.handleSubmit(this.debouncedUpdate.bind(this))();
+      nextProps.handleSubmit(this.debouncedUpdate.bind(this))()
     } else if (nextProps.invalid || nextProps.submitting) {
-      this.debouncedUpdate.cancel();
+      this.debouncedUpdate.cancel()
     }
   }
 
   update(data) {
-    this.props.updateParameters(this.props.currentPlan.name, data);
+    this.props.updateParameters(this.props.currentPlan.name, data)
   }
 
   render() {
-    const { error, handleSubmit, children } = this.props;
+    const { error, handleSubmit, children } = this.props
     return (
       <Form onSubmit={handleSubmit(this.debouncedUpdate.bind(this))}>
         <FormErrorList errors={error ? [error] : []} />
         {children}
       </Form>
-    );
+    )
   }
 }
 NodesAssignmentForm.propTypes = {
@@ -65,12 +65,12 @@ NodesAssignmentForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   pristine: PropTypes.bool.isRequired,
   updateParameters: PropTypes.func.isRequired
-};
+}
 
 const mapStateToProps = (state, ownProps) => ({
   currentPlan: getCurrentPlan(state),
   initialValues: getAssignedNodesCountsByRole(state).toJS()
-});
+})
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -82,18 +82,18 @@ const mapDispatchToProps = dispatch => {
           inputFields,
           redirectPath
         )
-      );
+      )
     },
     submit: () => dispatch(submit('nodesAssignment'))
-  };
-};
+  }
+}
 
 const form = reduxForm({
   enableReinitialize: true,
   keepDirtyOnReinitialize: true,
   form: 'nodesAssignment'
-});
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   form(NodesAssignmentForm)
-);
+)

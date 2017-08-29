@@ -20,11 +20,11 @@ import {
   FormattedMessage,
   FormattedTime,
   injectIntl
-} from 'react-intl';
-import { startCase } from 'lodash';
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Row, Col } from 'react-bootstrap';
+} from 'react-intl'
+import { startCase } from 'lodash'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Row, Col } from 'react-bootstrap'
 
 const messages = defineMessages({
   macAddresses: {
@@ -87,26 +87,26 @@ const messages = defineMessages({
     id: 'nodeExtendedinfo.driver',
     defaultMessage: 'Driver:'
   }
-});
+})
 
 class NodeExtendedInfo extends React.Component {
   componentDidMount() {
     if (
       this.props.node.getIn(['introspectionStatus', 'state']) === 'finished'
     ) {
-      this.props.fetchNodeIntrospectionData(this.props.node.get('uuid'));
+      this.props.fetchNodeIntrospectionData(this.props.node.get('uuid'))
     }
   }
 
   renderInterfaces() {
-    const { intl, node } = this.props;
+    const { intl, node } = this.props
     if (node.getIn(['introspectionData', 'interfaces']).isEmpty()) {
       return (
         <dl>
           <dt><FormattedMessage {...messages.macAddresses} /></dt>
           {node.get('macs').map(mac => <dd key={mac}>{mac}</dd>)}
         </dl>
-      );
+      )
     } else {
       return (
         <dl>
@@ -128,17 +128,17 @@ class NodeExtendedInfo extends React.Component {
                     </span>
                     {ifc.get('pxe') && '| PXE'}
                   </div>
-                );
+                )
               })
               .toList()}
           </dd>
         </dl>
-      );
+      )
     }
   }
 
   renderBios() {
-    const bios = this.props.node.getIn(['introspectionData', 'bios']);
+    const bios = this.props.node.getIn(['introspectionData', 'bios'])
     return (
       !bios.isEmpty() &&
       <div>
@@ -149,22 +149,22 @@ class NodeExtendedInfo extends React.Component {
             .toList()}
         </dd>
       </div>
-    );
+    )
   }
 
   renderRootDisk() {
-    const rootDisk = this.props.node.getIn(['introspectionData', 'rootDisk']);
+    const rootDisk = this.props.node.getIn(['introspectionData', 'rootDisk'])
     return (
       rootDisk &&
       <div>
         <dt><FormattedMessage {...messages.rootDisk} /></dt>
         <dd>{rootDisk}</dd>
       </div>
-    );
+    )
   }
 
   renderProduct() {
-    const product = this.props.node.getIn(['introspectionData', 'product']);
+    const product = this.props.node.getIn(['introspectionData', 'product'])
     return (
       !product.isEmpty() &&
       <div>
@@ -183,25 +183,25 @@ class NodeExtendedInfo extends React.Component {
           </span>
         </dd>
       </div>
-    );
+    )
   }
 
   renderKernel() {
     const kernelVersion = this.props.node.getIn([
       'introspectionData',
       'kernelVersion'
-    ]);
+    ])
     return (
       kernelVersion &&
       <div>
         <dt><FormattedMessage {...messages.kernel} /></dt>
         <dd>{kernelVersion}</dd>
       </div>
-    );
+    )
   }
 
   render() {
-    const { node } = this.props;
+    const { node } = this.props
     return (
       <Row>
         <Col lg={4} md={6}>
@@ -241,13 +241,13 @@ class NodeExtendedInfo extends React.Component {
           {this.renderInterfaces()}
         </Col>
       </Row>
-    );
+    )
   }
 }
 NodeExtendedInfo.propTypes = {
   fetchNodeIntrospectionData: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,
   node: PropTypes.object.isRequired
-};
+}
 
-export default injectIntl(NodeExtendedInfo);
+export default injectIntl(NodeExtendedInfo)

@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { List, Map, Record } from 'immutable';
+import { List, Map, Record } from 'immutable'
 
 export const ParametersDefaultState = Record({
   loaded: false,
@@ -26,7 +26,7 @@ export const ParametersDefaultState = Record({
   resources: Map(),
   parameters: Map(),
   mistralParameters: Map()
-});
+})
 
 export const Parameter = Record({
   default: undefined,
@@ -36,7 +36,7 @@ export const Parameter = Record({
   noEcho: undefined,
   type: 'string',
   value: undefined
-});
+})
 
 export const Resource = Record({
   description: undefined,
@@ -45,4 +45,4 @@ export const Resource = Record({
   resources: List(),
   parameters: List(),
   type: undefined
-});
+})

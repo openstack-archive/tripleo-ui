@@ -14,14 +14,14 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import invariant from 'invariant';
+import PropTypes from 'prop-types'
+import React from 'react'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import invariant from 'invariant'
 
-import DataTableRow from './DataTableRow';
-import DataTableColumn from './DataTableColumn';
-import Loader from '../Loader';
+import DataTableRow from './DataTableRow'
+import DataTableColumn from './DataTableColumn'
+import Loader from '../Loader'
 
 const messages = defineMessages({
   filter: {
@@ -32,26 +32,26 @@ const messages = defineMessages({
     id: 'DataTable.itemsVisibleInTable',
     defaultMessage: 'Showing {showing} of {total} items'
   }
-});
+})
 
 class DataTable extends React.Component {
   _getColumns() {
-    let columns = [];
+    let columns = []
     React.Children.forEach(this.props.children, child => {
       if (child == null) {
-        return;
+        return
       }
       invariant(
         child.type === DataTableColumn,
         'DataTable child type should be <DataTableColumn />'
-      );
-      columns.push(child);
-    });
-    return columns;
+      )
+      columns.push(child)
+    })
+    return columns
   }
 
   onFilterTable(event) {
-    this.props.onFilter(event.target.value);
+    this.props.onFilter(event.target.value)
   }
 
   renderFilterInput() {
@@ -69,27 +69,27 @@ class DataTable extends React.Component {
             />
           </label>
         </div>
-      );
+      )
     }
-    return false;
+    return false
   }
 
   renderTableActions() {
     if (this.props.tableActions) {
-      return this.props.tableActions();
+      return this.props.tableActions()
     }
   }
 
   render() {
-    let columns = this._getColumns();
+    let columns = this._getColumns()
 
     let headers = columns.map(column => {
-      return column.props.header;
-    });
+      return column.props.header
+    })
 
-    let rows = [];
+    let rows = []
     for (var i = 0; i < this.props.rowsCount; ++i) {
-      rows[i] = <DataTableRow key={i} index={i} columns={columns} />;
+      rows[i] = <DataTableRow key={i} index={i} columns={columns} />
     }
 
     return (
@@ -131,11 +131,11 @@ class DataTable extends React.Component {
           </table>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default injectIntl(DataTable);
+export default injectIntl(DataTable)
 
 DataTable.propTypes = {
   children: PropTypes.oneOfType([
@@ -151,8 +151,8 @@ DataTable.propTypes = {
   onFilter: PropTypes.func,
   rowsCount: PropTypes.number.isRequired,
   tableActions: PropTypes.func
-};
+}
 DataTable.defaultProps = {
   className: 'table',
   dataOperationInProgress: false
-};
+}

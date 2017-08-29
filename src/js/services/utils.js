@@ -14,9 +14,9 @@
  * under the License.
  */
 
-import { Map, List } from 'immutable';
-import store from '../store';
-import { LANGUAGE_NAMES } from '../constants/i18n';
+import { Map, List } from 'immutable'
+import store from '../store'
+import { LANGUAGE_NAMES } from '../constants/i18n'
 
 /**
  * Returns the public url of an openstack API,
@@ -31,11 +31,11 @@ export function getServiceUrl(
   appConfig = getAppConfig()
 ) {
   let serviceUrl =
-    appConfig[serviceName] || getFromServiceCatalog(serviceName, urlType);
+    appConfig[serviceName] || getFromServiceCatalog(serviceName, urlType)
   if (!serviceUrl) {
-    throw Error(`URL for service ${serviceName} can not be found`);
+    throw Error(`URL for service ${serviceName} can not be found`)
   }
-  return serviceUrl.replace('%(project_id)s', getProjectId());
+  return serviceUrl.replace('%(project_id)s', getProjectId())
 }
 
 function getFromServiceCatalog(serviceName, urlType) {
@@ -45,30 +45,30 @@ function getFromServiceCatalog(serviceName, urlType) {
     .find(service => service.get('name') === serviceName, null, Map())
     .get('endpoints', List())
     .find(endpoint => endpoint.get('interface') === urlType, null, Map())
-    .get('url');
+    .get('url')
 }
 
 /**
  * Returns Keystone Auth Token ID
  */
 export function getAuthTokenId() {
-  return store.getState().login.tokenId;
+  return store.getState().login.tokenId
 }
 
 export function getProjectId() {
-  return store.getState().login.getIn(['token', 'project', 'id']);
+  return store.getState().login.getIn(['token', 'project', 'id'])
 }
 
 export function getAppConfig() {
-  return window.tripleOUiConfig || {};
+  return window.tripleOUiConfig || {}
 }
 
 export function getEnabledLanguages() {
-  const excludedLanguages = getAppConfig().excludedLanguages || [];
-  let configLanguages = Object.assign({}, LANGUAGE_NAMES);
+  const excludedLanguages = getAppConfig().excludedLanguages || []
+  let configLanguages = Object.assign({}, LANGUAGE_NAMES)
   excludedLanguages.map(language => {
-    delete configLanguages[language];
-  });
+    delete configLanguages[language]
+  })
 
-  return Map(configLanguages).sort();
+  return Map(configLanguages).sort()
 }

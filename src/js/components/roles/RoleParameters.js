@@ -14,14 +14,14 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { connect } from 'react-redux'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import ParameterInputList from '../parameters/ParameterInputList';
-import { getRoleParameters } from '../../selectors/parameters';
-import { getRole } from '../../selectors/roles';
+import ParameterInputList from '../parameters/ParameterInputList'
+import { getRoleParameters } from '../../selectors/parameters'
+import { getRole } from '../../selectors/roles'
 
 class RoleParameters extends React.Component {
   render() {
@@ -32,21 +32,21 @@ class RoleParameters extends React.Component {
           mistralParameters={this.props.mistralParameters}
         />
       </div>
-    );
+    )
   }
 }
 RoleParameters.propTypes = {
   match: PropTypes.object.isRequired,
   mistralParameters: ImmutablePropTypes.map.isRequired,
   parameters: ImmutablePropTypes.map.isRequired
-};
+}
 
 function mapStateToProps(state, props) {
   return {
     mistralParameters: state.parameters.mistralParameters,
     parameters: getRoleParameters(state, props.match.params.roleIdentifier),
     role: getRole(state, props.match.params.roleIdentifier)
-  };
+  }
 }
 
-export default connect(mapStateToProps)(RoleParameters);
+export default connect(mapStateToProps)(RoleParameters)

@@ -14,17 +14,17 @@
  * under the License.
  */
 
-import { fromJS, Map, OrderedMap } from 'immutable';
+import { fromJS, Map, OrderedMap } from 'immutable'
 
 import WorkflowExecutionsConstants
-  from '../constants/WorkflowExecutionsConstants';
-import { WorkflowExecution } from '../immutableRecords/workflowExecutions';
+  from '../constants/WorkflowExecutionsConstants'
+import { WorkflowExecution } from '../immutableRecords/workflowExecutions'
 
 const initialState = Map({
   executionsLoaded: false,
   isFetching: false,
   executions: OrderedMap()
-});
+})
 
 export default function workflowExecutionsReducer(
   state = initialState,
@@ -32,20 +32,20 @@ export default function workflowExecutionsReducer(
 ) {
   switch (action.type) {
     case WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_PENDING:
-      return state.set('isFetching', true);
+      return state.set('isFetching', true)
 
     case WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_SUCCESS: {
       const executions = fromJS(action.payload)
         .map(execution => new WorkflowExecution(parseExecutionAttrs(execution)))
-        .sortBy(execution => execution.updated_at);
+        .sortBy(execution => execution.updated_at)
       return state
         .set('executions', executions)
         .set('executionsLoaded', true)
-        .set('isFetching', false);
+        .set('isFetching', false)
     }
 
     case WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_FAILED:
-      return state.set('executionsLoaded', true).set('isFetching', false);
+      return state.set('executionsLoaded', true).set('isFetching', false)
 
     case WorkflowExecutionsConstants.ADD_WORKFLOW_EXECUTION:
       return state.update('executions', executions =>
@@ -53,18 +53,18 @@ export default function workflowExecutionsReducer(
           action.payload.id,
           new WorkflowExecution(parseExecutionAttrs(fromJS(action.payload)))
         )
-      );
+      )
 
     case WorkflowExecutionsConstants.UPDATE_WORKFLOW_EXECUTION_PENDING:
       return state.mergeIn(
         ['executions', action.payload.id],
         fromJS(action.payload.patch)
-      );
+      )
 
     default:
-      return state;
+      return state
   }
 }
 
 const parseExecutionAttrs = execution =>
-  execution.set('updated_at', fromJS(Date.parse(execution.get('updated_at'))));
+  execution.set('updated_at', fromJS(Date.parse(execution.get('updated_at'))))
