@@ -17,8 +17,8 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { ListView } from 'patternfly-react';
 
-import { ListView } from '../../ui/ListView';
 import NodeListItem from './NodeListItem';
 
 export default class NodesListView extends React.Component {
