@@ -16,25 +16,11 @@
 
 import { defineMessages, FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 import { Col, Row } from 'react-bootstrap';
+import { ListViewIcon, ListViewItem, ListViewInfoItem } from 'patternfly-react';
 
 import { formatBytes } from '../../utils';
-import {
-  ListViewAdditionalInfo,
-  ListViewAdditionalInfoItem,
-  ListViewBody,
-  ListViewDescription,
-  ListViewDescriptionHeading,
-  ListViewDescriptionText,
-  ListViewExpand,
-  ListViewIcon,
-  ListViewItem,
-  ListViewItemContainer,
-  ListViewItemHeader,
-  ListViewLeft,
-  ListViewMainInfo
-} from '../../ui/ListView';
 
 const messages = defineMessages({
   type: {
@@ -79,90 +65,56 @@ const messages = defineMessages({
   }
 });
 
-export default class NodeDrive extends Component {
-  constructor() {
-    super();
-    this.state = {
-      expanded: false
-    };
-  }
-
-  toggleExpanded() {
-    this.setState(prevState => ({ expanded: !prevState.expanded }));
-  }
-
-  render() {
-    const { drive } = this.props;
-    const [driveSize, driveSizeUnit] = formatBytes(drive.size);
-    return (
-      <ListViewItem stacked={false} expanded={this.state.expanded}>
-
-        <ListViewItemHeader toggleExpanded={this.toggleExpanded.bind(this)}>
-          <ListViewExpand expanded={this.state.expanded} />
-          <ListViewMainInfo>
-            <ListViewLeft>
-              <ListViewIcon size="sm" icon="pficon pficon-volume" />
-            </ListViewLeft>
-            <ListViewBody>
-              <ListViewDescription>
-                <ListViewDescriptionHeading>
-                  {drive.name}
-                </ListViewDescriptionHeading>
-                <ListViewDescriptionText>
-                  {drive.rootDisk &&
-                    <FormattedMessage {...messages.rootDisk} />}
-                </ListViewDescriptionText>
-              </ListViewDescription>
-              <ListViewAdditionalInfo>
-                <ListViewAdditionalInfoItem>
-                  <FormattedMessage {...messages.type} />&nbsp;
-                  <strong>{drive.rotational ? 'HDD' : 'SSD'}</strong>
-                </ListViewAdditionalInfoItem>
-                <ListViewAdditionalInfoItem>
-                  <FormattedMessage {...messages.size} />&nbsp;
-                  <strong>{driveSize}</strong>
-                  {driveSizeUnit}
-                </ListViewAdditionalInfoItem>
-              </ListViewAdditionalInfo>
-            </ListViewBody>
-          </ListViewMainInfo>
-        </ListViewItemHeader>
-
-        <ListViewItemContainer
-          onClose={this.toggleExpanded.bind(this)}
-          expanded={this.state.expanded}
-        >
-          <Row>
-            <Col sm={11}>
-              <dl className="dl-horizontal">
-                <dt><FormattedMessage {...messages.model} /></dt>
-                <dd>{drive.model || <FormattedMessage {...messages.na} />}</dd>
-                <dt><FormattedMessage {...messages.serial} /></dt>
-                <dd>{drive.serial || <FormattedMessage {...messages.na} />}</dd>
-                <dt><FormattedMessage {...messages.vendor} /></dt>
-                <dd>{drive.vendor || <FormattedMessage {...messages.na} />}</dd>
-                <dt><FormattedMessage {...messages.wwn} /></dt>
-                <dd>{drive.wwn || <FormattedMessage {...messages.na} />}</dd>
-                <dt><FormattedMessage {...messages.wwnVendorExtension} /></dt>
-                <dd>
-                  {drive.wwn_vendor_extension ||
-                    <FormattedMessage {...messages.na} />}
-                </dd>
-                <dt><FormattedMessage {...messages.wwnWithExtension} /></dt>
-                <dd>
-                  {drive.wwn_with_extension ||
-                    <FormattedMessage {...messages.na} />}
-                </dd>
-              </dl>
-            </Col>
-          </Row>
-        </ListViewItemContainer>
-
-      </ListViewItem>
-    );
-  }
-}
-
+const NodeDrive = ({ drive }) => {
+  const [driveSize, driveSizeUnit] = formatBytes(drive.size);
+  return (
+    <ListViewItem
+      leftContent={<ListViewIcon size="sm" icon="pficon pficon-volume" />}
+      heading={drive.name}
+      description={
+        drive.rootDisk && <FormattedMessage {...messages.rootDisk} />
+      }
+      additionalInfo={[
+        <ListViewInfoItem key="driveType">
+          <FormattedMessage {...messages.type} />&nbsp;
+          <strong>{drive.rotational ? 'HDD' : 'SSD'}</strong>
+        </ListViewInfoItem>,
+        <ListViewInfoItem key="driveSize">
+          <FormattedMessage {...messages.size} />&nbsp;
+          <strong>{driveSize}</strong>
+          {driveSizeUnit}
+        </ListViewInfoItem>
+      ]}
+    >
+      <Row>
+        <Col sm={11}>
+          <dl className="dl-horizontal">
+            <dt><FormattedMessage {...messages.model} /></dt>
+            <dd>{drive.model || <FormattedMessage {...messages.na} />}</dd>
+            <dt><FormattedMessage {...messages.serial} /></dt>
+            <dd>{drive.serial || <FormattedMessage {...messages.na} />}</dd>
+            <dt><FormattedMessage {...messages.vendor} /></dt>
+            <dd>{drive.vendor || <FormattedMessage {...messages.na} />}</dd>
+            <dt><FormattedMessage {...messages.wwn} /></dt>
+            <dd>{drive.wwn || <FormattedMessage {...messages.na} />}</dd>
+            <dt><FormattedMessage {...messages.wwnVendorExtension} /></dt>
+            <dd>
+              {drive.wwn_vendor_extension ||
+                <FormattedMessage {...messages.na} />}
+            </dd>
+            <dt><FormattedMessage {...messages.wwnWithExtension} /></dt>
+            <dd>
+              {drive.wwn_with_extension ||
+                <FormattedMessage {...messages.na} />}
+            </dd>
+          </dl>
+        </Col>
+      </Row>
+    </ListViewItem>
+  );
+};
 NodeDrive.propTypes = {
   drive: PropTypes.object.isRequired
 };
+
+export default NodeDrive;
