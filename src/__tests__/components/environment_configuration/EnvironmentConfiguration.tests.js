@@ -14,38 +14,38 @@
  * under the License.
  */
 
-import { Map } from 'immutable';
-import React from 'react';
-import ReactShallowRenderer from 'react-test-renderer/shallow';
+import { Map } from 'immutable'
+import React from 'react'
+import ReactShallowRenderer from 'react-test-renderer/shallow'
 
 // TODO(jtomasek): remove this import when store is correctly mocked
-import store from '../../../js/store'; // eslint-disable-line no-unused-vars
+import store from '../../../js/store' // eslint-disable-line no-unused-vars
 import EnvironmentConfiguration
-  from '../../../js/components/environment_configuration/EnvironmentConfiguration';
+  from '../../../js/components/environment_configuration/EnvironmentConfiguration'
 
 describe('EnvironmentConfiguration component', () => {
-  let EnvConfVdom;
+  let EnvConfVdom
   beforeEach(() => {
-    let shallowRenderer = new ReactShallowRenderer();
+    let shallowRenderer = new ReactShallowRenderer()
     shallowRenderer.render(
       <EnvironmentConfiguration
         currentPlanName={'some-plan'}
         environmentConfiguration={Map({ topics: [] })}
       />
-    );
-    EnvConfVdom = shallowRenderer.getRenderOutput();
-  });
+    )
+    EnvConfVdom = shallowRenderer.getRenderOutput()
+  })
 
   xit('should render a modal with form', () => {
-    let modal = EnvConfVdom.props.children[0];
-    expect(modal.props.className).toEqual('modal modal-visible');
+    let modal = EnvConfVdom.props.children[0]
+    expect(modal.props.className).toEqual('modal modal-visible')
     expect(modal.props.children.props.className).toEqual(
       'modal-dialog modal-lg'
-    );
+    )
     expect(modal.props.children.props.children.props.className).toEqual(
       'modal-content'
-    );
-    let form = modal.props.children.props.children.props.children;
-    expect(form.ref).toEqual('environmentConfigurationForm');
-  });
-});
+    )
+    let form = modal.props.children.props.children.props.children
+    expect(form.ref).toEqual('environmentConfigurationForm')
+  })
+})

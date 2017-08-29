@@ -14,19 +14,19 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 
-import DataTable from '../ui/tables/DataTable';
+import DataTable from '../ui/tables/DataTable'
 import {
   DataTableDateFieldCell,
   DataTableDataFieldCell,
   DataTableHeaderCell
-} from '../ui/tables/DataTableCells';
-import DataTableColumn from '../ui/tables/DataTableColumn';
-import Loader from '../ui/Loader';
+} from '../ui/tables/DataTableCells'
+import DataTableColumn from '../ui/tables/DataTableColumn'
+import Loader from '../ui/Loader'
 
 const messages = defineMessages({
   loadingResources: {
@@ -49,14 +49,14 @@ const messages = defineMessages({
     id: 'StackResourcesTable.updatedTime',
     defaultMessage: 'Updated Time'
   }
-});
+})
 
 class StackResourcesTable extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       filterString: ''
-    };
+    }
   }
 
   renderNoResourcesFound() {
@@ -74,34 +74,34 @@ class StackResourcesTable extends React.Component {
           </Loader>
         </td>
       </tr>
-    );
+    )
   }
 
   onFilter(filterString) {
     this.setState({
       filterString: filterString
-    });
+    })
   }
 
   _filterData(filterString, data) {
-    let dataKeys = ['resource_name', 'resource_status'];
+    let dataKeys = ['resource_name', 'resource_status']
     return filterString
       ? data.filter(row => {
           let result = dataKeys.filter(dataKey => {
             return row[dataKey]
               .toLowerCase()
-              .includes(filterString.toLowerCase());
-          });
-          return result.length > 0;
+              .includes(filterString.toLowerCase())
+          })
+          return result.length > 0
         })
-      : data;
+      : data
   }
 
   render() {
     let filteredData = this._filterData(
       this.state.filterString,
       this.props.resources.toList().toJS()
-    );
+    )
     return (
       <DataTable
         {...this.props}
@@ -148,13 +148,13 @@ class StackResourcesTable extends React.Component {
           }
         />
       </DataTable>
-    );
+    )
   }
 }
 StackResourcesTable.propTypes = {
   intl: PropTypes.object,
   isFetchingResources: PropTypes.bool.isRequired,
   resources: ImmutablePropTypes.map.isRequired
-};
+}
 
-export default injectIntl(StackResourcesTable);
+export default injectIntl(StackResourcesTable)

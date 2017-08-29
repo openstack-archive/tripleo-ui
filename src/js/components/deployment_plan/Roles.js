@@ -14,32 +14,32 @@
  * under the License.
  */
 
-import { defineMessages, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import Loader from '../ui/Loader';
-import NodesAssignmentForm from './NodesAssignmentForm';
-import RoleCard from './RoleCard';
+import Loader from '../ui/Loader'
+import NodesAssignmentForm from './NodesAssignmentForm'
+import RoleCard from './RoleCard'
 
 const messages = defineMessages({
   loadingDeploymentRoles: {
     id: 'Roles.loadingDeploymentRoles',
     defaultMessage: 'Loading Deployment Roles...'
   }
-});
+})
 
 class Roles extends React.Component {
   componentDidMount() {
-    this.props.fetchRoles();
-    this.props.fetchNodes();
+    this.props.fetchRoles()
+    this.props.fetchNodes()
   }
 
   componentDidUpdate() {
     if (!this.props.loaded && !this.props.isFetchingRoles) {
-      this.props.fetchRoles();
-      this.props.fetchNodes();
+      this.props.fetchRoles()
+      this.props.fetchNodes()
     }
   }
 
@@ -61,8 +61,8 @@ class Roles extends React.Component {
             )}
           />
         </div>
-      );
-    });
+      )
+    })
   }
 
   render() {
@@ -84,7 +84,7 @@ class Roles extends React.Component {
           </Loader>
         </div>
       </div>
-    );
+    )
   }
 }
 Roles.propTypes = {
@@ -98,6 +98,6 @@ Roles.propTypes = {
   loaded: PropTypes.bool.isRequired,
   nodeCountParametersByRole: ImmutablePropTypes.map.isRequired,
   roles: PropTypes.array.isRequired
-};
+}
 
-export default injectIntl(Roles);
+export default injectIntl(Roles)

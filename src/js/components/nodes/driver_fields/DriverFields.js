@@ -14,13 +14,13 @@
  * under the License.
  */
 
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { defineMessages, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { defineMessages, injectIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import HorizontalInput from '../../ui/forms/HorizontalInput';
-import HorizontalTextarea from '../../ui/forms/HorizontalTextarea';
+import HorizontalInput from '../../ui/forms/HorizontalInput'
+import HorizontalTextarea from '../../ui/forms/HorizontalTextarea'
 
 const messages = defineMessages({
   ipOrFqdnValidatorMessage: {
@@ -31,28 +31,28 @@ const messages = defineMessages({
     id: 'DriverFields.portValidationMessage',
     defaultMessage: 'Please enter valid Port number (0 - 65535)'
   }
-});
+})
 
 class DriverFields extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     let ip_regex =
       '^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9]' +
-      '[0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
+      '[0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
     let fqdn_regex =
-      '^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?$';
+      '^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?$'
 
     this.portRegex =
       '^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}' +
-      '|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$$';
+      '|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$$'
 
     this.ipOrFqdnValidator = {
       matchRegexp: new RegExp(ip_regex + '|' + fqdn_regex)
-    };
+    }
     this.ipOrFqdnValidatorMessage = this.props.intl.formatMessage(
       messages.ipOrFqdnValidatorMessage
-    );
+    )
   }
 
   render() {
@@ -96,7 +96,7 @@ class DriverFields extends React.Component {
           required
         />
       </div>
-    );
+    )
   }
 }
 DriverFields.propTypes = {
@@ -106,6 +106,6 @@ DriverFields.propTypes = {
   port_title: PropTypes.string.isRequired,
   pwd_title: PropTypes.string.isRequired,
   user_title: PropTypes.string.isRequired
-};
+}
 
-export default injectIntl(DriverFields);
+export default injectIntl(DriverFields)

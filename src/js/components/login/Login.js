@@ -14,24 +14,24 @@
  * under the License.
  */
 
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import Formsy from 'formsy-react';
-import PropTypes from 'prop-types';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Redirect } from 'react-router-dom';
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
+import { connect } from 'react-redux'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import Formsy from 'formsy-react'
+import PropTypes from 'prop-types'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Redirect } from 'react-router-dom'
 
-import FormErrorList from '../ui/forms/FormErrorList';
-import I18nActions from '../../actions/I18nActions';
-import Loader from '../ui/Loader';
-import LoginInput from '../ui/forms/LoginInput';
-import LanguageInput from './LanguageInput';
-import LoginActions from '../../actions/LoginActions';
+import FormErrorList from '../ui/forms/FormErrorList'
+import I18nActions from '../../actions/I18nActions'
+import Loader from '../ui/Loader'
+import LoginInput from '../ui/forms/LoginInput'
+import LanguageInput from './LanguageInput'
+import LoginActions from '../../actions/LoginActions'
 
-import LogoSvg from '../../../img/logo.svg';
-import TripleoOwlSvg from '../../../img/tripleo-owl.svg';
+import LogoSvg from '../../../img/logo.svg'
+import TripleoOwlSvg from '../../../img/tripleo-owl.svg'
 
 const messages = defineMessages({
   authenticating: {
@@ -67,54 +67,54 @@ const messages = defineMessages({
     defaultMessage: 'This tool will walk you through the process of configuring and ' +
       'deploying an OpenStack environment.'
   }
-});
+})
 
 class Login extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       canSubmit: false
-    };
+    }
   }
   componentWillMount() {
-    ReactDOM.findDOMNode(document.documentElement).className = 'login-pf';
+    ReactDOM.findDOMNode(document.documentElement).className = 'login-pf'
   }
 
   componentDidUpdate() {
     if (!this.props.isAuthenticated || this.props.isAuthenticating) {
-      this.invalidateLoginForm(this.props.formFieldErrors.toJS());
+      this.invalidateLoginForm(this.props.formFieldErrors.toJS())
     }
   }
 
   componentWillUnmount() {
-    ReactDOM.findDOMNode(document.documentElement).className = '';
+    ReactDOM.findDOMNode(document.documentElement).className = ''
   }
 
   invalidateLoginForm(formFieldErrors) {
-    this.refs.form.updateInputsWithError(formFieldErrors);
+    this.refs.form.updateInputsWithError(formFieldErrors)
   }
 
   _enableButton() {
-    this.setState({ canSubmit: true });
+    this.setState({ canSubmit: true })
   }
 
   _disableButton() {
-    this.setState({ canSubmit: false });
+    this.setState({ canSubmit: false })
   }
 
   handleLogin(formData, resetForm, invalidateForm) {
-    const formFields = Object.keys(this.refs.form.inputs);
-    this.props.authenticateUser(formData, formFields);
+    const formFields = Object.keys(this.refs.form.inputs)
+    this.props.authenticateUser(formData, formFields)
   }
 
   render() {
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
+    const { from } = this.props.location.state || { from: { pathname: '/' } }
     const {
       formErrors,
       isAuthenticating,
       isAuthenticated,
       intl: { formatMessage }
-    } = this.props;
+    } = this.props
 
     if (!isAuthenticated) {
       return (
@@ -190,9 +190,9 @@ class Login extends React.Component {
             </div>
           </div>
         </div>
-      );
+      )
     } else {
-      return <Redirect to={from} />;
+      return <Redirect to={from} />
     }
   }
 }
@@ -207,7 +207,7 @@ Login.propTypes = {
   language: PropTypes.string,
   location: PropTypes.object,
   userLoggedIn: PropTypes.bool.isRequired
-};
+}
 
 function mapStateToProps(state) {
   return {
@@ -217,7 +217,7 @@ function mapStateToProps(state) {
     isAuthenticating: state.login.get('isAuthenticating'),
     language: state.i18n.get('language', 'en'),
     userLoggedIn: state.login.hasIn(['keystoneAccess', 'user'])
-  };
+  }
 }
 
 const mapDispatchToProps = dispatch => {
@@ -225,7 +225,7 @@ const mapDispatchToProps = dispatch => {
     chooseLanguage: language => dispatch(I18nActions.chooseLanguage(language)),
     authenticateUser: (formData, formFields, nextPath) =>
       dispatch(LoginActions.authenticateUser(formData, formFields, nextPath))
-  };
-};
+  }
+}
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Login));
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Login))

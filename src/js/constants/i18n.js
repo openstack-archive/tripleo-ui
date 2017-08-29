@@ -9,4 +9,4 @@ export const LANGUAGE_NAMES = {
   'ko-KR': 'Korean',
   'tr-TR': 'Turkish',
   'zh-CN': 'Simplified Chinese'
-};
+}

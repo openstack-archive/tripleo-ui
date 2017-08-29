@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import keyMirror from 'keymirror';
+import keyMirror from 'keymirror'
 
 export default keyMirror({
   DOWNLOAD_LOGS_PENDING: null,
@@ -23,4 +23,4 @@ export default keyMirror({
   QUEUE_MESSAGE: null,
   FLUSH_MESSAGES_SUCCESS: null,
   WS_AUTHENTICATION_SUCCESS: null
-});
+})

@@ -14,24 +14,24 @@
  * under the License.
  */
 
-import { defineMessages } from 'react-intl';
-import { normalize, arrayOf } from 'normalizr';
-import when from 'when';
+import { defineMessages } from 'react-intl'
+import { normalize, arrayOf } from 'normalizr'
+import when from 'when'
 
-import { getNodesByIds } from '../selectors/nodes';
-import { handleErrors } from './ErrorActions';
-import IronicApiService from '../services/IronicApiService';
-import IronicInspectorApiService from '../services/IronicInspectorApiService';
-import MistralApiService from '../services/MistralApiService';
-import NodesConstants from '../constants/NodesConstants';
-import NotificationActions from './NotificationActions';
+import { getNodesByIds } from '../selectors/nodes'
+import { handleErrors } from './ErrorActions'
+import IronicApiService from '../services/IronicApiService'
+import IronicInspectorApiService from '../services/IronicInspectorApiService'
+import MistralApiService from '../services/MistralApiService'
+import NodesConstants from '../constants/NodesConstants'
+import NotificationActions from './NotificationActions'
 import {
   nodeSchema,
   portSchema,
   introspectionStatusSchema
-} from '../normalizrSchemas/nodes';
-import MistralConstants from '../constants/MistralConstants';
-import { setNodeCapability } from '../utils/nodes';
+} from '../normalizrSchemas/nodes'
+import MistralConstants from '../constants/MistralConstants'
+import { setNodeCapability } from '../utils/nodes'
 
 const messages = defineMessages({
   introspectionNotificationMessage: {
@@ -46,46 +46,46 @@ const messages = defineMessages({
     id: 'NodesActions.introspectionFailedNotificationTitle',
     defaultMessage: 'Nodes Introspection Failed'
   }
-});
+})
 
 export default {
   startOperation(nodeIds) {
     return {
       type: NodesConstants.START_NODES_OPERATION,
       payload: nodeIds
-    };
+    }
   },
 
   finishOperation(nodeIds) {
     return {
       type: NodesConstants.FINISH_NODES_OPERATION,
       payload: nodeIds
-    };
+    }
   },
 
   addNodes(nodes) {
     return {
       type: NodesConstants.ADD_NODES,
       payload: nodes
-    };
+    }
   },
 
   requestNodes() {
     return {
       type: NodesConstants.REQUEST_NODES
-    };
+    }
   },
 
   receiveNodes(entities) {
     return {
       type: NodesConstants.RECEIVE_NODES,
       payload: entities
-    };
+    }
   },
 
   fetchNodes() {
     return (dispatch, getState) => {
-      dispatch(this.requestNodes());
+      dispatch(this.requestNodes())
       when
         .all([
           IronicApiService.getNodes(),
@@ -94,49 +94,49 @@ export default {
         ])
         .then(response => {
           const nodes = normalize(response[0].nodes, arrayOf(nodeSchema))
-            .entities.nodes;
+            .entities.nodes
           const ports = normalize(response[1].ports, arrayOf(portSchema))
-            .entities.ports;
+            .entities.ports
           const introspectionStatuses = normalize(
             response[2].introspection,
             arrayOf(introspectionStatusSchema)
-          ).entities.introspectionStatuses;
-          dispatch(this.receiveNodes({ nodes, ports, introspectionStatuses }));
+          ).entities.introspectionStatuses
+          dispatch(this.receiveNodes({ nodes, ports, introspectionStatuses }))
         })
         .catch(error => {
-          dispatch(handleErrors(error, 'Nodes could not be loaded'));
-          dispatch(this.receiveNodes({}));
-        });
-    };
+          dispatch(handleErrors(error, 'Nodes could not be loaded'))
+          dispatch(this.receiveNodes({}))
+        })
+    }
   },
 
   fetchNodeIntrospectionDataSuccess(nodeId, data) {
     return {
       type: NodesConstants.FETCH_NODE_INTROSPECTION_DATA_SUCCESS,
       payload: { nodeId, data }
-    };
+    }
   },
 
   fetchNodeIntrospectionDataFailed(nodeId) {
     return {
       type: NodesConstants.FETCH_NODE_INTROSPECTION_DATA_FAILED,
       payload: nodeId
-    };
+    }
   },
 
   fetchNodeIntrospectionData(nodeId) {
     return dispatch => {
       IronicInspectorApiService.getIntrospectionData(nodeId)
         .then(response => {
-          dispatch(this.fetchNodeIntrospectionDataSuccess(nodeId, response));
+          dispatch(this.fetchNodeIntrospectionDataSuccess(nodeId, response))
         })
         .catch(error => {
           dispatch(
             handleErrors(error, 'Node introspection data could not be loaded')
-          );
-          dispatch(this.fetchNodeIntrospectionDataFailed(nodeId));
-        });
-    };
+          )
+          dispatch(this.fetchNodeIntrospectionDataFailed(nodeId))
+        })
+    }
   },
 
   /*
@@ -144,40 +144,40 @@ export default {
    */
   pollNodeslistDuringProgress() {
     return (dispatch, getState) => {
-      const nodesState = getState().nodes;
+      const nodesState = getState().nodes
       if (nodesState.get('nodesInProgress').size > 0) {
         // Only fetch nodes if there's currently no unfinished request.
         if (!nodesState.get('isFetching')) {
-          dispatch(this.fetchNodes());
+          dispatch(this.fetchNodes())
         }
         setTimeout(() => {
-          dispatch(this.pollNodeslistDuringProgress());
-        }, 5000);
+          dispatch(this.pollNodeslistDuringProgress())
+        }, 5000)
       }
-    };
+    }
   },
 
   startNodesIntrospection(nodeIds) {
     return (dispatch, getState) => {
-      dispatch(this.startOperation(nodeIds));
-      dispatch(this.pollNodeslistDuringProgress());
+      dispatch(this.startOperation(nodeIds))
+      dispatch(this.pollNodeslistDuringProgress())
       MistralApiService.runWorkflow(MistralConstants.BAREMETAL_INTROSPECT, {
         node_uuids: nodeIds
       }).catch(error => {
         dispatch(
           handleErrors(error, 'Selected Nodes could not be introspected')
-        );
-        dispatch(this.finishOperation(nodeIds));
-      });
-    };
+        )
+        dispatch(this.finishOperation(nodeIds))
+      })
+    }
   },
 
   nodesIntrospectionFinished(messagePayload) {
     return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      const nodeIds = messagePayload.execution.input.node_uuids;
-      dispatch(this.finishOperation(nodeIds));
-      dispatch(this.fetchNodes());
+      const { formatMessage } = getIntl(getState())
+      const nodeIds = messagePayload.execution.input.node_uuids
+      dispatch(this.finishOperation(nodeIds))
+      dispatch(this.fetchNodes())
 
       switch (messagePayload.status) {
         case 'SUCCESS': {
@@ -187,8 +187,8 @@ export default {
               title: formatMessage(messages.introspectionNotificationTitle),
               message: formatMessage(messages.introspectionNotificationMessage)
             })
-          );
-          break;
+          )
+          break
         }
         case 'FAILED': {
           dispatch(
@@ -200,18 +200,18 @@ export default {
                 .filter(m => m.message)
                 .map(m => m.message)
             })
-          );
-          break;
+          )
+          break
         }
         default:
-          break;
+          break
       }
-    };
+    }
   },
 
   tagNodes(nodeIds, tag) {
     return (dispatch, getState) => {
-      const nodes = getNodesByIds(getState(), nodeIds);
+      const nodes = getNodesByIds(getState(), nodeIds)
       nodes.map(node => {
         dispatch(
           this.updateNode({
@@ -228,29 +228,29 @@ export default {
               }
             ]
           })
-        );
-      });
-    };
+        )
+      })
+    }
   },
 
   startProvideNodes(nodeIds) {
     return (dispatch, getState) => {
-      dispatch(this.startOperation(nodeIds));
-      dispatch(this.pollNodeslistDuringProgress());
+      dispatch(this.startOperation(nodeIds))
+      dispatch(this.pollNodeslistDuringProgress())
       MistralApiService.runWorkflow(MistralConstants.BAREMETAL_PROVIDE, {
         node_uuids: nodeIds
       }).catch(error => {
-        dispatch(handleErrors(error, 'Selected Nodes could not be provided'));
-        dispatch(this.finishOperation(nodeIds));
-      });
-    };
+        dispatch(handleErrors(error, 'Selected Nodes could not be provided'))
+        dispatch(this.finishOperation(nodeIds))
+      })
+    }
   },
 
   provideNodesFinished(messagePayload) {
     return (dispatch, getState) => {
-      const nodeIds = messagePayload.execution.input.node_uuids;
-      dispatch(this.finishOperation(nodeIds));
-      dispatch(this.fetchNodes());
+      const nodeIds = messagePayload.execution.input.node_uuids
+      dispatch(this.finishOperation(nodeIds))
+      dispatch(this.fetchNodes())
 
       switch (messagePayload.status) {
         case 'SUCCESS': {
@@ -260,8 +260,8 @@ export default {
               title: 'Nodes are available',
               message: messagePayload.message
             })
-          );
-          break;
+          )
+          break
         }
         case 'FAILED': {
           dispatch(
@@ -271,33 +271,33 @@ export default {
                 .filter(message => message.result)
                 .map(message => message.result)
             })
-          );
-          break;
+          )
+          break
         }
         default:
-          break;
+          break
       }
-    };
+    }
   },
 
   startManageNodes(nodeIds) {
     return (dispatch, getState) => {
-      dispatch(this.startOperation(nodeIds));
-      dispatch(this.pollNodeslistDuringProgress());
+      dispatch(this.startOperation(nodeIds))
+      dispatch(this.pollNodeslistDuringProgress())
       MistralApiService.runWorkflow(MistralConstants.BAREMETAL_MANAGE, {
         node_uuids: nodeIds
       }).catch(error => {
-        dispatch(handleErrors(error, 'Selected Nodes could not be managed'));
-        dispatch(this.finishOperation(nodeIds));
-      });
-    };
+        dispatch(handleErrors(error, 'Selected Nodes could not be managed'))
+        dispatch(this.finishOperation(nodeIds))
+      })
+    }
   },
 
   manageNodesFinished(messagePayload) {
     return (dispatch, getState) => {
-      const nodeIds = messagePayload.execution.input.node_uuids;
-      dispatch(this.finishOperation(nodeIds));
-      dispatch(this.fetchNodes());
+      const nodeIds = messagePayload.execution.input.node_uuids
+      dispatch(this.finishOperation(nodeIds))
+      dispatch(this.fetchNodes())
 
       switch (messagePayload.status) {
         case 'SUCCESS': {
@@ -307,8 +307,8 @@ export default {
               title: 'Nodes are manageable',
               message: messagePayload.message
             })
-          );
-          break;
+          )
+          break
         }
         case 'FAILED': {
           dispatch(
@@ -318,77 +318,77 @@ export default {
                 .filter(message => message.result)
                 .map(message => message.result)
             })
-          );
-          break;
+          )
+          break
         }
         default:
-          break;
+          break
       }
-    };
+    }
   },
 
   updateNode(nodePatch) {
     return (dispatch, getState) => {
-      dispatch(this.updateNodePending(nodePatch.uuid));
+      dispatch(this.updateNodePending(nodePatch.uuid))
       IronicApiService.patchNode(nodePatch)
         .then(response => {
-          dispatch(this.updateNodeSuccess(response));
+          dispatch(this.updateNodeSuccess(response))
         })
         .catch(error => {
-          dispatch(handleErrors(error, 'Node could not be updated'));
-          dispatch(this.updateNodeFailed(nodePatch.uuid));
-        });
-    };
+          dispatch(handleErrors(error, 'Node could not be updated'))
+          dispatch(this.updateNodeFailed(nodePatch.uuid))
+        })
+    }
   },
 
   updateNodePending(nodeId) {
     return {
       type: NodesConstants.UPDATE_NODE_PENDING,
       payload: nodeId
-    };
+    }
   },
 
   updateNodeFailed(nodeId) {
     return {
       type: NodesConstants.UPDATE_NODE_FAILED,
       payload: nodeId
-    };
+    }
   },
 
   updateNodeSuccess(node) {
     return {
       type: NodesConstants.UPDATE_NODE_SUCCESS,
       payload: node
-    };
+    }
   },
 
   deleteNodes(nodeIds) {
     return (dispatch, getState) => {
-      dispatch(this.startOperation(nodeIds));
+      dispatch(this.startOperation(nodeIds))
       nodeIds.map(nodeId => {
         IronicApiService.deleteNode(nodeId)
           .then(response => {
-            dispatch(this.deleteNodeSuccess(nodeId));
+            dispatch(this.deleteNodeSuccess(nodeId))
           })
           .catch(error => {
-            dispatch(handleErrors(error, 'Node could not be deleted'));
-            dispatch(this.deleteNodeFailed(nodeId));
-          });
-      });
-    };
+            dispatch(handleErrors(error, 'Node could not be deleted'))
+            dispatch(this.deleteNodeFailed(nodeId))
+          })
+      })
+    }
   },
 
   deleteNodeSuccess(nodeId) {
     return {
       type: NodesConstants.DELETE_NODE_SUCCESS,
       payload: nodeId
-    };
+    }
   },
 
   deleteNodeFailed(nodeId) {
     return {
       type: NodesConstants.DELETE_NODE_FAILED,
       payload: nodeId
-    };
+    }
   }
-};
+}

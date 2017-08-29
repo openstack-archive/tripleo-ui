@@ -14,28 +14,28 @@
  * under the License.
  */
 
-import { IntlProvider } from 'react-intl';
-import React from 'react';
-import ReactShallowRenderer from 'react-test-renderer/shallow';
-import { List, Map, Set } from 'immutable';
+import { IntlProvider } from 'react-intl'
+import React from 'react'
+import ReactShallowRenderer from 'react-test-renderer/shallow'
+import { List, Map, Set } from 'immutable'
 
 // TODO(jtomasek): remove this import when store is correctly mocked
-import store from '../../../js/store';
-import NodesTableView from '../../../js/components/nodes/NodesTableView';
+import store from '../../../js/store'
+import NodesTableView from '../../../js/components/nodes/NodesTableView'
 
 let nodes = Map({
   1: { uuid: 1 },
   2: { uuid: 2 }
-});
+})
 
-let roles = Map();
+let roles = Map()
 
 describe('RegisteredNodesTabPane component', () => {
-  let vdom;
+  let vdom
   beforeEach(() => {
-    let shallowRenderer = new ReactShallowRenderer();
-    const intlProvider = new IntlProvider({ locale: 'en' }, {});
-    const { intl } = intlProvider.getChildContext();
+    let shallowRenderer = new ReactShallowRenderer()
+    const intlProvider = new IntlProvider({ locale: 'en' }, {})
+    const { intl } = intlProvider.getChildContext()
     shallowRenderer.render(
       <NodesTableView.WrappedComponent.WrappedComponent
         availableProfiles={List()}
@@ -51,17 +51,17 @@ describe('RegisteredNodesTabPane component', () => {
         store={store}
         intl={intl}
       />
-    );
-    vdom = shallowRenderer.getRenderOutput();
+    )
+    vdom = shallowRenderer.getRenderOutput()
     /* TODO(jtomasek): replace this with shallowRenderer.getMountedInstance() when it is available
        https://github.com/facebook/react/pull/4918/files */
     // tabPaneInstance = shallowRenderer._instance._instance;
-  });
+  })
 
   it('should render NodesTable and pass nodes as data prop', () => {
     expect(vdom.props.children.props.children[1].type.displayName).toEqual(
       'InjectIntl(NodesTable)'
-    );
-    expect(vdom.props.children.props.children[1].props.nodes).toEqual(nodes);
-  });
-});
+    )
+    expect(vdom.props.children.props.children[1].props.nodes).toEqual(nodes)
+  })
+})

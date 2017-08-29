@@ -14,19 +14,19 @@
  * under the License.
  */
 
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map } from 'immutable'
 
 import {
   getCurrentStackDeploymentInProgress,
   getCurrentStack,
   getOvercloudInfo
-} from '../../js/selectors/stacks';
-import { InitialPlanState, Plan } from '../../js/immutableRecords/plans';
-import { Stack, StacksState } from '../../js/immutableRecords/stacks';
+} from '../../js/selectors/stacks'
+import { InitialPlanState, Plan } from '../../js/immutableRecords/plans'
+import { Stack, StacksState } from '../../js/immutableRecords/stacks'
 
 describe('stacks selectors', () => {
   describe('getOvercloudInfo', () => {
-    let state;
+    let state
     beforeEach(() => {
       state = {
         stacks: new StacksState({
@@ -50,8 +50,8 @@ describe('stacks selectors', () => {
             })
           })
         })
-      };
-    });
+      }
+    })
 
     it('returns false if ip and admin pwd are not loaded', () => {
       expect(getOvercloudInfo(state)).toEqual(
@@ -59,8 +59,8 @@ describe('stacks selectors', () => {
           ipAddress: undefined,
           adminPassword: undefined
         })
-      );
-    });
+      )
+    })
 
     it('returns false if ip is not loaded', () => {
       state.stacks = state.stacks.set(
@@ -68,27 +68,27 @@ describe('stacks selectors', () => {
         fromJS({
           parameter_defaults: { AdminPassword: '12345' }
         })
-      );
+      )
       expect(getOvercloudInfo(state)).toEqual(
         Map({
           ipAddress: undefined,
           adminPassword: '12345'
         })
-      );
-    });
+      )
+    })
 
     it('returns empty Map if admin pwd is not loaded', () => {
       state.stacks = state.stacks.setIn(
         ['resourceDetails', 'PublicVirtualIP', 'attributes', 'ip_address'],
         '192.0.2.5'
-      );
+      )
       expect(getOvercloudInfo(state)).toEqual(
         Map({
           ipAddress: '192.0.2.5',
           adminPassword: undefined
         })
-      );
-    });
+      )
+    })
 
     it('returns a Map containing ip and pwd if both are loaded', () => {
       state.stacks = state.stacks.set(
@@ -96,19 +96,19 @@ describe('stacks selectors', () => {
         fromJS({
           parameter_defaults: { AdminPassword: 'overcloudAdminPass' }
         })
-      );
+      )
       state.stacks = state.stacks.setIn(
         ['resourceDetails', 'PublicVirtualIP', 'attributes', 'ip_address'],
         '192.0.2.5'
-      );
+      )
       expect(getOvercloudInfo(state)).toEqual(
         Map({
           ipAddress: '192.0.2.5',
           adminPassword: 'overcloudAdminPass'
         })
-      );
-    });
-  });
+      )
+    })
+  })
 
   describe('getCurrentStack()', () => {
     const state = {
@@ -133,14 +133,14 @@ describe('stacks selectors', () => {
           })
         })
       })
-    };
+    }
 
     it('returns a stack based on the currentPlanName', () => {
       expect(getCurrentStack(state)).toEqual(
         Stack({ stack_name: 'overcloud', stack_status: 'CREATE_COMPLETE' })
-      );
-    });
-  });
+      )
+    })
+  })
 
   describe('getCurrentStackDeploymentInProgress', () => {
     it("returns true if the current plan's deployment is in progress", () => {
@@ -166,9 +166,9 @@ describe('stacks selectors', () => {
             })
           })
         })
-      };
-      expect(getCurrentStackDeploymentInProgress(state)).toBe(true);
-    });
+      }
+      expect(getCurrentStackDeploymentInProgress(state)).toBe(true)
+    })
 
     it("returns false if the current plan's deployment is not in progress", () => {
       const state = {
@@ -193,9 +193,9 @@ describe('stacks selectors', () => {
             })
           })
         })
-      };
-      expect(getCurrentStackDeploymentInProgress(state)).toBe(false);
-    });
+      }
+      expect(getCurrentStackDeploymentInProgress(state)).toBe(false)
+    })
 
     it('returns false if the current plan does not have an associated stack', () => {
       const state = {
@@ -216,8 +216,8 @@ describe('stacks selectors', () => {
             })
           })
         })
-      };
-      expect(getCurrentStackDeploymentInProgress(state)).toBe(false);
-    });
-  });
-});
+      }
+      expect(getCurrentStackDeploymentInProgress(state)).toBe(false)
+    })
+  })
+})

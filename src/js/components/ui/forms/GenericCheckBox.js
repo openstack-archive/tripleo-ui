@@ -14,17 +14,17 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
-import Formsy from 'formsy-react';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ClassNames from 'classnames'
+import Formsy from 'formsy-react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import InputDescription from './InputDescription';
-import InputErrorMessage from './InputErrorMessage';
+import InputDescription from './InputDescription'
+import InputErrorMessage from './InputErrorMessage'
 
 class GenericCheckBox extends React.Component {
   changeValue(event) {
-    this.props.setValue(event.target.checked);
+    this.props.setValue(event.target.checked)
   }
 
   render() {
@@ -33,7 +33,7 @@ class GenericCheckBox extends React.Component {
       radio: this.props.type === 'radio',
       'has-error': this.props.showError(),
       required: this.props.showRequired()
-    });
+    })
 
     return (
       <div className={divClasses}>
@@ -52,7 +52,7 @@ class GenericCheckBox extends React.Component {
         <InputErrorMessage getErrorMessage={this.props.getErrorMessage} />
         <InputDescription description={this.props.description} />
       </div>
-    );
+    )
   }
 }
 GenericCheckBox.propTypes = {
@@ -69,8 +69,8 @@ GenericCheckBox.propTypes = {
   showRequired: PropTypes.func,
   title: PropTypes.string,
   type: PropTypes.string
-};
+}
 GenericCheckBox.defaultProps = {
   type: 'checkbox'
-};
-export default Formsy.HOC(GenericCheckBox);
+}
+export default Formsy.HOC(GenericCheckBox)

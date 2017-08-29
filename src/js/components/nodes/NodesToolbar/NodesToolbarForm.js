@@ -14,15 +14,15 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import { Field, reduxForm } from 'redux-form';
-import { FormGroup, MenuItem } from 'react-bootstrap';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import { Field, reduxForm } from 'redux-form'
+import { FormGroup, MenuItem } from 'react-bootstrap'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import DropdownSelect from '../../ui/reduxForm/DropdownSelect';
-import { nodeColumnMessages } from '../messages';
-import { SortDirectionInput } from '../../ui/Toolbar/ToolbarInputs';
+import DropdownSelect from '../../ui/reduxForm/DropdownSelect'
+import { nodeColumnMessages } from '../messages'
+import { SortDirectionInput } from '../../ui/Toolbar/ToolbarInputs'
 
 const messages = defineMessages({
   table: {
@@ -37,7 +37,7 @@ const messages = defineMessages({
     id: 'NodesToolbarForm.sortDir',
     defaultMessage: 'Sort direction'
   }
-});
+})
 
 const NodesToolbarForm = ({ handleSubmit, intl }) => (
   <form onSubmit={handleSubmit}>
@@ -93,14 +93,14 @@ const NodesToolbarForm = ({ handleSubmit, intl }) => (
     </FormGroup>
     */}
   </form>
-);
+)
 NodesToolbarForm.propTypes = {
   children: PropTypes.node,
   handleSubmit: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired
-};
+}
 export default injectIntl(
   reduxForm({
     form: 'nodesToolbar'
   })(NodesToolbarForm)
-);
+)

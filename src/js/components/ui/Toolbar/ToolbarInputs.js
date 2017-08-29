@@ -14,9 +14,9 @@
  * under the License.
  */
 
-import { Button } from 'react-bootstrap';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { Button } from 'react-bootstrap'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 export const SortDirectionInput = ({ input: { onChange, value }, title }) => {
   return (
@@ -28,24 +28,24 @@ export const SortDirectionInput = ({ input: { onChange, value }, title }) => {
     >
       <span className={`fa fa-sort-alpha-${value}`} />
     </Button>
-  );
-};
+  )
+}
 SortDirectionInput.propTypes = {
   children: PropTypes.node,
   input: PropTypes.object.isRequired,
   title: PropTypes.string
-};
+}
 
 const getIconClass = optionKey => {
   switch (optionKey) {
     case 'cards':
-      return 'fa fa-th-large';
+      return 'fa fa-th-large'
     case 'list':
-      return 'fa fa-th-list';
+      return 'fa fa-th-list'
     default:
-      return 'fa fa-th';
+      return 'fa fa-th'
   }
-};
+}
 
 export const ContentViewSelectorInput = ({
   input: { onChange, value },
@@ -65,9 +65,9 @@ export const ContentViewSelectorInput = ({
         </Button>
       ))}
     </div>
-  );
-};
+  )
+}
 ContentViewSelectorInput.propTypes = {
   input: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired
-};
+}

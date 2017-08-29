@@ -14,20 +14,20 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import { Field } from 'redux-form';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import { Field } from 'redux-form'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import Link from '../ui/Link';
-import NodePickerInput from '../ui/reduxForm/NodePickerInput';
+import Link from '../ui/Link'
+import NodePickerInput from '../ui/reduxForm/NodePickerInput'
 import {
   maxValue,
   minValue,
   number,
   messages as validationMessages
-} from '../ui/reduxForm/validations';
+} from '../ui/reduxForm/validations'
 
 const messages = defineMessages({
   nodesAssigned: {
@@ -43,7 +43,7 @@ const messages = defineMessages({
     defaultMessage: 'of {count, number}',
     description: 'Used to display available nodes to assign, e.g. 1 of 2 Nodes Assigned'
   }
-});
+})
 
 const RoleCard = ({
   assignedNodesCountParameter,
@@ -63,7 +63,7 @@ const RoleCard = ({
     ),
     minValue(0, intl.formatMessage(validationMessages.minValue, { min: '0' })),
     number(intl.formatMessage(validationMessages.number))
-  ];
+  ]
 
   return (
     <div className={`card-pf card-pf-accented role-card ${identifier}`}>
@@ -110,8 +110,8 @@ const RoleCard = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 RoleCard.propTypes = {
   assignedNodesCountParameter: ImmutablePropTypes.record,
   availableNodesCount: PropTypes.number.isRequired,
@@ -120,6 +120,6 @@ RoleCard.propTypes = {
   intl: PropTypes.object,
   name: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired
-};
+}
 
-export default injectIntl(RoleCard);
+export default injectIntl(RoleCard)

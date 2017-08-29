@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { List, Map, Record } from 'immutable';
+import { List, Map, Record } from 'immutable'
 
 export const EnvironmentConfigurationState = Record({
   loaded: false,
@@ -26,7 +26,7 @@ export const EnvironmentConfigurationState = Record({
     formErrors: List(),
     formFieldErrors: Map()
   })
-});
+})
 
 export const Environment = Record({
   file: undefined,
@@ -38,4 +38,4 @@ export const Environment = Record({
   requires: List(),
   resourceRegistry: Map(),
   parameterDefaults: Map()
-});
+})

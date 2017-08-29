@@ -14,17 +14,17 @@
  * under the License.
  */
 
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import DeploymentSuccess from './DeploymentSuccess';
-import DeploymentFailure from './DeploymentFailure';
-import DeploymentProgress from './DeploymentProgress';
-import Link from '../ui/Link';
-import Loader from '../ui/Loader';
-import { stackStates } from '../../constants/StacksConstants';
+import DeploymentSuccess from './DeploymentSuccess'
+import DeploymentFailure from './DeploymentFailure'
+import DeploymentProgress from './DeploymentProgress'
+import Link from '../ui/Link'
+import Loader from '../ui/Loader'
+import { stackStates } from '../../constants/StacksConstants'
 
 const messages = defineMessages({
   validateAndDeploy: {
@@ -35,7 +35,7 @@ const messages = defineMessages({
     id: 'DeployStep.requestingDeploy',
     defaultMessage: 'Requesting a deploy...'
   }
-});
+})
 
 export const DeployStep = ({
   currentPlan,
@@ -74,7 +74,7 @@ export const DeployStep = ({
           </Loader>
         </Link>
       </Loader>
-    );
+    )
   } else if (currentStack.stack_status.match(/PROGRESS/)) {
     return (
       <DeploymentProgress
@@ -84,7 +84,7 @@ export const DeployStep = ({
         deleteStack={deleteStack}
         deploymentProgress={currentStackDeploymentProgress}
       />
-    );
+    )
   } else if (currentStack.stack_status.match(/COMPLETE/)) {
     return (
       <DeploymentSuccess
@@ -96,7 +96,7 @@ export const DeployStep = ({
         fetchStackResource={fetchStackResource}
         fetchStackEnvironment={fetchStackEnvironment}
       />
-    );
+    )
   } else {
     return (
       <DeploymentFailure
@@ -105,9 +105,9 @@ export const DeployStep = ({
         isRequestingStackDelete={isRequestingStackDelete}
         stack={currentStack}
       />
-    );
+    )
   }
-};
+}
 
 DeployStep.propTypes = {
   currentPlan: ImmutablePropTypes.record.isRequired,
@@ -122,6 +122,6 @@ DeployStep.propTypes = {
   isRequestingStackDelete: PropTypes.bool.isRequired,
   overcloudInfo: ImmutablePropTypes.map.isRequired,
   stacksLoaded: PropTypes.bool.isRequired
-};
+}
 
-export default injectIntl(DeployStep);
+export default injectIntl(DeployStep)

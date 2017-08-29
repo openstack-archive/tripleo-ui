@@ -14,17 +14,17 @@
  * under the License.
  */
 
-import { createSelector } from 'reselect';
-import { Map } from 'immutable';
+import { createSelector } from 'reselect'
+import { Map } from 'immutable'
 
-import { Stack } from '../immutableRecords/stacks';
-import { getCurrentPlanName } from './plans';
+import { Stack } from '../immutableRecords/stacks'
+import { getCurrentPlanName } from './plans'
 
-const stacksSelector = state => state.stacks.stacks;
+const stacksSelector = state => state.stacks.stacks
 const currentStackEnvironmentSelector = state =>
-  state.stacks.currentStackEnvironment;
-const stackResourcesSelector = state => state.stacks.resources;
-const stackResourceDetailsSelector = state => state.stacks.resourceDetails;
+  state.stacks.currentStackEnvironment
+const stackResourcesSelector = state => state.stacks.resources
+const stackResourceDetailsSelector = state => state.stacks.resourceDetails
 
 /**
  * Returns the stack associated with currentPlanName
@@ -32,7 +32,7 @@ const stackResourceDetailsSelector = state => state.stacks.resourceDetails;
 export const getCurrentStack = createSelector(
   [stacksSelector, getCurrentPlanName],
   (stacks, currentPlanName) => stacks.get(currentPlanName)
-);
+)
 
 /**
  * Returns a flag for the deployment progress of the current plan
@@ -44,9 +44,9 @@ export const getCurrentStackDeploymentInProgress = createSelector(
     return (
       stacks.get(currentPlanName, new Stack()).stack_status ===
       'CREATE_IN_PROGRESS'
-    );
+    )
   }
-);
+)
 
 /**
  * Returns calculated percentage of deployment progress
@@ -54,16 +54,16 @@ export const getCurrentStackDeploymentInProgress = createSelector(
 export const getCurrentStackDeploymentProgress = createSelector(
   [stackResourcesSelector],
   resources => {
-    let allResources = resources.size;
+    let allResources = resources.size
     if (allResources > 0) {
       let completeResources = resources.filter(r => {
-        return r.resource_status === 'CREATE_COMPLETE';
-      }).size;
-      return Math.ceil(completeResources / allResources * 100);
+        return r.resource_status === 'CREATE_COMPLETE'
+      }).size
+      return Math.ceil(completeResources / allResources * 100)
     }
-    return 0;
+    return 0
   }
-);
+)
 
 /**
   * Returns a Map containing the overcloud information.
@@ -78,12 +78,12 @@ export const getOvercloudInfo = createSelector(
     const adminPassword = currentStackEnvironment.getIn([
       'parameter_defaults',
       'AdminPassword'
-    ]);
+    ])
     const ipAddress = stackResourceDetails.getIn([
       'PublicVirtualIP',
       'attributes',
       'ip_address'
-    ]);
-    return Map({ ipAddress, adminPassword });
+    ])
+    return Map({ ipAddress, adminPassword })
   }
-);
+)

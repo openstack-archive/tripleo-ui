@@ -14,19 +14,19 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 import {
   deploymentStatusMessages as statusMessages,
   stackStates
-} from '../../constants/StacksConstants';
-import DeleteStackButton from './DeleteStackButton';
-import Loader from '../ui/Loader';
-import ProgressBar from '../ui/ProgressBar';
+} from '../../constants/StacksConstants'
+import DeleteStackButton from './DeleteStackButton'
+import Loader from '../ui/Loader'
+import ProgressBar from '../ui/ProgressBar'
 
 const messages = defineMessages({
   cancelDeployment: {
@@ -45,7 +45,7 @@ const messages = defineMessages({
     id: 'DeploymentProgress.viewInformation',
     defaultMessage: 'View detailed information'
   }
-});
+})
 
 class DeploymentProgress extends React.Component {
   renderProgressBar() {
@@ -55,7 +55,7 @@ class DeploymentProgress extends React.Component {
           label={this.props.deploymentProgress + '%'}
           labelPosition="topRight"
         />
-      : null;
+      : null
   }
 
   render() {
@@ -65,13 +65,13 @@ class DeploymentProgress extends React.Component {
       intl: { formatMessage },
       isRequestingStackDelete,
       stack
-    } = this.props;
+    } = this.props
 
     const statusMessage = (
       <strong>
         <FormattedMessage {...statusMessages[stack.stack_status]} />
       </strong>
-    );
+    )
 
     const deleteButton = stack.stack_status !== stackStates.DELETE_IN_PROGRESS
       ? <DeleteStackButton
@@ -83,7 +83,7 @@ class DeploymentProgress extends React.Component {
           loaderContent={formatMessage(messages.requestingDeletion)}
           stack={stack}
         />
-      : null;
+      : null
 
     return (
       <div>
@@ -99,7 +99,7 @@ class DeploymentProgress extends React.Component {
         {this.renderProgressBar()}
         {deleteButton}
       </div>
-    );
+    )
   }
 }
 
@@ -110,6 +110,6 @@ DeploymentProgress.propTypes = {
   intl: PropTypes.object,
   isRequestingStackDelete: PropTypes.bool.isRequired,
   stack: ImmutablePropTypes.record.isRequired
-};
+}
 
-export default injectIntl(DeploymentProgress);
+export default injectIntl(DeploymentProgress)

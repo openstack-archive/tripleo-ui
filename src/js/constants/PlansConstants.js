@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import keyMirror from 'keymirror';
+import keyMirror from 'keymirror'
 
 export default keyMirror({
   REQUEST_PLANS: null,
@@ -40,6 +40,6 @@ export default keyMirror({
   EXPORT_PLAN_PENDING: null,
   EXPORT_PLAN_SUCCESS: null,
   EXPORT_PLAN_FAILED: null
-});
+})
 
-export const PLAN_ENVIRONMENT = 'plan-environment.yaml';
+export const PLAN_ENVIRONMENT = 'plan-environment.yaml'

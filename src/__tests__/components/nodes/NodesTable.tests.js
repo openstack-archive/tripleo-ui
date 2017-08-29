@@ -14,21 +14,21 @@
  * under the License.
  */
 
-import { IntlProvider } from 'react-intl';
-import React from 'react';
-import ReactShallowRenderer from 'react-test-renderer/shallow';
-import { Map, Set } from 'immutable';
+import { IntlProvider } from 'react-intl'
+import React from 'react'
+import ReactShallowRenderer from 'react-test-renderer/shallow'
+import { Map, Set } from 'immutable'
 
-import NodesTable from '../../../js/components/nodes/NodesTable';
-import { NodesTableProfileCell } from '../../../js/components/nodes/NodesTable';
+import NodesTable from '../../../js/components/nodes/NodesTable'
+import { NodesTableProfileCell } from '../../../js/components/nodes/NodesTable'
 
 const initialState = {
   filterString: '',
   sortBy: '',
   sortDir: 'asc'
-};
+}
 
-const filterString = '1';
+const filterString = '1'
 
 let nodes = Map({
   1: {
@@ -52,14 +52,14 @@ let nodes = Map({
       capabilities: 'boot_option:local,profile:nonexistentRole'
     }
   }
-});
+})
 
 describe('NodesTable component', () => {
-  let nodesTableVdom, nodesTableInstance;
+  let nodesTableVdom, nodesTableInstance
   beforeEach(() => {
-    let shallowRenderer = new ReactShallowRenderer();
-    const intlProvider = new IntlProvider({ locale: 'en' }, {});
-    const { intl } = intlProvider.getChildContext();
+    let shallowRenderer = new ReactShallowRenderer()
+    const intlProvider = new IntlProvider({ locale: 'en' }, {})
+    const { intl } = intlProvider.getChildContext()
     shallowRenderer.render(
       <NodesTable.WrappedComponent
         nodes={nodes}
@@ -67,56 +67,56 @@ describe('NodesTable component', () => {
         isFetchingNodes={false}
         intl={intl}
       />
-    );
-    nodesTableVdom = shallowRenderer.getRenderOutput();
-    nodesTableInstance = shallowRenderer._instance._instance;
-  });
+    )
+    nodesTableVdom = shallowRenderer.getRenderOutput()
+    nodesTableInstance = shallowRenderer._instance._instance
+  })
 
   it('should render with initial state', () => {
-    expect(nodesTableInstance.state).toEqual(initialState);
-  });
+    expect(nodesTableInstance.state).toEqual(initialState)
+  })
 
   it('should render DataTable and pass data', () => {
-    expect(nodesTableVdom.type.displayName).toEqual('InjectIntl(DataTable)');
-    expect(nodesTableVdom.props.data).toEqual(nodes.toList().toJS());
-    expect(nodesTableVdom.props.noRowsRenderer.name).toBeDefined();
-    expect(nodesTableVdom.props.children.length).toEqual(11);
-  });
+    expect(nodesTableVdom.type.displayName).toEqual('InjectIntl(DataTable)')
+    expect(nodesTableVdom.props.data).toEqual(nodes.toList().toJS())
+    expect(nodesTableVdom.props.noRowsRenderer.name).toBeDefined()
+    expect(nodesTableVdom.props.children.length).toEqual(11)
+  })
 
   it('should be able to filter rows', () => {
-    spyOn(nodesTableInstance, '_filterData').and.callThrough();
-    nodesTableInstance.onFilter(filterString);
+    spyOn(nodesTableInstance, '_filterData').and.callThrough()
+    nodesTableInstance.onFilter(filterString)
     expect(nodesTableInstance.state).toEqual({
       filterString: '1',
       sortBy: '',
       sortDir: 'asc'
-    });
+    })
     expect(nodesTableInstance._filterData).toHaveBeenCalledWith(
       '1',
       nodesTableInstance.props.nodes.toList().toJS()
-    );
-  });
-});
+    )
+  })
+})
 
 describe('NodesTableRoleCell', () => {
-  let roleCellInstance;
+  let roleCellInstance
   describe('getAssignedRoleTitle', () => {
     it('should return Not Assigned when profile is not set in node.properties.capabilities', () => {
-      let shallowRenderer = new ReactShallowRenderer();
+      let shallowRenderer = new ReactShallowRenderer()
       shallowRenderer.render(
         <NodesTableProfileCell data={nodes.toList().toJS()} rowIndex={0} />
-      );
-      roleCellInstance = shallowRenderer._instance._instance;
-      expect(roleCellInstance.getAssignedRoleTitle()).toEqual('compute');
-    });
+      )
+      roleCellInstance = shallowRenderer._instance._instance
+      expect(roleCellInstance.getAssignedRoleTitle()).toEqual('compute')
+    })
 
     it('should return Not Assigned when profile is not set in node.properties.capabilities', () => {
-      let shallowRenderer = new ReactShallowRenderer();
+      let shallowRenderer = new ReactShallowRenderer()
       shallowRenderer.render(
         <NodesTableProfileCell data={nodes.toList().toJS()} rowIndex={1} />
-      );
-      roleCellInstance = shallowRenderer._instance._instance;
-      expect(roleCellInstance.getAssignedRoleTitle()).toEqual('-');
-    });
-  });
-});
+      )
+      roleCellInstance = shallowRenderer._instance._instance
+      expect(roleCellInstance.getAssignedRoleTitle()).toEqual('-')
+    })
+  })
+})

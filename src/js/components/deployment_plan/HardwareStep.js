@@ -14,16 +14,16 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
-import React from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl'
+import { Link } from 'react-router-dom'
+import React from 'react'
 
 const messages = defineMessages({
   registerNodes: {
     id: 'HardwareStep.registerNodes',
     defaultMessage: 'Register Nodes'
   }
-});
+})
 
 const HardwareStep = () => {
   return (
@@ -31,7 +31,7 @@ const HardwareStep = () => {
       <span className="fa fa-plus" />&nbsp;
       <FormattedMessage {...messages.registerNodes} />
     </Link>
-  );
-};
+  )
+}
 
-export default HardwareStep;
+export default HardwareStep

@@ -14,39 +14,39 @@
  * under the License.
  */
 
-import ExtendableError from 'es6-error';
+import ExtendableError from 'es6-error'
 
 class BaseAxiosError extends ExtendableError {
   constructor(message, e) {
-    super(message);
-    this.config = e.config;
-    this.request = e.request;
-    this.response = e.response;
+    super(message)
+    this.config = e.config
+    this.request = e.request
+    this.response = e.response
   }
 }
 
 class AuthenticationError extends BaseAxiosError {
   constructor(e) {
-    super('Authentication failed, please log in again', e);
+    super('Authentication failed, please log in again', e)
   }
 }
 
 class ConnectionError extends BaseAxiosError {
   constructor(message, e) {
-    super(message, e);
+    super(message, e)
   }
 }
 
 class MistralApiError extends BaseAxiosError {
   constructor(e) {
-    super(e.response.data.faultstring, e);
+    super(e.response.data.faultstring, e)
   }
 }
 
 class MistralExecutionError extends ExtendableError {
   constructor(response) {
-    super(response.data.output);
-    this.response = response;
+    super(response.data.output)
+    this.response = response
   }
 }
 
@@ -54,27 +54,27 @@ class SwiftApiError extends BaseAxiosError {}
 
 class IronicApiError extends BaseAxiosError {
   constructor(e) {
-    const message = JSON.parse(e.response.data.error_message);
-    super(message.faultstring, e);
+    const message = JSON.parse(e.response.data.error_message)
+    super(message.faultstring, e)
   }
 }
 
 class IronicInspectorApiError extends BaseAxiosError {
   constructor(e) {
-    super(e.response.data.error.message, e);
+    super(e.response.data.error.message, e)
   }
 }
 
 class HeatApiError extends BaseAxiosError {
   constructor(e) {
-    const { data } = e.response;
-    super(data.message || data.error.message, e);
+    const { data } = e.response
+    super(data.message || data.error.message, e)
   }
 }
 
 class KeystoneApiError extends BaseAxiosError {
   constructor(e) {
-    super(e.response.data.error.message, e);
+    super(e.response.data.error.message, e)
   }
 }
 
@@ -89,4 +89,4 @@ export {
   IronicInspectorApiError,
   HeatApiError,
   KeystoneApiError
-};
+}

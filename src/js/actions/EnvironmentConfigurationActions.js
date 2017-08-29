@@ -14,18 +14,18 @@
  * under the License.
  */
 
-import { defineMessages } from 'react-intl';
-import { normalize, arrayOf } from 'normalizr';
-import yaml from 'js-yaml';
+import { defineMessages } from 'react-intl'
+import { normalize, arrayOf } from 'normalizr'
+import yaml from 'js-yaml'
 
 import EnvironmentConfigurationConstants
-  from '../constants/EnvironmentConfigurationConstants';
-import { handleErrors } from './ErrorActions';
-import MistralApiService from '../services/MistralApiService';
-import NotificationActions from '../actions/NotificationActions';
-import { topicSchema } from '../normalizrSchemas/environmentConfiguration';
-import MistralConstants from '../constants/MistralConstants';
-import SwiftApiService from '../services/SwiftApiService';
+  from '../constants/EnvironmentConfigurationConstants'
+import { handleErrors } from './ErrorActions'
+import MistralApiService from '../services/MistralApiService'
+import NotificationActions from '../actions/NotificationActions'
+import { topicSchema } from '../normalizrSchemas/environmentConfiguration'
+import MistralConstants from '../constants/MistralConstants'
+import SwiftApiService from '../services/SwiftApiService'
 
 const messages = defineMessages({
   envConfigUpdatedNotificationMessage: {
@@ -36,62 +36,62 @@ const messages = defineMessages({
     id: 'EnvironmentConfigurationActions.envConfigUpdatedNotificationTitle',
     defaultMessage: 'Environment Configuration updated'
   }
-});
+})
 
 export default {
   fetchEnvironmentConfiguration(planName, redirect) {
     return dispatch => {
-      dispatch(this.fetchEnvironmentConfigurationPending());
+      dispatch(this.fetchEnvironmentConfigurationPending())
       MistralApiService.runAction(MistralConstants.CAPABILITIES_GET, {
         container: planName
       })
         .then(response => {
           const entities = normalize(response, arrayOf(topicSchema))
-            .entities || {};
-          dispatch(this.fetchEnvironmentConfigurationSuccess(entities));
+            .entities || {}
+          dispatch(this.fetchEnvironmentConfigurationSuccess(entities))
         })
         .catch(error => {
           if (redirect) {
-            redirect();
+            redirect()
           }
           dispatch(
             handleErrors(error, 'Deployment configuration could not be loaded')
-          );
-          dispatch(this.fetchEnvironmentConfigurationFailed());
-        });
-    };
+          )
+          dispatch(this.fetchEnvironmentConfigurationFailed())
+        })
+    }
   },
 
   fetchEnvironmentConfigurationPending() {
     return {
       type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_PENDING
-    };
+    }
   },
 
   fetchEnvironmentConfigurationSuccess(entities) {
     return {
       type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_SUCCESS,
       payload: entities
-    };
+    }
   },
 
   fetchEnvironmentConfigurationFailed(environment) {
     return {
       type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_FAILED
-    };
+    }
   },
 
   updateEnvironmentConfiguration(planName, data, formFields) {
     return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      dispatch(this.updateEnvironmentConfigurationPending());
+      const { formatMessage } = getIntl(getState())
+      dispatch(this.updateEnvironmentConfigurationPending())
       MistralApiService.runAction(MistralConstants.CAPABILITIES_UPDATE, {
         environments: data,
         container: planName
       })
         .then(response => {
-          const enabledEnvs = response.environments.map(env => env.path);
-          dispatch(this.updateEnvironmentConfigurationSuccess(enabledEnvs));
+          const enabledEnvs = response.environments.map(env => env.path)
+          dispatch(this.updateEnvironmentConfigurationSuccess(enabledEnvs))
           dispatch(
             NotificationActions.notify({
               title: formatMessage(messages.envConfigUpdatedNotificationTitle),
@@ -100,7 +100,7 @@ export default {
               ),
               type: 'success'
             })
-          );
+          )
         })
         .catch(error => {
           dispatch(
@@ -109,7 +109,7 @@ export default {
               'Deployment configuration could not be updated',
               false
             )
-          );
+          )
           dispatch(
             this.updateEnvironmentConfigurationFailed([
               {
@@ -117,22 +117,22 @@ export default {
                 message: error.message
               }
             ])
-          );
-        });
-    };
+          )
+        })
+    }
   },
 
   updateEnvironmentConfigurationPending() {
     return {
       type: EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_PENDING
-    };
+    }
   },
 
   updateEnvironmentConfigurationSuccess(enabledEnvironments) {
     return {
       type: EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS,
       payload: enabledEnvironments
-    };
+    }
   },
 
   updateEnvironmentConfigurationFailed(formErrors = [], formFieldErrors = {}) {
@@ -142,12 +142,12 @@ export default {
         formErrors,
         formFieldErrors
       }
-    };
+    }
   },
 
   fetchEnvironment(planName, environmentPath) {
     return dispatch => {
-      dispatch(this.fetchEnvironmentPending(environmentPath));
+      dispatch(this.fetchEnvironmentPending(environmentPath))
       SwiftApiService.getObject(planName, environmentPath)
         .then(response => {
           const {
@@ -156,14 +156,14 @@ export default {
           } = yaml.safeLoad(response, {
             filename: environmentPath,
             json: true
-          });
+          })
           dispatch(
             this.fetchEnvironmentSuccess({
               file: environmentPath,
               resourceRegistry: resource_registry,
               parameterDefaults: parameter_defaults
             })
-          );
+          )
         })
         .catch(error => {
           dispatch(
@@ -172,29 +172,29 @@ export default {
               `Environment ${environmentPath} could not be loaded`,
               false
             )
-          );
+          )
           dispatch(
             this.fetchEnvironmentFailed(environmentPath, {
               title: `Environment ${environmentPath} could not be loaded`,
               message: error.message
             })
-          );
-        });
-    };
+          )
+        })
+    }
   },
 
   fetchEnvironmentPending(environmentPath) {
     return {
       type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_PENDING,
       payload: environmentPath
-    };
+    }
   },
 
   fetchEnvironmentSuccess(environment) {
     return {
       type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_SUCCESS,
       payload: environment
-    };
+    }
   },
 
   fetchEnvironmentFailed(environmentPath, error) {
@@ -204,6 +204,6 @@ export default {
         environmentPath,
         error
       }
-    };
+    }
   }
-};
+}

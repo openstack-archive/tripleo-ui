@@ -14,23 +14,23 @@
  * under the License.
  */
 
-import uuid from 'node-uuid';
-import when from 'when';
+import uuid from 'node-uuid'
+import when from 'when'
 
-import { getAuthTokenId, getProjectId, getServiceUrl } from './utils';
+import { getAuthTokenId, getProjectId, getServiceUrl } from './utils'
 import {
   ZAQAR_DEFAULT_QUEUE,
   ZAQAR_LOGGING_QUEUE
-} from '../constants/ZaqarConstants';
-import ZaqarActions from '../actions/ZaqarActions';
-import NotificationActions from '../actions/NotificationActions';
+} from '../constants/ZaqarConstants'
+import ZaqarActions from '../actions/ZaqarActions'
+import NotificationActions from '../actions/NotificationActions'
 
 // We're using `console` here to avoid circular imports.
 const logger = {
   error: (...msg) => {
-    console.log(...msg); // eslint-disable-line no-console
+    console.log(...msg) // eslint-disable-line no-console
   }
-};
+}
 
 export default {
   socket: null,
@@ -38,37 +38,37 @@ export default {
 
   init(getState, dispatch, history) {
     when.try(getServiceUrl, 'zaqar-websocket').then(serviceUrl => {
-      this.socket = new WebSocket(serviceUrl);
-      this.clientID = uuid.v4();
+      this.socket = new WebSocket(serviceUrl)
+      this.clientID = uuid.v4()
       this.socket.onopen = () => {
-        this.authenticate();
-        this.createQueue(ZAQAR_DEFAULT_QUEUE);
-        this.createQueue(ZAQAR_LOGGING_QUEUE);
-        this.subscribe(ZAQAR_DEFAULT_QUEUE);
-      };
+        this.authenticate()
+        this.createQueue(ZAQAR_DEFAULT_QUEUE)
+        this.createQueue(ZAQAR_LOGGING_QUEUE)
+        this.subscribe(ZAQAR_DEFAULT_QUEUE)
+      }
 
-      this.socket.onclose = function(evt) {};
+      this.socket.onclose = function(evt) {}
 
       this.socket.onerror = function(error) {
         logger.error(
           'Zaqar WebSocket encountered error: ',
           error.message,
           'Closing Socket.'
-        );
+        )
         dispatch(
           NotificationActions.notify({
             title: 'Zaqar WebSocket encountered Error',
             message: error.message
           })
-        );
-        this.close();
-      };
+        )
+        this.close()
+      }
 
       this.socket.onmessage = evt => {
-        const data = JSON.parse(evt.data);
-        dispatch(ZaqarActions.messageReceived(data, history));
-      };
-    });
+        const data = JSON.parse(evt.data)
+        dispatch(ZaqarActions.messageReceived(data, history))
+      }
+    })
   },
 
   authenticate() {
@@ -79,8 +79,8 @@ export default {
         'Client-ID': this.clientID,
         'X-Project-ID': getProjectId()
       }
-    };
-    this.socket.send(JSON.stringify(message));
+    }
+    this.socket.send(JSON.stringify(message))
   },
 
   sendMessage(action, body = {}) {
@@ -91,22 +91,22 @@ export default {
         'X-Project-ID': getProjectId()
       },
       body: body
-    };
-    this.socket.send(JSON.stringify(message));
+    }
+    this.socket.send(JSON.stringify(message))
   },
 
   createQueue(queueName) {
-    this.sendMessage('queue_create', { queue_name: queueName });
+    this.sendMessage('queue_create', { queue_name: queueName })
   },
 
   subscribe(queueName, ttl = 3600) {
     this.sendMessage('subscription_create', {
       queue_name: queueName,
       ttl: ttl
-    });
+    })
   },
 
   close() {
-    this.socket && this.socket.close();
+    this.socket && this.socket.close()
   }
-};
+}

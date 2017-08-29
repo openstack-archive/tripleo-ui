@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { defineMessages } from 'react-intl';
+import { defineMessages } from 'react-intl'
 /**
  *  Maps Node property names to translated labels. This is used to populate toolbar select options
  *  or Table Column labels etc.
@@ -60,4 +60,4 @@ export const nodeColumnMessages = defineMessages({
     id: 'NodeColumns.macs',
     defaultMessage: 'Mac Addresses'
   }
-});
+})

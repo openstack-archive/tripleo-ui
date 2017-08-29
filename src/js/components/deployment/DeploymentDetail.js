@@ -14,40 +14,40 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { connect } from 'react-redux'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 import {
   allPreDeploymentValidationsSuccessful
-} from '../../selectors/validations';
-import DeploymentConfirmation from './DeploymentConfirmation';
-import DeploymentProgress from './DeploymentProgress';
-import DeploymentSuccess from './DeploymentSuccess';
-import DeploymentFailure from './DeploymentFailure';
-import { getCurrentPlan, getCurrentPlanName } from '../../selectors/plans';
+} from '../../selectors/validations'
+import DeploymentConfirmation from './DeploymentConfirmation'
+import DeploymentProgress from './DeploymentProgress'
+import DeploymentSuccess from './DeploymentSuccess'
+import DeploymentFailure from './DeploymentFailure'
+import { getCurrentPlan, getCurrentPlanName } from '../../selectors/plans'
 import {
   getCurrentStack,
   getCurrentStackDeploymentProgress
-} from '../../selectors/stacks';
+} from '../../selectors/stacks'
 import {
   getEnvironmentConfigurationSummary
-} from '../../selectors/environmentConfiguration';
-import Loader from '../ui/Loader';
+} from '../../selectors/environmentConfiguration'
+import Loader from '../ui/Loader'
 import {
   ModalPanelBackdrop,
   ModalPanel,
   ModalPanelHeader,
   ModalPanelBody,
   ModalPanelFooter
-} from '../ui/ModalPanel';
-import PlanActions from '../../actions/PlansActions';
-import { stackStates } from '../../constants/StacksConstants';
-import StacksActions from '../../actions/StacksActions';
-import ValidationsActions from '../../actions/ValidationsActions';
+} from '../ui/ModalPanel'
+import PlanActions from '../../actions/PlansActions'
+import { stackStates } from '../../constants/StacksConstants'
+import StacksActions from '../../actions/StacksActions'
+import ValidationsActions from '../../actions/ValidationsActions'
 
 const messages = defineMessages({
   close: {
@@ -62,7 +62,7 @@ const messages = defineMessages({
     id: 'DeploymentDetail.modalTitle',
     defaultMessage: 'Plan {planName} deployment'
   }
-});
+})
 
 class DeploymentDetail extends React.Component {
   renderStatus() {
@@ -79,7 +79,7 @@ class DeploymentDetail extends React.Component {
       fetchStackResources,
       runPreDeploymentValidations,
       stacksLoaded
-    } = this.props;
+    } = this.props
 
     if (
       !currentStack ||
@@ -99,7 +99,7 @@ class DeploymentDetail extends React.Component {
             runPreDeploymentValidations={runPreDeploymentValidations}
           />
         </Loader>
-      );
+      )
     } else if (currentStack.stack_status.match(/PROGRESS/)) {
       return (
         <DeploymentProgress
@@ -109,7 +109,7 @@ class DeploymentDetail extends React.Component {
           stackResourcesLoaded={currentStackResourcesLoaded}
           fetchStackResources={fetchStackResources}
         />
-      );
+      )
     } else if (currentStack.stack_status.match(/COMPLETE/)) {
       return (
         <DeploymentSuccess
@@ -117,7 +117,7 @@ class DeploymentDetail extends React.Component {
           stackResources={currentStackResources}
           stackResourcesLoaded={currentStackResourcesLoaded}
         />
-      );
+      )
     } else {
       return (
         <DeploymentFailure
@@ -127,12 +127,12 @@ class DeploymentDetail extends React.Component {
           stackResourcesLoaded={currentStackResourcesLoaded}
           planName={currentPlanName}
         />
-      );
+      )
     }
   }
 
   render() {
-    const { currentPlanName } = this.props;
+    const { currentPlanName } = this.props
     return (
       <div>
         <ModalPanelBackdrop />
@@ -166,7 +166,7 @@ class DeploymentDetail extends React.Component {
           </ModalPanelFooter>
         </ModalPanel>
       </div>
-    );
+    )
   }
 }
 
@@ -184,7 +184,7 @@ DeploymentDetail.propTypes = {
   intl: PropTypes.object,
   runPreDeploymentValidations: PropTypes.func.isRequired,
   stacksLoaded: PropTypes.bool.isRequired
-};
+}
 
 const mapStateToProps = state => {
   return {
@@ -199,8 +199,8 @@ const mapStateToProps = state => {
     currentStackResourcesLoaded: state.stacks.resourcesLoaded,
     environmentConfigurationSummary: getEnvironmentConfigurationSummary(state),
     stacksLoaded: state.stacks.isLoaded
-  };
-};
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -211,9 +211,9 @@ const mapDispatchToProps = dispatch => {
       dispatch(
         ValidationsActions.runValidationGroups(['pre-deployment'], planName)
       )
-  };
-};
+  }
+}
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(DeploymentDetail)
-);
+)

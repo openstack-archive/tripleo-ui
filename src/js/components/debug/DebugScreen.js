@@ -14,15 +14,15 @@
  * under the License.
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import { connect } from 'react-redux'
 
-import Link from '../ui/Link';
-import LoggerActions from '../../actions/LoggerActions';
-import Modal from '../ui/Modal';
-import Loader from '../ui/Loader';
+import Link from '../ui/Link'
+import LoggerActions from '../../actions/LoggerActions'
+import Modal from '../ui/Modal'
+import Loader from '../ui/Loader'
 
 const messages = defineMessages({
   debugPageTitle: {
@@ -59,21 +59,21 @@ const messages = defineMessages({
     id: 'DebugScreen.error',
     defaultMessage: 'An error has occurred while preparing the log download.'
   }
-});
+})
 
 class DebugScreen extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       logsHaveBeenRequested: false
-    };
+    }
   }
 
   _downloadLogs() {
     this.setState({
       logsHaveBeenRequested: true
-    });
-    this.props.downloadLogs();
+    })
+    this.props.downloadLogs()
   }
 
   _renderDownloadButton() {
@@ -90,12 +90,12 @@ class DebugScreen extends React.Component {
             </span>
           : <FormattedMessage {...messages.downloadButton} />}
       </button>
-    );
+    )
   }
 
   _renderMessage() {
     if (!this.state.logsHaveBeenRequested || this.props.isDownloadingLogs) {
-      return;
+      return
     }
 
     return this.props.logsUrl
@@ -110,7 +110,7 @@ class DebugScreen extends React.Component {
         </div>
       : <div>
           <FormattedMessage {...messages.downloadError} />
-        </div>;
+        </div>
   }
 
   render() {
@@ -127,7 +127,7 @@ class DebugScreen extends React.Component {
           {this._renderMessage()}
         </div>
       </Modal>
-    );
+    )
   }
 }
 
@@ -135,21 +135,21 @@ DebugScreen.propTypes = {
   downloadLogs: PropTypes.func,
   isDownloadingLogs: PropTypes.bool,
   logsUrl: PropTypes.string
-};
+}
 
 function mapStateToProps(state) {
   return {
     isDownloadingLogs: state.logger.isDownloadingLogs,
     logsUrl: state.logger.logsUrl
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     downloadLogs: () => dispatch(LoggerActions.downloadLogs())
-  };
+  }
 }
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(DebugScreen)
-);
+)

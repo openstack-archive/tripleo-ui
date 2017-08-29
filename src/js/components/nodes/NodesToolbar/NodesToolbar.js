@@ -1,28 +1,25 @@
-import { connect } from 'react-redux';
-import { defineMessages, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { submit } from 'redux-form';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { connect } from 'react-redux'
+import { defineMessages, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import { submit } from 'redux-form'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import {
-  ActiveFilter,
-  ActiveFiltersList
-} from '../../ui/Toolbar/ActiveFilters';
-import { getActiveFilters, getFilterByName } from '../../../selectors/filters';
-import { getFilteredNodes, getNodes } from '../../../selectors/nodes';
-import { nodeColumnMessages } from '../messages';
-import NodesToolbarForm from './NodesToolbarForm';
-import NodesToolbarActions from './NodesToolbarActions';
-import { SelectAllButton } from '../../ui/Toolbar/SelectAll';
-import ToolbarFiltersForm from '../../ui/Toolbar/ToolbarFiltersForm';
+import { ActiveFilter, ActiveFiltersList } from '../../ui/Toolbar/ActiveFilters'
+import { getActiveFilters, getFilterByName } from '../../../selectors/filters'
+import { getFilteredNodes, getNodes } from '../../../selectors/nodes'
+import { nodeColumnMessages } from '../messages'
+import NodesToolbarForm from './NodesToolbarForm'
+import NodesToolbarActions from './NodesToolbarActions'
+import { SelectAllButton } from '../../ui/Toolbar/SelectAll'
+import ToolbarFiltersForm from '../../ui/Toolbar/ToolbarFiltersForm'
 import {
   clearActiveFilters,
   deleteActiveFilter,
   addActiveFilter,
   updateFilter
-} from '../../../actions/FiltersActions';
-import { Toolbar, ToolbarActions, ToolbarResults } from '../../ui/Toolbar';
+} from '../../../actions/FiltersActions'
+import { Toolbar, ToolbarActions, ToolbarResults } from '../../ui/Toolbar'
 
 const messages = defineMessages({
   activeFilters: {
@@ -46,11 +43,11 @@ const messages = defineMessages({
     id: 'NodesToolbar.nonFilteredToolbarResults',
     defaultMessage: '{totalCount, number} {totalCount, plural, one {Node} other {Nodes}}'
   }
-});
+})
 
 class NodesToolbar extends React.Component {
   handleNodesToolbarFormChange(allValues, dispatch, formProps) {
-    this.props.submitNodesToolbarForm();
+    this.props.submitNodesToolbarForm()
   }
 
   render() {
@@ -65,7 +62,7 @@ class NodesToolbar extends React.Component {
       addActiveFilter,
       nodesCount,
       updateFilter
-    } = this.props;
+    } = this.props
     return (
       <Toolbar tableView={nodesToolbarFilter.get('contentView') === 'table'}>
         <ToolbarActions>
@@ -148,7 +145,7 @@ class NodesToolbar extends React.Component {
           </p>
         </ToolbarResults>
       </Toolbar>
-    );
+    )
   }
 }
 NodesToolbar.propTypes = {
@@ -163,7 +160,7 @@ NodesToolbar.propTypes = {
   nodesToolbarFilter: PropTypes.object.isRequired,
   submitNodesToolbarForm: PropTypes.func.isRequired,
   updateFilter: PropTypes.func.isRequired
-};
+}
 const mapDispatchToProps = dispatch => {
   return {
     clearActiveFilters: () => dispatch(clearActiveFilters('nodesToolbar')),
@@ -172,8 +169,8 @@ const mapDispatchToProps = dispatch => {
     submitNodesToolbarForm: () => dispatch(submit('nodesToolbar')),
     addActiveFilter: data => dispatch(addActiveFilter('nodesToolbar', data)),
     updateFilter: data => dispatch(updateFilter('nodesToolbar', data))
-  };
-};
+  }
+}
 const mapStateToProps = state => {
   return {
     activeFilters: getActiveFilters(state, 'nodesToolbar'),
@@ -183,8 +180,8 @@ const mapStateToProps = state => {
       'activeFilters'
     ),
     nodesCount: getNodes(state).size
-  };
-};
+  }
+}
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(NodesToolbar)
-);
+)

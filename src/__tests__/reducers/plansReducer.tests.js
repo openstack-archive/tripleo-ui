@@ -14,82 +14,82 @@
  * under the License.
  */
 
-import { List, Map } from 'immutable';
+import { List, Map } from 'immutable'
 
 // TODO(jtomasek): remove this import when store is correctly mocked
-import store from '../../js/store'; // eslint-disable-line no-unused-vars
-import CurrentPlanActions from '../../js/actions/CurrentPlanActions';
+import store from '../../js/store' // eslint-disable-line no-unused-vars
+import CurrentPlanActions from '../../js/actions/CurrentPlanActions'
 import {
   InitialPlanState,
   Plan,
   PlanFile
-} from '../../js/immutableRecords/plans';
-import PlansActions from '../../js/actions/PlansActions';
-import plansReducer from '../../js/reducers/plansReducer';
+} from '../../js/immutableRecords/plans'
+import PlansActions from '../../js/actions/PlansActions'
+import plansReducer from '../../js/reducers/plansReducer'
 
 describe('plansReducer state', () => {
   describe('default state', () => {
-    let state;
+    let state
 
     beforeEach(() => {
-      state = plansReducer(undefined, { type: 'undefined-action' });
-    });
+      state = plansReducer(undefined, { type: 'undefined-action' })
+    })
 
     it('`isFetchingPlans` is false', () => {
-      expect(state.get('isFetchingPlans')).toBe(false);
-    });
+      expect(state.get('isFetchingPlans')).toBe(false)
+    })
 
     it('`all` is empty', () => {
-      expect(state.get('all').size).toEqual(0);
-    });
+      expect(state.get('all').size).toEqual(0)
+    })
 
     it('`currentPlanName` is undefined', () => {
-      expect(state.get('currentPlanName')).not.toBeDefined();
-    });
-  });
+      expect(state.get('currentPlanName')).not.toBeDefined()
+    })
+  })
 
   describe('CREATE_PLAN_PENDING', () => {
     it('sets isTransitioningPlan to `true`', () => {
       let state = plansReducer(
         new InitialPlanState(),
         PlansActions.createPlanPending()
-      );
-      expect(state.isTransitioningPlan).toBe(true);
-    });
-  });
+      )
+      expect(state.isTransitioningPlan).toBe(true)
+    })
+  })
 
   describe('CREATE_PLAN_SUCCESS', () => {
-    let state;
+    let state
 
     beforeEach(() => {
       state = plansReducer(
         new InitialPlanState({ isTransitioningPlan: true }),
         PlansActions.createPlanSuccess()
-      );
-    });
+      )
+    })
 
     it('sets isTransitioningPlan to `false`', () => {
-      expect(state.isTransitioningPlan).toBe(false);
-    });
-  });
+      expect(state.isTransitioningPlan).toBe(false)
+    })
+  })
 
   describe('REQUEST_PLANSLIST', () => {
-    let state;
+    let state
 
     beforeEach(() => {
       state = plansReducer(
         Map({ isFetchingPlans: false }),
         PlansActions.requestPlans()
-      );
-    });
+      )
+    })
 
     it('sets `isFetchingPlans` to true', () => {
-      expect(state.get('isFetchingPlans')).toBe(true);
-    });
-  });
+      expect(state.get('isFetchingPlans')).toBe(true)
+    })
+  })
 
   describe('RECEIVE_PLANSLIST', () => {
-    let state;
+    let state
 
     beforeEach(() => {
       state = plansReducer(
@@ -101,23 +101,23 @@ describe('plansReducer state', () => {
           { name: 'overcloud', description: 'Default deployment plan' },
           { name: 'another-cloud', description: 'My custom plan' }
         ])
-      );
-    });
+      )
+    })
 
     it('sets `isFetchingPlans` to false', () => {
-      expect(state.get('isFetchingPlans')).toBe(false);
-    });
+      expect(state.get('isFetchingPlans')).toBe(false)
+    })
 
     it('sets `all` to a list of Plan records', () => {
-      expect(state.get('all').size).toEqual(2);
+      expect(state.get('all').size).toEqual(2)
       state.get('all').forEach(item => {
-        expect(item instanceof Plan).toBe(true);
-      });
-    });
-  });
+        expect(item instanceof Plan).toBe(true)
+      })
+    })
+  })
 
   describe('RECEIVE_PLAN', () => {
-    let state, plan;
+    let state, plan
 
     beforeEach(() => {
       state = plansReducer(
@@ -137,9 +137,9 @@ describe('plansReducer state', () => {
           'capabilities_map.yaml': { name: 'capabilities_map.yaml' },
           'foo.yaml': { name: 'foo.yaml' }
         })
-      );
-      plan = state.getIn(['all', 'overcloud']);
-    });
+      )
+      plan = state.getIn(['all', 'overcloud'])
+    })
 
     it('updates the plan records `files` attributes', () => {
       expect(plan.get('files')).toEqual(
@@ -149,24 +149,24 @@ describe('plansReducer state', () => {
           }),
           'foo.yaml': new PlanFile({ name: 'foo.yaml' })
         })
-      );
-    });
-  });
+      )
+    })
+  })
 
   describe('PLAN_CHOSEN', () => {
-    let state;
+    let state
 
     beforeEach(() => {
       state = plansReducer(
         new InitialPlanState(),
         CurrentPlanActions.planChosen('another-cloud')
-      );
-    });
+      )
+    })
 
     it('sets the current planName', () => {
-      expect(state.get('currentPlanName')).toEqual('another-cloud');
-    });
-  });
+      expect(state.get('currentPlanName')).toEqual('another-cloud')
+    })
+  })
 
   describe('Plan deletion', () => {
     let state = Map({
@@ -174,37 +174,37 @@ describe('plansReducer state', () => {
         overcloud: new Plan({ name: 'overcloud' }),
         somecloud: new Plan({ name: 'somecloud' })
       })
-    });
-    let newState;
+    })
+    let newState
 
     it('DELETE_PLAN_PENDING sets `transition` in plan Record to `deleting`', () => {
       newState = plansReducer(
         state,
         PlansActions.deletePlanPending('somecloud')
-      );
-      let plan = newState.getIn(['all', 'somecloud']);
-      expect(plan.get('transition')).toBe('deleting');
-    });
+      )
+      let plan = newState.getIn(['all', 'somecloud'])
+      expect(plan.get('transition')).toBe('deleting')
+    })
 
     it('DELETE_PLAN_SUCCESS removes the plan Record', () => {
       newState = plansReducer(
         newState,
         PlansActions.deletePlanSuccess('somecloud')
-      );
+      )
       expect(newState.get('all')).toEqual(
         Map({
           overcloud: new Plan({ name: 'overcloud' })
         })
-      );
-    });
+      )
+    })
 
     it('DELETE_PLAN_FAILED sets `transition` in plan Record to false', () => {
       newState = plansReducer(
         newState,
         PlansActions.deletePlanFailed('somecloud')
-      );
-      let plan = newState.getIn(['all', 'somecloud']);
-      expect(plan.get('transition')).toBe(false);
-    });
-  });
-});
+      )
+      let plan = newState.getIn(['all', 'somecloud'])
+      expect(plan.get('transition')).toBe(false)
+    })
+  })
+})

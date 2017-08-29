@@ -14,18 +14,18 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
-import Formsy from 'formsy-react';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ClassNames from 'classnames'
+import Formsy from 'formsy-react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import InputDescription from './InputDescription';
-import InputErrorMessage from './InputErrorMessage';
+import InputDescription from './InputDescription'
+import InputErrorMessage from './InputErrorMessage'
 
 class GroupedCheckBox extends React.Component {
   changeValue(event) {
-    this.props.onChange(event.target.checked, this.props.name);
-    this.props.setValue(event.target.checked);
+    this.props.onChange(event.target.checked, this.props.name)
+    this.props.setValue(event.target.checked)
   }
 
   render() {
@@ -34,7 +34,7 @@ class GroupedCheckBox extends React.Component {
       radio: this.props.type === 'radio',
       'has-error': this.props.showError(),
       required: this.props.showRequired()
-    });
+    })
 
     return (
       <div className={divClasses}>
@@ -53,7 +53,7 @@ class GroupedCheckBox extends React.Component {
         <InputErrorMessage getErrorMessage={this.props.getErrorMessage} />
         <InputDescription description={this.props.description} />
       </div>
-    );
+    )
   }
 }
 GroupedCheckBox.propTypes = {
@@ -71,8 +71,8 @@ GroupedCheckBox.propTypes = {
   showRequired: PropTypes.func,
   title: PropTypes.string.isRequired,
   type: PropTypes.string
-};
+}
 GroupedCheckBox.defaultProps = {
   type: 'checkbox'
-};
-export default Formsy.HOC(GroupedCheckBox);
+}
+export default Formsy.HOC(GroupedCheckBox)

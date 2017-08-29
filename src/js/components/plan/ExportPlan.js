@@ -14,15 +14,15 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { connect } from 'react-redux'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
-import PlansActions from '../../actions/PlansActions';
-import Loader from '../ui/Loader';
-import Modal from '../ui/Modal';
+import PlansActions from '../../actions/PlansActions'
+import Loader from '../ui/Loader'
+import Modal from '../ui/Modal'
 
 const messages = defineMessages({
   exportPlanName: {
@@ -51,17 +51,17 @@ const messages = defineMessages({
     id: 'ExportPlan.cancel',
     defaultMessage: 'Cancel'
   }
-});
+})
 
 class ExportPlan extends React.Component {
   componentDidMount() {
-    let planName = this.getNameFromUrl();
-    this.props.exportPlan(planName);
+    let planName = this.getNameFromUrl()
+    this.props.exportPlan(planName)
   }
 
   getNameFromUrl() {
-    let planName = this.props.match.params.planName || '';
-    return planName.replace(/[^A-Za-z0-9_-]*/g, '');
+    let planName = this.props.match.params.planName || ''
+    return planName.replace(/[^A-Za-z0-9_-]*/g, '')
   }
 
   render() {
@@ -115,7 +115,7 @@ class ExportPlan extends React.Component {
           </Link>
         </div>
       </Modal>
-    );
+    )
   }
 }
 
@@ -126,21 +126,21 @@ ExportPlan.propTypes = {
   match: PropTypes.object,
   params: PropTypes.object,
   planExportUrl: PropTypes.string
-};
+}
 
 function mapStateToProps(state) {
   return {
     isExportingPlan: state.plans.isExportingPlan,
     planExportUrl: state.plans.planExportUrl
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     exportPlan: planName => dispatch(PlansActions.exportPlan(planName))
-  };
+  }
 }
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(ExportPlan)
-);
+)

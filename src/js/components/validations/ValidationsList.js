@@ -14,21 +14,21 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { connect } from 'react-redux'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import BlankSlate from '../ui/BlankSlate';
-import { getCurrentPlanName } from '../../selectors/plans';
-import Loader from '../ui/Loader';
-import ValidationsActions from '../../actions/ValidationsActions';
-import ValidationsToolbar from './ValidationsToolbar';
-import Validation from './Validation';
-import ValidationDetail from './ValidationDetail';
-import WorkflowExecutionsActions from '../../actions/WorkflowExecutionsActions';
-import { getFilteredValidations } from '../../selectors/validations';
+import BlankSlate from '../ui/BlankSlate'
+import { getCurrentPlanName } from '../../selectors/plans'
+import Loader from '../ui/Loader'
+import ValidationsActions from '../../actions/ValidationsActions'
+import ValidationsToolbar from './ValidationsToolbar'
+import Validation from './Validation'
+import ValidationDetail from './ValidationDetail'
+import WorkflowExecutionsActions from '../../actions/WorkflowExecutionsActions'
+import { getFilteredValidations } from '../../selectors/validations'
 
 const messages = defineMessages({
   loadingValidations: {
@@ -51,36 +51,36 @@ const messages = defineMessages({
     id: 'ValidationsList.validations',
     defaultMessage: 'Validations'
   }
-});
+})
 
 class ValidationsList extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       showDetail: null
-    };
+    }
   }
 
   componentDidMount() {
-    this.props.fetchValidations();
+    this.props.fetchValidations()
   }
 
   refreshValidations() {
-    this.props.fetchValidations();
-    this.props.fetchWorkflowExecutions();
+    this.props.fetchValidations()
+    this.props.fetchWorkflowExecutions()
   }
 
   showValidationDetail(uuid) {
-    this.setState({ showDetail: uuid });
+    this.setState({ showDetail: uuid })
   }
 
   hideValidationDetail() {
-    this.setState({ showDetail: null });
+    this.setState({ showDetail: null })
   }
 
   rendervalidationDetail() {
     if (this.state.showDetail) {
-      const validation = this.props.validations.get(this.state.showDetail);
+      const validation = this.props.validations.get(this.state.showDetail)
       return (
         <ValidationDetail
           description={validation.description}
@@ -96,12 +96,12 @@ class ValidationsList extends React.Component {
           status={validation.status}
           stopValidation={this.props.stopValidation.bind(this)}
         />
-      );
+      )
     }
   }
 
   renderValidations() {
-    const { validations, currentPlanName } = this.props;
+    const { validations, currentPlanName } = this.props
 
     if (validations.isEmpty()) {
       return (
@@ -111,7 +111,7 @@ class ValidationsList extends React.Component {
         >
           <p><FormattedMessage {...messages.noValidationsMessage} /></p>
         </BlankSlate>
-      );
+      )
     } else {
       return validations.toList().map(validation => {
         return (
@@ -134,13 +134,13 @@ class ValidationsList extends React.Component {
             description={validation.description}
             id={validation.id}
           />
-        );
-      });
+        )
+      })
     }
   }
 
   render() {
-    const { formatMessage } = this.props.intl;
+    const { formatMessage } = this.props.intl
 
     return (
       <div className="col-sm-12 col-lg-3 sidebar-pf sidebar-pf-right fixed-container validations">
@@ -179,7 +179,7 @@ class ValidationsList extends React.Component {
         </Loader>
         {this.rendervalidationDetail()}
       </div>
-    );
+    )
   }
 }
 
@@ -194,7 +194,7 @@ ValidationsList.propTypes = {
   stopValidation: PropTypes.func.isRequired,
   validations: ImmutablePropTypes.map.isRequired,
   validationsLoaded: PropTypes.bool.isRequired
-};
+}
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -202,17 +202,17 @@ const mapDispatchToProps = dispatch => {
     fetchWorkflowExecutions: () =>
       dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
     runValidation: (id, currentPlanName) => {
-      dispatch(ValidationsActions.runValidation(id, currentPlanName));
+      dispatch(ValidationsActions.runValidation(id, currentPlanName))
     },
     stopValidation: executionId => {
       dispatch(
         WorkflowExecutionsActions.updateWorkflowExecution(executionId, {
           state: 'PAUSED'
         })
-      );
+      )
     }
-  };
-};
+  }
+}
 
 const mapStateToProps = state => {
   return {
@@ -221,9 +221,9 @@ const mapStateToProps = state => {
     validations: getFilteredValidations(state),
     validationsLoaded: state.validations.get('validationsLoaded'),
     currentPlanName: getCurrentPlanName(state)
-  };
-};
+  }
+}
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(ValidationsList)
-);
+)

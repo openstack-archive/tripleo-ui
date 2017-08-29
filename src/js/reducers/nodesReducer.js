@@ -14,24 +14,24 @@
  * under the License.
  */
 
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map } from 'immutable'
 
-import NodesConstants from '../constants/NodesConstants';
+import NodesConstants from '../constants/NodesConstants'
 import {
   NodesState,
   Port,
   IntrospectionStatus
-} from '../immutableRecords/nodes';
+} from '../immutableRecords/nodes'
 
-const initialState = new NodesState();
+const initialState = new NodesState()
 
 export default function nodesReducer(state = initialState, action) {
   switch (action.type) {
     case NodesConstants.REQUEST_NODES:
-      return state.set('isFetching', true);
+      return state.set('isFetching', true)
 
     case NodesConstants.RECEIVE_NODES: {
-      const { nodes, ports, introspectionStatuses } = action.payload;
+      const { nodes, ports, introspectionStatuses } = action.payload
       return state
         .set('all', fromJS(nodes || {}))
         .set('ports', Map(ports).map(port => new Port(port)))
@@ -40,39 +40,39 @@ export default function nodesReducer(state = initialState, action) {
           Map(introspectionStatuses).map(s => new IntrospectionStatus(s))
         )
         .set('isLoaded', true)
-        .set('isFetching', false);
+        .set('isFetching', false)
     }
 
     case NodesConstants.FETCH_NODE_INTROSPECTION_DATA_SUCCESS: {
-      const { nodeId, data } = action.payload;
-      return state.setIn(['introspectionData', nodeId], fromJS(data));
+      const { nodeId, data } = action.payload
+      return state.setIn(['introspectionData', nodeId], fromJS(data))
     }
 
     case NodesConstants.FETCH_NODE_INTROSPECTION_DATA_FAILED:
-      return state.deleteIn(['introspectionData', action.payload]);
+      return state.deleteIn(['introspectionData', action.payload])
 
     case NodesConstants.START_NODES_OPERATION:
       return state.update('nodesInProgress', nodesInProgress =>
         nodesInProgress.union(action.payload)
-      );
+      )
 
     case NodesConstants.FINISH_NODES_OPERATION:
       return state.update('nodesInProgress', nodesInProgress =>
         nodesInProgress.subtract(action.payload)
-      );
+      )
 
     case NodesConstants.ADD_NODES:
-      return state.update('all', all => all.merge(fromJS(action.payload)));
+      return state.update('all', all => all.merge(fromJS(action.payload)))
 
     case NodesConstants.UPDATE_NODE_PENDING:
       return state.update('nodesInProgress', nodesInProgress =>
         nodesInProgress.add(action.payload)
-      );
+      )
 
     case NodesConstants.UPDATE_NODE_FAILED:
       return state.update('nodesInProgress', nodesInProgress =>
         nodesInProgress.remove(action.payload)
-      );
+      )
 
     case NodesConstants.UPDATE_NODE_SUCCESS:
       return state
@@ -81,21 +81,21 @@ export default function nodesReducer(state = initialState, action) {
         )
         .update('nodesInProgress', nodesInProgress =>
           nodesInProgress.remove(action.payload.uuid)
-        );
+        )
 
     case NodesConstants.DELETE_NODE_SUCCESS:
       return state
         .deleteIn(['all', action.payload])
         .update('nodesInProgress', nodesInProgress =>
           nodesInProgress.remove(action.payload)
-        );
+        )
 
     case NodesConstants.DELETE_NODE_FAILED:
       return state.update('nodesInProgress', nodesInProgress =>
         nodesInProgress.remove(action.payload)
-      );
+      )
 
     default:
-      return state;
+      return state
   }
 }

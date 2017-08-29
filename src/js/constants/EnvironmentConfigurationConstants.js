@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import keyMirror from 'keymirror';
+import keyMirror from 'keymirror'
 
 export default keyMirror({
   FETCH_ENVIRONMENT_CONFIGURATION_PENDING: null,
@@ -26,4 +26,4 @@ export default keyMirror({
   FETCH_ENVIRONMENT_PENDING: null,
   FETCH_ENVIRONMENT_SUCCESS: null,
   FETCH_ENVIRONMENT_FAILED: null
-});
+})

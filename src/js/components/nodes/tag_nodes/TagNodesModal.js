@@ -14,19 +14,19 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import Modal from '../../ui/Modal';
-import TagNodesForm from './TagNodesForm';
+import Modal from '../../ui/Modal'
+import TagNodesForm from './TagNodesForm'
 
 const messages = defineMessages({
   title: {
     id: 'TagNodesModal.title',
     defaultMessage: 'Tag Nodes into Profiles'
   }
-});
+})
 
 export default class TagNodesModal extends React.Component {
   render() {
@@ -53,7 +53,7 @@ export default class TagNodesModal extends React.Component {
           profiles={this.props.availableProfiles}
         />
       </Modal>
-    );
+    )
   }
 }
 TagNodesModal.propTypes = {
@@ -61,4 +61,4 @@ TagNodesModal.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onProfileSelected: PropTypes.func.isRequired,
   show: PropTypes.bool.isRequired
-};
+}

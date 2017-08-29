@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { List, Map, Record, Set } from 'immutable';
+import { List, Map, Record, Set } from 'immutable'
 
 export const NodesState = Record({
   isFetching: false,
@@ -24,7 +24,7 @@ export const NodesState = Record({
   ports: Map(),
   introspectionStatuses: Map(),
   introspectionData: Map()
-});
+})
 
 export const NodeToRegister = Record({
   uuid: undefined,
@@ -40,7 +40,7 @@ export const NodeToRegister = Record({
   memory: undefined,
   disk: undefined,
   valid: false
-});
+})
 
 export const IronicNode = Record({
   // uuid: undefined, TODO(jtomasek): re-add this once registration supports passing uuid
@@ -56,13 +56,13 @@ export const IronicNode = Record({
   memory: undefined,
   disk: undefined,
   capabilities: 'boot_option:local'
-});
+})
 
 export const Port = Record({
   uuid: undefined,
   address: undefined,
   node_uuid: undefined
-});
+})
 
 export const IntrospectionStatus = Record({
   error: undefined,
@@ -71,4 +71,4 @@ export const IntrospectionStatus = Record({
   started_at: undefined,
   state: 'not introspected',
   uuid: undefined
-});
+})

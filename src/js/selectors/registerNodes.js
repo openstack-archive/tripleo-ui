@@ -14,11 +14,11 @@
  * under the License.
  */
 
-import { createSelector } from 'reselect';
+import { createSelector } from 'reselect'
 
-import { IronicNode } from '../immutableRecords/nodes';
+import { IronicNode } from '../immutableRecords/nodes'
 
-const nodesToRegister = state => state.registerNodes.get('nodesToRegister');
+const nodesToRegister = state => state.registerNodes.get('nodesToRegister')
 
 /**
  * Returns true if there are any nodes to register and all of them are valid
@@ -29,9 +29,9 @@ export const allNodesToRegisterAreValid = createSelector(
   nodesToRegister => {
     return (
       nodesToRegister.every(node => node.valid) && !nodesToRegister.isEmpty()
-    );
+    )
   }
-);
+)
 
 /**
  * Converts nodesToRegister to map of nodes comsumable by register workflow
@@ -40,6 +40,6 @@ export const allNodesToRegisterAreValid = createSelector(
 export const getIronicNodesfromNodesToRegister = createSelector(
   nodesToRegister,
   nodesToRegister => {
-    return nodesToRegister.map(node => new IronicNode(node));
+    return nodesToRegister.map(node => new IronicNode(node))
   }
-);
+)

@@ -14,21 +14,21 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import * as _ from 'lodash';
+import PropTypes from 'prop-types'
+import React from 'react'
+import * as _ from 'lodash'
 
 export default class FormErrorList extends React.Component {
   renderErrors() {
-    const { errors } = this.props;
+    const { errors } = this.props
     if (errors.length > 1) {
       const errorList = errors.map((error, index) => {
         return (
           <li key={index}>
             {error.title} {error.message}
           </li>
-        );
-      });
+        )
+      })
       return (
         <div>
           <strong>{`${errors.length} Errors Found:`}</strong>
@@ -36,7 +36,7 @@ export default class FormErrorList extends React.Component {
             {errorList}
           </ul>
         </div>
-      );
+      )
     } else {
       return (
         <p>
@@ -44,13 +44,13 @@ export default class FormErrorList extends React.Component {
           <br />
           {errors[0].message}
         </p>
-      );
+      )
     }
   }
 
   render() {
     if (_.isEmpty(this.props.errors)) {
-      return null;
+      return null
     } else {
       return (
         <div
@@ -60,10 +60,10 @@ export default class FormErrorList extends React.Component {
           <span className="pficon pficon-error-circle-o" aria-hidden="true" />
           {this.renderErrors()}
         </div>
-      );
+      )
     }
   }
 }
 FormErrorList.propTypes = {
   errors: PropTypes.array.isRequired
-};
+}

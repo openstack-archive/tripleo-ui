@@ -14,23 +14,23 @@
  * under the License.
  */
 
-import { combineReducers } from 'redux';
-import { reducer as formReducer } from 'redux-form';
+import { combineReducers } from 'redux'
+import { reducer as formReducer } from 'redux-form'
 
-import environmentConfigurationReducer from './environmentConfigurationReducer';
-import filtersReducer from './filtersReducer';
-import i18nReducer from './i18nReducer';
-import loggerReducer from './loggerReducer';
-import loginReducer from './loginReducer';
-import nodesReducer from './nodesReducer';
-import notificationsReducer from './notificationsReducer';
-import parametersReducer from './parametersReducer';
-import plansReducer from './plansReducer';
-import registerNodesReducer from './registerNodesReducer';
-import rolesReducer from './rolesReducer';
-import stacksReducer from './stacksReducer';
-import validationsReducer from './validationsReducer';
-import workflowExecutionsReducer from './workflowExecutionsReducer';
+import environmentConfigurationReducer from './environmentConfigurationReducer'
+import filtersReducer from './filtersReducer'
+import i18nReducer from './i18nReducer'
+import loggerReducer from './loggerReducer'
+import loginReducer from './loginReducer'
+import nodesReducer from './nodesReducer'
+import notificationsReducer from './notificationsReducer'
+import parametersReducer from './parametersReducer'
+import plansReducer from './plansReducer'
+import registerNodesReducer from './registerNodesReducer'
+import rolesReducer from './rolesReducer'
+import stacksReducer from './stacksReducer'
+import validationsReducer from './validationsReducer'
+import workflowExecutionsReducer from './workflowExecutionsReducer'
 
 const appReducer = combineReducers({
   environmentConfiguration: environmentConfigurationReducer,
@@ -48,6 +48,6 @@ const appReducer = combineReducers({
   stacks: stacksReducer,
   validations: validationsReducer,
   form: formReducer
-});
+})
 
-export default appReducer;
+export default appReducer

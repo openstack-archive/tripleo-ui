@@ -14,10 +14,10 @@
  * under the License.
  */
 
-import { List, Map, OrderedMap } from 'immutable';
+import { List, Map, OrderedMap } from 'immutable'
 
-import * as selectors from '../../js/selectors/registerNodes';
-import { NodeToRegister, IronicNode } from '../../js/immutableRecords/nodes';
+import * as selectors from '../../js/selectors/registerNodes'
+import { NodeToRegister, IronicNode } from '../../js/immutableRecords/nodes'
 
 describe('registerNodes selectors', () => {
   const state = {
@@ -40,11 +40,11 @@ describe('registerNodes selectors', () => {
         })
       })
     })
-  };
+  }
 
   it('provides selector to provide information if all Nodes to register are valid', () => {
-    expect(selectors.allNodesToRegisterAreValid(state)).toBeFalsy();
-  });
+    expect(selectors.allNodesToRegisterAreValid(state)).toBeFalsy()
+  })
 
   it('provides selector to convert nodesToRegister to nodes consumable by API', () => {
     const expectedNodesList = OrderedMap({
@@ -74,9 +74,9 @@ describe('registerNodes selectors', () => {
         memory: undefined,
         disk: undefined
       })
-    });
+    })
     expect(selectors.getIronicNodesfromNodesToRegister(state)).toEqual(
       expectedNodesList
-    );
-  });
-});
+    )
+  })
+})

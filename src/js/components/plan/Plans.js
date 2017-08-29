@@ -14,14 +14,14 @@
  * under the License.
  */
 
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
 
-import PlansList from './PlansList';
-import DeletePlan from './DeletePlan';
-import EditPlan from './EditPlan';
-import ExportPlan from './ExportPlan';
-import NewPlan from './NewPlan';
+import PlansList from './PlansList'
+import DeletePlan from './DeletePlan'
+import EditPlan from './EditPlan'
+import ExportPlan from './ExportPlan'
+import NewPlan from './NewPlan'
 
 export default class Plans extends React.Component {
   render() {
@@ -43,6 +43,6 @@ export default class Plans extends React.Component {
           </Switch>
         </div>
       </div>
-    );
+    )
   }
 }

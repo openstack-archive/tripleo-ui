@@ -35,4 +35,4 @@ export default {
   VALIDATIONS_LIST: 'tripleo.validations.list_validations',
   VALIDATIONS_RUN: 'tripleo.validations.v1.run_validation',
   VALIDATIONS_RUN_GROUPS: 'tripleo.validations.v1.run_groups'
-};
+}

@@ -14,42 +14,42 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { defineMessages, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux'
+import { defineMessages, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Redirect, Route, Switch, withRouter } from 'react-router-dom'
 
-import DebugScreen from './debug/DebugScreen';
-import DeploymentPlan from './deployment_plan/DeploymentPlan';
-import { getCurrentPlanName } from '../selectors/plans';
-import Loader from './ui/Loader';
-import LoginActions from '../actions/LoginActions';
-import NavBar from './NavBar';
-import Nodes from './nodes/Nodes';
-import Plans from './plan/Plans.js';
-import PlansActions from '../actions/PlansActions';
-import ValidationsList from './validations/ValidationsList';
-import WorkflowExecutionsActions from '../actions/WorkflowExecutionsActions';
-import ZaqarActions from '../actions/ZaqarActions';
+import DebugScreen from './debug/DebugScreen'
+import DeploymentPlan from './deployment_plan/DeploymentPlan'
+import { getCurrentPlanName } from '../selectors/plans'
+import Loader from './ui/Loader'
+import LoginActions from '../actions/LoginActions'
+import NavBar from './NavBar'
+import Nodes from './nodes/Nodes'
+import Plans from './plan/Plans.js'
+import PlansActions from '../actions/PlansActions'
+import ValidationsList from './validations/ValidationsList'
+import WorkflowExecutionsActions from '../actions/WorkflowExecutionsActions'
+import ZaqarActions from '../actions/ZaqarActions'
 
 const messages = defineMessages({
   loadingDeployments: {
     id: 'AuthenticatedContent.loadingDeployments',
     defaultMessage: 'Loading Deployments...'
   }
-});
+})
 
 class AuthenticatedContent extends React.Component {
   componentDidMount() {
-    this.props.initializeZaqarConnection();
-    this.props.fetchPlans();
-    this.props.fetchWorkflowExecutions();
+    this.props.initializeZaqarConnection()
+    this.props.fetchPlans()
+    this.props.fetchWorkflowExecutions()
   }
 
   render() {
-    const { currentPlanName, intl, logoutUser, plansLoaded, user } = this.props;
+    const { currentPlanName, intl, logoutUser, plansLoaded, user } = this.props
     return (
       <Loader
         loaded={plansLoaded}
@@ -76,7 +76,7 @@ class AuthenticatedContent extends React.Component {
           </div>
         </div>
       </Loader>
-    );
+    )
   }
 }
 AuthenticatedContent.propTypes = {
@@ -90,7 +90,7 @@ AuthenticatedContent.propTypes = {
   logoutUser: PropTypes.func.isRequired,
   plansLoaded: PropTypes.bool,
   user: ImmutablePropTypes.map
-};
+}
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   logoutUser: () => dispatch(LoginActions.logoutUser()),
@@ -99,14 +99,14 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
   initializeZaqarConnection: () =>
     dispatch(ZaqarActions.initializeConnection(ownProps.history))
-});
+})
 
 const mapStateToProps = state => ({
   currentPlanName: getCurrentPlanName(state),
   plansLoaded: state.plans.get('plansLoaded'),
   user: state.login.getIn(['token', 'user'])
-});
+})
 
 export default injectIntl(
   withRouter(connect(mapStateToProps, mapDispatchToProps)(AuthenticatedContent))
-);
+)

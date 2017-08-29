@@ -1,6 +1,6 @@
 export default class Adapter {
   constructor(dispatch) {
-    this._dispatch = dispatch;
+    this._dispatch = dispatch
   }
 
   debug(...args) {}

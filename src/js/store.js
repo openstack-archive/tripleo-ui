@@ -14,16 +14,16 @@
  * under the License.
  */
 
-import { applyMiddleware, createStore } from 'redux';
-import cookie from 'react-cookie';
-import thunkMiddleware from 'redux-thunk';
-import createLogger from 'redux-logger';
-import logger, { predicate } from './services/logging/LoggingService';
+import { applyMiddleware, createStore } from 'redux'
+import cookie from 'react-cookie'
+import thunkMiddleware from 'redux-thunk'
+import createLogger from 'redux-logger'
+import logger, { predicate } from './services/logging/LoggingService'
 
-import appReducer from './reducers/appReducer';
-import { InitialPlanState } from './immutableRecords/plans';
-import { InitialLoginState } from './immutableRecords/login';
-import { getIntl } from './selectors/i18n';
+import appReducer from './reducers/appReducer'
+import { InitialPlanState } from './immutableRecords/plans'
+import { InitialLoginState } from './immutableRecords/login'
+import { getIntl } from './selectors/i18n'
 
 const hydrateStore = () => {
   return {
@@ -33,12 +33,12 @@ const hydrateStore = () => {
     login: new InitialLoginState({
       tokenId: cookie.load('keystoneAuthTokenId')
     })
-  };
-};
+  }
+}
 
 function getStoredPlanName() {
   if (window && window.localStorage) {
-    return window.localStorage.getItem('currentPlanName');
+    return window.localStorage.getItem('currentPlanName')
   }
 }
 
@@ -55,7 +55,7 @@ const loggerMiddleware = createLogger({
     nextState: false,
     error: false
   }
-});
+})
 
 const store = createStore(
   appReducer,
@@ -64,8 +64,8 @@ const store = createStore(
     thunkMiddleware.withExtraArgument({ getIntl }),
     loggerMiddleware
   )
-);
+)
 
-logger.setReduxDispatch(store.dispatch);
+logger.setReduxDispatch(store.dispatch)
 
-export default store;
+export default store

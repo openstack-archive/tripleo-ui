@@ -14,13 +14,13 @@
  * under the License.
  */
 
-import { createSelector } from 'reselect';
+import { createSelector } from 'reselect'
 
-const notifications = state => state.notifications.get('all');
+const notifications = state => state.notifications.get('all')
 
 export const getNonViewedNotifications = createSelector(
   notifications,
   notifications => {
-    return notifications.filterNot(notification => notification.viewed);
+    return notifications.filterNot(notification => notification.viewed)
   }
-);
+)

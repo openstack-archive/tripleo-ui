@@ -14,22 +14,22 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { defineMessages, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux'
+import { defineMessages, injectIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Redirect } from 'react-router-dom'
 
-import AuthenticatedContent from './AuthenticatedContent';
-import Loader from './ui/Loader';
-import LoginActions from '../actions/LoginActions';
+import AuthenticatedContent from './AuthenticatedContent'
+import Loader from './ui/Loader'
+import LoginActions from '../actions/LoginActions'
 
 const messages = defineMessages({
   authenticating: {
     id: 'UserAuthenticator.authenticating',
     defaultMessage: 'Authenticating...'
   }
-});
+})
 
 /**
  * Takes care of authenticating user. After authentication is resolved, AuthenticatedContent
@@ -38,17 +38,17 @@ const messages = defineMessages({
  */
 class UserAuthenticator extends React.Component {
   componentWillMount() {
-    this.checkAuth(this.props);
+    this.checkAuth(this.props)
   }
 
   componentWillReceiveProps(nextProps) {
-    this.checkAuth(nextProps);
+    this.checkAuth(nextProps)
   }
 
   checkAuth(props) {
-    const { isAuthenticated, isAuthenticating, keystoneAuthTokenId } = props;
+    const { isAuthenticated, isAuthenticating, keystoneAuthTokenId } = props
     if (!isAuthenticated && !isAuthenticating && keystoneAuthTokenId) {
-      this.props.authenticateUserViaToken(keystoneAuthTokenId);
+      this.props.authenticateUserViaToken(keystoneAuthTokenId)
     }
   }
 
@@ -58,7 +58,7 @@ class UserAuthenticator extends React.Component {
       isAuthenticated,
       keystoneAuthTokenId,
       location
-    } = this.props;
+    } = this.props
 
     if (isAuthenticated || isAuthenticating || keystoneAuthTokenId) {
       return (
@@ -71,11 +71,9 @@ class UserAuthenticator extends React.Component {
             <AuthenticatedContent />
           </Loader>
         </div>
-      );
+      )
     } else {
-      return (
-        <Redirect to={{ pathname: '/login', state: { from: location } }} />
-      );
+      return <Redirect to={{ pathname: '/login', state: { from: location } }} />
     }
   }
 }
@@ -86,21 +84,21 @@ UserAuthenticator.propTypes = {
   isAuthenticating: PropTypes.bool.isRequired,
   keystoneAuthTokenId: PropTypes.string,
   location: PropTypes.object.isRequired
-};
+}
 
 const mapStateToProps = state => {
   return {
     isAuthenticated: state.login.isAuthenticated,
     isAuthenticating: state.login.isAuthenticating,
     keystoneAuthTokenId: state.login.tokenId
-  };
-};
+  }
+}
 
 const mapDispatchToProps = dispatch => ({
   authenticateUserViaToken: tokenId =>
     dispatch(LoginActions.authenticateUserViaToken(tokenId))
-});
+})
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(UserAuthenticator)
-);
+)

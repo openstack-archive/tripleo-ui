@@ -14,10 +14,10 @@
  * under the License.
  */
 
-import { getAuthTokenId, getServiceUrl } from '../../js/services/utils';
-import { InitialLoginState } from '../../js/immutableRecords/login';
-import { List, Map } from 'immutable';
-import store from '../../js/store';
+import { getAuthTokenId, getServiceUrl } from '../../js/services/utils'
+import { InitialLoginState } from '../../js/immutableRecords/login'
+import { List, Map } from 'immutable'
+import store from '../../js/store'
 
 describe('utility functions', () => {
   const appState = {
@@ -66,37 +66,37 @@ describe('utility functions', () => {
       }),
       isAuthenticating: false
     })
-  };
+  }
 
   beforeEach(() => {
-    spyOn(store, 'getState').and.returnValue(appState);
-  });
+    spyOn(store, 'getState').and.returnValue(appState)
+  })
 
   describe('getServiceUrl', () => {
     it('returns the publicURL of a service from the serviceCatalog by default', () => {
-      expect(getServiceUrl('nova')).toEqual('http://someNovaPublicUrl');
-    });
+      expect(getServiceUrl('nova')).toEqual('http://someNovaPublicUrl')
+    })
 
     it('returns another url type if specified', () => {
-      expect(getServiceUrl('nova')).toEqual('http://someNovaPublicUrl');
-    });
+      expect(getServiceUrl('nova')).toEqual('http://someNovaPublicUrl')
+    })
 
     it('gives precedence to urls made available through app.conf', () => {
       expect(
         getServiceUrl('fooservice', null, { fooservice: 'http://FooPublicURL' })
-      ).toEqual('http://FooPublicURL');
-    });
+      ).toEqual('http://FooPublicURL')
+    })
 
     it('expands urls containing the keystone project macro', () => {
       expect(getServiceUrl('macroservice')).toEqual(
         'http://MacroPublicUrl/v1/Foo_778899'
-      );
-    });
-  });
+      )
+    })
+  })
 
   describe('getAuthTokenId', () => {
     it('retrieves the Keystone Auth Token ID from login state', () => {
-      expect(getAuthTokenId()).toEqual(123456);
-    });
-  });
-});
+      expect(getAuthTokenId()).toEqual(123456)
+    })
+  })
+})

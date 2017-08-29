@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { List, Map, Record } from 'immutable';
+import { List, Map, Record } from 'immutable'
 
 export const Validation = Record({
   description: '',
@@ -25,4 +25,4 @@ export const Validation = Record({
   results: Map(),
   stateInfo: undefined,
   status: undefined
-});
+})

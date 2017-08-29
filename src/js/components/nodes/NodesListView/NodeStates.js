@@ -14,10 +14,10 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import React from 'react';
-import PropTypes from 'prop-types';
+import ClassNames from 'classnames'
+import { defineMessages, FormattedMessage } from 'react-intl'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const messages = defineMessages({
   introspectionState: {
@@ -56,7 +56,7 @@ const messages = defineMessages({
     id: 'NodePowerState.unknownPowerState',
     defaultMessage: 'Unknown'
   }
-});
+})
 
 export const NodeMaintenanceState = ({ maintenance, reason }) => {
   if (maintenance) {
@@ -67,17 +67,17 @@ export const NodeMaintenanceState = ({ maintenance, reason }) => {
         &nbsp;
         <FormattedMessage {...messages.maintenance} />
       </span>
-    );
+    )
   }
-  return null;
-};
+  return null
+}
 NodeMaintenanceState.propTypes = {
   maintenance: PropTypes.bool.isRequired,
   reason: PropTypes.string
-};
+}
 NodeMaintenanceState.defaultProps = {
   reason: ''
-};
+}
 
 export const NodeProvisionState = ({
   provisionState,
@@ -95,11 +95,11 @@ export const NodeProvisionState = ({
         </span>
       : provisionState}
   </span>
-);
+)
 NodeProvisionState.propTypes = {
   provisionState: PropTypes.string.isRequired,
   targetProvisionState: PropTypes.string
-};
+}
 
 export const NodeIntrospectionStatus = ({
   status: { finished, state, error }
@@ -108,47 +108,47 @@ export const NodeIntrospectionStatus = ({
     <strong><FormattedMessage {...messages.introspectionState} /></strong>&nbsp;
     {state}
   </span>
-);
+)
 NodeIntrospectionStatus.propTypes = {
   status: PropTypes.object.isRequired
-};
+}
 
 export class NodePowerState extends React.Component {
   renderPowerState(message) {
-    const { powerState, targetPowerState } = this.props;
+    const { powerState, targetPowerState } = this.props
     const iconClass = ClassNames({
       'fa fa-power-off': true,
       'text-warning': targetPowerState,
       'text-success': powerState === 'power on',
       'text-danger': powerState === 'power off'
-    });
+    })
     return (
       <span>
         <span className={iconClass} title="Power state" />
         &nbsp;
         <FormattedMessage {...messages[message]} />
       </span>
-    );
+    )
   }
 
   render() {
-    const { powerState, targetPowerState } = this.props;
+    const { powerState, targetPowerState } = this.props
     if (targetPowerState === 'power on') {
-      return this.renderPowerState('poweringOn');
+      return this.renderPowerState('poweringOn')
     } else if (targetPowerState === 'power off') {
-      return this.renderPowerState('poweringOff');
+      return this.renderPowerState('poweringOff')
     } else if (targetPowerState === 'rebooting') {
-      return this.renderPowerState('rebooting');
+      return this.renderPowerState('rebooting')
     } else if (powerState === 'power on') {
-      return this.renderPowerState('powerOn');
+      return this.renderPowerState('powerOn')
     } else if (powerState === 'power off') {
-      return this.renderPowerState('powerOff');
+      return this.renderPowerState('powerOff')
     } else {
-      return this.renderPowerState('unknownPowerState');
+      return this.renderPowerState('unknownPowerState')
     }
   }
 }
 NodePowerState.propTypes = {
   powerState: PropTypes.string,
   targetPowerState: PropTypes.string
-};
+}

@@ -14,31 +14,31 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { connect } from 'react-redux'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import Notification from './Notification';
-import NotificationActions from '../../actions/NotificationActions';
-import { getNonViewedNotifications } from '../../selectors/notifications';
+import Notification from './Notification'
+import NotificationActions from '../../actions/NotificationActions'
+import { getNonViewedNotifications } from '../../selectors/notifications'
 
 class NotificationsToaster extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       isHovered: false
-    };
+    }
   }
 
   // handles the mouse hovering over a Toaster
   _handleMouseEnter() {
-    this.setState({ isHovered: true });
+    this.setState({ isHovered: true })
   }
 
   // handles the mouse leaving the hover over a Toaster
   _handleMouseLeave() {
-    this.setState({ isHovered: false });
+    this.setState({ isHovered: false })
   }
 
   renderNotifications() {
@@ -54,8 +54,8 @@ class NotificationsToaster extends React.Component {
           removeNotification={() =>
             this.props.removeNotification(notification.id)}
         />
-      );
-    });
+      )
+    })
   }
 
   render() {
@@ -67,26 +67,26 @@ class NotificationsToaster extends React.Component {
       >
         {this.renderNotifications()}
       </div>
-    );
+    )
   }
 }
 NotificationsToaster.propTypes = {
   notifications: ImmutablePropTypes.map.isRequired,
   removeNotification: PropTypes.func
-};
+}
 
 function mapStateToProps(state) {
   return {
     notifications: getNonViewedNotifications(state).sortBy(n => n.timestamp)
-  };
+  }
 }
 function mapDispatchToProps(dispatch) {
   return {
     removeNotification: notificationId =>
       dispatch(NotificationActions.notificationViewed(notificationId))
-  };
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   NotificationsToaster
-);
+)

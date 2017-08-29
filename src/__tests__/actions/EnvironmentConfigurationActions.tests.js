@@ -14,33 +14,33 @@
  * under the License.
  */
 
-import when from 'when';
+import when from 'when'
 
-import * as utils from '../../js/services/utils';
+import * as utils from '../../js/services/utils'
 import EnvironmentConfigurationActions
-  from '../../js/actions/EnvironmentConfigurationActions';
-import MistralApiService from '../../js/services/MistralApiService';
-import { mockGetIntl } from './utils';
+  from '../../js/actions/EnvironmentConfigurationActions'
+import MistralApiService from '../../js/services/MistralApiService'
+import { mockGetIntl } from './utils'
 
 // Use this to mock asynchronous functions which return a promise.
 // The promise will immediately resolve with `data`.
 let createResolvingPromise = data => {
   return () => {
-    return when.resolve(data);
-  };
-};
+    return when.resolve(data)
+  }
+}
 
 describe('EnvironmentConfigurationActions', () => {
   beforeEach(() => {
-    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
-  });
+    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token')
+  })
 
   describe('fetchEnvironmentConfiguration', () => {
     beforeEach(done => {
       spyOn(
         EnvironmentConfigurationActions,
         'fetchEnvironmentConfigurationSuccess'
-      );
+      )
       // Mock the service call.
       spyOn(MistralApiService, 'runAction').and.callFake(
         createResolvingPromise({
@@ -65,33 +65,33 @@ describe('EnvironmentConfigurationActions', () => {
             }
           }
         })
-      );
+      )
       EnvironmentConfigurationActions.fetchEnvironmentConfiguration(
         'overcloud'
-      )(() => {}, () => {});
+      )(() => {}, () => {})
       // Call done with a minimal timeout.
       setTimeout(() => {
-        done();
-      }, 1);
-    });
+        done()
+      }, 1)
+    })
 
     it('dispatches fetchEnvironmentConfigurationSuccess', () => {
       expect(
         EnvironmentConfigurationActions.fetchEnvironmentConfigurationSuccess
-      ).toHaveBeenCalled();
-    });
-  });
+      ).toHaveBeenCalled()
+    })
+  })
 
   describe('updateEnvironmentConfiguration', () => {
     beforeEach(done => {
       spyOn(
         EnvironmentConfigurationActions,
         'updateEnvironmentConfigurationPending'
-      );
+      )
       spyOn(
         EnvironmentConfigurationActions,
         'updateEnvironmentConfigurationSuccess'
-      );
+      )
       // Mock the service call.
       spyOn(MistralApiService, 'runAction').and.callFake(
         createResolvingPromise({
@@ -108,28 +108,28 @@ describe('EnvironmentConfigurationActions', () => {
             }
           ]
         })
-      );
+      )
       EnvironmentConfigurationActions.updateEnvironmentConfiguration(
         'overcloud',
         {},
         {}
-      )(() => {}, () => {}, mockGetIntl);
+      )(() => {}, () => {}, mockGetIntl)
       // Call done with a minimal timeout.
       setTimeout(() => {
-        done();
-      }, 1);
-    });
+        done()
+      }, 1)
+    })
 
     it('dispatches updatingEnvironmentConfiguration', () => {
       expect(
         EnvironmentConfigurationActions.updateEnvironmentConfigurationPending
-      ).toHaveBeenCalled();
-    });
+      ).toHaveBeenCalled()
+    })
 
     it('dispatches environmentConfigurationUpdated', () => {
       expect(
         EnvironmentConfigurationActions.updateEnvironmentConfigurationSuccess
-      ).toHaveBeenCalled();
-    });
-  });
-});
+      ).toHaveBeenCalled()
+    })
+  })
+})

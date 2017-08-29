@@ -35,4 +35,4 @@ export default [
     name: 'cephStorage',
     title: 'Ceph Storage'
   }
-];
+]

@@ -14,12 +14,12 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import Loader from '../ui/Loader';
+import Loader from '../ui/Loader'
 
 const messages = defineMessages({
   loadingOvercloudInformation: {
@@ -42,11 +42,11 @@ const messages = defineMessages({
     id: 'OvercloudInfo.username',
     defaultMessage: 'Username:'
   }
-});
+})
 
 const OvercloudInfo = ({ intl, overcloudInfo }) => {
-  const ip = overcloudInfo.get('ipAddress');
-  const password = overcloudInfo.get('adminPassword');
+  const ip = overcloudInfo.get('ipAddress')
+  const password = overcloudInfo.get('adminPassword')
 
   // TODO(honza) add SSL
 
@@ -65,11 +65,11 @@ const OvercloudInfo = ({ intl, overcloudInfo }) => {
       </Loader>
       <br />
     </div>
-  );
-};
+  )
+}
 OvercloudInfo.propTypes = {
   intl: PropTypes.object,
   overcloudInfo: ImmutablePropTypes.map.isRequired
-};
+}
 
-export default injectIntl(OvercloudInfo);
+export default injectIntl(OvercloudInfo)

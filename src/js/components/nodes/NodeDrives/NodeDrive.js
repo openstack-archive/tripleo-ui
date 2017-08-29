@@ -14,12 +14,12 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { defineMessages, FormattedMessage } from 'react-intl'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import { Col, Row } from 'react-bootstrap'
 
-import { formatBytes } from '../../utils';
+import { formatBytes } from '../../utils'
 import {
   ListViewAdditionalInfo,
   ListViewAdditionalInfoItem,
@@ -34,7 +34,7 @@ import {
   ListViewItemHeader,
   ListViewLeft,
   ListViewMainInfo
-} from '../../ui/ListView';
+} from '../../ui/ListView'
 
 const messages = defineMessages({
   type: {
@@ -77,23 +77,23 @@ const messages = defineMessages({
     id: 'NodeDrive.notAvailable',
     defaultMessage: 'n/a'
   }
-});
+})
 
 export default class NodeDrive extends Component {
   constructor() {
-    super();
+    super()
     this.state = {
       expanded: false
-    };
+    }
   }
 
   toggleExpanded() {
-    this.setState(prevState => ({ expanded: !prevState.expanded }));
+    this.setState(prevState => ({ expanded: !prevState.expanded }))
   }
 
   render() {
-    const { drive } = this.props;
-    const [driveSize, driveSizeUnit] = formatBytes(drive.size);
+    const { drive } = this.props
+    const [driveSize, driveSizeUnit] = formatBytes(drive.size)
     return (
       <ListViewItem stacked={false} expanded={this.state.expanded}>
 
@@ -159,10 +159,10 @@ export default class NodeDrive extends Component {
         </ListViewItemContainer>
 
       </ListViewItem>
-    );
+    )
   }
 }
 
 NodeDrive.propTypes = {
   drive: PropTypes.object.isRequired
-};
+}

@@ -14,18 +14,18 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
-import Formsy from 'formsy-react';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ClassNames from 'classnames'
+import Formsy from 'formsy-react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 class PlanFileInput extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       progress: 0,
       unreadableFile: null
-    };
+    }
   }
 
   componentDidUpdate() {
@@ -34,29 +34,29 @@ class PlanFileInput extends React.Component {
       this.refs[this.props.name].setAttribute(
         'webkitdirectory',
         'webkitdirectory'
-      );
-      this.refs[this.props.name].setAttribute('multiple', 'multiple');
+      )
+      this.refs[this.props.name].setAttribute('multiple', 'multiple')
     } else {
-      this.refs[this.props.name].removeAttribute('webkitdirectory');
-      this.refs[this.props.name].removeAttribute('multiple');
+      this.refs[this.props.name].removeAttribute('webkitdirectory')
+      this.refs[this.props.name].removeAttribute('multiple')
     }
   }
 
   processFolderFiles(inputFiles) {
-    let files = [];
-    let processedFilesCount = 0;
+    let files = []
+    let processedFilesCount = 0
 
     for (let i = 0, l = inputFiles.length; i < l; i++) {
-      let reader = new FileReader();
-      let file = inputFiles[i];
+      let reader = new FileReader()
+      let file = inputFiles[i]
 
       reader.onerror = (f => {
         return e => {
           this.setState({
             unreadableFile: f.webkitRelativePath
-          });
-        };
-      })(file);
+          })
+        }
+      })(file)
 
       reader.onload = (f => {
         return e => {
@@ -64,53 +64,53 @@ class PlanFileInput extends React.Component {
             let obj = {
               name: f.webkitRelativePath.replace(/^[^\/]*\//, ''),
               content: e.target.result
-            };
-            files.push(obj);
+            }
+            files.push(obj)
           }
-          processedFilesCount += 1;
+          processedFilesCount += 1
           this.setState(
             { progress: Math.round(100 / l * processedFilesCount) },
             () => {
               // if the last file is processed, setValue -> triggers onChange on Formsy.Form
               if (processedFilesCount === l) {
-                this.props.setValue(files);
-                this.setState({ progress: 0 });
+                this.props.setValue(files)
+                this.setState({ progress: 0 })
               }
             }
-          );
-        };
-      })(file);
-      reader.readAsText(file);
+          )
+        }
+      })(file)
+      reader.readAsText(file)
     }
   }
 
   processTarball(file) {
-    this.props.setValue([{ name: file.name, file: file }]);
+    this.props.setValue([{ name: file.name, file: file }])
   }
 
   processFiles(event) {
     if (this.props.uploadType === 'folder') {
-      this.processFolderFiles.bind(this)(event.target.files);
+      this.processFolderFiles.bind(this)(event.target.files)
     } else {
-      this.processTarball.bind(this)(event.target.files[0]);
+      this.processTarball.bind(this)(event.target.files[0])
     }
   }
 
   renderErrorMessage() {
-    let errorMessage = this.props.getErrorMessage();
+    let errorMessage = this.props.getErrorMessage()
     if (!errorMessage && this.state.unreadableFile) {
-      errorMessage = `${this.state.unreadableFile} could not be read.`;
+      errorMessage = `${this.state.unreadableFile} could not be read.`
     }
     return errorMessage
       ? <span className="help-block">{errorMessage}</span>
-      : false;
+      : false
   }
 
   renderDescription() {
-    let description = this.props.description;
+    let description = this.props.description
     return description
       ? <small className="help-block">{description}</small>
-      : false;
+      : false
   }
 
   renderProgress() {
@@ -121,7 +121,7 @@ class PlanFileInput extends React.Component {
             style={{ width: `${this.state.progress}%` }}
           />
         </div>
-      : false;
+      : false
   }
 
   render() {
@@ -130,7 +130,7 @@ class PlanFileInput extends React.Component {
       'has-error': this.props.showError(),
       'has-success': this.props.isValid(),
       required: this.props.isRequired()
-    });
+    })
 
     return (
       <div className={divClasses}>
@@ -153,7 +153,7 @@ class PlanFileInput extends React.Component {
           {this.renderDescription()}
         </div>
       </div>
-    );
+    )
   }
 }
 PlanFileInput.propTypes = {
@@ -169,11 +169,11 @@ PlanFileInput.propTypes = {
   showError: PropTypes.func,
   title: PropTypes.string.isRequired,
   uploadType: PropTypes.string
-};
+}
 PlanFileInput.defaultProps = {
   inputColumnClasses: 'col-sm-10',
   labelColumnClasses: 'col-sm-2',
   uploadType: 'tarball'
-};
+}
 
-export default Formsy.HOC(PlanFileInput);
+export default Formsy.HOC(PlanFileInput)

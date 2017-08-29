@@ -14,44 +14,44 @@
  * under the License.
  */
 
-import { IntlProvider } from 'react-intl';
-import React from 'react';
-import ReactShallowRenderer from 'react-test-renderer/shallow';
+import { IntlProvider } from 'react-intl'
+import React from 'react'
+import ReactShallowRenderer from 'react-test-renderer/shallow'
 
-const IronicApiService = require('../../../js/services/IronicApiService');
+const IronicApiService = require('../../../js/services/IronicApiService')
 
 // TODO(jtomasek): remove this import when store is correctly mocked
-import store from '../../../js/store'; // eslint-disable-line no-unused-vars
-import Nodes from '../../../js/components/nodes/Nodes';
+import store from '../../../js/store' // eslint-disable-line no-unused-vars
+import Nodes from '../../../js/components/nodes/Nodes'
 
 describe('Nodes Component', () => {
-  let NodesVdom, NodesInstance;
+  let NodesVdom, NodesInstance
   beforeEach(() => {
-    let shallowRenderer = new ReactShallowRenderer();
-    const intlProvider = new IntlProvider({ locale: 'en' }, {});
-    const { intl } = intlProvider.getChildContext();
-    shallowRenderer.render(<Nodes.WrappedComponent intl={intl} />);
-    NodesVdom = shallowRenderer.getRenderOutput();
-    NodesInstance = shallowRenderer._instance._instance;
-  });
+    let shallowRenderer = new ReactShallowRenderer()
+    const intlProvider = new IntlProvider({ locale: 'en' }, {})
+    const { intl } = intlProvider.getChildContext()
+    shallowRenderer.render(<Nodes.WrappedComponent intl={intl} />)
+    NodesVdom = shallowRenderer.getRenderOutput()
+    NodesInstance = shallowRenderer._instance._instance
+  })
 
   // TODO(jtomasek): not sure how to mock children passed by react router
   xit('should render Nodes nav tabs', () => {
-    expect(NodesVdom).toExist();
-  });
+    expect(NodesVdom).toExist()
+  })
 
-  xit('should render tab-pane', () => {});
+  xit('should render tab-pane', () => {})
 
-  xit('should listen to NodesStore changes', () => {});
+  xit('should listen to NodesStore changes', () => {})
 
   xit(
     'should get nodes from NodesStore and store them in state on change in NodesStore',
     () => {}
-  );
+  )
 
   xit('should issue a request to list Nodes on when mounted', () => {
-    spyOn(IronicApiService, 'handleGetNodes');
-    NodesInstance.componentDidMount();
-    expect(IronicApiService.handleGetNodes).toHaveBeenCalled();
-  });
-});
+    spyOn(IronicApiService, 'handleGetNodes')
+    NodesInstance.componentDidMount()
+    expect(IronicApiService.handleGetNodes).toHaveBeenCalled()
+  })
+})

@@ -14,17 +14,17 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+import PropTypes from 'prop-types'
+import React from 'react'
+import { withRouter } from 'react-router-dom'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
 
 const messages = defineMessages({
   importPlan: {
     id: 'ListPlans.importPlan',
     defaultMessage: 'Import Plan'
   }
-});
+})
 
 const ImportPlanCard = ({ history }) => (
   <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
@@ -41,9 +41,9 @@ const ImportPlanCard = ({ history }) => (
       </div>
     </div>
   </div>
-);
+)
 ImportPlanCard.propTypes = {
   history: PropTypes.object.isRequired
-};
+}
 
-export default withRouter(injectIntl(ImportPlanCard));
+export default withRouter(injectIntl(ImportPlanCard))

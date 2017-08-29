@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { getAppConfig } from '../services/utils';
+import { getAppConfig } from '../services/utils'
 
-const host = location.protocol + '//' + location.hostname;
-export const KEYSTONE_URL = getAppConfig().keystone || host + ':5000/v3';
+const host = location.protocol + '//' + location.hostname
+export const KEYSTONE_URL = getAppConfig().keystone || host + ':5000/v3'

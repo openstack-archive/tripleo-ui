@@ -14,34 +14,34 @@
  * under the License.
  */
 
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map } from 'immutable'
 
-import { Stack, StackResource, StacksState } from '../immutableRecords/stacks';
-import StacksConstants, { stackStates } from '../constants/StacksConstants';
-import PlansConstants from '../constants/PlansConstants';
+import { Stack, StackResource, StacksState } from '../immutableRecords/stacks'
+import StacksConstants, { stackStates } from '../constants/StacksConstants'
+import PlansConstants from '../constants/PlansConstants'
 
-const initialState = new StacksState();
+const initialState = new StacksState()
 
 export default function stacksReducer(state = initialState, action) {
   switch (action.type) {
     case StacksConstants.FETCH_STACKS_PENDING:
-      return state.set('isFetching', true);
+      return state.set('isFetching', true)
 
     case StacksConstants.FETCH_STACKS_SUCCESS: {
       return state
         .set('isLoaded', true)
         .set('isFetching', false)
-        .set('stacks', fromJS(action.payload).map(stack => new Stack(stack)));
+        .set('stacks', fromJS(action.payload).map(stack => new Stack(stack)))
     }
 
     case StacksConstants.FETCH_STACKS_FAILED:
       return state
         .set('isLoaded', true)
         .set('isFetching', false)
-        .set('stacks', Map());
+        .set('stacks', Map())
 
     case StacksConstants.FETCH_RESOURCES_PENDING:
-      return state.set('isFetchingResources', true);
+      return state.set('isFetchingResources', true)
 
     case StacksConstants.FETCH_RESOURCES_SUCCESS: {
       return state
@@ -52,24 +52,24 @@ export default function stacksReducer(state = initialState, action) {
           fromJS(action.payload)
             .map(resource => new StackResource(resource))
             .sortBy(resource => resource.updated_time)
-        );
+        )
     }
 
     case StacksConstants.FETCH_RESOURCES_FAILED:
-      return state.set('isFetchingResources', false);
+      return state.set('isFetchingResources', false)
 
     case StacksConstants.FETCH_STACK_ENVIRONMENT_FAILED:
-      return state.set('isFetchingEnvironment', false);
+      return state.set('isFetchingEnvironment', false)
 
     case StacksConstants.FETCH_STACK_ENVIRONMENT_PENDING:
-      return state.set('isFetchingEnvironment', true);
+      return state.set('isFetchingEnvironment', true)
 
     case StacksConstants.FETCH_STACK_ENVIRONMENT_SUCCESS: {
-      let environment = fromJS(action.payload.environment);
+      let environment = fromJS(action.payload.environment)
       return state
         .set('currentStackEnvironment', environment)
         .set('isFetchingEnvironment', false)
-        .set('environmentLoaded', true);
+        .set('environmentLoaded', true)
     }
 
     case StacksConstants.FETCH_RESOURCE_SUCCESS:
@@ -78,10 +78,10 @@ export default function stacksReducer(state = initialState, action) {
         .setIn(
           ['resourceDetails', action.payload.resource_name],
           new StackResource(fromJS(action.payload))
-        );
+        )
 
     case PlansConstants.PLAN_CHOSEN:
-      return initialState;
+      return initialState
 
     case StacksConstants.DELETE_STACK_SUCCESS:
       return state
@@ -89,15 +89,15 @@ export default function stacksReducer(state = initialState, action) {
         .setIn(
           ['stacks', action.payload, 'stack_status'],
           stackStates.DELETE_IN_PROGRESS
-        );
+        )
 
     case StacksConstants.DELETE_STACK_FAILED:
-      return state.set('isRequestingStackDelete', false);
+      return state.set('isRequestingStackDelete', false)
 
     case StacksConstants.DELETE_STACK_PENDING:
-      return state.set('isRequestingStackDelete', true);
+      return state.set('isRequestingStackDelete', true)
 
     default:
-      return state;
+      return state
   }
 }

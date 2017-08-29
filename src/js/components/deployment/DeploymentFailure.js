@@ -14,31 +14,31 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import { deploymentStatusMessages } from '../../constants/StacksConstants';
-import InlineNotification from '../ui/InlineNotification';
-import StackResourcesTable from './StackResourcesTable';
+import { deploymentStatusMessages } from '../../constants/StacksConstants'
+import InlineNotification from '../ui/InlineNotification'
+import StackResourcesTable from './StackResourcesTable'
 
 const messages = defineMessages({
   resources: {
     id: 'DeploymentFailure.resources',
     defaultMessage: 'Resources'
   }
-});
+})
 
 class DeploymentFailure extends React.Component {
   componentDidMount() {
-    this.props.fetchStackResources(this.props.stack);
+    this.props.fetchStackResources(this.props.stack)
   }
 
   render() {
     const status = this.props.intl.formatMessage(
       deploymentStatusMessages[this.props.stack.stack_status]
-    );
+    )
 
     return (
       <div className="col-sm-12 fixed-container-body-content">
@@ -51,7 +51,7 @@ class DeploymentFailure extends React.Component {
           resources={this.props.stackResources.reverse()}
         />
       </div>
-    );
+    )
   }
 }
 
@@ -62,6 +62,6 @@ DeploymentFailure.propTypes = {
   stack: ImmutablePropTypes.record.isRequired,
   stackResources: ImmutablePropTypes.map.isRequired,
   stackResourcesLoaded: PropTypes.bool.isRequired
-};
+}
 
-export default injectIntl(DeploymentFailure);
+export default injectIntl(DeploymentFailure)

@@ -14,15 +14,15 @@
  * under the License.
  */
 
-import { defineMessages, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import DeleteStackButton from './DeleteStackButton';
-import { deploymentStatusMessages } from '../../constants/StacksConstants';
-import InlineNotification from '../ui/InlineNotification';
-import OvercloudInfo from '../deployment/OvercloudInfo';
+import DeleteStackButton from './DeleteStackButton'
+import { deploymentStatusMessages } from '../../constants/StacksConstants'
+import InlineNotification from '../ui/InlineNotification'
+import OvercloudInfo from '../deployment/OvercloudInfo'
 
 const messages = defineMessages({
   deleteDeployment: {
@@ -33,19 +33,19 @@ const messages = defineMessages({
     id: 'DeploymentSuccess.requestingDeletion',
     defaultMessage: 'Requesting Deletion of Deployment'
   }
-});
+})
 
 class DeploymentSuccess extends React.Component {
   componentDidMount() {
-    this.props.fetchStackResource(this.props.stack, 'PublicVirtualIP');
-    this.props.fetchStackEnvironment(this.props.stack);
+    this.props.fetchStackResource(this.props.stack, 'PublicVirtualIP')
+    this.props.fetchStackEnvironment(this.props.stack)
   }
 
   render() {
-    const { formatMessage } = this.props.intl;
+    const { formatMessage } = this.props.intl
     const status = formatMessage(
       deploymentStatusMessages[this.props.stack.stack_status]
-    );
+    )
 
     return (
       <div>
@@ -66,7 +66,7 @@ class DeploymentSuccess extends React.Component {
           stack={this.props.stack}
         />
       </div>
-    );
+    )
   }
 }
 
@@ -79,6 +79,6 @@ DeploymentSuccess.propTypes = {
   overcloudInfo: ImmutablePropTypes.map.isRequired,
   stack: ImmutablePropTypes.record.isRequired,
   stackResources: ImmutablePropTypes.map.isRequired
-};
+}
 
-export default injectIntl(DeploymentSuccess);
+export default injectIntl(DeploymentSuccess)

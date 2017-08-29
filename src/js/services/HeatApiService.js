@@ -14,11 +14,11 @@
  * under the License.
  */
 
-import axios from 'axios';
-import when from 'when';
+import axios from 'axios'
+import when from 'when'
 
-import { AuthenticationError, HeatApiError, ConnectionError } from './errors';
-import { getAuthTokenId, getServiceUrl } from '../services/utils';
+import { AuthenticationError, HeatApiError, ConnectionError } from './errors'
+import { getAuthTokenId, getServiceUrl } from '../services/utils'
 
 class HeatApiService {
   defaultRequest(path, additionalAttributes) {
@@ -33,21 +33,21 @@ class HeatApiService {
           }
         },
         additionalAttributes
-      );
-      return axios(requestAttributes);
-    });
+      )
+      return axios(requestAttributes)
+    })
   }
 
   getStacks() {
     return this.defaultRequest('/stacks')
       .then(response => response.data)
-      .catch(handleErrors);
+      .catch(handleErrors)
   }
 
   getStack(stackName, stackId) {
     return this.defaultRequest(`/stacks/${stackName}/${stackId}`)
       .then(response => response.data)
-      .catch(handleErrors);
+      .catch(handleErrors)
   }
 
   getResources(stackName, stackId) {
@@ -55,7 +55,7 @@ class HeatApiService {
       params: { nested_depth: 3 }
     })
       .then(response => response.data)
-      .catch(handleErrors);
+      .catch(handleErrors)
   }
 
   getResource(stack, resourceName) {
@@ -63,7 +63,7 @@ class HeatApiService {
       `/stacks/${stack.stack_name}/${stack.id}/resources/${resourceName}`
     )
       .then(response => response.data)
-      .catch(handleErrors);
+      .catch(handleErrors)
   }
 
   getEnvironment(stack) {
@@ -71,28 +71,28 @@ class HeatApiService {
       `/stacks/${stack.stack_name}/${stack.id}/environment`
     )
       .then(response => response.data)
-      .catch(handleErrors);
+      .catch(handleErrors)
   }
 
   deleteStack(name, id) {
     return this.defaultRequest(`/stacks/${name}/${id}`, { method: 'DELETE' })
       .then(response => response.data)
-      .catch(handleErrors);
+      .catch(handleErrors)
   }
 }
 
 const handleErrors = e => {
   if (e.response && e.response.status === 401) {
-    return when.reject(new AuthenticationError(e));
+    return when.reject(new AuthenticationError(e))
   } else if (e.response) {
-    return when.reject(new HeatApiError(e));
+    return when.reject(new HeatApiError(e))
   } else if (e.request) {
     return when.reject(
       new ConnectionError('Connection to Heat API could not be established', e)
-    );
+    )
   } else {
-    return when.reject(e);
+    return when.reject(e)
   }
-};
+}
 
-export default new HeatApiService();
+export default new HeatApiService()

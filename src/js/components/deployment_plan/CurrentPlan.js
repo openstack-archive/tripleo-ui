@@ -14,50 +14,50 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Link, Route, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Link, Route, withRouter } from 'react-router-dom'
 
-import DeploymentConfiguration from './DeploymentConfiguration';
-import DeploymentDetail from '../deployment/DeploymentDetail';
-import { getAllPlansButCurrent } from '../../selectors/plans';
+import DeploymentConfiguration from './DeploymentConfiguration'
+import DeploymentDetail from '../deployment/DeploymentDetail'
+import { getAllPlansButCurrent } from '../../selectors/plans'
 import {
   getCurrentStack,
   getCurrentStackDeploymentProgress,
   getCurrentStackDeploymentInProgress,
   getOvercloudInfo
-} from '../../selectors/stacks';
+} from '../../selectors/stacks'
 import {
   getAvailableNodes,
   getAvailableNodesCountsByRole,
   getNodeCountParametersByRole,
   getTotalAssignedNodesCount
-} from '../../selectors/nodesAssignment';
+} from '../../selectors/nodesAssignment'
 import {
   getEnvironmentConfigurationSummary
-} from '../../selectors/environmentConfiguration';
-import { getCurrentPlan } from '../../selectors/plans';
-import { getRoles } from '../../selectors/roles';
-import ConfigurePlanStep from './ConfigurePlanStep';
-import CurrentPlanActions from '../../actions/CurrentPlanActions';
-import { DeploymentPlanStep } from './DeploymentPlanStep';
-import DeployStep from './DeployStep';
+} from '../../selectors/environmentConfiguration'
+import { getCurrentPlan } from '../../selectors/plans'
+import { getRoles } from '../../selectors/roles'
+import ConfigurePlanStep from './ConfigurePlanStep'
+import CurrentPlanActions from '../../actions/CurrentPlanActions'
+import { DeploymentPlanStep } from './DeploymentPlanStep'
+import DeployStep from './DeployStep'
 import EnvironmentConfigurationActions
-  from '../../actions/EnvironmentConfigurationActions';
-import HardwareStep from './HardwareStep';
-import NodesActions from '../../actions/NodesActions';
-import NotificationActions from '../../actions/NotificationActions';
-import ParametersActions from '../../actions/ParametersActions';
-import PlansActions from '../../actions/PlansActions';
-import RoleDetail from '../roles/RoleDetail';
-import RolesStep from './RolesStep';
-import RolesActions from '../../actions/RolesActions';
-import StacksActions from '../../actions/StacksActions';
-import stackStates from '../../constants/StacksConstants';
-import ValidationsActions from '../../actions/ValidationsActions';
+  from '../../actions/EnvironmentConfigurationActions'
+import HardwareStep from './HardwareStep'
+import NodesActions from '../../actions/NodesActions'
+import NotificationActions from '../../actions/NotificationActions'
+import ParametersActions from '../../actions/ParametersActions'
+import PlansActions from '../../actions/PlansActions'
+import RoleDetail from '../roles/RoleDetail'
+import RolesStep from './RolesStep'
+import RolesActions from '../../actions/RolesActions'
+import StacksActions from '../../actions/StacksActions'
+import stackStates from '../../constants/StacksConstants'
+import ValidationsActions from '../../actions/ValidationsActions'
 
 const messages = defineMessages({
   backToAllPlans: {
@@ -113,70 +113,70 @@ const messages = defineMessages({
       'status and login details, which you use to interact with your overcloud. Click "Deploy" to ' +
       'start the deployment.'
   }
-});
+})
 
 class CurrentPlan extends React.Component {
   componentDidMount() {
-    this.props.fetchStacks();
-    this.fetchParameters();
+    this.props.fetchStacks()
+    this.fetchParameters()
   }
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.stacksLoaded) {
-      this.props.fetchStacks();
+      this.props.fetchStacks()
     }
     if (nextProps.currentPlan !== this.props.currentPlan) {
-      this.fetchParameters();
+      this.fetchParameters()
     }
-    this.postDeploymentValidationsCheck(nextProps.currentStack);
-    this.pollCurrentStack(nextProps.currentStack);
+    this.postDeploymentValidationsCheck(nextProps.currentStack)
+    this.pollCurrentStack(nextProps.currentStack)
   }
 
   componentWillUnmount() {
-    clearTimeout(this.stackProgressTimeout);
+    clearTimeout(this.stackProgressTimeout)
   }
 
   fetchParameters() {
     !this.props.isFetchingParameters &&
-      this.props.fetchParameters(this.props.currentPlan.name);
+      this.props.fetchParameters(this.props.currentPlan.name)
   }
 
   pollCurrentStack(currentStack) {
     if (currentStack) {
       if (currentStack.stack_status.match(/PROGRESS/)) {
-        clearTimeout(this.stackProgressTimeout);
+        clearTimeout(this.stackProgressTimeout)
         this.stackProgressTimeout = setTimeout(() => {
-          this.props.fetchStacks();
-          this.props.fetchStackResources(currentStack);
-        }, 20000);
+          this.props.fetchStacks()
+          this.props.fetchStackResources(currentStack)
+        }, 20000)
       }
     }
   }
 
   postDeploymentValidationsCheck(nextStack) {
-    const { currentStack, currentPlan } = this.props;
+    const { currentStack, currentPlan } = this.props
     const progressStates = [
       stackStates.UPDATE_IN_PROGRESS,
       stackStates.CREATE_IN_PROGRESS
-    ];
+    ]
     const successStates = [
       stackStates.UPDATE_COMPLETE,
       stackStates.CREATE_COMPLETE
-    ];
+    ]
     if (
       currentStack &&
       nextStack &&
       progressStates.includes(currentStack.stack_status) &&
       successStates.includes(nextStack.stack_status)
     ) {
-      this.props.runPostDeploymentValidations(currentPlan.name);
+      this.props.runPostDeploymentValidations(currentPlan.name)
     }
   }
 
   render() {
-    const { intl: { formatMessage }, currentPlan } = this.props;
+    const { intl: { formatMessage }, currentPlan } = this.props
 
-    const currentPlanName = currentPlan.name;
+    const currentPlanName = currentPlan.name
     return (
       <div className="row">
         <div className="col-sm-12">
@@ -273,7 +273,7 @@ class CurrentPlan extends React.Component {
           component={DeploymentDetail}
         />
       </div>
-    );
+    )
   }
 }
 
@@ -314,7 +314,7 @@ CurrentPlan.propTypes = {
   runPostDeploymentValidations: PropTypes.func.isRequired,
   stacksLoaded: PropTypes.bool.isRequired,
   totalAssignedNodesCount: PropTypes.number.isRequired
-};
+}
 
 export function mapStateToProps(state, props) {
   return {
@@ -342,14 +342,14 @@ export function mapStateToProps(state, props) {
     rolesLoaded: state.roles.get('loaded'),
     stacksLoaded: state.stacks.get('isLoaded'),
     totalAssignedNodesCount: getTotalAssignedNodesCount(state)
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     choosePlan: planName => dispatch(CurrentPlanActions.choosePlan(planName)),
     deleteStack: (stackName, stackId) => {
-      dispatch(StacksActions.deleteStack(stackName, stackId));
+      dispatch(StacksActions.deleteStack(stackName, stackId))
     },
     deployPlan: planName => dispatch(PlansActions.deployPlan(planName)),
     fetchStackEnvironment: stack =>
@@ -360,7 +360,7 @@ function mapDispatchToProps(dispatch) {
           planName,
           parentPath
         )
-      );
+      )
     },
     fetchNodes: () => dispatch(NodesActions.fetchNodes()),
     fetchParameters: planName =>
@@ -375,11 +375,11 @@ function mapDispatchToProps(dispatch) {
     runPostDeploymentValidations: planName => {
       dispatch(
         ValidationsActions.runValidationGroups(['post-deployment'], planName)
-      );
+      )
     }
-  };
+  }
 }
 
 export default injectIntl(
   withRouter(connect(mapStateToProps, mapDispatchToProps)(CurrentPlan))
-);
+)

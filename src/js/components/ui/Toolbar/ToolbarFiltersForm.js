@@ -14,24 +14,24 @@
  * under the License.
  */
 
-import { Button, FormGroup, InputGroup, MenuItem } from 'react-bootstrap';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Button, FormGroup, InputGroup, MenuItem } from 'react-bootstrap'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Field, reduxForm } from 'redux-form'
 
-import DropdownSelect from '../reduxForm/DropdownSelect';
+import DropdownSelect from '../reduxForm/DropdownSelect'
 
 class ToolbarFiltersForm extends React.Component {
   submit(data) {
-    this.props.onSubmit(data);
-    this.props.initialize({ filterBy: data.filterBy });
+    this.props.onSubmit(data)
+    this.props.initialize({ filterBy: data.filterBy })
   }
 
   renderFilterByOptions() {
-    const { options } = this.props;
+    const { options } = this.props
     return Object.keys(options).map(k => (
       <MenuItem key={k} eventKey={k}>{options[k]}</MenuItem>
-    ));
+    ))
   }
 
   renderFilterStringField() {
@@ -44,11 +44,11 @@ class ToolbarFiltersForm extends React.Component {
         placeholder={this.props.placeholder}
         className="form-control"
       />
-    );
+    )
   }
 
   render() {
-    const { formatSelectValue, handleSubmit, options } = this.props;
+    const { formatSelectValue, handleSubmit, options } = this.props
     return (
       <form onSubmit={handleSubmit(this.submit.bind(this))}>
         <FormGroup className="toolbar-pf-filter">
@@ -68,7 +68,7 @@ class ToolbarFiltersForm extends React.Component {
             : this.renderFilterStringField()}
         </FormGroup>
       </form>
-    );
+    )
   }
 }
 ToolbarFiltersForm.propTypes = {
@@ -80,8 +80,8 @@ ToolbarFiltersForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   options: PropTypes.object,
   placeholder: PropTypes.string
-};
+}
 ToolbarFiltersForm.defaultProps = {
   placeholder: 'Add filter'
-};
-export default reduxForm()(ToolbarFiltersForm);
+}
+export default reduxForm()(ToolbarFiltersForm)

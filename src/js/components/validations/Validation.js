@@ -14,20 +14,20 @@
  * under the License.
  */
 
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import { ValidationStatusIcon } from './ValidationStatusIcon';
+import { ValidationStatusIcon } from './ValidationStatusIcon'
 
 export default class Validation extends React.Component {
   constructor() {
-    super();
-    this.state = { isPending: false };
+    super()
+    this.state = { isPending: false }
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ isPending: false });
+    this.setState({ isPending: false })
   }
 
   /**
@@ -35,17 +35,17 @@ export default class Validation extends React.Component {
    * started) no action can be run
    */
   triggerValidationAction() {
-    this.setState({ isPending: true });
+    this.setState({ isPending: true })
 
     switch (true) {
       case this.state.isPending:
-        break;
+        break
       case this.props.status === 'running':
-        this.props.stopValidation(this.props.results.last().id);
-        break;
+        this.props.stopValidation(this.props.results.last().id)
+        break
       default:
-        this.props.runValidation();
-        break;
+        this.props.runValidation()
+        break
     }
   }
 
@@ -57,8 +57,8 @@ export default class Validation extends React.Component {
             <span className="label label-default">{group}</span>
           </small>
         </div>
-      );
-    });
+      )
+    })
   }
 
   render() {
@@ -94,7 +94,7 @@ export default class Validation extends React.Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -108,4 +108,4 @@ Validation.propTypes = {
   showValidationDetail: PropTypes.func.isRequired,
   status: PropTypes.string,
   stopValidation: PropTypes.func.isRequired
-};
+}

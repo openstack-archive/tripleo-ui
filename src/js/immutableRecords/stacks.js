@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { List, Map, OrderedMap, Record } from 'immutable';
+import { List, Map, OrderedMap, Record } from 'immutable'
 
 export const StacksState = Record({
   currentStackEnvironment: Map(),
@@ -28,7 +28,7 @@ export const StacksState = Record({
   resources: OrderedMap(),
   resourceDetails: Map(),
   stacks: Map()
-});
+})
 
 export const Stack = Record({
   creation_time: undefined,
@@ -43,7 +43,7 @@ export const Stack = Record({
   stack_user_project_id: undefined,
   tags: Map(),
   updated_time: undefined
-});
+})
 
 export const StackResource = Record({
   attributes: undefined,
@@ -57,4 +57,4 @@ export const StackResource = Record({
   resource_status_reason: undefined,
   resource_type: undefined,
   updated_time: undefined
-});
+})

@@ -74,7 +74,7 @@
   },
   "scripts": {
     "lint": "./bin/run_lint.sh",
-    "prettier": "prettier --write --single-quote 'src/**/*.js'",
+    "prettier": "prettier --write --single-quote --no-semi 'src/**/*.js'",
     "build": "webpack --env=prod --bail --progress",
     "build:dev": "webpack --env=dev --bail --progress",
     "start": "webpack-dev-server --env=dev --progress",
@@ -86,27 +86,19 @@
   },
   "jest": {
     "testURL": "http://localhost",
-    "testMatch": [
-      "**/__tests__/**/*.tests.js"
-    ],
+    "testMatch": ["**/__tests__/**/*.tests.js"],
     "transform": {
       "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
       "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
-    ]
+    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"]
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/openstack/tripleo-ui"
   },
-  "keywords": [
-    "tripleo",
-    "tripleo-ui",
-    "openstack"
-  ],
+  "keywords": ["tripleo", "tripleo-ui", "openstack"],
   "author": "Openstack <openstack-dev@lists.openstack.org>",
   "license": "Apache-2.0"
 }

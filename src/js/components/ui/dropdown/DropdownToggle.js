@@ -14,13 +14,13 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 
 export default class DropdownToggle extends React.Component {
   handleClick(e) {
-    e.preventDefault();
-    this.props.toggleDropdown();
+    e.preventDefault()
+    this.props.toggleDropdown()
   }
 
   render() {
@@ -32,15 +32,15 @@ export default class DropdownToggle extends React.Component {
       >
         {this.props.children}
       </a>
-    );
+    )
   }
 }
 DropdownToggle.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   toggleDropdown: PropTypes.func
-};
+}
 
 DropdownToggle.defaultProps = {
   className: 'dropdown-toggle'
-};
+}

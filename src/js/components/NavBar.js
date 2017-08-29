@@ -14,18 +14,18 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Link } from 'react-router-dom';
-import ImmutablePropTypes from 'react-immutable-proptypes';
+import { defineMessages, FormattedMessage } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Link } from 'react-router-dom'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 
-import { getEnabledLanguages } from '../services/utils';
-import NavTab from './ui/NavTab';
-import I18nDropdown from './i18n/I18nDropdown';
-import StatusDropdown from './StatusDropdown';
+import { getEnabledLanguages } from '../services/utils'
+import NavTab from './ui/NavTab'
+import I18nDropdown from './i18n/I18nDropdown'
+import StatusDropdown from './StatusDropdown'
 
-import TripleoOwlSvg from '../../img/tripleo-owl-navbar.svg';
+import TripleoOwlSvg from '../../img/tripleo-owl-navbar.svg'
 
 const messages = defineMessages({
   toggleNavigation: {
@@ -48,16 +48,16 @@ const messages = defineMessages({
     id: 'Navbar.nodesTab',
     defaultMessage: 'Nodes'
   }
-});
+})
 
 export default class NavBar extends React.Component {
   logout(e) {
-    e.preventDefault();
-    this.props.onLogout();
+    e.preventDefault()
+    this.props.onLogout()
   }
 
   _renderLanguageDropdown() {
-    const languages = getEnabledLanguages();
+    const languages = getEnabledLanguages()
 
     // Only include the I18nDropdown if there's more than one
     // language to choose from.
@@ -65,7 +65,7 @@ export default class NavBar extends React.Component {
       ? <li>
           <I18nDropdown />
         </li>
-      : null;
+      : null
   }
 
   _renderHelpDropdown() {
@@ -73,7 +73,7 @@ export default class NavBar extends React.Component {
       <li>
         <StatusDropdown />
       </li>
-    );
+    )
   }
 
   render() {
@@ -131,10 +131,10 @@ export default class NavBar extends React.Component {
           </ul>
         </div>
       </nav>
-    );
+    )
   }
 }
 NavBar.propTypes = {
   onLogout: PropTypes.func.isRequired,
   user: ImmutablePropTypes.map
-};
+}

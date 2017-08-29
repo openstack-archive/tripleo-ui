@@ -14,13 +14,13 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ClassNames from 'classnames'
+import { defineMessages, FormattedMessage } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import DropdownKebab from '../../ui/dropdown/DropdownKebab';
+import DropdownKebab from '../../ui/dropdown/DropdownKebab'
 import {
   ListViewActions,
   ListViewAdditionalInfo,
@@ -37,16 +37,16 @@ import {
   ListViewItemHeader,
   ListViewLeft,
   ListViewMainInfo
-} from '../../ui/ListView';
-import MenuItemLink from '../../ui/dropdown/MenuItemLink';
-import NodeExtendedInfo from './NodeExtendedInfo';
+} from '../../ui/ListView'
+import MenuItemLink from '../../ui/dropdown/MenuItemLink'
+import NodeExtendedInfo from './NodeExtendedInfo'
 import {
   NodeIntrospectionStatus,
   NodeMaintenanceState,
   NodePowerState,
   NodeProvisionState
-} from './NodeStates';
-import { parseNodeCapabilities } from '../../../utils/nodes';
+} from './NodeStates'
+import { parseNodeCapabilities } from '../../../utils/nodes'
 
 const messages = defineMessages({
   profile: {
@@ -70,27 +70,27 @@ const messages = defineMessages({
     id: 'NodeListItem.actions.manageDrives',
     defaultMessage: 'Manage Drives'
   }
-});
+})
 
 export default class NodeListItem extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       expanded: false
-    };
+    }
   }
 
   toggleExpanded() {
-    this.setState(prevState => ({ expanded: !prevState.expanded }));
+    this.setState(prevState => ({ expanded: !prevState.expanded }))
   }
 
   render() {
-    const { fetchNodeIntrospectionData, node, inProgress } = this.props;
+    const { fetchNodeIntrospectionData, node, inProgress } = this.props
 
     const iconClass = ClassNames({
       'pficon pficon-server': true,
       running: inProgress
-    });
+    })
     return (
       <ListViewItem expanded={this.state.expanded} stacked>
         <ListViewItemHeader toggleExpanded={this.toggleExpanded.bind(this)}>
@@ -182,11 +182,11 @@ export default class NodeListItem extends React.Component {
           />
         </ListViewItemContainer>
       </ListViewItem>
-    );
+    )
   }
 }
 NodeListItem.propTypes = {
   fetchNodeIntrospectionData: PropTypes.func.isRequired,
   inProgress: PropTypes.bool.isRequired,
   node: ImmutablePropTypes.map.isRequired
-};
+}

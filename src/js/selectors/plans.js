@@ -14,25 +14,24 @@
  * under the License.
  */
 
-import { createSelector } from 'reselect';
+import { createSelector } from 'reselect'
 
-export const plans = state => state.plans.get('all').sortBy(plan => plan.name);
-export const getPlan = (state, planName) =>
-  state.plans.getIn(['all', planName]);
-export const currentPlanName = state => state.plans.currentPlanName;
+export const plans = state => state.plans.get('all').sortBy(plan => plan.name)
+export const getPlan = (state, planName) => state.plans.getIn(['all', planName])
+export const currentPlanName = state => state.plans.currentPlanName
 
 export const getCurrentPlan = createSelector(
   plans,
   currentPlanName,
   (plans, currentPlanName) => plans.get(currentPlanName)
-);
+)
 
 export const getCurrentPlanName = createSelector(
   getCurrentPlan,
   currentPlan => currentPlan && currentPlan.name
-);
+)
 
-export const getPlans = createSelector(plans, plans => plans);
+export const getPlans = createSelector(plans, plans => plans)
 
 /**
  * Returns a Map o all plans except for the selected one
@@ -43,6 +42,6 @@ export const getAllPlansButCurrent = createSelector(
   (plans, currentPlanName) => {
     return plans
       .filter(plan => plan.name != currentPlanName)
-      .sortBy(plan => plan.name);
+      .sortBy(plan => plan.name)
   }
-);
+)

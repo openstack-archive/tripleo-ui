@@ -1,10 +1,10 @@
-import { defineMessages, FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import DropdownKebab from '../../ui/dropdown/DropdownKebab';
-import MenuItemLink from '../../ui/dropdown/MenuItemLink';
-import { stackStates } from '../../../constants/StacksConstants';
+import DropdownKebab from '../../ui/dropdown/DropdownKebab'
+import MenuItemLink from '../../ui/dropdown/MenuItemLink'
+import { stackStates } from '../../../constants/StacksConstants'
 
 const messages = defineMessages({
   edit: {
@@ -19,7 +19,7 @@ const messages = defineMessages({
     id: 'PlanActions.delete',
     defaultMessage: 'Delete'
   }
-});
+})
 
 const PlanActions = ({ planName, stack }) => {
   const renderEditAction = () => {
@@ -31,14 +31,14 @@ const PlanActions = ({ planName, stack }) => {
         stackStates.DELETE_IN_PROGRESS
       ].includes(stack.get('stack_status'))
     ) {
-      return null;
+      return null
     }
     return (
       <MenuItemLink to={`/plans/manage/${planName}/edit`}>
         <FormattedMessage {...messages.edit} />
       </MenuItemLink>
-    );
-  };
+    )
+  }
 
   return (
     <div className="pull-right">
@@ -53,11 +53,11 @@ const PlanActions = ({ planName, stack }) => {
           </MenuItemLink>}
       </DropdownKebab>
     </div>
-  );
-};
+  )
+}
 PlanActions.propTypes = {
   planName: PropTypes.string.isRequired,
   stack: PropTypes.object
-};
+}
 
-export default PlanActions;
+export default PlanActions

@@ -14,15 +14,15 @@
  * under the License.
  */
 
-import axios from 'axios';
-import when from 'when';
+import axios from 'axios'
+import when from 'when'
 
 import {
   AuthenticationError,
   IronicInspectorApiError,
   ConnectionError
-} from './errors';
-import { getServiceUrl, getAuthTokenId } from './utils';
+} from './errors'
+import { getServiceUrl, getAuthTokenId } from './utils'
 
 class IronicInspectorApiService {
   defaultRequest(path, additionalAttributes) {
@@ -37,9 +37,9 @@ class IronicInspectorApiService {
           }
         },
         additionalAttributes
-      );
-      return axios(requestAttributes);
-    });
+      )
+      return axios(requestAttributes)
+    })
   }
 
   /**
@@ -49,7 +49,7 @@ class IronicInspectorApiService {
   getIntrospectionStatuses() {
     return this.defaultRequest(`/introspection`)
       .then(response => response.data)
-      .catch(handleErrors);
+      .catch(handleErrors)
   }
 
   /**
@@ -59,25 +59,25 @@ class IronicInspectorApiService {
   getIntrospectionData(nodeId) {
     return this.defaultRequest(`/introspection/${nodeId}/data`)
       .then(response => response.data)
-      .catch(handleErrors);
+      .catch(handleErrors)
   }
 }
 
 const handleErrors = e => {
   if (e.response && e.response.status === 401) {
-    return when.reject(new AuthenticationError(e));
+    return when.reject(new AuthenticationError(e))
   } else if (e.response) {
-    return when.reject(new IronicInspectorApiError(e));
+    return when.reject(new IronicInspectorApiError(e))
   } else if (e.request) {
     return when.reject(
       new ConnectionError(
         'Connection to Ironic Inspector API could not be established',
         e
       )
-    );
+    )
   } else {
-    return when.reject(e);
+    return when.reject(e)
   }
-};
+}
 
-export default new IronicInspectorApiService();
+export default new IronicInspectorApiService()

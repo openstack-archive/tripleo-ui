@@ -14,19 +14,19 @@
  * under the License.
  */
 
-import React from 'react';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+import React from 'react'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
 
-import Dropdown from '../components/ui/dropdown/Dropdown';
-import DropdownToggle from '../components/ui/dropdown/DropdownToggle';
-import DropdownItem from '../components/ui/dropdown/DropdownItem';
+import Dropdown from '../components/ui/dropdown/Dropdown'
+import DropdownToggle from '../components/ui/dropdown/DropdownToggle'
+import DropdownItem from '../components/ui/dropdown/DropdownItem'
 
 const messages = defineMessages({
   debug: {
     id: 'StatusDropdown.debug',
     defaultMessage: 'Debug'
   }
-});
+})
 
 class StatusDropdown extends React.Component {
   render() {
@@ -39,8 +39,8 @@ class StatusDropdown extends React.Component {
           <FormattedMessage {...messages.debug} />
         </DropdownItem>
       </Dropdown>
-    );
+    )
   }
 }
 
-export default injectIntl(StatusDropdown);
+export default injectIntl(StatusDropdown)

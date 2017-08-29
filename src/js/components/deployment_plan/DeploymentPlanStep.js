@@ -14,8 +14,8 @@
  * under the License.
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
 export const DeploymentPlanStep = ({ children, disabled, title, tooltip }) => {
   return (
@@ -30,16 +30,16 @@ export const DeploymentPlanStep = ({ children, disabled, title, tooltip }) => {
       </h3>
       {children}
     </li>
-  );
-};
+  )
+}
 
 DeploymentPlanStep.propTypes = {
   children: PropTypes.node,
   disabled: PropTypes.bool,
   title: PropTypes.string.isRequired,
   tooltip: PropTypes.string
-};
+}
 
 DeploymentPlanStep.defaultProps = {
   disabled: false
-};
+}

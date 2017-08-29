@@ -14,11 +14,11 @@
  * under the License.
  */
 
-import { Map } from 'immutable';
+import { Map } from 'immutable'
 
-import { Plan } from '../../js/immutableRecords/plans';
-import { getAllPlansButCurrent } from '../../js/selectors/plans';
-import { InitialPlanState } from '../../js/immutableRecords/plans';
+import { Plan } from '../../js/immutableRecords/plans'
+import { getAllPlansButCurrent } from '../../js/selectors/plans'
+import { InitialPlanState } from '../../js/immutableRecords/plans'
 
 describe('plans selectors', () => {
   describe('getAllPlansButCurrent()', () => {
@@ -39,11 +39,11 @@ describe('plans selectors', () => {
           })
         })
       })
-    };
+    }
 
     it('provides selector to list all Plans except for the currently selected one', () => {
-      expect(getAllPlansButCurrent(state).size).toEqual(1);
-      expect(getAllPlansButCurrent(state).first().name).toEqual('plan2');
-    });
-  });
-});
+      expect(getAllPlansButCurrent(state).size).toEqual(1)
+      expect(getAllPlansButCurrent(state).first().name).toEqual('plan2')
+    })
+  })
+})

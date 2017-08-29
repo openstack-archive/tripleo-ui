@@ -14,14 +14,14 @@
  * under the License.
  */
 
-import { defineMessages } from 'react-intl';
-import { startSubmit, stopSubmit } from 'redux-form';
+import { defineMessages } from 'react-intl'
+import { startSubmit, stopSubmit } from 'redux-form'
 
-import { handleErrors } from './ErrorActions';
-import NotificationActions from '../actions/NotificationActions';
-import ParametersConstants from '../constants/ParametersConstants';
-import MistralApiService from '../services/MistralApiService';
-import MistralConstants from '../constants/MistralConstants';
+import { handleErrors } from './ErrorActions'
+import NotificationActions from '../actions/NotificationActions'
+import ParametersConstants from '../constants/ParametersConstants'
+import MistralApiService from '../services/MistralApiService'
+import MistralConstants from '../constants/MistralConstants'
 
 const messages = defineMessages({
   parametersUpdatedNotficationTitle: {
@@ -32,68 +32,68 @@ const messages = defineMessages({
     id: 'ParametersActions.parametersUpdatedNotficationMessage',
     defaultMessage: 'The Deployment parameters have been successfully updated.'
   }
-});
+})
 
 export default {
   fetchParametersPending() {
     return {
       type: ParametersConstants.FETCH_PARAMETERS_PENDING
-    };
+    }
   },
 
   fetchParametersSuccess(entities) {
     return {
       type: ParametersConstants.FETCH_PARAMETERS_SUCCESS,
       payload: entities
-    };
+    }
   },
 
   fetchParametersFailed(formErrors, formFieldErrors) {
     return {
       type: ParametersConstants.FETCH_PARAMETERS_FAILED
-    };
+    }
   },
 
   fetchParameters(planName, redirect) {
     return dispatch => {
-      dispatch(this.fetchParametersPending());
+      dispatch(this.fetchParametersPending())
       MistralApiService.runAction(MistralConstants.PARAMETERS_GET, {
         container: planName
       })
         .then(response => {
-          const { resources, parameters } = response.heat_resource_tree;
-          const mistralParameters = response.mistral_environment_parameters;
+          const { resources, parameters } = response.heat_resource_tree
+          const mistralParameters = response.mistral_environment_parameters
           dispatch(
             this.fetchParametersSuccess({
               resources,
               parameters,
               mistralParameters
             })
-          );
+          )
         })
         .catch(error => {
-          dispatch(this.fetchParametersFailed());
+          dispatch(this.fetchParametersFailed())
           if (redirect) {
-            redirect();
+            redirect()
           }
           dispatch(
             handleErrors(error, 'Deployment parameters could not be loaded')
-          );
-        });
-    };
+          )
+        })
+    }
   },
 
   updateParametersPending() {
     return {
       type: ParametersConstants.UPDATE_PARAMETERS_PENDING
-    };
+    }
   },
 
   updateParametersSuccess(updatedParameters) {
     return {
       type: ParametersConstants.UPDATE_PARAMETERS_SUCCESS,
       payload: updatedParameters
-    };
+    }
   },
 
   updateParametersFailed(formErrors, formFieldErrors) {
@@ -103,21 +103,21 @@ export default {
         formErrors: formErrors,
         formFieldErrors: formFieldErrors
       }
-    };
+    }
   },
 
   updateParameters(planName, data, inputFieldNames, redirect) {
     return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      dispatch(startSubmit('nodesAssignment'));
-      dispatch(this.updateParametersPending());
+      const { formatMessage } = getIntl(getState())
+      dispatch(startSubmit('nodesAssignment'))
+      dispatch(this.updateParametersPending())
       MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE, {
         container: planName,
         parameters: data
       })
         .then(response => {
-          dispatch(this.updateParametersSuccess(data));
-          dispatch(stopSubmit('nodesAssignment'));
+          dispatch(this.updateParametersSuccess(data))
+          dispatch(stopSubmit('nodesAssignment'))
           dispatch(
             NotificationActions.notify({
               title: formatMessage(messages.parametersUpdatedNotficationTitle),
@@ -126,9 +126,9 @@ export default {
               ),
               type: 'success'
             })
-          );
+          )
           if (redirect) {
-            redirect();
+            redirect()
           }
         })
         .catch(error => {
@@ -138,7 +138,7 @@ export default {
               'Deployment parameters could not be updated',
               false
             )
-          );
+          )
           dispatch(
             stopSubmit('nodesAssignment', {
               _error: {
@@ -146,7 +146,7 @@ export default {
                 message: error.message
               }
             })
-          );
+          )
           dispatch(
             this.updateParametersFailed([
               {
@@ -154,8 +154,8 @@ export default {
                 message: error.message
               }
             ])
-          );
-        });
-    };
+          )
+        })
+    }
   }
-};
+}

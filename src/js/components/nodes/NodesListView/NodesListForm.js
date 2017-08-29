@@ -14,16 +14,16 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
-import { defineMessages, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Form, reduxForm } from 'redux-form';
-import { pickBy } from 'lodash';
+import { connect } from 'react-redux'
+import { defineMessages, injectIntl } from 'react-intl'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Form, reduxForm } from 'redux-form'
+import { pickBy } from 'lodash'
 
-import NodesActions from '../../../actions/NodesActions';
-import { getFilteredNodes, nodesInProgress } from '../../../selectors/nodes';
+import NodesActions from '../../../actions/NodesActions'
+import { getFilteredNodes, nodesInProgress } from '../../../selectors/nodes'
 
 const messages = defineMessages({
   selectNodes: {
@@ -34,7 +34,7 @@ const messages = defineMessages({
     id: 'NodesListForm.operationInProgressValidationMessage',
     defaultMessage: 'There is an operation in progress on some of the selected Nodes'
   }
-});
+})
 
 class NodesListForm extends React.Component {
   componentWillReceiveProps(nextProps) {
@@ -42,34 +42,34 @@ class NodesListForm extends React.Component {
     const removedValues = this.props.nodes
       .keySeq()
       .toSet()
-      .subtract(nextProps.nodes.keySeq());
-    removedValues.map(v => this.props.change(`values.${v}`, false));
+      .subtract(nextProps.nodes.keySeq())
+    removedValues.map(v => this.props.change(`values.${v}`, false))
   }
 
   handleFormSubmit(formData) {
-    const nodeIds = Object.keys(pickBy(formData.values, value => !!value));
+    const nodeIds = Object.keys(pickBy(formData.values, value => !!value))
 
     switch (formData.submitAction) {
       case 'introspect':
-        this.props.introspectNodes(nodeIds);
-        break;
+        this.props.introspectNodes(nodeIds)
+        break
       case 'provide':
-        this.props.provideNodes(nodeIds);
-        break;
+        this.props.provideNodes(nodeIds)
+        break
       case 'manage':
-        this.props.manageNodes(nodeIds);
-        break;
+        this.props.manageNodes(nodeIds)
+        break
       case 'tag':
-        this.props.tagNodes(nodeIds, formData.tag);
-        break;
+        this.props.tagNodes(nodeIds, formData.tag)
+        break
       case 'delete':
-        this.props.deleteNodes(nodeIds);
-        break;
+        this.props.deleteNodes(nodeIds)
+        break
       default:
-        break;
+        break
     }
 
-    this.props.reset();
+    this.props.reset()
   }
 
   render() {
@@ -79,7 +79,7 @@ class NodesListForm extends React.Component {
       >
         {this.props.children}
       </Form>
-    );
+    )
   }
 }
 NodesListForm.propTypes = {
@@ -94,19 +94,19 @@ NodesListForm.propTypes = {
   provideNodes: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   tagNodes: PropTypes.func.isRequired
-};
+}
 
 const validate = (formData, props) => {
-  const errors = {};
-  const nodeIds = Object.keys(pickBy(formData.values, value => !!value));
-  const selectedInProgress = props.nodesInProgress.intersect(nodeIds).size;
+  const errors = {}
+  const nodeIds = Object.keys(pickBy(formData.values, value => !!value))
+  const selectedInProgress = props.nodesInProgress.intersect(nodeIds).size
   if (nodeIds.length === 0) {
-    errors._error = props.intl.formatMessage(messages.selectNodes);
+    errors._error = props.intl.formatMessage(messages.selectNodes)
   } else if (selectedInProgress > 0) {
-    errors._error = props.intl.formatMessage(messages.operationInProgress);
+    errors._error = props.intl.formatMessage(messages.operationInProgress)
   }
-  return errors;
-};
+  return errors
+}
 
 const form = reduxForm({
   form: 'nodesListForm',
@@ -114,12 +114,12 @@ const form = reduxForm({
     values: {}
   },
   validate
-});
+})
 
 const mapStateToProps = state => ({
   nodes: getFilteredNodes(state),
   nodesInProgress: nodesInProgress(state)
-});
+})
 
 const mapDispatchToProps = dispatch => ({
   deleteNodes: nodeIds => dispatch(NodesActions.deleteNodes(nodeIds)),
@@ -128,8 +128,8 @@ const mapDispatchToProps = dispatch => ({
   manageNodes: nodeIds => dispatch(NodesActions.startManageNodes(nodeIds)),
   provideNodes: nodeIds => dispatch(NodesActions.startProvideNodes(nodeIds)),
   tagNodes: (nodeIds, tag) => dispatch(NodesActions.tagNodes(nodeIds, tag))
-});
+})
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(form(NodesListForm))
-);
+)

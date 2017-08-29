@@ -14,6 +14,6 @@
  * under the License.
  */
 
-import { Schema } from 'normalizr';
+import { Schema } from 'normalizr'
 
-export const roleSchema = new Schema('roles', { idAttribute: 'name' });
+export const roleSchema = new Schema('roles', { idAttribute: 'name' })

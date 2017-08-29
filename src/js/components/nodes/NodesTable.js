@@ -14,22 +14,22 @@
  * under the License.
  */
 
-import * as _ from 'lodash';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
+import * as _ from 'lodash'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
 
-import DataTable from '../ui/tables/DataTable';
+import DataTable from '../ui/tables/DataTable'
 import {
   DataTableCell,
   DataTableDataFieldCell,
   DataTableHeaderCell
-} from '../ui/tables/DataTableCells';
-import { DataTableCheckBoxCell } from '../ui/tables/DataTableCells';
-import DataTableColumn from '../ui/tables/DataTableColumn';
-import Loader from '../ui/Loader';
-import { parseNodeCapabilities } from '../../utils/nodes';
+} from '../ui/tables/DataTableCells'
+import { DataTableCheckBoxCell } from '../ui/tables/DataTableCells'
+import DataTableColumn from '../ui/tables/DataTableColumn'
+import Loader from '../ui/Loader'
+import { parseNodeCapabilities } from '../../utils/nodes'
 
 const messages = defineMessages({
   noNodes: {
@@ -90,16 +90,16 @@ const messages = defineMessages({
     defaultMessage: 'Maintenance',
     description: 'Table header'
   }
-});
+})
 
 class NodesTable extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       filterString: '',
       sortBy: '',
       sortDir: 'asc'
-    };
+    }
   }
 
   renderNoNodesFound() {
@@ -117,34 +117,34 @@ class NodesTable extends React.Component {
           </Loader>
         </td>
       </tr>
-    );
+    )
   }
 
   onFilter(filterString) {
     this.setState({
       filterString: filterString
-    });
+    })
   }
 
   _filterData(filterString, data) {
-    let dataKeys = ['name'];
+    let dataKeys = ['name']
     return filterString
       ? data.filter(row => {
           let result = dataKeys.filter(dataKey => {
             return row[dataKey]
               .toLowerCase()
-              .includes(filterString.toLowerCase());
-          });
-          return result.length > 0;
+              .includes(filterString.toLowerCase())
+          })
+          return result.length > 0
         })
-      : data;
+      : data
   }
 
   render() {
     let filteredData = this._filterData(
       this.state.filterString,
       this.props.nodes.toList().toJS()
-    );
+    )
     return (
       <DataTable
         {...this.props}
@@ -289,7 +289,7 @@ class NodesTable extends React.Component {
           }
         />
       </DataTable>
-    );
+    )
   }
 }
 NodesTable.propTypes = {
@@ -297,50 +297,50 @@ NodesTable.propTypes = {
   isFetchingNodes: PropTypes.bool.isRequired,
   nodes: ImmutablePropTypes.map.isRequired,
   nodesInProgress: ImmutablePropTypes.set.isRequired
-};
+}
 
-export default injectIntl(NodesTable);
+export default injectIntl(NodesTable)
 
 export const NodesTableMaintenanceCell = props => {
-  const value = _.result(props.data[props.rowIndex], props.field).toString();
+  const value = _.result(props.data[props.rowIndex], props.field).toString()
   return (
     <DataTableCell {...props}>
       {value}
     </DataTableCell>
-  );
-};
+  )
+}
 NodesTableMaintenanceCell.propTypes = {
   data: PropTypes.array.isRequired,
   field: PropTypes.string.isRequired,
   rowIndex: PropTypes.number
-};
+}
 
 export const NodesTableMacsCell = props => {
-  const value = _.result(props.data[props.rowIndex], props.field).join(', ');
+  const value = _.result(props.data[props.rowIndex], props.field).join(', ')
   return (
     <DataTableCell {...props}>
       {value}
     </DataTableCell>
-  );
-};
+  )
+}
 NodesTableMacsCell.propTypes = {
   data: PropTypes.array.isRequired,
   field: PropTypes.string.isRequired,
   rowIndex: PropTypes.number
-};
+}
 
 export class NodesTableCheckBoxCell extends React.Component {
   render() {
     const nodeId = _.result(
       this.props.data[this.props.rowIndex],
       this.props.field
-    );
+    )
     return (
       <DataTableCheckBoxCell
         {...this.props}
         operationInProgress={this.props.nodesInProgress.includes(nodeId)}
       />
-    );
+    )
   }
 }
 NodesTableCheckBoxCell.propTypes = {
@@ -348,7 +348,7 @@ NodesTableCheckBoxCell.propTypes = {
   field: PropTypes.string.isRequired,
   nodesInProgress: ImmutablePropTypes.set.isRequired,
   rowIndex: PropTypes.number
-};
+}
 
 export class NodesTableProfileCell extends React.Component {
   getAssignedRoleTitle() {
@@ -356,9 +356,9 @@ export class NodesTableProfileCell extends React.Component {
       this.props.data[this.props.rowIndex],
       'properties.capabilities',
       ''
-    );
-    const profile = parseNodeCapabilities(capabilities).profile;
-    return profile ? profile : '-';
+    )
+    const profile = parseNodeCapabilities(capabilities).profile
+    return profile ? profile : '-'
   }
 
   render() {
@@ -366,10 +366,10 @@ export class NodesTableProfileCell extends React.Component {
       <DataTableCell {...this.props}>
         {this.getAssignedRoleTitle()}
       </DataTableCell>
-    );
+    )
   }
 }
 NodesTableProfileCell.propTypes = {
   data: PropTypes.array.isRequired,
   rowIndex: PropTypes.number
-};
+}

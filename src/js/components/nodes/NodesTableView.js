@@ -1,23 +1,23 @@
-import * as _ from 'lodash';
-import { connect } from 'react-redux';
-import { List, Map } from 'immutable';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
-import React from 'react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import Formsy from 'formsy-react';
+import * as _ from 'lodash'
+import { connect } from 'react-redux'
+import { List, Map } from 'immutable'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import PropTypes from 'prop-types'
+import React from 'react'
+import ImmutablePropTypes from 'react-immutable-proptypes'
+import Formsy from 'formsy-react'
 
 import {
   getAvailableNodeProfiles,
   getFilteredNodes,
   getNodesOperationInProgress
-} from '../../selectors/nodes';
-import ConfirmationModal from '../ui/ConfirmationModal';
-import FormErrorList from '../ui/forms/FormErrorList';
-import NodesActions from '../../actions/NodesActions';
-import NodesTable from './NodesTable';
-import TagNodesModal from './tag_nodes/TagNodesModal';
-import { findClosestWithAttribute } from '../utils/Dom';
+} from '../../selectors/nodes'
+import ConfirmationModal from '../ui/ConfirmationModal'
+import FormErrorList from '../ui/forms/FormErrorList'
+import NodesActions from '../../actions/NodesActions'
+import NodesTable from './NodesTable'
+import TagNodesModal from './tag_nodes/TagNodesModal'
+import { findClosestWithAttribute } from '../utils/Dom'
 
 const messages = defineMessages({
   introspectNodes: {
@@ -46,22 +46,22 @@ const messages = defineMessages({
     id: 'NodesTableView.deleteNodesModalMessage',
     defaultMessage: 'Are you sure you want to delete the selected nodes?'
   }
-});
+})
 
 class NodesTableView extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       canSubmit: false,
       showDeleteModal: false,
       showTagNodesModal: false,
       submitParameters: {},
       submitType: 'introspect'
-    };
+    }
   }
 
   componentDidUpdate() {
-    this.invalidateForm(this.props.formFieldErrors.toJS());
+    this.invalidateForm(this.props.formFieldErrors.toJS())
   }
 
   canSubmit() {
@@ -71,22 +71,22 @@ class NodesTableView extends React.Component {
         true
       )
     ) {
-      this.enableButton();
+      this.enableButton()
     } else {
-      this.disableButton();
+      this.disableButton()
     }
   }
 
   enableButton() {
-    this.setState({ canSubmit: true });
+    this.setState({ canSubmit: true })
   }
 
   disableButton() {
-    this.setState({ canSubmit: false });
+    this.setState({ canSubmit: false })
   }
 
   invalidateForm(formFieldErrors) {
-    this.refs.registeredNodesTableForm.updateInputsWithError(formFieldErrors);
+    this.refs.registeredNodesTableForm.updateInputsWithError(formFieldErrors)
   }
 
   getTableActions() {
@@ -137,7 +137,7 @@ class NodesTableView extends React.Component {
           <FormattedMessage {...messages.deleteNodes} />
         </button>
       </div>
-    );
+    )
   }
 
   onTagNodesSubmit(tag) {
@@ -148,7 +148,7 @@ class NodesTableView extends React.Component {
         submitParameters: { tag: tag }
       },
       this.refs.registeredNodesTableForm.submit
-    );
+    )
   }
 
   multipleSubmit(e) {
@@ -157,33 +157,33 @@ class NodesTableView extends React.Component {
         submitType: findClosestWithAttribute(e.target, 'name')
       },
       this.refs.registeredNodesTableForm.submit
-    );
+    )
   }
 
   handleSubmit(formData, resetForm, invalidateForm) {
-    this.disableButton();
-    const nodeIds = _.keys(_.pickBy(formData, value => !!value));
+    this.disableButton()
+    const nodeIds = _.keys(_.pickBy(formData, value => !!value))
 
     switch (this.state.submitType) {
       case 'introspect':
-        this.props.introspectNodes(nodeIds);
-        break;
+        this.props.introspectNodes(nodeIds)
+        break
       case 'tag':
-        this.props.tagNodes(nodeIds, this.state.submitParameters.tag);
-        this.setState({ submitParameters: {} });
-        break;
+        this.props.tagNodes(nodeIds, this.state.submitParameters.tag)
+        this.setState({ submitParameters: {} })
+        break
       case 'provide':
-        this.props.provideNodes(nodeIds);
-        break;
+        this.props.provideNodes(nodeIds)
+        break
       case 'delete':
-        this.setState({ showDeleteModal: false });
-        this.props.deleteNodes(nodeIds);
-        break;
+        this.setState({ showDeleteModal: false })
+        this.props.deleteNodes(nodeIds)
+        break
       default:
-        break;
+        break
     }
 
-    resetForm();
+    resetForm()
   }
 
   render() {
@@ -227,7 +227,7 @@ class NodesTableView extends React.Component {
           />
         </Formsy.Form>
       </div>
-    );
+    )
   }
 }
 NodesTableView.propTypes = {
@@ -244,11 +244,11 @@ NodesTableView.propTypes = {
   nodesOperationInProgress: PropTypes.bool.isRequired,
   provideNodes: PropTypes.func.isRequired,
   tagNodes: PropTypes.func.isRequired
-};
+}
 NodesTableView.defaultProps = {
   formErrors: List(),
   formFieldErrors: Map()
-};
+}
 
 function mapStateToProps(state) {
   return {
@@ -257,7 +257,7 @@ function mapStateToProps(state) {
     nodesInProgress: state.nodes.get('nodesInProgress'),
     nodesOperationInProgress: getNodesOperationInProgress(state),
     isFetchingNodes: state.nodes.get('isFetching')
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -267,9 +267,9 @@ function mapDispatchToProps(dispatch) {
       dispatch(NodesActions.startNodesIntrospection(nodeIds)),
     provideNodes: nodeIds => dispatch(NodesActions.startProvideNodes(nodeIds)),
     tagNodes: (nodeIds, tag) => dispatch(NodesActions.tagNodes(nodeIds, tag))
-  };
+  }
 }
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(NodesTableView)
-);
+)

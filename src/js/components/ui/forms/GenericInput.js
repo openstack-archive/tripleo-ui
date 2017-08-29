@@ -14,17 +14,17 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
-import Formsy from 'formsy-react';
-import PropTypes from 'prop-types';
-import React from 'react';
+import ClassNames from 'classnames'
+import Formsy from 'formsy-react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import InputDescription from './InputDescription';
-import InputErrorMessage from './InputErrorMessage';
+import InputDescription from './InputDescription'
+import InputErrorMessage from './InputErrorMessage'
 
 class GenericInput extends React.Component {
   changeValue(event) {
-    this.props.setValue(event.target.value);
+    this.props.setValue(event.target.value)
   }
 
   render() {
@@ -33,7 +33,7 @@ class GenericInput extends React.Component {
       'has-error': this.props.showError(),
       'has-success': this.props.isValid(),
       required: this.props.isRequired()
-    });
+    })
 
     return (
       <div className={divClasses}>
@@ -54,7 +54,7 @@ class GenericInput extends React.Component {
         <InputErrorMessage getErrorMessage={this.props.getErrorMessage} />
         <InputDescription description={this.props.description} />
       </div>
-    );
+    )
   }
 }
 GenericInput.propTypes = {
@@ -70,8 +70,8 @@ GenericInput.propTypes = {
   showError: PropTypes.func,
   title: PropTypes.string.isRequired,
   type: PropTypes.string
-};
+}
 GenericInput.defaultProps = {
   type: 'text'
-};
-export default Formsy.HOC(GenericInput);
+}
+export default Formsy.HOC(GenericInput)

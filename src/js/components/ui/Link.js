@@ -14,9 +14,9 @@
  * under the License.
  */
 
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Link as ReactRouterLink } from 'react-router-dom';
+import PropTypes from 'prop-types'
+import React from 'react'
+import { Link as ReactRouterLink } from 'react-router-dom'
 
 export default class Link extends React.Component {
   render() {
@@ -28,16 +28,16 @@ export default class Link extends React.Component {
           this.props.className + (this.props.disabled ? ' disabled' : '')
         }
       />
-    );
+    )
   }
 }
 
 Link.propTypes = {
   className: PropTypes.string,
   disabled: PropTypes.bool
-};
+}
 
 Link.defaultProps = {
   className: '',
   disabled: false
-};
+}

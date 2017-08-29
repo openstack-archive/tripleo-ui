@@ -14,15 +14,15 @@
  * under the License.
  */
 
-import Formsy from 'formsy-react';
-import PropTypes from 'prop-types';
-import React from 'react';
+import Formsy from 'formsy-react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import InputErrorMessage from './InputErrorMessage';
+import InputErrorMessage from './InputErrorMessage'
 
 class LoginInput extends React.Component {
   changeValue(event) {
-    this.props.setValue(event.target.value);
+    this.props.setValue(event.target.value)
   }
 
   render() {
@@ -49,7 +49,7 @@ class LoginInput extends React.Component {
           <InputErrorMessage getErrorMessage={this.props.getErrorMessage} />
         </div>
       </div>
-    );
+    )
   }
 }
 LoginInput.propTypes = {
@@ -61,9 +61,9 @@ LoginInput.propTypes = {
   setValue: PropTypes.func,
   title: PropTypes.string.isRequired,
   type: PropTypes.string
-};
+}
 LoginInput.defaultProps = {
   autoFocus: false,
   type: 'text'
-};
-export default Formsy.HOC(LoginInput);
+}
+export default Formsy.HOC(LoginInput)
