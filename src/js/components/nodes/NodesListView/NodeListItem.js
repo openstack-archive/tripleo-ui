@@ -14,30 +14,15 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
+import cx from 'classnames';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Field } from 'redux-form';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { ListViewItem, ListViewIcon, ListViewInfoItem } from 'patternfly-react';
 
 import DropdownKebab from '../../ui/dropdown/DropdownKebab';
-import {
-  ListViewActions,
-  ListViewAdditionalInfo,
-  ListViewAdditionalInfoItem,
-  ListViewBody,
-  ListViewCheckbox,
-  ListViewDescription,
-  ListViewDescriptionHeading,
-  ListViewDescriptionText,
-  ListViewExpand,
-  ListViewIcon,
-  ListViewItem,
-  ListViewItemContainer,
-  ListViewItemHeader,
-  ListViewLeft,
-  ListViewMainInfo
-} from '../../ui/ListView';
 import MenuItemLink from '../../ui/dropdown/MenuItemLink';
 import NodeExtendedInfo from './NodeExtendedInfo';
 import {
@@ -72,121 +57,101 @@ const messages = defineMessages({
   }
 });
 
-export default class NodeListItem extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      expanded: false
-    };
-  }
-
-  toggleExpanded() {
-    this.setState(prevState => ({ expanded: !prevState.expanded }));
-  }
-
-  render() {
-    const { fetchNodeIntrospectionData, node, inProgress } = this.props;
-
-    const iconClass = ClassNames({
-      'pficon pficon-server': true,
-      running: inProgress
-    });
-    return (
-      <ListViewItem expanded={this.state.expanded} stacked>
-        <ListViewItemHeader toggleExpanded={this.toggleExpanded.bind(this)}>
-          <ListViewExpand expanded={this.state.expanded} />
-          <ListViewCheckbox
-            disabled={inProgress}
-            name={`values.${node.get('uuid')}`}
-          />
-          {node.getIn(['introspectionStatus', 'state']) === 'finished' &&
-            <ListViewActions>
-              <DropdownKebab id={`${node.get('uuid')}Actions`} pullRight>
-                <MenuItemLink to={`/nodes/${node.get('uuid')}/drives`}>
-                  <FormattedMessage {...messages.manageDrives} />
-                </MenuItemLink>
-              </DropdownKebab>
-            </ListViewActions>}
-          <ListViewMainInfo>
-            <ListViewLeft>
-              <ListViewIcon size="sm" icon={iconClass} />
-            </ListViewLeft>
-            <ListViewBody>
-              <ListViewDescription>
-                <ListViewDescriptionHeading>
-                  {node.get('name') || node.get('uuid')}
-                </ListViewDescriptionHeading>
-                <ListViewDescriptionText>
-                  <NodePowerState
-                    powerState={node.get('power_state')}
-                    targetPowerState={node.get('target_power_state')}
-                  />
-                  <NodeMaintenanceState
-                    maintenance={node.get('maintenance')}
-                    reason={node.get('maintenance_reason')}
-                  />
-                  {' | '}
-                  <NodeIntrospectionStatus
-                    status={node.get('introspectionStatus').toJS()}
-                  />
-                  {' | '}
-                  <NodeProvisionState
-                    provisionState={node.get('provision_state')}
-                    targetProvisionState={node.get('target_provision_state')}
-                  />
-                </ListViewDescriptionText>
-              </ListViewDescription>
-              <ListViewAdditionalInfo>
-                <ListViewAdditionalInfoItem>
-                  <span className="pficon pficon-flavor" />
-                  <FormattedMessage {...messages.profile} />
-                  &nbsp;
-                  {parseNodeCapabilities(
-                    node.getIn(['properties', 'capabilities'])
-                  ).profile || '-'}
-                </ListViewAdditionalInfoItem>
-                <ListViewAdditionalInfoItem>
-                  <span className="pficon pficon-cpu" />
-                  <strong>{node.getIn(['properties', 'cpus'], '-')}</strong>
-                  &nbsp;
-                  <FormattedMessage
-                    {...messages.cpuCores}
-                    values={{ cpuCores: node.getIn(['properties', 'cpus']) }}
-                  />
-                </ListViewAdditionalInfoItem>
-                <ListViewAdditionalInfoItem>
-                  <span className="pficon pficon-memory" />
-                  <strong>
-                    {node.getIn(['properties', 'memory_mb'], '-')}
-                  </strong>
-                  &nbsp;
-                  <FormattedMessage {...messages.ram} />
-                </ListViewAdditionalInfoItem>
-                <ListViewAdditionalInfoItem>
-                  <span className="fa fa-database" />
-                  <strong>{node.getIn(['properties', 'local_gb'], '-')}</strong>
-                  &nbsp;
-                  <FormattedMessage {...messages.disk} />
-                </ListViewAdditionalInfoItem>
-              </ListViewAdditionalInfo>
-            </ListViewBody>
-          </ListViewMainInfo>
-        </ListViewItemHeader>
-        <ListViewItemContainer
-          onClose={this.toggleExpanded.bind(this)}
-          expanded={this.state.expanded}
-        >
-          <NodeExtendedInfo
-            node={node}
-            fetchNodeIntrospectionData={fetchNodeIntrospectionData}
-          />
-        </ListViewItemContainer>
-      </ListViewItem>
-    );
-  }
-}
+export const NodeListItem = ({
+  fetchNodeIntrospectionData,
+  node,
+  inProgress
+}) => (
+  <ListViewItem
+    checkboxInput={
+      <Field
+        name={`values.${node.get('uuid')}`}
+        type="checkbox"
+        component="input"
+        disabled={inProgress}
+        onClick={e => e.stopPropagation()} // TODO(jtomasek): probably not needed
+      />
+    }
+    actions={
+      node.getIn(['introspectionStatus', 'state']) === 'finished' &&
+        <DropdownKebab id={`${node.get('uuid')}Actions`} pullRight>
+          <MenuItemLink to={`/nodes/${node.get('uuid')}/drives`}>
+            <FormattedMessage {...messages.manageDrives} />
+          </MenuItemLink>
+        </DropdownKebab>
+    }
+    leftContent={
+      <ListViewIcon
+        size="sm"
+        icon={cx('pficon pficon-server', { running: inProgress })}
+      />
+    }
+    heading={node.get('name') || node.get('uuid')}
+    description={
+      <div>
+        <NodePowerState
+          powerState={node.get('power_state')}
+          targetPowerState={node.get('target_power_state')}
+        />
+        <NodeMaintenanceState
+          maintenance={node.get('maintenance')}
+          reason={node.get('maintenance_reason')}
+        />
+        {' | '}
+        <NodeIntrospectionStatus
+          status={node.get('introspectionStatus').toJS()}
+        />
+        {' | '}
+        <NodeProvisionState
+          provisionState={node.get('provision_state')}
+          targetProvisionState={node.get('target_provision_state')}
+        />
+      </div>
+    }
+    additionalInfo={[
+      <ListViewInfoItem key="profile">
+        <span className="pficon pficon-flavor" />
+        <FormattedMessage {...messages.profile} />
+        &nbsp;
+        {parseNodeCapabilities(node.getIn(['properties', 'capabilities']))
+          .profile || '-'}
+      </ListViewInfoItem>,
+      <ListViewInfoItem key="cpus">
+        <span className="pficon pficon-cpu" />
+        <strong>{node.getIn(['properties', 'cpus'], '-')}</strong>
+        &nbsp;
+        <FormattedMessage
+          {...messages.cpuCores}
+          values={{ cpuCores: node.getIn(['properties', 'cpus']) }}
+        />
+      </ListViewInfoItem>,
+      <ListViewInfoItem key="memory">
+        <span className="pficon pficon-memory" />
+        <strong>
+          {node.getIn(['properties', 'memory_mb'], '-')}
+        </strong>
+        &nbsp;
+        <FormattedMessage {...messages.ram} />
+      </ListViewInfoItem>,
+      <ListViewInfoItem key="disk">
+        <span className="fa fa-database" />
+        <strong>{node.getIn(['properties', 'local_gb'], '-')}</strong>
+        &nbsp;
+        <FormattedMessage {...messages.disk} />
+      </ListViewInfoItem>
+    ]}
+    stacked
+  >
+    <NodeExtendedInfo
+      node={node}
+      fetchNodeIntrospectionData={fetchNodeIntrospectionData}
+    />
+  </ListViewItem>
+);
 NodeListItem.propTypes = {
   fetchNodeIntrospectionData: PropTypes.func.isRequired,
   inProgress: PropTypes.bool.isRequired,
   node: ImmutablePropTypes.map.isRequired
 };
+
+export default NodeListItem;
