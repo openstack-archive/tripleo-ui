@@ -32,13 +32,20 @@ export default function nodesReducer(state = initialState, action) {
 
     case NodesConstants.RECEIVE_NODES: {
       const { nodes, ports, introspectionStatuses } = action.payload;
+      let statuses;
+      if (introspectionStatuses === undefined) {
+        statuses = Map(nodes).map(
+          node => new IntrospectionStatus({ uuid: node.uuid, state: 'Unknown' })
+        );
+      } else {
+        statuses = Map(introspectionStatuses).map(
+          s => new IntrospectionStatus(s)
+        );
+      }
       return state
         .set('all', fromJS(nodes || {}))
         .set('ports', Map(ports).map(port => new Port(port)))
-        .set(
-          'introspectionStatuses',
-          Map(introspectionStatuses).map(s => new IntrospectionStatus(s))
-        )
+        .set('introspectionStatuses', statuses)
         .set('isLoaded', true)
         .set('isFetching', false);
     }

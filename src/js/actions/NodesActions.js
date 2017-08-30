@@ -86,21 +86,27 @@ export default {
   fetchNodes() {
     return (dispatch, getState) => {
       dispatch(this.requestNodes());
+      let introspectionStatuses = undefined;
+      IronicInspectorApiService.getIntrospectionStatuses()
+        .then(response_introspection => {
+          introspectionStatuses = normalize(
+            response_introspection.introspection,
+            arrayOf(introspectionStatusSchema)
+          ).entities.introspectionStatuses;
+        })
+        .catch(error => {
+          dispatch(
+            handleErrors(error, 'Node introspection data could not be loaded')
+          );
+        });
+
       when
-        .all([
-          IronicApiService.getNodes(),
-          IronicApiService.getPorts(),
-          IronicInspectorApiService.getIntrospectionStatuses()
-        ])
+        .all([IronicApiService.getNodes(), IronicApiService.getPorts()])
         .then(response => {
           const nodes = normalize(response[0].nodes, arrayOf(nodeSchema))
             .entities.nodes;
           const ports = normalize(response[1].ports, arrayOf(portSchema))
             .entities.ports;
-          const introspectionStatuses = normalize(
-            response[2].introspection,
-            arrayOf(introspectionStatusSchema)
-          ).entities.introspectionStatuses;
           dispatch(this.receiveNodes({ nodes, ports, introspectionStatuses }));
         })
         .catch(error => {
