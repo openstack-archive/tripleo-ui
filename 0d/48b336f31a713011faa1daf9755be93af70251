@@ -1,0 +1,10 @@
+Code-Review+2: Ben Nemec <openstack@nemebean.com>
+Code-Review+2: Alex Schultz <aschultz@redhat.com>
+Workflow+1: Alex Schultz <aschultz@redhat.com>
+Code-Review+1: Jason E. Rist <jrist@redhat.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Thu, 31 Aug 2017 03:23:27 +0000
+Reviewed-on: https://review.openstack.org/499351
+Project: openstack/tripleo-ui
+Branch: refs/heads/master
