@@ -21,40 +21,36 @@ import React from 'react';
 import DriverFields from './DriverFields';
 
 const messages = defineMessages({
-  addr_title: {
-    id: 'PXEAndDRACDriverFields.addr_title',
+  address: {
+    id: 'PXEAndDRACDriverFields.address',
     defaultMessage: 'DRAC Host'
   },
-  port_title: {
-    id: 'PXEAndDRACDriverFields.port_title',
+  port: {
+    id: 'PXEAndDRACDriverFields.port',
     defaultMessage: 'DRAC Port'
   },
-  user_title: {
-    id: 'PXEAndDRACDriverFields.user_title',
+  user: {
+    id: 'PXEAndDRACDriverFields.user',
     defaultMessage: 'DRAC Username'
   },
-  pwd_title: {
-    id: 'PXEAndDRACDriverFields.pwd_title',
+  password: {
+    id: 'PXEAndDRACDriverFields.password',
     defaultMessage: 'DRAC Password'
   }
 });
 
-class PXEAndDRACDriverFields extends React.Component {
-  render() {
-    return (
-      <DriverFields
-        {...this.props}
-        addr_title={this.props.intl.formatMessage(messages.addr_title)}
-        user_title={this.props.intl.formatMessage(messages.user_title)}
-        port_title={this.props.intl.formatMessage(messages.port_title)}
-        pwd_title={this.props.intl.formatMessage(messages.pwd_title)}
-      />
-    );
-  }
-}
-
-PXEAndDRACDriverFields.propTypes = {
-  intl: PropTypes.object
+const PXEAndDRAC = ({ intl: { formatMessage }, node }) => (
+  <DriverFields
+    node={node}
+    addressLabel={formatMessage(messages.address)}
+    portLabel={formatMessage(messages.port)}
+    userLabel={formatMessage(messages.user)}
+    passwordLabel={formatMessage(messages.password)}
+  />
+);
+PXEAndDRAC.propTypes = {
+  intl: PropTypes.object.isRequired,
+  node: PropTypes.string.isRequired
 };
 
-export default injectIntl(PXEAndDRACDriverFields);
+export default injectIntl(PXEAndDRAC);
