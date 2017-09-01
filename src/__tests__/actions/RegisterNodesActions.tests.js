@@ -14,64 +14,36 @@
  * under the License.
  */
 
-import when from 'when';
 import { Map } from 'immutable';
-
+// TODO(jtomasek): remove this import when store is correctly mocked
+import store from '../../js/store'; // eslint-disable-line no-unused-vars
 import { InitialPlanState, Plan } from '../../js/immutableRecords/plans';
-import MistralApiService from '../../js/services/MistralApiService';
-import mockHistory from '../mocks/history';
 import { mockGetIntl } from './utils';
 import RegisterNodesActions from '../../js/actions/RegisterNodesActions';
 import NodesActions from '../../js/actions/NodesActions';
 import NotificationActions from '../../js/actions/NotificationActions';
-import * as utils from '../../js/services/utils';
-import { IronicNode } from '../../js/immutableRecords/nodes';
 
-let createResolvingPromise = data => {
-  return () => {
-    return when.resolve(data);
-  };
-};
+describe('startNodesRegistration Action', () => {
+  beforeEach(() => {
+    spyOn(RegisterNodesActions, 'nodesRegistrationPending');
+    const dispatch = () => {};
 
-describe('Asynchronous Register Nodes Action', () => {
-  beforeEach(done => {
-    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
-    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
-    spyOn(RegisterNodesActions, 'startNodesRegistrationPending');
-    spyOn(RegisterNodesActions, 'startNodesRegistrationSuccess');
-    spyOn(RegisterNodesActions, 'startNodesRegistrationFailed');
-    // Mock the service call.
-    spyOn(MistralApiService, 'runWorkflow').and.callFake(
-      createResolvingPromise({ state: 'RUNNING' })
-    );
-
-    const nodesToRegister = Map({
-      1: new IronicNode({
-        uuid: 1
-      })
-    });
+    const nodesToRegister = [
+      {
+        name: 'node1',
+        pm_addr: '192.168.10.10',
+        pm_user: 'admin',
+        pm_password: 'pass'
+      }
+    ];
     // Call the action creator and the resulting action.
     // In this case, dispatch and getState are just empty placeHolders.
-    RegisterNodesActions.startNodesRegistration(nodesToRegister)(
-      () => {},
-      () => {}
-    );
+    RegisterNodesActions.startNodesRegistration(nodesToRegister)(dispatch);
     // Call `done` with a minimal timeout.
-    setTimeout(() => {
-      done();
-    }, 1);
   });
 
-  it('dispatches startNodesRegistrationPending', () => {
-    expect(
-      RegisterNodesActions.startNodesRegistrationPending
-    ).toHaveBeenCalled();
-  });
-
-  it('dispatches startNodesRegistrationSuccess', () => {
-    expect(
-      RegisterNodesActions.startNodesRegistrationSuccess
-    ).toHaveBeenCalledWith();
+  it('dispatches nodesRegistrationPending', () => {
+    expect(RegisterNodesActions.nodesRegistrationPending).toHaveBeenCalled();
   });
 });
 
@@ -108,7 +80,7 @@ describe('nodesRegistrationFinished', () => {
     spyOn(NotificationActions, 'notify');
     spyOn(RegisterNodesActions, 'nodesRegistrationSuccess');
 
-    RegisterNodesActions.nodesRegistrationFinished(messagePayload, mockHistory)(
+    RegisterNodesActions.nodesRegistrationFinished(messagePayload)(
       () => {},
       () => {
         return {
@@ -134,7 +106,6 @@ describe('nodesRegistrationFinished', () => {
       successNotification
     );
     expect(RegisterNodesActions.nodesRegistrationSuccess).toHaveBeenCalled();
-    expect(mockHistory.push).toHaveBeenCalledWith('/nodes');
   });
 
   it('handles failed nodes registration', () => {
@@ -171,7 +142,7 @@ describe('nodesRegistrationFinished', () => {
 
     spyOn(RegisterNodesActions, 'nodesRegistrationFailed');
 
-    RegisterNodesActions.nodesRegistrationFinished(messagePayload, mockHistory)(
+    RegisterNodesActions.nodesRegistrationFinished(messagePayload)(
       () => {},
       () => {
         return {
@@ -189,7 +160,6 @@ describe('nodesRegistrationFinished', () => {
       mockGetIntl
     );
 
-    expect(mockHistory.push).toHaveBeenCalledWith('/nodes/register');
     expect(NodesActions.addNodes).toHaveBeenCalledWith(
       normalizedRegisteredNodes
     );

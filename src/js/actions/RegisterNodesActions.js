@@ -19,14 +19,11 @@ import { normalize, arrayOf } from 'normalizr';
 import { Map } from 'immutable';
 
 import { getCurrentPlanName } from '../selectors/plans';
-import { handleErrors } from './ErrorActions';
 import RegisterNodesConstants from '../constants/RegisterNodesConstants';
-import MistralApiService from '../services/MistralApiService';
 import NotificationActions from './NotificationActions';
 import NodesActions from './NodesActions';
 import { nodeSchema } from '../normalizrSchemas/nodes';
 import ValidationsActions from './ValidationsActions';
-import MistralConstants from '../constants/MistralConstants';
 
 const messages = defineMessages({
   registrationNotificationTitle: {
@@ -40,80 +37,26 @@ const messages = defineMessages({
 });
 
 export default {
-  addNode(node) {
-    return {
-      type: RegisterNodesConstants.ADD_NODE,
-      payload: node
-    };
-  },
-
-  selectNode(id) {
-    return {
-      type: RegisterNodesConstants.SELECT_NODE,
-      payload: id
-    };
-  },
-
-  removeNode(id) {
-    return {
-      type: RegisterNodesConstants.REMOVE_NODE,
-      payload: id
-    };
-  },
-
-  updateNode(node) {
-    return {
-      type: RegisterNodesConstants.UPDATE_NODE,
-      payload: node
-    };
-  },
-
   startNodesRegistration(nodes) {
     return (dispatch, getState) => {
-      dispatch(this.startNodesRegistrationPending(nodes));
-      MistralApiService.runWorkflow(
-        MistralConstants.BAREMETAL_REGISTER_OR_UPDATE,
-        {
-          nodes_json: nodes.toList().toJS(),
-          kernel_name: 'bm-deploy-kernel',
-          ramdisk_name: 'bm-deploy-ramdisk'
-        }
-      )
-        .then(response => {
-          dispatch(this.startNodesRegistrationSuccess());
-        })
-        .catch(error => {
-          dispatch(handleErrors(error, 'Nodes registration failed', false));
-          dispatch(
-            this.startNodesRegistrationFailed([
-              { title: 'Nodes registration failed', message: error.message }
-            ])
-          );
-        });
+      // TODO(jtomasek): Once we are able to generate UUIDs for nodes,
+      // add nodes to the list and add operation using startNodesOperation action.
+      // Remove registerNodesRegucer and track the progress on each node.
+      // Introduce separate reducer for tracking operations: nodeOperationsById
+      // dispatch(NodesActions.addNodes(nodes.map(node => new Node(node))));
+      // dispatch(startOperation(nodes.map(node => node.uuid), 'register'))
+      // addNodes(nodesToRegister.map(node => new Node))
+      dispatch(this.nodesRegistrationPending());
     };
   },
 
-  startNodesRegistrationPending(nodes) {
+  nodesRegistrationPending() {
     return {
-      type: RegisterNodesConstants.START_NODES_REGISTRATION_PENDING,
-      payload: nodes
+      type: RegisterNodesConstants.NODES_REGISTRATION_PENDING
     };
   },
 
-  startNodesRegistrationSuccess() {
-    return {
-      type: RegisterNodesConstants.START_NODES_REGISTRATION_SUCCESS
-    };
-  },
-
-  startNodesRegistrationFailed(errors) {
-    return {
-      type: RegisterNodesConstants.START_NODES_REGISTRATION_FAILED,
-      payload: errors
-    };
-  },
-
-  nodesRegistrationFinished(messagePayload, history) {
+  nodesRegistrationFinished(messagePayload) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       const registeredNodes =
@@ -141,7 +84,6 @@ export default {
             })
           );
           dispatch(this.nodesRegistrationSuccess());
-          history.push('/nodes');
           break;
         }
         case 'FAILED': {
@@ -153,7 +95,6 @@ export default {
                 .map(m => m.result)
             }
           ];
-          history.push('/nodes/register');
           // TODO(jtomasek): repopulate nodes registration form with failed nodes provided by message
           dispatch(this.nodesRegistrationFailed(errors));
           break;
@@ -177,12 +118,6 @@ export default {
         errors: errors,
         failedNodes: failedNodes
       }
-    };
-  },
-
-  cancelNodesRegistration() {
-    return {
-      type: RegisterNodesConstants.CANCEL_NODES_REGISTRATION
     };
   }
 };
