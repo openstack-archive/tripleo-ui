@@ -31,7 +31,7 @@ import NodesListForm from './NodesListView/NodesListForm';
 import NodesListView from './NodesListView/NodesListView';
 import NodesToolbar from './NodesToolbar/NodesToolbar';
 import NodesTableView from './NodesTableView';
-import RegisterNodesDialog from './RegisterNodesDialog';
+import RegisterNodesDialog from './registerNodes/RegisterNodesDialog';
 
 const messages = defineMessages({
   loadingNodes: {
@@ -45,6 +45,10 @@ const messages = defineMessages({
   registerNodes: {
     id: 'Nodes.registerNodes',
     defaultMessage: 'Register Nodes'
+  },
+  registeringNodes: {
+    id: 'Nodes.registeringNodes',
+    defaultMessage: 'Registering Nodes...'
   },
   nodes: {
     id: 'Nodes.nodes',
@@ -107,6 +111,11 @@ class Nodes extends React.Component {
           height={80}
         >
           <NodesToolbar />
+          <Loader
+            loaded={!this.props.isRegistering}
+            content={this.props.intl.formatMessage(messages.registeringNodes)}
+            height={80}
+          />
           {this.renderContentView()}
         </Loader>
         <Route path="/nodes/register" component={RegisterNodesDialog} />
@@ -121,6 +130,7 @@ Nodes.propTypes = {
   fetchNodes: PropTypes.func.isRequired,
   fetchingNodes: PropTypes.bool.isRequired,
   intl: PropTypes.object.isRequired,
+  isRegistering: PropTypes.bool.isRequired,
   nodes: ImmutablePropTypes.map.isRequired,
   nodesInProgress: ImmutablePropTypes.set.isRequired,
   nodesLoaded: PropTypes.bool.isRequired
@@ -131,6 +141,7 @@ const mapStateToProps = state => ({
     'contentView',
     'list'
   ),
+  isRegistering: state.registerNodes.get('isRegistering'),
   fetchingNodes: state.nodes.get('isFetching'),
   nodes: getFilteredNodes(state),
   nodesInProgress: nodesInProgress(state),

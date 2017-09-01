@@ -19,6 +19,7 @@ export default {
   BAREMETAL_MANAGE: 'tripleo.baremetal.v1.manage',
   BAREMETAL_PROVIDE: 'tripleo.baremetal.v1.provide',
   BAREMETAL_REGISTER_OR_UPDATE: 'tripleo.baremetal.v1.register_or_update',
+  BAREMETAL_VALIDATE_NODES: 'tripleo.baremetal.validate_nodes',
   CAPABILITIES_GET: 'tripleo.heat_capabilities.get',
   CAPABILITIES_UPDATE: 'tripleo.heat_capabilities.update',
   CREATE_CONTAINER: 'tripleo.plan.create_container',
