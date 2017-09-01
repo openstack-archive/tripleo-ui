@@ -21,40 +21,36 @@ import React from 'react';
 import DriverFields from './DriverFields';
 
 const messages = defineMessages({
-  addr_title: {
-    id: 'PXEAndIPMIToolDriverFields.addr_title',
+  address: {
+    id: 'PXEAndIPMIToolDriverFields.address',
     defaultMessage: 'IPMI IP Address or FQDN'
   },
-  port_title: {
-    id: 'PXEAndIPMIToolDriverFields.port_title',
+  port: {
+    id: 'PXEAndIPMIToolDriverFields.port',
     defaultMessage: 'IPMI Port'
   },
-  user_title: {
-    id: 'PXEAndIPMIToolDriverFields.user_title',
+  user: {
+    id: 'PXEAndIPMIToolDriverFields.user',
     defaultMessage: 'IPMI Username'
   },
-  pwd_title: {
-    id: 'PXEAndIPMIToolDriverFields.pwd_title',
+  password: {
+    id: 'PXEAndIPMIToolDriverFields.password',
     defaultMessage: 'IPMI Password'
   }
 });
 
-class PXEAndIPMIToolDriverFields extends React.Component {
-  render() {
-    return (
-      <DriverFields
-        {...this.props}
-        addr_title={this.props.intl.formatMessage(messages.addr_title)}
-        user_title={this.props.intl.formatMessage(messages.user_title)}
-        port_title={this.props.intl.formatMessage(messages.port_title)}
-        pwd_title={this.props.intl.formatMessage(messages.pwd_title)}
-      />
-    );
-  }
-}
-
-PXEAndIPMIToolDriverFields.propTypes = {
-  intl: PropTypes.object
+const PXEAndIPMITool = ({ intl: { formatMessage }, node }) => (
+  <DriverFields
+    node={node}
+    addressLabel={formatMessage(messages.address)}
+    portLabel={formatMessage(messages.port)}
+    userLabel={formatMessage(messages.user)}
+    passwordLabel={formatMessage(messages.password)}
+  />
+);
+PXEAndIPMITool.propTypes = {
+  intl: PropTypes.object.isRequired,
+  node: PropTypes.string.isRequired
 };
 
-export default injectIntl(PXEAndIPMIToolDriverFields);
+export default injectIntl(PXEAndIPMITool);
