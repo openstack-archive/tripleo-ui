@@ -14,25 +14,20 @@
  * under the License.
  */
 
-import { Map } from 'immutable';
+export const MAC_ADDRESS_REGEX = new RegExp(
+  /^([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}(,([0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2})*$/
+);
 
-import RegisterNodesConstants from '../constants/RegisterNodesConstants';
+export const NODE_NAME_REGEX = new RegExp(/^[A-Z0-9-._~]+$/i);
 
-const initialState = Map({
-  isRegistering: false
-});
+export const IPV4_REGEX = new RegExp(
+  /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
+);
 
-export default function registerNodesReducer(state = initialState, action) {
-  switch (action.type) {
-    case RegisterNodesConstants.NODES_REGISTRATION_PENDING: {
-      return state.set('isRegistering', true);
-    }
+export const FQDN_REGEX = new RegExp(
+  /^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?$/
+);
 
-    case RegisterNodesConstants.NODES_REGISTRATION_FAILED:
-    case RegisterNodesConstants.NODES_REGISTRATION_SUCCESS:
-      return initialState;
-
-    default:
-      return state;
-  }
-}
+export const PORT_REGEX = new RegExp(
+  /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/
+);

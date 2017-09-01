@@ -16,41 +16,31 @@
 
 import shortid from 'shortid';
 import { Map } from 'immutable';
-
 import { InitialPlanState, Plan } from '../../js/immutableRecords/plans';
-import MistralApiService from '../../js/services/MistralApiService';
-import mockHistory from '../mocks/history';
 import { mockStore } from './utils';
-import RegisterNodesActions from '../../js/actions/RegisterNodesActions';
 import NodesActions from '../../js/actions/NodesActions';
 import NotificationActions from '../../js/actions/NotificationActions';
-import { IronicNode } from '../../js/immutableRecords/nodes';
 import ValidationsActions from '../../js/actions/ValidationsActions';
+import RegisterNodesActions from '../../js/actions/RegisterNodesActions';
 
-describe('Asynchronous Register Nodes Action', () => {
+describe('startNodesRegistration Action', () => {
   const store = mockStore({});
-  const nodesToRegister = Map({
-    1: new IronicNode({
-      uuid: 1
-    })
-  });
+  const nodesToRegister = [
+    {
+      name: 'node1',
+      pm_addr: '192.168.10.10',
+      pm_user: 'admin',
+      pm_password: 'pass'
+    }
+  ];
 
-  beforeEach(() => {
-    MistralApiService.runWorkflow = jest
-      .fn()
-      .mockReturnValue(() => Promise.resolve({ state: 'RUNNING' }));
-  });
-
-  it('dispatches actions', () => {
-    return store
-      .dispatch(RegisterNodesActions.startNodesRegistration(nodesToRegister))
-      .then(() => {
-        expect(MistralApiService.runWorkflow).toHaveBeenCalled();
-        expect(store.getActions()).toEqual([
-          RegisterNodesActions.startNodesRegistrationPending(nodesToRegister),
-          RegisterNodesActions.startNodesRegistrationSuccess()
-        ]);
-      });
+  it('dispatches nodesRegistrationPending', () => {
+    store.dispatch(
+      RegisterNodesActions.startNodesRegistration(nodesToRegister)
+    );
+    expect(store.getActions()).toEqual([
+      RegisterNodesActions.nodesRegistrationPending()
+    ]);
   });
 });
 
@@ -103,10 +93,7 @@ describe('nodesRegistrationFinished', () => {
     };
 
     store.dispatch(
-      RegisterNodesActions.nodesRegistrationFinished(
-        messagePayload,
-        mockHistory
-      )
+      RegisterNodesActions.nodesRegistrationFinished(messagePayload)
     );
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
     expect(store.getActions()).toEqual([
@@ -161,13 +148,9 @@ describe('nodesRegistrationFinished', () => {
     ];
 
     store.dispatch(
-      RegisterNodesActions.nodesRegistrationFinished(
-        messagePayload,
-        mockHistory
-      )
+      RegisterNodesActions.nodesRegistrationFinished(messagePayload)
     );
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
-    expect(mockHistory.push).toHaveBeenCalledWith('/nodes/register');
     expect(store.getActions()).toEqual([
       NodesActions.addNodes(normalizedRegisteredNodes),
       RegisterNodesActions.nodesRegistrationFailed(errors)

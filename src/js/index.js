@@ -24,10 +24,13 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import App from './components/App';
 import I18nProvider from './components/i18n/I18nProvider';
 import initFormsy from './components/utils/Formsy';
+import { setupReduxFormValidators } from './utils/reduxFormValidators';
 import store from './store';
 import '../less/base.less';
 
 initFormsy();
+
+setupReduxFormValidators();
 
 ReactDOM.render(
   <Provider store={store}>
