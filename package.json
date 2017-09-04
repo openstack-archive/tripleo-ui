@@ -1,6 +1,6 @@
 {
   "name": "tripleo-ui",
-  "version": "7.3.0",
+  "version": "8.0.0",
   "description": "TripleO UI - TripleO-based OpenStack deployment UI",
   "main": "index.js",
   "dependencies": {
