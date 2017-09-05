@@ -1077,6 +1077,11 @@
       "from": "redux-form@6.6.1",
       "resolved": "https://registry.npmjs.org/redux-form/-/redux-form-6.6.1.tgz"
     },
+    "redux-form-validators": {
+      "version": "2.0.1",
+      "from": "redux-form-validators@latest",
+      "resolved": "https://registry.npmjs.org/redux-form-validators/-/redux-form-validators-2.0.1.tgz"
+    },
     "redux-logger": {
       "version": "2.6.1",
       "from": "redux-logger@>=2.6.1 <2.7.0",
