@@ -223,4 +223,57 @@ describe(' validations selectors', () => {
       expect(filtered.get('check-network-gateway')).toBeDefined();
     });
   });
+
+  describe('getMostRecentPlanUpdate', () => {
+    it('returns 0 if there are no executions', () => {
+      const executions = Map({});
+      expect(
+        selectors.getMostRecentPlanUpdate(executions, 'overcloud')
+      ).toEqual(0);
+    });
+
+    it('returns 0 if there are no relevant executions', () => {
+      const executions = Map({
+        one: Map({
+          workflow_name: 'tripleo.baremetal.v1.introspect',
+          updated_at: 1504686886000
+        })
+      });
+      expect(
+        selectors.getMostRecentPlanUpdate(executions, 'overcloud')
+      ).toEqual(0);
+    });
+
+    it('returns the most recent update time', () => {
+      const executions = Map({
+        one: WorkflowExecution({
+          workflow_name: 'tripleo.baremetal.v1.introspect',
+          updated_at: 1500000000007
+        }),
+        two: WorkflowExecution({
+          workflow_name: 'tripleo.plan_management.v1.create_deployment_plan',
+          updated_at: 1500000000004,
+          input: Map({ container: 'overcloud' })
+        }),
+        three: WorkflowExecution({
+          workflow_name: 'tripleo.plan_management.v1.update_deployment_plan',
+          updated_at: 1500000000003,
+          input: Map({ container: 'overcloud' })
+        }),
+        four: WorkflowExecution({
+          workflow_name: 'tripleo.plan_management.v1.delete_deployment_plan',
+          updated_at: 1500000000006,
+          input: Map({ container: 'overcloud' })
+        }),
+        five: WorkflowExecution({
+          workflow_name: 'tripleo.plan_management.v1.update_deployment_plan',
+          updated_at: 1500000000005,
+          input: Map({ container: 'another-cloud' })
+        })
+      });
+      expect(
+        selectors.getMostRecentPlanUpdate(executions, 'overcloud')
+      ).toEqual(1500000000004);
+    });
+  });
 });
