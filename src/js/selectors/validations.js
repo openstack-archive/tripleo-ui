@@ -15,6 +15,7 @@
  */
 
 import { createSelector } from 'reselect';
+import { Map } from 'immutable';
 
 import { getCurrentPlanName } from './plans';
 import { getFilterByName } from './filters';
@@ -31,10 +32,15 @@ const validationsToolbarFilter = state =>
 export const getValidationExecutionsForCurrentPlan = createSelector(
   [executions, getCurrentPlanName],
   (executions, currentPlanName) => {
+    const mostRecentPlanUpdate = getMostRecentPlanUpdate(
+      executions,
+      currentPlanName
+    );
     return executions.filter(
       execution =>
         execution.get('workflow_name') === MistralConstants.VALIDATIONS_RUN &&
-        execution.getIn(['input', 'plan']) === currentPlanName
+        execution.getIn(['input', 'plan']) === currentPlanName &&
+        execution.get('updated_at') > mostRecentPlanUpdate
     );
   }
 );
@@ -55,7 +61,8 @@ export const getValidationsWithResults = createSelector(
 );
 
 /**
- * Filter validations using the active Toolbar filters
+ * Filter validations using the active Toolbar filters.
+ * Only include validations younger than the most recent update to a plan.
  */
 export const getFilteredValidations = createSelector(
   [getValidationsWithResults, validationsToolbarFilter],
@@ -98,6 +105,33 @@ export const getFilteredValidations = createSelector(
       );
   }
 );
+
+/**
+ * Helper function to get the most recent time a plan has been updated or
+ * created.
+ */
+const getMostRecentPlanUpdate = (executions, planName) => {
+  return (executions
+    .filter(
+      execution =>
+        (execution.get('workflow_name') === MistralConstants.PLAN_UPDATE ||
+          execution.get('workflow_name') === MistralConstants.PLAN_CREATE) &&
+        execution.getIn(['input', 'container']) === planName
+    )
+    .sort((a, b) => {
+      if (a.get('updated_at') < b.get('updated_at')) {
+        return -1;
+      }
+      if (a.get('updated_at') > b.get('updated_at')) {
+        return 1;
+      }
+      if (a.get('updated_at') === b.get('updated_at')) {
+        return 0;
+      }
+    })
+    .last() || Map({}))
+    .get('updated_at', 0);
+};
 
 /**
  * Helper function to get a validation results by validation name
