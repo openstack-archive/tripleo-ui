@@ -14,6 +14,17 @@ Tests during development
 
 Start Karma to run tests after every change ``npm run test:watch``.
 
+Testing a production build locally
+----------------------------------
+
+::
+
+   $ <kill your webpack-dev-server process>
+   $ npm run build
+   $ cd dist
+   $ python -m SimpleHTTPServer 1111
+   $ <go to http://localhost:1111 in the browser>
+
 Debugging tests
 ---------------
 
