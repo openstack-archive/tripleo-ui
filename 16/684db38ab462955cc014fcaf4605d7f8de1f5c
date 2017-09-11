@@ -1,0 +1,8 @@
+Code-Review+2: Ana Krivokapic <akrivoka@redhat.com>
+Workflow+1: Ana Krivokapic <akrivoka@redhat.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Mon, 11 Sep 2017 12:43:29 +0000
+Reviewed-on: https://review.openstack.org/502022
+Project: openstack/tripleo-ui
+Branch: refs/heads/stable/pike
