@@ -128,7 +128,7 @@
         "NodeDrives.title": "\u8282\u70b9\u9a71\u52a8 - {nodeId}",
         "NodeExtendedInfo.macAddresses": "MAC\u5730\u5740\uff1a",
         "NodeIntrospectionState.introspectionStateLabel": "\u5185\u7701\uff1a",
-        "NodeListItem.Profile": "\u7b80\u4ecb\uff1a",
+        "NodeListItem.Profile": "Profile:",
         "NodeListItem.actions.manageDrives": "\u7ba1\u7406\u9a71\u52a8",
         "NodeListItem.cpuCores": "CPU{cpuCores, \u590d\u6570, \u4e00\u4e2a {Core} \u5176\u4ed6 {Cores}}",
         "NodeListItem.gbDisk": "GB\u78c1\u76d8",
