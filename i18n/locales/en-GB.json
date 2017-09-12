@@ -140,7 +140,7 @@
         "PXEAndIPMIToolDriverFields.pwd_title": "IPMI Password",
         "PXEAndIPMIToolDriverFields.user_title": "IPMI Username",
         "PXEAndSSHDriverFields.addr_title": "SSH IP Address or FQDN",
-        "PXEAndSSHDriverFields.pwd_title": "SSH Key",
+        "PXEAndSSHDriverFields.pwd_title": "Private Key",
         "PXEAndSSHDriverFields.user_title": "SSH User",
         "ParameterInput.enterValidJson": "Please enter a valid JSON string.",
         "ParameterInputList.noParameters": "There are currently no parameters to configure in this section.",
