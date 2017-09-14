@@ -49,8 +49,10 @@ export default {
             RegisterNodesActions.nodesRegistrationFinished(payload, history)
           );
           break;
-
+        // TODO(honza): Remove the internal workflow once this bug is resolved
+        // https://bugs.launchpad.net/tripleo/+bug/1716671
         case MistralConstants.BAREMETAL_INTROSPECT:
+        case MistralConstants.BAREMETAL_INTROSPECT_INTERNAL:
           dispatch(NodesActions.nodesIntrospectionFinished(payload));
           break;
 

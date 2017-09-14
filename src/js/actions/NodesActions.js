@@ -17,6 +17,7 @@
 import { defineMessages } from 'react-intl';
 import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
+import { isArray } from 'lodash';
 
 import { getNodesByIds } from '../selectors/nodes';
 import { handleErrors } from './ErrorActions';
@@ -191,14 +192,19 @@ export default {
           break;
         }
         case 'FAILED': {
+          // TODO(honza): Temporary hack until this is fixed
+          // https://bugs.launchpad.net/tripleo/+bug/1716671
+          // messagePayload.message is an array when the execution type is
+          // tripleo.baremetal.v1.introspect; a string otherwise
+          const message = isArray(messagePayload.message)
+            ? messagePayload.message.filter(m => m.message).map(m => m.message)
+            : messagePayload.message;
           dispatch(
             NotificationActions.notify({
               title: formatMessage(
                 messages.introspectionFailedNotificationTitle
               ),
-              message: messagePayload.message
-                .filter(m => m.message)
-                .map(m => m.message)
+              message
             })
           );
           break;
