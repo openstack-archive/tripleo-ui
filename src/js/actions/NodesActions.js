@@ -209,6 +209,23 @@ export default {
     };
   },
 
+  nodeIntrospectionFinished(messagePayload) {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
+      const nodeId = messagePayload.execution.input.node_uuid;
+      dispatch(this.finishOperation([nodeId]));
+
+      if (messagePayload.status === 'FAILED') {
+        dispatch(
+          NotificationActions.notify({
+            title: formatMessage(messages.introspectionFailedNotificationTitle),
+            message: messagePayload.message
+          })
+        );
+      }
+    };
+  },
+
   tagNodes(nodeIds, tag) {
     return (dispatch, getState) => {
       const nodes = getNodesByIds(getState(), nodeIds);
