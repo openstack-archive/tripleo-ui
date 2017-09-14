@@ -17,6 +17,7 @@
 import { defineMessages } from 'react-intl';
 import { normalize, arrayOf } from 'normalizr';
 import when from 'when';
+import { isArray } from 'lodash';
 
 import { getNodesByIds } from '../selectors/nodes';
 import { handleErrors } from './ErrorActions';
@@ -175,7 +176,9 @@ export default {
   nodesIntrospectionFinished(messagePayload) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      const nodeIds = messagePayload.execution.input.node_uuids;
+      const nodeIds = messagePayload.execution.input.node_uuids || [
+        messagePayload.execution.input.node_uuid
+      ];
       dispatch(this.finishOperation(nodeIds));
       dispatch(this.fetchNodes());
 
@@ -191,14 +194,15 @@ export default {
           break;
         }
         case 'FAILED': {
+          const message = isArray(messagePayload.message)
+            ? messagePayload.message.filter(m => m.message).map(m => m.message)
+            : messagePayload.message;
           dispatch(
             NotificationActions.notify({
               title: formatMessage(
                 messages.introspectionFailedNotificationTitle
               ),
-              message: messagePayload.message
-                .filter(m => m.message)
-                .map(m => m.message)
+              message
             })
           );
           break;

@@ -49,8 +49,8 @@ export default {
             RegisterNodesActions.nodesRegistrationFinished(payload, history)
           );
           break;
-
         case MistralConstants.BAREMETAL_INTROSPECT:
+        case MistralConstants.BAREMETAL_INTROSPECT_INTERNAL:
           dispatch(NodesActions.nodesIntrospectionFinished(payload));
           break;
 
