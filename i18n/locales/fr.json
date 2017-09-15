@@ -12,6 +12,7 @@
         "CurrentPlan.hardwareStepTooltip": "Cette \u00e9tape enregistre et introspecte vos n\u0153uds. enregistrement consiste \u00e0 d\u00e9finir les d\u00e9tails de gestion de l'alimentation de chaque n\u0153ud afin que vous Director puisse les contr\u00f4ler pendant les \u00e9tapes d'introspection et de provisionnement. Apr\u00e8s l'enregistrement, vous introspectez les noeuds, ce qui permet d'identifier le mat\u00e9riel pr\u00e9sent sur chaque n\u0153ud et de construire un profil associ\u00e9. Apr\u00e8s l'enregistrement et l'introspection, vous pouvez affecter les n\u0153uds \u00e0 des r\u00f4les sp\u00e9cifiques dans votre overcloud.",
         "DataTable.filter": "Filtrer",
         "DebugScreen.cancel": "Annuler",
+        "DebugScreen.downloadLogs": "T\u00e9l\u00e9charger les logs",
         "DeletePlan.cancel": "Annuler",
         "DeletePlan.deletePlan": "Supprimer le plan",
         "DeletePlan.deletePlanConfirmation": "\u00cates-vous s\u00fbr de vouloir supprimer le plan {planName}?",
