@@ -14,8 +14,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-set -e
+# Ensure that all of our source files contain the Apache 2.0 license header
 
-eslint --max-warnings 0 src
-./bin/verify-languages.js
-./bin/verify-license-headers.sh
+files=$(git grep --files-without-match -e 'Red Hat' '*.js' '*.less')
+
+if [ -z "$files" ]
+then
+    exit 0
+else
+    echo "The following files are missing a license header:"
+    echo ""
+    echo "$files"
+    exit 1
+fi
