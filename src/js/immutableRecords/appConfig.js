@@ -1,7 +1,13 @@
-import { List, Map, Record } from 'immutable';
+import { List, Record } from 'immutable';
 
 export const AppConfig = Record({
-  endpoints: Map(),
+  keystone: undefined,
+  heat: undefined,
+  ironic: undefined,
+  'ironic-inspector': undefined,
+  mistral: undefined,
+  swift: undefined,
+  'zaqar-websocket': undefined,
   zaqarDefaultQueue: 'tripleo',
   excludedLanguages: List(),
   loggers: List(['console'])
