@@ -86,11 +86,11 @@ export default {
   fetchNodes() {
     return (dispatch, getState) => {
       dispatch(this.requestNodes());
-      when
+      return when
         .all([
-          IronicApiService.getNodes(),
-          IronicApiService.getPorts(),
-          IronicInspectorApiService.getIntrospectionStatuses()
+          dispatch(IronicApiService.getNodes()),
+          dispatch(IronicApiService.getPorts()),
+          dispatch(IronicInspectorApiService.getIntrospectionStatuses())
         ])
         .then(response => {
           const nodes = normalize(response[0].nodes, arrayOf(nodeSchema))
@@ -125,8 +125,8 @@ export default {
   },
 
   fetchNodeIntrospectionData(nodeId) {
-    return dispatch => {
-      IronicInspectorApiService.getIntrospectionData(nodeId)
+    return dispatch =>
+      dispatch(IronicInspectorApiService.getIntrospectionData(nodeId))
         .then(response => {
           dispatch(this.fetchNodeIntrospectionDataSuccess(nodeId, response));
         })
@@ -136,7 +136,6 @@ export default {
           );
           dispatch(this.fetchNodeIntrospectionDataFailed(nodeId));
         });
-    };
   },
 
   /*
@@ -161,9 +160,12 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
       dispatch(this.pollNodeslistDuringProgress());
-      MistralApiService.runWorkflow(MistralConstants.BAREMETAL_INTROSPECT, {
-        node_uuids: nodeIds
-      }).catch(error => {
+      return MistralApiService.runWorkflow(
+        MistralConstants.BAREMETAL_INTROSPECT,
+        {
+          node_uuids: nodeIds
+        }
+      ).catch(error => {
         dispatch(
           handleErrors(error, 'Selected Nodes could not be introspected')
         );
@@ -254,7 +256,7 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
       dispatch(this.pollNodeslistDuringProgress());
-      MistralApiService.runWorkflow(MistralConstants.BAREMETAL_PROVIDE, {
+      return MistralApiService.runWorkflow(MistralConstants.BAREMETAL_PROVIDE, {
         node_uuids: nodeIds
       }).catch(error => {
         dispatch(handleErrors(error, 'Selected Nodes could not be provided'));
@@ -347,7 +349,7 @@ export default {
   updateNode(nodePatch) {
     return (dispatch, getState) => {
       dispatch(this.updateNodePending(nodePatch.uuid));
-      IronicApiService.patchNode(nodePatch)
+      return dispatch(IronicApiService.patchNode(nodePatch))
         .then(response => {
           dispatch(this.updateNodeSuccess(response));
         })
@@ -380,18 +382,18 @@ export default {
   },
 
   deleteNodes(nodeIds) {
-    return (dispatch, getState) => {
+    return dispatch => {
       dispatch(this.startOperation(nodeIds));
-      nodeIds.map(nodeId => {
-        IronicApiService.deleteNode(nodeId)
-          .then(response => {
-            dispatch(this.deleteNodeSuccess(nodeId));
-          })
-          .catch(error => {
-            dispatch(handleErrors(error, 'Node could not be deleted'));
-            dispatch(this.deleteNodeFailed(nodeId));
-          });
-      });
+      return Promise.all(
+        nodeIds.map(nodeId =>
+          dispatch(IronicApiService.deleteNode(nodeId))
+            .then(response => dispatch(this.deleteNodeSuccess(nodeId)))
+            .catch(error => {
+              dispatch(handleErrors(error, 'Node could not be deleted'));
+              dispatch(this.deleteNodeFailed(nodeId));
+            })
+        )
+      );
     };
   },
 

@@ -22,24 +22,24 @@ import {
   IronicInspectorApiError,
   ConnectionError
 } from './errors';
-import { getServiceUrl, getAuthTokenId } from './utils';
+import { getAuthTokenId, getServiceUrl } from '../selectors/auth';
 
 class IronicInspectorApiService {
   defaultRequest(path, additionalAttributes) {
-    return when.try(getServiceUrl, 'ironic-inspector').then(serviceUrl => {
-      let requestAttributes = Object.assign(
-        {
-          baseURL: `${serviceUrl}/v1`,
-          url: path,
-          method: 'GET',
-          headers: {
-            'X-Auth-Token': getAuthTokenId()
-          }
-        },
-        additionalAttributes
+    return (dispatch, getState) =>
+      axios(
+        Object.assign(
+          {
+            baseURL: `${getServiceUrl(getState(), 'ironic-inspector')}/v1`,
+            url: path,
+            method: 'GET',
+            headers: {
+              'X-Auth-Token': getAuthTokenId(getState())
+            }
+          },
+          additionalAttributes
+        )
       );
-      return axios(requestAttributes);
-    });
   }
 
   /**
@@ -47,9 +47,10 @@ class IronicInspectorApiService {
    * @returns {object} introspection statuses
    */
   getIntrospectionStatuses() {
-    return this.defaultRequest(`/introspection`)
-      .then(response => response.data)
-      .catch(handleErrors);
+    return dispatch =>
+      dispatch(this.defaultRequest(`/introspection`))
+        .then(response => response.data)
+        .catch(handleErrors);
   }
 
   /**
@@ -57,9 +58,10 @@ class IronicInspectorApiService {
    * @returns {object} introspection data
    */
   getIntrospectionData(nodeId) {
-    return this.defaultRequest(`/introspection/${nodeId}/data`)
-      .then(response => response.data)
-      .catch(handleErrors);
+    return dispatch =>
+      dispatch(this.defaultRequest(`/introspection/${nodeId}/data`))
+        .then(response => response.data)
+        .catch(handleErrors);
   }
 }
 
