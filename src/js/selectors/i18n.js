@@ -21,10 +21,10 @@ import { Map } from 'immutable';
 import { LANGUAGE_NAMES } from '../constants/i18n';
 // TODO(jtomasek): This should rather be in /constants
 import { MESSAGES } from '../components/i18n/messages';
+import { getExcludedLanguages } from './appConfig';
 
-const getMessages = () => MESSAGES;
-const getAvailableLanguages = () => LANGUAGE_NAMES;
-export const getAppConfig = state => state.appConfig;
+export const getMessages = () => MESSAGES;
+export const getAvailableLanguages = () => LANGUAGE_NAMES;
 export const getCurrentLanguage = state => state.i18n.language;
 
 export const getCurrentLanguageMessages = createSelector(
@@ -45,11 +45,11 @@ export const getIntl = createSelector(
 );
 
 export const getEnabledLanguages = createSelector(
-  [getAppConfig, getAvailableLanguages],
-  (appConfig, languages) =>
+  [getExcludedLanguages, getAvailableLanguages],
+  (excludedLanguages, languages) =>
     // with immutablejs v 4.0.0 this can be replaced with
     // Map(languages).deleteAll(appConfig.excludedLanguages).sort();
     Map(languages)
-      .filterNot((language, key) => appConfig.excludedLanguages.includes(key))
+      .filterNot((language, key) => excludedLanguages.includes(key))
       .sort()
 );
