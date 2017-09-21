@@ -88,9 +88,9 @@ export default {
       dispatch(this.requestNodes());
       when
         .all([
-          IronicApiService.getNodes(),
-          IronicApiService.getPorts(),
-          IronicInspectorApiService.getIntrospectionStatuses()
+          dispatch(IronicApiService.getNodes()),
+          dispatch(IronicApiService.getPorts()),
+          dispatch(IronicInspectorApiService.getIntrospectionStatuses())
         ])
         .then(response => {
           const nodes = normalize(response[0].nodes, arrayOf(nodeSchema))
@@ -126,7 +126,7 @@ export default {
 
   fetchNodeIntrospectionData(nodeId) {
     return dispatch => {
-      IronicInspectorApiService.getIntrospectionData(nodeId)
+      dispatch(IronicInspectorApiService.getIntrospectionData(nodeId))
         .then(response => {
           dispatch(this.fetchNodeIntrospectionDataSuccess(nodeId, response));
         })
@@ -330,7 +330,7 @@ export default {
   updateNode(nodePatch) {
     return (dispatch, getState) => {
       dispatch(this.updateNodePending(nodePatch.uuid));
-      IronicApiService.patchNode(nodePatch)
+      dispatch(IronicApiService.patchNode(nodePatch))
         .then(response => {
           dispatch(this.updateNodeSuccess(response));
         })
@@ -366,7 +366,7 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
       nodeIds.map(nodeId => {
-        IronicApiService.deleteNode(nodeId)
+        dispatch(IronicApiService.deleteNode(nodeId))
           .then(response => {
             dispatch(this.deleteNodeSuccess(nodeId));
           })

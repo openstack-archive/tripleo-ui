@@ -18,25 +18,25 @@ import axios from 'axios';
 import when from 'when';
 
 import { AuthenticationError, IronicApiError, ConnectionError } from './errors';
-import { getServiceUrl, getAuthTokenId } from './utils';
+import { getAuthTokenId, getServiceUrl } from '../selectors/auth';
 
 class IronicApiService {
   defaultRequest(path, additionalAttributes) {
-    return when.try(getServiceUrl, 'ironic').then(serviceUrl => {
-      let requestAttributes = Object.assign(
-        {
-          baseURL: serviceUrl,
-          url: path,
-          method: 'GET',
-          headers: {
-            'X-Auth-Token': getAuthTokenId(),
-            'X-OpenStack-Ironic-API-Version': '1.14'
-          }
-        },
-        additionalAttributes
+    return (dispatch, getState) =>
+      axios(
+        Object.assign(
+          {
+            baseURL: getServiceUrl(getState(), 'ironic'),
+            url: path,
+            method: 'GET',
+            headers: {
+              'X-Auth-Token': getAuthTokenId(getState()),
+              'X-OpenStack-Ironic-API-Version': '1.14'
+            }
+          },
+          additionalAttributes
+        )
       );
-      return axios(requestAttributes);
-    });
   }
 
   /**
@@ -44,32 +44,40 @@ class IronicApiService {
    * @returns {array} of nodes with complete details
    */
   getNodes() {
-    return this.defaultRequest('/nodes/detail')
-      .then(response => response.data)
-      .catch(handleErrors);
+    return dispatch =>
+      dispatch(this.defaultRequest('/nodes/detail'))
+        .then(response => response.data)
+        .catch(handleErrors);
   }
 
   getPorts() {
-    return this.defaultRequest('/ports/detail')
-      .then(response => response.data)
-      .catch(handleErrors);
+    return dispatch =>
+      dispatch(this.defaultRequest('/ports/detail'))
+        .then(response => response.data)
+        .catch(handleErrors);
   }
 
   patchNode(nodePatch) {
-    return this.defaultRequest('/nodes/' + nodePatch.uuid, {
-      method: 'PATCH',
-      data: nodePatch.patches
-    })
-      .then(response => response.data)
-      .catch(handleErrors);
+    return dispatch =>
+      dispatch(
+        this.defaultRequest('/nodes/' + nodePatch.uuid, {
+          method: 'PATCH',
+          data: nodePatch.patches
+        })
+      )
+        .then(response => response.data)
+        .catch(handleErrors);
   }
 
   deleteNode(nodeId) {
-    return this.defaultRequest('/nodes/' + nodeId, {
-      method: 'DELETE'
-    })
-      .then(response => response.data)
-      .catch(handleErrors);
+    return dispatch =>
+      dispatch(
+        this.defaultRequest('/nodes/' + nodeId, {
+          method: 'DELETE'
+        })
+      )
+        .then(response => response.data)
+        .catch(handleErrors);
   }
 }
 
