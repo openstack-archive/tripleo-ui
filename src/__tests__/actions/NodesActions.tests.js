@@ -14,7 +14,8 @@
  * under the License.
  */
 
-import when from 'when';
+import configureMockStore from 'redux-mock-store';
+import thunkMiddleware from 'redux-thunk';
 
 import IronicApiService from '../../js/services/IronicApiService';
 import IronicInspectorApiService
@@ -22,12 +23,15 @@ import IronicInspectorApiService
 import MistralApiService from '../../js/services/MistralApiService';
 import { mockGetIntl } from './utils';
 import NodesActions from '../../js/actions/NodesActions';
-import NotificationActions from '../../js/actions/NotificationActions';
+import * as ErrorActions from '../../js/actions/ErrorActions';
 import NodesConstants from '../../js/constants/NodesConstants';
-import * as utils from '../../js/services/utils';
 import MistralConstants from '../../js/constants/MistralConstants';
 
 const mockGetNodesResponse = [{ uuid: 1 }, { uuid: 2 }];
+
+const mockStore = configureMockStore([
+  thunkMiddleware.withExtraArgument(mockGetIntl)
+]);
 
 describe('Nodes Actions', () => {
   it('creates action to request nodes', () => {
@@ -113,56 +117,28 @@ describe('Nodes Actions', () => {
   });
 });
 
-// Use this to mock asynchronous functions which return a promise.
-// The promise will immediately resolve with `data`.
-let createResolvingPromise = data => {
-  return () => {
-    return when.resolve(data);
-  };
-};
-
-let createRejectingPromise = error => {
-  return () => {
-    return when.reject(error);
-  };
-};
-
-describe('Asynchronous Nodes Actions', () => {
-  beforeEach(done => {
-    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
-    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
-    spyOn(NodesActions, 'requestNodes');
-    spyOn(NodesActions, 'receiveNodes');
-    // Mock the service call.
-    spyOn(IronicApiService, 'getNodes').and.callFake(
-      createResolvingPromise({ nodes: [{ uuid: '123' }] })
-    );
-    spyOn(IronicApiService, 'getPorts').and.callFake(
-      createResolvingPromise({
+describe('Fetching Nodes Actions', () => {
+  beforeEach(() => {
+    IronicApiService.getNodes = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve({ nodes: [{ uuid: '123' }] }));
+    IronicApiService.getPorts = jest.fn().mockReturnValue(() =>
+      Promise.resolve({
         ports: [{ uuid: 'port1', address: 'mac', node_uuid: '123' }]
       })
     );
-    spyOn(IronicInspectorApiService, 'getIntrospectionStatuses').and.callFake(
-      createResolvingPromise({
-        introspection: [{ uuid: 'node1', state: 'finished' }]
-      })
-    );
-
-    // Call the action creator and the resulting action.
-    // In this case, dispatch and getState are just empty placeHolders.
-    NodesActions.fetchNodes()(() => {}, () => {});
-    // Call `done` with a minimal timeout.
-    setTimeout(() => {
-      done();
-    }, 1);
+    IronicInspectorApiService.getIntrospectionStatuses = jest
+      .fn()
+      .mockReturnValue(() =>
+        Promise.resolve({
+          introspection: [{ uuid: 'node1', state: 'finished' }]
+        })
+      );
   });
 
-  it('dispatches requestNodes', () => {
-    expect(NodesActions.requestNodes).toHaveBeenCalled();
-  });
-
-  it('dispatches receiveNodes', () => {
-    expect(NodesActions.receiveNodes).toHaveBeenCalledWith({
+  it('fetches the data and dispatches actions', () => {
+    const store = mockStore({});
+    const normalizedData = {
       nodes: {
         123: {
           uuid: '123'
@@ -181,6 +157,19 @@ describe('Asynchronous Nodes Actions', () => {
           state: 'finished'
         }
       }
+    };
+
+    return store.dispatch(NodesActions.fetchNodes()).then(() => {
+      expect(IronicApiService.getNodes).toHaveBeenCalled();
+      expect(IronicApiService.getPorts).toHaveBeenCalled();
+      expect(
+        IronicInspectorApiService.getIntrospectionStatuses
+      ).toHaveBeenCalled();
+
+      expect(store.getActions()).toEqual([
+        NodesActions.requestNodes(),
+        NodesActions.receiveNodes(normalizedData)
+      ]);
     });
   });
 });
@@ -188,33 +177,30 @@ describe('Asynchronous Nodes Actions', () => {
 describe('Fetching Introspection data success', () => {
   const response = { interfaces: { eth0: { mac: '00:00:00:00:00:11' } } };
   const nodeId = '598612eb-f21b-435e-a868-7bb74e576cc2';
+  const store = mockStore({});
 
-  beforeEach(done => {
-    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
-    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
-    spyOn(NodesActions, 'fetchNodeIntrospectionDataSuccess');
-    spyOn(IronicInspectorApiService, 'getIntrospectionData').and.callFake(
-      createResolvingPromise(response)
-    );
-
-    NodesActions.fetchNodeIntrospectionData(nodeId)(() => {}, () => {});
-    setTimeout(() => {
-      done();
-    }, 1);
+  beforeEach(() => {
+    IronicInspectorApiService.getIntrospectionData = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve(response));
   });
 
   it('dispatches fetchNodeIntrospectionDataSuccess', () => {
-    expect(IronicInspectorApiService.getIntrospectionData).toHaveBeenCalledWith(
-      nodeId
-    );
-    expect(NodesActions.fetchNodeIntrospectionDataSuccess).toHaveBeenCalledWith(
-      nodeId,
-      response
-    );
+    return store
+      .dispatch(NodesActions.fetchNodeIntrospectionData(nodeId))
+      .then(() => {
+        expect(
+          IronicInspectorApiService.getIntrospectionData
+        ).toHaveBeenCalledWith(nodeId);
+        expect(store.getActions()).toEqual([
+          NodesActions.fetchNodeIntrospectionDataSuccess(nodeId, response)
+        ]);
+      });
   });
 });
 
 describe('Fetching Introspection data error', () => {
+  const store = mockStore({});
   const nodeId = '598612eb-f21b-435e-a868-7bb74e576cc2';
   const error = {
     response: {
@@ -223,70 +209,64 @@ describe('Fetching Introspection data error', () => {
     }
   };
 
-  beforeEach(done => {
-    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
-    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
-    spyOn(NodesActions, 'fetchNodeIntrospectionDataFailed');
-    spyOn(NotificationActions, 'notify');
-    spyOn(IronicInspectorApiService, 'getIntrospectionData').and.callFake(
-      createRejectingPromise(error)
-    );
-
-    NodesActions.fetchNodeIntrospectionData(nodeId)(() => {}, () => {});
-    setTimeout(() => {
-      done();
-    }, 1);
+  beforeEach(() => {
+    IronicInspectorApiService.getIntrospectionData = jest
+      .fn()
+      .mockReturnValue(() => Promise.reject(error));
+    ErrorActions.handleErrors = jest.fn().mockReturnValue(() => {});
   });
 
   it('dispatches fetchNodeIntrospectionDataFailed', () => {
-    expect(IronicInspectorApiService.getIntrospectionData).toHaveBeenCalledWith(
-      nodeId
-    );
-    expect(NodesActions.fetchNodeIntrospectionDataFailed).toHaveBeenCalledWith(
-      nodeId
-    );
+    return store
+      .dispatch(NodesActions.fetchNodeIntrospectionData(nodeId))
+      .then(() => {
+        expect(
+          IronicInspectorApiService.getIntrospectionData
+        ).toHaveBeenCalledWith(nodeId);
+        expect(store.getActions()).toEqual([
+          NodesActions.fetchNodeIntrospectionDataFailed(nodeId)
+        ]);
+      });
   });
 });
 
 describe('Asynchronous Introspect Nodes Action', () => {
-  beforeEach(done => {
-    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
-    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
-    spyOn(NodesActions, 'startOperation');
-    // Mock the service call.
-    spyOn(MistralApiService, 'runWorkflow').and.callFake(
-      createResolvingPromise({ state: 'RUNNING' })
-    );
+  const store = mockStore({});
+  const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
 
-    const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
-    // Call the action creator and the resulting action.
-    // In this case, dispatch and getState are just empty placeHolders.
-    NodesActions.startNodesIntrospection(nodeIds)(() => {}, () => {});
-    // Call `done` with a minimal timeout.
-    setTimeout(() => {
-      done();
-    }, 1);
+  beforeEach(() => {
+    MistralApiService.runWorkflow = jest.fn(() =>
+      Promise.resolve({ state: 'RUNNING' })
+    );
+    NodesActions.pollNodeslistDuringProgress = jest
+      .fn()
+      .mockReturnValue(() => {});
   });
 
   it('dispatches startOperation', () => {
-    const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
-    expect(
-      MistralApiService.runWorkflow
-    ).toHaveBeenCalledWith(MistralConstants.BAREMETAL_INTROSPECT, {
-      node_uuids: nodeIds
-    });
-    expect(NodesActions.startOperation).toHaveBeenCalledWith(nodeIds);
+    return store
+      .dispatch(NodesActions.startNodesIntrospection(nodeIds))
+      .then(() => {
+        expect(
+          MistralApiService.runWorkflow
+        ).toHaveBeenCalledWith(MistralConstants.BAREMETAL_INTROSPECT, {
+          node_uuids: nodeIds
+        });
+        expect(NodesActions.pollNodeslistDuringProgress).toHaveBeenCalled();
+        expect(store.getActions()).toEqual([
+          NodesActions.startOperation(nodeIds)
+        ]);
+      });
   });
 });
 
 describe('nodesIntrospectionFinished', () => {
   beforeEach(() => {
-    spyOn(NodesActions, 'finishOperation');
-    spyOn(NodesActions, 'fetchNodes');
-    spyOn(NotificationActions, 'notify');
+    NodesActions.fetchNodes = jest.fn().mockReturnValue(() => {});
   });
 
   it('handles successful nodes introspection', () => {
+    const store = mockStore({});
     const messagePayload = {
       execution: {
         input: {
@@ -303,17 +283,17 @@ describe('nodesIntrospectionFinished', () => {
       ttl: 3600
     };
 
-    NodesActions.nodesIntrospectionFinished(messagePayload)(
-      () => {},
-      () => {},
-      mockGetIntl
-    );
-
+    store.dispatch(NodesActions.nodesIntrospectionFinished(messagePayload));
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
-    expect(NotificationActions.notify).toHaveBeenCalled();
+    const actions = store.getActions();
+    expect(Object.keys(actions).map(key => actions[key].type)).toEqual([
+      'FINISH_NODES_OPERATION',
+      'NOTIFY'
+    ]);
   });
 
   it('handles failed nodes introspection', () => {
+    const store = mockStore({});
     const messagePayload = {
       execution: {
         input: {
@@ -331,152 +311,129 @@ describe('nodesIntrospectionFinished', () => {
       ttl: 3600
     };
 
-    NodesActions.nodesIntrospectionFinished(messagePayload)(
-      () => {},
-      () => {},
-      mockGetIntl
-    );
-
+    store.dispatch(NodesActions.nodesIntrospectionFinished(messagePayload));
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
-    expect(NotificationActions.notify).toHaveBeenCalledWith({
-      title: 'Nodes Introspection Failed',
-      message: [
-        'Nodes Introspection failed',
-        'Some error occurred during introspection'
-      ]
-    });
+    const actions = store.getActions();
+    expect(Object.keys(actions).map(key => actions[key].type)).toEqual([
+      'FINISH_NODES_OPERATION',
+      'NOTIFY'
+    ]);
   });
 });
 
 describe('startProvideNodes Action', () => {
+  const store = mockStore({});
   const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
 
-  beforeEach(done => {
-    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
-    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
-    spyOn(NodesActions, 'startOperation');
-    // Mock the service call.
-    spyOn(MistralApiService, 'runWorkflow').and.callFake(
-      createResolvingPromise({ state: 'RUNNING' })
+  beforeEach(() => {
+    MistralApiService.runWorkflow = jest.fn(() =>
+      Promise.resolve({ state: 'RUNNING' })
     );
-
-    NodesActions.startProvideNodes(nodeIds)(() => {}, () => {});
-    setTimeout(() => {
-      done();
-    }, 1);
+    NodesActions.pollNodeslistDuringProgress = jest
+      .fn()
+      .mockReturnValue(() => {});
   });
 
   it('dispatches startOperation', () => {
-    expect(
-      MistralApiService.runWorkflow
-    ).toHaveBeenCalledWith(MistralConstants.BAREMETAL_PROVIDE, {
-      node_uuids: nodeIds
+    return store.dispatch(NodesActions.startProvideNodes(nodeIds)).then(() => {
+      expect(
+        MistralApiService.runWorkflow
+      ).toHaveBeenCalledWith(MistralConstants.BAREMETAL_PROVIDE, {
+        node_uuids: nodeIds
+      });
+      expect(NodesActions.pollNodeslistDuringProgress).toHaveBeenCalled();
+      expect(store.getActions()).toEqual([
+        NodesActions.startOperation(nodeIds)
+      ]);
     });
-    expect(NodesActions.startOperation).toHaveBeenCalledWith(nodeIds);
   });
 });
 
 describe('provideNodesFinished', () => {
   beforeEach(() => {
-    spyOn(NodesActions, 'finishOperation');
-    spyOn(NodesActions, 'fetchNodes');
-    spyOn(NotificationActions, 'notify');
+    NodesActions.fetchNodes = jest.fn().mockReturnValue(() => {});
   });
 
   it('handles success', () => {
+    const store = mockStore({});
     const messagePayload = {
       status: 'SUCCESS',
       message: 'Nodes were successfully made available',
       execution: { input: { node_uuids: [] } }
     };
 
-    NodesActions.provideNodesFinished(messagePayload)(() => {}, () => {});
-
-    expect(NodesActions.finishOperation).toHaveBeenCalled();
+    store.dispatch(NodesActions.nodesIntrospectionFinished(messagePayload));
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
-    expect(NotificationActions.notify).toHaveBeenCalled();
+    const actions = store.getActions();
+    expect(Object.keys(actions).map(key => actions[key].type)).toEqual([
+      'FINISH_NODES_OPERATION',
+      'NOTIFY'
+    ]);
   });
 
   it('handles failure', () => {
+    const store = mockStore({});
     const messagePayload = {
       status: 'FAILED',
       message: [{ result: 'Failed to set nodes to available.' }],
       execution: { input: { node_uuids: [] } }
     };
 
-    NodesActions.provideNodesFinished(messagePayload)(() => {}, () => {});
-
-    expect(NodesActions.finishOperation).toHaveBeenCalled();
+    store.dispatch(NodesActions.nodesIntrospectionFinished(messagePayload));
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
-    expect(NotificationActions.notify).toHaveBeenCalledWith({
-      title: 'Some Nodes could not be provided',
-      message: ['Failed to set nodes to available.']
-    });
+    const actions = store.getActions();
+    expect(Object.keys(actions).map(key => actions[key].type)).toEqual([
+      'FINISH_NODES_OPERATION',
+      'NOTIFY'
+    ]);
   });
 });
 
 describe('Update Node thunk action', () => {
-  beforeEach(done => {
-    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
-    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
-    spyOn(NodesActions, 'updateNodePending');
-    spyOn(NodesActions, 'updateNodeSuccess');
-    // Mock the service call.
-    spyOn(IronicApiService, 'patchNode').and.callFake(
-      createResolvingPromise({ uuid: 'someId' })
-    );
+  const store = mockStore({});
+  const nodePatch = {
+    uuid: 'someId',
+    patches: [
+      {
+        op: 'replace',
+        path: '/properties/capabilities',
+        value: 'updated value for path'
+      }
+    ]
+  };
 
-    const nodePatch = {
-      uuid: 'someId',
-      patches: [
-        {
-          op: 'replace',
-          path: '/properties/capabilities',
-          value: 'updated value for path'
-        }
-      ]
-    };
-
-    NodesActions.updateNode(nodePatch)(() => {}, () => {});
-    // Call `done` with a minimal timeout.
-    setTimeout(() => {
-      done();
-    }, 1);
+  beforeEach(() => {
+    IronicApiService.patchNode = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve({ uuid: 'someId' }));
   });
 
-  it('dispatches updateNodePending action', () => {
-    expect(NodesActions.updateNodePending).toHaveBeenCalledWith('someId');
-  });
-
-  it('dispatches updateNodeSuccess action', () => {
-    expect(NodesActions.updateNodeSuccess).toHaveBeenCalledWith({
-      uuid: 'someId'
+  it('dispatches required actions', () => {
+    return store.dispatch(NodesActions.updateNode(nodePatch)).then(() => {
+      expect(store.getActions()).toEqual([
+        NodesActions.updateNodePending('someId'),
+        NodesActions.updateNodeSuccess({ uuid: 'someId' })
+      ]);
     });
   });
 });
 
 describe('Delete Nodes thunk action', () => {
+  const store = mockStore({});
   const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
 
-  beforeEach(done => {
-    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
-    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
-    spyOn(NodesActions, 'startOperation');
-    spyOn(NodesActions, 'deleteNodeSuccess');
-    // Mock the service call.
-    spyOn(IronicApiService, 'deleteNode').and.callFake(
-      createResolvingPromise()
-    );
-
-    NodesActions.deleteNodes(nodeIds)(() => {}, () => {});
-    // Call `done` with a minimal timeout.
-    setTimeout(() => {
-      done();
-    }, 1);
+  beforeEach(() => {
+    IronicApiService.deleteNode = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve());
   });
 
   it('successfully deletes a set of nodes', () => {
-    expect(NodesActions.startOperation).toHaveBeenCalledWith(nodeIds);
-    expect(NodesActions.deleteNodeSuccess).toHaveBeenCalledWith(nodeIds[0]);
+    return store.dispatch(NodesActions.deleteNodes(nodeIds)).then(() => {
+      expect(store.getActions()).toEqual([
+        NodesActions.startOperation(nodeIds),
+        NodesActions.deleteNodeSuccess(nodeIds[0])
+      ]);
+    });
   });
 });
