@@ -14,18 +14,9 @@
  * under the License.
  */
 
-import { List, Record } from 'immutable';
+export const getAppConfig = state => state.appConfig;
 
-export const AppConfig = Record({
-  keystone: undefined,
-  heat: undefined,
-  ironic: undefined,
-  'ironic-inspector': undefined,
-  mistral: undefined,
-  swift: undefined,
-  'zaqar-websocket': undefined,
-  zaqarDefaultQueue: 'tripleo',
-  zaqarLoggerQueue: 'tripleo-ui-logging',
-  excludedLanguages: List(),
-  loggers: List(['console', 'zaqar'])
-});
+export const getServiceUrlFromAppConfig = (state, service) =>
+  state.appConfig.get(service);
+
+export const getExcludedLanguages = state => state.appConfig.excludedLanguages;

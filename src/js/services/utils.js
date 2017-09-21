@@ -14,6 +14,7 @@
  * under the License.
  */
 
+/*eslint-disable no-console */
 import { Map, List } from 'immutable';
 import store from '../store';
 
@@ -29,6 +30,10 @@ export function getServiceUrl(
   urlType = 'public',
   appConfig = getAppConfig()
 ) {
+  process.env.NODE_ENV === 'development' &&
+    console.warn(
+      'Using getServiceUrl from services/utils is deprecated. Use selector from selectors/auth.js instead'
+    );
   let serviceUrl =
     appConfig[serviceName] || getFromServiceCatalog(serviceName, urlType);
   if (!serviceUrl) {
@@ -51,13 +56,25 @@ function getFromServiceCatalog(serviceName, urlType) {
  * Returns Keystone Auth Token ID
  */
 export function getAuthTokenId() {
+  process.env.NODE_ENV === 'development' &&
+    console.warn(
+      'Using getAuthTokenId from services/utils is deprecated. Use selector from selectors/auth.js instead'
+    );
   return store.getState().login.tokenId;
 }
 
 export function getProjectId() {
+  process.env.NODE_ENV === 'development' &&
+    console.warn(
+      'Using getProjectId from services/utils is deprecated. Use selector from selectors/auth.js instead'
+    );
   return store.getState().login.getIn(['token', 'project', 'id']);
 }
 
 export function getAppConfig() {
+  process.env.NODE_ENV === 'development' &&
+    console.warn(
+      'Using getAppConfig from services/utils is deprecated. Use selector from selectors/appConfig.js instead'
+    );
   return window.tripleOUiConfig || {};
 }
