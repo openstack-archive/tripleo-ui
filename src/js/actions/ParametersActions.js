@@ -57,9 +57,11 @@ export default {
   fetchParameters(planName, redirect) {
     return dispatch => {
       dispatch(this.fetchParametersPending());
-      MistralApiService.runAction(MistralConstants.PARAMETERS_GET, {
-        container: planName
-      })
+      dispatch(
+        MistralApiService.runAction(MistralConstants.PARAMETERS_GET, {
+          container: planName
+        })
+      )
         .then(response => {
           const { resources, parameters } = response.heat_resource_tree;
           const mistralParameters = response.mistral_environment_parameters;
@@ -111,10 +113,12 @@ export default {
       const { formatMessage } = getIntl(getState());
       dispatch(startSubmit('nodesAssignment'));
       dispatch(this.updateParametersPending());
-      MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE, {
-        container: planName,
-        parameters: data
-      })
+      dispatch(
+        MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE, {
+          container: planName,
+          parameters: data
+        })
+      )
         .then(response => {
           dispatch(this.updateParametersSuccess(data));
           dispatch(stopSubmit('nodesAssignment'));

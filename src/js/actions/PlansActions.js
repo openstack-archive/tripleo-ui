@@ -86,7 +86,7 @@ export default {
   fetchPlans() {
     return dispatch => {
       dispatch(this.requestPlans());
-      MistralApiService.runAction(MistralConstants.PLAN_LIST)
+      dispatch(MistralApiService.runAction(MistralConstants.PLAN_LIST))
         // TODO(jtomasek): This block should be done on Mistral action side
         .then(planNames =>
           when
@@ -183,9 +183,11 @@ export default {
       dispatch(this.updatePlanPending(planName));
       uploadFilesToContainer(planName, planFiles)
         .then(response =>
-          MistralApiService.runWorkflow(MistralConstants.PLAN_UPDATE, {
-            container: planName
-          })
+          dispatch(
+            MistralApiService.runWorkflow(MistralConstants.PLAN_UPDATE, {
+              container: planName
+            })
+          )
         )
         .catch(error => {
           dispatch(handleErrors(error, 'Plan update failed', false));
@@ -207,9 +209,11 @@ export default {
       dispatch(this.updatePlanPending(planName));
       SwiftApiService.uploadTarball(planName, file)
         .then(response => {
-          MistralApiService.runWorkflow(MistralConstants.PLAN_UPDATE, {
-            container: planName
-          });
+          dispatch(
+            MistralApiService.runWorkflow(MistralConstants.PLAN_UPDATE, {
+              container: planName
+            })
+          );
         })
         .catch(error => {
           dispatch(handleErrors(error, 'Plan update failed', false));
@@ -283,14 +287,18 @@ export default {
   createPlan(planName, planFiles) {
     return dispatch => {
       dispatch(this.createPlanPending());
-      MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
-        container: planName
-      })
+      dispatch(
+        MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
+          container: planName
+        })
+      )
         .then(response => uploadFilesToContainer(planName, planFiles))
         .then(response =>
-          MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
-            container: planName
-          })
+          dispatch(
+            MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
+              container: planName
+            })
+          )
         )
         .catch(error => {
           dispatch(handleErrors(error, 'Plan creation failed', false));
@@ -306,14 +314,18 @@ export default {
   createPlanFromTarball(planName, file) {
     return dispatch => {
       dispatch(this.createPlanPending());
-      MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
-        container: planName
-      })
+      dispatch(
+        MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
+          container: planName
+        })
+      )
         .then(response => SwiftApiService.uploadTarball(planName, file))
         .then(response =>
-          MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
-            container: planName
-          })
+          dispatch(
+            MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
+              container: planName
+            })
+          )
         )
         .catch(error => {
           dispatch(handleErrors(error, 'Plan creation failed', false));
@@ -379,9 +391,11 @@ export default {
       const { formatMessage } = getIntl(getState());
       dispatch(this.deletePlanPending(planName));
       history.push('/plans/manage');
-      MistralApiService.runAction(MistralConstants.PLAN_DELETE, {
-        container: planName
-      })
+      dispatch(
+        MistralApiService.runAction(MistralConstants.PLAN_DELETE, {
+          container: planName
+        })
+      )
         .then(response => {
           dispatch(this.deletePlanSuccess(planName));
           dispatch(
@@ -427,10 +441,12 @@ export default {
   deployPlan(planName) {
     return dispatch => {
       dispatch(this.deployPlanPending(planName));
-      MistralApiService.runWorkflow(MistralConstants.DEPLOYMENT_DEPLOY_PLAN, {
-        container: planName,
-        timeout: 240
-      })
+      dispatch(
+        MistralApiService.runWorkflow(MistralConstants.DEPLOYMENT_DEPLOY_PLAN, {
+          container: planName,
+          timeout: 240
+        })
+      )
         .then(response => {
           dispatch(StackActions.fetchStacks());
         })
@@ -486,9 +502,11 @@ export default {
   exportPlan(planName) {
     return dispatch => {
       dispatch(this.exportPlanPending(planName));
-      MistralApiService.runWorkflow(MistralConstants.PLAN_EXPORT, {
-        plan: planName
-      }).catch(error => {
+      dispatch(
+        MistralApiService.runWorkflow(MistralConstants.PLAN_EXPORT, {
+          plan: planName
+        })
+      ).catch(error => {
         dispatch(handleErrors(error, `Plan ${planName} could not be exported`));
         dispatch(this.exportPlanFailed(planName));
       });
