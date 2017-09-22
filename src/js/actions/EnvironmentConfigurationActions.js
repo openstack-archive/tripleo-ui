@@ -42,9 +42,11 @@ export default {
   fetchEnvironmentConfiguration(planName, redirect) {
     return dispatch => {
       dispatch(this.fetchEnvironmentConfigurationPending());
-      MistralApiService.runAction(MistralConstants.CAPABILITIES_GET, {
-        container: planName
-      })
+      return dispatch(
+        MistralApiService.runAction(MistralConstants.CAPABILITIES_GET, {
+          container: planName
+        })
+      )
         .then(response => {
           const entities = normalize(response, arrayOf(topicSchema))
             .entities || {};
@@ -85,10 +87,12 @@ export default {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.updateEnvironmentConfigurationPending());
-      MistralApiService.runAction(MistralConstants.CAPABILITIES_UPDATE, {
-        environments: data,
-        container: planName
-      })
+      return dispatch(
+        MistralApiService.runAction(MistralConstants.CAPABILITIES_UPDATE, {
+          environments: data,
+          container: planName
+        })
+      )
         .then(response => {
           const enabledEnvs = response.environments.map(env => env.path);
           dispatch(this.updateEnvironmentConfigurationSuccess(enabledEnvs));

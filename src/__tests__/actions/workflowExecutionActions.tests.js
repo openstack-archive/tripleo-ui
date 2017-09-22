@@ -14,80 +14,79 @@
  * under the License.
  */
 
-import when from 'when';
-
 import MistralApiService from '../../js/services/MistralApiService';
 import WorkflowExecutionsActions
   from '../../js/actions/WorkflowExecutionsActions';
-
-let createResolvingPromise = data => {
-  return () => {
-    return when.resolve(data);
-  };
-};
+import { mockStore } from './utils';
 
 describe('fetchWorkflowExecutions action', () => {
-  beforeEach(done => {
-    spyOn(WorkflowExecutionsActions, 'fetchWorkflowExecutionsPending');
-    spyOn(WorkflowExecutionsActions, 'fetchWorkflowExecutionsSuccess');
+  const store = mockStore({});
+  const response = [
+    {
+      state: 'SUCCESS',
+      params: '{}',
+      output: "{'status': 'FAILED',}",
+      input: "{'validation_name': 'check-network-gateway'}",
+      id: '1a'
+    }
+  ];
+  const normalizedResponse = {
+    '1a': {
+      state: 'SUCCESS',
+      params: '{}',
+      output: "{'status': 'FAILED',}",
+      input: "{'validation_name': 'check-network-gateway'}",
+      id: '1a'
+    }
+  };
 
-    const response = {
-      executions: [
-        {
-          state: 'SUCCESS',
-          params: '{}',
-          output: "{'status': 'FAILED',}",
-          input: "{'validation_name': 'check-network-gateway'}",
-          id: '1a'
-        }
-      ]
-    };
-
-    spyOn(MistralApiService, 'getWorkflowExecutions').and.callFake(
-      createResolvingPromise(response)
-    );
-
-    WorkflowExecutionsActions.fetchWorkflowExecutions()(() => {}, () => {});
-    setTimeout(() => {
-      done();
-    }, 1);
+  beforeEach(() => {
+    MistralApiService.getWorkflowExecutions = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve(response));
   });
 
   it('dispatches appropriate actions and normalizes the response', () => {
-    expect(
-      WorkflowExecutionsActions.fetchWorkflowExecutionsPending
-    ).toHaveBeenCalled();
-    expect(MistralApiService.getWorkflowExecutions).toHaveBeenCalled();
-    expect(
-      WorkflowExecutionsActions.fetchWorkflowExecutionsSuccess
-    ).toHaveBeenCalled();
+    return store
+      .dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions())
+      .then(() => {
+        expect(MistralApiService.getWorkflowExecutions).toHaveBeenCalled();
+        expect(store.getActions()).toEqual([
+          WorkflowExecutionsActions.fetchWorkflowExecutionsPending(),
+          WorkflowExecutionsActions.fetchWorkflowExecutionsSuccess(
+            normalizedResponse
+          )
+        ]);
+      });
   });
 });
 
 describe('updateWorkflowExecution action', () => {
-  beforeEach(done => {
-    spyOn(WorkflowExecutionsActions, 'updateWorkflowExecutionPending');
-    spyOn(WorkflowExecutionsActions, 'addWorkflowExecution');
+  const store = mockStore({});
 
-    spyOn(MistralApiService, 'updateWorkflowExecution').and.callFake(
-      createResolvingPromise()
-    );
-
-    WorkflowExecutionsActions.updateWorkflowExecution('512e', {
-      state: 'PAUSED'
-    })(() => {}, () => {});
-    setTimeout(() => {
-      done();
-    }, 1);
+  beforeEach(() => {
+    MistralApiService.updateWorkflowExecution = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve());
   });
 
   it('dispatches appropriate actions', () => {
-    expect(
-      WorkflowExecutionsActions.updateWorkflowExecutionPending
-    ).toHaveBeenCalledWith('512e', { state: 'PAUSED' });
-    expect(
-      MistralApiService.updateWorkflowExecution
-    ).toHaveBeenCalledWith('512e', { state: 'PAUSED' });
-    expect(WorkflowExecutionsActions.addWorkflowExecution).toHaveBeenCalled();
+    return store
+      .dispatch(
+        WorkflowExecutionsActions.updateWorkflowExecution('512e', {
+          state: 'PAUSED'
+        })
+      )
+      .then(() => {
+        expect(
+          MistralApiService.updateWorkflowExecution
+        ).toHaveBeenCalledWith('512e', { state: 'PAUSED' });
+        expect(store.getActions()).toEqual([
+          WorkflowExecutionsActions.updateWorkflowExecutionPending('512e', {
+            state: 'PAUSED'
+          }),
+          WorkflowExecutionsActions.addWorkflowExecution()
+        ]);
+      });
   });
 });

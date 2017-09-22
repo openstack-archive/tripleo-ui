@@ -14,24 +14,17 @@
  * under the License.
  */
 
-import configureMockStore from 'redux-mock-store';
-import thunkMiddleware from 'redux-thunk';
-
 import IronicApiService from '../../js/services/IronicApiService';
 import IronicInspectorApiService
   from '../../js/services/IronicInspectorApiService';
 import MistralApiService from '../../js/services/MistralApiService';
-import { mockGetIntl } from './utils';
+import { mockStore } from './utils';
 import NodesActions from '../../js/actions/NodesActions';
 import * as ErrorActions from '../../js/actions/ErrorActions';
 import NodesConstants from '../../js/constants/NodesConstants';
 import MistralConstants from '../../js/constants/MistralConstants';
 
 const mockGetNodesResponse = [{ uuid: 1 }, { uuid: 2 }];
-
-const mockStore = configureMockStore([
-  thunkMiddleware.withExtraArgument(mockGetIntl)
-]);
 
 describe('Nodes Actions', () => {
   it('creates action to request nodes', () => {
@@ -235,9 +228,9 @@ describe('Asynchronous Introspect Nodes Action', () => {
   const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
 
   beforeEach(() => {
-    MistralApiService.runWorkflow = jest.fn(() =>
-      Promise.resolve({ state: 'RUNNING' })
-    );
+    MistralApiService.runWorkflow = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve({ state: 'RUNNING' }));
     NodesActions.pollNodeslistDuringProgress = jest
       .fn()
       .mockReturnValue(() => {});
@@ -326,15 +319,15 @@ describe('startProvideNodes Action', () => {
   const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
 
   beforeEach(() => {
-    MistralApiService.runWorkflow = jest.fn(() =>
-      Promise.resolve({ state: 'RUNNING' })
-    );
+    MistralApiService.runWorkflow = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve({ state: 'RUNNING' }));
     NodesActions.pollNodeslistDuringProgress = jest
       .fn()
       .mockReturnValue(() => {});
   });
 
-  it('dispatches startOperation', () => {
+  it('dispatches actions', () => {
     return store.dispatch(NodesActions.startProvideNodes(nodeIds)).then(() => {
       expect(
         MistralApiService.runWorkflow

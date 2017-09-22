@@ -15,7 +15,6 @@
  */
 
 import { Map } from 'immutable';
-import when from 'when';
 
 import MistralApiService from '../../js/services/MistralApiService';
 import ValidationsActions from '../../js/actions/ValidationsActions';
@@ -25,14 +24,8 @@ import WorkflowExecutionsActions
 import {
   WorkflowExecution
 } from '../../js/immutableRecords/workflowExecutions';
-import * as utils from '../../js/services/utils';
 import MistralConstants from '../../js/constants/MistralConstants';
-
-let createResolvingPromise = data => {
-  return () => {
-    return when.resolve(data);
-  };
-};
+import { mockStore } from './utils';
 
 describe('Validations actions', () => {
   it('should create an action for pending Validations request', () => {
@@ -79,73 +72,71 @@ describe('Validations actions', () => {
 });
 
 describe('FetchValidations action', () => {
-  beforeEach(done => {
-    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
-    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
-    spyOn(ValidationsActions, 'fetchValidationsPending');
-    spyOn(ValidationsActions, 'fetchValidationsSuccess');
-
-    const response = {
-      output: [{ id: '512e' }, { id: 'check-network-gateway' }]
-    };
-    spyOn(MistralApiService, 'runAction').and.callFake(
-      createResolvingPromise(response)
-    );
-
-    ValidationsActions.fetchValidations()(() => {}, () => {});
-    setTimeout(() => {
-      done();
-    }, 1);
+  const store = mockStore({});
+  const response = [{ id: '512e' }, { id: 'check-network-gateway' }];
+  const normalizedResponse = {
+    '512e': { id: '512e' },
+    'check-network-gateway': { id: 'check-network-gateway' }
+  };
+  beforeEach(() => {
+    MistralApiService.runAction = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve(response));
   });
 
   it('dispatches appropriate actions and normalizes the response', () => {
-    expect(ValidationsActions.fetchValidationsPending).toHaveBeenCalled();
-    expect(MistralApiService.runAction).toHaveBeenCalledWith(
-      MistralConstants.VALIDATIONS_LIST
-    );
-    expect(ValidationsActions.fetchValidationsSuccess).toHaveBeenCalled();
+    return store.dispatch(ValidationsActions.fetchValidations()).then(() => {
+      expect(MistralApiService.runAction).toHaveBeenCalledWith(
+        MistralConstants.VALIDATIONS_LIST
+      );
+      expect(store.getActions()).toEqual([
+        ValidationsActions.fetchValidationsPending(),
+        ValidationsActions.fetchValidationsSuccess(normalizedResponse)
+      ]);
+    });
   });
 });
 
 describe('RunValidation action', () => {
-  beforeEach(done => {
-    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
-    spyOn(utils, 'getServiceUrl').and.returnValue('mock-url');
-    spyOn(WorkflowExecutionsActions, 'addWorkflowExecution');
-
-    const addWorkflowExecutionResponse = {
-      state_info: null,
-      created_at: '2016-07-19 13:22:29.588140',
-      description: '',
-      state: 'RUNNING',
-      workflow_name: MistralConstants.VALIDATIONS_RUN,
-      task_execution_id: null,
-      updated_at: '2016-07-19 13:22:29.592989',
-      workflow_id: 'f8b280bb-5ba2-486b-9384-ddd79300d987',
-      params: '{}',
-      output: '{}',
-      input: `{\"validation_name\": \"check-network-gateway\",
+  const store = mockStore({});
+  const addWorkflowExecutionResponse = {
+    state_info: null,
+    created_at: '2016-07-19 13:22:29.588140',
+    description: '',
+    state: 'RUNNING',
+    workflow_name: MistralConstants.VALIDATIONS_RUN,
+    task_execution_id: null,
+    updated_at: '2016-07-19 13:22:29.592989',
+    workflow_id: 'f8b280bb-5ba2-486b-9384-ddd79300d987',
+    params: '{}',
+    output: '{}',
+    input: `{\"validation_name\": \"check-network-gateway\",
               \"queue_name\": \"tripleo\", \"plan\": \"plan\"}`,
-      id: 'dc971ab5-7f17-43d2-8944-1f0ffade502d'
-    };
+    id: 'dc971ab5-7f17-43d2-8944-1f0ffade502d'
+  };
 
-    spyOn(MistralApiService, 'runWorkflow').and.callFake(
-      createResolvingPromise(addWorkflowExecutionResponse)
-    );
-
-    ValidationsActions.runValidation('512e', 'overcloud')(() => {}, () => {});
-    setTimeout(() => {
-      done();
-    }, 1);
+  beforeEach(() => {
+    MistralApiService.runWorkflow = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve(addWorkflowExecutionResponse));
   });
 
   it('dispatches appropriate actions', () => {
-    expect(
-      MistralApiService.runWorkflow
-    ).toHaveBeenCalledWith(MistralConstants.VALIDATIONS_RUN, {
-      validation_name: '512e',
-      plan: 'overcloud'
-    });
+    return store
+      .dispatch(ValidationsActions.runValidation('512e', 'overcloud'))
+      .then(() => {
+        expect(
+          MistralApiService.runWorkflow
+        ).toHaveBeenCalledWith(MistralConstants.VALIDATIONS_RUN, {
+          validation_name: '512e',
+          plan: 'overcloud'
+        });
+        expect(store.getActions()).toEqual([
+          WorkflowExecutionsActions.addWorkflowExecution(
+            addWorkflowExecutionResponse
+          )
+        ]);
+      });
   });
 });
 
