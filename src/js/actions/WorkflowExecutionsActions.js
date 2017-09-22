@@ -28,7 +28,7 @@ export default {
   fetchWorkflowExecutions() {
     return (dispatch, getState) => {
       dispatch(this.fetchWorkflowExecutionsPending());
-      MistralApiService.getWorkflowExecutions()
+      return dispatch(MistralApiService.getWorkflowExecutions())
         .then(response => {
           const executions = normalize(
             response,
@@ -74,7 +74,7 @@ export default {
   updateWorkflowExecution(id, patch) {
     return (dispatch, getState) => {
       dispatch(this.updateWorkflowExecutionPending(id, patch));
-      MistralApiService.updateWorkflowExecution(id, patch)
+      return dispatch(MistralApiService.updateWorkflowExecution(id, patch))
         .then(response => {
           dispatch(this.addWorkflowExecution(response));
         })

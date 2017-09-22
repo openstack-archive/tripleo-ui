@@ -14,6 +14,9 @@
  * under the License.
  */
 
+import configureMockStore from 'redux-mock-store';
+import thunkMiddleware from 'redux-thunk';
+
 export const mockGetIntl = {
   getIntl: () => {
     return {
@@ -21,3 +24,7 @@ export const mockGetIntl = {
     };
   }
 };
+
+export const mockStore = configureMockStore([
+  thunkMiddleware.withExtraArgument(mockGetIntl)
+]);
