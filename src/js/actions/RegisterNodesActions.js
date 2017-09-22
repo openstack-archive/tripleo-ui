@@ -71,13 +71,15 @@ export default {
   startNodesRegistration(nodes) {
     return (dispatch, getState) => {
       dispatch(this.startNodesRegistrationPending(nodes));
-      MistralApiService.runWorkflow(
-        MistralConstants.BAREMETAL_REGISTER_OR_UPDATE,
-        {
-          nodes_json: nodes.toList().toJS(),
-          kernel_name: 'bm-deploy-kernel',
-          ramdisk_name: 'bm-deploy-ramdisk'
-        }
+      return dispatch(
+        MistralApiService.runWorkflow(
+          MistralConstants.BAREMETAL_REGISTER_OR_UPDATE,
+          {
+            nodes_json: nodes.toList().toJS(),
+            kernel_name: 'bm-deploy-kernel',
+            ramdisk_name: 'bm-deploy-ramdisk'
+          }
+        )
       )
         .then(response => {
           dispatch(this.startNodesRegistrationSuccess());
