@@ -18,66 +18,80 @@ import axios from 'axios';
 import when from 'when';
 
 import { AuthenticationError, HeatApiError, ConnectionError } from './errors';
-import { getAuthTokenId, getServiceUrl } from '../services/utils';
+import { getAuthTokenId, getServiceUrl } from '../selectors/auth';
 
 class HeatApiService {
   defaultRequest(path, additionalAttributes) {
-    return when.try(getServiceUrl, 'heat').then(serviceUrl => {
-      let requestAttributes = Object.assign(
-        {
-          baseURL: serviceUrl,
-          url: path,
-          method: 'GET',
-          headers: {
-            'X-Auth-Token': getAuthTokenId()
-          }
-        },
-        additionalAttributes
+    return (dispatch, getState) =>
+      axios(
+        Object.assign(
+          {
+            baseURL: getServiceUrl(getState(), 'heat'),
+            url: path,
+            method: 'GET',
+            headers: {
+              'X-Auth-Token': getAuthTokenId(getState())
+            }
+          },
+          additionalAttributes
+        )
       );
-      return axios(requestAttributes);
-    });
   }
 
   getStacks() {
-    return this.defaultRequest('/stacks')
-      .then(response => response.data)
-      .catch(handleErrors);
+    return dispatch =>
+      dispatch(this.defaultRequest('/stacks'))
+        .then(response => response.data)
+        .catch(handleErrors);
   }
 
   getStack(stackName, stackId) {
-    return this.defaultRequest(`/stacks/${stackName}/${stackId}`)
-      .then(response => response.data)
-      .catch(handleErrors);
+    return dispatch =>
+      dispatch(this.defaultRequest(`/stacks/${stackName}/${stackId}`))
+        .then(response => response.data)
+        .catch(handleErrors);
   }
 
   getResources(stackName, stackId) {
-    return this.defaultRequest(`/stacks/${stackName}/${stackId}/resources`, {
-      params: { nested_depth: 3 }
-    })
-      .then(response => response.data)
-      .catch(handleErrors);
+    return dispatch =>
+      dispatch(
+        this.defaultRequest(`/stacks/${stackName}/${stackId}/resources`, {
+          params: { nested_depth: 3 }
+        })
+      )
+        .then(response => response.data)
+        .catch(handleErrors);
   }
 
   getResource(stack, resourceName) {
-    return this.defaultRequest(
-      `/stacks/${stack.stack_name}/${stack.id}/resources/${resourceName}`
-    )
-      .then(response => response.data)
-      .catch(handleErrors);
+    return dispatch =>
+      dispatch(
+        this.defaultRequest(
+          `/stacks/${stack.stack_name}/${stack.id}/resources/${resourceName}`
+        )
+      )
+        .then(response => response.data)
+        .catch(handleErrors);
   }
 
   getEnvironment(stack) {
-    return this.defaultRequest(
-      `/stacks/${stack.stack_name}/${stack.id}/environment`
-    )
-      .then(response => response.data)
-      .catch(handleErrors);
+    return dispatch =>
+      dispatch(
+        this.defaultRequest(
+          `/stacks/${stack.stack_name}/${stack.id}/environment`
+        )
+      )
+        .then(response => response.data)
+        .catch(handleErrors);
   }
 
   deleteStack(name, id) {
-    return this.defaultRequest(`/stacks/${name}/${id}`, { method: 'DELETE' })
-      .then(response => response.data)
-      .catch(handleErrors);
+    return dispatch =>
+      dispatch(
+        this.defaultRequest(`/stacks/${name}/${id}`, { method: 'DELETE' })
+      )
+        .then(response => response.data)
+        .catch(handleErrors);
   }
 }
 
