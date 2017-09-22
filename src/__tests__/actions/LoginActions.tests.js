@@ -14,40 +14,66 @@
  * under the License.
  */
 
+import configureMockStore from 'redux-mock-store';
+import cookie from 'react-cookie';
+import thunkMiddleware from 'redux-thunk';
+
 import KeystoneApiService from '../../js/services/KeystoneApiService';
 import LoginActions from '../../js/actions/LoginActions';
-import cookie from 'react-cookie';
+import { mockGetIntl } from './utils';
+import ZaqarWebSocketService from '../../js/services/ZaqarWebSocketService';
 
-let mockKeystoneAccess = {
-  token: {
-    id: 'someTokenIdString'
-  },
-  user: 'admin',
-  serviceCatalog: 'service catalog',
-  metadata: 'some metadata'
-};
+const mockStore = configureMockStore([
+  thunkMiddleware.withExtraArgument(mockGetIntl)
+]);
 
 describe('LoginActions', () => {
-  xit('creates action to authenticate user via keystone token', () => {
-    spyOn(KeystoneApiService, 'authenticateUserViaToken');
-    LoginActions.authenticateUserViaToken('someTokenIdString');
-    expect(KeystoneApiService.authenticateUserViaToken).toHaveBeenCalledWith(
-      'someTokenIdString'
-    );
+  it('creates action to authenticate user via keystone token', () => {
+    const store = mockStore({});
+    const response = {
+      data: { token: {} },
+      headers: { 'x-subject-token': 'someTokenId' }
+    };
+    KeystoneApiService.authenticateUserViaToken = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve(response));
+
+    return store.dispatch(LoginActions.authenticateUserViaToken()).then(() => {
+      expect(store.getActions()).toEqual([
+        LoginActions.userAuthStarted(),
+        LoginActions.userAuthSuccess('someTokenId', {})
+      ]);
+    });
   });
 
-  xit('creates action to login user with keystoneAccess response', () => {
-    spyOn(cookie, 'save');
-    LoginActions.loginUser(mockKeystoneAccess);
-    expect(cookie.save).toHaveBeenCalledWith(
-      'keystoneAuthTokenId',
-      mockKeystoneAccess.token.id
-    );
+  it('creates action to login user via username and password', () => {
+    const store = mockStore({});
+    const response = {
+      data: { token: {} },
+      headers: { 'x-subject-token': 'someTokenId' }
+    };
+
+    cookie.save = jest.fn();
+    KeystoneApiService.authenticateUser = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve(response));
+
+    return store.dispatch(LoginActions.authenticateUser({})).then(() => {
+      expect(cookie.save).toHaveBeenCalled();
+      expect(store.getActions()).toEqual([
+        LoginActions.userAuthStarted(),
+        LoginActions.userAuthSuccess('someTokenId', {})
+      ]);
+    });
   });
 
-  xit('creates action to logout user', () => {
-    spyOn(cookie, 'remove');
-    LoginActions.logoutUser();
+  it('creates action to logout user', () => {
+    const store = mockStore({});
+    cookie.remove = jest.fn();
+    ZaqarWebSocketService.close = jest.fn();
+    store.dispatch(LoginActions.logoutUser());
     expect(cookie.remove).toHaveBeenCalled();
+    expect(ZaqarWebSocketService.close).toHaveBeenCalled();
+    expect(store.getActions()).toEqual([LoginActions.logoutUserSuccess()]);
   });
 });
