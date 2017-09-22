@@ -18,73 +18,85 @@ import axios from 'axios';
 import when from 'when';
 
 import { AuthenticationError, SwiftApiError, ConnectionError } from './errors';
-import { getAuthTokenId, getServiceUrl } from '../services/utils';
+import { getAuthTokenId, getServiceUrl } from '../selectors/auth';
 
 class SwiftApiService {
   defaultRequest(path, additionalAttributes) {
-    return when.try(getServiceUrl, 'swift').then(serviceUrl => {
-      let requestAttributes = Object.assign(
-        {
-          baseURL: serviceUrl,
-          url: path,
-          method: 'GET',
-          headers: { 'X-Auth-Token': getAuthTokenId() }
-        },
-        additionalAttributes
+    return (dispatch, getState) =>
+      axios(
+        Object.assign(
+          {
+            baseURL: getServiceUrl(getState(), 'swift'),
+            url: path,
+            method: 'GET',
+            headers: { 'X-Auth-Token': getAuthTokenId(getState()) }
+          },
+          additionalAttributes
+        )
       );
-      return axios(requestAttributes);
-    });
   }
 
   createObject(container, objectName, data) {
-    return this.defaultRequest(`/${container}/${objectName}`, {
-      method: 'PUT',
-      data: data
-    }).catch(error => handleErrors(error));
+    return dispatch =>
+      dispatch(
+        this.defaultRequest(`/${container}/${objectName}`, {
+          method: 'PUT',
+          data: data
+        })
+      ).catch(error => handleErrors(error));
   }
 
   getContainer(container) {
-    return this.defaultRequest(`/${container}`, {
-      method: 'GET',
-      params: { format: 'json' }
-    })
-      .then(response => response.data)
-      .catch(error => handleErrors(error));
+    return dispatch =>
+      dispatch(
+        this.defaultRequest(`/${container}`, {
+          method: 'GET',
+          params: { format: 'json' }
+        })
+      )
+        .then(response => response.data)
+        .catch(error => handleErrors(error));
   }
 
   getObject(container, object) {
-    return this.defaultRequest(`/${container}/${object}`, {
-      method: 'GET',
-      params: { format: 'json' }
-    })
-      .then(response => response.data)
-      .catch(error => handleErrors(error));
+    return dispatch =>
+      dispatch(
+        this.defaultRequest(`/${container}/${object}`, {
+          method: 'GET',
+          params: { format: 'json' }
+        })
+      )
+        .then(response => response.data)
+        .catch(error => handleErrors(error));
   }
 
   uploadTarball(planName, file) {
-    return this.defaultRequest(`/${planName}`, {
-      method: 'PUT',
-      data: file,
-      params: { 'extract-archive': 'tar.gz' }
-    })
-      .then(response => response.data)
-      .catch(error => {
-        // Swift doesn't add CORS headers to sucessful PUT requests,
-        // so a failed request is counted as success if *all* of the
-        // following criteria a true:
-        //   - status is 0
-        //   - statusText is empty
-        //   - timeout is false
-        if (
-          error.request.status === 0 &&
-          error.request.statusText === '' &&
-          error.request.timeout === 0
-        ) {
-          return when.resolve(error.data);
-        } else {
-          return handleErrors(error);
-        }
-      });
+    return dispatch =>
+      dispatch(
+        this.defaultRequest(`/${planName}`, {
+          method: 'PUT',
+          data: file,
+          params: { 'extract-archive': 'tar.gz' }
+        })
+      )
+        .then(response => response.data)
+        .catch(error => {
+          // Swift doesn't add CORS headers to sucessful PUT requests,
+          // so a failed request is counted as success if *all* of the
+          // following criteria a true:
+          //   - status is 0
+          //   - statusText is empty
+          //   - timeout is false
+          if (
+            error.request.status === 0 &&
+            error.request.statusText === '' &&
+            error.request.timeout === 0
+          ) {
+            return when.resolve(error.data);
+          } else {
+            return handleErrors(error);
+          }
+        });
   }
 }
 

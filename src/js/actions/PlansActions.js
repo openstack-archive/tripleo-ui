@@ -92,7 +92,7 @@ export default {
           when
             .all(
               planNames.map(name =>
-                SwiftApiService.getObject(name, PLAN_ENVIRONMENT)
+                dispatch(SwiftApiService.getObject(name, PLAN_ENVIRONMENT))
               )
             )
             .then(planEnvs =>
@@ -141,7 +141,7 @@ export default {
   fetchPlan(planName) {
     return dispatch => {
       dispatch(this.requestPlan());
-      SwiftApiService.getContainer(planName)
+      dispatch(SwiftApiService.getContainer(planName))
         .then(response => {
           const planFiles = normalize(response, arrayOf(planFileSchema))
             .entities.planFiles || {};
@@ -207,7 +207,7 @@ export default {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.updatePlanPending(planName));
-      SwiftApiService.uploadTarball(planName, file)
+      dispatch(SwiftApiService.uploadTarball(planName, file))
         .then(response => {
           dispatch(
             MistralApiService.runWorkflow(MistralConstants.PLAN_UPDATE, {
@@ -319,7 +319,9 @@ export default {
           container: planName
         })
       )
-        .then(response => SwiftApiService.uploadTarball(planName, file))
+        .then(response =>
+          dispatch(SwiftApiService.uploadTarball(planName, file))
+        )
         .then(response =>
           dispatch(
             MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
@@ -549,10 +551,12 @@ export default {
 export const uploadFilesToContainer = (container, files) =>
   when.all(
     Object.keys(files).map(fileName =>
-      SwiftApiService.createObject(
-        container,
-        fileName,
-        files[fileName].contents
+      dispatch(
+        SwiftApiService.createObject(
+          container,
+          fileName,
+          files[fileName].contents
+        )
       )
     )
   );
