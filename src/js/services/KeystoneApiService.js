@@ -22,72 +22,79 @@ import {
   KeystoneApiError,
   ConnectionError
 } from './errors';
-import { KEYSTONE_URL } from '../constants/KeystoneApiConstants';
+import { getServiceUrl } from '../selectors/auth';
 
 class KeystoneApiService {
   defaultRequest(additionalAttributes) {
-    return axios(
-      Object.assign(
-        {
-          baseURL: KEYSTONE_URL,
-          url: '/auth/tokens',
-          method: 'POST'
-        },
-        additionalAttributes
-      )
-    );
+    return (dispatch, getState) =>
+      axios(
+        Object.assign(
+          {
+            baseURL: getServiceUrl(getState(), 'keystone'),
+            url: '/auth/tokens',
+            method: 'POST'
+          },
+          additionalAttributes
+        )
+      );
   }
 
   authenticateUser(username, password) {
-    return this.defaultRequest({
-      data: {
-        auth: {
-          identity: {
-            methods: ['password'],
-            password: {
-              user: {
-                name: username,
-                domain: {
-                  name: 'Default'
-                },
-                password: password
-              }
-            }
-          },
-          scope: {
-            project: {
-              name: 'admin',
-              domain: {
-                name: 'Default'
+    return dispatch =>
+      dispatch(
+        this.defaultRequest({
+          data: {
+            auth: {
+              identity: {
+                methods: ['password'],
+                password: {
+                  user: {
+                    name: username,
+                    domain: {
+                      name: 'Default'
+                    },
+                    password: password
+                  }
+                }
+              },
+              scope: {
+                project: {
+                  name: 'admin',
+                  domain: {
+                    name: 'Default'
+                  }
+                }
               }
             }
           }
-        }
-      }
-    }).catch(handleErrors);
+        })
+      ).catch(handleErrors);
   }
 
   authenticateUserViaToken(keystoneAuthTokenId) {
-    return this.defaultRequest({
-      data: {
-        auth: {
-          identity: {
-            methods: ['token'],
-            token: {
-              id: keystoneAuthTokenId
-            }
-          },
-          scope: {
-            project: {
-              name: 'admin',
-              domain: {
-                name: 'Default'
+    return dispatch =>
+      dispatch(
+        this.defaultRequest({
+          data: {
+            auth: {
+              identity: {
+                methods: ['token'],
+                token: {
+                  id: keystoneAuthTokenId
+                }
+              },
+              scope: {
+                project: {
+                  name: 'admin',
+                  domain: {
+                    name: 'Default'
+                  }
+                }
               }
             }
           }
-        }
-      }
-    }).catch(handleErrors);
+        })
+      ).catch(handleErrors);
   }
 }
 
