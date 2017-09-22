@@ -44,7 +44,7 @@ export default {
   fetchStacks(planName) {
     return (dispatch, getState) => {
       dispatch(this.fetchStacksPending());
-      HeatApiService.getStacks()
+      return dispatch(HeatApiService.getStacks())
         .then(response => {
           const stacks = normalize(response.stacks, arrayOf(stackSchema))
             .entities.stacks || {};
@@ -79,7 +79,7 @@ export default {
   fetchResources(stackName, stackId) {
     return dispatch => {
       dispatch(this.fetchResourcesPending());
-      HeatApiService.getResources(stackName, stackId)
+      dispatch(HeatApiService.getResources(stackName, stackId))
         .then(({ resources }) => {
           const res = normalize(resources, arrayOf(stackResourceSchema))
             .entities.stackResources || {};
@@ -115,7 +115,7 @@ export default {
   fetchResource(stack, resourceName) {
     return dispatch => {
       dispatch(this.fetchResourcePending());
-      HeatApiService.getResource(stack, resourceName)
+      dispatch(HeatApiService.getResource(stack, resourceName))
         .then(({ resource }) => {
           dispatch(this.fetchResourceSuccess(resource));
         })
@@ -150,7 +150,7 @@ export default {
   fetchEnvironment(stack) {
     return dispatch => {
       dispatch(this.fetchEnvironmentPending(stack));
-      HeatApiService.getEnvironment(stack)
+      dispatch(HeatApiService.getEnvironment(stack))
         .then(response => {
           dispatch(this.fetchEnvironmentSuccess(stack, response));
         })
@@ -188,7 +188,7 @@ export default {
   deleteStack(stack) {
     return dispatch => {
       dispatch(this.deleteStackPending());
-      HeatApiService.deleteStack(stack.stack_name, stack.id)
+      dispatch(HeatApiService.deleteStack(stack.stack_name, stack.id))
         .then(response => {
           dispatch(this.deleteStackSuccess(stack.stack_name));
         })
