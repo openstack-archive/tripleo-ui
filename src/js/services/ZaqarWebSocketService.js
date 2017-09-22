@@ -15,13 +15,12 @@
  */
 
 import uuid from 'node-uuid';
-import when from 'when';
 
-import { getAuthTokenId, getProjectId, getServiceUrl } from './utils';
+import { getAuthTokenId, getProjectId, getServiceUrl } from '../selectors/auth';
 import {
-  ZAQAR_DEFAULT_QUEUE,
-  ZAQAR_LOGGING_QUEUE
-} from '../constants/ZaqarConstants';
+  getDefaultZaqarQueue,
+  getLoggingZaqarQueue
+} from '../selectors/appConfig';
 import ZaqarActions from '../actions/ZaqarActions';
 import NotificationActions from '../actions/NotificationActions';
 
@@ -36,15 +35,15 @@ export default {
   socket: null,
   clientID: null,
 
-  init(getState, dispatch, history) {
-    when.try(getServiceUrl, 'zaqar-websocket').then(serviceUrl => {
-      this.socket = new WebSocket(serviceUrl);
+  init(history) {
+    return (dispatch, getState) => {
+      this.socket = new WebSocket(getServiceUrl(getState(), 'zaqar-websocket'));
       this.clientID = uuid.v4();
       this.socket.onopen = () => {
-        this.authenticate();
-        this.createQueue(ZAQAR_DEFAULT_QUEUE);
-        this.createQueue(ZAQAR_LOGGING_QUEUE);
-        this.subscribe(ZAQAR_DEFAULT_QUEUE);
+        dispatch(this.authenticate());
+        dispatch(this.createQueue(getDefaultZaqarQueue(getState())));
+        dispatch(this.createQueue(getLoggingZaqarQueue(getState())));
+        dispatch(this.subscribe(getDefaultZaqarQueue(getState())));
       };
 
       this.socket.onclose = function(evt) {};
@@ -68,42 +67,50 @@ export default {
         const data = JSON.parse(evt.data);
         dispatch(ZaqarActions.messageReceived(data, history));
       };
-    });
+    };
   },
 
   authenticate() {
-    const message = {
-      action: 'authenticate',
-      headers: {
-        'X-Auth-Token': getAuthTokenId(),
-        'Client-ID': this.clientID,
-        'X-Project-ID': getProjectId()
-      }
+    return (dispatch, getState) => {
+      const message = {
+        action: 'authenticate',
+        headers: {
+          'X-Auth-Token': getAuthTokenId(getState()),
+          'Client-ID': this.clientID,
+          'X-Project-ID': getProjectId(getState())
+        }
+      };
+      this.socket.send(JSON.stringify(message));
     };
-    this.socket.send(JSON.stringify(message));
   },
 
   sendMessage(action, body = {}) {
-    const message = {
-      action: action,
-      headers: {
-        'Client-ID': this.clientID,
-        'X-Project-ID': getProjectId()
-      },
-      body: body
+    return (dispatch, getState) => {
+      const message = {
+        action: action,
+        headers: {
+          'Client-ID': this.clientID,
+          'X-Project-ID': getProjectId(getState())
+        },
+        body: body
+      };
+      this.socket.send(JSON.stringify(message));
     };
-    this.socket.send(JSON.stringify(message));
   },
 
   createQueue(queueName) {
-    this.sendMessage('queue_create', { queue_name: queueName });
+    return dispatch =>
+      dispatch(this.sendMessage('queue_create', { queue_name: queueName }));
   },
 
   subscribe(queueName, ttl = 3600) {
-    this.sendMessage('subscription_create', {
-      queue_name: queueName,
-      ttl: ttl
-    });
+    return dispatch =>
+      dispatch(
+        this.sendMessage('subscription_create', {
+          queue_name: queueName,
+          ttl: ttl
+        })
+      );
   },
 
   close() {
