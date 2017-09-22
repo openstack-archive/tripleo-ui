@@ -24,20 +24,17 @@ import storage from '../mocks/storage';
 window.localStorage = window.sessionStorage = storage;
 
 describe('PlansActions', () => {
-  beforeEach(() => {
-    MistralApiService.runAction = jest
-      .fn()
-      .mockReturnValue(() => Promise.resolve());
-    MistralApiService.runWorkflow = jest
-      .fn()
-      .mockReturnValue(() => Promise.resolve());
-    SwiftApiService.createObject = jest
-      .fn()
-      .mockReturnValue(() => Promise.resolve());
-  });
-
   describe('updatePlan', () => {
     const store = mockStore({});
+
+    beforeEach(() => {
+      MistralApiService.runWorkflow = jest
+        .fn()
+        .mockReturnValue(() => Promise.resolve());
+      SwiftApiService.createObject = jest
+        .fn()
+        .mockReturnValue(() => Promise.resolve());
+    });
 
     it('dispatches actions', () => {
       return store
@@ -58,6 +55,18 @@ describe('PlansActions', () => {
   describe('createPlan', () => {
     const store = mockStore({});
 
+    beforeEach(() => {
+      MistralApiService.runAction = jest
+        .fn()
+        .mockReturnValue(() => Promise.resolve());
+      MistralApiService.runWorkflow = jest
+        .fn()
+        .mockReturnValue(() => Promise.resolve());
+      SwiftApiService.createObject = jest
+        .fn()
+        .mockReturnValue(() => Promise.resolve());
+    });
+
     it('dispatches actions', () => {
       return store
         .dispatch(PlansActions.createPlan('somecloud', {}))
@@ -71,6 +80,12 @@ describe('PlansActions', () => {
 
   describe('deletePlans', () => {
     const store = mockStore({});
+
+    beforeEach(() => {
+      MistralApiService.runAction = jest
+        .fn()
+        .mockReturnValue(() => Promise.resolve());
+    });
 
     it('dispatches actions', () => {
       return store
@@ -88,30 +103,22 @@ describe('PlansActions', () => {
   describe('fetchPlans', () => {
     const store = mockStore({});
     const apiResponseMistral = ['overcloud', 'another-cloud'];
-    const expectedPlans = [{ name: 'overcloud' }, { name: 'another-cloud' }];
+    const expectedPlans = [
+      { name: 'overcloud', description: 'Default deployment plan' },
+      { name: 'another-cloud', description: 'My custom plan' }
+    ];
 
     beforeEach(() => {
       SwiftApiService.getObject = jest
         .fn()
         .mockReturnValueOnce(() =>
           Promise.resolve(
-            ```
-            description: Default deployment plan
-            name: overcloud
-            ```
+            'name: overcloud\ndescription: Default deployment plan'
           )
         )
         .mockReturnValueOnce(() =>
-          Promise.resolve(
-            ```
-            description: My custom plan
-            name: another-cloud
-            ```
-          )
+          Promise.resolve('name: another-cloud\ndescription: My custom plan')
         );
-    });
-
-    beforeEach(() => {
       MistralApiService.runAction = jest
         .fn()
         .mockReturnValue(() => Promise.resolve(apiResponseMistral));
@@ -119,6 +126,7 @@ describe('PlansActions', () => {
 
     it('dispatches actions', () => {
       return store.dispatch(PlansActions.fetchPlans()).then(() => {
+        expect(MistralApiService.runAction).toHaveBeenCalled();
         expect(store.getActions()).toEqual([
           PlansActions.requestPlans(),
           PlansActions.receivePlans(expectedPlans)
@@ -139,9 +147,9 @@ describe('PlansActions', () => {
     };
 
     beforeEach(() => {
-      SwiftApiService.getContainer = jest.fn(() =>
-        Promise.resolve(apiResponse)
-      );
+      SwiftApiService.getContainer = jest
+        .fn()
+        .mockReturnValue(() => Promise.resolve(apiResponse));
     });
 
     it('dispatches actions', () => {
