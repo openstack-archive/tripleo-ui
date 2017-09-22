@@ -24,12 +24,6 @@ import MistralConstants from '../constants/MistralConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 
 export default {
-  initializeConnection(history) {
-    return (dispatch, getState) => {
-      ZaqarWebSocketService.init(getState, dispatch, history);
-    };
-  },
-
   handleAuthenticationSuccess(message, dispatch) {
     message = get(message, ['body', 'message']);
 
@@ -120,7 +114,7 @@ export default {
         return;
       }
 
-      ZaqarWebSocketService.sendMessage('message_post', message);
+      dispatch(ZaqarWebSocketService.sendMessage('message_post', message));
     };
   }
 };

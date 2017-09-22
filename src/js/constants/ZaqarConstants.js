@@ -14,6 +14,8 @@
  * under the License.
  */
 
+// TODO(jtomasek): remove this, all should be accessed via selectors/appConfig
+
 import { getAppConfig } from '../services/utils';
 
 let zaqarDefaultQueue = getAppConfig()['zaqar_default_queue'] || 'tripleo';
