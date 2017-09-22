@@ -26,7 +26,7 @@ export default {
   authenticateUserViaToken(keystoneAuthTokenId, nextPath) {
     return (dispatch, getState) => {
       dispatch(this.userAuthStarted());
-      KeystoneApiService.authenticateUserViaToken(keystoneAuthTokenId)
+      dispatch(KeystoneApiService.authenticateUserViaToken(keystoneAuthTokenId))
         .then(response => {
           const {
             data: { token },
@@ -56,7 +56,12 @@ export default {
   authenticateUser(formData, formFields, nextPath) {
     return (dispatch, getState) => {
       dispatch(this.userAuthStarted());
-      KeystoneApiService.authenticateUser(formData.username, formData.password)
+      dispatch(
+        KeystoneApiService.authenticateUser(
+          formData.username,
+          formData.password
+        )
+      )
         .then(response => {
           const {
             data: { token },
