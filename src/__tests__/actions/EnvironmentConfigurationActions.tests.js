@@ -14,122 +14,138 @@
  * under the License.
  */
 
-import when from 'when';
+import configureMockStore from 'redux-mock-store';
+import thunkMiddleware from 'redux-thunk';
 
-import * as utils from '../../js/services/utils';
 import EnvironmentConfigurationActions
   from '../../js/actions/EnvironmentConfigurationActions';
+import NotificationActions from '../../js/actions/NotificationActions';
 import MistralApiService from '../../js/services/MistralApiService';
 import { mockGetIntl } from './utils';
 
-// Use this to mock asynchronous functions which return a promise.
-// The promise will immediately resolve with `data`.
-let createResolvingPromise = data => {
-  return () => {
-    return when.resolve(data);
-  };
-};
+const mockStore = configureMockStore([
+  thunkMiddleware.withExtraArgument(mockGetIntl)
+]);
 
-describe('EnvironmentConfigurationActions', () => {
-  beforeEach(() => {
-    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
-  });
+describe('fetchEnvironmentConfiguration', () => {
+  const store = mockStore({});
 
-  describe('fetchEnvironmentConfiguration', () => {
-    beforeEach(done => {
-      spyOn(
-        EnvironmentConfigurationActions,
-        'fetchEnvironmentConfigurationSuccess'
-      );
-      // Mock the service call.
-      spyOn(MistralApiService, 'runAction').and.callFake(
-        createResolvingPromise({
-          output: {
-            'Basic Configuration': {
-              environment_groups: [
-                {
-                  description: 'Enable basic configuration required for OpenStack Deployment',
-                  environments: [
-                    {
-                      enabled: true,
-                      description: null,
-                      file: 'overcloud-resource-registry-puppet.yaml',
-                      title: 'Default Configuration'
-                    }
-                  ],
-                  title: null
-                }
-              ],
-              description: null,
-              title: 'Basic Configuration'
-            }
+  it('dispatches fetchEnvironmentConfigurationSuccess', () => {
+    const response = {
+      'General Deployment Options': {
+        environment_groups: [
+          {
+            description: 'Enable basic configuration required for OpenStack Deployment',
+            environments: [
+              {
+                enabled: true,
+                description: null,
+                file: 'overcloud-resource-registry-puppet.yaml',
+                title: 'Default Configuration'
+              }
+            ],
+            title: null
           }
-        })
-      );
-      EnvironmentConfigurationActions.fetchEnvironmentConfiguration(
-        'overcloud'
-      )(() => {}, () => {});
-      // Call done with a minimal timeout.
-      setTimeout(() => {
-        done();
-      }, 1);
-    });
+        ],
+        description: null,
+        title: 'General Deployment Options'
+      }
+    };
+    const normalizedResponse = {
+      environmentGroups: {
+        'Enable basic configuration required for OpenStack Deployment': {
+          description: 'Enable basic configuration required for OpenStack Deployment',
+          environments: ['overcloud-resource-registry-puppet.yaml'],
+          title: null
+        }
+      },
+      environments: {
+        'overcloud-resource-registry-puppet.yaml': {
+          description: null,
+          enabled: true,
+          file: 'overcloud-resource-registry-puppet.yaml',
+          title: 'Default Configuration'
+        }
+      },
+      topics: {
+        'General Deployment Options': {
+          description: null,
+          environment_groups: [
+            'Enable basic configuration required for OpenStack Deployment'
+          ],
+          title: 'General Deployment Options'
+        }
+      }
+    };
+    MistralApiService.runAction = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve(response));
+    return store
+      .dispatch(
+        EnvironmentConfigurationActions.fetchEnvironmentConfiguration('myPlan')
+      )
+      .then(() => {
+        expect(MistralApiService.runAction).toHaveBeenCalled();
+        expect(store.getActions()).toEqual([
+          EnvironmentConfigurationActions.fetchEnvironmentConfigurationPending(),
+          EnvironmentConfigurationActions.fetchEnvironmentConfigurationSuccess(
+            normalizedResponse
+          )
+        ]);
+      });
+  });
+});
 
-    it('dispatches fetchEnvironmentConfigurationSuccess', () => {
-      expect(
-        EnvironmentConfigurationActions.fetchEnvironmentConfigurationSuccess
-      ).toHaveBeenCalled();
-    });
+describe('updateEnvironmentConfiguration', () => {
+  const store = mockStore({});
+
+  beforeEach(() => {
+    MistralApiService.runAction = jest.fn().mockReturnValue(() =>
+      Promise.resolve({
+        template: 'overcloud.yaml',
+        environments: [
+          {
+            path: 'overcloud-resource-registry-puppet.yaml'
+          },
+          {
+            path: 'environments/puppet-pacemaker.yaml'
+          },
+          {
+            path: 'environments/network-isolation.yaml'
+          }
+        ]
+      })
+    );
+    NotificationActions.notify = jest.fn(() => ({ type: 'NOTIFY' }));
   });
 
-  describe('updateEnvironmentConfiguration', () => {
-    beforeEach(done => {
-      spyOn(
-        EnvironmentConfigurationActions,
-        'updateEnvironmentConfigurationPending'
-      );
-      spyOn(
-        EnvironmentConfigurationActions,
-        'updateEnvironmentConfigurationSuccess'
-      );
-      // Mock the service call.
-      spyOn(MistralApiService, 'runAction').and.callFake(
-        createResolvingPromise({
-          template: 'overcloud.yaml',
-          environments: [
-            {
-              path: 'overcloud-resource-registry-puppet.yaml'
-            },
-            {
-              path: 'environments/puppet-pacemaker.yaml'
-            },
-            {
-              path: 'environments/network-isolation.yaml'
-            }
-          ]
-        })
-      );
-      EnvironmentConfigurationActions.updateEnvironmentConfiguration(
-        'overcloud',
-        {},
-        {}
-      )(() => {}, () => {}, mockGetIntl);
-      // Call done with a minimal timeout.
-      setTimeout(() => {
-        done();
-      }, 1);
-    });
+  it('dispatches actions', () => {
+    return store
+      .dispatch(
+        EnvironmentConfigurationActions.updateEnvironmentConfiguration('myPlan')
+      )
+      .then(() => {
+        expect(MistralApiService.runAction).toHaveBeenCalled();
+        expect(store.getActions()).toEqual([
+          EnvironmentConfigurationActions.updateEnvironmentConfigurationPending(),
+          EnvironmentConfigurationActions.updateEnvironmentConfigurationSuccess(
+            [
+              'overcloud-resource-registry-puppet.yaml',
+              'environments/puppet-pacemaker.yaml',
+              'environments/network-isolation.yaml'
+            ]
+          ),
+          NotificationActions.notify({ type: 'NOTIFY' })
+        ]);
+      });
 
-    it('dispatches updatingEnvironmentConfiguration', () => {
-      expect(
-        EnvironmentConfigurationActions.updateEnvironmentConfigurationPending
-      ).toHaveBeenCalled();
-    });
-
-    it('dispatches environmentConfigurationUpdated', () => {
-      expect(
-        EnvironmentConfigurationActions.updateEnvironmentConfigurationSuccess
-      ).toHaveBeenCalled();
-    });
+    // const result = EnvironmentConfigurationActions.updateEnvironmentConfiguration(
+    //   'myPlan'
+    // );
+    // const mockDispatch = jest.fn();
+    // result(mockDispatch, jest.fn(), mockGetIntl).then(() => {
+    //   console.log(mockDispatch);
+    //   expect(mockDispatch.mock.calls).toEqual(true);
+    // });
   });
 });
