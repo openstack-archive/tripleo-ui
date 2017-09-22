@@ -33,7 +33,7 @@ import Plans from './plan/Plans.js';
 import PlansActions from '../actions/PlansActions';
 import ValidationsList from './validations/ValidationsList';
 import WorkflowExecutionsActions from '../actions/WorkflowExecutionsActions';
-import ZaqarActions from '../actions/ZaqarActions';
+import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 
 const messages = defineMessages({
   loadingDeployments: {
@@ -111,7 +111,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchWorkflowExecutions: () =>
     dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
   initializeZaqarConnection: () =>
-    dispatch(ZaqarActions.initializeConnection(ownProps.history))
+    dispatch(ZaqarWebSocketService.init(ownProps.history))
 });
 
 const mapStateToProps = state => ({

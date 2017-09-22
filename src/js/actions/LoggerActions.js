@@ -23,7 +23,7 @@ import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 import NotificationActions from '../actions/NotificationActions';
 import MistralConstants from '../constants/MistralConstants';
 import MistralApiService from '../services/MistralApiService';
-import { getServiceUrl } from '../services/utils';
+import { getServiceUrl } from '../selectors/auth';
 
 const messages = defineMessages({
   downloadLogsFailedNotificationTitle: {
@@ -113,7 +113,7 @@ export default {
         let urlParser = document.createElement('a');
         urlParser.href = payload.tempurl;
         let url = urlParser.hostname;
-        urlParser.href = getServiceUrl('swift');
+        urlParser.href = getServiceUrl(getState(), 'swift');
         let swiftUrl = urlParser.hostname;
         dispatch(
           this.downloadLogsSuccess(payload.tempurl.replace(url, swiftUrl))

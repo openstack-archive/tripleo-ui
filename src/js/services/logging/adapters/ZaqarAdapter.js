@@ -14,7 +14,6 @@
  * under the License.
  */
 
-import { ZAQAR_LOGGING_QUEUE } from '../../../constants/ZaqarConstants';
 import ZaqarActions from '../../../actions/ZaqarActions';
 import Adapter from './BaseAdapter';
 
@@ -57,7 +56,13 @@ export default class ZaqarAdapter extends Adapter {
     }
 
     const msg = this._formatMessage(level, ...message);
-    this._dispatch(ZaqarActions.postMessage(ZAQAR_LOGGING_QUEUE, msg));
+
+    // TODO(jtomasek): remove this when adapter has access to getState,
+    // loggingQueue should be retrieved via selectors/appConfig
+    const loggingQueue =
+      (window.tripleOUiConfig || {})['logger-zaqar-queue'] ||
+      'tripleo-ui-logging';
+    this._dispatch(ZaqarActions.postMessage(loggingQueue, msg));
   }
 
   debug(...args) {
