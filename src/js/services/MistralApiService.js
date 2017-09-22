@@ -23,23 +23,23 @@ import {
   MistralApiError,
   ConnectionError
 } from './errors';
-import { getServiceUrl, getAuthTokenId } from './utils';
+import { getServiceUrl, getAuthTokenId } from '../selectors/auth';
 import MistralConstants from '../constants/MistralConstants';
 
 class MistralApiService {
   defaultRequest(path, additionalAttributes) {
-    return when.try(getServiceUrl, 'mistral').then(serviceUrl => {
-      const requestAttributes = Object.assign(
-        {
-          baseURL: serviceUrl,
-          url: path,
-          method: 'GET',
-          headers: { 'X-Auth-Token': getAuthTokenId() }
-        },
-        additionalAttributes
+    return (dispatch, getState) =>
+      axios(
+        Object.assign(
+          {
+            baseURL: getServiceUrl(getState(), 'mistral'),
+            url: path,
+            method: 'GET',
+            headers: { 'X-Auth-Token': getAuthTokenId(getState()) }
+          },
+          additionalAttributes
+        )
       );
-      return axios(requestAttributes);
-    });
   }
 
   /**
@@ -48,14 +48,17 @@ class MistralApiService {
    * @return {array} of Executions.
    */
   getWorkflowExecutions() {
-    return this.defaultRequest('/executions', {
-      params: { include_output: true }
-    })
-      .then(response => {
-        response.data.executions.map(parseExecutionAttrs);
-        return when.resolve(response.data.executions);
-      })
-      .catch(handleErrors);
+    return dispatch =>
+      dispatch(
+        this.defaultRequest('/executions', {
+          params: { include_output: true }
+        })
+      )
+        .then(response => {
+          response.data.executions.map(parseExecutionAttrs);
+          return when.resolve(response.data.executions);
+        })
+        .catch(handleErrors);
   }
 
   /**
@@ -65,15 +68,18 @@ class MistralApiService {
    * @param {patch} Partial execution objects carrying the changes
    */
   updateWorkflowExecution(executionId, patch) {
-    return this.defaultRequest('/executions/' + executionId, {
-      method: 'PUT',
-      data: patch
-    })
-      .then(response => {
-        const execution = parseExecutionAttrs(response.data);
-        return when.resolve(execution);
-      })
-      .catch(handleErrors);
+    return dispatch =>
+      dispatch(
+        this.defaultRequest('/executions/' + executionId, {
+          method: 'PUT',
+          data: patch
+        })
+      )
+        .then(response => {
+          const execution = parseExecutionAttrs(response.data);
+          return when.resolve(execution);
+        })
+        .catch(handleErrors);
   }
 
   /**
@@ -84,32 +90,35 @@ class MistralApiService {
    * @return {object} Execution.
    */
   runWorkflow(workflowName, input = {}) {
-    return this.defaultRequest('/executions', {
-      method: 'POST',
-      data: {
-        workflow_name: workflowName,
-        input: input
-      }
-    })
-      .then(response => {
-        response.data = parseExecutionAttrs(response.data);
+    return dispatch =>
+      dispatch(
+        this.defaultRequest('/executions', {
+          method: 'POST',
+          data: {
+            workflow_name: workflowName,
+            input: input
+          }
+        })
+      )
+        .then(response => {
+          response.data = parseExecutionAttrs(response.data);
 
-        if (response.data.state === 'ERROR') {
-          return when.reject(new MistralExecutionError(response));
-        } else if (workflowName === MistralConstants.VALIDATIONS_RUN) {
-          // Running validation is special case when whole execution needs to be returned
-          return when.resolve(response.data);
-        } else {
-          return when.resolve(response.data.output.result);
-        }
-      })
-      .catch(e => {
-        if (e.name === 'MistralExecutionError') {
-          return when.reject(e);
-        } else {
-          return handleErrors(e);
-        }
-      });
+          if (response.data.state === 'ERROR') {
+            return when.reject(new MistralExecutionError(response));
+          } else if (workflowName === MistralConstants.VALIDATIONS_RUN) {
+            // Running validation is special case when whole execution needs to be returned
+            return when.resolve(response.data);
+          } else {
+            return when.resolve(response.data.output.result);
+          }
+        })
+        .catch(e => {
+          if (e.name === 'MistralExecutionError') {
+            return when.reject(e);
+          } else {
+            return handleErrors(e);
+          }
+        });
   }
 
   /**
@@ -120,32 +129,35 @@ class MistralApiService {
    * @return {object} Action Execution.
    */
   runAction(actionName, input = {}) {
-    return this.defaultRequest('/action_executions', {
-      method: 'POST',
-      data: {
-        name: actionName,
-        input: input,
-        params: {
-          save_result: true,
-          run_sync: true
-        }
-      }
-    })
-      .then(response => {
-        response.data.output = JSON.parse(response.data.output).result;
-        if (response.data.state === 'ERROR') {
-          return when.reject(new MistralExecutionError(response));
-        } else {
-          return when.resolve(response.data.output);
-        }
-      })
-      .catch(e => {
-        if (e.name === 'MistralExecutionError') {
-          return when.reject(e);
-        } else {
-          return handleErrors(e);
-        }
-      });
+    return dispatch =>
+      dispatch(
+        this.defaultRequest('/action_executions', {
+          method: 'POST',
+          data: {
+            name: actionName,
+            input: input,
+            params: {
+              save_result: true,
+              run_sync: true
+            }
+          }
+        })
+      )
+        .then(response => {
+          response.data.output = JSON.parse(response.data.output).result;
+          if (response.data.state === 'ERROR') {
+            return when.reject(new MistralExecutionError(response));
+          } else {
+            return when.resolve(response.data.output);
+          }
+        })
+        .catch(e => {
+          if (e.name === 'MistralExecutionError') {
+            return when.reject(e);
+          } else {
+            return handleErrors(e);
+          }
+        });
   }
 }
 

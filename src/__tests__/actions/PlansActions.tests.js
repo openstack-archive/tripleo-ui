@@ -14,15 +14,10 @@
  * under the License.
  */
 
-import when from 'when';
-
-import * as utils from '../../js/services/utils';
 import MistralApiService from '../../js/services/MistralApiService';
+import { mockStore } from './utils';
 import mockHistory from '../mocks/history';
-import { mockGetIntl } from './utils';
 import PlansActions from '../../js/actions/PlansActions';
-// hacky solution to be able to spy on named export function
-import * as PlansActionsModule from '../../js/actions/PlansActions';
 import SwiftApiService from '../../js/services/SwiftApiService';
 import storage from '../mocks/storage';
 
@@ -30,174 +25,132 @@ window.localStorage = window.sessionStorage = storage;
 
 describe('PlansActions', () => {
   beforeEach(() => {
-    spyOn(utils, 'getAuthTokenId').and.returnValue('mock-auth-token');
+    MistralApiService.runAction = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve());
+    MistralApiService.runWorkflow = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve());
+    SwiftApiService.createObject = jest
+      .fn()
+      .mockReturnValue(() => Promise.resolve());
   });
 
   describe('updatePlan', () => {
-    beforeEach(done => {
-      spyOn(PlansActions, 'updatePlanPending');
-      spyOn(PlansActions, 'updatePlanSuccess');
-      spyOn(PlansActions, 'fetchPlans');
-      spyOn(PlansActionsModule, 'uploadFilesToContainer').and.callFake(
-        when.resolve
-      );
-      spyOn(MistralApiService, 'runWorkflow').and.callFake(() =>
-        when.resolve({ state: 'SUCCESS' })
-      );
+    const store = mockStore({});
 
-      PlansActions.updatePlan('somecloud', {}, mockHistory)(
-        () => {},
-        () => {},
-        mockGetIntl
-      );
-
-      setTimeout(() => {
-        done();
-      }, 1);
-    });
-
-    it('dispatches updatePlanPending', () => {
-      expect(PlansActions.updatePlanPending).toHaveBeenCalledWith('somecloud');
+    it('dispatches actions', () => {
+      return store
+        .dispatch(
+          PlansActions.updatePlan('somecloud', {
+            someFile: { contents: 'file contents' }
+          })
+        )
+        .then(() => {
+          expect(MistralApiService.runWorkflow).toHaveBeenCalled();
+          expect(store.getActions()).toEqual([
+            PlansActions.updatePlanPending('somecloud')
+          ]);
+        });
     });
   });
 
   describe('createPlan', () => {
-    beforeEach(done => {
-      spyOn(PlansActions, 'createPlanPending');
-      spyOn(PlansActions, 'createPlanSuccess');
-      // Mock the service call.
-      spyOn(PlansActionsModule, 'uploadFilesToContainer').and.callFake(
-        when.resolve
-      );
-      spyOn(MistralApiService, 'runAction').and.callFake(when.resolve);
-      spyOn(MistralApiService, 'runWorkflow').and.callFake(() =>
-        when.resolve({ state: 'SUCCESS' })
-      );
-      // Call the action creator and the resulting action.
-      // In this case, dispatch and getState are just empty placeHolders.
-      PlansActions.createPlan('somecloud', {})(() => {}, () => {}, mockGetIntl);
-      // Call done with a minimal timeout.
-      setTimeout(() => {
-        done();
-      }, 1);
-    });
+    const store = mockStore({});
 
-    it('dispatches createPlanPending', () => {
-      expect(PlansActions.createPlanPending).toHaveBeenCalled();
+    it('dispatches actions', () => {
+      return store
+        .dispatch(PlansActions.createPlan('somecloud', {}))
+        .then(() => {
+          expect(store.getActions()).toEqual([
+            PlansActions.createPlanPending()
+          ]);
+        });
     });
   });
 
   describe('deletePlans', () => {
-    beforeEach(done => {
-      spyOn(PlansActions, 'deletePlanPending');
-      spyOn(PlansActions, 'deletePlanSuccess');
-      spyOn(PlansActions, 'fetchPlans');
-      // Mock the service call.
-      spyOn(MistralApiService, 'runAction').and.callFake(when.resolve);
-      // Call the action creator and the resulting action.
-      // In this case, dispatch and getState are just empty placeHolders.
-      PlansActions.deletePlan('somecloud', mockHistory)(
-        () => {},
-        () => {},
-        mockGetIntl
-      );
-      // Call done with a minimal timeout.
-      setTimeout(() => {
-        done();
-      }, 1);
-    });
+    const store = mockStore({});
 
-    it('dispatches deletePlanPending', () => {
-      expect(PlansActions.deletePlanPending).toHaveBeenCalledWith('somecloud');
-    });
-
-    it('dispatches deletePlanSuccess', () => {
-      expect(PlansActions.deletePlanSuccess).toHaveBeenCalledWith('somecloud');
-    });
-
-    it('dispatches fetchPlans', () => {
-      expect(PlansActions.fetchPlans).not.toHaveBeenCalled();
+    it('dispatches actions', () => {
+      return store
+        .dispatch(PlansActions.deletePlan('somecloud', mockHistory))
+        .then(() => {
+          expect(store.getActions().map(action => action.type)).toEqual([
+            'DELETE_PLAN_PENDING',
+            'DELETE_PLAN_SUCCESS',
+            'NOTIFY'
+          ]);
+        });
     });
   });
 
-  let apiResponseMistral = ['overcloud', 'another-cloud'];
-
-  let apiResponseSwift = [
-    `description: Default deployment plan\nname: overcloud`,
-    `description: My custom plan\nname: another-cloud`
-  ];
-
   describe('fetchPlans', () => {
-    beforeEach(done => {
-      let swiftAlreadyCalled = false;
-      spyOn(PlansActions, 'requestPlans');
-      spyOn(PlansActions, 'receivePlans');
-      spyOn(MistralApiService, 'runAction').and.callFake(() =>
-        when.resolve(apiResponseMistral)
-      );
-      spyOn(SwiftApiService, 'getObject').and.callFake(() => {
-        if (swiftAlreadyCalled) {
-          return apiResponseSwift[1];
-        } else {
-          swiftAlreadyCalled = true;
-          return apiResponseSwift[0];
-        }
+    const store = mockStore({});
+    const apiResponseMistral = ['overcloud', 'another-cloud'];
+    const expectedPlans = [{ name: 'overcloud' }, { name: 'another-cloud' }];
+
+    beforeEach(() => {
+      SwiftApiService.getObject = jest
+        .fn()
+        .mockReturnValueOnce(() =>
+          Promise.resolve(
+            ```
+            description: Default deployment plan
+            name: overcloud
+            ```
+          )
+        )
+        .mockReturnValueOnce(() =>
+          Promise.resolve(
+            ```
+            description: My custom plan
+            name: another-cloud
+            ```
+          )
+        );
+    });
+
+    beforeEach(() => {
+      MistralApiService.runAction = jest
+        .fn()
+        .mockReturnValue(() => Promise.resolve(apiResponseMistral));
+    });
+
+    it('dispatches actions', () => {
+      return store.dispatch(PlansActions.fetchPlans()).then(() => {
+        expect(store.getActions()).toEqual([
+          PlansActions.requestPlans(),
+          PlansActions.receivePlans(expectedPlans)
+        ]);
       });
-
-      // Mock the service call.
-      // Call the action creator and the resulting action.
-      // In this case, dispatch and getState are just empty placeHolders.
-      PlansActions.fetchPlans()(() => {}, () => {});
-      // Call done with a minimal timeout.
-      setTimeout(() => {
-        done();
-      }, 1);
-    });
-
-    it('dispatches requestPlans', () => {
-      expect(PlansActions.requestPlans).toHaveBeenCalled();
-    });
-
-    it('dispatches receivePlans', () => {
-      expect(PlansActions.receivePlans).toHaveBeenCalledWith([
-        {
-          name: 'overcloud',
-          description: 'Default deployment plan'
-        },
-        {
-          name: 'another-cloud',
-          description: 'My custom plan'
-        }
-      ]);
     });
   });
 
   describe('fetchPlan', () => {
+    const store = mockStore({});
     let apiResponse = [
       { name: 'overcloud.yaml' },
       { name: 'capabilities_map.yaml' }
     ];
+    const normalizedResponse = {
+      'overcloud.yaml': { name: 'overcloud.yaml' },
+      'capabilities_map.yaml': { name: 'capabilities_map.yaml' }
+    };
 
-    beforeEach(done => {
-      spyOn(SwiftApiService, 'getContainer').and.callFake(() =>
-        when.resolve(apiResponse)
+    beforeEach(() => {
+      SwiftApiService.getContainer = jest.fn(() =>
+        Promise.resolve(apiResponse)
       );
-      spyOn(PlansActions, 'requestPlan');
-      spyOn(PlansActions, 'receivePlan');
-      PlansActions.fetchPlan('overcloud')(() => {}, () => {});
-      setTimeout(() => {
-        done();
-      }, 1);
     });
 
-    it('dispatches requestPlan', () => {
-      expect(PlansActions.requestPlan).toHaveBeenCalled();
-    });
-
-    it('dispatches receivePlan', () => {
-      expect(PlansActions.receivePlan).toHaveBeenCalledWith('overcloud', {
-        'overcloud.yaml': { name: 'overcloud.yaml' },
-        'capabilities_map.yaml': { name: 'capabilities_map.yaml' }
+    it('dispatches actions', () => {
+      return store.dispatch(PlansActions.fetchPlan('overcloud')).then(() => {
+        expect(SwiftApiService.getContainer).toHaveBeenCalled();
+        expect(store.getActions()).toEqual([
+          PlansActions.requestPlan(),
+          PlansActions.receivePlan('overcloud', normalizedResponse)
+        ]);
       });
     });
   });

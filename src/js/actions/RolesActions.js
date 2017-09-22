@@ -24,9 +24,11 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.fetchRolesPending());
 
-      MistralApiService.runAction(MistralConstants.ROLE_LIST, {
-        container: planName
-      })
+      dispatch(
+        MistralApiService.runAction(MistralConstants.ROLE_LIST, {
+          container: planName
+        })
+      )
         .then(response => {
           dispatch(this.fetchRolesSuccess(response));
         })
