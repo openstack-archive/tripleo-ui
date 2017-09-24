@@ -69,7 +69,6 @@ const store = createStore(
   )
 );
 
-// TODO(jtomasek): re-enable this once service/utils are refactored
-// logger.setReduxDispatch(store.dispatch);
+logger.setReduxDispatch(store.dispatch);
 
 export default store;
