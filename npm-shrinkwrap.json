@@ -1,6 +1,6 @@
 {
   "name": "tripleo-ui",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "dependencies": {
     "babel-core": {
       "version": "6.14.0",
