@@ -92,10 +92,18 @@ export default class NodeListItem extends React.Component {
       running: inProgress
     });
     return (
-      <ListViewItem expanded={this.state.expanded} stacked>
+      <ListViewItem
+        expanded={this.state.expanded}
+        stacked
+        className="NodeListItem__listViewItem"
+      >
         <ListViewItemHeader toggleExpanded={this.toggleExpanded.bind(this)}>
-          <ListViewExpand expanded={this.state.expanded} />
+          <ListViewExpand
+            expanded={this.state.expanded}
+            className="NodeListItem__listViewExpand"
+          />
           <ListViewCheckbox
+            className="NodeListItem__listViewCheckbox"
             disabled={inProgress}
             name={`values.${node.get('uuid')}`}
           />
@@ -113,31 +121,35 @@ export default class NodeListItem extends React.Component {
             </ListViewLeft>
             <ListViewBody>
               <ListViewDescription>
-                <ListViewDescriptionHeading>
+                <ListViewDescriptionHeading className="NodeListItem__nodeName">
                   {node.get('name') || node.get('uuid')}
                 </ListViewDescriptionHeading>
                 <ListViewDescriptionText>
                   <NodePowerState
+                    className="NodeListItem__nodePowerState"
                     powerState={node.get('power_state')}
                     targetPowerState={node.get('target_power_state')}
                   />
                   <NodeMaintenanceState
+                    className="NodeListItem__nodeMaintenanceState"
                     maintenance={node.get('maintenance')}
                     reason={node.get('maintenance_reason')}
                   />
                   {' | '}
                   <NodeIntrospectionStatus
+                    className="NodeListItem__nodeIntrospectionStatus"
                     status={node.get('introspectionStatus').toJS()}
                   />
                   {' | '}
                   <NodeProvisionState
+                    className="NodeListItem__nodeProvisionState"
                     provisionState={node.get('provision_state')}
                     targetProvisionState={node.get('target_provision_state')}
                   />
                 </ListViewDescriptionText>
               </ListViewDescription>
               <ListViewAdditionalInfo>
-                <ListViewAdditionalInfoItem>
+                <ListViewAdditionalInfoItem className="NodeListItem__profile">
                   <span className="pficon pficon-flavor" />
                   <FormattedMessage {...messages.profile} />
                   &nbsp;
@@ -145,7 +157,7 @@ export default class NodeListItem extends React.Component {
                     node.getIn(['properties', 'capabilities'])
                   ).profile || '-'}
                 </ListViewAdditionalInfoItem>
-                <ListViewAdditionalInfoItem>
+                <ListViewAdditionalInfoItem className="NodeListItem__cpuCount">
                   <span className="pficon pficon-cpu" />
                   <strong>{node.getIn(['properties', 'cpus'], '-')}</strong>
                   &nbsp;
@@ -154,7 +166,7 @@ export default class NodeListItem extends React.Component {
                     values={{ cpuCores: node.getIn(['properties', 'cpus']) }}
                   />
                 </ListViewAdditionalInfoItem>
-                <ListViewAdditionalInfoItem>
+                <ListViewAdditionalInfoItem className="NodeListItem__memorySize">
                   <span className="pficon pficon-memory" />
                   <strong>
                     {node.getIn(['properties', 'memory_mb'], '-')}
@@ -162,7 +174,7 @@ export default class NodeListItem extends React.Component {
                   &nbsp;
                   <FormattedMessage {...messages.ram} />
                 </ListViewAdditionalInfoItem>
-                <ListViewAdditionalInfoItem>
+                <ListViewAdditionalInfoItem className="NodeListItem__diskSize">
                   <span className="fa fa-database" />
                   <strong>{node.getIn(['properties', 'local_gb'], '-')}</strong>
                   &nbsp;

@@ -107,31 +107,36 @@ class NodesToolbarActions extends React.Component {
           }
         >
           <Button
+            id="NodesToolbarActions__introspectNodesAction"
             disabled={this.props.disabled}
             onClick={this.submitForm.bind(this, 'introspect')}
           >
             <FormattedMessage {...messages.introspectNodes} />
           </Button>
           <Button
+            id="NodesToolbarActions__provideNodesAction"
             disabled={this.props.disabled}
             onClick={this.submitForm.bind(this, 'provide')}
           >
             <FormattedMessage {...messages.provideNodes} />
           </Button>
-          <DropdownKebab id="nodesActionsKebab" pullRight>
+          <DropdownKebab id="NodesToolbarActions__nodesActionsKebab" pullRight>
             <MenuItem
+              id="NodesToolbarActions__manageNodesAction"
               disabled={this.props.disabled}
               onClick={this.submitForm.bind(this, 'manage')}
             >
               <FormattedMessage {...messages.manageNodes} />
             </MenuItem>
             <MenuItem
+              id="NodesToolbarActions__tagNodesAction"
               disabled={this.props.disabled}
               onClick={() => this.setState({ showTagNodesModal: true })}
             >
               <FormattedMessage {...messages.tagNodes} />
             </MenuItem>
             <MenuItem
+              id="NodesToolbarActions__deleteNodesAction"
               className="bg-danger"
               disabled={this.props.disabled}
               onClick={() => this.setState({ showDeleteModal: true })}

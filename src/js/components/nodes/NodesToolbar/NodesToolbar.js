@@ -86,6 +86,7 @@ class NodesToolbar extends React.Component {
       <Toolbar tableView={nodesToolbarFilter.get('contentView') === 'table'}>
         <ToolbarActions>
           <ToolbarFiltersForm
+            id="NodesToolbar_toolbarFiltersForm"
             form="nodesToolbarFilter"
             formatSelectValue={value =>
               intl.formatMessage(nodeColumnMessages[value])}
@@ -156,7 +157,7 @@ class NodesToolbar extends React.Component {
                 />
               ))}
           </ActiveFiltersList>
-          <p className="pull-right">
+          <p className="pull-right" id="NodesToolbar__selectAllButton">
             <SelectAllButton
               form="nodesListForm"
               items={filteredNodes.toList().toJS()}

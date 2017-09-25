@@ -86,6 +86,7 @@ class Nodes extends React.Component {
               inline
             >
               <a
+                id="Nodes__refreshResultsLink"
                 className="link btn btn-link"
                 onClick={this.refreshResults.bind(this)}
               >
@@ -94,7 +95,11 @@ class Nodes extends React.Component {
               </a>
             </Loader>
             &nbsp;
-            <Link to="/nodes/register" className="btn btn-primary">
+            <Link
+              to="/nodes/register"
+              className="btn btn-primary"
+              id="Nodes__registerNodesLink"
+            >
               <span className="fa fa-plus" />&nbsp;
               <FormattedMessage {...messages.registerNodes} />
             </Link>
