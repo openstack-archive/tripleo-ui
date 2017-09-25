@@ -34,6 +34,6 @@ export default class HorizontalStaticText extends React.Component {
 HorizontalStaticText.propTypes = {
   inputColumnClasses: PropTypes.string,
   labelColumnClasses: PropTypes.string,
-  text: PropTypes.string,
+  text: PropTypes.node,
   title: PropTypes.string
 };
