@@ -24,6 +24,6 @@ export const WorkflowExecution = Record({
   params: Map(),
   state: undefined,
   state_info: undefined,
-  updated_at: undefined,
+  updated_at: 0,
   workflow_name: undefined
 });
