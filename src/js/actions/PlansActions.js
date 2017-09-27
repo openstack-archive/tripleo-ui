@@ -184,7 +184,9 @@ export default {
       uploadFilesToContainer(planName, planFiles)
         .then(response =>
           MistralApiService.runWorkflow(MistralConstants.PLAN_UPDATE, {
-            container: planName
+            container: planName,
+            // TODO(sbaker) remove when there is a dedidated image prepare workflow
+            container_images_prepare: true
           })
         )
         .catch(error => {
@@ -208,7 +210,9 @@ export default {
       SwiftApiService.uploadTarball(planName, file)
         .then(response => {
           MistralApiService.runWorkflow(MistralConstants.PLAN_UPDATE, {
-            container: planName
+            container: planName,
+            // TODO(sbaker) remove when there is a dedidated image prepare workflow
+            container_images_prepare: true
           });
         })
         .catch(error => {
@@ -289,7 +293,9 @@ export default {
         .then(response => uploadFilesToContainer(planName, planFiles))
         .then(response =>
           MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
-            container: planName
+            container: planName,
+            // TODO(sbaker) remove when there is a dedidated image prepare workflow
+            container_images_prepare: true
           })
         )
         .catch(error => {
@@ -312,7 +318,9 @@ export default {
         .then(response => SwiftApiService.uploadTarball(planName, file))
         .then(response =>
           MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
-            container: planName
+            container: planName,
+            // TODO(sbaker) remove when there is a dedidated image prepare workflow
+            container_images_prepare: true
           })
         )
         .catch(error => {
