@@ -47,6 +47,10 @@ const messages = defineMessages({
   uploadType: {
     id: 'PlanEditFormTabs.uploadType',
     defaultMessage: 'Upload Type'
+  },
+  badExtension: {
+    id: 'PlanEditFormTabs.badExtension',
+    defaultMessage: 'Invalid type: plan file must be a tar archive (.tar.gz)'
   }
 });
 
@@ -145,6 +149,8 @@ class _PlanFormTab extends React.Component {
           inputColumnClasses="col-sm-7"
           labelColumnClasses="col-sm-3"
           uploadType={this.props.uploadType}
+          validations="tarballValidator"
+          validationError={formatMessage(messages.badExtension)}
           multiple
           required
         />
