@@ -16,6 +16,7 @@
 
 import ClassNames from 'classnames';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+import Formsy from 'formsy-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -54,6 +55,10 @@ const messages = defineMessages({
   uploadType: {
     id: 'PlanFormTabs.uploadType',
     defaultMessage: 'Upload Type'
+  },
+  badExtension: {
+    id: 'PlansActions.badExtension',
+    defaultMessage: 'Invalid type: plan file must be a tar archive (.tar.gz)'
   }
 });
 
@@ -145,6 +150,8 @@ class _PlanFormTab extends React.Component {
           inputColumnClasses="col-sm-7"
           labelColumnClasses="col-sm-3"
           uploadType={this.props.uploadType}
+          validations="tarballValidator"
+          validationError={formatMessage(messages.badExtension)}
           multiple
           required
         />
@@ -161,3 +168,14 @@ _PlanFormTab.propTypes = {
 _PlanFormTab.defaultProps = { active: false };
 
 const PlanFormTab = injectIntl(_PlanFormTab);
+
+Formsy.addValidationRule('tarballValidator', values => {
+  let files = values['planFiles'];
+  // If only one file was uploaded, it should be a tarball
+  if (files !== undefined && files.length === 1) {
+    if (!files[0].name.endsWith('.tar.gz')) {
+      return false;
+    }
+  }
+  return true;
+});
