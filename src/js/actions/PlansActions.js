@@ -66,6 +66,10 @@ const messages = defineMessages({
   exportFailedNotificationTitle: {
     id: 'PlansActions.exportFailedNotificationTitle',
     defaultMessage: 'Export Failed'
+  },
+  BadExtension: {
+    id: 'PlansActions.BadExtension',
+    defaultMessage: 'Invalid type: plan file must be a tar archive (.tar.gz)'
   }
 });
 
@@ -204,24 +208,35 @@ export default {
   updatePlanFromTarball(planName, file, history) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      dispatch(this.updatePlanPending(planName));
-      SwiftApiService.uploadTarball(planName, file)
-        .then(response => {
-          MistralApiService.runWorkflow(MistralConstants.PLAN_UPDATE, {
-            container: planName
+      if (!file.name.endsWith('.tar.gz')) {
+        dispatch(
+          this.updatePlanFailed(planName, [
+            {
+              title: 'Plan update failed',
+              message: formatMessage(messages.BadExtension)
+            }
+          ])
+        );
+      } else {
+        dispatch(this.updatePlanPending(planName));
+        SwiftApiService.uploadTarball(planName, file)
+          .then(response => {
+            MistralApiService.runWorkflow(MistralConstants.PLAN_UPDATE, {
+              container: planName
+            });
+          })
+          .catch(error => {
+            dispatch(handleErrors(error, 'Plan update failed', false));
+            dispatch(
+              this.updatePlanFailed(planName, [
+                {
+                  title: formatMessage(messages.planUpdateFailed),
+                  message: error.message
+                }
+              ])
+            );
           });
-        })
-        .catch(error => {
-          dispatch(handleErrors(error, 'Plan update failed', false));
-          dispatch(
-            this.updatePlanFailed(planName, [
-              {
-                title: formatMessage(messages.planUpdateFailed),
-                message: error.message
-              }
-            ])
-          );
-        });
+      }
     };
   },
 
@@ -304,25 +319,37 @@ export default {
   },
 
   createPlanFromTarball(planName, file) {
-    return dispatch => {
-      dispatch(this.createPlanPending());
-      MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
-        container: planName
-      })
-        .then(response => SwiftApiService.uploadTarball(planName, file))
-        .then(response =>
-          MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
-            container: planName
-          })
-        )
-        .catch(error => {
-          dispatch(handleErrors(error, 'Plan creation failed', false));
-          dispatch(
-            this.createPlanFailed([
-              { title: 'Plan creation failed', message: error.message }
-            ])
-          );
-        });
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
+      if (!file.name.endsWith('.tar.gz')) {
+        dispatch(
+          this.createPlanFailed([
+            {
+              title: 'Plan creation failed',
+              message: formatMessage(messages.BadExtension)
+            }
+          ])
+        );
+      } else {
+        dispatch(this.createPlanPending());
+        MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
+          container: planName
+        })
+          .then(response => SwiftApiService.uploadTarball(planName, file))
+          .then(response =>
+            MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
+              container: planName
+            })
+          )
+          .catch(error => {
+            dispatch(handleErrors(error, 'Plan creation failed', false));
+            dispatch(
+              this.createPlanFailed([
+                { title: 'Plan creation failed', message: error.message }
+              ])
+            );
+          });
+      }
     };
   },
 
