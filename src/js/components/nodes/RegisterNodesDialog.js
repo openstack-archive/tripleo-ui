@@ -22,7 +22,7 @@ import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
-import uuid from 'node-uuid';
+import uuid from 'uuid';
 
 import BlankSlate from '../ui/BlankSlate';
 import {

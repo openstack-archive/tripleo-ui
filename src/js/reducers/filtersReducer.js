@@ -15,7 +15,7 @@
  */
 
 import { Map } from 'immutable';
-import uuid from 'node-uuid';
+import uuid from 'uuid';
 
 import FiltersConstants from '../constants/FiltersConstants';
 import { ActiveFilter, FiltersInitialState } from '../immutableRecords/filters';
