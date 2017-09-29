@@ -16,9 +16,6 @@
 
 import { List, Map } from 'immutable';
 
-// TODO(hpokorny): remove this import when store is correctly mocked
-import store from '../../js/store'; // eslint-disable-line no-unused-vars
-
 import { InitialLoggerState } from '../../js/immutableRecords/logger';
 import LoggerActions from '../../js/actions/LoggerActions';
 import loggerReducer from '../../js/reducers/loggerReducer';
