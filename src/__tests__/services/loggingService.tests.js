@@ -14,8 +14,6 @@
  * under the License.
  */
 
-// TODO(hpokorny): remove this import when store is correctly mocked
-import store from '../../js/store'; // eslint-disable-line no-unused-vars
 import { predicate } from '../../js/services/logging/LoggingService';
 
 describe('Logger predicate', () => {

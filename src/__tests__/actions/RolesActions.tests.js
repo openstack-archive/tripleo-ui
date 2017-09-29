@@ -14,8 +14,6 @@
  * under the License.
  */
 
-// TODO(jtomasek): remove this import when store is correctly mocked
-import store from '../../js/store'; // eslint-disable-line no-unused-vars
 import RolesActions from '../../js/actions/RolesActions';
 import RolesConstants from '../../js/constants/RolesConstants';
 
