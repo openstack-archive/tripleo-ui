@@ -1,0 +1,5 @@
+---
+security:
+  - |
+    Use up to date uuid library for generating UUIDs instead of deprecated
+    node-uuid

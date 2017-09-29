@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import uuid from 'node-uuid';
+import uuid from 'uuid';
 
 import { getAuthTokenId, getProjectId, getServiceUrl } from '../selectors/auth';
 import {
