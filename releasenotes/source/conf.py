@@ -29,7 +29,7 @@ import openstackdocstheme
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'oslosphinx',
+    'openstackdocstheme',
     'reno.sphinxext',
 ]
 

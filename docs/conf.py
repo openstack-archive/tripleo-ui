@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-extensions = ['oslosphinx']
+extensions = ['openstackdocstheme']
 
 source_suffix = '.rst'
 
@@ -24,3 +24,8 @@ copyright = u'2017, OpenStack Foundation'
 pygments_style = 'sphinx'
 
 htmlhelp_basename = '%sdoc' % project
+html_theme = 'openstackdocs'
+
+repository_name = 'openstack/tripleo-ui'
+bug_project = 'tripleo'
+bug_tag = 'ui'
