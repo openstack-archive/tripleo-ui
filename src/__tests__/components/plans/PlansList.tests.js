@@ -19,13 +19,18 @@ import { Map } from 'immutable';
 import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 
-import store from '../../../js/store';
+import { mockStore } from '../../actions/utils';
 import PlansList from '../../../js/components/plan/PlansList';
 import FileList from '../../../js/components/plan/FileList';
-import { PlanFile } from '../../../js/immutableRecords/plans';
+import { InitialPlanState, PlanFile } from '../../../js/immutableRecords/plans';
+import { StacksState } from '../../../js/immutableRecords/stacks';
 
 describe('PlansList component', () => {
   let output;
+  const store = mockStore({
+    plans: new InitialPlanState(),
+    stacks: new StacksState()
+  });
 
   beforeEach(() => {
     let shallowRenderer = new ReactShallowRenderer();
