@@ -24,7 +24,7 @@ import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import DebugScreen from './debug/DebugScreen';
 import DeploymentPlan from './deployment_plan/DeploymentPlan';
 import { getCurrentPlanName } from '../selectors/plans';
-import Loader from './ui/Loader';
+import { GlobalLoader } from './ui/Loader';
 import LoginActions from '../actions/LoginActions';
 import NavBar from './NavBar';
 import Nodes from './nodes/Nodes';
@@ -51,10 +51,9 @@ class AuthenticatedContent extends React.Component {
   render() {
     const { currentPlanName, intl, logoutUser, plansLoaded, user } = this.props;
     return (
-      <Loader
+      <GlobalLoader
         loaded={plansLoaded}
         content={intl.formatMessage(messages.loadingDeployments)}
-        global
       >
         <header>
           <NavBar user={user} onLogout={logoutUser.bind(this)} />
@@ -75,7 +74,7 @@ class AuthenticatedContent extends React.Component {
             <ValidationsList />
           </div>
         </div>
-      </Loader>
+      </GlobalLoader>
     );
   }
 }

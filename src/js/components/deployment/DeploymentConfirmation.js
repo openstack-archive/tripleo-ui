@@ -21,7 +21,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 
 import BlankSlate from '../ui/BlankSlate';
 import InlineNotification from '../ui/InlineNotification';
-import Loader from '../ui/Loader';
+import { InlineLoader } from '../ui/Loader';
 
 const messages = defineMessages({
   deployButton: {
@@ -140,16 +140,14 @@ export const DeployButton = injectIntl(
         className="btn btn-lg btn-primary"
         onClick={() => deploy()}
       >
-        <Loader
+        <InlineLoader
           loaded={!isRequestingPlanDeploy}
           content={intl.formatMessage(messages.requestingDeploymentLoader)}
-          component="span"
-          inline
         >
           <span className="fa fa-cloud-upload" />
           {' '}
           <FormattedMessage {...messages.deployButton} />
-        </Loader>
+        </InlineLoader>
       </button>
     );
   }

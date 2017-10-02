@@ -36,7 +36,7 @@ import {
 import {
   getEnvironmentConfigurationSummary
 } from '../../selectors/environmentConfiguration';
-import Loader from '../ui/Loader';
+import { Loader } from '../ui/Loader';
 import {
   ModalPanelBackdrop,
   ModalPanel,
