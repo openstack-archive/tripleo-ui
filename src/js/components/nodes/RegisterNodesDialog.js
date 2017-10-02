@@ -31,7 +31,7 @@ import {
 } from '../../selectors/registerNodes';
 import { NodeToRegister } from '../../immutableRecords/nodes';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
-import Loader from '../ui/Loader';
+import { Loader } from '../ui/Loader';
 import NotificationActions from '../../actions/NotificationActions';
 import RegisterNodesActions from '../../actions/RegisterNodesActions';
 import RegisterNodeForm from './RegisterNodeForm';

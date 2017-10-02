@@ -32,7 +32,7 @@ import {
   getEnvironments,
   getTopicsTree
 } from '../../selectors/environmentConfiguration';
-import Loader from '../ui/Loader';
+import { Loader } from '../ui/Loader';
 import Tab from '../ui/Tab';
 import TabPane from '../ui/TabPane';
 

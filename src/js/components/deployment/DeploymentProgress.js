@@ -23,7 +23,7 @@ import {
   deploymentStatusMessages as statusMessages,
   stackStates
 } from '../../constants/StacksConstants';
-import Loader from '../ui/Loader';
+import { InlineLoader } from '../ui/Loader';
 import ProgressBar from '../ui/ProgressBar';
 import StackResourcesTable from './StackResourcesTable';
 
@@ -59,7 +59,7 @@ export default class DeploymentProgress extends React.Component {
     return (
       <div className="col-sm-12 fixed-container-body-content">
         <div className="progress-description">
-          <Loader loaded={false} content={statusMessage} inline />
+          <InlineLoader content={statusMessage} />
         </div>
         {this.renderProgressBar()}
         <h2><FormattedMessage {...messages.resources} /></h2>
