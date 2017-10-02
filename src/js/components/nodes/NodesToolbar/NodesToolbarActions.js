@@ -17,14 +17,12 @@
 import { Button, FormGroup, MenuItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { change, submit, isInvalid } from 'redux-form';
 
 import ConfirmationModal from '../../ui/ConfirmationModal';
 import DropdownKebab from '../../ui/dropdown/DropdownKebab';
-import { getAvailableNodeProfiles } from '../../../selectors/nodes';
 import TagNodesModal from '../tag_nodes/TagNodesModal';
 
 const messages = defineMessages({
@@ -157,7 +155,6 @@ class NodesToolbarActions extends React.Component {
             onCancel={() => this.setState({ showDeleteModal: false })}
           />
           <TagNodesModal
-            availableProfiles={this.props.availableProfiles.toArray()}
             onProfileSelected={this.tagNodes.bind(this)}
             onCancel={() => this.setState({ showTagNodesModal: false })}
             show={this.state.showTagNodesModal}
@@ -168,7 +165,6 @@ class NodesToolbarActions extends React.Component {
   }
 }
 NodesToolbarActions.propTypes = {
-  availableProfiles: ImmutablePropTypes.list.isRequired,
   disabled: PropTypes.bool.isRequired,
   intl: PropTypes.object,
   setSubmitAction: PropTypes.func.isRequired,
@@ -177,7 +173,6 @@ NodesToolbarActions.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  availableProfiles: getAvailableNodeProfiles(state),
   disabled: isInvalid('nodesListForm')(state)
 });
 
