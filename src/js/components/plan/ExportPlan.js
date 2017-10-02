@@ -21,7 +21,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import PlansActions from '../../actions/PlansActions';
-import Loader from '../ui/Loader';
+import { Loader } from '../ui/Loader';
 import Modal from '../ui/Modal';
 
 const messages = defineMessages({

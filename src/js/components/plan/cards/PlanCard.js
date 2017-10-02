@@ -25,7 +25,7 @@ import {
   FormattedTime
 } from 'react-intl';
 
-import Loader from '../../ui/Loader';
+import { InlineLoader, OverlayLoader } from '../../ui/Loader';
 import PlanActions from './PlanActions';
 import {
   stackStates,
@@ -55,7 +55,7 @@ class PlanCard extends React.Component {
         case stackStates.CREATE_IN_PROGRESS:
         case stackStates.UPDATE_IN_PROGRESS:
         case stackStates.DELETE_IN_PROGRESS:
-          return <Loader inline />;
+          return <InlineLoader />;
 
         case stackStates.CREATE_COMPLETE:
         case stackStates.UPDATE_COMPLETE:
@@ -128,7 +128,8 @@ class PlanCard extends React.Component {
           className={cardClasses}
           onClick={() => history.push(`/plans/${plan.name}`)}
         >
-          <Loader
+          <OverlayLoader
+            className="card-loader"
             loaded={!plan.transition}
             content={
               plan.transition
@@ -137,20 +138,19 @@ class PlanCard extends React.Component {
                   })
                 : ''
             }
-            height={62}
-            overlay
-          />
-          <h2 className="card-pf-title">
-            {plan.name}
-            <PlanActions planName={plan.name} stack={stack} />
-          </h2>
-          {plan.description &&
-            <div className="card-pf-body">
-              {plan.description}
-            </div>}
-          <div className="card-pf-footer">
-            {this.renderStackInfo()}
-          </div>
+          >
+            <h2 className="card-pf-title">
+              {plan.name}
+              <PlanActions planName={plan.name} stack={stack} />
+            </h2>
+            {plan.description &&
+              <div className="card-pf-body">
+                {plan.description}
+              </div>}
+            <div className="card-pf-footer">
+              {this.renderStackInfo()}
+            </div>
+          </OverlayLoader>
         </div>
       </div>
     );
