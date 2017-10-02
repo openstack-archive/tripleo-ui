@@ -23,7 +23,7 @@ import DeploymentSuccess from './DeploymentSuccess';
 import DeploymentFailure from './DeploymentFailure';
 import DeploymentProgress from './DeploymentProgress';
 import Link from '../ui/Link';
-import Loader from '../ui/Loader';
+import { InlineLoader, Loader } from '../ui/Loader';
 import { stackStates } from '../../constants/StacksConstants';
 
 const messages = defineMessages({
@@ -62,16 +62,14 @@ export const DeployStep = ({
           disabled={currentPlan.isRequestingPlanDeploy}
           to={`/plans/${currentPlan.name}/deployment-detail`}
         >
-          <Loader
+          <InlineLoader
             loaded={!currentPlan.isRequestingPlanDeploy}
             content={intl.formatMessage(messages.requestingDeploy)}
-            component="span"
-            inline
           >
             <span className="fa fa-cloud-upload" />
             {' '}
             <FormattedMessage {...messages.validateAndDeploy} />
-          </Loader>
+          </InlineLoader>
         </Link>
       </Loader>
     );

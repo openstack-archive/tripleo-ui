@@ -26,7 +26,7 @@ import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import PlansActions from '../../actions/PlansActions';
 import PlanFormTabs from './PlanFormTabs';
 import Modal from '../ui/Modal';
-import Loader from '../ui/Loader';
+import { Loader } from '../ui/Loader';
 
 const messages = defineMessages({
   cancel: {

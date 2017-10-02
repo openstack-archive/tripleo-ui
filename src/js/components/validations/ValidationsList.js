@@ -22,7 +22,7 @@ import React from 'react';
 
 import BlankSlate from '../ui/BlankSlate';
 import { getCurrentPlanName } from '../../selectors/plans';
-import Loader from '../ui/Loader';
+import { InlineLoader, Loader } from '../ui/Loader';
 import ValidationsActions from '../../actions/ValidationsActions';
 import ValidationsToolbar from './ValidationsToolbar';
 import Validation from './Validation';
@@ -146,13 +146,12 @@ class ValidationsList extends React.Component {
       <div className="col-sm-12 col-lg-3 sidebar-pf sidebar-pf-right fixed-container validations">
         <div className="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right fixed-container-header">
           <div className="actions pull-right">
-            <Loader
+            <InlineLoader
               loaded={
                 !(this.props.validationsLoaded &&
                   this.props.isFetchingValidations)
               }
               content={formatMessage(messages.loadingValidations)}
-              inline
             >
               <a
                 className="link refresh"
@@ -162,14 +161,16 @@ class ValidationsList extends React.Component {
                 {' '}
                 <FormattedMessage {...messages.refresh} />
               </a>
-            </Loader>
+            </InlineLoader>
           </div>
           <h2 className="h4"><FormattedMessage {...messages.validations} /></h2>
         </div>
         <Loader
           loaded={this.props.validationsLoaded && this.props.executionsLoaded}
           content={formatMessage(messages.loadingValidations)}
-          componentProps={{ className: 'row fixed-container-body' }}
+          component={({ children }) => (
+            <div className="row fixed-container-body">{children}</div>
+          )}
           height={80}
         >
           <ValidationsToolbar />
