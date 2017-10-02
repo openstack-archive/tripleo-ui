@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    When there is no active Deployment plan, Nodes tagging dialog displays
+    notification which lets user quickly activate the plan to be able to list
+    select profiles which correspond to plan Roles
