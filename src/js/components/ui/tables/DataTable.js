@@ -21,7 +21,7 @@ import invariant from 'invariant';
 
 import DataTableRow from './DataTableRow';
 import DataTableColumn from './DataTableColumn';
-import Loader from '../Loader';
+import { InlineLoader } from '../Loader';
 
 const messages = defineMessages({
   filter: {
@@ -97,10 +97,9 @@ class DataTable extends React.Component {
         <div className="dataTables_header">
           {this.renderFilterInput()}
           <div className="dataTables_actions">
-            <Loader
+            <InlineLoader
               loaded={!this.props.dataOperationInProgress}
               size="sm"
-              inline
             />
             {this.renderTableActions()}
           </div>

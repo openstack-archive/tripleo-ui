@@ -25,7 +25,7 @@ import { getCurrentPlanName } from '../../selectors/plans';
 import { getEnvironmentParameters } from '../../selectors/parameters';
 import { getEnvironment } from '../../selectors/environmentConfiguration';
 import InlineNotification from '../ui/InlineNotification';
-import Loader from '../ui/Loader';
+import { Loader } from '../ui/Loader';
 import ParameterInputList from './ParameterInputList';
 
 class EnvironmentParameters extends React.Component {

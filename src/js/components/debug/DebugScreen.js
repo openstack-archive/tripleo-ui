@@ -22,7 +22,7 @@ import { connect } from 'react-redux';
 import Link from '../ui/Link';
 import LoggerActions from '../../actions/LoggerActions';
 import Modal from '../ui/Modal';
-import Loader from '../ui/Loader';
+import { InlineLoader } from '../ui/Loader';
 
 const messages = defineMessages({
   debugPageTitle: {
@@ -83,12 +83,15 @@ class DebugScreen extends React.Component {
         className="btn btn-primary"
         onClick={this._downloadLogs.bind(this)}
       >
-        {this.props.isDownloadingLogs
-          ? <span>
-              <FormattedMessage {...messages.downloadButtonInProgress} />
-              &nbsp; <Loader inline />
-            </span>
-          : <FormattedMessage {...messages.downloadButton} />}
+        <InlineLoader
+          loaded={!this.props.isDownloadingLogs}
+          content={this.props.intl.formatMessage(
+            messages.downloadButtonInProgress
+          )}
+          inverse
+        >
+          <FormattedMessage {...messages.downloadButton} />
+        </InlineLoader>
       </button>
     );
   }
@@ -133,6 +136,7 @@ class DebugScreen extends React.Component {
 
 DebugScreen.propTypes = {
   downloadLogs: PropTypes.func,
+  intl: PropTypes.object.isRequired,
   isDownloadingLogs: PropTypes.bool,
   logsUrl: PropTypes.string
 };

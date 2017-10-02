@@ -18,7 +18,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Loader from '../ui/Loader';
+import { InlineLoader } from '../ui/Loader';
 
 const messages = defineMessages({
   loadingCurrentConfiguration: {
@@ -46,16 +46,14 @@ class DeploymentConfigurationSummary extends React.Component {
 
   render() {
     return (
-      <Loader
+      <InlineLoader
         loaded={this.props.loaded}
         content={this.props.intl.formatMessage(
           messages.loadingCurrentConfiguration
         )}
-        component="span"
-        inline
       >
-        <span>{this.props.summary}</span>
-      </Loader>
+        {this.props.summary}
+      </InlineLoader>
     );
   }
 }
