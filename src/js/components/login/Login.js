@@ -25,7 +25,7 @@ import { Redirect } from 'react-router-dom';
 
 import FormErrorList from '../ui/forms/FormErrorList';
 import I18nActions from '../../actions/I18nActions';
-import Loader from '../ui/Loader';
+import { GlobalLoader } from '../ui/Loader';
 import LoginInput from '../ui/forms/LoginInput';
 import LanguageInput from './LanguageInput';
 import LoginActions from '../../actions/LoginActions';
@@ -122,10 +122,9 @@ class Login extends React.Component {
           <span id="badge">
             <img src={LogoSvg} alt="TripleO" />
           </span>
-          <Loader
+          <GlobalLoader
             content={formatMessage(messages.authenticating)}
             loaded={!isAuthenticating}
-            global
           />
           <div className="container">
             <div className="row">
