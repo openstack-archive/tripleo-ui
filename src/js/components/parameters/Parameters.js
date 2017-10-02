@@ -32,7 +32,7 @@ import { getRootParameters } from '../../selectors/parameters';
 import {
   getEnabledEnvironments
 } from '../../selectors/environmentConfiguration';
-import Loader from '../ui/Loader';
+import { Loader } from '../ui/Loader';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import ParametersActions from '../../actions/ParametersActions';
 import ParameterInputList from './ParameterInputList';

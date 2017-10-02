@@ -24,7 +24,7 @@ import { Route } from 'react-router-dom';
 
 import { getFilterByName } from '../../selectors/filters';
 import { getFilteredNodes, nodesInProgress } from '../../selectors/nodes';
-import Loader from '../ui/Loader';
+import { Loader, InlineLoader } from '../ui/Loader';
 import NodeDrives from './NodeDrives/NodeDrives';
 import NodesActions from '../../actions/NodesActions';
 import NodesListForm from './NodesListView/NodesListForm';
@@ -79,11 +79,10 @@ class Nodes extends React.Component {
       <div>
         <div className="page-header">
           <div className="pull-right">
-            <Loader
+            <InlineLoader
               loaded={!(this.props.fetchingNodes && this.props.nodesLoaded)}
               content={this.props.intl.formatMessage(messages.loadingNodes)}
               component="span"
-              inline
             >
               <a
                 id="Nodes__refreshResultsLink"
@@ -93,7 +92,7 @@ class Nodes extends React.Component {
                 <span className="pficon pficon-refresh" />&nbsp;
                 <FormattedMessage {...messages.refreshResults} />
               </a>
-            </Loader>
+            </InlineLoader>
             &nbsp;
             <Link
               to="/nodes/register"

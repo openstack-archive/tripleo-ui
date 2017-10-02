@@ -19,7 +19,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Loader from '../ui/Loader';
+import { Loader } from '../ui/Loader';
 
 const messages = defineMessages({
   loadingOvercloudInformation: {
