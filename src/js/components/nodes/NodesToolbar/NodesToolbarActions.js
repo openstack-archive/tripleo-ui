@@ -124,14 +124,14 @@ class NodesToolbarActions extends React.Component {
             <MenuItem
               id="NodesToolbarActions__manageNodesAction"
               disabled={this.props.disabled}
-              onClick={this.submitForm.bind(this, 'manage')}
+              onSelect={this.submitForm.bind(this, 'manage')}
             >
               <FormattedMessage {...messages.manageNodes} />
             </MenuItem>
             <MenuItem
               id="NodesToolbarActions__tagNodesAction"
               disabled={this.props.disabled}
-              onClick={() => this.setState({ showTagNodesModal: true })}
+              onSelect={() => this.setState({ showTagNodesModal: true })}
             >
               <FormattedMessage {...messages.tagNodes} />
             </MenuItem>
@@ -139,7 +139,7 @@ class NodesToolbarActions extends React.Component {
               id="NodesToolbarActions__deleteNodesAction"
               className="bg-danger"
               disabled={this.props.disabled}
-              onClick={() => this.setState({ showDeleteModal: true })}
+              onSelect={() => this.setState({ showDeleteModal: true })}
             >
               <FormattedMessage {...messages.deleteNodes} />
             </MenuItem>
