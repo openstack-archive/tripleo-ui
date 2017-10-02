@@ -25,7 +25,7 @@ import DebugScreen from './debug/DebugScreen';
 import DeploymentPlan from './deployment_plan/DeploymentPlan';
 import { getCurrentPlanName } from '../selectors/plans';
 import { getEnabledLanguages } from '../selectors/i18n';
-import Loader from './ui/Loader';
+import { GlobalLoader } from './ui/Loader';
 import LoginActions from '../actions/LoginActions';
 import NavBar from './NavBar';
 import Nodes from './nodes/Nodes';
@@ -59,10 +59,9 @@ class AuthenticatedContent extends React.Component {
       user
     } = this.props;
     return (
-      <Loader
+      <GlobalLoader
         loaded={plansLoaded}
         content={intl.formatMessage(messages.loadingDeployments)}
-        global
       >
         <header>
           <NavBar
@@ -87,7 +86,7 @@ class AuthenticatedContent extends React.Component {
             <ValidationsList />
           </div>
         </div>
-      </Loader>
+      </GlobalLoader>
     );
   }
 }

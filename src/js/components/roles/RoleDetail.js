@@ -28,7 +28,7 @@ import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
 import { getCurrentPlanName } from '../../selectors/plans';
 import { getRole } from '../../selectors/roles';
 import { getRoleServices } from '../../selectors/parameters';
-import Loader from '../ui/Loader';
+import { Loader } from '../ui/Loader';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import {
   ModalPanelBackdrop,

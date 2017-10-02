@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import TableCheckBox from '../forms/TableCheckBox';
-import Loader from '../Loader';
+import { InlineLoader } from '../Loader';
 
 /**
 * Default table header cell class
@@ -99,18 +99,14 @@ export class DataTableCheckBoxCell extends React.Component {
     );
     return (
       <DataTableCell {...this.props}>
-        <Loader
-          loaded={!this.props.operationInProgress}
-          component="span"
-          inline
-        >
+        <InlineLoader loaded={!this.props.operationInProgress}>
           <TableCheckBox
             name={value}
             id={value}
             value={false}
             disabled={this.props.disabled}
           />
-        </Loader>
+        </InlineLoader>
       </DataTableCell>
     );
   }

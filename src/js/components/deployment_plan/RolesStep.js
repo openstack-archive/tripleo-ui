@@ -19,7 +19,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Loader from '../ui/Loader';
+import { InlineLoader } from '../ui/Loader';
 import Roles from './Roles';
 
 const messages = defineMessages({
@@ -60,24 +60,20 @@ const RolesStep = ({
   return (
     <div>
       <p>
-        <Loader
+        <InlineLoader
           loaded={!isFetchingNodes}
           content={intl.formatMessage(messages.loadingNodes)}
-          component="span"
-          inline
         >
-          <Loader
+          <InlineLoader
             loaded={!isFetchingParameters}
             content={intl.formatMessage(messages.loadingParameters)}
-            component="span"
-            inline
           >
             <FormattedMessage
               {...messages.nodesAvailableToAssign}
               values={{ nodesCount: nodesCount }}
             />
-          </Loader>
-        </Loader>
+          </InlineLoader>
+        </InlineLoader>
       </p>
       <Roles
         currentPlanName={currentPlanName}
