@@ -70,7 +70,7 @@ const RoleCard = ({
       <h2 className="card-pf-title">
         {title}
         <Link
-          to={`/plans/${currentPlanName}/roles/${identifier}`}
+          to={`/plans/${currentPlanName}/roles/${name}`}
           className="link pull-right"
           title="Edit Role parameters"
         >
