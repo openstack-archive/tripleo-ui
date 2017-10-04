@@ -14,6 +14,7 @@
  * under the License.
  */
 
+import { startCase } from 'lodash';
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
@@ -50,14 +51,14 @@ class Roles extends React.Component {
           <RoleCard
             currentPlanName={this.props.currentPlanName}
             name={role.name}
-            title={role.title}
+            title={startCase(role.name)}
             identifier={role.identifier}
             fetchNodes={this.props.fetchNodes}
             assignedNodesCountParameter={this.props.nodeCountParametersByRole.get(
-              role.identifier
+              role.name
             )}
             availableNodesCount={this.props.availableNodesCountsByRole.get(
-              role.identifier
+              role.name
             )}
           />
         </div>
