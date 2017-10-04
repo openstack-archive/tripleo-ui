@@ -152,17 +152,17 @@ class RoleDetail extends React.Component {
         <div className="row">
           <ul className="nav nav-tabs">
             <NavTab
-              to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/parameters`}
+              to={`/plans/${currentPlanName}/roles/${urlParams.roleName}/parameters`}
             >
               <FormattedMessage {...messages.parameters} />
             </NavTab>
             <NavTab
-              to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/services`}
+              to={`/plans/${currentPlanName}/roles/${urlParams.roleName}/services`}
             >
               <FormattedMessage {...messages.services} />
             </NavTab>
             <NavTab
-              to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/network-configuration`}
+              to={`/plans/${currentPlanName}/roles/${urlParams.roleName}/network-configuration`}
             >
               <FormattedMessage {...messages.networkConfiguration} />
             </NavTab>
@@ -218,20 +218,20 @@ class RoleDetail extends React.Component {
             >
               <Switch location={location}>
                 <Route
-                  path="/plans/:planName/roles/:roleIdentifier/parameters"
+                  path="/plans/:planName/roles/:roleName/parameters"
                   component={RoleParameters}
                 />
                 <Route
-                  path="/plans/:planName/roles/:roleIdentifier/services"
+                  path="/plans/:planName/roles/:roleName/services"
                   component={RoleServices}
                 />
                 <Route
-                  path="/plans/:planName/roles/:roleIdentifier/network-configuration"
+                  path="/plans/:planName/roles/:roleName/network-configuration"
                   component={RoleNetworkConfig}
                 />
                 <Redirect
-                  from="/plans/:planName/roles/:roleIdentifier"
-                  to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/parameters`}
+                  from="/plans/:planName/roles/:roleName"
+                  to={`/plans/${currentPlanName}/roles/${urlParams.roleName}/parameters`}
                 />
               </Switch>
             </Loader>
@@ -274,8 +274,8 @@ function mapStateToProps(state, props) {
     formFieldErrors: state.parameters.form.get('formFieldErrors'),
     allParameters: state.parameters.parameters,
     parametersLoaded: state.parameters.loaded,
-    role: getRole(state, props.match.params.roleIdentifier),
-    roleServices: getRoleServices(state, props.match.params.roleIdentifier),
+    role: getRole(state, props.match.params.roleName),
+    roleServices: getRoleServices(state, props.match.params.roleName),
     rolesLoaded: state.roles.get('loaded')
   };
 }
