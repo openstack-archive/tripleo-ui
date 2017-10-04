@@ -15,7 +15,7 @@
  */
 
 import { fromJS, Map } from 'immutable';
-import { kebabCase, startCase } from 'lodash';
+import { kebabCase } from 'lodash';
 
 import PlansConstants from '../constants/PlansConstants';
 import RolesConstants from '../constants/RolesConstants';
@@ -29,16 +29,14 @@ export default function rolesReducer(state = initialState, action) {
       return state.set('isFetching', true);
 
     case RolesConstants.FETCH_ROLES_SUCCESS: {
-      // Convert roles array into Map of Role records. This could get replaced by normalizing
-      // once the mistral getRoles action returns an array of objects
-      const roles = fromJS(action.payload).reduce(
-        (result, role) =>
-          result.set(_getRoleIdentifier(role), _createRole(role)),
-        Map()
+      const roles = fromJS(action.payload).map(role =>
+        new Role(role).update(role =>
+          role.set('identifier', _getRoleIdentifier(role.name))
+        )
       );
 
       return state
-        .set('roles', fromJS(roles).map(role => new Role(role)))
+        .set('roles', roles)
         .set('isFetching', false)
         .set('loaded', true);
     }
@@ -56,14 +54,6 @@ export default function rolesReducer(state = initialState, action) {
       return state;
   }
 }
-
-const _createRole = roleName => {
-  return new Role({
-    name: roleName,
-    title: startCase(roleName),
-    identifier: _getRoleIdentifier(roleName)
-  });
-};
 
 // TODO(jtomasek): Controller role name and tag don't follow naming convention
 // Remove this after controller tag is renamed from control to controller

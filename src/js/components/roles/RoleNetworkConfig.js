@@ -44,12 +44,12 @@ RoleNetworkConfig.propTypes = {
 
 function mapStateToProps(state, props) {
   return {
-    description: getRoleNetworkConfig(state, props.match.params.roleIdentifier)
+    description: getRoleNetworkConfig(state, props.match.params.roleName)
       .description,
     mistralParameters: state.parameters.mistralParameters,
-    parameters: getRoleNetworkConfig(state, props.match.params.roleIdentifier)
+    parameters: getRoleNetworkConfig(state, props.match.params.roleName)
       .parameters,
-    role: getRole(state, props.match.params.roleIdentifier)
+    role: getRole(state, props.match.params.roleName)
   };
 }
 

@@ -106,8 +106,8 @@ RoleServices.propTypes = {
 function mapStateToProps(state, props) {
   return {
     mistralParameters: state.parameters.mistralParameters,
-    role: getRole(state, props.match.params.roleIdentifier),
-    services: getRoleServices(state, props.match.params.roleIdentifier)
+    role: getRole(state, props.match.params.roleName),
+    services: getRoleServices(state, props.match.params.roleName)
   };
 }
 

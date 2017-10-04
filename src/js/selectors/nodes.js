@@ -136,7 +136,8 @@ export const getProfilesList = createSelector(getNodes, nodes =>
  */
 export const getAvailableNodeProfiles = createSelector(
   [getProfilesList, getRoles],
-  (profiles, roles) => Set.fromKeys(roles).union(profiles).toList().sort()
+  (profiles, roles) =>
+    Set(roles.toList().map(r => r.identifier)).union(profiles).toList().sort()
 );
 
 /*
