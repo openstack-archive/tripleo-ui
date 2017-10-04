@@ -14,8 +14,11 @@
  * under the License.
  */
 
+import { normalize, arrayOf } from 'normalizr';
+
 import { handleErrors } from './ErrorActions';
 import RolesConstants from '../constants/RolesConstants';
+import { roleSchema } from '../normalizrSchemas/roles';
 import MistralApiService from '../services/MistralApiService';
 import MistralConstants from '../constants/MistralConstants';
 
@@ -25,10 +28,13 @@ export default {
       dispatch(this.fetchRolesPending());
 
       MistralApiService.runAction(MistralConstants.ROLE_LIST, {
-        container: planName
+        container: planName,
+        detail: true
       })
         .then(response => {
-          dispatch(this.fetchRolesSuccess(response));
+          const roles = normalize(response, arrayOf(roleSchema)).entities
+            .roles || {};
+          dispatch(this.fetchRolesSuccess(roles));
         })
         .catch(error => {
           dispatch(handleErrors(error, 'Roles could not be loaded'));
