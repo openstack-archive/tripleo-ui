@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { Map, Record } from 'immutable';
+import { List, Map, Record } from 'immutable';
 
 export const RolesState = Record({
   loaded: false,
@@ -23,7 +23,16 @@ export const RolesState = Record({
 });
 
 export const Role = Record({
+  CountDefault: 0,
+  HostnameFormatDefault: '%stackname%-{{role.name.lower()}}-%index%',
+  disable_constraints: false,
+  disable_upgrade_deployment: false,
+  upgrade_batch_size: 1,
+  ServicesDefault: List(),
+  tags: List(),
+  description: undefined,
   name: undefined,
+  networks: List(),
   title: undefined,
   identifier: undefined
 });

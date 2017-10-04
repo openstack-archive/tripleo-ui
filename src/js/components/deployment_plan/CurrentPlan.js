@@ -264,10 +264,7 @@ class CurrentPlan extends React.Component {
           path="/plans/:planName/configuration"
           component={DeploymentConfiguration}
         />
-        <Route
-          path="/plans/:planName/roles/:roleIdentifier"
-          component={RoleDetail}
-        />
+        <Route path="/plans/:planName/roles/:roleName" component={RoleDetail} />
         <Route
           path="/plans/:planName/deployment-detail"
           component={DeploymentDetail}
