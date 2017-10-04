@@ -75,10 +75,7 @@ export const getTotalUntaggedAssignedNodesCount = createSelector(
       const taggedCount = nodes.filter(
         node => getNodeCapabilities(node).profile === role.identifier
       ).size;
-      const assignedCount = parametersByRole.getIn(
-        [role.identifier, 'default'],
-        0
-      );
+      const assignedCount = parametersByRole.getIn([role.name, 'default'], 0);
       const remainder = Math.max(0, assignedCount - taggedCount);
       return total + remainder;
     }, 0)
@@ -100,10 +97,7 @@ export const getAvailableNodesCountsByRole = createSelector(
       const taggedCount = nodes.filter(
         node => getNodeCapabilities(node).profile === role.identifier
       ).size;
-      const assignedCount = parametersByRole.getIn(
-        [role.identifier, 'default'],
-        0
-      );
+      const assignedCount = parametersByRole.getIn([role.name, 'default'], 0);
       const untaggedCount = untaggedNodes.size;
       return (
         taggedCount +
