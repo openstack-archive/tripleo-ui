@@ -44,8 +44,8 @@ RoleParameters.propTypes = {
 function mapStateToProps(state, props) {
   return {
     mistralParameters: state.parameters.mistralParameters,
-    parameters: getRoleParameters(state, props.match.params.roleIdentifier),
-    role: getRole(state, props.match.params.roleIdentifier)
+    parameters: getRoleParameters(state, props.match.params.roleName),
+    role: getRole(state, props.match.params.roleName)
   };
 }
 

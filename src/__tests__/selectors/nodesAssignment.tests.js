@@ -174,28 +174,25 @@ describe('Nodes Assignment selectors', () => {
         }
       });
       this.roles = Map({
-        control: new Role({
+        Controller: new Role({
           name: 'Controller',
-          title: 'Controller',
           identifier: 'control'
         }),
-        compute: new Role({
+        Compute: new Role({
           name: 'Compute',
-          title: 'Compute',
           identifier: 'compute'
         }),
-        'block-storage': new Role({
+        BlockStorage: new Role({
           name: 'BlockStorage',
-          title: 'Block Storage',
           identifier: 'block-storage'
         })
       });
       this.parametersByRole = Map({
-        control: new Parameter({
+        Controler: new Parameter({
           name: 'ControllerCount',
           default: 1
         }),
-        compute: new Parameter({
+        Compute: new Parameter({
           name: 'ComputeCount',
           default: 1
         })
@@ -254,32 +251,32 @@ describe('Nodes Assignment selectors', () => {
         }
       });
       this.roles = Map({
-        control: new Role({
+        Controller: new Role({
           name: 'Controller',
           title: 'Controller',
           identifier: 'control'
         }),
-        compute: new Role({
+        Compute: new Role({
           name: 'Compute',
           title: 'Compute',
           identifier: 'compute'
         }),
-        'block-storage': new Role({
+        BlockStorage: new Role({
           name: 'BlockStorage',
           title: 'Block Storage',
           identifier: 'block-storage'
         })
       });
       this.nodeCountParametersByRole = Map({
-        control: new Parameter({
+        Controller: new Parameter({
           name: 'ControllerCount',
           default: 1
         }),
-        compute: new Parameter({
+        Compute: new Parameter({
           name: 'ComputeCount',
           default: 1
         }),
-        'block-storage': new Parameter({
+        BlockStorage: new Parameter({
           name: 'BlockStorageCount',
           default: 0
         })
@@ -295,22 +292,22 @@ describe('Nodes Assignment selectors', () => {
         this.nodeCountParametersByRole,
         this.totalUntaggedAssignedNodesCount
       );
-      expect(result.get('control')).toEqual(1);
-      expect(result.get('compute')).toEqual(1);
-      expect(result.get('block-storage')).toEqual(0);
+      expect(result.get('Controller')).toEqual(1);
+      expect(result.get('Compute')).toEqual(1);
+      expect(result.get('BlockStorage')).toEqual(0);
     });
 
     it('handles cases when assigned count is higher then actual nodes available', function() {
       this.nodeCountParametersByRole = Map({
-        control: new Parameter({
+        Controller: new Parameter({
           name: 'ControllerCount',
           default: 4
         }),
-        compute: new Parameter({
+        Compute: new Parameter({
           name: 'ComputeCount',
           default: 1
         }),
-        'block-storage': new Parameter({
+        BlockStorage: new Parameter({
           name: 'BlockStorageCount',
           default: 0
         })
@@ -323,9 +320,9 @@ describe('Nodes Assignment selectors', () => {
         this.nodeCountParametersByRole,
         this.totalUntaggedAssignedNodesCount
       );
-      expect(result.get('control')).toEqual(1);
-      expect(result.get('compute')).toEqual(0);
-      expect(result.get('block-storage')).toEqual(0);
+      expect(result.get('Controller')).toEqual(1);
+      expect(result.get('Compute')).toEqual(0);
+      expect(result.get('BlockStorage')).toEqual(0);
     });
   });
 
