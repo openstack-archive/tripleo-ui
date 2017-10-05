@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import * as _ from 'lodash';
+import { result } from 'lodash';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -302,7 +302,7 @@ NodesTable.propTypes = {
 export default injectIntl(NodesTable);
 
 export const NodesTableMaintenanceCell = props => {
-  const value = _.result(props.data[props.rowIndex], props.field).toString();
+  const value = result(props.data[props.rowIndex], props.field).toString();
   return (
     <DataTableCell {...props}>
       {value}
@@ -316,7 +316,7 @@ NodesTableMaintenanceCell.propTypes = {
 };
 
 export const NodesTableMacsCell = props => {
-  const value = _.result(props.data[props.rowIndex], props.field).join(', ');
+  const value = result(props.data[props.rowIndex], props.field).join(', ');
   return (
     <DataTableCell {...props}>
       {value}
@@ -331,7 +331,7 @@ NodesTableMacsCell.propTypes = {
 
 export class NodesTableCheckBoxCell extends React.Component {
   render() {
-    const nodeId = _.result(
+    const nodeId = result(
       this.props.data[this.props.rowIndex],
       this.props.field
     );
@@ -352,7 +352,7 @@ NodesTableCheckBoxCell.propTypes = {
 
 export class NodesTableProfileCell extends React.Component {
   getAssignedRoleTitle() {
-    const capabilities = _.result(
+    const capabilities = result(
       this.props.data[this.props.rowIndex],
       'properties.capabilities',
       ''

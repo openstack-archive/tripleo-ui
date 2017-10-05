@@ -14,8 +14,15 @@
  * under the License.
  */
 
-import * as _ from 'lodash';
 import { Button } from 'react-bootstrap';
+import {
+  mapValues,
+  mapKeys,
+  camelCase,
+  filter,
+  values as _values,
+  pick
+} from 'lodash';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
@@ -100,8 +107,8 @@ class EnvironmentConfiguration extends React.Component {
   * so we need to convert data back to e.g. { filename.yaml: true, ... }
   */
   _convertFormData(formData) {
-    return _.mapValues(
-      _.mapKeys(formData, (value, key) => {
+    return mapValues(
+      mapKeys(formData, (value, key) => {
         return key + '.yaml';
       }),
       value => {
@@ -143,7 +150,7 @@ class EnvironmentConfiguration extends React.Component {
   }
 
   isTabActive(tabName) {
-    let firstTabName = _.camelCase(
+    let firstTabName = camelCase(
       this.props.environmentConfigurationTopics.first().get('title')
     );
     let currentTab = this.state.activeTab || firstTabName;
@@ -154,7 +161,7 @@ class EnvironmentConfiguration extends React.Component {
     let topics = this.props.environmentConfigurationTopics
       .toList()
       .map((topic, index) => {
-        let tabName = _.camelCase(topic.get('title'));
+        let tabName = camelCase(topic.get('title'));
         return (
           <TabPane isActive={this.isTabActive(tabName)} key={index}>
             <EnvironmentConfigurationTopic
@@ -171,7 +178,7 @@ class EnvironmentConfiguration extends React.Component {
     let topicTabs = this.props.environmentConfigurationTopics
       .toList()
       .map((topic, index) => {
-        let tabName = _.camelCase(topic.get('title'));
+        let tabName = camelCase(topic.get('title'));
         return (
           <Tab key={index} isActive={this.isTabActive(tabName)}>
             <a href="" onClick={this.activateTab.bind(this, tabName)}>
@@ -308,8 +315,8 @@ Formsy.addValidationRule('requiredEnvironments', function(
   requiredEnvironmentFieldNames
 ) {
   if (value) {
-    return !_.filter(
-      _.values(_.pick(values, requiredEnvironmentFieldNames)),
+    return !filter(
+      _values(pick(values, requiredEnvironmentFieldNames)),
       function(val) {
         return val === false;
       }
