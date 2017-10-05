@@ -1,0 +1,11 @@
+Code-Review+2: Honza Pokorny <honza@redhat.com>
+Code-Review+1: Haïkel Guémar <hguemar@fedoraproject.org>
+Code-Review+1: Ana Krivokapic <akrivoka@redhat.com>
+Code-Review+2: Florian Fuchs <flfuchs@redhat.com>
+Workflow+1: Florian Fuchs <flfuchs@redhat.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Thu, 05 Oct 2017 15:35:03 +0000
+Reviewed-on: https://review.openstack.org/504902
+Project: openstack/tripleo-ui
+Branch: refs/heads/master
