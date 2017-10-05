@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import * as _ from 'lodash';
+import { result } from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -58,10 +58,7 @@ DataTableCell.propTypes = {
 */
 export class DataTableDataFieldCell extends React.Component {
   render() {
-    let value = _.result(
-      this.props.data[this.props.rowIndex],
-      this.props.field
-    );
+    let value = result(this.props.data[this.props.rowIndex], this.props.field);
     return (
       <DataTableCell {...this.props}>
         {value}
@@ -78,7 +75,7 @@ DataTableDataFieldCell.propTypes = {
 export const DataTableDateFieldCell = props => {
   //TODO(jtomasek): Update this component to parse date and format it using React Intl's
   // FormatedDate
-  const value = _.result(props.data[props.rowIndex], props.field);
+  const value = result(props.data[props.rowIndex], props.field);
   return (
     <DataTableCell {...props}>
       {value}
@@ -93,10 +90,7 @@ DataTableDateFieldCell.propTypes = {
 
 export class DataTableCheckBoxCell extends React.Component {
   render() {
-    let value = _.result(
-      this.props.data[this.props.rowIndex],
-      this.props.field
-    );
+    let value = result(this.props.data[this.props.rowIndex], this.props.field);
     return (
       <DataTableCell {...this.props}>
         <Loader

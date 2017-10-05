@@ -16,13 +16,13 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import * as _ from 'lodash';
+import { isEmpty } from 'lodash';
 
 import FormErrorList from './FormErrorList';
 
 export default class ModalFormErrorList extends React.Component {
   render() {
-    if (_.isEmpty(this.props.errors)) {
+    if (isEmpty(this.props.errors)) {
       return null;
     } else {
       return (
