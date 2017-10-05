@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import * as _ from 'lodash';
+import { includes, values, keys, pickBy } from 'lodash';
 import { connect } from 'react-redux';
 import { List, Map } from 'immutable';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
@@ -83,8 +83,8 @@ class NodesTableView extends React.Component {
 
   canSubmit() {
     if (
-      _.includes(
-        _.values(this.refs.registeredNodesTableForm.getCurrentValues()),
+      includes(
+        values(this.refs.registeredNodesTableForm.getCurrentValues()),
         true
       )
     ) {
@@ -179,7 +179,7 @@ class NodesTableView extends React.Component {
 
   handleSubmit(formData, resetForm, invalidateForm) {
     this.disableButton();
-    const nodeIds = _.keys(_.pickBy(formData, value => !!value));
+    const nodeIds = keys(pickBy(formData, value => !!value));
 
     switch (this.state.submitType) {
       case 'introspect':
