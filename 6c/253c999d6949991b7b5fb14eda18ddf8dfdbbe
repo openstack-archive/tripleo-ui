@@ -1,0 +1,9 @@
+Code-Review+2: Ana Krivokapic <akrivoka@redhat.com>
+Workflow+1: Ana Krivokapic <akrivoka@redhat.com>
+Code-Review+1: Jason E. Rist <jrist@redhat.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Thu, 05 Oct 2017 06:50:50 +0000
+Reviewed-on: https://review.openstack.org/509588
+Project: openstack/tripleo-ui
+Branch: refs/heads/master
