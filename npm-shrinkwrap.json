@@ -1209,6 +1209,11 @@
       "from": "uncontrollable@>=4.0.1 <5.0.0",
       "resolved": "https://registry.npmjs.org/uncontrollable/-/uncontrollable-4.0.3.tgz"
     },
+    "uuid": {
+      "version": "3.1.0",
+      "from": "uuid@latest",
+      "resolved": "https://registry.npmjs.org/uuid/-/uuid-3.1.0.tgz"
+    },
     "value-equal": {
       "version": "0.2.1",
       "from": "value-equal@>=0.2.0 <0.3.0",
