@@ -16,10 +16,12 @@
 
 import { applyMiddleware, createStore } from 'redux';
 import cookie from 'react-cookie';
+import { fromJS } from 'immutable';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import logger, { predicate } from './services/logging/LoggingService';
 
+import { AppConfig } from './immutableRecords/appConfig';
 import appReducer from './reducers/appReducer';
 import { InitialPlanState } from './immutableRecords/plans';
 import { InitialLoginState } from './immutableRecords/login';
@@ -27,6 +29,7 @@ import { getIntl } from './selectors/i18n';
 
 const hydrateStore = () => {
   return {
+    appConfig: new AppConfig(window && fromJS(window.tripleOUiConfig)),
     plans: new InitialPlanState({
       currentPlanName: getStoredPlanName()
     }),
