@@ -29,6 +29,7 @@ import parametersReducer from './parametersReducer';
 import plansReducer from './plansReducer';
 import registerNodesReducer from './registerNodesReducer';
 import rolesReducer from './rolesReducer';
+import { availableRolesReducer } from './rolesReducer';
 import stacksReducer from './stacksReducer';
 import validationsReducer from './validationsReducer';
 import workflowExecutionsReducer from './workflowExecutionsReducer';
@@ -47,6 +48,7 @@ const appReducer = combineReducers({
   plans: plansReducer,
   registerNodes: registerNodesReducer,
   roles: rolesReducer,
+  availableRoles: availableRolesReducer,
   stacks: stacksReducer,
   validations: validationsReducer,
   form: formReducer
