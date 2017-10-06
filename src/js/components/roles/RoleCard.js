@@ -14,12 +14,15 @@
  * under the License.
  */
 
+import { Col } from 'react-bootstrap';
+import cx from 'classnames';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { Field } from 'redux-form';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import FloatingToolbar from '../ui/FloatingToolbar';
 import Link from '../ui/Link';
 import NodePickerInput from '../ui/reduxForm/NodePickerInput';
 import {
@@ -53,7 +56,8 @@ const RoleCard = ({
   identifier,
   intl,
   name,
-  title
+  title,
+  ...rest
 }) => {
   const validations = [
     maxValue(
@@ -67,52 +71,59 @@ const RoleCard = ({
   ];
 
   return (
-    <div className={`card-pf card-pf-accented role-card ${identifier}`}>
-      <h2 className="card-pf-title">
-        {title}
-        <Link
-          to={`/plans/${currentPlanName}/roles/${name}`}
-          className="link pull-right"
-          title="Edit Role parameters"
-        >
-          <span className="pficon pficon-edit" />
-        </Link>
-      </h2>
-      <div className="card-pf-body">
-        <div className="card-pf-utilization-details">
-          <div className="node-picker-cell">
-            {assignedNodesCountParameter ? (
-              <Field
-                component={NodePickerInput}
-                increment={1}
-                validate={validations}
-                name={assignedNodesCountParameter.name}
-                max={availableNodesCount}
-              />
-            ) : (
-              <NodePickerInput
-                increment={1}
-                input={{ value: '-' }}
-                meta={{ submitting: true }}
-                max={availableNodesCount}
-                min={0}
-              />
-            )}
+    <Col xs={6} sm={4} md={3} lg={2} {...rest}>
+      <div
+        className={cx(
+          'card-pf card-pf-view card-pf-view-select card-pf-accented role-card',
+          identifier
+        )}
+      >
+        <FloatingToolbar top right style={{ border: 'none' }}>
+          <Link
+            to={`/plans/${currentPlanName}/roles/${name}`}
+            className="link pull-right"
+            title="Edit Role parameters"
+          >
+            <span className="pficon pficon-settings" />
+          </Link>
+        </FloatingToolbar>
+        <h2 className="card-pf-title">{title}</h2>
+        <div className="card-pf-body">
+          <div className="card-pf-utilization-details">
+            <div className="node-picker-cell">
+              {assignedNodesCountParameter ? (
+                <Field
+                  component={NodePickerInput}
+                  increment={1}
+                  validate={validations}
+                  name={assignedNodesCountParameter.name}
+                  max={availableNodesCount}
+                />
+              ) : (
+                <NodePickerInput
+                  increment={1}
+                  input={{ value: '-' }}
+                  meta={{ submitting: true }}
+                  max={availableNodesCount}
+                  min={0}
+                />
+              )}
+            </div>
+            <span className="card-pf-utilization-card-details-description">
+              <span className="card-pf-utilization-card-details-line-1">
+                <FormattedMessage
+                  {...messages.availableNodesCount}
+                  values={{ count: availableNodesCount }}
+                />
+              </span>
+              <span className="card-pf-utilization-card-details-line-2">
+                <FormattedMessage {...messages.nodesAssigned} />
+              </span>
+            </span>
           </div>
-          <span className="card-pf-utilization-card-details-description">
-            <span className="card-pf-utilization-card-details-line-1">
-              <FormattedMessage
-                {...messages.availableNodesCount}
-                values={{ count: availableNodesCount }}
-              />
-            </span>
-            <span className="card-pf-utilization-card-details-line-2">
-              <FormattedMessage {...messages.nodesAssigned} />
-            </span>
-          </span>
         </div>
       </div>
-    </div>
+    </Col>
   );
 };
 RoleCard.propTypes = {
@@ -123,6 +134,9 @@ RoleCard.propTypes = {
   intl: PropTypes.object,
   name: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired
+};
+RoleCard.defaultProps = {
+  availableNodesCount: 0
 };
 
 export default injectIntl(RoleCard);
