@@ -19,6 +19,7 @@ import LoggerActions from './LoggerActions';
 import NodesActions from './NodesActions';
 import PlansActions from './PlansActions';
 import RegisterNodesActions from './RegisterNodesActions';
+import RolesActions from './RolesActions';
 import ValidationsActions from './ValidationsActions';
 import MistralConstants from '../constants/MistralConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
@@ -87,6 +88,11 @@ export default {
 
         case MistralConstants.DOWNLOAD_LOGS: {
           dispatch(LoggerActions.downloadLogsFinished(payload));
+          break;
+        }
+
+        case MistralConstants.LIST_AVAILABLE_ROLES: {
+          dispatch(RolesActions.fetchAvailableRolesFinished(payload, history));
           break;
         }
 
