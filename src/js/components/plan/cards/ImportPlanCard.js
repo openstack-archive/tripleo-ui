@@ -14,10 +14,13 @@
  * under the License.
  */
 
+import { Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+
+import { ActionCard } from '../../ui/cards';
 
 const messages = defineMessages({
   importPlan: {
@@ -27,20 +30,15 @@ const messages = defineMessages({
 });
 
 const ImportPlanCard = ({ history }) => (
-  <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-    <div
-      className="card-pf import-plan-card card-pf-view card-pf-view-select card-pf-view-single-select"
-      onClick={() => history.push(`/plans/manage/new`)}
+  <Col sm={6} md={4} lg={3}>
+    <ActionCard
+      onClick={() => history.push('/plans/manage/new')}
       id="ListPlans__importPlanLink"
     >
-      <div className="card-pf-body">
-        <p className="text-center">
-          <span className="pficon pficon-add-circle-o" />&nbsp;
-          <FormattedMessage {...messages.importPlan} />
-        </p>
-      </div>
-    </div>
-  </div>
+      <span className="pficon pficon-add-circle-o" />&nbsp;
+      <FormattedMessage {...messages.importPlan} />
+    </ActionCard>
+  </Col>
 );
 ImportPlanCard.propTypes = {
   history: PropTypes.object.isRequired
