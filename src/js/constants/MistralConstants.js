@@ -33,6 +33,7 @@ export default {
   PLAN_LIST: 'tripleo.plan.list',
   PLAN_EXPORT: 'tripleo.plan_management.v1.export_deployment_plan',
   ROLE_LIST: 'tripleo.role.list',
+  LIST_AVAILABLE_ROLES: 'tripleo.plan_management.v1.list_available_roles',
   VALIDATIONS_LIST: 'tripleo.validations.list_validations',
   VALIDATIONS_RUN: 'tripleo.validations.v1.run_validation',
   VALIDATIONS_RUN_GROUPS: 'tripleo.validations.v1.run_groups'

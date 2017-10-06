@@ -14,6 +14,7 @@
  * under the License.
  */
 
+import { defineMessages } from 'react-intl';
 import { normalize, arrayOf } from 'normalizr';
 
 import { handleErrors } from './ErrorActions';
@@ -21,6 +22,13 @@ import RolesConstants from '../constants/RolesConstants';
 import { roleSchema } from '../normalizrSchemas/roles';
 import MistralApiService from '../services/MistralApiService';
 import MistralConstants from '../constants/MistralConstants';
+
+const messages = defineMessages({
+  availableRolesNotLoaded: {
+    id: 'RolesActions.availableRolesNotLoaded',
+    defaultMessage: 'Available Roles could not be loaded'
+  }
+});
 
 export default {
   fetchRoles(planName) {
@@ -61,6 +69,59 @@ export default {
   fetchRolesFailed() {
     return {
       type: RolesConstants.FETCH_ROLES_FAILED
+    };
+  },
+
+  fetchAvailableRoles(planName) {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
+      dispatch(this.fetchAvailableRolesPending());
+      dispatch(
+        MistralApiService.runWorkflow(MistralConstants.LIST_AVAILABLE_ROLES, {
+          container: planName
+        })
+      ).catch(error => {
+        dispatch(
+          handleErrors(error, formatMessage(messages.availableRolesNotLoaded))
+        );
+      });
+    };
+  },
+
+  fetchAvailableRolesFinished({ available_roles, message, status }, history) {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
+      debugger;
+      if (status === 'SUCCESS') {
+        const roles = normalize(available_roles, arrayOf(roleSchema)).entities
+          .roles || {};
+        dispatch(this.fetchAvailableRolesSuccess(roles));
+      } else {
+        dispatch(
+          handleErrors(message, formatMessage(messages.availableRolesNotLoaded))
+        );
+        history.push('/plans');
+        dispatch(this.fetchAvailableRolesFailed());
+      }
+    };
+  },
+
+  fetchAvailableRolesPending() {
+    return {
+      type: RolesConstants.FETCH_AVAILABLE_ROLES_PENDING
+    };
+  },
+
+  fetchAvailableRolesSuccess(roles) {
+    return {
+      type: RolesConstants.FETCH_AVAILABLE_ROLES_SUCCESS,
+      payload: roles
+    };
+  },
+
+  fetchAvailableRolesFailed() {
+    return {
+      type: RolesConstants.FETCH_AVAILABLE_ROLES_FAILED
     };
   }
 };
