@@ -14,13 +14,20 @@
  * under the License.
  */
 
+import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 
+import {
+  getAvailableNodes,
+  getTotalAssignedNodesCount
+} from '../../selectors/nodesAssignment';
 import { InlineLoader } from '../ui/Loader';
-import Roles from './Roles';
+import NodesActions from '../../actions/NodesActions';
+import Roles from '../roles/Roles';
+import RolesActions from '../../actions/RolesActions';
 
 const messages = defineMessages({
   loadingNodes: {
@@ -39,16 +46,12 @@ const messages = defineMessages({
 
 const RolesStep = ({
   availableNodesCount,
-  availableNodesCountsByRole,
-  currentPlanName,
-  roles,
   fetchRoles,
   fetchNodes,
   intl,
   isFetchingNodes,
   isFetchingParameters,
-  isFetchingRoles,
-  nodeCountParametersByRole,
+  nodesLoaded,
   rolesLoaded,
   totalAssignedNodesCount
 }) => {
@@ -76,33 +79,38 @@ const RolesStep = ({
         </InlineLoader>
       </p>
       <Roles
-        currentPlanName={currentPlanName}
-        roles={roles.toList().toJS()}
-        availableNodesCountsByRole={availableNodesCountsByRole}
-        nodeCountParametersByRole={nodeCountParametersByRole}
         fetchRoles={fetchRoles}
         fetchNodes={fetchNodes}
-        isFetchingNodes={isFetchingNodes}
-        isFetchingRoles={isFetchingRoles}
-        loaded={rolesLoaded}
+        loaded={rolesLoaded && nodesLoaded}
       />
     </div>
   );
 };
 RolesStep.propTypes = {
   availableNodesCount: PropTypes.number.isRequired,
-  availableNodesCountsByRole: ImmutablePropTypes.map.isRequired,
-  currentPlanName: PropTypes.string.isRequired,
   fetchNodes: PropTypes.func.isRequired,
   fetchRoles: PropTypes.func.isRequired,
   intl: PropTypes.object,
   isFetchingNodes: PropTypes.bool.isRequired,
   isFetchingParameters: PropTypes.bool.isRequired,
-  isFetchingRoles: PropTypes.bool.isRequired,
-  nodeCountParametersByRole: ImmutablePropTypes.map.isRequired,
-  roles: ImmutablePropTypes.map.isRequired,
+  nodesLoaded: PropTypes.bool.isRequired,
   rolesLoaded: PropTypes.bool.isRequired,
   totalAssignedNodesCount: PropTypes.number.isRequired
 };
 
-export default injectIntl(RolesStep);
+const mapStateToProps = state => ({
+  availableNodesCount: getAvailableNodes(state).size,
+  isFetchingNodes: state.nodes.get('isFetching'),
+  isFetchingParameters: state.parameters.isFetching,
+  rolesLoaded: state.roles.loaded,
+  nodesLoaded: state.nodes.isLoaded,
+  totalAssignedNodesCount: getTotalAssignedNodesCount(state)
+});
+const mapDispatchToProps = dispatch => ({
+  fetchRoles: planName => dispatch(RolesActions.fetchRoles(planName)),
+  fetchNodes: () => dispatch(NodesActions.fetchNodes())
+});
+
+export default injectIntl(
+  withRouter(connect(mapStateToProps, mapDispatchToProps)(RolesStep))
+);
