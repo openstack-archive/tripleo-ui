@@ -23,7 +23,39 @@ import { Role, RolesState } from '../immutableRecords/roles';
 
 const initialState = new RolesState();
 
-export default function rolesReducer(state = initialState, action) {
+export const availableRolesReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case RolesConstants.FETCH_AVAILABLE_ROLES_PENDING:
+      return state.set('isFetching', true);
+
+    case RolesConstants.FETCH_AVAILABLE_ROLES_SUCCESS: {
+      const roles = fromJS(action.payload).map(role =>
+        new Role(role).update(role =>
+          role.set('identifier', _getRoleIdentifier(role.name))
+        )
+      );
+
+      return state
+        .set('roles', roles)
+        .set('isFetching', false)
+        .set('loaded', true);
+    }
+
+    case RolesConstants.FETCH_AVAILABLE_ROLES_FAILED:
+      return state
+        .set('roles', Map())
+        .set('isFetching', false)
+        .set('loaded', true);
+
+    case PlansConstants.PLAN_CHOSEN:
+      return state.set('loaded', false);
+
+    default:
+      return state;
+  }
+};
+
+const rolesReducer = (state = initialState, action) => {
   switch (action.type) {
     case RolesConstants.FETCH_ROLES_PENDING:
       return state.set('isFetching', true);
@@ -53,7 +85,8 @@ export default function rolesReducer(state = initialState, action) {
     default:
       return state;
   }
-}
+};
+export default rolesReducer;
 
 // TODO(jtomasek): Controller role name and tag don't follow naming convention
 // Remove this after controller tag is renamed from control to controller
