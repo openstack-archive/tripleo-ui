@@ -60,5 +60,43 @@ export default {
     return {
       type: RolesConstants.FETCH_ROLES_FAILED
     };
+  },
+
+  fetchAvailableRoles(planName) {
+    return (dispatch, getState) => {
+      dispatch(this.fetchAvailableRolesPending());
+
+      MistralApiService.runAction(MistralConstants.AVAILABLE_ROLE_LIST, {
+        container: planName
+      })
+        .then(response => {
+          const roles = normalize(response, arrayOf(roleSchema)).entities
+            .roles || {};
+          dispatch(this.fetchAvailableRolesSuccess(roles));
+        })
+        .catch(error => {
+          dispatch(handleErrors(error, 'Available Roles could not be loaded'));
+          dispatch(this.fetchAvailableRolesFailed());
+        });
+    };
+  },
+
+  fetchAvailableRolesPending() {
+    return {
+      type: RolesConstants.FETCH_AVAILABLE_ROLES_PENDING
+    };
+  },
+
+  fetchAvailableRolesSuccess(roles) {
+    return {
+      type: RolesConstants.FETCH_AVAILABLE_ROLES_SUCCESS,
+      payload: roles
+    };
+  },
+
+  fetchAvailableRolesFailed() {
+    return {
+      type: RolesConstants.FETCH_AVAILABLE_ROLES_FAILED
+    };
   }
 };
