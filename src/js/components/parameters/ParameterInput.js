@@ -21,6 +21,7 @@ import { isObjectLike } from 'lodash';
 
 import HorizontalInput from '../ui/forms/HorizontalInput';
 import HorizontalNumberInput from '../ui/forms/HorizontalNumberInput';
+import HorizontalArrayInput from '../ui/forms/HorizontalArrayInput';
 import HorizontalTextarea from '../ui/forms/HorizontalTextarea';
 import HorizontalCheckBox from '../ui/forms/HorizontalCheckBox';
 import HorizontalStaticText from '../ui/forms/HorizontalStaticText';
@@ -47,6 +48,17 @@ class ParameterInput extends React.Component {
           inputColumnClasses="col-sm-8"
         />
       );
+    } else if (type.toLowerCase() === 'commadelimitedlist') {
+      return (
+        <HorizontalArrayInput
+          name={name}
+          title={label}
+          description={description}
+          value={defaultValue}
+          labelColumnClasses="col-sm-4"
+          inputColumnClasses="col-sm-8"
+        />
+      );
     } else if (type.toLowerCase() === 'json' || isObjectLike(defaultValue)) {
       return (
         <HorizontalTextarea
@@ -58,17 +70,6 @@ class ParameterInput extends React.Component {
           validationError={this.props.intl.formatMessage(
             messages.enterValidJson
           )}
-          labelColumnClasses="col-sm-4"
-          inputColumnClasses="col-sm-8"
-        />
-      );
-    } else if (type.toLowerCase() === 'commadelimitedlist') {
-      return (
-        <HorizontalTextarea
-          name={name}
-          title={label}
-          description={description}
-          value={defaultValue}
           labelColumnClasses="col-sm-4"
           inputColumnClasses="col-sm-8"
         />
@@ -92,7 +93,6 @@ class ParameterInput extends React.Component {
         <HorizontalNumberInput
           name={name}
           title={label}
-          min={0}
           description={description}
           value={defaultValue}
           labelColumnClasses="col-sm-4"
