@@ -14,11 +14,17 @@
  * under the License.
  */
 
+import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import { getAvailableNodeProfiles } from '../../../selectors/nodes';
+import { getCurrentPlan } from '../../../selectors/plans';
+import { getRoles } from '../../../selectors/roles';
 import Modal from '../../ui/Modal';
+import RolesActions from '../../../actions/RolesActions';
 import TagNodesForm from './TagNodesForm';
 
 const messages = defineMessages({
@@ -28,16 +34,28 @@ const messages = defineMessages({
   }
 });
 
-export default class TagNodesModal extends React.Component {
+class TagNodesModal extends React.Component {
+  componentDidMount() {
+    const { currentPlan, fetchRoles } = this.props;
+    currentPlan && fetchRoles(currentPlan.name);
+  }
+
   render() {
+    const {
+      show,
+      onCancel,
+      onProfileSelected,
+      availableProfiles,
+      roles
+    } = this.props;
     return (
-      <Modal dialogClasses="modal-md" show={this.props.show}>
+      <Modal dialogClasses="modal-md" show={show}>
         <div className="modal-header">
           <button
             type="button"
             className="close"
             aria-label="Close"
-            onClick={this.props.onCancel}
+            onClick={onCancel}
           >
             <span aria-hidden="true" className="pficon pficon-close" />
           </button>
@@ -48,17 +66,33 @@ export default class TagNodesModal extends React.Component {
           </h4>
         </div>
         <TagNodesForm
-          onCancel={this.props.onCancel}
-          onSubmit={this.props.onProfileSelected}
-          profiles={this.props.availableProfiles}
+          onCancel={onCancel}
+          onSubmit={onProfileSelected}
+          profiles={availableProfiles.toArray()}
+          roles={roles.toList()}
         />
       </Modal>
     );
   }
 }
 TagNodesModal.propTypes = {
-  availableProfiles: PropTypes.array.isRequired,
+  availableProfiles: ImmutablePropTypes.list.isRequired,
+  currentPlan: ImmutablePropTypes.record,
+  fetchRoles: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   onProfileSelected: PropTypes.func.isRequired,
+  roles: ImmutablePropTypes.map.isRequired,
   show: PropTypes.bool.isRequired
 };
+
+const mapStateToProps = state => ({
+  availableProfiles: getAvailableNodeProfiles(state),
+  currentPlan: getCurrentPlan(state),
+  roles: getRoles(state)
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchRoles: planName => dispatch(RolesActions.fetchRoles(planName))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TagNodesModal);
