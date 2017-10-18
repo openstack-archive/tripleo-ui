@@ -16,13 +16,26 @@
 
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import HorizontalSelect from '../../ui/forms/HorizontalSelect';
 import HorizontalInput from '../../ui/forms/HorizontalInput';
+import InlineNotification from '../../ui/InlineNotification';
 
 const messages = defineMessages({
+  activateDeploymentPlan: {
+    id: 'TagNodesForm.activateDeploymentPlan',
+    defaultMessage: 'Activate a Deployment plan',
+    description: 'First part of noRolesInfo message - the contents of a link'
+  },
+  noRolesInfo: {
+    id: 'TagNodesForm.noRolesInfo',
+    defaultMessage: '{link} to select profiles which match available Roles',
+    description: 'A second part of noRolesInfo message - rest of the text after link'
+  },
   confirm: {
     id: 'TagNodesForm.confirm',
     defaultMessage: 'Confirm'
@@ -102,7 +115,7 @@ class TagNodesForm extends React.Component {
   }
 
   render() {
-    const { formatMessage } = this.props.intl;
+    const { intl: { formatMessage }, onCancel, roles } = this.props;
     return (
       <Formsy.Form
         ref="tagNodesForm"
@@ -113,6 +126,19 @@ class TagNodesForm extends React.Component {
         onInvalid={this.disableButton.bind(this)}
       >
         <div className="modal-body">
+          {roles.isEmpty() &&
+            <InlineNotification type="info">
+              <FormattedMessage
+                {...messages.noRolesInfo}
+                values={{
+                  link: (
+                    <Link to="/plans">
+                      <FormattedMessage {...messages.activateDeploymentPlan} />
+                    </Link>
+                  )
+                }}
+              />
+            </InlineNotification>}
           <fieldset>
             <HorizontalSelect
               name="profile"
@@ -153,7 +179,7 @@ class TagNodesForm extends React.Component {
             type="button"
             className="btn btn-default"
             aria-label="Close"
-            onClick={this.props.onCancel}
+            onClick={onCancel}
           >
             <FormattedMessage {...messages.cancel} />
           </button>
@@ -166,6 +192,7 @@ TagNodesForm.propTypes = {
   intl: PropTypes.object.isRequired,
   onCancel: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  profiles: PropTypes.array.isRequired
+  profiles: PropTypes.array.isRequired,
+  roles: ImmutablePropTypes.list.isRequired
 };
 export default injectIntl(TagNodesForm);
