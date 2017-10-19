@@ -1,0 +1,11 @@
+Verified+1: Jenkins
+Code-Review+1: Jason E. Rist <jrist@redhat.com>
+Code-Review+2: Jiri Tomasek <jtomasek@redhat.com>
+Code-Review+1: Ana Krivokapic <akrivoka@redhat.com>
+Workflow+1: Jiri Tomasek <jtomasek@redhat.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Thu, 19 Oct 2017 08:15:37 +0000
+Reviewed-on: https://review.openstack.org/510862
+Project: openstack/tripleo-ui
+Branch: refs/heads/stable/pike
