@@ -14,16 +14,17 @@
  * under the License.
  */
 
+import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { isObjectLike, mapValues } from 'lodash';
-import { Link } from 'react-router-dom';
 import { fromJS, is } from 'immutable';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import { CloseModal } from '../ui/Modals';
 import EnvironmentConfigurationActions
   from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentParameters from './EnvironmentParameters';
@@ -264,13 +265,13 @@ class Parameters extends React.Component {
           >
             <FormattedMessage {...messages.saveAndClose} />
           </button>
-          <Link
-            to={`/plans/${this.props.currentPlanName}`}
-            type="button"
-            className="btn btn-default"
-          >
-            <FormattedMessage {...messages.cancel} />
-          </Link>
+          <CloseModal
+            render={onHide => (
+              <Button onClick={onHide}>
+                <FormattedMessage {...messages.cancel} />
+              </Button>
+            )}
+          />
         </div>
       </Formsy.Form>
     );

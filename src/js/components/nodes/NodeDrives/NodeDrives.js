@@ -17,13 +17,19 @@
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router-dom';
+import {
+  Button,
+  ModalHeader,
+  ModalTitle,
+  ModalBody,
+  ModalFooter
+} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+import { CloseModal, RoutedModal } from '../../ui/Modals';
 import { getNodeDrives } from '../../../selectors/nodes';
 import { ListView } from '../../ui/ListView';
-import Modal from '../../ui/Modal';
 import NodeDrive from './NodeDrive';
 import NodesActions from '../../../actions/NodesActions';
 
@@ -45,31 +51,32 @@ class NodeDrives extends Component {
 
   render() {
     return (
-      <Modal dialogClasses="modal-xl">
-        <div className="modal-header">
-          <Link to="/nodes" type="button" className="close">
-            <span aria-hidden="true" className="pficon pficon-close" />
-          </Link>
-          <h4 className="modal-title">
+      <RoutedModal bsSize="xl" redirectPath="/nodes">
+        <ModalHeader closeButton>
+          <ModalTitle>
             <FormattedMessage
               {...messages.title}
               values={{ nodeId: this.props.match.params.nodeId }}
             />
-          </h4>
-        </div>
-        <div className="modal-body">
+          </ModalTitle>
+        </ModalHeader>
+        <ModalBody>
           <ListView>
             {this.props.drives
               .toJS()
               .map(drive => <NodeDrive key={drive.name} drive={drive} />)}
           </ListView>
-        </div>
-        <div className="modal-footer">
-          <Link to="/nodes" type="button" className="btn btn-default">
-            <FormattedMessage {...messages.close} />
-          </Link>
-        </div>
-      </Modal>
+        </ModalBody>
+        <ModalFooter>
+          <CloseModal
+            render={onHide => (
+              <Button onClick={onHide}>
+                <FormattedMessage {...messages.close} />
+              </Button>
+            )}
+          />
+        </ModalFooter>
+      </RoutedModal>
     );
   }
 }
