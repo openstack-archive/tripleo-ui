@@ -17,13 +17,14 @@
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { ModalHeader, ModalTitle } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import { getAvailableNodeProfiles } from '../../../selectors/nodes';
 import { getCurrentPlan } from '../../../selectors/plans';
 import { getRoles } from '../../../selectors/roles';
-import Modal from '../../ui/Modal';
+import { Modal } from '../../ui/Modals';
 import RolesActions from '../../../actions/RolesActions';
 import TagNodesForm from './TagNodesForm';
 
@@ -49,22 +50,14 @@ class TagNodesModal extends React.Component {
       roles
     } = this.props;
     return (
-      <Modal dialogClasses="modal-md" show={show}>
-        <div className="modal-header">
-          <button
-            type="button"
-            className="close"
-            aria-label="Close"
-            onClick={onCancel}
-          >
-            <span aria-hidden="true" className="pficon pficon-close" />
-          </button>
-          <h4 className="modal-title">
+      <Modal show={show} onHide={onCancel}>
+        <ModalHeader closeButton>
+          <ModalTitle>
             <span className="fa fa-tag" />
             {' '}
             <FormattedMessage {...messages.title} />
-          </h4>
-        </div>
+          </ModalTitle>
+        </ModalHeader>
         <TagNodesForm
           onCancel={onCancel}
           onSubmit={onProfileSelected}
