@@ -19,8 +19,9 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { includes } from 'lodash';
+import { ModalHeader, ModalTitle, ModalBody } from 'react-bootstrap';
 
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modals';
 import { ValidationStatusIcon } from './ValidationStatusIcon';
 
 const messages = defineMessages({
@@ -53,7 +54,7 @@ const messages = defineMessages({
 class ValidationDetail extends React.Component {
   constructor() {
     super();
-    this.state = { isPending: false };
+    this.state = { isPending: false, show: true };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -106,21 +107,21 @@ class ValidationDetail extends React.Component {
 
   render() {
     return (
-      <Modal dialogClasses="modal-lg">
-        <div className="modal-header">
-          <button
-            type="button"
-            className="close"
-            aria-label={this.props.intl.formatMessage(messages.close)}
-            onClick={this.props.hideValidationDetail}
-          >
-            <span aria-hidden="true" className="pficon pficon-close" />
-          </button>
-          <h4 className="modal-title">
+      <Modal
+        bsSize="lg"
+        onHide={() => this.setState({ show: false })}
+        onExited={this.props.hideValidationDetail}
+        show={this.state.show}
+      >
+        <ModalHeader
+          closeButton
+          closeLabel={this.props.intl.formatMessage(messages.close)}
+        >
+          <ModalTitle>
             <FormattedMessage {...messages.validationDetail} />
-          </h4>
-        </div>
-        <div className="modal-body">
+          </ModalTitle>
+        </ModalHeader>
+        <ModalBody>
           <div className="validation-detail-title">
             <div className="list-view-pf-left">
               <ValidationStatusIcon
@@ -149,7 +150,7 @@ class ValidationDetail extends React.Component {
             {this.props.status}
           </p>
           {this.renderValidationOutput()}
-        </div>
+        </ModalBody>
       </Modal>
     );
   }

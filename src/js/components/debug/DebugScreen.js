@@ -18,11 +18,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { ModalHeader, ModalTitle, ModalBody } from 'react-bootstrap';
 
-import Link from '../ui/Link';
 import LoggerActions from '../../actions/LoggerActions';
-import Modal from '../ui/Modal';
 import { InlineLoader } from '../ui/Loader';
+import { RoutedModal } from '../ui/Modals';
 
 const messages = defineMessages({
   debugPageTitle: {
@@ -118,18 +118,17 @@ class DebugScreen extends React.Component {
 
   render() {
     return (
-      <Modal dialogClasses="modal-lg">
-        <div className="modal-header">
-          <Link to="/" type="button" className="close">
-            <span aria-hidden="true" className="pficon pficon-close" />
-          </Link>
-          <h4><FormattedMessage {...messages.debugPageTitle} /></h4>
-        </div>
-        <div className="modal-body">
+      <RoutedModal bsSize="lg">
+        <ModalHeader closeButton>
+          <ModalTitle>
+            <FormattedMessage {...messages.debugPageTitle} />
+          </ModalTitle>
+        </ModalHeader>
+        <ModalBody>
           {this._renderDownloadButton()}
           {this._renderMessage()}
-        </div>
-      </Modal>
+        </ModalBody>
+      </RoutedModal>
     );
   }
 }

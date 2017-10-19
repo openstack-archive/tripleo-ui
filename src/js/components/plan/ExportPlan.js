@@ -16,13 +16,19 @@
 
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+import {
+  Button,
+  ModalHeader,
+  ModalTitle,
+  ModalBody,
+  ModalFooter
+} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
+import { CloseModal, RoutedModal } from '../ui/Modals';
 import PlansActions from '../../actions/PlansActions';
 import { Loader } from '../ui/Loader';
-import Modal from '../ui/Modal';
 
 const messages = defineMessages({
   exportPlanName: {
@@ -66,19 +72,20 @@ class ExportPlan extends React.Component {
 
   render() {
     return (
-      <Modal dialogClasses="modal-sm" id="ExportPlan__exportPlanModal">
-        <div className="modal-header">
-          <Link to="/plans/manage" type="button" className="close">
-            <span aria-hidden="true" className="pficon pficon-close" />
-          </Link>
-          <h4 className="modal-title">
+      <RoutedModal
+        bsSize="sm"
+        id="ExportPlan__exportPlanModal"
+        redirectPath="/plans/manage"
+      >
+        <ModalHeader closeButton>
+          <ModalTitle>
             <FormattedMessage
               {...messages.exportPlanName}
               values={{ planName: this.getNameFromUrl() }}
             />
-          </h4>
-        </div>
-        <div className="modal-body text-center">
+          </ModalTitle>
+        </ModalHeader>
+        <ModalBody className="text-center">
           <Loader
             loaded={!this.props.isExportingPlan}
             size="lg"
@@ -103,18 +110,20 @@ class ExportPlan extends React.Component {
                   <FormattedMessage {...messages.exportError} />
                 </div>}
           </Loader>
-        </div>
-        <div className="modal-footer">
-          <Link
-            to="/plans/manage"
-            type="button"
-            className="btn btn-default"
-            id="ExportPlan__cancelExportPlanModalButton"
-          >
-            <FormattedMessage {...messages.cancel} />
-          </Link>
-        </div>
-      </Modal>
+        </ModalBody>
+        <ModalFooter>
+          <CloseModal
+            render={onHide => (
+              <Button
+                onClick={onHide}
+                id="ExportPlan__cancelExportPlanModalButton"
+              >
+                <FormattedMessage {...messages.cancel} />
+              </Button>
+            )}
+          />
+        </ModalFooter>
+      </RoutedModal>
     );
   }
 }

@@ -16,12 +16,18 @@
 
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+import {
+  Button,
+  ModalHeader,
+  ModalTitle,
+  ModalBody,
+  ModalFooter
+} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
+import { CloseModal, RoutedModal } from '../ui/Modals';
 import PlansActions from '../../actions/PlansActions';
-import Modal from '../ui/Modal';
 
 const messages = defineMessages({
   deletePlan: {
@@ -57,21 +63,22 @@ class DeletePlan extends React.Component {
 
   render() {
     return (
-      <Modal dialogClasses="modal-sm" id="DeletePlan__deletePlanModal">
-        <div className="modal-header">
-          <Link to="/plans/manage" type="button" className="close">
-            <span aria-hidden="true" className="pficon pficon-close" />
-          </Link>
-          <h4 className="modal-title">
+      <RoutedModal
+        bsSize="sm"
+        id="DeletePlan__deletePlanModal"
+        redirectPath="/plans/manage"
+      >
+        <ModalHeader closeButton>
+          <ModalTitle>
             <span className="pficon pficon-delete" />
             {' '}
             <FormattedMessage
               {...messages.deletePlanName}
               values={{ planName: this.getNameFromUrl() }}
             />
-          </h4>
-        </div>
-        <div className="modal-body">
+          </ModalTitle>
+        </ModalHeader>
+        <ModalBody>
           <p>
             <FormattedMessage
               {...messages.deletePlanConfirmation}
@@ -86,8 +93,8 @@ class DeletePlan extends React.Component {
               }}
             />
           </p>
-        </div>
-        <div className="modal-footer">
+        </ModalBody>
+        <ModalFooter>
           <button
             className="btn btn-danger"
             onClick={this.onDeleteClick.bind(this)}
@@ -96,16 +103,18 @@ class DeletePlan extends React.Component {
           >
             <FormattedMessage {...messages.deletePlan} />
           </button>
-          <Link
-            to="/plans/manage"
-            type="button"
-            className="btn btn-default"
-            id="DeletePlan__cancelDeletePlanModalButton"
-          >
-            <FormattedMessage {...messages.cancel} />
-          </Link>
-        </div>
-      </Modal>
+          <CloseModal
+            render={onHide => (
+              <Button
+                onClick={onHide}
+                id="DeletePlan__cancelDeletePlanModalButton"
+              >
+                <FormattedMessage {...messages.cancel} />
+              </Button>
+            )}
+          />
+        </ModalFooter>
+      </RoutedModal>
     );
   }
 }

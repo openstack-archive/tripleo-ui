@@ -14,10 +14,17 @@
  * under the License.
  */
 
+import {
+  Button,
+  ModalHeader,
+  ModalTitle,
+  ModalBody,
+  ModalFooter
+} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Modal from '../ui/Modal';
+import Modal from './Modal';
 
 export default class ConfirmationModal extends React.Component {
   renderTitle() {
@@ -30,42 +37,33 @@ export default class ConfirmationModal extends React.Component {
   }
 
   render() {
+    const {
+      show,
+      onCancel,
+      question,
+      confirmActionName,
+      onConfirm,
+      confirmActionTitle,
+      title
+    } = this.props;
     return (
-      <Modal dialogClasses="modal-sm" show={this.props.show}>
-        <div className="modal-header">
-          <button
-            type="button"
-            className="close"
-            aria-label="Close"
-            onClick={this.props.onCancel}
-          >
-            <span aria-hidden="true" className="pficon pficon-close" />
-          </button>
-          <h4 className="modal-title">
+      <Modal bsSize="sm" show={show} onHide={onCancel}>
+        <ModalHeader closeButton>
+          <ModalTitle>
             {this.renderTitle()}
-          </h4>
-        </div>
-        <div className="modal-body">
-          <p>{this.props.question}</p>
-        </div>
-        <div className="modal-footer">
-          <button
-            className="btn btn-danger"
-            type="button"
-            name={this.props.confirmActionName}
-            onClick={this.props.onConfirm}
-          >
-            {this.props.confirmActionTitle || this.props.title}
-          </button>
-          <button
-            type="button"
-            className="btn btn-default"
-            aria-label="Close"
-            onClick={this.props.onCancel}
-          >
+          </ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+          <p>{question}</p>
+        </ModalBody>
+        <ModalFooter>
+          <Button bsStyle="danger" name={confirmActionName} onClick={onConfirm}>
+            {confirmActionTitle || title}
+          </Button>
+          <Button aria-label="Close" onClick={onCancel}>
             Cancel
-          </button>
-        </div>
+          </Button>
+        </ModalFooter>
       </Modal>
     );
   }
