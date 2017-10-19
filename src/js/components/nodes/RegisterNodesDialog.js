@@ -14,17 +14,18 @@
  * under the License.
  */
 
+import { Button, ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ClassNames from 'classnames';
-import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
 import uuid from 'uuid';
 
 import BlankSlate from '../ui/BlankSlate';
+import { CloseModal, RoutedModal } from '../ui/Modals';
 import {
   allNodesToRegisterAreValid,
   getIronicNodesfromNodesToRegister
@@ -37,7 +38,6 @@ import RegisterNodesActions from '../../actions/RegisterNodesActions';
 import RegisterNodeForm from './RegisterNodeForm';
 import Tab from '../ui/Tab';
 import TabPane from '../ui/TabPane';
-import Modal from '../ui/Modal';
 
 const messages = defineMessages({
   invalidJson: {
@@ -255,15 +255,16 @@ class RegisterNodesDialog extends React.Component {
 
   render() {
     return (
-      <Modal dialogClasses="modal-xl">
-        <div className="modal-header">
-          <Link to="/nodes" type="button" className="close">
-            <span className="pficon pficon-close" />
-          </Link>
-          <h4 className="modal-title">
+      <RoutedModal
+        onHide={() => this.props.cancelNodesRegistration()}
+        bsSize="xl"
+        redirectPath="/nodes"
+      >
+        <ModalHeader closeButton>
+          <ModalTitle>
             <FormattedMessage {...messages.registerNodes} />
-          </h4>
-        </div>
+          </ModalTitle>
+        </ModalHeader>
         <Loader
           loaded={!this.props.isRegistering}
           size="lg"
@@ -316,15 +317,14 @@ class RegisterNodesDialog extends React.Component {
             </div>
           </div>
         </Loader>
-        <div className="modal-footer">
-          <Link
-            to="/nodes"
-            onClick={() => this.props.cancelNodesRegistration()}
-            type="button"
-            className="btn btn-default"
-          >
-            <FormattedMessage {...messages.cancel} />
-          </Link>
+        <ModalFooter>
+          <CloseModal
+            render={onHide => (
+              <Button onClick={onHide}>
+                <FormattedMessage {...messages.cancel} />
+              </Button>
+            )}
+          />
           <button
             disabled={!this.props.canSubmit}
             onClick={() =>
@@ -334,8 +334,8 @@ class RegisterNodesDialog extends React.Component {
           >
             <FormattedMessage {...messages.registerNodes} />
           </button>
-        </div>
-      </Modal>
+        </ModalFooter>
+      </RoutedModal>
     );
   }
 }

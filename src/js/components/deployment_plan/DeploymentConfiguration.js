@@ -15,7 +15,8 @@
  */
 
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Link, Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { ModalHeader, ModalTitle } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -23,7 +24,7 @@ import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
 import EnvironmentConfiguration
   from '../environment_configuration/EnvironmentConfiguration';
 import NavTab from '../ui/NavTab';
-import Modal from '../ui/Modal';
+import { RoutedModal } from '../ui/Modals';
 import Parameters from '../parameters/Parameters';
 
 const messages = defineMessages({
@@ -42,22 +43,23 @@ const messages = defineMessages({
 });
 
 class DeploymentConfiguration extends React.Component {
+  constructor() {
+    super();
+    this.state = { show: true };
+  }
   render() {
     const { location, match } = this.props;
     return (
-      <Modal id="DeploymentConfiguration__ModalDialog" dialogClasses="modal-xl">
-        <div className="modal-header">
-          <Link
-            to={`/plans/${match.params.planName}`}
-            type="button"
-            className="close"
-          >
-            <span aria-hidden="true" className="pficon pficon-close" />
-          </Link>
-          <h4 className="modal-title">
+      <RoutedModal
+        id="DeploymentConfiguration__ModalDialog"
+        bsSize="xl"
+        redirectPath={`/plans/${match.params.planName}`}
+      >
+        <ModalHeader closeButton>
+          <ModalTitle>
             <FormattedMessage {...messages.deploymentConfiguration} />
-          </h4>
-        </div>
+          </ModalTitle>
+        </ModalHeader>
 
         <ul className="nav nav-tabs">
           <NavTab
@@ -88,7 +90,7 @@ class DeploymentConfiguration extends React.Component {
             to={`${match.url}/environment`}
           />
         </Switch>
-      </Modal>
+      </RoutedModal>
     );
   }
 }
