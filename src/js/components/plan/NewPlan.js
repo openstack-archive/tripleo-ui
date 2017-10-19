@@ -18,14 +18,14 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router-dom';
+import { Button, ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import { CloseModal, RoutedModal } from '../ui/Modals';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import PlansActions from '../../actions/PlansActions';
 import PlanFormTabs from './PlanFormTabs';
-import Modal from '../ui/Modal';
 import { Loader } from '../ui/Loader';
 
 const messages = defineMessages({
@@ -95,7 +95,12 @@ class NewPlan extends React.Component {
 
   render() {
     return (
-      <Modal dialogClasses="modal-lg" id="NewPlan__modal">
+      <RoutedModal
+        onHide={() => this.props.cancelCreatePlan()}
+        bsSize="lg"
+        id="NewPlan__modal"
+        redirectPath="/plans/manage"
+      >
         <Formsy.Form
           ref="NewPlanForm"
           role="form"
@@ -105,19 +110,11 @@ class NewPlan extends React.Component {
           onValid={this.onFormValid.bind(this)}
           onInvalid={this.onFormInvalid.bind(this)}
         >
-          <div className="modal-header">
-            <Link
-              to="/plans/manage"
-              type="button"
-              onClick={() => this.props.cancelCreatePlan()}
-              className="close"
-            >
-              <span aria-hidden="true" className="pficon pficon-close" />
-            </Link>
-            <h4 className="modal-title">
+          <ModalHeader closeButton>
+            <ModalTitle>
               <FormattedMessage {...messages.importPlan} />
-            </h4>
-          </div>
+            </ModalTitle>
+          </ModalHeader>
           <Loader
             loaded={!this.props.isTransitioningPlan}
             size="lg"
@@ -134,7 +131,7 @@ class NewPlan extends React.Component {
             </div>
           </Loader>
 
-          <div className="modal-footer">
+          <ModalFooter>
             <button
               disabled={!this.state.canSubmit}
               className="btn btn-primary"
@@ -142,18 +139,16 @@ class NewPlan extends React.Component {
             >
               <FormattedMessage {...messages.uploadAndCreate} />
             </button>
-            <Link
-              to="/plans/manage"
-              type="button"
-              onClick={() => this.props.cancelCreatePlan()}
-              className="btn btn-default"
-              id="NewPlan__cancelCreatePlanButton"
-            >
-              <FormattedMessage {...messages.cancel} />
-            </Link>
-          </div>
+            <CloseModal
+              render={onHide => (
+                <Button id="NewPlan__cancelCreatePlanButton" onClick={onHide}>
+                  <FormattedMessage {...messages.cancel} />
+                </Button>
+              )}
+            />
+          </ModalFooter>
         </Formsy.Form>
-      </Modal>
+      </RoutedModal>
     );
   }
 }
