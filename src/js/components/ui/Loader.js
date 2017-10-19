@@ -15,10 +15,11 @@
  */
 
 import cx from 'classnames';
+import { ModalBody } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modals';
 
 /* TODO(jtomasek): simplify this once updated to React 16 as it allows
    components to return array instead of single element */
@@ -141,11 +142,11 @@ export const GlobalLoader = ({
     loaded={loaded}
     originalContent={children}
   >
-    <Modal dialogClasses="modal-sm">
-      <div className="modal-body">
+    <Modal bsSize="sm" show animation={false}>
+      <ModalBody>
         <Spinner />
         {content && <div className="text-center">{content}</div>}
-      </div>
+      </ModalBody>
     </Modal>
   </BaseLoader>
 );

@@ -26,10 +26,9 @@ import {
   SubmissionError,
   submit
 } from 'redux-form';
-import { Button } from 'react-bootstrap';
+import { Button, ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { last, omit } from 'lodash';
-import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -37,6 +36,7 @@ import uuid from 'uuid';
 import when from 'when';
 import { withRouter } from 'react-router-dom';
 
+import { CloseModal, RoutedModal } from '../../ui/Modals';
 import { handleErrors } from '../../../actions/ErrorActions';
 import { OverlayLoader } from '../../ui/Loader';
 import NotificationActions from '../../../actions/NotificationActions';
@@ -44,7 +44,6 @@ import RegisterNodesActions from '../../../actions/RegisterNodesActions';
 import RegisterNodesForm from './RegisterNodesForm';
 import NodesFileUpload from './NodesFileUpload';
 import NodeTab from './NodeTab';
-import Modal from '../../ui/Modal';
 
 import MistralApiService from '../../../services/MistralApiService';
 import MistralConstants from '../../../constants/MistralConstants';
@@ -183,15 +182,12 @@ class RegisterNodesDialog extends React.Component {
       submitting
     } = this.props;
     return (
-      <Modal dialogClasses="modal-xl">
-        <div className="modal-header">
-          <Link to="/nodes" type="button" className="close">
-            <span className="pficon pficon-close" />
-          </Link>
-          <h4 className="modal-title">
+      <RoutedModal bsSize="xl" redirectPath="/nodes" onHide={resetForm}>
+        <ModalHeader closeButton>
+          <ModalTitle>
             <FormattedMessage {...messages.registerNodes} />
-          </h4>
-        </div>
+          </ModalTitle>
+        </ModalHeader>
         <div className="container-fluid">
           <OverlayLoader
             containerClassName="row row-eq-height"
@@ -226,15 +222,14 @@ class RegisterNodesDialog extends React.Component {
             </div>
           </OverlayLoader>
         </div>
-        <div className="modal-footer">
-          <Link
-            to="/nodes"
-            onClick={() => resetForm()}
-            type="button"
-            className="btn btn-default"
-          >
-            <FormattedMessage {...messages.cancel} />
-          </Link>
+        <ModalFooter>
+          <CloseModal
+            render={onHide => (
+              <Button onClick={onHide}>
+                <FormattedMessage {...messages.cancel} />
+              </Button>
+            )}
+          />
           <button
             disabled={pristine || invalid || submitting}
             onClick={() => submitForm()}
@@ -243,8 +238,8 @@ class RegisterNodesDialog extends React.Component {
           >
             <FormattedMessage {...messages.registerNodes} />
           </button>
-        </div>
-      </Modal>
+        </ModalFooter>
+      </RoutedModal>
     );
   }
 }
