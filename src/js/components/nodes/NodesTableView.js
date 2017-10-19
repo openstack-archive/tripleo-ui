@@ -28,7 +28,7 @@ import {
   getFilteredNodes,
   getNodesOperationInProgress
 } from '../../selectors/nodes';
-import ConfirmationModal from '../ui/ConfirmationModal';
+import { ConfirmationModal } from '../ui/Modals';
 import FormErrorList from '../ui/forms/FormErrorList';
 import NodesActions from '../../actions/NodesActions';
 import NodesTable from './NodesTable';
