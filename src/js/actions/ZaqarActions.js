@@ -54,6 +54,10 @@ export default {
           dispatch(NodesActions.nodesIntrospectionFinished(payload));
           break;
 
+        case MistralConstants.BAREMETAL_INTROSPECT_INTERNAL:
+          dispatch(NodesActions.nodeIntrospectionFinished(payload));
+          break;
+
         case MistralConstants.BAREMETAL_PROVIDE:
           dispatch(NodesActions.provideNodesFinished(payload));
           break;
