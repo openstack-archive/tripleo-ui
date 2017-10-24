@@ -29,35 +29,32 @@
 
 .modal {
   z-index: 1040; // set the same z-index as backdrop to make nested modals work correctly
-  // &.modal-visible {
-  //   display: block;
-  // }
+}
 
-  .modal-dialog {
-    margin: 50px auto;
+.modal-dialog {
+  margin: 50px auto;
+  .nav-tabs {
+    font-size: 12px;
+    padding: 15px 15px 0 15px;
+  }
+  .modal-body {
     .nav-tabs {
-      font-size: 12px;
-      padding: 15px 15px 0 15px;
-    }
-    .modal-body {
-      .nav-tabs {
-        padding: 0;
-        margin-bottom: 15px;
-      }
+      padding: 0;
+      margin-bottom: 15px;
     }
   }
+}
 
-  .modal-header {
-    border-bottom: 1px solid @modal-header-border-color ;
-  }
+.modal-header {
+  border-bottom: 1px solid @modal-header-border-color ;
+}
 
 
-  .modal-footer {
-    margin-top: 0px;
-    background-color: #f8f8f8;
-    border-top: 1px solid @modal-footer-border-color ;
-    padding: 10px 18px;
-  }
+.modal-footer {
+  margin-top: 0px;
+  background-color: #f8f8f8;
+  border-top: 1px solid @modal-footer-border-color ;
+  padding: 10px 18px;
 }
 
 .modal-form-error-list {

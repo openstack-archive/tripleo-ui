@@ -15,6 +15,7 @@
  */
 
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { ModalBody } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { injectIntl } from 'react-intl';
@@ -30,7 +31,7 @@ class DeploymentSuccess extends React.Component {
     );
 
     return (
-      <div className="col-sm-12 fixed-container-body-content">
+      <ModalBody className="flex-container flex-column">
         <InlineNotification type="success" title={status}>
           <p>{this.props.stack.stack_status_reason}</p>
         </InlineNotification>
@@ -39,7 +40,7 @@ class DeploymentSuccess extends React.Component {
           stack={this.props.stack}
           stackResources={this.props.stackResources}
         />
-      </div>
+      </ModalBody>
     );
   }
 }

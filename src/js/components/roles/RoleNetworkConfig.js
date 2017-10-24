@@ -26,7 +26,7 @@ import { getRole } from '../../selectors/roles';
 class RoleNetworkConfig extends React.Component {
   render() {
     return (
-      <div className="col-sm-12">
+      <div className="col-sm-12 flex-column">
         <fieldset>{this.props.description}</fieldset>
         <ParameterInputList
           parameters={this.props.parameters.toList()}

@@ -14,7 +14,9 @@
  * under the License.
  */
 
-export Modal from './Modal';
-export RoutedModal from './RoutedModal';
-export ConfirmationModal from './ConfirmationModal';
 export CloseModal from './CloseModal';
+export ConfirmationModal from './ConfirmationModal';
+export Modal from './Modal';
+export ModalPanel from './ModalPanel';
+export RoutedModal from './RoutedModal';
+export RoutedModalPanel from './RoutedModalPanel';
