@@ -16,6 +16,7 @@
 
 import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { ModalBody } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -57,17 +58,21 @@ export default class DeploymentProgress extends React.Component {
     );
 
     return (
-      <div className="col-sm-12 fixed-container-body-content">
-        <div className="progress-description">
-          <InlineLoader content={statusMessage} />
+      <ModalBody className="flex-container">
+        <div>
+          <div className="progress-description">
+            <InlineLoader content={statusMessage} />
+          </div>
+          {this.renderProgressBar()}
         </div>
-        {this.renderProgressBar()}
         <h2><FormattedMessage {...messages.resources} /></h2>
-        <StackResourcesTable
-          isFetchingResources={!this.props.stackResourcesLoaded}
-          resources={this.props.stackResources.reverse()}
-        />
-      </div>
+        <div className="flex-column">
+          <StackResourcesTable
+            isFetchingResources={!this.props.stackResourcesLoaded}
+            resources={this.props.stackResources.reverse()}
+          />
+        </div>
+      </ModalBody>
     );
   }
 }

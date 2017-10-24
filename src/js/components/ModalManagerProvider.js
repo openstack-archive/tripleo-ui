@@ -14,31 +14,30 @@
  * under the License.
  */
 
-import cx from 'classnames';
-import { Modal as BootstrapModal } from 'react-bootstrap';
+import { Modal } from 'react-overlays';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 /**
- * Enhanced React Bootstrap Modal component to allow additional xl size
+ * ModalManagerProvider component provides single ModalManager instance via context to Modal and
+ * ModalPanel instances. ModalManager is then aware of all modals and allows for correct modal
+ * nesting, focus transfer etc.
  */
-const Modal = ({ dialogClassName, bsSize, ...props }, { modalManager }) => (
-  <BootstrapModal
-    {...props}
-    manager={modalManager}
-    dialogClassName={cx(dialogClassName, `modal-${bsSize}`)}
-  />
-);
-Modal.contextTypes = {
+class ModalManagerProvider extends React.Component {
+  getChildContext() {
+    return {
+      modalManager: new Modal.Manager()
+    };
+  }
+  render() {
+    return this.props.children;
+  }
+}
+ModalManagerProvider.childContextTypes = {
   modalManager: PropTypes.object
 };
-Modal.propTypes = {
-  ...BootstrapModal.propTypes,
-  bsSize: PropTypes.oneOf(['sm', 'md', 'lg', 'xl']),
+ModalManagerProvider.propTypes = {
   children: PropTypes.node
 };
-Modal.defaultProps = {
-  ...BootstrapModal.defaultProps,
-  bsSize: 'md'
-};
-export default Modal;
+
+export default ModalManagerProvider;

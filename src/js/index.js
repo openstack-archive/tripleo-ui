@@ -24,6 +24,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import App from './components/App';
 import I18nProvider from './components/i18n/I18nProvider';
 import initFormsy from './components/utils/Formsy';
+import ModalManagerProvider from './components/ModalManagerProvider';
 import store from './store';
 import '../less/base.less';
 
@@ -32,9 +33,11 @@ initFormsy();
 ReactDOM.render(
   <Provider store={store}>
     <I18nProvider>
-      <Router>
-        <App />
-      </Router>
+      <ModalManagerProvider>
+        <Router>
+          <App />
+        </Router>
+      </ModalManagerProvider>
     </I18nProvider>
   </Provider>,
   document.getElementById('react-app-index')

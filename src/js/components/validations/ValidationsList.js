@@ -161,43 +161,45 @@ class ValidationsList extends React.Component {
           'validations-sidebar'
         )}
       >
-        <div className="sidebar-header sidebar-header-bleed-left">
-          <h2 className="h4">
-            <FormattedMessage {...messages.validations} />
-            <div className="actions pull-right">
-              <InlineLoader
-                loaded={
-                  !(this.props.validationsLoaded &&
-                    this.props.isFetchingValidations)
-                }
-                component="small"
-                content={formatMessage(messages.loadingValidations)}
-              >
-                <a
-                  className="link refresh"
-                  onClick={this.refreshValidations.bind(this)}
+        <div className="flex-container">
+          <div className="sidebar-header sidebar-header-bleed-left">
+            <h2 className="h4">
+              <FormattedMessage {...messages.validations} />
+              <div className="actions pull-right">
+                <InlineLoader
+                  loaded={
+                    !(this.props.validationsLoaded &&
+                      this.props.isFetchingValidations)
+                  }
+                  component="small"
+                  content={formatMessage(messages.loadingValidations)}
                 >
-                  <span className="pficon pficon-refresh" />
-                  {' '}
-                  <FormattedMessage {...messages.refresh} />
-                </a>
-              </InlineLoader>
-            </div>
-          </h2>
-        </div>
-        <ValidationsToolbar />
-        <Loader
-          loaded={this.props.validationsLoaded && this.props.executionsLoaded}
-          content={formatMessage(messages.loadingValidations)}
-          component={({ children }) => (
-            <div className="row fixed-container-body">{children}</div>
-          )}
-          height={80}
-        >
-          <div className="list-group list-view-pf validation-list">
-            {this.renderValidations()}
+                  <a
+                    className="link refresh"
+                    onClick={this.refreshValidations.bind(this)}
+                  >
+                    <span className="pficon pficon-refresh" />
+                    {' '}
+                    <FormattedMessage {...messages.refresh} />
+                  </a>
+                </InlineLoader>
+              </div>
+            </h2>
           </div>
-        </Loader>
+          <ValidationsToolbar />
+          <Loader
+            loaded={this.props.validationsLoaded && this.props.executionsLoaded}
+            content={formatMessage(messages.loadingValidations)}
+            component={({ children }) => (
+              <div className="row flex-column">{children}</div>
+            )}
+            height={80}
+          >
+            <div className="list-group list-view-pf validation-list">
+              {this.renderValidations()}
+            </div>
+          </Loader>
+        </div>
         {this.rendervalidationDetail()}
       </div>
     );

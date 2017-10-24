@@ -26,7 +26,7 @@ import { getRole } from '../../selectors/roles';
 class RoleParameters extends React.Component {
   render() {
     return (
-      <div className="col-sm-12">
+      <div className="col-sm-12 flex-column">
         <ParameterInputList
           parameters={this.props.parameters.toList()}
           mistralParameters={this.props.mistralParameters}

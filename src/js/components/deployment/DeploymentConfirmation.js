@@ -69,7 +69,7 @@ class DeploymentConfirmation extends React.Component {
     } = this.props;
 
     return (
-      <div className="col-sm-12 deployment-summary">
+      <div className="flex-column deployment-summary">
         <BlankSlate
           iconClass="fa fa-cloud-upload"
           title={this.props.intl.formatMessage(
