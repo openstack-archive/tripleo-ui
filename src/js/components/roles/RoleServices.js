@@ -73,13 +73,13 @@ class RoleServices extends React.Component {
   render() {
     const { formatMessage } = this.props.intl;
     return (
-      <div className="row-eq-height">
-        <div className="col-sm-4 sidebar-pf sidebar-pf-left">
+      <div className="flex-row">
+        <div className="col-xs-12 col-sm-4 sidebar-pf sidebar-pf-left flex-column">
           <ul className="nav nav-pills nav-stacked nav-arrows">
             {this.renderServiceTabs()}
           </ul>
         </div>
-        <div className="col-sm-8">
+        <div className="col-xs-12 col-sm-8 flex-column">
           <ParameterInputList
             emptyParametersMessage={
               this.state.selectedService

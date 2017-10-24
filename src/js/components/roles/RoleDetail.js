@@ -20,9 +20,10 @@ import Formsy from 'formsy-react';
 import { fromJS, is } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { isObjectLike, mapValues } from 'lodash';
-import { Link, Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Button, ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
 
 import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
 import { getCurrentPlanName } from '../../selectors/plans';
@@ -30,13 +31,7 @@ import { getRole } from '../../selectors/roles';
 import { getRoleServices } from '../../selectors/parameters';
 import { Loader } from '../ui/Loader';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
-import {
-  ModalPanelBackdrop,
-  ModalPanel,
-  ModalPanelHeader,
-  ModalPanelBody,
-  ModalPanelFooter
-} from '../ui/ModalPanel';
+import { CloseModal, RoutedModalPanel } from '../ui/Modals';
 import NavTab from '../ui/NavTab';
 import ParametersActions from '../../actions/ParametersActions';
 import RoleNetworkConfig from './RoleNetworkConfig';
@@ -44,6 +39,10 @@ import RoleParameters from './RoleParameters';
 import RoleServices from './RoleServices';
 
 const messages = defineMessages({
+  cancel: {
+    id: 'RoleDetail.cancel',
+    defaultMessage: 'Cancel'
+  },
   networkConfiguration: {
     id: 'RoleDetail.networkConfiguration',
     defaultMessage: 'Network Configuration'
@@ -74,7 +73,8 @@ class RoleDetail extends React.Component {
   constructor() {
     super();
     this.state = {
-      canSubmit: false
+      canSubmit: false,
+      show: true
     };
   }
 
@@ -142,33 +142,29 @@ class RoleDetail extends React.Component {
   renderRoleTabs() {
     const {
       currentPlanName,
-      formErrors,
       match: { params: urlParams },
       parametersLoaded,
       rolesLoaded
     } = this.props;
     if (rolesLoaded && parametersLoaded) {
       return (
-        <div className="row">
-          <ul className="nav nav-tabs">
-            <NavTab
-              to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/parameters`}
-            >
-              <FormattedMessage {...messages.parameters} />
-            </NavTab>
-            <NavTab
-              to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/services`}
-            >
-              <FormattedMessage {...messages.services} />
-            </NavTab>
-            <NavTab
-              to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/network-configuration`}
-            >
-              <FormattedMessage {...messages.networkConfiguration} />
-            </NavTab>
-          </ul>
-          <ModalFormErrorList errors={formErrors.toJS()} />
-        </div>
+        <ul className="nav nav-tabs">
+          <NavTab
+            to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/parameters`}
+          >
+            <FormattedMessage {...messages.parameters} />
+          </NavTab>
+          <NavTab
+            to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/services`}
+          >
+            <FormattedMessage {...messages.services} />
+          </NavTab>
+          <NavTab
+            to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/network-configuration`}
+          >
+            <FormattedMessage {...messages.networkConfiguration} />
+          </NavTab>
+        </ul>
       );
     }
   }
@@ -178,66 +174,59 @@ class RoleDetail extends React.Component {
     const roleName = this.props.role ? this.props.role.name : null;
     const {
       currentPlanName,
+      formErrors,
       intl,
       location,
       match: { params: urlParams }
     } = this.props;
-
     return (
-      <Formsy.Form
-        ref="roleParametersForm"
-        role="form"
-        className="form form-horizontal"
-        onSubmit={this.handleSubmit.bind(this)}
-        onValid={this.enableButton.bind(this)}
-        onInvalid={this.disableButton.bind(this)}
-      >
-        <ModalPanelBackdrop />
-        <ModalPanel>
-          <ModalPanelHeader>
-            <Link
-              to={`/plans/${currentPlanName}`}
-              type="button"
-              className="close"
-            >
-              <span aria-hidden="true" className="pficon pficon-close" />
-            </Link>
-            <h2 className="modal-title">
+      <RoutedModalPanel redirectPath={`/plans/${currentPlanName}`}>
+        <Formsy.Form
+          ref="roleParametersForm"
+          role="form"
+          className="form form-horizontal flex-container"
+          onSubmit={this.handleSubmit.bind(this)}
+          onValid={this.enableButton.bind(this)}
+          onInvalid={this.disableButton.bind(this)}
+        >
+          <ModalHeader closeButton>
+            <ModalTitle>
               <FormattedMessage
                 {...messages.role}
                 values={{ roleName: roleName }}
               />
-            </h2>
-          </ModalPanelHeader>
+            </ModalTitle>
+          </ModalHeader>
           {this.renderRoleTabs()}
-          <ModalPanelBody>
-            <Loader
-              height={60}
-              content={intl.formatMessage(messages.loadingParameters)}
-              loaded={dataLoaded}
-            >
-              <Switch location={location}>
-                <Route
-                  path="/plans/:planName/roles/:roleIdentifier/parameters"
-                  component={RoleParameters}
-                />
-                <Route
-                  path="/plans/:planName/roles/:roleIdentifier/services"
-                  component={RoleServices}
-                />
-                <Route
-                  path="/plans/:planName/roles/:roleIdentifier/network-configuration"
-                  component={RoleNetworkConfig}
-                />
-                <Redirect
-                  from="/plans/:planName/roles/:roleIdentifier"
-                  to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/parameters`}
-                />
-              </Switch>
-            </Loader>
-          </ModalPanelBody>
+          <ModalFormErrorList errors={formErrors.toJS()} />
+          <Loader
+            height={60}
+            content={intl.formatMessage(messages.loadingParameters)}
+            component="div"
+            componentProps={{ className: 'flex-container' }}
+            loaded={dataLoaded}
+          >
+            <Switch location={location}>
+              <Route
+                path="/plans/:planName/roles/:roleIdentifier/parameters"
+                component={RoleParameters}
+              />
+              <Route
+                path="/plans/:planName/roles/:roleIdentifier/services"
+                component={RoleServices}
+              />
+              <Route
+                path="/plans/:planName/roles/:roleIdentifier/network-configuration"
+                component={RoleNetworkConfig}
+              />
+              <Redirect
+                from="/plans/:planName/roles/:roleIdentifier"
+                to={`/plans/${currentPlanName}/roles/${urlParams.roleIdentifier}/parameters`}
+              />
+            </Switch>
+          </Loader>
           {dataLoaded
-            ? <ModalPanelFooter>
+            ? <ModalFooter>
                 <button
                   type="submit"
                   disabled={!this.state.canSubmit}
@@ -245,10 +234,17 @@ class RoleDetail extends React.Component {
                 >
                   <FormattedMessage {...messages.saveChanges} />
                 </button>
-              </ModalPanelFooter>
+                <CloseModal
+                  render={onHide => (
+                    <Button onClick={onHide}>
+                      <FormattedMessage {...messages.cancel} />
+                    </Button>
+                  )}
+                />
+              </ModalFooter>
             : null}
-        </ModalPanel>
-      </Formsy.Form>
+        </Formsy.Form>
+      </RoutedModalPanel>
     );
   }
 }
