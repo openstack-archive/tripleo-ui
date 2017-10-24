@@ -16,6 +16,7 @@
 
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { ModalBody } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -41,16 +42,18 @@ class DeploymentFailure extends React.Component {
     );
 
     return (
-      <div className="col-sm-12 fixed-container-body-content">
+      <ModalBody className="flex-container">
         <InlineNotification type="error" title={status}>
           <p>{this.props.stack.stack_status_reason}</p>
         </InlineNotification>
         <h2><FormattedMessage {...messages.resources} /></h2>
-        <StackResourcesTable
-          isFetchingResources={!this.props.stackResourcesLoaded}
-          resources={this.props.stackResources.reverse()}
-        />
-      </div>
+        <div className="flex-column">
+          <StackResourcesTable
+            isFetchingResources={!this.props.stackResourcesLoaded}
+            resources={this.props.stackResources.reverse()}
+          />
+        </div>
+      </ModalBody>
     );
   }
 }
