@@ -14,12 +14,11 @@
  * under the License.
  */
 
-import when from 'when';
-
-import * as utils from '../../js/services/utils';
+import { mockStore } from '../actions/utils';
 import HeatApiService from '../../js/services/HeatApiService';
 
 describe('HeatApiService', () => {
+  const store = mockStore({});
   describe('.getStacks() (success)', () => {
     const apiResponse = {
       data: {
@@ -29,25 +28,22 @@ describe('HeatApiService', () => {
         ]
       }
     };
-    let result;
 
-    beforeEach(done => {
-      spyOn(utils, 'getServiceUrl').and.returnValue('example.com');
-      spyOn(HeatApiService, 'defaultRequest').and.returnValue(
-        when.resolve(apiResponse)
-      );
-      HeatApiService.getStacks().then(res => {
-        result = res;
-        done();
-      });
+    beforeEach(() => {
+      HeatApiService.defaultRequest = jest
+        .fn()
+        .mockReturnValue(() => Promise.resolve(apiResponse));
     });
 
     it('returns a stack object based on <planName>', () => {
-      expect(result).toEqual({
-        stacks: [
-          { stack_name: 'overcloud', stack_status: 'CREATE_COMPLETE' },
-          { stack_name: 'anothercloud', stack_status: 'CREATE_FAILED' }
-        ]
+      return store.dispatch(HeatApiService.getStacks()).then(result => {
+        expect(HeatApiService.defaultRequest).toHaveBeenCalled();
+        expect(result).toEqual({
+          stacks: [
+            { stack_name: 'overcloud', stack_status: 'CREATE_COMPLETE' },
+            { stack_name: 'anothercloud', stack_status: 'CREATE_FAILED' }
+          ]
+        });
       });
     });
   });
