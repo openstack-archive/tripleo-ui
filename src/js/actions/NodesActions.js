@@ -160,11 +160,10 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
       dispatch(this.pollNodeslistDuringProgress());
-      return MistralApiService.runWorkflow(
-        MistralConstants.BAREMETAL_INTROSPECT,
-        {
+      return dispatch(
+        MistralApiService.runWorkflow(MistralConstants.BAREMETAL_INTROSPECT, {
           node_uuids: nodeIds
-        }
+        })
       ).catch(error => {
         dispatch(
           handleErrors(error, 'Selected Nodes could not be introspected')
@@ -256,9 +255,11 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
       dispatch(this.pollNodeslistDuringProgress());
-      return MistralApiService.runWorkflow(MistralConstants.BAREMETAL_PROVIDE, {
-        node_uuids: nodeIds
-      }).catch(error => {
+      return dispatch(
+        MistralApiService.runWorkflow(MistralConstants.BAREMETAL_PROVIDE, {
+          node_uuids: nodeIds
+        })
+      ).catch(error => {
         dispatch(handleErrors(error, 'Selected Nodes could not be provided'));
         dispatch(this.finishOperation(nodeIds));
       });
@@ -303,9 +304,11 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
       dispatch(this.pollNodeslistDuringProgress());
-      MistralApiService.runWorkflow(MistralConstants.BAREMETAL_MANAGE, {
-        node_uuids: nodeIds
-      }).catch(error => {
+      dispatch(
+        MistralApiService.runWorkflow(MistralConstants.BAREMETAL_MANAGE, {
+          node_uuids: nodeIds
+        })
+      ).catch(error => {
         dispatch(handleErrors(error, 'Selected Nodes could not be managed'));
         dispatch(this.finishOperation(nodeIds));
       });
