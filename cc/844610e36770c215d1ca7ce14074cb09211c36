@@ -1,0 +1,8 @@
+Code-Review+2: Honza Pokorny <honza@redhat.com>
+Workflow+1: Emilien Macchi <emilien@redhat.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Wed, 25 Oct 2017 21:30:29 +0000
+Reviewed-on: https://review.openstack.org/515137
+Project: openstack/tripleo-ui
+Branch: refs/heads/stable/pike
