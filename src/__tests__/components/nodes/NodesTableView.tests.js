@@ -19,8 +19,7 @@ import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 import { List, Map, Set } from 'immutable';
 
-// TODO(jtomasek): remove this import when store is correctly mocked
-import store from '../../../js/store';
+import { mockStore } from '../../actions/utils';
 import NodesTableView from '../../../js/components/nodes/NodesTableView';
 
 let nodes = Map({
@@ -48,7 +47,7 @@ describe('RegisteredNodesTabPane component', () => {
         isFetchingNodes={false}
         nodesInProgress={Set()}
         nodesOperationInProgress={false}
-        store={store}
+        store={mockStore({})}
         intl={intl}
       />
     );
