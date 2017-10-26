@@ -38,10 +38,6 @@ const messages = defineMessages({
     id: 'Nodes.loadingNodes',
     defaultMessage: 'Loading Nodes...'
   },
-  refreshResults: {
-    id: 'Nodes.refreshResults',
-    defaultMessage: 'Refresh Results'
-  },
   registerNodes: {
     id: 'Nodes.registerNodes',
     defaultMessage: 'Register Nodes'
@@ -54,11 +50,6 @@ const messages = defineMessages({
 
 class Nodes extends React.Component {
   componentDidMount() {
-    this.props.fetchNodes();
-  }
-
-  refreshResults(e) {
-    e.preventDefault();
     this.props.fetchNodes();
   }
 
@@ -84,16 +75,7 @@ class Nodes extends React.Component {
               content={this.props.intl.formatMessage(messages.loadingNodes)}
               component="span"
               inline
-            >
-              <a
-                id="Nodes__refreshResultsLink"
-                className="link btn btn-link"
-                onClick={this.refreshResults.bind(this)}
-              >
-                <span className="pficon pficon-refresh" />&nbsp;
-                <FormattedMessage {...messages.refreshResults} />
-              </a>
-            </Loader>
+            />
             &nbsp;
             <Link
               to="/nodes/register"
