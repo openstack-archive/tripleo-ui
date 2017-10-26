@@ -152,7 +152,7 @@ export default {
   fetchEnvironment(planName, environmentPath) {
     return dispatch => {
       dispatch(this.fetchEnvironmentPending(environmentPath));
-      SwiftApiService.getObject(planName, environmentPath)
+      dispatch(SwiftApiService.getObject(planName, environmentPath))
         .then(response => {
           const {
             resource_registry,
