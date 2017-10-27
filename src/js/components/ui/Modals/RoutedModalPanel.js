@@ -14,6 +14,8 @@
  * under the License.
  */
 
+import { connect } from 'react-redux';
+import cx from 'classnames';
 import { pick } from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -45,6 +47,11 @@ export class RoutedModalPanel extends React.Component {
     return (
       <ModalPanel
         {...modalPanelProps}
+        // TODO(jtomasek): consider moving this prop directly to ModalPanel once
+        // we move all forms from Formsy to Redux-Form
+        modalPanelClassName={cx('col-xs-12', 'col-sm-11', 'col-sm-offset-1', {
+          'col-lg-8': this.props.showValidations
+        })}
         show={this.state.show}
         onHide={this.handleHide.bind(this)}
         onExited={this.handleExited.bind(this)}
@@ -57,9 +64,12 @@ RoutedModalPanel.propTypes = {
   history: PropTypes.object.isRequired,
   onExited: PropTypes.func,
   onHide: PropTypes.func,
-  redirectPath: PropTypes.string
+  redirectPath: PropTypes.string,
+  showValidations: PropTypes.bool.isRequired
 };
 RoutedModalPanel.defaultProps = {
   redirectPath: '/'
 };
-export default withRouter(RoutedModalPanel);
+export default connect(state => ({
+  showValidations: state.validations.showValidations
+}))(withRouter(RoutedModalPanel));
