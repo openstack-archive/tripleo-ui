@@ -35,7 +35,7 @@ const messages = defineMessages({
   },
   downloadPlanExport: {
     id: 'ExportPlan.download',
-    defaultMessage: 'Download Export'
+    defaultMessage: 'Download'
   },
   downloadPlanExportMessage: {
     id: 'ExportPlan.downloadMessage',
@@ -49,7 +49,7 @@ const messages = defineMessages({
   },
   cancel: {
     id: 'ExportPlan.cancel',
-    defaultMessage: 'Cancel'
+    defaultMessage: 'Close'
   }
 });
 
