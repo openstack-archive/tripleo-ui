@@ -108,7 +108,7 @@ ModalPanel.propTypes = {
 };
 ModalPanel.defaultProps = {
   ...Modal.defaultProps,
-  modalPanelClassName: 'col-xs-11 col-xs-offset-1',
+  modalPanelClassName: 'col-xs-12 col-sm-11 col-sm-offset-1',
   style: { top: 86 }
 };
 
