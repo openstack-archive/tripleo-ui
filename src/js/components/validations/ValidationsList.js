@@ -20,6 +20,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import { addActiveFilter } from '../../actions/FiltersActions';
 import BlankSlate from '../ui/BlankSlate';
 import { getCurrentPlanName } from '../../selectors/plans';
 import Loader from '../ui/Loader';
@@ -133,6 +134,7 @@ class ValidationsList extends React.Component {
             stopValidation={this.props.stopValidation.bind(this)}
             description={validation.description}
             id={validation.id}
+            addActiveFilter={this.props.addActiveFilter}
           />
         );
       });
@@ -184,6 +186,7 @@ class ValidationsList extends React.Component {
 }
 
 ValidationsList.propTypes = {
+  addActiveFilter: PropTypes.func.isRequired,
   currentPlanName: PropTypes.string,
   executionsLoaded: PropTypes.bool.isRequired,
   fetchValidations: PropTypes.func.isRequired,
@@ -198,6 +201,8 @@ ValidationsList.propTypes = {
 
 const mapDispatchToProps = dispatch => {
   return {
+    addActiveFilter: data =>
+      dispatch(addActiveFilter('validationsToolbar', data)),
     fetchValidations: () => dispatch(ValidationsActions.fetchValidations()),
     fetchWorkflowExecutions: () =>
       dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
