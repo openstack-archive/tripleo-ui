@@ -122,10 +122,8 @@ class CurrentPlan extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.stacksLoaded) {
-      this.props.fetchStacks();
-    }
     if (nextProps.currentPlan !== this.props.currentPlan) {
+      this.props.fetchStacks();
       this.fetchParameters();
     }
     this.postDeploymentValidationsCheck(nextProps.currentStack);
