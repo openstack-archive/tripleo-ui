@@ -87,7 +87,9 @@ export default {
         output: omit(messagePayload, 'execution'),
         params: messagePayload.execution.params,
         state: messagePayload.status,
-        workflow_name: MistralConstants.VALIDATIONS_RUN
+        workflow_name: MistralConstants.VALIDATIONS_RUN,
+        // TODO(jtomasek): replace this with messagePayload.execution.updated_at once message provides it
+        updated_at: new Date(Date.now()) // setting this explicitly as message does not provide it
       };
       dispatch(WorkflowExecutionsActions.addWorkflowExecution(execution));
     };
