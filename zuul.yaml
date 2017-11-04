@@ -1,0 +1,6 @@
+- project:
+    name: openstack/tripleo-ui
+    check:
+      jobs:
+        - nodejs6-npm-run-lint
+        - nodejs6-npm-run-test
