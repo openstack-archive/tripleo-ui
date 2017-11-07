@@ -1,0 +1,10 @@
+Code-Review+2: Honza Pokorny <honza@redhat.com>
+Workflow+1: Honza Pokorny <honza@redhat.com>
+Code-Review+1: Jon Schlueter <jschluet@redhat.com>
+Code-Review+2: Julie Pichon <jpichon@redhat.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Tue, 07 Nov 2017 17:54:15 +0000
+Reviewed-on: https://review.openstack.org/518346
+Project: openstack/tripleo-ui
+Branch: refs/heads/stable/pike
