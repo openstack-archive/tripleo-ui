@@ -1,0 +1,9 @@
+Code-Review+2: Florian Fuchs <flfuchs@redhat.com>
+Workflow+1: Florian Fuchs <flfuchs@redhat.com>
+Code-Review+1: Jason E. Rist <jrist@redhat.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Wed, 08 Nov 2017 17:21:56 +0000
+Reviewed-on: https://review.openstack.org/518555
+Project: openstack/tripleo-ui
+Branch: refs/heads/stable/pike
