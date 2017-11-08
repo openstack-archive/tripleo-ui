@@ -30,6 +30,7 @@ import {
   getCurrentStackDeploymentInProgress,
   getOvercloudInfo
 } from '../../selectors/stacks';
+import { getNodes } from '../../selectors/nodes';
 import {
   getAvailableNodes,
   getAvailableNodesCountsByRole,
@@ -220,6 +221,7 @@ class CurrentPlan extends React.Component {
               tooltip={formatMessage(messages.configureRolesStepTooltip)}
             >
               <RolesStep
+                allNodesCount={this.props.allNodes.size}
                 availableNodesCount={this.props.availableNodes.size}
                 availableNodesCountsByRole={
                   this.props.availableNodesCountsByRole
@@ -276,6 +278,7 @@ class CurrentPlan extends React.Component {
 }
 
 CurrentPlan.propTypes = {
+  allNodes: ImmutablePropTypes.map,
   availableNodes: ImmutablePropTypes.map,
   availableNodesCountsByRole: ImmutablePropTypes.map.isRequired,
   choosePlan: PropTypes.func,
@@ -318,6 +321,7 @@ export function mapStateToProps(state, props) {
   return {
     availableNodesCountsByRole: getAvailableNodesCountsByRole(state),
     nodeCountParametersByRole: getNodeCountParametersByRole(state),
+    allNodes: getNodes(state),
     availableNodes: getAvailableNodes(state),
     currentPlan: getCurrentPlan(state),
     currentStack: getCurrentStack(state),

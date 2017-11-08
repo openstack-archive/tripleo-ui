@@ -33,11 +33,15 @@ const messages = defineMessages({
   },
   nodesAvailableToAssign: {
     id: 'RolesStep.nodesAvailableToAssign',
-    defaultMessage: '{nodesCount} Nodes available to assign'
+    defaultMessage: `{availableNodesCount} Nodes Total
+({totalAssignedNodesCount, number} assigned to roles,
+{nodesCount, number} available for assignment,
+{nodesRequireActionCount, number} require action)`
   }
 });
 
 const RolesStep = ({
+  allNodesCount,
   availableNodesCount,
   availableNodesCountsByRole,
   currentPlanName,
@@ -52,10 +56,10 @@ const RolesStep = ({
   rolesLoaded,
   totalAssignedNodesCount
 }) => {
-  const nodesCount = (
-    <strong>
-      {Math.max(0, availableNodesCount - totalAssignedNodesCount)}
-    </strong>
+  const nodesCount = Math.max(0, availableNodesCount - totalAssignedNodesCount);
+  const nodesRequireActionCount = Math.max(
+    0,
+    allNodesCount - availableNodesCount
   );
   return (
     <div>
@@ -74,7 +78,12 @@ const RolesStep = ({
           >
             <FormattedMessage
               {...messages.nodesAvailableToAssign}
-              values={{ nodesCount: nodesCount }}
+              values={{
+                nodesCount,
+                availableNodesCount,
+                totalAssignedNodesCount,
+                nodesRequireActionCount
+              }}
             />
           </Loader>
         </Loader>
@@ -94,6 +103,7 @@ const RolesStep = ({
   );
 };
 RolesStep.propTypes = {
+  allNodesCount: PropTypes.number.isRequired,
   availableNodesCount: PropTypes.number.isRequired,
   availableNodesCountsByRole: ImmutablePropTypes.map.isRequired,
   currentPlanName: PropTypes.string.isRequired,
