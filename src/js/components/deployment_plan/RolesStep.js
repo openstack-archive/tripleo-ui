@@ -33,7 +33,7 @@ const messages = defineMessages({
   },
   nodesAvailableToAssign: {
     id: 'RolesStep.nodesAvailableToAssign',
-    defaultMessage: `{availableNodesCount} Nodes Total
+    defaultMessage: `{allNodesCount, number} Nodes Total
 ({totalAssignedNodesCount, number} assigned to roles,
 {nodesCount, number} available for assignment,
 {nodesRequireActionCount, number} require action)`
@@ -80,7 +80,7 @@ const RolesStep = ({
               {...messages.nodesAvailableToAssign}
               values={{
                 nodesCount,
-                availableNodesCount,
+                allNodesCount,
                 totalAssignedNodesCount,
                 nodesRequireActionCount
               }}
