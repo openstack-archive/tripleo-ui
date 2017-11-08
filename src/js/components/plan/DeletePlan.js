@@ -63,7 +63,6 @@ class DeletePlan extends React.Component {
             <span aria-hidden="true" className="pficon pficon-close" />
           </Link>
           <h4 className="modal-title">
-            <span className="pficon pficon-delete" />
             {' '}
             <FormattedMessage
               {...messages.deletePlanName}
