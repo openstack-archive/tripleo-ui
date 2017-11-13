@@ -71,7 +71,6 @@ class DeleteStackButton extends React.Component {
           show={this.state.showDeleteModal}
           title={formatMessage(messages.deleteDeployment)}
           question={formatMessage(messages.deleteConfirmationQuestion)}
-          iconClass="pficon pficon-delete"
           confirmActionName="delete"
           onConfirm={this.confirmDelete.bind(this)}
           onCancel={() => this.setState({ showDeleteModal: false })}
