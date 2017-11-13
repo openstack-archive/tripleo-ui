@@ -35,7 +35,7 @@ const messages = defineMessages({
   },
   downloadPlanExport: {
     id: 'ExportPlan.download',
-    defaultMessage: 'Download Export'
+    defaultMessage: 'Download'
   },
   downloadPlanExportMessage: {
     id: 'ExportPlan.downloadMessage',
@@ -47,9 +47,9 @@ const messages = defineMessages({
     id: 'ExportPlan.error',
     defaultMessage: 'An error occurred while exporting the plan'
   },
-  cancel: {
-    id: 'ExportPlan.cancel',
-    defaultMessage: 'Cancel'
+  close: {
+    id: 'ExportPlan.close',
+    defaultMessage: 'Close'
   }
 });
 
@@ -109,9 +109,9 @@ class ExportPlan extends React.Component {
             to="/plans/manage"
             type="button"
             className="btn btn-default"
-            id="ExportPlan__cancelExportPlanModalButton"
+            id="ExportPlan__closeExportPlanModalButton"
           >
-            <FormattedMessage {...messages.cancel} />
+            <FormattedMessage {...messages.close} />
           </Link>
         </div>
       </Modal>
