@@ -1,0 +1,9 @@
+Code-Review+2: Emilien Macchi <emilien@redhat.com>
+Workflow+1: Emilien Macchi <emilien@redhat.com>
+Code-Review+1: ShangXiao <shangxiaobj@inspur.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Mon, 13 Nov 2017 07:53:59 +0000
+Reviewed-on: https://review.openstack.org/519230
+Project: openstack/tripleo-ui
+Branch: refs/heads/stable/pike
