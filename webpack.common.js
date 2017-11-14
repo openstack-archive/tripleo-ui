@@ -15,9 +15,11 @@
  */
 
 require('es6-promise').polyfill(); // https://github.com/webpack/css-loader/issues/144
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const I18nPlugin = require('./src/js/plugins/i18n');
 const path = require('path');
+const version = require('./src/js/loaders/version');
 
 module.exports = {
   entry: __dirname + '/src/js/index.js',
@@ -28,6 +30,10 @@ module.exports = {
     sourceMapFilename: 'tripleo_ui.js.map'
   },
   plugins: [
+    new webpack.DefinePlugin({
+      VERSION: version.version,
+      GITSHA: version.gitSha
+    }),
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       favicon: 'src/img/owl.png'

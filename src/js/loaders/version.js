@@ -17,6 +17,8 @@
 'use strict';
 
 var fs = require('fs');
+var execSync = require('child_process').execSync;
+var trim = require('lodash').trim;
 
 function getVersion() {
   var packageContents = fs.readFileSync('./package.json', 'utf8');
@@ -24,15 +26,11 @@ function getVersion() {
   return packageJson.version;
 }
 
-function getStringToInput() {
-  let version = getVersion();
-  return `
-  window.tripleOUiConfig = window.tripleOUiConfig || {};
-  window.tripleOUiConfig.version = '${version}';
-  `;
+function getGitSha() {
+  return trim(execSync('git rev-parse --short HEAD', { encoding: 'utf8' }));
 }
 
-module.exports = function(content) {
-  content = content + getStringToInput();
-  return content;
+module.exports = {
+  version: JSON.stringify(getVersion()),
+  gitSha: JSON.stringify(getGitSha())
 };
