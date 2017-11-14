@@ -1,0 +1,15 @@
+---
+
+- project:
+    name: openstack/tripleo-ui
+    templates:
+      - nodejs6-jobs
+      - nodejs6-publish-to-npm
+      - release-notes-jobs
+      - system-required
+      - translation-jobs
+      - translation-jobs-ocata
+      - translation-jobs-pike
+    post:
+      jobs:
+        - publish-openstack-python-tarball
