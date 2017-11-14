@@ -1,0 +1,6 @@
+---
+
+- project:
+    name: openstack/tripleo-ui
+    templates:
+      - nodejs6-jobs
