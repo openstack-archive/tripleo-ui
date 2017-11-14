@@ -23,6 +23,7 @@ import Link from '../ui/Link';
 import LoggerActions from '../../actions/LoggerActions';
 import Modal from '../ui/Modal';
 import { InlineLoader } from '../ui/Loader';
+import { getAppVersion, getAppVersionGitSha } from '../../selectors/appConfig';
 
 const messages = defineMessages({
   debugPageTitle: {
@@ -58,6 +59,14 @@ const messages = defineMessages({
   downloadError: {
     id: 'DebugScreen.error',
     defaultMessage: 'An error has occurred while preparing the log download.'
+  },
+  version: {
+    id: 'DebugScreen.version',
+    defaultMessage: 'Version'
+  },
+  gitSha: {
+    id: 'DebugScreen.gitSha',
+    defaultMessage: 'Git Sha'
   }
 });
 
@@ -116,6 +125,20 @@ class DebugScreen extends React.Component {
         </div>;
   }
 
+  _renderVersion() {
+    const { version, gitSha } = this.props;
+    return (
+      <div>
+        <p>
+          <strong>
+            <FormattedMessage {...messages.version} />
+          </strong>
+          : {version} (<FormattedMessage {...messages.gitSha} />: {gitSha})
+        </p>
+      </div>
+    );
+  }
+
   render() {
     return (
       <Modal dialogClasses="modal-lg">
@@ -126,6 +149,7 @@ class DebugScreen extends React.Component {
           <h4><FormattedMessage {...messages.debugPageTitle} /></h4>
         </div>
         <div className="modal-body">
+          {this._renderVersion()}
           {this._renderDownloadButton()}
           {this._renderMessage()}
         </div>
@@ -136,15 +160,19 @@ class DebugScreen extends React.Component {
 
 DebugScreen.propTypes = {
   downloadLogs: PropTypes.func,
+  gitSha: PropTypes.string.isRequired,
   intl: PropTypes.object.isRequired,
   isDownloadingLogs: PropTypes.bool,
-  logsUrl: PropTypes.string
+  logsUrl: PropTypes.string,
+  version: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
   return {
+    gitSha: getAppVersionGitSha(state),
     isDownloadingLogs: state.logger.isDownloadingLogs,
-    logsUrl: state.logger.logsUrl
+    logsUrl: state.logger.logsUrl,
+    version: getAppVersion(state)
   };
 }
 
