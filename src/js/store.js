@@ -28,6 +28,10 @@ import { InitialLoginState } from './immutableRecords/login';
 import { getIntl } from './selectors/i18n';
 
 const hydrateStore = () => {
+  // VERSION and GITSHA are populated by webpack
+  window.tripleOUiConfig.version = VERSION;
+  window.tripleOUiConfig.gitSha = GITSHA;
+
   return {
     appConfig: new AppConfig(window && fromJS(window.tripleOUiConfig)),
     plans: new InitialPlanState({

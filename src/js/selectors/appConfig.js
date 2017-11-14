@@ -26,3 +26,7 @@ export const getDefaultZaqarQueue = state =>
 
 export const getLoggingZaqarQueue = state =>
   state.appConfig.get('logger-zaqar-queue', 'tripleo-ui-logging');
+
+export const getAppVersion = state => state.appConfig.get('version');
+
+export const getAppVersionGitSha = state => state.appConfig.get('gitSha');
