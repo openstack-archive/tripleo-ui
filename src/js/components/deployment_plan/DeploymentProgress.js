@@ -25,7 +25,7 @@ import {
   stackStates
 } from '../../constants/StacksConstants';
 import DeleteStackButton from './DeleteStackButton';
-import Loader from '../ui/Loader';
+import { InlineLoader } from '../ui/Loader';
 import ProgressBar from '../ui/ProgressBar';
 
 const messages = defineMessages({
@@ -94,7 +94,7 @@ class DeploymentProgress extends React.Component {
           </Link>
         </p>
         <div className="progress-description">
-          <Loader loaded={false} content={statusMessage} inline />
+          <InlineLoader content={statusMessage} />
         </div>
         {this.renderProgressBar()}
         {deleteButton}

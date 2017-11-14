@@ -21,7 +21,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 
 import AuthenticatedContent from './AuthenticatedContent';
-import Loader from './ui/Loader';
+import { GlobalLoader } from './ui/Loader';
 import LoginActions from '../actions/LoginActions';
 
 const messages = defineMessages({
@@ -63,13 +63,12 @@ class UserAuthenticator extends React.Component {
     if (isAuthenticated || isAuthenticating || keystoneAuthTokenId) {
       return (
         <div>
-          <Loader
+          <GlobalLoader
             loaded={this.props.isAuthenticated}
             content={this.props.intl.formatMessage(messages.authenticating)}
-            global
           >
             <AuthenticatedContent />
-          </Loader>
+          </GlobalLoader>
         </div>
       );
     } else {

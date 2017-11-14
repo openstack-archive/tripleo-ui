@@ -20,7 +20,7 @@ import React from 'react';
 
 import ConfirmationModal from '../ui/ConfirmationModal';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import Loader from '../ui/Loader';
+import { InlineLoader } from '../ui/Loader';
 
 const messages = defineMessages({
   deleteDeployment: {
@@ -58,14 +58,13 @@ class DeleteStackButton extends React.Component {
           disabled={this.props.disabled}
           className="link btn btn-danger"
         >
-          <Loader
+          <InlineLoader
             loaded={this.props.loaded}
             content={this.props.loaderContent}
-            component="span"
-            inline
+            inverse
           >
             <span className={this.props.buttonIconClass} /> {this.props.content}
-          </Loader>
+          </InlineLoader>
         </button>
         <ConfirmationModal
           show={this.state.showDeleteModal}

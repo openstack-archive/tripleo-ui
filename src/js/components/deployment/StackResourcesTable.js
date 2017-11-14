@@ -26,7 +26,7 @@ import {
   DataTableHeaderCell
 } from '../ui/tables/DataTableCells';
 import DataTableColumn from '../ui/tables/DataTableColumn';
-import Loader from '../ui/Loader';
+import { Loader } from '../ui/Loader';
 
 const messages = defineMessages({
   loadingResources: {
