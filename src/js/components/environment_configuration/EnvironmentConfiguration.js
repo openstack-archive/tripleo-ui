@@ -48,6 +48,10 @@ const messages = defineMessages({
   saveAndClose: {
     id: 'EnvironmentConfiguration.saveAndClose',
     defaultMessage: 'Save And Close'
+  },
+  loadingEnvironmentConfiguration: {
+    id: 'EnvironmentConfiguration.loadingEnvironmentConfiguration',
+    defaultMessage: 'Loading Deployment Configuration...'
   }
 });
 
@@ -185,7 +189,13 @@ class EnvironmentConfiguration extends React.Component {
         onValid={this.enableButton.bind(this)}
         onInvalid={this.disableButton.bind(this)}
       >
-        <Loader height={60} loaded={!this.props.isFetching}>
+        <Loader
+          height={60}
+          loaded={!this.props.isFetching}
+          content={this.props.intl.formatMessage(
+            messages.loadingEnvironmentConfiguration
+          )}
+        >
           <ModalFormErrorList errors={this.props.formErrors.toJS()} />
           <div className="container-fluid">
             <div className="row row-eq-height">
@@ -243,6 +253,7 @@ EnvironmentConfiguration.propTypes = {
   formErrors: ImmutablePropTypes.list.isRequired,
   formFieldErrors: ImmutablePropTypes.map.isRequired,
   history: PropTypes.object.isRequired,
+  intl: PropTypes.object,
   isFetching: PropTypes.bool,
   location: PropTypes.object,
   updateEnvironmentConfiguration: PropTypes.func
