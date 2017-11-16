@@ -14,6 +14,7 @@
  * under the License.
  */
 
+import { Button } from 'patternfly-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -22,7 +23,7 @@ import React from 'react';
  * if positioned inside Modal or ModalPanel component
  * see https://cdb.reacttraining.com/use-a-render-prop-50de598f11ce
  */
-class CloseModal extends React.Component {
+export class CloseModal extends React.Component {
   render() {
     const modal = this.context.$bs_modal;
     return this.props.render(modal && modal.onHide);
@@ -37,4 +38,28 @@ CloseModal.propTypes = {
   render: PropTypes.func.isRequired
 };
 
-export default CloseModal;
+export const CloseModalButton = ({ children, ...props }) => (
+  <CloseModal
+    render={onHide => (
+      <Button {...props} onClick={onHide}>
+        {children}
+      </Button>
+    )}
+  />
+);
+CloseModalButton.propTypes = Button.propTypes;
+
+export const CloseModalXButton = () => (
+  <CloseModal
+    render={onHide => (
+      <button
+        className="close"
+        onClick={onHide}
+        aria-hidden="true"
+        aria-label="Close"
+      >
+        <span className="pficon pficon-close" />
+      </button>
+    )}
+  />
+);

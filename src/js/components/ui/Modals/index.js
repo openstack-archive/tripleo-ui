@@ -14,7 +14,7 @@
  * under the License.
  */
 
-export CloseModal from './CloseModal';
+export { CloseModal, CloseModalButton, CloseModalXButton } from './CloseModal';
 export ConfirmationModal from './ConfirmationModal';
 export Modal from './Modal';
 export ModalPanel from './ModalPanel';

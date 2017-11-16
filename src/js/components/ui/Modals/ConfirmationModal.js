@@ -25,6 +25,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import Modal from './Modal';
+import { CloseModalXButton } from './CloseModal';
 
 export default class ConfirmationModal extends React.Component {
   renderTitle() {
@@ -48,7 +49,8 @@ export default class ConfirmationModal extends React.Component {
     } = this.props;
     return (
       <Modal bsSize="sm" show={show} onHide={onCancel}>
-        <ModalHeader closeButton>
+        <ModalHeader>
+          <CloseModalXButton />
           <ModalTitle>
             {this.renderTitle()}
           </ModalTitle>

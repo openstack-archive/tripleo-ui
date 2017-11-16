@@ -21,14 +21,10 @@ import React from 'react';
 import { includes } from 'lodash';
 import { ModalHeader, ModalTitle, ModalBody } from 'react-bootstrap';
 
-import { Modal } from '../ui/Modals';
+import { CloseModalXButton, Modal } from '../ui/Modals';
 import { ValidationStatusIcon } from './ValidationStatusIcon';
 
 const messages = defineMessages({
-  close: {
-    id: 'ValidationDetail.close',
-    defaultMessage: 'Close'
-  },
   description: {
     id: 'ValidationDetail.description',
     defaultMessage: 'Description:'
@@ -113,10 +109,8 @@ class ValidationDetail extends React.Component {
         onExited={this.props.hideValidationDetail}
         show={this.state.show}
       >
-        <ModalHeader
-          closeButton
-          closeLabel={this.props.intl.formatMessage(messages.close)}
-        >
+        <ModalHeader>
+          <CloseModalXButton />
           <ModalTitle>
             <FormattedMessage {...messages.validationDetail} />
           </ModalTitle>

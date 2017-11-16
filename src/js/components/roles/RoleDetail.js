@@ -23,7 +23,7 @@ import { isObjectLike, mapValues } from 'lodash';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Button, ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
+import { ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
 
 import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
 import { getCurrentPlanName } from '../../selectors/plans';
@@ -31,7 +31,11 @@ import { getRole } from '../../selectors/roles';
 import { getRoleServices } from '../../selectors/parameters';
 import { Loader } from '../ui/Loader';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
-import { CloseModal, RoutedModalPanel } from '../ui/Modals';
+import {
+  CloseModalButton,
+  CloseModalXButton,
+  RoutedModalPanel
+} from '../ui/Modals';
 import NavTab from '../ui/NavTab';
 import ParametersActions from '../../actions/ParametersActions';
 import RoleNetworkConfig from './RoleNetworkConfig';
@@ -189,7 +193,8 @@ class RoleDetail extends React.Component {
           onValid={this.enableButton.bind(this)}
           onInvalid={this.disableButton.bind(this)}
         >
-          <ModalHeader closeButton>
+          <ModalHeader>
+            <CloseModalXButton />
             <ModalTitle>
               <FormattedMessage
                 {...messages.role}
@@ -234,13 +239,9 @@ class RoleDetail extends React.Component {
                 >
                   <FormattedMessage {...messages.saveChanges} />
                 </button>
-                <CloseModal
-                  render={onHide => (
-                    <Button onClick={onHide}>
-                      <FormattedMessage {...messages.cancel} />
-                    </Button>
-                  )}
-                />
+                <CloseModalButton>
+                  <FormattedMessage {...messages.cancel} />
+                </CloseModalButton>
               </ModalFooter>
             : null}
         </Formsy.Form>
