@@ -22,5 +22,6 @@ export default keyMirror({
   FETCH_AVAILABLE_ROLES_FAILED: null,
   FETCH_ROLES_PENDING: null,
   FETCH_ROLES_SUCCESS: null,
-  FETCH_ROLES_FAILED: null
+  FETCH_ROLES_FAILED: null,
+  SELECT_ROLES_SUCCESS: null
 });
