@@ -14,9 +14,10 @@
  * under the License.
  */
 
-import { Button } from 'react-bootstrap';
+import { Button, Col } from 'react-bootstrap';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
+import { pickBy } from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { reduxForm } from 'redux-form';
@@ -26,12 +27,16 @@ import FormErrorList from '../ui/forms/FormErrorList';
 
 const messages = defineMessages({
   confirm: {
-    id: 'SelectRolesDialog.confirm',
+    id: 'SelectRolesForm.confirm',
     defaultMessage: 'Confirm Selection'
   },
   cancel: {
-    id: 'SelectRolesDialog.cancel',
+    id: 'SelectRolesForm.cancel',
     defaultMessage: 'Cancel'
+  },
+  primaryRoleValidationError: {
+    id: 'SelectRolesForm.primaryRoleValidationError',
+    defaultMessage: 'Please select one role tagged as "primary"'
   }
 });
 
@@ -43,11 +48,14 @@ class SelectRolesForm extends React.Component {
       error,
       handleSubmit,
       invalid,
-      pristine
+      pristine,
+      submitting
     } = this.props;
     return (
       <form onSubmit={handleSubmit}>
-        <FormErrorList errors={error ? [error] : []} />
+        <Col sm={12}>
+          <FormErrorList errors={error ? [error] : []} />
+        </Col>
         {children}
         <FloatingToolbar bottom right>
           <Button
@@ -75,10 +83,25 @@ SelectRolesForm.propTypes = {
   pristine: PropTypes.bool.isRequired
 };
 
+const validateForm = (values, { availableRoles }) => {
+  const errors = {};
+  const selectedRoleNames = Object.keys(pickBy(values));
+  const selectedRoles = availableRoles.filter((r, k) =>
+    selectedRoleNames.includes(k)
+  );
+  if (!selectedRoles.some(r => r.tags.includes('primary'))) {
+    errors._error = {
+      message: <FormattedMessage {...messages.primaryRoleValidationError} />
+    };
+  }
+  return errors;
+};
+
 const form = reduxForm({
   enableReinitialize: true,
   form: 'selectRoles',
-  keepDirtyOnReinitialize: true
+  keepDirtyOnReinitialize: true,
+  validate: validateForm
 });
 
 export default injectIntl(form(SelectRolesForm));

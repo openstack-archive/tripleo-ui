@@ -96,6 +96,11 @@ export default {
           break;
         }
 
+        case MistralConstants.SELECT_ROLES: {
+          dispatch(RolesActions.selectRolesFinished(payload, history));
+          break;
+        }
+
         default:
           break;
       }
