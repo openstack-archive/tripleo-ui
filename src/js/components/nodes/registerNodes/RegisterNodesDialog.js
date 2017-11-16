@@ -36,7 +36,11 @@ import uuid from 'uuid';
 import when from 'when';
 import { withRouter } from 'react-router-dom';
 
-import { CloseModal, RoutedModal } from '../../ui/Modals';
+import {
+  CloseModalButton,
+  CloseModalXButton,
+  RoutedModal
+} from '../../ui/Modals';
 import { handleErrors } from '../../../actions/ErrorActions';
 import { OverlayLoader } from '../../ui/Loader';
 import NotificationActions from '../../../actions/NotificationActions';
@@ -183,7 +187,8 @@ class RegisterNodesDialog extends React.Component {
     } = this.props;
     return (
       <RoutedModal bsSize="xl" redirectPath="/nodes" onHide={resetForm}>
-        <ModalHeader closeButton>
+        <ModalHeader>
+          <CloseModalXButton />
           <ModalTitle>
             <FormattedMessage {...messages.registerNodes} />
           </ModalTitle>
@@ -223,13 +228,9 @@ class RegisterNodesDialog extends React.Component {
           </OverlayLoader>
         </div>
         <ModalFooter>
-          <CloseModal
-            render={onHide => (
-              <Button onClick={onHide}>
-                <FormattedMessage {...messages.cancel} />
-              </Button>
-            )}
-          />
+          <CloseModalButton>
+            <FormattedMessage {...messages.cancel} />
+          </CloseModalButton>
           <button
             disabled={pristine || invalid || submitting}
             onClick={() => submitForm()}

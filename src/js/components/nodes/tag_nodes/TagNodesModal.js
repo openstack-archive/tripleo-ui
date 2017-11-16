@@ -24,7 +24,7 @@ import React from 'react';
 import { getAvailableNodeProfiles } from '../../../selectors/nodes';
 import { getCurrentPlan } from '../../../selectors/plans';
 import { getRoles } from '../../../selectors/roles';
-import { Modal } from '../../ui/Modals';
+import { CloseModalXButton, Modal } from '../../ui/Modals';
 import RolesActions from '../../../actions/RolesActions';
 import TagNodesForm from './TagNodesForm';
 
@@ -51,7 +51,8 @@ class TagNodesModal extends React.Component {
     } = this.props;
     return (
       <Modal show={show} onHide={onCancel}>
-        <ModalHeader closeButton>
+        <ModalHeader>
+          <CloseModalXButton />
           <ModalTitle>
             <span className="fa fa-tag" />
             {' '}
