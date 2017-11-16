@@ -16,6 +16,7 @@
 
 import { defineMessages } from 'react-intl';
 import { normalize, arrayOf } from 'normalizr';
+import { startSubmit, stopSubmit } from 'redux-form';
 
 import { handleErrors } from './ErrorActions';
 import RolesConstants from '../constants/RolesConstants';
@@ -121,6 +122,44 @@ export default {
   fetchAvailableRolesFailed() {
     return {
       type: RolesConstants.FETCH_AVAILABLE_ROLES_FAILED
+    };
+  },
+
+  selectRoles(planName, roleNames) {
+    return (dispatch, getState) => {
+      dispatch(startSubmit('selectRoles'));
+      dispatch(
+        MistralApiService.runWorkflow(MistralConstants.LIST_AVAILABLE_ROLES, {
+          container: planName,
+          roles: roleNames
+        })
+      ).catch(error => {
+        const { name, message } = error;
+        dispatch(
+          stopSubmit('selectRoles', { _error: { title: name, message } })
+        );
+      });
+    };
+  },
+
+  selectRolesFinished({ message, status }, history) {
+    return (dispatch, getState) => {
+      if (status === 'SUCCESS') {
+        const roles = normalize(message, arrayOf(roleSchema)).entities
+          .roles || {};
+        dispatch(this.selectRolesSuccess(roles));
+        dispatch(stopSubmit('selectRoles'));
+        history.push('/plans');
+      } else {
+        dispatch(stopSubmit('selectRoles', { _error: message }));
+      }
+    };
+  },
+
+  selectRolesSuccess(roles) {
+    return {
+      type: RolesConstants.SELECT_ROLES_SUCCESS,
+      payload: roles
     };
   }
 };
