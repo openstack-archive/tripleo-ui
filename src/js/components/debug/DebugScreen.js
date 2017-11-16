@@ -20,6 +20,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { ModalHeader, ModalTitle, ModalBody } from 'react-bootstrap';
 
+import { CloseModalXButton } from '../ui/Modals';
 import LoggerActions from '../../actions/LoggerActions';
 import { InlineLoader } from '../ui/Loader';
 import { RoutedModal } from '../ui/Modals';
@@ -119,7 +120,8 @@ class DebugScreen extends React.Component {
   render() {
     return (
       <RoutedModal bsSize="lg">
-        <ModalHeader closeButton>
+        <ModalHeader>
+          <CloseModalXButton />
           <ModalTitle>
             <FormattedMessage {...messages.debugPageTitle} />
           </ModalTitle>

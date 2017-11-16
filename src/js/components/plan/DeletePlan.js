@@ -17,7 +17,6 @@
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import {
-  Button,
   ModalHeader,
   ModalTitle,
   ModalBody,
@@ -26,7 +25,7 @@ import {
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CloseModal, RoutedModal } from '../ui/Modals';
+import { CloseModalButton, CloseModalXButton, RoutedModal } from '../ui/Modals';
 import PlansActions from '../../actions/PlansActions';
 
 const messages = defineMessages({
@@ -68,7 +67,8 @@ class DeletePlan extends React.Component {
         id="DeletePlan__deletePlanModal"
         redirectPath="/plans/manage"
       >
-        <ModalHeader closeButton>
+        <ModalHeader>
+          <CloseModalXButton />
           <ModalTitle>
             <FormattedMessage
               {...messages.deletePlanName}
@@ -101,16 +101,9 @@ class DeletePlan extends React.Component {
           >
             <FormattedMessage {...messages.deletePlan} />
           </button>
-          <CloseModal
-            render={onHide => (
-              <Button
-                onClick={onHide}
-                id="DeletePlan__cancelDeletePlanModalButton"
-              >
-                <FormattedMessage {...messages.cancel} />
-              </Button>
-            )}
-          />
+          <CloseModalButton id="DeletePlan__cancelDeletePlanModalButton">
+            <FormattedMessage {...messages.cancel} />
+          </CloseModalButton>
         </ModalFooter>
       </RoutedModal>
     );

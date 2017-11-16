@@ -17,7 +17,6 @@
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import {
-  Button,
   ModalHeader,
   ModalTitle,
   ModalBody,
@@ -26,7 +25,7 @@ import {
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CloseModal, RoutedModal } from '../ui/Modals';
+import { CloseModalButton, CloseModalXButton, RoutedModal } from '../ui/Modals';
 import PlansActions from '../../actions/PlansActions';
 import { Loader } from '../ui/Loader';
 
@@ -77,7 +76,8 @@ class ExportPlan extends React.Component {
         id="ExportPlan__exportPlanModal"
         redirectPath="/plans/manage"
       >
-        <ModalHeader closeButton>
+        <ModalHeader>
+          <CloseModalXButton />
           <ModalTitle>
             <FormattedMessage
               {...messages.exportPlanName}
@@ -112,16 +112,9 @@ class ExportPlan extends React.Component {
           </Loader>
         </ModalBody>
         <ModalFooter>
-          <CloseModal
-            render={onHide => (
-              <Button
-                onClick={onHide}
-                id="ExportPlan__closeExportPlanModalButton"
-              >
-                <FormattedMessage {...messages.close} />
-              </Button>
-            )}
-          />
+          <CloseModalButton id="ExportPlan__closeExportPlanModalButton">
+            <FormattedMessage {...messages.close} />
+          </CloseModalButton>
         </ModalFooter>
       </RoutedModal>
     );
