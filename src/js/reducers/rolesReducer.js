@@ -60,6 +60,7 @@ const rolesReducer = (state = initialState, action) => {
     case RolesConstants.FETCH_ROLES_PENDING:
       return state.set('isFetching', true);
 
+    case RolesConstants.SELECT_ROLES_SUCCESS:
     case RolesConstants.FETCH_ROLES_SUCCESS: {
       const roles = fromJS(action.payload).map(role =>
         new Role(role).update(role =>
@@ -78,6 +79,9 @@ const rolesReducer = (state = initialState, action) => {
         .set('roles', Map())
         .set('isFetching', false)
         .set('loaded', true);
+
+    case RolesConstants.SELECT_ROLES_SUCCESS:
+      return state.set('roles', roles);
 
     case PlansConstants.PLAN_CHOSEN:
       return state.set('loaded', false);
