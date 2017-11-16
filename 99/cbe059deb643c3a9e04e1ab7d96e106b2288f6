@@ -1,0 +1,11 @@
+Code-Review+1: Jason E. Rist <jrist@redhat.com>
+Code-Review+1: Liz Blanchard <lblanchard@redhat.com>
+Code-Review+2: Jiri Tomasek <jtomasek@redhat.com>
+Code-Review+2: Florian Fuchs <flfuchs@redhat.com>
+Workflow+1: Florian Fuchs <flfuchs@redhat.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Thu, 16 Nov 2017 14:43:44 +0000
+Reviewed-on: https://review.openstack.org/518607
+Project: openstack/tripleo-ui
+Branch: refs/heads/master
