@@ -14,9 +14,11 @@
  * under the License.
  */
 
-import { Button } from 'react-bootstrap';
+import { Button, Col } from 'react-bootstrap';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
+import { pickBy } from 'lodash';
+import { OverlayLoader } from '../ui/Loader';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { reduxForm } from 'redux-form';
@@ -26,12 +28,20 @@ import FormErrorList from '../ui/forms/FormErrorList';
 
 const messages = defineMessages({
   confirm: {
-    id: 'SelectRolesDialog.confirm',
+    id: 'SelectRolesForm.confirm',
     defaultMessage: 'Confirm Selection'
   },
   cancel: {
-    id: 'SelectRolesDialog.cancel',
+    id: 'SelectRolesForm.cancel',
     defaultMessage: 'Cancel'
+  },
+  updatingRoles: {
+    id: 'SelectRolesForm.updatingRoles',
+    defaultMessage: 'Updating Roles...'
+  },
+  primaryRoleValidationError: {
+    id: 'SelectRolesForm.primaryRoleValidationError',
+    defaultMessage: 'Please select one role tagged as "primary" and "controller"'
   }
 });
 
@@ -43,25 +53,34 @@ class SelectRolesForm extends React.Component {
       error,
       handleSubmit,
       invalid,
-      pristine
+      intl: { formatMessage },
+      pristine,
+      submitting
     } = this.props;
     return (
       <form onSubmit={handleSubmit}>
-        <FormErrorList errors={error ? [error] : []} />
-        {children}
-        <FloatingToolbar bottom right>
-          <Button
-            disabled={invalid || pristine}
-            bsStyle="primary"
-            type="submit"
-          >
-            <FormattedMessage {...messages.confirm} />
-          </Button>
-          {' '}
-          <Link to={`/plans/${currentPlanName}`} className="btn btn-default">
-            <FormattedMessage {...messages.cancel} />
-          </Link>
-        </FloatingToolbar>
+        <Col sm={12}>
+          <FormErrorList errors={error ? [error] : []} />
+        </Col>
+        <OverlayLoader
+          loaded={!submitting}
+          content={formatMessage(messages.updatingRoles)}
+        >
+          {children}
+          <FloatingToolbar bottom right>
+            <Button
+              disabled={invalid || pristine}
+              bsStyle="primary"
+              type="submit"
+            >
+              <FormattedMessage {...messages.confirm} />
+            </Button>
+            {' '}
+            <Link to={`/plans/${currentPlanName}`} className="btn btn-default">
+              <FormattedMessage {...messages.cancel} />
+            </Link>
+          </FloatingToolbar>
+        </OverlayLoader>
       </form>
     );
   }
@@ -71,14 +90,31 @@ SelectRolesForm.propTypes = {
   currentPlanName: PropTypes.string.isRequired,
   error: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
   invalid: PropTypes.bool.isRequired,
-  pristine: PropTypes.bool.isRequired
+  pristine: PropTypes.bool.isRequired,
+  submitting: PropTypes.bool.isRequired
+};
+
+const validateForm = (values, { availableRoles }) => {
+  const errors = {};
+  const selectedRoleNames = Object.keys(pickBy(values));
+  const selectedRoles = availableRoles.filter((r, k) =>
+    selectedRoleNames.includes(k)
+  );
+  if (!selectedRoles.some(r => r.tags.includes('primary'))) {
+    errors._error = {
+      message: <FormattedMessage {...messages.primaryRoleValidationError} />
+    };
+  }
+  return errors;
 };
 
 const form = reduxForm({
   enableReinitialize: true,
   form: 'selectRoles',
-  keepDirtyOnReinitialize: true
+  keepDirtyOnReinitialize: true,
+  validate: validateForm
 });
 
 export default injectIntl(form(SelectRolesForm));
