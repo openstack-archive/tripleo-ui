@@ -18,11 +18,11 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Button, ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
+import { ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CloseModal, RoutedModal } from '../ui/Modals';
+import { CloseModalButton, CloseModalXButton, RoutedModal } from '../ui/Modals';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import PlansActions from '../../actions/PlansActions';
 import PlanFormTabs from './PlanFormTabs';
@@ -110,7 +110,8 @@ class NewPlan extends React.Component {
           onValid={this.onFormValid.bind(this)}
           onInvalid={this.onFormInvalid.bind(this)}
         >
-          <ModalHeader closeButton>
+          <ModalHeader>
+            <CloseModalXButton />
             <ModalTitle>
               <FormattedMessage {...messages.importPlan} />
             </ModalTitle>
@@ -139,13 +140,9 @@ class NewPlan extends React.Component {
             >
               <FormattedMessage {...messages.uploadAndCreate} />
             </button>
-            <CloseModal
-              render={onHide => (
-                <Button id="NewPlan__cancelCreatePlanButton" onClick={onHide}>
-                  <FormattedMessage {...messages.cancel} />
-                </Button>
-              )}
-            />
+            <CloseModalButton id="NewPlan__cancelCreatePlanButton">
+              <FormattedMessage {...messages.cancel} />
+            </CloseModalButton>
           </ModalFooter>
         </Formsy.Form>
       </RoutedModal>

@@ -24,7 +24,7 @@ import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
 import EnvironmentConfiguration
   from '../environment_configuration/EnvironmentConfiguration';
 import NavTab from '../ui/NavTab';
-import { RoutedModal } from '../ui/Modals';
+import { CloseModalXButton, RoutedModal } from '../ui/Modals';
 import Parameters from '../parameters/Parameters';
 
 const messages = defineMessages({
@@ -55,7 +55,8 @@ class DeploymentConfiguration extends React.Component {
         bsSize="xl"
         redirectPath={`/plans/${match.params.planName}`}
       >
-        <ModalHeader closeButton>
+        <ModalHeader>
+          <CloseModalXButton />
           <ModalTitle>
             <FormattedMessage {...messages.deploymentConfiguration} />
           </ModalTitle>
