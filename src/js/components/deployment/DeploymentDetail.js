@@ -17,7 +17,7 @@
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Button, ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
+import { ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -37,7 +37,11 @@ import {
   getEnvironmentConfigurationSummary
 } from '../../selectors/environmentConfiguration';
 import { Loader } from '../ui/Loader';
-import { CloseModal, RoutedModalPanel } from '../ui/Modals';
+import {
+  CloseModalButton,
+  CloseModalXButton,
+  RoutedModalPanel
+} from '../ui/Modals';
 import PlanActions from '../../actions/PlansActions';
 import { stackStates } from '../../constants/StacksConstants';
 import StacksActions from '../../actions/StacksActions';
@@ -126,7 +130,8 @@ class DeploymentDetail extends React.Component {
     } = this.props;
     return (
       <RoutedModalPanel redirectPath={`/plans/${currentPlanName}`}>
-        <ModalHeader closeButton>
+        <ModalHeader>
+          <CloseModalXButton />
           <ModalTitle>
             <FormattedMessage
               {...messages.modalTitle}
@@ -144,13 +149,9 @@ class DeploymentDetail extends React.Component {
           {this.renderStatus()}
         </Loader>
         <ModalFooter>
-          <CloseModal
-            render={onHide => (
-              <Button onClick={onHide}>
-                <FormattedMessage {...messages.close} />
-              </Button>
-            )}
-          />
+          <CloseModalButton>
+            <FormattedMessage {...messages.close} />
+          </CloseModalButton>
         </ModalFooter>
       </RoutedModalPanel>
     );

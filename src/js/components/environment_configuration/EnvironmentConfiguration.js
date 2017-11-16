@@ -15,7 +15,6 @@
  */
 
 import * as _ from 'lodash';
-import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Formsy from 'formsy-react';
@@ -23,7 +22,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CloseModal } from '../ui/Modals';
+import { CloseModalButton } from '../ui/Modals';
 import EnvironmentConfigurationActions
   from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentConfigurationTopic from './EnvironmentConfigurationTopic';
@@ -233,13 +232,9 @@ class EnvironmentConfiguration extends React.Component {
           >
             <FormattedMessage {...messages.saveAndClose} />
           </button>
-          <CloseModal
-            render={onHide => (
-              <Button onClick={onHide}>
-                <FormattedMessage {...messages.cancel} />
-              </Button>
-            )}
-          />
+          <CloseModalButton>
+            <FormattedMessage {...messages.cancel} />
+          </CloseModalButton>
         </div>
       </Formsy.Form>
     );

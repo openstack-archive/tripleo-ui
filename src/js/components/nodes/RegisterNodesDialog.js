@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { Button, ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
+import { ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -25,7 +25,7 @@ import React from 'react';
 import uuid from 'uuid';
 
 import BlankSlate from '../ui/BlankSlate';
-import { CloseModal, RoutedModal } from '../ui/Modals';
+import { CloseModalButton, CloseModalXButton, RoutedModal } from '../ui/Modals';
 import {
   allNodesToRegisterAreValid,
   getIronicNodesfromNodesToRegister
@@ -260,7 +260,8 @@ class RegisterNodesDialog extends React.Component {
         bsSize="xl"
         redirectPath="/nodes"
       >
-        <ModalHeader closeButton>
+        <ModalHeader>
+          <CloseModalXButton />
           <ModalTitle>
             <FormattedMessage {...messages.registerNodes} />
           </ModalTitle>
@@ -318,13 +319,9 @@ class RegisterNodesDialog extends React.Component {
           </div>
         </Loader>
         <ModalFooter>
-          <CloseModal
-            render={onHide => (
-              <Button onClick={onHide}>
-                <FormattedMessage {...messages.cancel} />
-              </Button>
-            )}
-          />
+          <CloseModalButton>
+            <FormattedMessage {...messages.cancel} />
+          </CloseModalButton>
           <button
             disabled={!this.props.canSubmit}
             onClick={() =>

@@ -18,7 +18,6 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import {
-  Button,
   ModalHeader,
   ModalTitle,
   ModalBody,
@@ -27,7 +26,11 @@ import {
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import { CloseModal, RoutedModal } from '../../ui/Modals';
+import {
+  CloseModalButton,
+  CloseModalXButton,
+  RoutedModal
+} from '../../ui/Modals';
 import { getNodeDrives } from '../../../selectors/nodes';
 import { ListView } from '../../ui/ListView';
 import NodeDrive from './NodeDrive';
@@ -52,7 +55,8 @@ class NodeDrives extends Component {
   render() {
     return (
       <RoutedModal bsSize="xl" redirectPath="/nodes">
-        <ModalHeader closeButton>
+        <ModalHeader>
+          <CloseModalXButton />
           <ModalTitle>
             <FormattedMessage
               {...messages.title}
@@ -68,13 +72,9 @@ class NodeDrives extends Component {
           </ListView>
         </ModalBody>
         <ModalFooter>
-          <CloseModal
-            render={onHide => (
-              <Button onClick={onHide}>
-                <FormattedMessage {...messages.close} />
-              </Button>
-            )}
-          />
+          <CloseModalButton>
+            <FormattedMessage {...messages.close} />
+          </CloseModalButton>
         </ModalFooter>
       </RoutedModal>
     );
