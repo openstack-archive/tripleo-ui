@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Custom deployment roles selection. Roles section of Deployment plan page now
+    includes 'Manage Roles'. Clicking the link provides a list of all available
+    roles and lets user select roles intended for deployment.
