@@ -26,7 +26,7 @@ const AvailableRoleInput = ({
   input: { value, name, onChange },
   style
 }) => (
-  <Col xs={6} sm={4} md={3} lg={2} style={style}>
+  <Col xs={12} sm={4} lg={3} style={style}>
     <div
       className={cx(
         'card-pf card-pf-view card-pf-view-select card-pf-view-multi-select',
