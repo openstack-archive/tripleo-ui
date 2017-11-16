@@ -95,6 +95,12 @@ export default {
           dispatch(RolesActions.fetchAvailableRolesFinished(payload, history));
           break;
         }
+        // TODO(jtomasek): change this back once underlining tripleo-common patch is fixed
+        // case MistralConstants.SELECT_ROLES: {
+        case 'tripleo.roles.v1.select_roles': {
+          dispatch(RolesActions.selectRolesFinished(payload, history));
+          break;
+        }
 
         default:
           break;

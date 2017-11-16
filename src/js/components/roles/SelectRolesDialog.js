@@ -20,6 +20,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { ModalHeader, ModalTitle } from 'react-bootstrap';
 import React from 'react';
+import { pickBy } from 'lodash';
 import PropTypes from 'prop-types';
 
 import AvailableRoleInput from './AvailableRoleInput';
@@ -46,10 +47,16 @@ class SelectRolesDialog extends React.Component {
     this.props.fetchAvailableRoles();
   }
 
+  handleFormSubmit = (values, dispatch, formProps) => {
+    const roleNames = Object.keys(pickBy(values));
+    this.props.selectRoles(this.props.currentPlanName, roleNames);
+  };
+
   render() {
     const {
       availableRoles,
       availableRolesLoaded,
+      fetchingAvailableRoles,
       intl: { formatMessage },
       currentPlanName,
       roles
@@ -62,13 +69,16 @@ class SelectRolesDialog extends React.Component {
             <FormattedMessage {...messages.selectRolesTitle} />
           </ModalTitle>
         </ModalHeader>
-        <SelectRolesForm
-          initialValues={availableRoles.map(r => roles.includes(r)).toJS()}
-          currentPlanName={currentPlanName}
+        <Loader
+          height={100}
+          loaded={availableRolesLoaded && !fetchingAvailableRoles}
+          content={formatMessage(messages.loadingAvailableRoles)}
         >
-          <Loader
-            loaded={availableRolesLoaded}
-            content={formatMessage(messages.loadingAvailableRoles)}
+          <SelectRolesForm
+            onSubmit={this.handleFormSubmit}
+            initialValues={availableRoles.map(r => roles.includes(r)).toJS()}
+            availableRoles={availableRoles}
+            currentPlanName={currentPlanName}
           >
             <div className="row row-cards-pf">
               {availableRoles
@@ -82,8 +92,8 @@ class SelectRolesDialog extends React.Component {
                   />
                 ))}
             </div>
-          </Loader>
-        </SelectRolesForm>
+          </SelectRolesForm>
+        </Loader>
       </RoutedModal>
     );
   }
@@ -93,20 +103,25 @@ SelectRolesDialog.propTypes = {
   availableRolesLoaded: PropTypes.bool.isRequired,
   currentPlanName: PropTypes.string.isRequired,
   fetchAvailableRoles: PropTypes.func.isRequired,
+  fetchingAvailableRoles: PropTypes.bool.isRequired,
   intl: PropTypes.object.isRequired,
-  roles: ImmutablePropTypes.map.isRequired
+  roles: ImmutablePropTypes.map.isRequired,
+  selectRoles: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   availableRoles: getMergedRoles(state),
   availableRolesLoaded: state.availableRoles.loaded,
+  fetchingAvailableRoles: state.availableRoles.isFetching,
   currentPlanName: getCurrentPlanName(state),
   roles: getRoles(state)
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchAvailableRoles: planName =>
-    dispatch(RolesActions.fetchAvailableRoles(planName))
+    dispatch(RolesActions.fetchAvailableRoles(planName)),
+  selectRoles: (planName, roleNames) =>
+    dispatch(RolesActions.selectRoles(planName, roleNames))
 });
 
 export default injectIntl(

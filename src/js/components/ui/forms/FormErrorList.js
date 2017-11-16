@@ -40,8 +40,8 @@ export default class FormErrorList extends React.Component {
     } else {
       return (
         <p>
-          <strong>{errors[0].title}</strong>
-          <br />
+          {errors[0].title && <strong>{errors[0].title}</strong>}
+          {' '}
           {errors[0].message}
         </p>
       );
@@ -53,10 +53,7 @@ export default class FormErrorList extends React.Component {
       return null;
     } else {
       return (
-        <div
-          className="toast-pf form-error-list alert alert-danger"
-          role="alert"
-        >
+        <div className="form-error-list alert alert-danger" role="alert">
           <span className="pficon pficon-error-circle-o" aria-hidden="true" />
           {this.renderErrors()}
         </div>
