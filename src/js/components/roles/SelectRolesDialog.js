@@ -19,6 +19,7 @@ import { Field } from 'redux-form';
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
+import { pickBy } from 'lodash';
 import PropTypes from 'prop-types';
 
 import AvailableRoleInput from './AvailableRoleInput';
@@ -40,6 +41,11 @@ class SelectRolesDialog extends React.Component {
     this.props.fetchAvailableRoles();
   }
 
+  handleFormSubmit = (values, dispatch, props) => {
+    const roleNames = Object.keys(pickBy(values));
+    this.props.selectRoles(roleNames);
+  };
+
   render() {
     const {
       availableRoles,
@@ -50,11 +56,13 @@ class SelectRolesDialog extends React.Component {
     } = this.props;
     return (
       <SelectRolesForm
+        onSubmit={this.handleFormSubmit}
         initialValues={availableRoles.map(r => roles.includes(r)).toJS()}
         currentPlanName={currentPlanName}
       >
         <OverlayLoader
-          loaded={availableRolesLoaded}
+          // loaded={availableRolesLoaded}
+          loaded
           content={formatMessage(messages.loadingAvailableRoles)}
         >
           <div className="row row-cards-pf">
