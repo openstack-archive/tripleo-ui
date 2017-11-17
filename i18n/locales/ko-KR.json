@@ -278,7 +278,6 @@
         "Roles.loadingDeploymentRoles": "\ubc30\ud3ec \uc5ed\ud560\uc744 \ubd88\ub7ec\uc624\ub294 \uc911...",
         "RolesStep.loadingNodes": "\ub178\ub4dc\ub97c \ubd88\ub7ec\uc624\ub294 \uc911...",
         "RolesStep.loadingParameters": "\ub9e4\uac1c\ubcc0\uc218\ub97c \ubd88\ub7ec\uc624\ub294 \uc911...",
-        "RolesStep.nodesAvailableToAssign": "\ud560\ub2f9 \uac00\ub2a5\ud55c {nodesCount} \ub178\ub4dc",
         "SelectAll.deselectAllText": "\ubaa8\ub450 \uc120\ud0dd \ucde8\uc18c",
         "SelectAll.selectAllText": "\uc804\uc81c \uc120\ud0dd",
         "StackResourcesTable.loadingResources": "\uc790\uc6d0\uc744 \ubd88\ub7ec\uc624\ub294 \uc911...",

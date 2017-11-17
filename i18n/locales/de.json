@@ -276,7 +276,6 @@
         "Roles.loadingDeploymentRoles": "Lade Bereitstellungsrollen...",
         "RolesStep.loadingNodes": "Lade Knoten...",
         "RolesStep.loadingParameters": "Lade Parameter...",
-        "RolesStep.nodesAvailableToAssign": "{nodesCount} Knoten verf\u00fcgbar zum Zuweisen",
         "SelectAll.deselectAllText": "Alle abw\u00e4hlen",
         "SelectAll.selectAllText": "Alle Ausw\u00e4hlen",
         "StackResourcesTable.loadingResources": "Lade Resourcen....",

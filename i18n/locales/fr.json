@@ -235,7 +235,6 @@
         "Roles.loadingDeploymentRoles": "Chargement des roles de d\u00e9ploiement...",
         "RolesStep.loadingNodes": "Chargement des n\u0153uds...",
         "RolesStep.loadingParameters": "Chargement des param\u00e8tres...",
-        "RolesStep.nodesAvailableToAssign": "{nodesCount} n\u0153uds disponibles pour l'affectation",
         "SelectAll.deselectAllText": "Tout d\u00e9s\u00e9lectionner",
         "SelectAll.selectAllText": "Tout s\u00e9lectionner",
         "StackResourcesTable.loadingResources": "Chargement des ressources...",

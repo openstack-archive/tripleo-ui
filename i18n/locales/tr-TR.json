@@ -242,7 +242,6 @@
         "Roles.loadingDeploymentRoles": "Uygulama Rolleri Y\u00fckleniyor...",
         "RolesStep.loadingNodes": "D\u00fc\u011f\u00fcmler Y\u00fckleniyor...",
         "RolesStep.loadingParameters": "Parametreler Y\u00fckleniyor...",
-        "RolesStep.nodesAvailableToAssign": "Atanabilecek {nodesCount} D\u00fc\u011f\u00fcm var",
         "StackResourcesTable.loadingResources": "Kaynaklar Y\u00fckleniyor...",
         "StackResourcesTable.name": "\u0130sim",
         "StackResourcesTable.noResourcesAvailable": "Kullan\u0131labilir Kaynak yok.",

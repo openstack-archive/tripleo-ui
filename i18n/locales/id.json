@@ -278,7 +278,6 @@
         "Roles.loadingDeploymentRoles": "Loading Deployment Roles...",
         "RolesStep.loadingNodes": "Loading Nodes...",
         "RolesStep.loadingParameters": "Loading Parameters...",
-        "RolesStep.nodesAvailableToAssign": "{nodesCount} Nodes tersedia untuk menetapkan",
         "SelectAll.deselectAllText": "Deselect All",
         "SelectAll.selectAllText": "Select All",
         "StackResourcesTable.loadingResources": "Loading Resources...",

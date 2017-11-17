@@ -278,7 +278,6 @@
         "Roles.loadingDeploymentRoles": "Cargando los roles del despliegue...",
         "RolesStep.loadingNodes": "Cargando nodos...",
         "RolesStep.loadingParameters": "Cargando par\u00e1metros...",
-        "RolesStep.nodesAvailableToAssign": "{nodesCount} nodos disponibles para asignar",
         "SelectAll.deselectAllText": "Deseleccionar todos",
         "SelectAll.selectAllText": "Seleccionar todos",
         "StackResourcesTable.loadingResources": "Cargando recursos...",
