@@ -130,7 +130,7 @@
         "NodeIntrospectionState.introspectionStateLabel": "\u30a4\u30f3\u30c8\u30ed\u30b9\u30da\u30af\u30b7\u30e7\u30f3",
         "NodeListItem.Profile": "\u30d7\u30ed\u30d5\u30a1\u30a4\u30eb:",
         "NodeListItem.actions.manageDrives": "\u30c9\u30e9\u30a4\u30d6\u306e\u7ba1\u7406",
-        "NodeListItem.cpuCores": "CPU {cpuCores, plural, one {Core} other {Cores}}",
+        "NodeListItem.cpuCores": "CPU {cpuCores, plural, one {\u30b3\u30a2} other {\u30b3\u30a2}}",
         "NodeListItem.gbDisk": "GB \u30c7\u30a3\u30b9\u30af",
         "NodeListItem.mbRam": "MB RAM",
         "NodeMaintenanceState.maintenanceWarning": "\u30e1\u30f3\u30c6\u30ca\u30f3\u30b9",
