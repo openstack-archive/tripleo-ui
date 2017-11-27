@@ -19,6 +19,8 @@ import Formsy from 'formsy-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+const IGNORED_FILE_PATHS = /(^\.git.*|^releasenotes\/.*)$/;
+
 class PlanFileInput extends React.Component {
   constructor() {
     super();
@@ -60,9 +62,10 @@ class PlanFileInput extends React.Component {
 
       reader.onload = (f => {
         return e => {
-          if (file.name.match(/(\.yaml|\.json|\.pp|\.sh|\.j2)$/)) {
+          const filePath = f.webkitRelativePath.replace(/^[^\/]*\//, '');
+          if (!filePath.match(IGNORED_FILE_PATHS)) {
             let obj = {
-              name: f.webkitRelativePath.replace(/^[^\/]*\//, ''),
+              name: filePath,
               content: e.target.result
             };
             files.push(obj);
