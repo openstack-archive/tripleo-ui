@@ -1,0 +1,8 @@
+- project:
+    name: openstack/tripleo-ui
+    check:
+      jobs:
+        - build-javascript-tarball:
+            files:
+              - npm-shrinkwrap.json
+              - package.json
