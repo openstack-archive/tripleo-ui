@@ -58,7 +58,7 @@ const messages = defineMessages({
   },
   badExtension: {
     id: 'PlanFormTabs.badExtension',
-    defaultMessage: 'Invalid type: plan file must be a tar archive (.tar.gz)'
+    defaultMessage: 'Invalid type: plan file must be a tar archive (.tar.gz or .tgz)'
   }
 });
 
@@ -173,7 +173,7 @@ Formsy.addValidationRule('tarballValidator', values => {
   let files = values['planFiles'];
   // If only one file was uploaded, it should be a tarball
   if (files !== undefined && files.length === 1) {
-    if (!files[0].name.endsWith('.tar.gz')) {
+    if (!files[0].name.endsWith('.tar.gz') && !files[0].name.endsWith('.tgz')) {
       return false;
     }
   }

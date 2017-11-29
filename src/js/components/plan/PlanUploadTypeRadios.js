@@ -25,7 +25,7 @@ const messages = defineMessages({
   },
   tarArchive: {
     id: 'PlanUploadTypeRadios.tarArchive',
-    defaultMessage: 'Tar Archive (tar.gz)'
+    defaultMessage: 'Tar Archive (.tar.gz or .tgz)'
   }
 });
 
