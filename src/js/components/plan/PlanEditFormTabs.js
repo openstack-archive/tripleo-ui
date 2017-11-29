@@ -50,7 +50,7 @@ const messages = defineMessages({
   },
   badExtension: {
     id: 'PlanEditFormTabs.badExtension',
-    defaultMessage: 'Invalid type: plan file must be a tar archive (.tar.gz)'
+    defaultMessage: 'Invalid type: plan file must be a tar archive (.tar.gz or .tgz)'
   }
 });
 
