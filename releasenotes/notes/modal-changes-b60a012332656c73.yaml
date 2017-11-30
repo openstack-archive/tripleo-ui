@@ -1,0 +1,7 @@
+---
+features:
+  - Adds validations status area to navigation bar
+  - Validations sidebar is toggleable from navigation bar
+  - Modals, Modal panels and validations sidebar transitions are properly
+    animated
+  - Responsive layout transitions are animated
