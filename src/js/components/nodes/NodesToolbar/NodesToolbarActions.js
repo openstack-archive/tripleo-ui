@@ -150,7 +150,6 @@ class NodesToolbarActions extends React.Component {
             question={this.props.intl.formatMessage(
               messages.deleteNodesModalMessage
             )}
-            iconClass="pficon pficon-delete"
             onConfirm={() => this.deleteNodes('delete')}
             onCancel={() => this.setState({ showDeleteModal: false })}
           />
