@@ -14,25 +14,10 @@
  * under the License.
  */
 
-import { Map } from 'immutable';
+import React from 'react';
+import Validators from 'redux-form-validators';
+import { FormattedMessage } from 'react-intl';
 
-import RegisterNodesConstants from '../constants/RegisterNodesConstants';
-
-const initialState = Map({
-  isRegistering: false
-});
-
-export default function registerNodesReducer(state = initialState, action) {
-  switch (action.type) {
-    case RegisterNodesConstants.NODES_REGISTRATION_PENDING: {
-      return state.set('isRegistering', true);
-    }
-
-    case RegisterNodesConstants.NODES_REGISTRATION_FAILED:
-    case RegisterNodesConstants.NODES_REGISTRATION_SUCCESS:
-      return initialState;
-
-    default:
-      return state;
-  }
-}
+export const setupReduxFormValidators = () => {
+  Validators.formatMessage = msg => <FormattedMessage {...msg.props || msg} />;
+};

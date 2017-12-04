@@ -157,6 +157,7 @@ export const OverlayLoader = ({
   className,
   component,
   componentProps,
+  containerClassName,
   content,
   loaded,
   ...rest
@@ -167,7 +168,7 @@ export const OverlayLoader = ({
     loaded={loaded}
     originalContent={children}
   >
-    <div style={{ position: 'relative' }}>
+    <div className={containerClassName} style={{ position: 'relative' }}>
       {children}
       <div
         className={cx('overlay-loader', className)}
@@ -181,7 +182,10 @@ export const OverlayLoader = ({
     </div>
   </BaseLoader>
 );
-OverlayLoader.propTypes = defaultLoaderPropTypes;
+OverlayLoader.propTypes = {
+  ...defaultLoaderPropTypes,
+  containerClassName: PropTypes.string
+};
 OverlayLoader.defaultProps = defaultLoaderDefaultProps;
 
 export const Spinner = ({ className, component, inline, inverse, size }) => {
