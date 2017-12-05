@@ -27,6 +27,17 @@ export default function filtersReducer(state = initialState, action) {
     case FiltersConstants.ADD_ACTIVE_FILTER: {
       const filterUUID = uuid.v4();
       const { filter, data: { filterBy, filterString } } = action.payload;
+      // Don't add a new filter if there already is one with the same
+      // filterBy and filterString.
+      if (
+        state.getIn([filter, 'activeFilters']).filter(value => {
+          return (
+            value.filterBy === filterBy && value.filterString === filterString
+          );
+        }).size > 0
+      ) {
+        return state;
+      }
       return state.setIn(
         [filter, 'activeFilters', filterUUID],
         new ActiveFilter({ uuid: filterUUID, filterBy, filterString })
