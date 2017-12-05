@@ -17,7 +17,7 @@
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router-dom';
+import { Button, ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -37,13 +37,7 @@ import {
   getEnvironmentConfigurationSummary
 } from '../../selectors/environmentConfiguration';
 import { Loader } from '../ui/Loader';
-import {
-  ModalPanelBackdrop,
-  ModalPanel,
-  ModalPanelHeader,
-  ModalPanelBody,
-  ModalPanelFooter
-} from '../ui/ModalPanel';
+import { CloseModal, RoutedModalPanel } from '../ui/Modals';
 import PlanActions from '../../actions/PlansActions';
 import { stackStates } from '../../constants/StacksConstants';
 import StacksActions from '../../actions/StacksActions';
@@ -77,8 +71,7 @@ class DeploymentDetail extends React.Component {
       deployPlan,
       environmentConfigurationSummary,
       fetchStackResources,
-      runPreDeploymentValidations,
-      stacksLoaded
+      runPreDeploymentValidations
     } = this.props;
 
     if (
@@ -86,19 +79,13 @@ class DeploymentDetail extends React.Component {
       currentStack.stack_status === stackStates.DELETE_COMPLETE
     ) {
       return (
-        <Loader
-          loaded={stacksLoaded}
-          content={this.props.intl.formatMessage(messages.loadingStacksLoader)}
-          height={40}
-        >
-          <DeploymentConfirmation
-            allValidationsSuccessful={allPreDeploymentValidationsSuccessful}
-            currentPlan={currentPlan}
-            deployPlan={deployPlan}
-            environmentSummary={environmentConfigurationSummary}
-            runPreDeploymentValidations={runPreDeploymentValidations}
-          />
-        </Loader>
+        <DeploymentConfirmation
+          allValidationsSuccessful={allPreDeploymentValidationsSuccessful}
+          currentPlan={currentPlan}
+          deployPlan={deployPlan}
+          environmentSummary={environmentConfigurationSummary}
+          runPreDeploymentValidations={runPreDeploymentValidations}
+        />
       );
     } else if (currentStack.stack_status.match(/PROGRESS/)) {
       return (
@@ -132,40 +119,40 @@ class DeploymentDetail extends React.Component {
   }
 
   render() {
-    const { currentPlanName } = this.props;
+    const {
+      currentPlanName,
+      intl: { formatMessage },
+      stacksLoaded
+    } = this.props;
     return (
-      <div>
-        <ModalPanelBackdrop />
-        <ModalPanel>
-          <ModalPanelHeader>
-            <Link
-              to={`/plans/${currentPlanName}`}
-              type="button"
-              className="close"
-            >
-              <span aria-hidden="true" className="pficon pficon-close" />
-            </Link>
-            <h2 className="modal-title">
-              <FormattedMessage
-                {...messages.modalTitle}
-                values={{ planName: currentPlanName }}
-              />
-            </h2>
-          </ModalPanelHeader>
-          <ModalPanelBody>
-            {this.renderStatus()}
-          </ModalPanelBody>
-          <ModalPanelFooter>
-            <Link
-              to={`/plans/${currentPlanName}`}
-              type="button"
-              className="btn btn-default"
-            >
-              <FormattedMessage {...messages.close} />
-            </Link>
-          </ModalPanelFooter>
-        </ModalPanel>
-      </div>
+      <RoutedModalPanel redirectPath={`/plans/${currentPlanName}`}>
+        <ModalHeader closeButton>
+          <ModalTitle>
+            <FormattedMessage
+              {...messages.modalTitle}
+              values={{ planName: currentPlanName }}
+            />
+          </ModalTitle>
+        </ModalHeader>
+        <Loader
+          loaded={stacksLoaded}
+          className="flex-container"
+          content={formatMessage(messages.loadingStacksLoader)}
+          componentProps={{ className: 'flex-container' }}
+          height={40}
+        >
+          {this.renderStatus()}
+        </Loader>
+        <ModalFooter>
+          <CloseModal
+            render={onHide => (
+              <Button onClick={onHide}>
+                <FormattedMessage {...messages.close} />
+              </Button>
+            )}
+          />
+        </ModalFooter>
+      </RoutedModalPanel>
     );
   }
 }
