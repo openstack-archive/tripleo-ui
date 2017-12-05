@@ -120,7 +120,15 @@ export default {
         })
       )
         .then(response => {
-          dispatch(this.updateParametersSuccess(data));
+          const { resources, parameters } = response.heat_resource_tree;
+          const mistralParameters = response.environment_parameters;
+          dispatch(
+            this.updateParametersSuccess({
+              resources,
+              parameters,
+              mistralParameters
+            })
+          );
           dispatch(stopSubmit('nodesAssignment'));
           dispatch(
             NotificationActions.notify({
