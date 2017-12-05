@@ -29,7 +29,7 @@ const parametersActionPayload = {
   },
   parameters: {
     parameter1: {
-      default: '3PuRFRBdhHDD49Td4jHJYmD3n',
+      default: '1',
       type: 'String',
       noEcho: 'true',
       description: 'The password for the glance service and db account',
@@ -126,9 +126,7 @@ describe('parametersReducer', () => {
 
     it('sets parameters', () => {
       expect(state.parameters.size).toEqual(1);
-      expect(state.parameters.getIn(['parameter1', 'default'])).toEqual(
-        '3PuRFRBdhHDD49Td4jHJYmD3n'
-      );
+      expect(state.parameters.getIn(['parameter1', 'default'])).toEqual('1');
       expect(Map.isMap(state.parameters)).toBe(true);
     });
 
@@ -201,7 +199,7 @@ describe('parametersReducer', () => {
     let state;
     const action = {
       type: ParametersConstants.UPDATE_PARAMETERS_SUCCESS,
-      payload: { foo: 'bar' }
+      payload: parametersActionPayload
     };
 
     beforeEach(() => {
@@ -209,11 +207,7 @@ describe('parametersReducer', () => {
         ParametersDefaultState({
           isFetching: true,
           form: Map({ some: 'value' }),
-          parameters: Map({
-            foo: new Parameter({
-              name: 'foo'
-            })
-          })
+          parameters: Map(parametersActionPayload.parameters)
         }),
         action
       );
@@ -233,7 +227,7 @@ describe('parametersReducer', () => {
     });
 
     it('updates parameters in state with new values', () => {
-      expect(state.parameters.get('foo').default).toEqual('bar');
+      expect(state.parameters.get('parameter1').default).toEqual('1');
     });
   });
 });
