@@ -28,9 +28,7 @@
 }
 
 .modal {
-  &.modal-visible {
-    display: block;
-  }
+  z-index: 1040; // set the same z-index as backdrop to make nested modals work correctly
 
   .modal-dialog {
     margin: 50px auto;

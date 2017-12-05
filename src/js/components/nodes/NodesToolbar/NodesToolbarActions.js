@@ -21,7 +21,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { change, submit, isInvalid } from 'redux-form';
 
-import ConfirmationModal from '../../ui/ConfirmationModal';
+import { ConfirmationModal } from '../../ui/Modals';
 import DropdownKebab from '../../ui/dropdown/DropdownKebab';
 import TagNodesModal from '../tag_nodes/TagNodesModal';
 
