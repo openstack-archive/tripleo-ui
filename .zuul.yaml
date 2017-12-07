@@ -1,0 +1,13 @@
+- project:
+    name: openstack/tripleo-ui
+    check:
+      jobs:
+        - tripleo-ci-centos-7-undercloud-oooq:
+            files:
+              - ^src/.*$
+    gate:
+      queue: tripleo
+      jobs:
+        - tripleo-ci-centos-7-undercloud-oooq:
+            files:
+              - ^src/.*$
