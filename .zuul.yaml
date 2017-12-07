@@ -1,0 +1,20 @@
+- project:
+    check:
+      jobs:
+        - tripleo-ci-centos-7-undercloud-oooq:
+            files:
+              - ^src/.*$
+              - ^webpack.*$
+              - ^package.json$
+              - ^npm-shrinkwrap.json$
+              - ^.babelrc$
+    gate:
+      queue: tripleo
+      jobs:
+        - tripleo-ci-centos-7-undercloud-oooq:
+            files:
+              - ^src/.*$
+              - ^webpack.*$
+              - ^package.json$
+              - ^npm-shrinkwrap.json$
+              - ^.babelrc$
