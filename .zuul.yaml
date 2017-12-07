@@ -1,0 +1,29 @@
+- project:
+    name: openstack/tripleo-ui
+    templates:
+       - tripleo-undercloud-jobs
+    check:
+      jobs:
+        # Only run the undercloud-oooq job
+        - tripleo-ci-centos-7-undercloud-oooq:
+            files:
+              - ^src/.*$
+        - tripleo-ci-centos-7-undercloud-upgrades:
+            irrelevant-files:
+              - .*
+        #- tripleo-ci-centos-7-undercloud-containers:
+        #    irrelevant-files:
+        #      - .*
+    gate:
+      queue: tripleo
+      jobs:
+        # Only run the undercloud-oooq job
+        - tripleo-ci-centos-7-undercloud-oooq:
+            files:
+              - ^src/.*$
+        - tripleo-ci-centos-7-undercloud-upgrades:
+            irrelevant-files:
+              - .*
+        #- tripleo-ci-centos-7-undercloud-containers:
+        #    irrelevant-files:
+        #      - .*
