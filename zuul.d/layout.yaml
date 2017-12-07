@@ -1,0 +1,15 @@
+- project:
+    name: openstack/tripleo-ui
+    templates:
+       - tripleo-undercloud-jobs
+    check:
+      jobs:
+        - tripleo-undercloud-jobs:
+            files:
+              - ^src/.*$
+    gate:
+      queue: tripleo
+      jobs:
+        - tripleo-undercloud-jobs:
+            files:
+              - ^src/.*$
