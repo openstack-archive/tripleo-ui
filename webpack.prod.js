@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const CommonConfig = require('./webpack.common.js');
 
-const license = `TripleO UI
+const license = `TripleO UI (test)
 https://github.com/openstack/tripleo-ui
 
 Copyright 2017 Red Hat Inc.
