@@ -14,6 +14,10 @@
  * under the License.
  */
 
+/**
+ * DO NOT MERGE, TESTING
+*/
+
 import { applyMiddleware, createStore } from 'redux';
 import cookie from 'react-cookie';
 import { fromJS } from 'immutable';
