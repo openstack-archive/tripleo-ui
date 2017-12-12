@@ -5,6 +5,13 @@
       "react-intl",
       {
         "messagesDir": "./i18n/extracted-messages/",
+        "enforceDescriptions": false
+      }
+    ],
+    [
+      "react-intl",
+      {
+        "messagesDir": "./i18n/extracted-messages/",
         "enforceDescriptions": false,
         "moduleSourceName": "./redux-form-validators"
       }
