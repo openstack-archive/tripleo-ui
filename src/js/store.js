@@ -51,13 +51,7 @@ const loggerMiddleware = createLogger({
   logger: logger,
   // We're turning off all colors here because the formatting chars obscure the
   // content server-side.
-  colors: {
-    title: false,
-    prevState: false,
-    action: false,
-    nextState: false,
-    error: false
-  }
+  colors: false
 });
 
 const store = createStore(
