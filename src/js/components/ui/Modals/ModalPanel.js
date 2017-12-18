@@ -18,37 +18,35 @@ import cx from 'classnames';
 import { Modal } from 'react-overlays';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Fade } from 'react-bootstrap';
+// import { Fade } from 'react-bootstrap';
 
-// TODO(jtomasek): use this as transition and backdropTransition props once react-bootstrap is
-// updated to version which uses react-overlays ^0.8.3
-// We could use latest react-overlays for ModalPanel now but that causes ModalPanel and Modal
-// nesting issues as Modal is not correctly registered by ModalManager
-//
-// import Transition, {
-//   ENTERED,
-//   ENTERING
-// } from 'react-transition-group/Transition';
-//
-// const Fade = ({ children, ...props }) => {
-//   const fadeStyles = {
-//     [ENTERING]: 'in',
-//     [ENTERED]: 'in'
-//   };
-//
-//   return (
-//     <Transition {...props} timeout={400}>
-//       {(status, innerProps) =>
-//         React.cloneElement(children, {
-//           ...innerProps,
-//           className: `fade ${fadeStyles[status]} ${children.props.className}`
-//         })}
-//     </Transition>
-//   );
-// };
-// Fade.propTypes = {
-//   children: PropTypes.node
-// };
+// TODO(jtomasek): use Fade transition from react-bootstrap once it is updated
+// to work correctly
+import Transition, {
+  ENTERED,
+  ENTERING
+} from 'react-transition-group/Transition';
+
+const Fade = ({ children, ...props }) => {
+  const fadeStyles = {
+    [ENTERING]: 'in',
+    [ENTERED]: 'in'
+  };
+
+  return (
+    <Transition {...props} timeout={400}>
+      {(status, innerProps) =>
+        React.cloneElement(children, {
+          ...innerProps,
+          className: `fade ${fadeStyles[status]} ${children.props.className}`
+        })
+      }
+    </Transition>
+  );
+};
+Fade.propTypes = {
+  children: PropTypes.node
+};
 
 class ModalPanel extends React.Component {
   // provide onHide via context, so child buttons (close/cancel) can access it
@@ -69,7 +67,7 @@ class ModalPanel extends React.Component {
         backdropClassName="modal-panel-backdrop modal-backdrop"
         backdropStyle={style}
         containerClassName="modal-open"
-        // backdropTransition={Fade}
+        backdropTransition={Fade}
         transition={Fade}
         className="fixed-container"
         style={style}
