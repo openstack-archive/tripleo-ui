@@ -37,10 +37,6 @@
     "jest": true
   },
   "extends": ["prettier", "prettier/react"],
-  "ecmaFeatures": {
-    "jsx": true,
-    "experimentalObjectRestSpread": true
-  },
   "plugins": ["prettier", "react"],
   "parser": "babel-eslint"
 }
