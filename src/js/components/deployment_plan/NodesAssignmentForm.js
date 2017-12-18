@@ -61,10 +61,14 @@ class NodesAssignmentForm extends React.Component {
 NodesAssignmentForm.propTypes = {
   children: PropTypes.node,
   currentPlan: ImmutablePropTypes.record.isRequired,
+  dirty: PropTypes.bool.isRequired,
   error: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
+  invalid: PropTypes.bool.isRequired,
   pristine: PropTypes.bool.isRequired,
-  updateParameters: PropTypes.func.isRequired
+  submitting: PropTypes.bool.isRequired,
+  updateParameters: PropTypes.func.isRequired,
+  valid: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => ({

@@ -85,7 +85,6 @@ describe('DataTable component', () => {
         <FormattedMessage
           defaultMessage="Showing {showing} of {total} items"
           id="DataTable.itemsVisibleInTable"
-          tagName="span"
           values={{ showing: <b>{2}</b>, total: <b>{2}</b> }}
         />
       </div>

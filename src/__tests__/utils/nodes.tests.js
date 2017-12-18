@@ -21,32 +21,24 @@ import {
 } from '../../js/utils/nodes';
 
 describe('parseNodeCapabilities', () => {
-  beforeEach(function() {
-    this.capabilitiesString = 'capability1:cap1,capability2:cap2';
-  });
-
   it('returns an object from capabilities string', function() {
+    const capabilitiesString = 'capability1:cap1,capability2:cap2';
     const expectedObject = {
       capability1: 'cap1',
       capability2: 'cap2'
     };
-    expect(parseNodeCapabilities(this.capabilitiesString)).toEqual(
-      expectedObject
-    );
+    expect(parseNodeCapabilities(capabilitiesString)).toEqual(expectedObject);
   });
 });
 
 describe('stringifyNodeCapabilities', () => {
-  beforeEach(function() {
-    this.capabilitiesObject = {
+  it('returns an string from capabilities object', function() {
+    const capabilitiesObject = {
       capability1: 'cap1',
       capability2: 'cap2'
     };
-  });
-
-  it('returns an string from capabilities object', function() {
     const expectedString = 'capability1:cap1,capability2:cap2';
-    expect(stringifyNodeCapabilities(this.capabilitiesObject)).toEqual(
+    expect(stringifyNodeCapabilities(capabilitiesObject)).toEqual(
       expectedString
     );
   });

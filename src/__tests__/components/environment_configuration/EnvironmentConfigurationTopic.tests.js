@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 
@@ -29,6 +29,7 @@ describe('EnvironmentConfigurationTopic component', () => {
     let shallowRenderer = new ReactShallowRenderer();
     shallowRenderer.render(
       <EnvironmentConfigurationTopic
+        allEnvironments={Map()}
         key={0}
         title={topic.title}
         description={topic.description}

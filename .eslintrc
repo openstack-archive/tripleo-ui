@@ -1,15 +1,15 @@
 {
   "rules": {
     "default-case": 0,
-    "linebreak-style": [ 2, "unix" ],
+    "linebreak-style": [2, "unix"],
     "no-cond-assign": [2, "except-parens"],
     "no-console": 2,
     "no-else-return": 0,
     "no-param-reassign": 0,
     "no-unneeded-ternary": 1,
-    "no-unused-vars": [1, {"vars": "local", "args": "none"}],
+    "no-unused-vars": [1, { "vars": "local", "args": "none" }],
     "radix": 0,
-    "prettier/prettier": ["error", {"singleQuote": true}],
+    "prettier/prettier": ["error", { "singleQuote": true }],
     "react/jsx-boolean-value": [1, "never"],
     "react/jsx-no-duplicate-props": 1,
     "react/jsx-no-undef": 1,
@@ -24,7 +24,6 @@
     "react/no-unknown-property": 1,
     "react/prop-types": 1,
     "react/react-in-jsx-scope": 1,
-    "react/require-extension": 1,
     "react/self-closing-comp": 1,
     "react/sort-comp": 1,
     "space-infix-ops": 0,
@@ -37,17 +36,11 @@
     "node": true,
     "jest": true
   },
-  "extends": [
-    "prettier",
-    "prettier/react"
-  ],
+  "extends": ["prettier", "prettier/react"],
   "ecmaFeatures": {
     "jsx": true,
     "experimentalObjectRestSpread": true
   },
-  "plugins": [
-    "prettier",
-    "react"
-  ],
+  "plugins": ["prettier", "react"],
   "parser": "babel-eslint"
 }
