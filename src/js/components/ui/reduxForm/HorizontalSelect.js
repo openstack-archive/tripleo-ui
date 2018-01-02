@@ -52,7 +52,7 @@ const HorizontalSelect = ({
         >
           {children}
         </FormControl>
-        <InputMessage fieldMeta={meta} />
+        <InputMessage {...meta} />
         <InputDescription description={description} />
       </Col>
     </FormGroup>
