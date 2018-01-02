@@ -14,40 +14,26 @@
  * under the License.
  */
 
-import * as _ from 'lodash';
+import { camelCase, mapKeys } from 'lodash';
 import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import Formsy, { addValidationRule } from 'formsy-react';
+import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CloseModalButton } from '../ui/Modals';
 import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
+import EnvironmentConfigurationForm from './EnvironmentConfigurationForm';
+import EnvironmentConfigurationSidebar from './EnvironmentConfigurationSidebar';
 import EnvironmentConfigurationTopic from './EnvironmentConfigurationTopic';
 import { getCurrentPlanName } from '../../selectors/plans';
-import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import {
   getEnvironments,
   getTopicsTree
 } from '../../selectors/environmentConfiguration';
 import { Loader } from '../ui/Loader';
-import Tab from '../ui/Tab';
 import TabPane from '../ui/TabPane';
 
 const messages = defineMessages({
-  cancel: {
-    id: 'EnvironmentConfiguration.cancel',
-    defaultMessage: 'Cancel'
-  },
-  saveChanges: {
-    id: 'EnvironmentConfiguration.saveChanges',
-    defaultMessage: 'Save Changes'
-  },
-  saveAndClose: {
-    id: 'EnvironmentConfiguration.saveAndClose',
-    defaultMessage: 'Save And Close'
-  },
   loadingEnvironmentConfiguration: {
     id: 'EnvironmentConfiguration.loadingEnvironmentConfiguration',
     defaultMessage: 'Loading Deployment Configuration...'
@@ -58,8 +44,6 @@ class EnvironmentConfiguration extends React.Component {
   constructor() {
     super();
     this.state = {
-      canSubmit: false,
-      closeOnSubmit: false,
       activeTab: undefined
     };
   }
@@ -75,165 +59,95 @@ class EnvironmentConfiguration extends React.Component {
     );
   }
 
-  componentDidUpdate() {
-    this.invalidateForm(this.props.formFieldErrors.toJS());
-  }
-
-  enableButton() {
-    this.setState({ canSubmit: true });
-  }
-
-  disableButton() {
-    this.setState({ canSubmit: false });
-  }
-
-  invalidateForm(formFieldErrors) {
-    this.refs.environmentConfigurationForm.updateInputsWithError(
-      formFieldErrors
-    );
-  }
-
-  /*
-  * Formsy splits data into objects by '.', file names include '.'
-  * so we need to convert data back to e.g. { filename.yaml: true, ... }
-  */
-  _convertFormData(formData) {
-    return _.mapValues(
-      _.mapKeys(formData, (value, key) => {
-        return key + '.yaml';
-      }),
-      value => {
-        return value.yaml;
-      }
-    );
-  }
-
-  handleSubmit(formData, resetForm, invalidateForm) {
-    const data = this._convertFormData(formData);
-    this.disableButton();
-    this.props.updateEnvironmentConfiguration(
-      this.props.currentPlanName,
-      data,
-      Object.keys(this.refs.environmentConfigurationForm.inputs)
-    );
-
-    if (this.state.closeOnSubmit) {
-      this.setState({
-        closeOnSubmit: false
-      });
-
-      this.props.history.push(`/plans/${this.props.currentPlanName}`);
-    }
-  }
-
-  onSubmitAndClose() {
-    this.setState(
-      {
-        closeOnSubmit: true
-      },
-      this.refs.environmentConfigurationForm.submit
-    );
-  }
-
-  activateTab(tabName, e) {
-    e.preventDefault();
-    this.setState({ activeTab: tabName });
-  }
-
-  isTabActive(tabName) {
-    let firstTabName = _.camelCase(
+  isTabActive = tabName => {
+    const firstTabName = camelCase(
       this.props.environmentConfigurationTopics.first().get('title')
     );
-    let currentTab = this.state.activeTab || firstTabName;
+    const currentTab = this.state.activeTab || firstTabName;
     return currentTab === tabName;
+  };
+
+  renderTopics = () => {
+    const { environmentConfigurationTopics } = this.props;
+    return environmentConfigurationTopics.toList().map((topic, index) => {
+      const tabName = camelCase(topic.get('title'));
+      return (
+        <TabPane
+          isActive={this.isTabActive(tabName)}
+          key={index}
+          renderOnlyActive
+        >
+          <EnvironmentConfigurationTopic
+            title={topic.get('title')}
+            description={topic.get('description')}
+            environmentGroups={topic.get('environment_groups')}
+          />
+        </TabPane>
+      );
+    });
+  };
+
+  handleSubmit = ({ saveAndClose, ...values }, dispatch, props) => {
+    const data = mapKeys(values, (_, k) => k.replace(':', '.'));
+    const {
+      currentPlanName,
+      history,
+      updateEnvironmentConfiguration
+    } = this.props;
+    if (saveAndClose) {
+      updateEnvironmentConfiguration(currentPlanName, data, () =>
+        history.push(`/plans/${currentPlanName}`)
+      );
+    } else {
+      updateEnvironmentConfiguration(currentPlanName, data);
+    }
+  };
+
+  /**
+   * Initial values are all enabled environments, keys are changed as dots
+   * in input names cause unwanted splitting into nested objects
+   */
+  getFormInitialValues() {
+    return this.props.allEnvironments
+      .mapKeys(k => k.replace('.', ':'))
+      .filter(e => e.enabled)
+      .map(e => e.enabled)
+      .toJS();
   }
 
   render() {
-    let topics = this.props.environmentConfigurationTopics
-      .toList()
-      .map((topic, index) => {
-        let tabName = _.camelCase(topic.get('title'));
-        return (
-          <TabPane isActive={this.isTabActive(tabName)} key={index}>
-            <EnvironmentConfigurationTopic
-              key={index}
-              title={topic.get('title')}
-              description={topic.get('description')}
-              allEnvironments={this.props.allEnvironments}
-              environmentGroups={topic.get('environment_groups')}
-            />
-          </TabPane>
-        );
-      });
-
-    let topicTabs = this.props.environmentConfigurationTopics
-      .toList()
-      .map((topic, index) => {
-        let tabName = _.camelCase(topic.get('title'));
-        return (
-          <Tab key={index} isActive={this.isTabActive(tabName)}>
-            <a href="" onClick={this.activateTab.bind(this, tabName)}>
-              {topic.get('title')}
-            </a>
-          </Tab>
-        );
-      });
+    const {
+      allEnvironments,
+      environmentConfigurationTopics,
+      isFetching,
+      intl: { formatMessage }
+    } = this.props;
 
     return (
-      <Formsy
-        ref="environmentConfigurationForm"
-        role="form"
-        className="form"
-        onSubmit={this.handleSubmit.bind(this)}
-        onValid={this.enableButton.bind(this)}
-        onInvalid={this.disableButton.bind(this)}
+      <Loader
+        height={60}
+        loaded={!isFetching}
+        content={formatMessage(messages.loadingEnvironmentConfiguration)}
       >
-        <Loader
-          height={60}
-          loaded={!this.props.isFetching}
-          content={this.props.intl.formatMessage(
-            messages.loadingEnvironmentConfiguration
-          )}
+        <EnvironmentConfigurationForm
+          allEnvironments={allEnvironments}
+          onSubmit={this.handleSubmit}
+          initialValues={this.getFormInitialValues()}
         >
-          <ModalFormErrorList errors={this.props.formErrors.toJS()} />
           <div className="container-fluid">
             <div className="row row-eq-height">
-              <div className="col-sm-4 sidebar-pf sidebar-pf-left">
-                <ul
-                  id="DeploymentConfiguration__CategoriesList"
-                  className="nav nav-pills nav-stacked nav-arrows"
-                >
-                  {topicTabs}
-                </ul>
-              </div>
+              <EnvironmentConfigurationSidebar
+                activateTab={tabName => this.setState({ activeTab: tabName })}
+                categories={environmentConfigurationTopics.toList().toJS()}
+                isTabActive={this.isTabActive}
+              />
               <div className="col-sm-8">
-                <div className="tab-content">{topics}</div>
+                <div className="tab-content">{this.renderTopics()}</div>
               </div>
             </div>
           </div>
-        </Loader>
-
-        <div className="modal-footer">
-          <button
-            type="submit"
-            disabled={!this.state.canSubmit}
-            className="btn btn-primary"
-          >
-            <FormattedMessage {...messages.saveChanges} />
-          </button>
-          <button
-            type="button"
-            disabled={!this.state.canSubmit}
-            onClick={this.onSubmitAndClose.bind(this)}
-            className="btn btn-default"
-          >
-            <FormattedMessage {...messages.saveAndClose} />
-          </button>
-          <CloseModalButton>
-            <FormattedMessage {...messages.cancel} />
-          </CloseModalButton>
-        </div>
-      </Formsy>
+        </EnvironmentConfigurationForm>
+      </Loader>
     );
   }
 }
@@ -252,60 +166,35 @@ EnvironmentConfiguration.propTypes = {
   updateEnvironmentConfiguration: PropTypes.func
 };
 
-function mapStateToProps(state) {
-  return {
-    currentPlanName: getCurrentPlanName(state),
-    allEnvironments: getEnvironments(state),
-    environmentConfigurationTopics: getTopicsTree(state),
-    formErrors: state.environmentConfiguration.getIn(['form', 'formErrors']),
-    formFieldErrors: state.environmentConfiguration.getIn([
-      'form',
-      'formFieldErrors'
-    ]),
-    isFetching: state.environmentConfiguration.isFetching
-  };
-}
+const mapStateToProps = state => ({
+  currentPlanName: getCurrentPlanName(state),
+  allEnvironments: getEnvironments(state),
+  environmentConfigurationTopics: getTopicsTree(state),
+  formErrors: state.environmentConfiguration.getIn(['form', 'formErrors']),
+  formFieldErrors: state.environmentConfiguration.getIn([
+    'form',
+    'formFieldErrors'
+  ]),
+  isFetching: state.environmentConfiguration.isFetching
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchEnvironmentConfiguration: planName => {
-      dispatch(
-        EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName)
-      );
-    },
-    updateEnvironmentConfiguration: (planName, data, inputFields) => {
-      dispatch(
-        EnvironmentConfigurationActions.updateEnvironmentConfiguration(
-          planName,
-          data,
-          inputFields
-        )
-      );
-    }
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  fetchEnvironmentConfiguration: planName => {
+    dispatch(
+      EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName)
+    );
+  },
+  updateEnvironmentConfiguration: (planName, data, inputFields) => {
+    dispatch(
+      EnvironmentConfigurationActions.updateEnvironmentConfiguration(
+        planName,
+        data,
+        inputFields
+      )
+    );
+  }
+});
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(EnvironmentConfiguration)
 );
-
-/**
- * requiresEnvironments validation
- * Invalidates input if it is selected and environment it requires is not.
- * example: validations="requiredEnvironments:['some_environment.yaml']"
- */
-addValidationRule('requiredEnvironments', function(
-  values,
-  value,
-  requiredEnvironmentFieldNames
-) {
-  if (value) {
-    return !_.filter(
-      _.values(_.pick(values, requiredEnvironmentFieldNames)),
-      function(val) {
-        return val === false;
-      }
-    ).length;
-  }
-  return true;
-});
