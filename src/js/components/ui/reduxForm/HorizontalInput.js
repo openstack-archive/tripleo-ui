@@ -44,7 +44,7 @@ const HorizontalInput = ({
       </Col>
       <Col sm={inputColumns}>
         <FormControl type={type} {...input} {...rest} />
-        <InputMessage fieldMeta={meta} />
+        <InputMessage {...meta} />
         <InputDescription description={description} />
       </Col>
     </FormGroup>

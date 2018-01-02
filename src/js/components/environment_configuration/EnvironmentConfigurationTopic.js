@@ -20,39 +20,30 @@ import React from 'react';
 
 import EnvironmentGroup from './EnvironmentGroup';
 
-export default class EnvironmentConfigurationTopic extends React.Component {
-  render() {
-    let environmentGroups = this.props.environmentGroups
+const EnvironmentConfigurationTopic = ({ description, environmentGroups }) => (
+  <fieldset className="environment-topic">
+    {description && (
+      <p>
+        <i>{description}</i>
+      </p>
+    )}
+    {environmentGroups
       .toList()
-      .map((envGroup, index) => {
-        return (
-          <EnvironmentGroup
-            key={index}
-            title={envGroup.get('title')}
-            description={envGroup.get('description')}
-            allEnvironments={this.props.allEnvironments}
-            environments={envGroup.get('environments')}
-            mutuallyExclusive={envGroup.get('mutually_exclusive')}
-          />
-        );
-      });
-
-    const { description } = this.props;
-    return (
-      <fieldset className="environment-topic">
-        {description && (
-          <p>
-            <i>{description}</i>
-          </p>
-        )}
-        {environmentGroups}
-      </fieldset>
-    );
-  }
-}
+      .map((envGroup, index) => (
+        <EnvironmentGroup
+          key={index}
+          title={envGroup.get('title')}
+          description={envGroup.get('description')}
+          environments={envGroup.get('environments')}
+          mutuallyExclusive={envGroup.get('mutually_exclusive')}
+        />
+      ))}
+  </fieldset>
+);
 EnvironmentConfigurationTopic.propTypes = {
-  allEnvironments: ImmutablePropTypes.map.isRequired,
   description: PropTypes.string,
   environmentGroups: ImmutablePropTypes.list,
   title: PropTypes.string.isRequired
 };
+
+export default EnvironmentConfigurationTopic;

@@ -15,6 +15,7 @@
  */
 
 import configureMockStore from 'redux-mock-store';
+import { startSubmit, stopSubmit } from 'redux-form';
 import thunkMiddleware from 'redux-thunk';
 
 import EnvironmentConfigurationActions from '../../js/actions/EnvironmentConfigurationActions';
@@ -128,7 +129,7 @@ describe('updateEnvironmentConfiguration', () => {
       .then(() => {
         expect(MistralApiService.runAction).toHaveBeenCalled();
         expect(store.getActions()).toEqual([
-          EnvironmentConfigurationActions.updateEnvironmentConfigurationPending(),
+          startSubmit('environmentConfigurationForm'),
           EnvironmentConfigurationActions.updateEnvironmentConfigurationSuccess(
             [
               'overcloud-resource-registry-puppet.yaml',
@@ -136,17 +137,9 @@ describe('updateEnvironmentConfiguration', () => {
               'environments/network-isolation.yaml'
             ]
           ),
+          stopSubmit('environmentConfigurationForm'),
           NotificationActions.notify({ type: 'NOTIFY' })
         ]);
       });
-
-    // const result = EnvironmentConfigurationActions.updateEnvironmentConfiguration(
-    //   'myPlan'
-    // );
-    // const mockDispatch = jest.fn();
-    // result(mockDispatch, jest.fn(), mockGetIntl).then(() => {
-    //   console.log(mockDispatch);
-    //   expect(mockDispatch.mock.calls).toEqual(true);
-    // });
   });
 });
