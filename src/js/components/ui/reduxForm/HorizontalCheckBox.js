@@ -17,16 +17,17 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { ControlLabel, FormGroup, Col, FormControl } from 'react-bootstrap';
+import { Checkbox, Col, FormGroup } from 'react-bootstrap';
 
 import { getValidationState, InputDescription, InputMessage } from './utils';
 
-const HorizontalTextarea = ({
+const HorizontalCheckBox = ({
   id,
   label,
   labelColumns,
   inputColumns,
   description,
+  type,
   input,
   meta,
   required,
@@ -34,22 +35,17 @@ const HorizontalTextarea = ({
 }) => {
   return (
     <FormGroup controlId={id} validationState={getValidationState(meta)}>
-      <Col
-        componentClass={ControlLabel}
-        sm={labelColumns}
-        className={cx({ 'required-pf': required })}
-      >
-        {label}
-      </Col>
-      <Col sm={inputColumns}>
-        <FormControl componentClass="textarea" {...input} {...rest} />
+      <Col smOffset={labelColumns} sm={inputColumns}>
+        <Checkbox {...input} {...rest}>
+          <span className={cx({ 'required-pf': required })}>{label}</span>
+        </Checkbox>
         <InputMessage {...meta} />
         <InputDescription description={description} />
       </Col>
     </FormGroup>
   );
 };
-HorizontalTextarea.propTypes = {
+HorizontalCheckBox.propTypes = {
   description: PropTypes.node,
   id: PropTypes.string.isRequired,
   input: PropTypes.object.isRequired,
@@ -57,11 +53,13 @@ HorizontalTextarea.propTypes = {
   label: PropTypes.node,
   labelColumns: PropTypes.number.isRequired,
   meta: PropTypes.object.isRequired,
-  required: PropTypes.bool.isRequired
+  required: PropTypes.bool.isRequired,
+  type: PropTypes.string.isRequired
 };
-HorizontalTextarea.defaultProps = {
+HorizontalCheckBox.defaultProps = {
   labelColumns: 5,
   inputColumns: 7,
-  required: false
+  required: false,
+  type: 'text'
 };
-export default HorizontalTextarea;
+export default HorizontalCheckBox;

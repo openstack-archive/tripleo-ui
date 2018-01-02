@@ -48,9 +48,6 @@ export default function environmentConfigurationReducer(
     case EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_FAILED:
       return state.set('isFetching', false).set('loaded', true);
 
-    case EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_PENDING:
-      return state.set('isFetching', true);
-
     case EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS: {
       const enabledEnvs = fromJS(action.payload);
       const updatedEnvs = state.environments.map(environment => {
@@ -59,14 +56,8 @@ export default function environmentConfigurationReducer(
           enabledEnvs.includes(environment.get('file'))
         );
       });
-      return state.set('environments', updatedEnvs).set('isFetching', false);
+      return state.set('environments', updatedEnvs);
     }
-
-    case EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_FAILED:
-      return state
-        .set('isFetching', false)
-        .set('loaded', true)
-        .set('form', fromJS(action.payload));
 
     case EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_PENDING:
       return state.setIn(['environments', action.payload, 'isFetching'], true);
