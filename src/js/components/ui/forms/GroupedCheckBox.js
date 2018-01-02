@@ -22,7 +22,11 @@ import React from 'react';
 import InputDescription from './InputDescription';
 import InputErrorMessage from './InputErrorMessage';
 
-class GroupedCheckBox extends React.Component {
+class GroupedCheckBox extends React.PureComponent {
+  constructor() {
+    super();
+    this.changeValue = this.changeValue.bind(this);
+  }
   changeValue(event) {
     this.props.onChange(event.target.checked, this.props.name);
     this.props.setValue(event.target.checked);
@@ -44,7 +48,7 @@ class GroupedCheckBox extends React.Component {
             name={this.props.name}
             ref={this.props.id}
             id={this.props.id}
-            onChange={this.changeValue.bind(this)}
+            onChange={this.changeValue}
             checked={!!this.props.getValue()}
             value={this.props.getValue()}
           />
