@@ -35,12 +35,11 @@ InputDescription.propTypes = {
   description: PropTypes.node
 };
 
-export const InputMessage = ({ fieldMeta: { touched, error, warning } }) =>
+export const InputMessage = ({ touched, error, warning }) =>
   touched
     ? (error ? <HelpBlock>{error}</HelpBlock> : null) ||
       (warning ? <HelpBlock>{warning}</HelpBlock> : null)
     : null;
-
 InputMessage.propTypes = {
   error: PropTypes.node,
   touched: PropTypes.bool,

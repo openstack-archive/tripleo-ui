@@ -16,6 +16,7 @@
 
 import { defineMessages } from 'react-intl';
 import { normalize } from 'normalizr';
+import { startSubmit, stopSubmit } from 'redux-form';
 import yaml from 'js-yaml';
 
 import EnvironmentConfigurationConstants from '../constants/EnvironmentConfigurationConstants';
@@ -85,10 +86,10 @@ export default {
     };
   },
 
-  updateEnvironmentConfiguration(planName, data, formFields) {
+  updateEnvironmentConfiguration(planName, data, redirect) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      dispatch(this.updateEnvironmentConfigurationPending());
+      dispatch(startSubmit('environmentConfigurationForm'));
       return dispatch(
         MistralApiService.runAction(MistralConstants.CAPABILITIES_UPDATE, {
           environments: data,
@@ -98,6 +99,7 @@ export default {
         .then(response => {
           const enabledEnvs = response.environments.map(env => env.path);
           dispatch(this.updateEnvironmentConfigurationSuccess(enabledEnvs));
+          dispatch(stopSubmit('environmentConfigurationForm'));
           dispatch(
             NotificationActions.notify({
               title: formatMessage(messages.envConfigUpdatedNotificationTitle),
@@ -107,31 +109,18 @@ export default {
               type: 'success'
             })
           );
+          redirect && redirect();
         })
         .catch(error => {
           dispatch(
-            handleErrors(
-              error,
-              'Deployment configuration could not be updated',
-              false
-            )
-          );
-          dispatch(
-            this.updateEnvironmentConfigurationFailed([
-              {
-                title: 'Configuration could not be updated',
+            stopSubmit('environmentConfigurationForm', {
+              _error: {
+                title: 'Deployment configuration could not be updated',
                 message: error.message
               }
-            ])
+            })
           );
         });
-    };
-  },
-
-  updateEnvironmentConfigurationPending() {
-    return {
-      type:
-        EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_PENDING
     };
   },
 
@@ -140,17 +129,6 @@ export default {
       type:
         EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS,
       payload: enabledEnvironments
-    };
-  },
-
-  updateEnvironmentConfigurationFailed(formErrors = [], formFieldErrors = {}) {
-    return {
-      type:
-        EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_FAILED,
-      payload: {
-        formErrors,
-        formFieldErrors
-      }
     };
   },
 
