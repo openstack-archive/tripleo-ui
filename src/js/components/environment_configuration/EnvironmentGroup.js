@@ -14,117 +14,61 @@
  * under the License.
  */
 
-import { defineMessages, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { change, Field } from 'redux-form';
 
-import GenericCheckBox from '../ui/forms/GenericCheckBox';
-import GroupedCheckBox from '../ui/forms/GroupedCheckBox';
-
-const messages = defineMessages({
-  requiredEnvironments: {
-    id: 'EnvironmentGroup.requiredEnvironments',
-    defaultMessage: 'This option requires {requiredEnvironments} to be enabled.'
-  }
-});
+import EnvironmentGroupHeading from './EnvironmentGroupHeading';
+import EnvironmentCheckBox from './EnvironmentCheckBox';
 
 class EnvironmentGroup extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      checkedEnvironment: null
-    };
-  }
-
-  componentWillMount() {
-    const firstCheckedEnvironment = this.props.environments
-      .filter(env => env.get('enabled') === true)
-      .first();
-    this.setState({
-      checkedEnvironment: firstCheckedEnvironment
-        ? firstCheckedEnvironment.get('file')
-        : null
-    });
-  }
-
-  onGroupedCheckBoxChange(checked, environmentFile) {
-    this.setState({ checkedEnvironment: checked ? environmentFile : null });
-  }
-
-  getRequiredEnvironmentsNames(environment) {
-    return environment.requires
-      .map(env => this.props.allEnvironments.getIn([env, 'title'], env))
-      .toArray();
-  }
-
-  generateInputs() {
-    const {
-      environments,
-      intl: { formatMessage },
-      mutuallyExclusive
-    } = this.props;
-
-    return environments.toList().map((environment, index) => {
-      const requiredEnvironments = environment.requires.toArray();
-      const requiredEnvironmentNames = this.getRequiredEnvironmentsNames(
-        environment
-      );
-      if (mutuallyExclusive) {
-        let checkBoxValue = this.state.checkedEnvironment === environment.file;
-        return (
-          <GroupedCheckBox
-            key={environment.file}
-            name={environment.file}
-            id={environment.file}
-            title={environment.title}
-            value={checkBoxValue}
-            validations={{ requiredEnvironments: requiredEnvironments }}
-            validationError={formatMessage(messages.requiredEnvironments, {
-              requiredEnvironments: requiredEnvironmentNames
-            })}
-            onChange={this.onGroupedCheckBoxChange.bind(this)}
-            description={environment.description}
-          />
-        );
-      } else {
-        return (
-          <GenericCheckBox
-            key={environment.file}
-            name={environment.file}
-            id={environment.file}
-            title={environment.title}
-            value={environment.get('enabled', false)}
-            validations={{ requiredEnvironments: requiredEnvironments }}
-            validationError={formatMessage(messages.requiredEnvironments, {
-              requiredEnvironments: requiredEnvironmentNames
-            })}
-            description={environment.description}
-          />
-        );
-      }
-    });
-  }
+  /**
+   * When enabling environment in mutually exclusive group disable other
+   * environments in the group
+   */
+  handleEnablingEnvironment = (event, newValue, previousValue) => {
+    const { changeValue, environments } = this.props;
+    if (newValue) {
+      environments
+        .delete(event.target.name.replace(':', '.'))
+        .map(env => changeValue(env.file.replace('.', ':'), false));
+    }
+  };
 
   render() {
-    let environments = this.generateInputs();
-
+    const { title, description, environments, mutuallyExclusive } = this.props;
     return (
       <div className="environment-group">
-        <EnvironmentGroupHeading
-          title={this.props.title}
-          description={this.props.description}
-        />
-        {environments}
+        <EnvironmentGroupHeading title={title} description={description} />
+        {environments
+          .toList()
+          .map((environment, index) => (
+            <Field
+              labelColumns={0}
+              inputColumns={12}
+              id={environment.file}
+              key={environment.file}
+              label={environment.title}
+              title={environment.file}
+              description={environment.description}
+              name={environment.file.replace('.', ':')}
+              component={EnvironmentCheckBox}
+              type="checkbox"
+              onChange={
+                mutuallyExclusive ? this.handleEnablingEnvironment : null
+              }
+            />
+          ))}
       </div>
     );
   }
 }
 EnvironmentGroup.propTypes = {
-  allEnvironments: ImmutablePropTypes.map.isRequired,
+  changeValue: PropTypes.func.isRequired,
   description: PropTypes.string,
   environments: ImmutablePropTypes.map,
-  intl: PropTypes.object,
   mutuallyExclusive: PropTypes.bool.isRequired,
   title: PropTypes.string
 };
@@ -132,26 +76,9 @@ EnvironmentGroup.defaultProps = {
   mutuallyExclusive: false
 };
 
-export default injectIntl(EnvironmentGroup);
+const mapDispatchToProps = dispatch => ({
+  changeValue: (field, value) =>
+    dispatch(change('environmentConfigurationForm', field, value))
+});
 
-class EnvironmentGroupHeading extends React.Component {
-  render() {
-    if (this.props.title) {
-      return (
-        <h4>
-          {this.props.title}
-          <br />
-          <small>{this.props.description}</small>
-        </h4>
-      );
-    } else if (this.props.description) {
-      return <p>{this.props.description}</p>;
-    } else {
-      return false;
-    }
-  }
-}
-EnvironmentGroupHeading.propTypes = {
-  description: PropTypes.string,
-  title: PropTypes.string
-};
+export default connect(null, mapDispatchToProps)(EnvironmentGroup);
