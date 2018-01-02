@@ -22,7 +22,11 @@ import React from 'react';
 import InputDescription from './InputDescription';
 import InputErrorMessage from './InputErrorMessage';
 
-class GenericCheckBox extends React.Component {
+class GenericCheckBox extends React.PureComponent {
+  constructor() {
+    super();
+    this.changeValue = this.changeValue.bind(this);
+  }
   changeValue(event) {
     this.props.setValue(event.target.checked);
   }
@@ -43,7 +47,7 @@ class GenericCheckBox extends React.Component {
             name={this.props.name}
             ref={this.props.id}
             id={this.props.id}
-            onChange={this.changeValue.bind(this)}
+            onChange={this.changeValue}
             checked={!!this.props.getValue()}
             value={this.props.getValue()}
           />
