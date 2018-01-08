@@ -81,6 +81,8 @@
   "scripts": {
     "lint": "./bin/run_lint.sh",
     "prettier": "prettier --write --single-quote 'src/**/*.js'",
+    "prebuild": "./bin/verify-version.js",
+    "prinstall": "./bin/verify-version.js",
     "build": "webpack --env=prod --bail --progress",
     "build:dev": "webpack --env=dev --bail --progress",
     "start": "webpack-dev-server --env=dev --progress",
@@ -115,5 +117,8 @@
     "openstack"
   ],
   "author": "Openstack <openstack-dev@lists.openstack.org>",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "engines": {
+    "node": "8.9.4"
+  }
 }
