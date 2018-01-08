@@ -80,6 +80,7 @@
   "scripts": {
     "lint": "./bin/run_lint.sh",
     "prettier": "prettier --write --single-quote 'src/**/*.js'",
+    "prebuild": "npm version --json | ./bin/verify-version.js",
     "build": "webpack --env=prod --bail --progress",
     "build:dev": "webpack --env=dev --bail --progress",
     "start": "webpack-dev-server --env=dev --progress",
