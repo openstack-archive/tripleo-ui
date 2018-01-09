@@ -16,7 +16,7 @@
  */
 
 var readline = require('readline');
-var REQUIRED_VERSION = 3;
+var REQUIRED_VERSION = 5;
 
 var rl = readline.createInterface({
   input: process.stdin,

@@ -20,7 +20,7 @@
     "keymirror": "~0.1.1",
     "lodash": "^4.0.0",
     "normalizr": "^2.0.0",
-    "patternfly": "^3.27.4",
+    "patternfly": "3.27.4",
     "patternfly-react": "^0.6.2",
     "prop-types": "^15.5.10",
     "react": "^15.6.2",
