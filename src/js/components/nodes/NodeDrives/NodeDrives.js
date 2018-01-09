@@ -25,6 +25,7 @@ import {
 } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { ListView } from 'patternfly-react';
 
 import {
   CloseModalButton,
@@ -32,7 +33,6 @@ import {
   RoutedModal
 } from '../../ui/Modals';
 import { getNodeDrives } from '../../../selectors/nodes';
-import { ListView } from '../../ui/ListView';
 import NodeDrive from './NodeDrive';
 import NodesActions from '../../../actions/NodesActions';
 
