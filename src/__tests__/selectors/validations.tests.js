@@ -23,9 +23,7 @@ import {
   FiltersInitialState
 } from '../../js/immutableRecords/filters';
 import { InitialPlanState, Plan } from '../../js/immutableRecords/plans';
-import {
-  WorkflowExecution
-} from '../../js/immutableRecords/workflowExecutions';
+import { WorkflowExecution } from '../../js/immutableRecords/workflowExecutions';
 import MistralConstants from '../../js/constants/MistralConstants';
 
 describe(' validations selectors', () => {

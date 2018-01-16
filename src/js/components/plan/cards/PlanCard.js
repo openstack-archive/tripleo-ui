@@ -96,15 +96,10 @@ class PlanCard extends React.Component {
     return (
       <ul className="list-unstyled">
         <li>
-          <strong>Status:</strong>
-          {' '}
-          {this.renderStackIcon(stack)}
-          {' '}
+          <strong>Status:</strong> {this.renderStackIcon(stack)}{' '}
           {this.getDeploymentStatus(stack)}
         </li>
-        <li>
-          {modified}
-        </li>
+        <li>{modified}</li>
       </ul>
     );
   }
@@ -143,13 +138,10 @@ class PlanCard extends React.Component {
               {plan.name}
               <PlanActions planName={plan.name} stack={stack} />
             </h2>
-            {plan.description &&
-              <div className="card-pf-body">
-                {plan.description}
-              </div>}
-            <div className="card-pf-footer">
-              {this.renderStackInfo()}
-            </div>
+            {plan.description && (
+              <div className="card-pf-body">{plan.description}</div>
+            )}
+            <div className="card-pf-footer">{this.renderStackInfo()}</div>
           </OverlayLoader>
         </div>
       </div>

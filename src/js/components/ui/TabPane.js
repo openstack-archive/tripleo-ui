@@ -32,11 +32,7 @@ export default class TabPane extends React.Component {
       active: this.props.isActive
     });
 
-    return (
-      <div className={classes}>
-        {this.renderChildren()}
-      </div>
-    );
+    return <div className={classes}>{this.renderChildren()}</div>;
   }
 }
 TabPane.propTypes = {

@@ -63,7 +63,8 @@ const messages = defineMessages({
   },
   nonFilteredToolbarResults: {
     id: 'ValidationsToolbar.nonFilteredToolbarResults',
-    defaultMessage: '{totalCount, number} {totalCount, plural, one ' +
+    defaultMessage:
+      '{totalCount, number} {totalCount, plural, one ' +
       '{Validation} other {Validations}}'
   }
 });

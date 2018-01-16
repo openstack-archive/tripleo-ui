@@ -34,8 +34,8 @@ export default {
         })
       )
         .then(response => {
-          const roles = normalize(response, arrayOf(roleSchema)).entities
-            .roles || {};
+          const roles =
+            normalize(response, arrayOf(roleSchema)).entities.roles || {};
           dispatch(this.fetchRolesSuccess(roles));
         })
         .catch(error => {

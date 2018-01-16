@@ -17,8 +17,7 @@
 import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 
-import EnvironmentGroup
-  from '../../../js/components/environment_configuration/EnvironmentGroup';
+import EnvironmentGroup from '../../../js/components/environment_configuration/EnvironmentGroup';
 import MockPlan from '../../mocks/MockPlan';
 
 const envGroup = MockPlan.capabilities.topics[0].environment_groups[0];

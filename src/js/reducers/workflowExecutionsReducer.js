@@ -16,8 +16,7 @@
 
 import { fromJS, Map, OrderedMap } from 'immutable';
 
-import WorkflowExecutionsConstants
-  from '../constants/WorkflowExecutionsConstants';
+import WorkflowExecutionsConstants from '../constants/WorkflowExecutionsConstants';
 import { WorkflowExecution } from '../immutableRecords/workflowExecutions';
 
 const initialState = Map({

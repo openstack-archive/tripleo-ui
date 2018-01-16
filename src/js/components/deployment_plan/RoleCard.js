@@ -41,7 +41,8 @@ const messages = defineMessages({
   availableNodesCount: {
     id: 'RoleCard.availableNodesCount',
     defaultMessage: 'of {count, number}',
-    description: 'Used to display available nodes to assign, e.g. 1 of 2 Nodes Assigned'
+    description:
+      'Used to display available nodes to assign, e.g. 1 of 2 Nodes Assigned'
   }
 });
 
@@ -80,21 +81,23 @@ const RoleCard = ({
       <div className="card-pf-body">
         <div className="card-pf-utilization-details">
           <div className="node-picker-cell">
-            {assignedNodesCountParameter
-              ? <Field
-                  component={NodePickerInput}
-                  increment={1}
-                  validate={validations}
-                  name={assignedNodesCountParameter.name}
-                  max={availableNodesCount}
-                />
-              : <NodePickerInput
-                  increment={1}
-                  input={{ value: '-' }}
-                  meta={{ submitting: true }}
-                  max={availableNodesCount}
-                  min={0}
-                />}
+            {assignedNodesCountParameter ? (
+              <Field
+                component={NodePickerInput}
+                increment={1}
+                validate={validations}
+                name={assignedNodesCountParameter.name}
+                max={availableNodesCount}
+              />
+            ) : (
+              <NodePickerInput
+                increment={1}
+                input={{ value: '-' }}
+                meta={{ submitting: true }}
+                max={availableNodesCount}
+                min={0}
+              />
+            )}
           </div>
           <span className="card-pf-utilization-card-details-description">
             <span className="card-pf-utilization-card-details-line-1">

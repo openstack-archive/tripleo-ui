@@ -66,8 +66,7 @@ export const DeployStep = ({
             loaded={!currentPlan.isRequestingPlanDeploy}
             content={intl.formatMessage(messages.requestingDeploy)}
           >
-            <span className="fa fa-cloud-upload" />
-            {' '}
+            <span className="fa fa-cloud-upload" />{' '}
             <FormattedMessage {...messages.validateAndDeploy} />
           </InlineLoader>
         </Link>

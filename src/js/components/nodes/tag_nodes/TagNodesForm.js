@@ -34,7 +34,8 @@ const messages = defineMessages({
   noRolesInfo: {
     id: 'TagNodesForm.noRolesInfo',
     defaultMessage: '{link} to select profiles which match available Roles',
-    description: 'A second part of noRolesInfo message - rest of the text after link'
+    description:
+      'A second part of noRolesInfo message - rest of the text after link'
   },
   confirm: {
     id: 'TagNodesForm.confirm',
@@ -104,7 +105,9 @@ class TagNodesForm extends React.Component {
     return this.props.profiles
       .map((profile, index) => <option key={index}>{profile}</option>)
       .concat([
-        <option key="spacer1" value="spacer" disabled>──────────</option>,
+        <option key="spacer1" value="spacer" disabled>
+          ──────────
+        </option>,
         <option key="noProfile" value="">
           {this.props.intl.formatMessage(messages.noProfileOption)}
         </option>,
@@ -126,7 +129,7 @@ class TagNodesForm extends React.Component {
         onInvalid={this.disableButton.bind(this)}
       >
         <div className="modal-body">
-          {roles.isEmpty() &&
+          {roles.isEmpty() && (
             <InlineNotification type="info">
               <FormattedMessage
                 {...messages.noRolesInfo}
@@ -138,7 +141,8 @@ class TagNodesForm extends React.Component {
                   )
                 }}
               />
-            </InlineNotification>}
+            </InlineNotification>
+          )}
           <fieldset>
             <HorizontalSelect
               name="profile"
@@ -149,22 +153,22 @@ class TagNodesForm extends React.Component {
             >
               {this.renderOptions()}
             </HorizontalSelect>
-            {this.state.showCustomInput
-              ? <HorizontalInput
-                  name="customProfile"
-                  title={formatMessage(messages.customProfileLabel)}
-                  type="text"
-                  inputColumnClasses="col-sm-7"
-                  labelColumnClasses="col-sm-3"
-                  value=""
-                  validations={{ matchRegexp: /^[0-9a-z]+(-[0-9a-z]+)*$/ }}
-                  validationError={formatMessage(
-                    messages.customProfileErrorMessage
-                  )}
-                  description={formatMessage(messages.customProfileDescription)}
-                  required
-                />
-              : null}
+            {this.state.showCustomInput ? (
+              <HorizontalInput
+                name="customProfile"
+                title={formatMessage(messages.customProfileLabel)}
+                type="text"
+                inputColumnClasses="col-sm-7"
+                labelColumnClasses="col-sm-3"
+                value=""
+                validations={{ matchRegexp: /^[0-9a-z]+(-[0-9a-z]+)*$/ }}
+                validationError={formatMessage(
+                  messages.customProfileErrorMessage
+                )}
+                description={formatMessage(messages.customProfileDescription)}
+                required
+              />
+            ) : null}
           </fieldset>
         </div>
         <div className="modal-footer">

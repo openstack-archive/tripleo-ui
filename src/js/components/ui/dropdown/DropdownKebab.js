@@ -28,9 +28,7 @@ const DropdownKebab = ({ children, id, pullRight }) => {
       >
         <span className="fa fa-ellipsis-v" />
       </Dropdown.Toggle>
-      <Dropdown.Menu>
-        {children}
-      </Dropdown.Menu>
+      <Dropdown.Menu>{children}</Dropdown.Menu>
     </Dropdown>
   );
 };

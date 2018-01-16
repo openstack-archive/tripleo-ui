@@ -40,15 +40,15 @@ class I18nDropdown extends React.Component {
     return languages
       .map((langName, langKey) => {
         const active = currentLanguage === langKey;
-        return MESSAGES[langKey] || langKey === 'en'
-          ? <DropdownItem
-              key={`lang-${langKey}`}
-              active={active}
-              onClick={this.props.chooseLanguage.bind(this, langKey)}
-            >
-              {langName}
-            </DropdownItem>
-          : null;
+        return MESSAGES[langKey] || langKey === 'en' ? (
+          <DropdownItem
+            key={`lang-${langKey}`}
+            active={active}
+            onClick={this.props.chooseLanguage.bind(this, langKey)}
+          >
+            {langName}
+          </DropdownItem>
+        ) : null;
       })
       .toList();
   }

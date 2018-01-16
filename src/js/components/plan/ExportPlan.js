@@ -44,7 +44,8 @@ const messages = defineMessages({
   },
   downloadPlanExportMessage: {
     id: 'ExportPlan.downloadMessage',
-    defaultMessage: 'The plan export you requested is ready. Please click the button below to ' +
+    defaultMessage:
+      'The plan export you requested is ready. Please click the button below to ' +
       'download the export. You might need to right-click the button and choose ' +
       '"Save link as...".'
   },
@@ -94,21 +95,20 @@ class ExportPlan extends React.Component {
               messages.exportingPlanLoader
             )}
           >
-            {this.props.planExportUrl
-              ? <div>
-                  <p>
-                    <FormattedMessage {...messages.downloadPlanExportMessage} />
-                  </p>
-                  <a
-                    href={this.props.planExportUrl}
-                    className="btn btn-success"
-                  >
-                    <FormattedMessage {...messages.downloadPlanExport} />
-                  </a>
-                </div>
-              : <div>
-                  <FormattedMessage {...messages.exportError} />
-                </div>}
+            {this.props.planExportUrl ? (
+              <div>
+                <p>
+                  <FormattedMessage {...messages.downloadPlanExportMessage} />
+                </p>
+                <a href={this.props.planExportUrl} className="btn btn-success">
+                  <FormattedMessage {...messages.downloadPlanExport} />
+                </a>
+              </div>
+            ) : (
+              <div>
+                <FormattedMessage {...messages.exportError} />
+              </div>
+            )}
           </Loader>
         </ModalBody>
         <ModalFooter>

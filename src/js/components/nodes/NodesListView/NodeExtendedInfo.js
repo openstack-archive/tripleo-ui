@@ -103,26 +103,29 @@ class NodeExtendedInfo extends React.Component {
     if (node.getIn(['introspectionData', 'interfaces']).isEmpty()) {
       return (
         <dl>
-          <dt><FormattedMessage {...messages.macAddresses} /></dt>
+          <dt>
+            <FormattedMessage {...messages.macAddresses} />
+          </dt>
           {node.get('macs').map(mac => <dd key={mac}>{mac}</dd>)}
         </dl>
       );
     } else {
       return (
         <dl>
-          <dt><FormattedMessage {...messages.interfaces} /></dt>
+          <dt>
+            <FormattedMessage {...messages.interfaces} />
+          </dt>
           <dd>
             {node
               .getIn(['introspectionData', 'interfaces'])
               .map((ifc, k) => {
                 return (
                   <div key={k}>
-                    {k}
-                    {' '} - {' '}
+                    {k} -{' '}
                     <span title={intl.formatMessage(messages.macAddress)}>
                       {ifc.get('mac')}
-                    </span>
-                    {' '} | {' '}
+                    </span>{' '}
+                    |{' '}
                     <span title={intl.formatMessage(messages.ipAddress)}>
                       {ifc.get('ip')}
                     </span>
@@ -140,58 +143,71 @@ class NodeExtendedInfo extends React.Component {
   renderBios() {
     const bios = this.props.node.getIn(['introspectionData', 'bios']);
     return (
-      !bios.isEmpty() &&
-      <div>
-        <dt><FormattedMessage {...messages.bios} /></dt>
-        <dd className="NodeExtendedInfo__bios">
-          {bios
-            .map((i, k) => <span key={k} title={startCase(k)}>{i} </span>)
-            .toList()}
-        </dd>
-      </div>
+      !bios.isEmpty() && (
+        <div>
+          <dt>
+            <FormattedMessage {...messages.bios} />
+          </dt>
+          <dd className="NodeExtendedInfo__bios">
+            {bios
+              .map((i, k) => (
+                <span key={k} title={startCase(k)}>
+                  {i}{' '}
+                </span>
+              ))
+              .toList()}
+          </dd>
+        </div>
+      )
     );
   }
 
   renderRootDisk() {
     const rootDisk = this.props.node.getIn(['introspectionData', 'rootDisk']);
     return (
-      rootDisk &&
-      <div>
-        <dt><FormattedMessage {...messages.rootDisk} /></dt>
-        <dd className="NodeExtendedInfo__rootDisk">{rootDisk}</dd>
-      </div>
+      rootDisk && (
+        <div>
+          <dt>
+            <FormattedMessage {...messages.rootDisk} />
+          </dt>
+          <dd className="NodeExtendedInfo__rootDisk">{rootDisk}</dd>
+        </div>
+      )
     );
   }
 
   renderProduct() {
     const product = this.props.node.getIn(['introspectionData', 'product']);
     return (
-      !product.isEmpty() &&
-      <div>
-        <dt><FormattedMessage {...messages.product} /></dt>
-        <dd>
-          <span
-            className="NodeExtendedInfo__productName"
-            title={this.props.intl.formatMessage(messages.productName)}
-          >
-            {product.get('name')}
-          </span>
-          {' '} - {' '}
-          <span
-            className="NodeExtendedInfo__productVendor"
-            title={this.props.intl.formatMessage(messages.productVendor)}
-          >
-            {product.get('vendor')}
-          </span>
-          {' '} | {' '}
-          <span
-            className="NodeExtendedInfo__productVersion"
-            title={this.props.intl.formatMessage(messages.productVersion)}
-          >
-            {product.get('version')}
-          </span>
-        </dd>
-      </div>
+      !product.isEmpty() && (
+        <div>
+          <dt>
+            <FormattedMessage {...messages.product} />
+          </dt>
+          <dd>
+            <span
+              className="NodeExtendedInfo__productName"
+              title={this.props.intl.formatMessage(messages.productName)}
+            >
+              {product.get('name')}
+            </span>{' '}
+            -{' '}
+            <span
+              className="NodeExtendedInfo__productVendor"
+              title={this.props.intl.formatMessage(messages.productVendor)}
+            >
+              {product.get('vendor')}
+            </span>{' '}
+            |{' '}
+            <span
+              className="NodeExtendedInfo__productVersion"
+              title={this.props.intl.formatMessage(messages.productVersion)}
+            >
+              {product.get('version')}
+            </span>
+          </dd>
+        </div>
+      )
     );
   }
 
@@ -201,13 +217,14 @@ class NodeExtendedInfo extends React.Component {
       'kernelVersion'
     ]);
     return (
-      kernelVersion &&
-      <div>
-        <dt><FormattedMessage {...messages.kernel} /></dt>
-        <dd className="NodeExtendedInfo__kernelVersion">
-          {kernelVersion}
-        </dd>
-      </div>
+      kernelVersion && (
+        <div>
+          <dt>
+            <FormattedMessage {...messages.kernel} />
+          </dt>
+          <dd className="NodeExtendedInfo__kernelVersion">{kernelVersion}</dd>
+        </div>
+      )
     );
   }
 
@@ -217,15 +234,21 @@ class NodeExtendedInfo extends React.Component {
       <Row className="NodeExtendedInfo__extendedInfoRow">
         <Col lg={4} md={6}>
           <dl className="dl-horizontal dl-horizontal-condensed">
-            <dt><FormattedMessage {...messages.uuid} /></dt>
+            <dt>
+              <FormattedMessage {...messages.uuid} />
+            </dt>
             <dd className="NodeExtendedInfo__uuid">{node.get('uuid')}</dd>
-            <dt><FormattedMessage {...messages.registered} /></dt>
+            <dt>
+              <FormattedMessage {...messages.registered} />
+            </dt>
             <dd className="NodeExtendedInfo__registered">
               <FormattedDate value={node.get('created_at')} />
               &nbsp;
               <FormattedTime value={node.get('created_at')} />
             </dd>
-            <dt><FormattedMessage {...messages.architecture} /></dt>
+            <dt>
+              <FormattedMessage {...messages.architecture} />
+            </dt>
             <dd className="NodeExtendedInfo__architecture">
               {node.getIn(['properties', 'cpu_arch'])}
             </dd>
@@ -237,10 +260,10 @@ class NodeExtendedInfo extends React.Component {
         </Col>
         <Col lg={4} md={6}>
           <dl className="dl-horizontal dl-horizontal-condensed">
-            <dt><FormattedMessage {...messages.driver} /></dt>
-            <dd className="NodeExtendedInfo__driver">
-              {node.get('driver')}
-            </dd>
+            <dt>
+              <FormattedMessage {...messages.driver} />
+            </dt>
+            <dd className="NodeExtendedInfo__driver">{node.get('driver')}</dd>
             {node
               .get('driver_info')
               .map((dInfo, key) => (
