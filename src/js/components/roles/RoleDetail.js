@@ -100,9 +100,9 @@ class RoleDetail extends React.Component {
   }
 
   /**
-  * Filter out non updated parameters, so only parameters which have been actually changed
-  * get sent to updateparameters
-  */
+   * Filter out non updated parameters, so only parameters which have been actually changed
+   * get sent to updateparameters
+   */
   _filterFormData(formData) {
     return fromJS(formData)
       .filterNot((value, key) => {
@@ -112,9 +112,9 @@ class RoleDetail extends React.Component {
   }
 
   /**
-  * Json parameter values are sent as string, this function parses them and checks if they're object
-  * or array. Also, parameters with undefined value are set to null
-  */
+   * Json parameter values are sent as string, this function parses them and checks if they're object
+   * or array. Also, parameters with undefined value are set to null
+   */
   _jsonParseFormData(formData) {
     return mapValues(formData, value => {
       try {
@@ -154,17 +154,23 @@ class RoleDetail extends React.Component {
       return (
         <ul className="nav nav-tabs">
           <NavTab
-            to={`/plans/${currentPlanName}/roles/${urlParams.roleName}/parameters`}
+            to={`/plans/${currentPlanName}/roles/${
+              urlParams.roleName
+            }/parameters`}
           >
             <FormattedMessage {...messages.parameters} />
           </NavTab>
           <NavTab
-            to={`/plans/${currentPlanName}/roles/${urlParams.roleName}/services`}
+            to={`/plans/${currentPlanName}/roles/${
+              urlParams.roleName
+            }/services`}
           >
             <FormattedMessage {...messages.services} />
           </NavTab>
           <NavTab
-            to={`/plans/${currentPlanName}/roles/${urlParams.roleName}/network-configuration`}
+            to={`/plans/${currentPlanName}/roles/${
+              urlParams.roleName
+            }/network-configuration`}
           >
             <FormattedMessage {...messages.networkConfiguration} />
           </NavTab>
@@ -226,24 +232,26 @@ class RoleDetail extends React.Component {
               />
               <Redirect
                 from="/plans/:planName/roles/:roleName"
-                to={`/plans/${currentPlanName}/roles/${urlParams.roleName}/parameters`}
+                to={`/plans/${currentPlanName}/roles/${
+                  urlParams.roleName
+                }/parameters`}
               />
             </Switch>
           </Loader>
-          {dataLoaded
-            ? <ModalFooter>
-                <button
-                  type="submit"
-                  disabled={!this.state.canSubmit}
-                  className="btn btn-primary"
-                >
-                  <FormattedMessage {...messages.saveChanges} />
-                </button>
-                <CloseModalButton>
-                  <FormattedMessage {...messages.cancel} />
-                </CloseModalButton>
-              </ModalFooter>
-            : null}
+          {dataLoaded ? (
+            <ModalFooter>
+              <button
+                type="submit"
+                disabled={!this.state.canSubmit}
+                className="btn btn-primary"
+              >
+                <FormattedMessage {...messages.saveChanges} />
+              </button>
+              <CloseModalButton>
+                <FormattedMessage {...messages.cancel} />
+              </CloseModalButton>
+            </ModalFooter>
+          ) : null}
         </Formsy.Form>
       </RoutedModalPanel>
     );

@@ -26,7 +26,8 @@ export default {
         environment_groups: [
           {
             title: null,
-            description: 'Enable basic configuration required for OpenStack Deployment',
+            description:
+              'Enable basic configuration required for OpenStack Deployment',
             environments: {
               'overcloud-resource-registry-puppet.yaml': {
                 file: 'overcloud-resource-registry-puppet.yaml',
@@ -43,12 +44,14 @@ export default {
               'environments/neutron-ml2-bigswitch.yaml': {
                 file: 'environments/neutron-ml2-bigswitch.yaml',
                 title: 'BigSwitch extensions',
-                description: 'Enable Big Switch extensions, configured via puppet\n'
+                description:
+                  'Enable Big Switch extensions, configured via puppet\n'
               },
               'environments/neutron-ml2-cisco-n1kv.yaml': {
                 file: 'environments/neutron-ml2-cisco-n1kv.yaml',
                 title: 'Cisco N1KV backend',
-                description: 'Enable a Cisco N1KV backend, configured via puppet\n'
+                description:
+                  'Enable a Cisco N1KV backend, configured via puppet\n'
               }
             }
           }

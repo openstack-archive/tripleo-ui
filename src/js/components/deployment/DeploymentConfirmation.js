@@ -50,7 +50,8 @@ const messages = defineMessages({
   },
   validationsWarningMessage: {
     id: 'DeploymentConfirmation.validationsWarningMessage',
-    defaultMessage: 'It is highly recommended that you resolve all validation issues before ' +
+    defaultMessage:
+      'It is highly recommended that you resolve all validation issues before ' +
       'continuing.'
   }
 });
@@ -78,8 +79,9 @@ class DeploymentConfirmation extends React.Component {
           )}
         >
           <p>
-            <strong><FormattedMessage {...messages.summary} /></strong>
-            {' '}
+            <strong>
+              <FormattedMessage {...messages.summary} />
+            </strong>{' '}
             {environmentSummary}
           </p>
           <ValidationsWarning
@@ -144,8 +146,7 @@ export const DeployButton = injectIntl(
           loaded={!isRequestingPlanDeploy}
           content={intl.formatMessage(messages.requestingDeploymentLoader)}
         >
-          <span className="fa fa-cloud-upload" />
-          {' '}
+          <span className="fa fa-cloud-upload" />{' '}
           <FormattedMessage {...messages.deployButton} />
         </InlineLoader>
       </button>

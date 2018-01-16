@@ -32,9 +32,7 @@ export default class FormErrorList extends React.Component {
       return (
         <div>
           <strong>{`${errors.length} Errors Found:`}</strong>
-          <ul>
-            {errorList}
-          </ul>
+          <ul>{errorList}</ul>
         </div>
       );
     } else {

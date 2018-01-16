@@ -41,13 +41,13 @@ export default class DeploymentProgress extends React.Component {
   }
 
   renderProgressBar() {
-    return this.props.stack.stack_status === stackStates.CREATE_IN_PROGRESS
-      ? <ProgressBar
-          value={this.props.deploymentProgress}
-          label={this.props.deploymentProgress + '%'}
-          labelPosition="topRight"
-        />
-      : null;
+    return this.props.stack.stack_status === stackStates.CREATE_IN_PROGRESS ? (
+      <ProgressBar
+        value={this.props.deploymentProgress}
+        label={this.props.deploymentProgress + '%'}
+        labelPosition="topRight"
+      />
+    ) : null;
   }
 
   render() {
@@ -65,7 +65,9 @@ export default class DeploymentProgress extends React.Component {
           </div>
           {this.renderProgressBar()}
         </div>
-        <h2><FormattedMessage {...messages.resources} /></h2>
+        <h2>
+          <FormattedMessage {...messages.resources} />
+        </h2>
         <div className="flex-column">
           <StackResourcesTable
             isFetchingResources={!this.props.stackResourcesLoaded}

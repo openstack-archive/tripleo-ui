@@ -94,9 +94,11 @@ export const SelectAllButton = selectAll(
       onClick={() => toggleSelectAll()}
       disabled={disabled}
     >
-      {shouldSelectAll
-        ? <FormattedMessage {...messages.selectAll} />
-        : <FormattedMessage {...messages.deselectAll} />}
+      {shouldSelectAll ? (
+        <FormattedMessage {...messages.selectAll} />
+      ) : (
+        <FormattedMessage {...messages.deselectAll} />
+      )}
     </Button>
   )
 );

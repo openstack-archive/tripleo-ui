@@ -18,11 +18,8 @@ import { normalize, arrayOf } from 'normalizr';
 
 import { handleErrors } from './ErrorActions';
 import MistralApiService from '../services/MistralApiService';
-import WorkflowExecutionsConstants
-  from '../constants/WorkflowExecutionsConstants';
-import {
-  workflowExecutionSchema
-} from '../normalizrSchemas/workflowExecutions';
+import WorkflowExecutionsConstants from '../constants/WorkflowExecutionsConstants';
+import { workflowExecutionSchema } from '../normalizrSchemas/workflowExecutions';
 
 export default {
   fetchWorkflowExecutions() {
@@ -30,10 +27,9 @@ export default {
       dispatch(this.fetchWorkflowExecutionsPending());
       return dispatch(MistralApiService.getWorkflowExecutions())
         .then(response => {
-          const executions = normalize(
-            response,
-            arrayOf(workflowExecutionSchema)
-          ).entities.executions || {};
+          const executions =
+            normalize(response, arrayOf(workflowExecutionSchema)).entities
+              .executions || {};
           dispatch(this.fetchWorkflowExecutionsSuccess(executions));
         })
         .catch(error => {

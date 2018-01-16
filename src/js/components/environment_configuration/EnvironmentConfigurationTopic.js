@@ -40,7 +40,11 @@ export default class EnvironmentConfigurationTopic extends React.Component {
     const { description } = this.props;
     return (
       <fieldset className="environment-topic">
-        {description && <p><i>{description}</i></p>}
+        {description && (
+          <p>
+            <i>{description}</i>
+          </p>
+        )}
         {environmentGroups}
       </fieldset>
     );

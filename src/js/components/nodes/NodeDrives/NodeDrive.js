@@ -89,23 +89,37 @@ const NodeDrive = ({ drive }) => {
       <Row>
         <Col sm={11}>
           <dl className="dl-horizontal">
-            <dt><FormattedMessage {...messages.model} /></dt>
+            <dt>
+              <FormattedMessage {...messages.model} />
+            </dt>
             <dd>{drive.model || <FormattedMessage {...messages.na} />}</dd>
-            <dt><FormattedMessage {...messages.serial} /></dt>
+            <dt>
+              <FormattedMessage {...messages.serial} />
+            </dt>
             <dd>{drive.serial || <FormattedMessage {...messages.na} />}</dd>
-            <dt><FormattedMessage {...messages.vendor} /></dt>
+            <dt>
+              <FormattedMessage {...messages.vendor} />
+            </dt>
             <dd>{drive.vendor || <FormattedMessage {...messages.na} />}</dd>
-            <dt><FormattedMessage {...messages.wwn} /></dt>
+            <dt>
+              <FormattedMessage {...messages.wwn} />
+            </dt>
             <dd>{drive.wwn || <FormattedMessage {...messages.na} />}</dd>
-            <dt><FormattedMessage {...messages.wwnVendorExtension} /></dt>
+            <dt>
+              <FormattedMessage {...messages.wwnVendorExtension} />
+            </dt>
             <dd>
-              {drive.wwn_vendor_extension ||
-                <FormattedMessage {...messages.na} />}
+              {drive.wwn_vendor_extension || (
+                <FormattedMessage {...messages.na} />
+              )}
             </dd>
-            <dt><FormattedMessage {...messages.wwnWithExtension} /></dt>
+            <dt>
+              <FormattedMessage {...messages.wwnWithExtension} />
+            </dt>
             <dd>
-              {drive.wwn_with_extension ||
-                <FormattedMessage {...messages.na} />}
+              {drive.wwn_with_extension || (
+                <FormattedMessage {...messages.na} />
+              )}
             </dd>
           </dl>
         </Col>

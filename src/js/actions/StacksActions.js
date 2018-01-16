@@ -46,8 +46,9 @@ export default {
       dispatch(this.fetchStacksPending());
       return dispatch(HeatApiService.getStacks())
         .then(response => {
-          const stacks = normalize(response.stacks, arrayOf(stackSchema))
-            .entities.stacks || {};
+          const stacks =
+            normalize(response.stacks, arrayOf(stackSchema)).entities.stacks ||
+            {};
           dispatch(this.fetchStacksSuccess(stacks));
         })
         .catch(error => {
@@ -81,8 +82,9 @@ export default {
       dispatch(this.fetchResourcesPending());
       dispatch(HeatApiService.getResources(stackName, stackId))
         .then(({ resources }) => {
-          const res = normalize(resources, arrayOf(stackResourceSchema))
-            .entities.stackResources || {};
+          const res =
+            normalize(resources, arrayOf(stackResourceSchema)).entities
+              .stackResources || {};
           dispatch(this.fetchResourcesSuccess(res));
         })
         .catch(error => {

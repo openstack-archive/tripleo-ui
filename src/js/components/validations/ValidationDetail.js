@@ -92,7 +92,11 @@ class ValidationDetail extends React.Component {
     if (lastResult && !includes(['running', 'paused'], this.props.status)) {
       return (
         <div>
-          <p><strong><FormattedMessage {...messages.output} /></strong></p>
+          <p>
+            <strong>
+              <FormattedMessage {...messages.output} />
+            </strong>
+          </p>
           <pre>
             {lastResult.output.get('stdout', lastResult.output.get('result'))}
           </pre>
@@ -128,19 +132,22 @@ class ValidationDetail extends React.Component {
             <h3>{this.props.name}</h3>
           </div>
           <p>
-            <strong><FormattedMessage {...messages.description} /></strong>
-            {' '}
+            <strong>
+              <FormattedMessage {...messages.description} />
+            </strong>{' '}
             <br />
             {this.props.description}
           </p>
           <p>
-            <strong><FormattedMessage {...messages.groups} /></strong>
-            {' '}
+            <strong>
+              <FormattedMessage {...messages.groups} />
+            </strong>{' '}
             {this.renderValidationGroups()}
           </p>
           <p>
-            <strong><FormattedMessage {...messages.status} /></strong>
-            {' '}
+            <strong>
+              <FormattedMessage {...messages.status} />
+            </strong>{' '}
             {this.props.status}
           </p>
           {this.renderValidationOutput()}

@@ -199,7 +199,10 @@ const _extractParameters = (parameters, nestedResources, allResources) => {
   return nestedResources.reduce((pars, res) => {
     const resource = allResources.get(res);
     return _extractParameters(
-      pars.toSet().union(resource.parameters.toSet()).toList(),
+      pars
+        .toSet()
+        .union(resource.parameters.toSet())
+        .toList(),
       resource.resources,
       allResources
     );

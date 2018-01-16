@@ -49,13 +49,13 @@ const messages = defineMessages({
 
 class DeploymentProgress extends React.Component {
   renderProgressBar() {
-    return this.props.stack.stack_status === stackStates.CREATE_IN_PROGRESS
-      ? <ProgressBar
-          value={this.props.deploymentProgress}
-          label={this.props.deploymentProgress + '%'}
-          labelPosition="topRight"
-        />
-      : null;
+    return this.props.stack.stack_status === stackStates.CREATE_IN_PROGRESS ? (
+      <ProgressBar
+        value={this.props.deploymentProgress}
+        label={this.props.deploymentProgress + '%'}
+        labelPosition="topRight"
+      />
+    ) : null;
   }
 
   render() {
@@ -73,8 +73,9 @@ class DeploymentProgress extends React.Component {
       </strong>
     );
 
-    const deleteButton = stack.stack_status !== stackStates.DELETE_IN_PROGRESS
-      ? <DeleteStackButton
+    const deleteButton =
+      stack.stack_status !== stackStates.DELETE_IN_PROGRESS ? (
+        <DeleteStackButton
           content={formatMessage(messages.cancelDeployment)}
           buttonIconClass="fa fa-ban"
           deleteStack={deleteStack}
@@ -83,12 +84,14 @@ class DeploymentProgress extends React.Component {
           loaderContent={formatMessage(messages.requestingDeletion)}
           stack={stack}
         />
-      : null;
+      ) : null;
 
     return (
       <div>
         <p>
-          <span><FormattedMessage {...messages.deploymentInProgress} /> </span>
+          <span>
+            <FormattedMessage {...messages.deploymentInProgress} />{' '}
+          </span>
           <Link to={`/plans/${currentPlanName}/deployment-detail`}>
             <FormattedMessage {...messages.viewInformation} />
           </Link>

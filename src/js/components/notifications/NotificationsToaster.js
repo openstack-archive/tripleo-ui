@@ -52,7 +52,8 @@ class NotificationsToaster extends React.Component {
           timeoutable={notification.type !== 'error'}
           timerPaused={this.state.isHovered}
           removeNotification={() =>
-            this.props.removeNotification(notification.id)}
+            this.props.removeNotification(notification.id)
+          }
         />
       );
     });

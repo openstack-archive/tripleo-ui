@@ -37,17 +37,14 @@ import {
   getNodeCountParametersByRole,
   getTotalAssignedNodesCount
 } from '../../selectors/nodesAssignment';
-import {
-  getEnvironmentConfigurationSummary
-} from '../../selectors/environmentConfiguration';
+import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
 import { getCurrentPlan } from '../../selectors/plans';
 import { getRoles } from '../../selectors/roles';
 import ConfigurePlanStep from './ConfigurePlanStep';
 import CurrentPlanActions from '../../actions/CurrentPlanActions';
 import { DeploymentPlanStep } from './DeploymentPlanStep';
 import DeployStep from './DeployStep';
-import EnvironmentConfigurationActions
-  from '../../actions/EnvironmentConfigurationActions';
+import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
 import HardwareStep from './HardwareStep';
 import NodesActions from '../../actions/NodesActions';
 import NotificationActions from '../../actions/NotificationActions';
@@ -83,7 +80,8 @@ const messages = defineMessages({
   },
   hardwareStepTooltip: {
     id: 'CurrentPlan.hardwareStepTooltip',
-    defaultMessage: 'This step registers and introspects your nodes. Registration involves ' +
+    defaultMessage:
+      'This step registers and introspects your nodes. Registration involves ' +
       'defining the power management details of each node so that you so that the director can ' +
       'control them during the introspection and provisioning stages. After registration, you ' +
       'introspect the nodes, which identifies the hardware each node uses and builds a profile of ' +
@@ -92,13 +90,15 @@ const messages = defineMessages({
   },
   configurePlanStepTooltip: {
     id: 'CurrentPlan.configurePlanStepTooltip',
-    defaultMessage: "This step allows you edit specific settings for the overcloud's network, " +
+    defaultMessage:
+      "This step allows you edit specific settings for the overcloud's network, " +
       'storage, and other certified plugins. Use this step to define your network isolation ' +
       'configuration and your backend storage settings.'
   },
   configureRolesStepTooltip: {
     id: 'CurrentPlan.configureRolesStepTooltip',
-    defaultMessage: 'This step assigns and removes nodes from roles in your overcloud. On each ' +
+    defaultMessage:
+      'This step assigns and removes nodes from roles in your overcloud. On each ' +
       "role's selection dialog, you can tag available nodes into the role or untag nodes already " +
       'assigned to the role. Click "Assign Nodes" for a particular role to open the selection ' +
       'dialog and start assigning nodes. ' +
@@ -108,7 +108,8 @@ const messages = defineMessages({
   },
   deployStepTooltip: {
     id: 'CurrentPlan.deploymentStepTooltip',
-    defaultMessage: 'This step performs the deployment of the overcloud. Once the deployment ' +
+    defaultMessage:
+      'This step performs the deployment of the overcloud. Once the deployment ' +
       'begins, the director tracks the progress and provides a report of each completed, running, ' +
       'or failed step. When the deployment completes, the director displays the current overcloud ' +
       'status and login details, which you use to interact with your overcloud. Click "Deploy" to ' +
@@ -329,8 +330,8 @@ export function mapStateToProps(state, props) {
     currentStackDeploymentProgress: getCurrentStackDeploymentProgress(state),
     environmentConfigurationLoaded: state.environmentConfiguration.loaded,
     environmentConfigurationSummary: getEnvironmentConfigurationSummary(state),
-    isFetchingEnvironmentConfiguration: state.environmentConfiguration
-      .isFetching,
+    isFetchingEnvironmentConfiguration:
+      state.environmentConfiguration.isFetching,
     isFetchingNodes: state.nodes.get('isFetching'),
     isFetchingParameters: state.parameters.isFetching,
     isFetchingRoles: state.roles.get('isFetching'),

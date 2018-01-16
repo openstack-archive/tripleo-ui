@@ -29,9 +29,7 @@ export const ActionCard = ({ children, className, onClick, ...rest }) => (
     {...rest}
   >
     <div className="card-pf-body">
-      <p className="text-center">
-        {children}
-      </p>
+      <p className="text-center">{children}</p>
     </div>
   </div>
 );

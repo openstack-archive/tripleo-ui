@@ -60,7 +60,8 @@ const messages = defineMessages({
   },
   nonFilteredToolbarResults: {
     id: 'NodesToolbar.nonFilteredToolbarResults',
-    defaultMessage: '{totalCount, number} {totalCount, plural, one {Node} other {Nodes}}'
+    defaultMessage:
+      '{totalCount, number} {totalCount, plural, one {Node} other {Nodes}}'
   }
 });
 
@@ -89,7 +90,8 @@ class NodesToolbar extends React.Component {
             id="NodesToolbar_toolbarFiltersForm"
             form="nodesToolbarFilter"
             formatSelectValue={value =>
-              intl.formatMessage(nodeColumnMessages[value])}
+              intl.formatMessage(nodeColumnMessages[value])
+            }
             initialValues={{ filterBy: 'name' }}
             onSubmit={addActiveFilter}
             options={{
