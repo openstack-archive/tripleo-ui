@@ -38,8 +38,7 @@ const NodeTab = ({
 }) => (
   <Tab isActive={isActive}>
     <a className="link" onClick={selectNode}>
-      <span className={cx('pficon', { 'pficon-error-circle-o': invalid })} />
-      {' '}
+      <span className={cx('pficon', { 'pficon-error-circle-o': invalid })} />{' '}
       {node.name ||
         (node.pm_addr &&
           node.pm_addr + (node.pm_port ? `:${node.pm_port}` : '')) ||

@@ -17,8 +17,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunkMiddleware from 'redux-thunk';
 
-import EnvironmentConfigurationActions
-  from '../../js/actions/EnvironmentConfigurationActions';
+import EnvironmentConfigurationActions from '../../js/actions/EnvironmentConfigurationActions';
 import NotificationActions from '../../js/actions/NotificationActions';
 import MistralApiService from '../../js/services/MistralApiService';
 import { mockGetIntl } from './utils';
@@ -35,7 +34,8 @@ describe('fetchEnvironmentConfiguration', () => {
       'General Deployment Options': {
         environment_groups: [
           {
-            description: 'Enable basic configuration required for OpenStack Deployment',
+            description:
+              'Enable basic configuration required for OpenStack Deployment',
             environments: [
               {
                 enabled: true,
@@ -54,7 +54,8 @@ describe('fetchEnvironmentConfiguration', () => {
     const normalizedResponse = {
       environmentGroups: {
         'Enable basic configuration required for OpenStack Deployment': {
-          description: 'Enable basic configuration required for OpenStack Deployment',
+          description:
+            'Enable basic configuration required for OpenStack Deployment',
           environments: ['overcloud-resource-registry-puppet.yaml'],
           title: null
         }

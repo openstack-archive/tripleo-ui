@@ -29,16 +29,20 @@ export const checkRunningDeployment = WrappedComponent => {
       if (this.props.currentStackDeploymentInProgress) {
         this.props.notify({
           title: 'Not allowed',
-          message: `A deployment for the plan ${this.props.currentPlanName} is already in progress.`,
+          message: `A deployment for the plan ${
+            this.props.currentPlanName
+          } is already in progress.`,
           type: 'warning'
         });
       }
     }
 
     render() {
-      return this.props.currentStackDeploymentInProgress
-        ? <Redirect to={`/plans/${this.props.currentPlanName}`} />
-        : <WrappedComponent {...this.props} />;
+      return this.props.currentStackDeploymentInProgress ? (
+        <Redirect to={`/plans/${this.props.currentPlanName}`} />
+      ) : (
+        <WrappedComponent {...this.props} />
+      );
     }
   }
   CheckRunningDeploymentHOC.propTypes = {

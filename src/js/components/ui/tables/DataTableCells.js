@@ -22,15 +22,11 @@ import TableCheckBox from '../forms/TableCheckBox';
 import { InlineLoader } from '../Loader';
 
 /**
-* Default table header cell class
-*/
+ * Default table header cell class
+ */
 export class DataTableHeaderCell extends React.Component {
   render() {
-    return (
-      <th {...this.props}>
-        {this.props.children}
-      </th>
-    );
+    return <th {...this.props}>{this.props.children}</th>;
   }
 }
 DataTableHeaderCell.propTypes = {
@@ -38,15 +34,11 @@ DataTableHeaderCell.propTypes = {
 };
 
 /**
-* Default table cell class
-*/
+ * Default table cell class
+ */
 export class DataTableCell extends React.Component {
   render() {
-    return (
-      <td>
-        {this.props.children}
-      </td>
-    );
+    return <td>{this.props.children}</td>;
   }
 }
 DataTableCell.propTypes = {
@@ -54,19 +46,15 @@ DataTableCell.propTypes = {
 };
 
 /**
-* Table cell class able to render value from data set passed to columns
-*/
+ * Table cell class able to render value from data set passed to columns
+ */
 export class DataTableDataFieldCell extends React.Component {
   render() {
     let value = _.result(
       this.props.data[this.props.rowIndex],
       this.props.field
     );
-    return (
-      <DataTableCell {...this.props}>
-        {value}
-      </DataTableCell>
-    );
+    return <DataTableCell {...this.props}>{value}</DataTableCell>;
   }
 }
 DataTableDataFieldCell.propTypes = {
@@ -79,11 +67,7 @@ export const DataTableDateFieldCell = props => {
   //TODO(jtomasek): Update this component to parse date and format it using React Intl's
   // FormatedDate
   const value = _.result(props.data[props.rowIndex], props.field);
-  return (
-    <DataTableCell {...props}>
-      {value}
-    </DataTableCell>
-  );
+  return <DataTableCell {...props}>{value}</DataTableCell>;
 };
 DataTableDateFieldCell.propTypes = {
   data: PropTypes.array.isRequired,

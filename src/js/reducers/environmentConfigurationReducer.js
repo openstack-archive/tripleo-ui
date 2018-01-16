@@ -16,8 +16,7 @@
 
 import { fromJS, Map } from 'immutable';
 
-import EnvironmentConfigurationConstants
-  from '../constants/EnvironmentConfigurationConstants';
+import EnvironmentConfigurationConstants from '../constants/EnvironmentConfigurationConstants';
 import {
   EnvironmentConfigurationState,
   Environment
