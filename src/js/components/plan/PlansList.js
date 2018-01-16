@@ -79,16 +79,18 @@ class PlansList extends React.Component {
             </Link>
           </div>
         </PageHeader>
-        {this.props.plans.isEmpty()
-          ? <NoPlans />
-          : <div className="panel panel-default">
-              <div className="cards-pf">
-                <div className="row row-cards-pf">
-                  <ImportPlanCard />
-                  {this.renderCards()}
-                </div>
+        {this.props.plans.isEmpty() ? (
+          <NoPlans />
+        ) : (
+          <div className="panel panel-default">
+            <div className="cards-pf">
+              <div className="row row-cards-pf">
+                <ImportPlanCard />
+                {this.renderCards()}
               </div>
-            </div>}
+            </div>
+          </div>
+        )}
       </div>
     );
   }

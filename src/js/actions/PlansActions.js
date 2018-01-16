@@ -143,8 +143,9 @@ export default {
       dispatch(this.requestPlan());
       return dispatch(SwiftApiService.getContainer(planName))
         .then(response => {
-          const planFiles = normalize(response, arrayOf(planFileSchema))
-            .entities.planFiles || {};
+          const planFiles =
+            normalize(response, arrayOf(planFileSchema)).entities.planFiles ||
+            {};
           dispatch(this.receivePlan(planName, planFiles));
         })
         .catch(error => {

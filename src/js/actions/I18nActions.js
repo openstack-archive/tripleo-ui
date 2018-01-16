@@ -34,9 +34,10 @@ export default {
           navigator.userLanguage;
         // If the locale contains the country but we can't find
         // messages for it then we only use the country part:
-        language = locale.match(/^[A-Za-z]+-[A-Za-z]+$/) && !MESSAGES[locale]
-          ? locale.split('-')[0]
-          : locale;
+        language =
+          locale.match(/^[A-Za-z]+-[A-Za-z]+$/) && !MESSAGES[locale]
+            ? locale.split('-')[0]
+            : locale;
       }
       dispatch(this.chooseLanguage(language));
     };

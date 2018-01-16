@@ -27,9 +27,7 @@ export const ActiveFiltersList = ({
     return (
       <span className="toolbar-pf-active-filters">
         <p>{label}&nbsp;</p>
-        <ul className="list-inline">
-          {children}
-        </ul>
+        <ul className="list-inline">{children}</ul>
         <p>
           <a className="link" onClick={() => handleClearAll()}>
             {clearAllLabel}

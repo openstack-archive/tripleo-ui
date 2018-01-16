@@ -52,15 +52,23 @@ const OvercloudInfo = ({ intl, overcloudInfo }) => {
 
   return (
     <div>
-      <h4><FormattedMessage {...messages.overcloudInformationHeader} /></h4>
+      <h4>
+        <FormattedMessage {...messages.overcloudInformationHeader} />
+      </h4>
       <Loader
         loaded={!!(ip && password)}
         content={intl.formatMessage(messages.loadingOvercloudInformation)}
       >
         <ul className="list">
-          <li><FormattedMessage {...messages.overcloudIpAddress} /> {ip}</li>
-          <li><FormattedMessage {...messages.username} /> admin</li>
-          <li><FormattedMessage {...messages.password} /> {password}</li>
+          <li>
+            <FormattedMessage {...messages.overcloudIpAddress} /> {ip}
+          </li>
+          <li>
+            <FormattedMessage {...messages.username} /> admin
+          </li>
+          <li>
+            <FormattedMessage {...messages.password} /> {password}
+          </li>
         </ul>
       </Loader>
       <br />

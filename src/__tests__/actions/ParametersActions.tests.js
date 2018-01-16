@@ -107,12 +107,13 @@ describe('ParametersActions', () => {
           ParametersActions.updateParameters('overcloud', { foo: 'bar' })
         )
         .then(() => {
-          expect(
-            MistralApiService.runAction
-          ).toHaveBeenCalledWith(MistralConstants.PARAMETERS_UPDATE, {
-            container: 'overcloud',
-            parameters: { foo: 'bar' }
-          });
+          expect(MistralApiService.runAction).toHaveBeenCalledWith(
+            MistralConstants.PARAMETERS_UPDATE,
+            {
+              container: 'overcloud',
+              parameters: { foo: 'bar' }
+            }
+          );
           expect(store.getActions()).toEqual([
             ReduxFormActions.startSubmit('nodesAssignment'),
             ParametersActions.updateParametersPending(),

@@ -16,8 +16,7 @@
 
 import { fromJS, List, Map } from 'immutable';
 
-import EnvironmentConfigurationConstants
-  from '../constants/EnvironmentConfigurationConstants';
+import EnvironmentConfigurationConstants from '../constants/EnvironmentConfigurationConstants';
 import ParametersConstants from '../constants/ParametersConstants';
 import PlansConstants from '../constants/PlansConstants';
 import {
@@ -59,13 +58,16 @@ export default function parametersReducer(state = initialState, action) {
     }
 
     case ParametersConstants.FETCH_PARAMETERS_FAILED:
-      return state.set('loaded', true).set('isFetching', false).set(
-        'form',
-        Map({
-          formErrors: List(),
-          formFieldErrors: Map()
-        })
-      );
+      return state
+        .set('loaded', true)
+        .set('isFetching', false)
+        .set(
+          'form',
+          Map({
+            formErrors: List(),
+            formFieldErrors: Map()
+          })
+        );
 
     case ParametersConstants.UPDATE_PARAMETERS_PENDING:
       return state.set('isFetching', true);

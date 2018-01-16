@@ -54,8 +54,7 @@ class DeploymentFailure extends React.Component {
       <div>
         <InlineNotification type="error" title={status}>
           <p>
-            {stack.stack_status_reason}
-            {' '}
+            {stack.stack_status_reason}{' '}
             <Link to={`/plans/${currentPlanName}/deployment-detail`}>
               <FormattedMessage {...messages.moreDetails} />
             </Link>

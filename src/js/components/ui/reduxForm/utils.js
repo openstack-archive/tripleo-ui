@@ -38,7 +38,7 @@ InputDescription.propTypes = {
 export const InputMessage = ({ fieldMeta: { touched, error, warning } }) =>
   touched
     ? (error ? <HelpBlock>{error}</HelpBlock> : null) ||
-        (warning ? <HelpBlock>{warning}</HelpBlock> : null)
+      (warning ? <HelpBlock>{warning}</HelpBlock> : null)
     : null;
 
 InputMessage.propTypes = {

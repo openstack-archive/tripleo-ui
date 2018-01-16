@@ -31,7 +31,11 @@ export default class ConfirmationModal extends React.Component {
   renderTitle() {
     const iconClass = this.props.iconClass;
     if (iconClass) {
-      return <span><span className={iconClass} /> {this.props.title}</span>;
+      return (
+        <span>
+          <span className={iconClass} /> {this.props.title}
+        </span>
+      );
     } else {
       return <span>{this.props.title}</span>;
     }
@@ -51,9 +55,7 @@ export default class ConfirmationModal extends React.Component {
       <Modal bsSize="sm" show={show} onHide={onCancel}>
         <ModalHeader>
           <CloseModalXButton />
-          <ModalTitle>
-            {this.renderTitle()}
-          </ModalTitle>
+          <ModalTitle>{this.renderTitle()}</ModalTitle>
         </ModalHeader>
         <ModalBody>
           <p>{question}</p>

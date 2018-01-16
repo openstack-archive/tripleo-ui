@@ -76,12 +76,12 @@ export default class Dropdown extends React.Component {
             {items}
           </ul>
         </div>
-        {this.state.isOpen
-          ? <div
-              onClick={this.toggleDropdown.bind(this)}
-              className="modal-backdrop fade"
-            />
-          : null}
+        {this.state.isOpen ? (
+          <div
+            onClick={this.toggleDropdown.bind(this)}
+            className="modal-backdrop fade"
+          />
+        ) : null}
       </span>
     );
   }

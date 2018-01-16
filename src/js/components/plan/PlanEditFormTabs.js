@@ -50,7 +50,8 @@ const messages = defineMessages({
   },
   badExtension: {
     id: 'PlanEditFormTabs.badExtension',
-    defaultMessage: 'Invalid type: plan file must be a tar archive (.tar.gz or .tgz)'
+    defaultMessage:
+      'Invalid type: plan file must be a tar archive (.tar.gz or .tgz)'
   }
 });
 
@@ -89,9 +90,8 @@ export default class PlanEditFormTabs extends React.Component {
           </Tab>
           <Tab isActive={this.isActiveTab('planFiles')}>
             <a className="link" onClick={() => this.setActiveTab('planFiles')}>
-              <FormattedMessage {...messages.files} /> <span className="badge">
-                {this.getFileCount.bind(this)()}
-              </span>
+              <FormattedMessage {...messages.files} />{' '}
+              <span className="badge">{this.getFileCount.bind(this)()}</span>
             </a>
           </Tab>
         </ul>
