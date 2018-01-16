@@ -85,16 +85,17 @@ export const NodeProvisionState = ({
   ...rest
 }) => (
   <span {...rest}>
-    <strong><FormattedMessage {...messages.provisionState} /></strong>&nbsp;
-    {targetProvisionState
-      ? <span>
-          {provisionState}
-          {' '}
-          <span className="fa fa-long-arrow-right" />
-          {' '}
-          {targetProvisionState}
-        </span>
-      : provisionState}
+    <strong>
+      <FormattedMessage {...messages.provisionState} />
+    </strong>&nbsp;
+    {targetProvisionState ? (
+      <span>
+        {provisionState} <span className="fa fa-long-arrow-right" />{' '}
+        {targetProvisionState}
+      </span>
+    ) : (
+      provisionState
+    )}
   </span>
 );
 NodeProvisionState.propTypes = {
@@ -107,7 +108,9 @@ export const NodeIntrospectionStatus = ({
   ...rest
 }) => (
   <span title={error} {...rest}>
-    <strong><FormattedMessage {...messages.introspectionState} /></strong>&nbsp;
+    <strong>
+      <FormattedMessage {...messages.introspectionState} />
+    </strong>&nbsp;
     {state}
   </span>
 );

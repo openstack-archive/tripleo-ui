@@ -24,14 +24,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { CloseModalButton } from '../ui/Modals';
-import EnvironmentConfigurationActions
-  from '../../actions/EnvironmentConfigurationActions';
+import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentParameters from './EnvironmentParameters';
 import { getCurrentPlanName } from '../../selectors/plans';
 import { getRootParameters } from '../../selectors/parameters';
-import {
-  getEnabledEnvironments
-} from '../../selectors/environmentConfiguration';
+import { getEnabledEnvironments } from '../../selectors/environmentConfiguration';
 import { Loader } from '../ui/Loader';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import ParametersActions from '../../actions/ParametersActions';
@@ -92,9 +89,9 @@ class Parameters extends React.Component {
   }
 
   /**
-  * Filter out non updated parameters, so only parameters which have been actually changed
-  * get sent to updateparameters
-  */
+   * Filter out non updated parameters, so only parameters which have been actually changed
+   * get sent to updateparameters
+   */
   _filterFormData(formData) {
     return fromJS(formData)
       .filterNot((value, key) => {
@@ -104,9 +101,9 @@ class Parameters extends React.Component {
   }
 
   /**
-  * Json parameter values are sent as string, this function parses them and checks if they're object
-  * or array. Also, parameters with undefined value are set to null
-  */
+   * Json parameter values are sent as string, this function parses them and checks if they're object
+   * or array. Also, parameters with undefined value are set to null
+   */
   _jsonParseFormData(formData) {
     return mapValues(formData, value => {
       try {
@@ -212,7 +209,6 @@ class Parameters extends React.Component {
         onValid={this.enableButton.bind(this)}
         onInvalid={this.disableButton.bind(this)}
       >
-
         <div className="container-fluid">
           <div className="row row-eq-height">
             <div className="col-sm-4 sidebar-pf sidebar-pf-left">
@@ -240,9 +236,7 @@ class Parameters extends React.Component {
                 loaded={this.props.parametersLoaded}
               >
                 <ModalFormErrorList errors={this.props.formErrors.toJS()} />
-                <div className="tab-content">
-                  {this.renderTabPanes()}
-                </div>
+                <div className="tab-content">{this.renderTabPanes()}</div>
               </Loader>
             </div>
           </div>

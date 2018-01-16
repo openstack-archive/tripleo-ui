@@ -100,60 +100,60 @@ class EditPlan extends React.Component {
   render() {
     const { plan } = this.props;
 
-    return plan
-      ? <RoutedModal bsSize="lg" redirectPath="/plans/manage">
-          <Formsy.Form
-            ref="EditPlanForm"
-            role="form"
-            className="form-horizontal"
-            onChange={this.onPlanFilesChange.bind(this)}
-            onValidSubmit={this.onFormSubmit.bind(this)}
-            onValid={this.onFormValid.bind(this)}
-            onInvalid={this.onFormInvalid.bind(this)}
+    return plan ? (
+      <RoutedModal bsSize="lg" redirectPath="/plans/manage">
+        <Formsy.Form
+          ref="EditPlanForm"
+          role="form"
+          className="form-horizontal"
+          onChange={this.onPlanFilesChange.bind(this)}
+          onValidSubmit={this.onFormSubmit.bind(this)}
+          onValid={this.onFormValid.bind(this)}
+          onInvalid={this.onFormInvalid.bind(this)}
+        >
+          <ModalHeader>
+            <CloseModalXButton />
+            <ModalTitle>
+              <FormattedMessage
+                {...messages.updatePlanNameFiles}
+                values={{ planName: plan.name }}
+              />
+            </ModalTitle>
+          </ModalHeader>
+          <Loader
+            loaded={!this.props.isTransitioningPlan}
+            size="lg"
+            height={60}
+            content={this.props.intl.formatMessage(messages.updatingPlanLoader)}
           >
-            <ModalHeader>
-              <CloseModalXButton />
-              <ModalTitle>
-                <FormattedMessage
-                  {...messages.updatePlanNameFiles}
-                  values={{ planName: plan.name }}
-                />
-              </ModalTitle>
-            </ModalHeader>
-            <Loader
-              loaded={!this.props.isTransitioningPlan}
-              size="lg"
-              height={60}
-              content={this.props.intl.formatMessage(
-                messages.updatingPlanLoader
-              )}
+            <ModalFormErrorList errors={this.props.planFormErrors.toJS()} />
+            <div className="modal-body">
+              <PlanEditFormTabs
+                selectedFiles={this.state.selectedFiles}
+                planName={plan.name}
+                planFiles={plan.files}
+                setUploadType={this.setUploadType.bind(this)}
+                uploadType={this.state.uploadType}
+              />
+            </div>
+          </Loader>
+          <ModalFooter>
+            <button
+              disabled={!this.state.canSubmit}
+              className="btn btn-primary"
+              type="submit"
             >
-              <ModalFormErrorList errors={this.props.planFormErrors.toJS()} />
-              <div className="modal-body">
-                <PlanEditFormTabs
-                  selectedFiles={this.state.selectedFiles}
-                  planName={plan.name}
-                  planFiles={plan.files}
-                  setUploadType={this.setUploadType.bind(this)}
-                  uploadType={this.state.uploadType}
-                />
-              </div>
-            </Loader>
-            <ModalFooter>
-              <button
-                disabled={!this.state.canSubmit}
-                className="btn btn-primary"
-                type="submit"
-              >
-                <FormattedMessage {...messages.uploadAndUpdate} />
-              </button>
-              <CloseModalButton>
-                <FormattedMessage {...messages.cancel} />
-              </CloseModalButton>
-            </ModalFooter>
-          </Formsy.Form>
-        </RoutedModal>
-      : <Redirect to="/plans" />;
+              <FormattedMessage {...messages.uploadAndUpdate} />
+            </button>
+            <CloseModalButton>
+              <FormattedMessage {...messages.cancel} />
+            </CloseModalButton>
+          </ModalFooter>
+        </Formsy.Form>
+      </RoutedModal>
+    ) : (
+      <Redirect to="/plans" />
+    );
   }
 }
 

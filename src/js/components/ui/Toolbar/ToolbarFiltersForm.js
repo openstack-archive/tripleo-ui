@@ -30,7 +30,9 @@ class ToolbarFiltersForm extends React.Component {
   renderFilterByOptions() {
     const { options } = this.props;
     return Object.keys(options).map(k => (
-      <MenuItem key={k} eventKey={k}>{options[k]}</MenuItem>
+      <MenuItem key={k} eventKey={k}>
+        {options[k]}
+      </MenuItem>
     ));
   }
 
@@ -52,20 +54,22 @@ class ToolbarFiltersForm extends React.Component {
     return (
       <form id={id} onSubmit={handleSubmit(this.submit.bind(this))}>
         <FormGroup className="toolbar-pf-filter">
-          {options
-            ? <InputGroup>
-                <InputGroup.Button>
-                  <Field
-                    name="filterBy"
-                    component={DropdownSelect}
-                    format={formatSelectValue}
-                  >
-                    {this.renderFilterByOptions()}
-                  </Field>
-                </InputGroup.Button>
-                {this.renderFilterStringField()}
-              </InputGroup>
-            : this.renderFilterStringField()}
+          {options ? (
+            <InputGroup>
+              <InputGroup.Button>
+                <Field
+                  name="filterBy"
+                  component={DropdownSelect}
+                  format={formatSelectValue}
+                >
+                  {this.renderFilterByOptions()}
+                </Field>
+              </InputGroup.Button>
+              {this.renderFilterStringField()}
+            </InputGroup>
+          ) : (
+            this.renderFilterStringField()
+          )}
         </FormGroup>
       </form>
     );

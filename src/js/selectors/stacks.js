@@ -66,8 +66,8 @@ export const getCurrentStackDeploymentProgress = createSelector(
 );
 
 /**
-  * Returns a Map containing the overcloud information.
-  */
+ * Returns a Map containing the overcloud information.
+ */
 export const getOvercloudInfo = createSelector(
   [
     currentStackEnvironmentSelector,

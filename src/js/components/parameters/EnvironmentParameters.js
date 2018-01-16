@@ -19,8 +19,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import EnvironmentConfigurationActions
-  from '../../actions/EnvironmentConfigurationActions';
+import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
 import { getCurrentPlanName } from '../../selectors/plans';
 import { getEnvironmentParameters } from '../../selectors/parameters';
 import { getEnvironment } from '../../selectors/environmentConfiguration';
@@ -44,13 +43,15 @@ class EnvironmentParameters extends React.Component {
         loaded={!isFetchingEnvironment}
         content="Fetching Parameters..."
       >
-        {environmentError
-          ? <fieldset>
-              <InlineNotification title={environmentError.title} type="error">
-                {environmentError.message}
-              </InlineNotification>
-            </fieldset>
-          : <ParameterInputList parameters={parameters.toList()} />}
+        {environmentError ? (
+          <fieldset>
+            <InlineNotification title={environmentError.title} type="error">
+              {environmentError.message}
+            </InlineNotification>
+          </fieldset>
+        ) : (
+          <ParameterInputList parameters={parameters.toList()} />
+        )}
       </Loader>
     );
   }

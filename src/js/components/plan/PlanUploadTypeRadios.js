@@ -46,8 +46,7 @@ export default class PlanUploadTypeRadios extends React.Component {
               value="tarball"
               onChange={this.props.setUploadType}
               defaultChecked
-            />
-            {' '}
+            />{' '}
             <FormattedMessage {...messages.tarArchive} />
           </label>
           <label className="radio-inline" htmlFor="checkbox-folder">
@@ -58,8 +57,7 @@ export default class PlanUploadTypeRadios extends React.Component {
               name="uploadType"
               onChange={this.props.setUploadType}
               value="folder"
-            />
-            {' '}
+            />{' '}
             <FormattedMessage {...messages.localFolder} />
           </label>
         </div>

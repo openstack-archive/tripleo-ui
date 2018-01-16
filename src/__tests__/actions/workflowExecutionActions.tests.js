@@ -15,8 +15,7 @@
  */
 
 import MistralApiService from '../../js/services/MistralApiService';
-import WorkflowExecutionsActions
-  from '../../js/actions/WorkflowExecutionsActions';
+import WorkflowExecutionsActions from '../../js/actions/WorkflowExecutionsActions';
 import { mockStore } from './utils';
 
 describe('fetchWorkflowExecutions action', () => {
@@ -78,9 +77,10 @@ describe('updateWorkflowExecution action', () => {
         })
       )
       .then(() => {
-        expect(
-          MistralApiService.updateWorkflowExecution
-        ).toHaveBeenCalledWith('512e', { state: 'PAUSED' });
+        expect(MistralApiService.updateWorkflowExecution).toHaveBeenCalledWith(
+          '512e',
+          { state: 'PAUSED' }
+        );
         expect(store.getActions()).toEqual([
           WorkflowExecutionsActions.updateWorkflowExecutionPending('512e', {
             state: 'PAUSED'

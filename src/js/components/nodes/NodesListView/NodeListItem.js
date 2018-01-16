@@ -75,12 +75,13 @@ export const NodeListItem = ({
       />
     }
     actions={
-      node.getIn(['introspectionStatus', 'state']) === 'finished' &&
+      node.getIn(['introspectionStatus', 'state']) === 'finished' && (
         <DropdownKebab id={`${node.get('uuid')}Actions`} pullRight>
           <MenuItemLink to={`/nodes/${node.get('uuid')}/drives`}>
             <FormattedMessage {...messages.manageDrives} />
           </MenuItemLink>
         </DropdownKebab>
+      )
     }
     leftContent={
       <ListViewIcon
@@ -137,9 +138,7 @@ export const NodeListItem = ({
       </ListViewInfoItem>,
       <ListViewInfoItem key="memory" className="NodeListItem__memorySize">
         <span className="pficon pficon-memory" />
-        <strong>
-          {node.getIn(['properties', 'memory_mb'], '-')}
-        </strong>
+        <strong>{node.getIn(['properties', 'memory_mb'], '-')}</strong>
         &nbsp;
         <FormattedMessage {...messages.ram} />
       </ListViewInfoItem>,

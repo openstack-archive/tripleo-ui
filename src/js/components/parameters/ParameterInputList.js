@@ -25,7 +25,8 @@ import ParameterInput from './ParameterInput';
 const messages = defineMessages({
   noParameters: {
     id: 'ParameterInputList.noParameters',
-    defaultMessage: 'There are currently no parameters to configure in this section.'
+    defaultMessage:
+      'There are currently no parameters to configure in this section.'
   }
 });
 
@@ -58,11 +59,7 @@ class ParameterInputList extends React.Component {
         </fieldset>
       );
     } else {
-      return (
-        <fieldset>
-          {parameters}
-        </fieldset>
-      );
+      return <fieldset>{parameters}</fieldset>;
     }
   }
 }

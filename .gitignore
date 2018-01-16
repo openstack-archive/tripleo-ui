@@ -1,8 +1,6 @@
 node_modules
 node_modules.tar.gz
 dist
-!dist/index.html
-!dist/tripleo_ui_config.js.sample
 tests_results.xml
 tripleo-ui-*.tgz
 tripleo-ui-*.tar.gz

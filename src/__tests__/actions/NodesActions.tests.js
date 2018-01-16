@@ -15,8 +15,7 @@
  */
 
 import IronicApiService from '../../js/services/IronicApiService';
-import IronicInspectorApiService
-  from '../../js/services/IronicInspectorApiService';
+import IronicInspectorApiService from '../../js/services/IronicInspectorApiService';
 import MistralApiService from '../../js/services/MistralApiService';
 import { mockStore } from './utils';
 import NodesActions from '../../js/actions/NodesActions';
@@ -240,11 +239,12 @@ describe('Asynchronous Introspect Nodes Action', () => {
     return store
       .dispatch(NodesActions.startNodesIntrospection(nodeIds))
       .then(() => {
-        expect(
-          MistralApiService.runWorkflow
-        ).toHaveBeenCalledWith(MistralConstants.BAREMETAL_INTROSPECT, {
-          node_uuids: nodeIds
-        });
+        expect(MistralApiService.runWorkflow).toHaveBeenCalledWith(
+          MistralConstants.BAREMETAL_INTROSPECT,
+          {
+            node_uuids: nodeIds
+          }
+        );
         expect(NodesActions.pollNodeslistDuringProgress).toHaveBeenCalled();
         expect(store.getActions()).toEqual([
           NodesActions.startOperation(nodeIds)
@@ -329,11 +329,12 @@ describe('startProvideNodes Action', () => {
 
   it('dispatches actions', () => {
     return store.dispatch(NodesActions.startProvideNodes(nodeIds)).then(() => {
-      expect(
-        MistralApiService.runWorkflow
-      ).toHaveBeenCalledWith(MistralConstants.BAREMETAL_PROVIDE, {
-        node_uuids: nodeIds
-      });
+      expect(MistralApiService.runWorkflow).toHaveBeenCalledWith(
+        MistralConstants.BAREMETAL_PROVIDE,
+        {
+          node_uuids: nodeIds
+        }
+      );
       expect(NodesActions.pollNodeslistDuringProgress).toHaveBeenCalled();
       expect(store.getActions()).toEqual([
         NodesActions.startOperation(nodeIds)

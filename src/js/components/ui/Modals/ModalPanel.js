@@ -81,9 +81,7 @@ class ModalPanel extends React.Component {
               className={cx('modal-panel', modalPanelClassName)}
               style={style}
             >
-              <div className="row flex-container">
-                {children}
-              </div>
+              <div className="row flex-container">{children}</div>
             </div>
           </div>
         </div>
