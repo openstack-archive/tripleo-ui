@@ -60,9 +60,11 @@ class AuthenticatedContent extends React.Component {
             <Route path="/nodes" component={Nodes} />
             <Route path="/plans/manage" component={Plans} />
             <Route path="/plans/:planName" component={DeploymentPlan} />
-            {currentPlanName
-              ? <Redirect from="/" to={`/plans/${currentPlanName}`} />
-              : <Redirect from="/" to="/plans/manage" />}
+            {currentPlanName ? (
+              <Redirect from="/" to={`/plans/${currentPlanName}`} />
+            ) : (
+              <Redirect from="/" to="/plans/manage" />
+            )}
           </Switch>
         </MainContent>
       </GlobalLoader>

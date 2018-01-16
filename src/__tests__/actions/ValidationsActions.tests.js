@@ -19,11 +19,8 @@ import { Map } from 'immutable';
 import MistralApiService from '../../js/services/MistralApiService';
 import ValidationsActions from '../../js/actions/ValidationsActions';
 import ValidationsConstants from '../../js/constants/ValidationsConstants';
-import WorkflowExecutionsActions
-  from '../../js/actions/WorkflowExecutionsActions';
-import {
-  WorkflowExecution
-} from '../../js/immutableRecords/workflowExecutions';
+import WorkflowExecutionsActions from '../../js/actions/WorkflowExecutionsActions';
+import { WorkflowExecution } from '../../js/immutableRecords/workflowExecutions';
 import MistralConstants from '../../js/constants/MistralConstants';
 import { mockStore } from './utils';
 
@@ -125,12 +122,13 @@ describe('RunValidation action', () => {
     return store
       .dispatch(ValidationsActions.runValidation('512e', 'overcloud'))
       .then(() => {
-        expect(
-          MistralApiService.runWorkflow
-        ).toHaveBeenCalledWith(MistralConstants.VALIDATIONS_RUN, {
-          validation_name: '512e',
-          plan: 'overcloud'
-        });
+        expect(MistralApiService.runWorkflow).toHaveBeenCalledWith(
+          MistralConstants.VALIDATIONS_RUN,
+          {
+            validation_name: '512e',
+            plan: 'overcloud'
+          }
+        );
         expect(store.getActions()).toEqual([
           WorkflowExecutionsActions.addWorkflowExecution(
             addWorkflowExecutionResponse

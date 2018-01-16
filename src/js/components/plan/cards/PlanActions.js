@@ -63,10 +63,11 @@ const PlanActions = ({ planName, stack }) => {
         <MenuItemLink to={`/plans/manage/${planName}/export`}>
           <FormattedMessage {...messages.export} />
         </MenuItemLink>
-        {!stack &&
+        {!stack && (
           <MenuItemLink to={`/plans/manage/${planName}/delete`}>
             <FormattedMessage {...messages.delete} />
-          </MenuItemLink>}
+          </MenuItemLink>
+        )}
       </DropdownKebab>
     </div>
   );

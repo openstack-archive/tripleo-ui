@@ -42,10 +42,7 @@ describe('Nodes Component', () => {
 
   xit('should listen to NodesStore changes', () => {});
 
-  xit(
-    'should get nodes from NodesStore and store them in state on change in NodesStore',
-    () => {}
-  );
+  xit('should get nodes from NodesStore and store them in state on change in NodesStore', () => {});
 
   xit('should issue a request to list Nodes on when mounted', () => {
     spyOn(IronicApiService, 'handleGetNodes');

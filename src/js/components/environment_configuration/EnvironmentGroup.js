@@ -139,7 +139,8 @@ class EnvironmentGroupHeading extends React.Component {
     if (this.props.title) {
       return (
         <h4>
-          {this.props.title}<br />
+          {this.props.title}
+          <br />
           <small>{this.props.description}</small>
         </h4>
       );

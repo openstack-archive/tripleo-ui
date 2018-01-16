@@ -65,7 +65,8 @@ const messages = defineMessages({
   },
   description: {
     id: 'Login.description',
-    defaultMessage: 'This tool will walk you through the process of configuring and ' +
+    defaultMessage:
+      'This tool will walk you through the process of configuring and ' +
       'deploying an OpenStack environment.'
   }
 });
@@ -183,7 +184,9 @@ class Login extends React.Component {
               </div>
               <div className="col-sm-5 col-md-6 col-lg-7 details">
                 <p>
-                  <strong><FormattedMessage {...messages.welcome} /></strong>
+                  <strong>
+                    <FormattedMessage {...messages.welcome} />
+                  </strong>
                   <br />
                   <FormattedMessage {...messages.description} />
                 </p>

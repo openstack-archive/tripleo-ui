@@ -36,7 +36,8 @@ const messages = defineMessages({
   },
   disabledButtonsWarning: {
     id: 'NodesToolbarActions.disabledButtonsWarning',
-    defaultMessage: 'You need to select Nodes first, or there is an operation already in ' +
+    defaultMessage:
+      'You need to select Nodes first, or there is an operation already in ' +
       'progress on some of the selected Nodes.'
   },
   introspectNodes: {
@@ -50,13 +51,15 @@ const messages = defineMessages({
   provideNodes: {
     id: 'NodesToolbarActions.provideNodes',
     defaultMessage: 'Provide Nodes',
-    description: '"Providing" the nodes changes the provisioning state to "available" so that ' +
+    description:
+      '"Providing" the nodes changes the provisioning state to "available" so that ' +
       'they can be used in a deployment.'
   },
   manageNodes: {
     id: 'NodesToolbarActions.manageNodes',
     defaultMessage: 'Manage Nodes',
-    description: '"Managing" the nodes changes the provisioning state to "manageable" so that ' +
+    description:
+      '"Managing" the nodes changes the provisioning state to "manageable" so that ' +
       'they can be introspected.'
   },
   deleteNodes: {
@@ -98,68 +101,64 @@ class NodesToolbarActions extends React.Component {
       // TODO(jtomasek): include proper error message from the form accessed via getFormSyncErrors
       // selector once the 'error' is available via selector
       // https://github.com/erikras/redux-form/issues/2872
-      (
-        <FormGroup
-          title={
-            disabled ? intl.formatMessage(messages.disabledButtonsWarning) : ''
-          }
+      <FormGroup
+        title={
+          disabled ? intl.formatMessage(messages.disabledButtonsWarning) : ''
+        }
+      >
+        <Button
+          id="NodesToolbarActions__introspectNodesAction"
+          disabled={this.props.disabled}
+          onClick={this.submitForm.bind(this, 'introspect')}
         >
-          <Button
-            id="NodesToolbarActions__introspectNodesAction"
+          <FormattedMessage {...messages.introspectNodes} />
+        </Button>
+        <Button
+          id="NodesToolbarActions__provideNodesAction"
+          disabled={this.props.disabled}
+          onClick={this.submitForm.bind(this, 'provide')}
+        >
+          <FormattedMessage {...messages.provideNodes} />
+        </Button>
+        <DropdownKebab id="NodesToolbarActions__nodesActionsKebab" pullRight>
+          <MenuItem
+            id="NodesToolbarActions__manageNodesAction"
             disabled={this.props.disabled}
-            onClick={this.submitForm.bind(this, 'introspect')}
+            onSelect={this.submitForm.bind(this, 'manage')}
           >
-            <FormattedMessage {...messages.introspectNodes} />
-          </Button>
-          <Button
-            id="NodesToolbarActions__provideNodesAction"
+            <FormattedMessage {...messages.manageNodes} />
+          </MenuItem>
+          <MenuItem
+            id="NodesToolbarActions__tagNodesAction"
             disabled={this.props.disabled}
-            onClick={this.submitForm.bind(this, 'provide')}
+            onSelect={() => this.setState({ showTagNodesModal: true })}
           >
-            <FormattedMessage {...messages.provideNodes} />
-          </Button>
-          <DropdownKebab id="NodesToolbarActions__nodesActionsKebab" pullRight>
-            <MenuItem
-              id="NodesToolbarActions__manageNodesAction"
-              disabled={this.props.disabled}
-              onSelect={this.submitForm.bind(this, 'manage')}
-            >
-              <FormattedMessage {...messages.manageNodes} />
-            </MenuItem>
-            <MenuItem
-              id="NodesToolbarActions__tagNodesAction"
-              disabled={this.props.disabled}
-              onSelect={() => this.setState({ showTagNodesModal: true })}
-            >
-              <FormattedMessage {...messages.tagNodes} />
-            </MenuItem>
-            <MenuItem
-              id="NodesToolbarActions__deleteNodesAction"
-              className="bg-danger"
-              disabled={this.props.disabled}
-              onSelect={() => this.setState({ showDeleteModal: true })}
-            >
-              <FormattedMessage {...messages.deleteNodes} />
-            </MenuItem>
-          </DropdownKebab>
-          <ConfirmationModal
-            show={this.state.showDeleteModal}
-            title={this.props.intl.formatMessage(
-              messages.deleteNodesModalTitle
-            )}
-            question={this.props.intl.formatMessage(
-              messages.deleteNodesModalMessage
-            )}
-            onConfirm={() => this.deleteNodes('delete')}
-            onCancel={() => this.setState({ showDeleteModal: false })}
-          />
-          <TagNodesModal
-            onProfileSelected={this.tagNodes.bind(this)}
-            onCancel={() => this.setState({ showTagNodesModal: false })}
-            show={this.state.showTagNodesModal}
-          />
-        </FormGroup>
-      )
+            <FormattedMessage {...messages.tagNodes} />
+          </MenuItem>
+          <MenuItem
+            id="NodesToolbarActions__deleteNodesAction"
+            className="bg-danger"
+            disabled={this.props.disabled}
+            onSelect={() => this.setState({ showDeleteModal: true })}
+          >
+            <FormattedMessage {...messages.deleteNodes} />
+          </MenuItem>
+        </DropdownKebab>
+        <ConfirmationModal
+          show={this.state.showDeleteModal}
+          title={this.props.intl.formatMessage(messages.deleteNodesModalTitle)}
+          question={this.props.intl.formatMessage(
+            messages.deleteNodesModalMessage
+          )}
+          onConfirm={() => this.deleteNodes('delete')}
+          onCancel={() => this.setState({ showDeleteModal: false })}
+        />
+        <TagNodesModal
+          onProfileSelected={this.tagNodes.bind(this)}
+          onCancel={() => this.setState({ showTagNodesModal: false })}
+          show={this.state.showTagNodesModal}
+        />
+      </FormGroup>
     );
   }
 }

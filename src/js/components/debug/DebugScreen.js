@@ -52,7 +52,8 @@ const messages = defineMessages({
   },
   downloadLogsMessage: {
     id: 'DebugScreen.downloadLogsMessage',
-    defaultMessage: 'The file you requested is ready. Please click the button below to ' +
+    defaultMessage:
+      'The file you requested is ready. Please click the button below to ' +
       'download the export. You might need to right-click the button and choose ' +
       '"Save link as...".'
   },
@@ -102,19 +103,21 @@ class DebugScreen extends React.Component {
       return;
     }
 
-    return this.props.logsUrl
-      ? <div>
-          <div>
-            <FormattedMessage {...messages.downloadLogsMessage} />
-          </div>
-          <br />
-          <a href={this.props.logsUrl} className="btn btn-success">
-            <FormattedMessage {...messages.downloadLogs} />
-          </a>
+    return this.props.logsUrl ? (
+      <div>
+        <div>
+          <FormattedMessage {...messages.downloadLogsMessage} />
         </div>
-      : <div>
-          <FormattedMessage {...messages.downloadError} />
-        </div>;
+        <br />
+        <a href={this.props.logsUrl} className="btn btn-success">
+          <FormattedMessage {...messages.downloadLogs} />
+        </a>
+      </div>
+    ) : (
+      <div>
+        <FormattedMessage {...messages.downloadError} />
+      </div>
+    );
   }
 
   render() {

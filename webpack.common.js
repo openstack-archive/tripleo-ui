@@ -17,7 +17,6 @@
 require('es6-promise').polyfill(); // https://github.com/webpack/css-loader/issues/144
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const I18nPlugin = require('./src/js/plugins/i18n');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 module.exports = {
   entry: __dirname + '/src/js/index.js',
@@ -29,19 +28,11 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/index.html'
+      template: 'src/index.html',
+      favicon: 'src/img/owl.png'
     }),
     new I18nPlugin({
       localePath: 'i18n/locales'
-    }),
-    new FaviconsWebpackPlugin({
-      logo: __dirname + '/src/img/owl.png',
-      prefix: 'icons-tripleo/',
-      emitStats: false,
-      statsFilename: 'iconstats-tripleo.json',
-      persistentCache: true,
-      inject: true,
-      title: 'TripleO UI'
     })
   ],
   module: {
@@ -101,27 +92,19 @@ module.exports = {
       // Plain CSS files
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
+        use: ['style-loader', 'css-loader']
       },
 
       // Less
       {
         test: /\.less$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'less-loader?sourceMap'
-        ]
+        use: ['style-loader', 'css-loader', 'less-loader?sourceMap']
       },
 
       {
         loader: __dirname + '/src/js/loaders/version.js',
         test: /src\/js\/index.js$/
       }
-
     ]
   }
 };
