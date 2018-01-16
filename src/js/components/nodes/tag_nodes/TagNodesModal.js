@@ -54,8 +54,7 @@ class TagNodesModal extends React.Component {
         <ModalHeader>
           <CloseModalXButton />
           <ModalTitle>
-            <span className="fa fa-tag" />
-            {' '}
+            <span className="fa fa-tag" />{' '}
             <FormattedMessage {...messages.title} />
           </ModalTitle>
         </ModalHeader>

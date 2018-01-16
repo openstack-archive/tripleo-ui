@@ -59,11 +59,10 @@ export default class Validation extends React.Component {
               this.props.addActiveFilter({
                 filterBy: 'group',
                 filterString: group
-              })}
+              })
+            }
           >
-            <small>
-              {group}
-            </small>
+            <small>{group}</small>
           </span>
         </div>
       );

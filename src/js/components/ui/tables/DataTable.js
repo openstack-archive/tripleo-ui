@@ -120,9 +120,7 @@ class DataTable extends React.Component {
             role="grid"
           >
             <thead>
-              <tr>
-                {headers}
-              </tr>
+              <tr>{headers}</tr>
             </thead>
             <tbody>
               {rows.length > 0 ? rows : this.props.noRowsRenderer()}

@@ -32,7 +32,8 @@ const messages = defineMessages({
   },
   operationInProgress: {
     id: 'NodesListForm.operationInProgressValidationMessage',
-    defaultMessage: 'There is an operation in progress on some of the selected Nodes'
+    defaultMessage:
+      'There is an operation in progress on some of the selected Nodes'
   }
 });
 

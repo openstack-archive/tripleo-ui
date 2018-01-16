@@ -65,11 +65,11 @@ class NavBar extends React.Component {
   _renderLanguageDropdown() {
     // Only include the I18nDropdown if there's more than one
     // language to choose from.
-    return this.props.languages.size > 1
-      ? <li>
-          <I18nDropdown />
-        </li>
-      : null;
+    return this.props.languages.size > 1 ? (
+      <li>
+        <I18nDropdown />
+      </li>
+    ) : null;
   }
 
   _renderHelpDropdown() {

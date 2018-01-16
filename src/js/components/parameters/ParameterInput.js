@@ -35,8 +35,8 @@ const messages = defineMessages({
 
 class ParameterInput extends React.Component {
   /**
-  * Process the parameter, generate relevant input
-  */
+   * Process the parameter, generate relevant input
+   */
   render() {
     const { name, label, description, defaultValue, value, type } = this.props;
     if (value) {

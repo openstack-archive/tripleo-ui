@@ -29,7 +29,8 @@ import Tab from '../ui/Tab';
 const messages = defineMessages({
   noParameters: {
     id: 'RoleServices.noParameters',
-    defaultMessage: 'There are currently no parameters to configure in this section.'
+    defaultMessage:
+      'There are currently no parameters to configure in this section.'
   },
   selectService: {
     id: 'RoleServices.selectService',

@@ -32,8 +32,9 @@ export default {
         MistralApiService.runAction(MistralConstants.VALIDATIONS_LIST)
       )
         .then(response => {
-          const validations = normalize(response, arrayOf(validationSchema))
-            .entities.validations || {};
+          const validations =
+            normalize(response, arrayOf(validationSchema)).entities
+              .validations || {};
           dispatch(this.fetchValidationsSuccess(validations));
         })
         .catch(error => {

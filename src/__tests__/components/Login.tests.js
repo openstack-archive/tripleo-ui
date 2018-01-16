@@ -73,25 +73,20 @@ describe('Login component', () => {
   });
 
   describe('When user is logged in', () => {
-    xit(
-      'redirects to nextPath when user is logged in and visits login page',
-      () => {
-        loginInstance = new Login();
-        loginInstance.context = {
-          router: {
-            getCurrentQuery() {
-              return {
-                nextPath: 'nodes'
-              };
-            }
+    xit('redirects to nextPath when user is logged in and visits login page', () => {
+      loginInstance = new Login();
+      loginInstance.context = {
+        router: {
+          getCurrentQuery() {
+            return {
+              nextPath: 'nodes'
+            };
           }
-        };
-        // loginInstance.context.router.transitionTo = jest.genMockFunction();
-        loginInstance.componentWillMount();
-        expect(loginInstance.context.router.transitionTo).toBeCalledWith(
-          'nodes'
-        );
-      }
-    );
+        }
+      };
+      // loginInstance.context.router.transitionTo = jest.genMockFunction();
+      loginInstance.componentWillMount();
+      expect(loginInstance.context.router.transitionTo).toBeCalledWith('nodes');
+    });
   });
 });

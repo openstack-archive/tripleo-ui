@@ -46,7 +46,8 @@ export default {
         },
         {
           name: 'Do something really tricky',
-          description: 'This is a very tricky process that could take a long time to complete',
+          description:
+            'This is a very tricky process that could take a long time to complete',
           ref: '/v1/plans/undefined/validations/4/',
           uuid: '4',
           status: 'failed'
@@ -54,7 +55,8 @@ export default {
       ]
     },
     {
-      description: 'Validations verify that the network was configured properly on all nodes',
+      description:
+        'Validations verify that the network was configured properly on all nodes',
       name: 'Network Configuration',
       ref: '/v1/plans/undefined/validation_types/2/',
       stage: 'introspection',
@@ -151,7 +153,8 @@ export default {
         },
         {
           name: 'Do something really tricky',
-          description: 'This is a very tricky process that could take a long time to complete',
+          description:
+            'This is a very tricky process that could take a long time to complete',
           ref: '/v1/plans/undefined/validations/4/',
           uuid: '4',
           status: 'failed'

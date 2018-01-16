@@ -21,8 +21,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
-import EnvironmentConfiguration
-  from '../environment_configuration/EnvironmentConfiguration';
+import EnvironmentConfiguration from '../environment_configuration/EnvironmentConfiguration';
 import NavTab from '../ui/NavTab';
 import { CloseModalXButton, RoutedModal } from '../ui/Modals';
 import Parameters from '../parameters/Parameters';

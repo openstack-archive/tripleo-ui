@@ -93,8 +93,7 @@ const ValidationsToggle = ({
       >
         {validationStatusCounts.keySeq().map(status => (
           <span key={status} title={formatMessage(messages[status])}>
-            {getIcon(status)} {validationStatusCounts.get(status)}
-            {' '}
+            {getIcon(status)} {validationStatusCounts.get(status)}{' '}
           </span>
         ))}
       </InlineLoader>
