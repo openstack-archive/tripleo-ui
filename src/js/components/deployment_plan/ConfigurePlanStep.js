@@ -32,8 +32,9 @@ const ConfigurePlanStep = props => {
   return (
     <div>
       <DeploymentConfigurationSummary {...props} />
-      &nbsp;
+      <br/>
       <Link
+        className="btn btn-default"
         id="ConfigurePlanStep__EditDeploymentLink"
         to={`/plans/${props.planName}/configuration`}
       >
