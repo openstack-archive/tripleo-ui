@@ -33,10 +33,11 @@ const messages = defineMessages({
   },
   nodesAvailableToAssign: {
     id: 'RolesStep.nodesAvailableToAssign',
-    defaultMessage: `{allNodesCount, number} Nodes Total
-({totalAssignedNodesCount, number} assigned to roles,
-{nodesCount, number} available for assignment,
-{nodesRequireActionCount, number} require action)`
+    defaultMessage:
+      '{allNodesCount, number} Nodes Total ' +
+      '({totalAssignedNodesCount, number} assigned to roles, ' +
+      '{nodesCount, number} available for assignment, ' +
+      '{nodesRequireActionCount, number} require action)'
   }
 });
 
