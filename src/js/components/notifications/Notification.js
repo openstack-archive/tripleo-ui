@@ -58,11 +58,7 @@ export default class Notification extends React.Component {
 
   renderMessage(message) {
     if (typeof message === 'object') {
-      return (
-        <ul>
-          {message.map((msg, i) => <li key={i}>{msg}</li>)}
-        </ul>
-      );
+      return <ul>{message.map((msg, i) => <li key={i}>{msg}</li>)}</ul>;
     } else {
       return <p>{message}</p>;
     }
@@ -90,16 +86,18 @@ export default class Notification extends React.Component {
       <div className="clearfix">
         <div className={classes} role="alert">
           <span className={iconClass} aria-hidden="true" />
-          {this.props.dismissable
-            ? <button
-                type="button"
-                className="close"
-                aria-label="Close"
-                onClick={this.props.removeNotification}
-              >
-                <span className="pficon pficon-close" aria-hidden="true" />
-              </button>
-            : false}
+          {this.props.dismissable ? (
+            <button
+              type="button"
+              className="close"
+              aria-label="Close"
+              onClick={this.props.removeNotification}
+            >
+              <span className="pficon pficon-close" aria-hidden="true" />
+            </button>
+          ) : (
+            false
+          )}
           <strong>{this.props.title}</strong>
           {this.renderMessage(this.props.message)}
         </div>

@@ -23,8 +23,7 @@ import {
   DataTableHeaderCell,
   DataTableDataFieldCell
 } from '../../../../js/components/ui/tables/DataTableCells';
-import DataTableColumn
-  from '../../../../js/components/ui/tables/DataTableColumn';
+import DataTableColumn from '../../../../js/components/ui/tables/DataTableColumn';
 
 const data = [
   { uuid: 1, provision_state: 'failed' },

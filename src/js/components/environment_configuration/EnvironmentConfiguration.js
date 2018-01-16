@@ -23,8 +23,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { CloseModalButton } from '../ui/Modals';
-import EnvironmentConfigurationActions
-  from '../../actions/EnvironmentConfigurationActions';
+import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentConfigurationTopic from './EnvironmentConfigurationTopic';
 import { getCurrentPlanName } from '../../selectors/plans';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
@@ -208,9 +207,7 @@ class EnvironmentConfiguration extends React.Component {
                 </ul>
               </div>
               <div className="col-sm-8">
-                <div className="tab-content">
-                  {topics}
-                </div>
+                <div className="tab-content">{topics}</div>
               </div>
             </div>
           </div>
@@ -293,10 +290,10 @@ export default injectIntl(
 );
 
 /**
-* requiresEnvironments validation
-* Invalidates input if it is selected and environment it requires is not.
-* example: validations="requiredEnvironments:['some_environment.yaml']"
-*/
+ * requiresEnvironments validation
+ * Invalidates input if it is selected and environment it requires is not.
+ * example: validations="requiredEnvironments:['some_environment.yaml']"
+ */
 Formsy.addValidationRule('requiredEnvironments', function(
   values,
   value,

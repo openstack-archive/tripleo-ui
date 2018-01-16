@@ -18,8 +18,7 @@ import { fromJS } from 'immutable';
 import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 
-import EnvironmentConfigurationTopic
-  from '../../../js/components/environment_configuration/EnvironmentConfigurationTopic';
+import EnvironmentConfigurationTopic from '../../../js/components/environment_configuration/EnvironmentConfigurationTopic';
 import MockPlan from '../../mocks/MockPlan';
 
 const topic = MockPlan.capabilities.topics[0];

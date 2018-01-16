@@ -67,15 +67,17 @@ class Nodes extends React.Component {
   }
 
   renderContentView() {
-    return this.props.contentView === 'table'
-      ? <NodesTableView />
-      : <NodesListForm>
-          <NodesListView
-            fetchNodeIntrospectionData={this.props.fetchNodeIntrospectionData}
-            nodes={this.props.nodes}
-            nodesInProgress={this.props.nodesInProgress}
-          />
-        </NodesListForm>;
+    return this.props.contentView === 'table' ? (
+      <NodesTableView />
+    ) : (
+      <NodesListForm>
+        <NodesListView
+          fetchNodeIntrospectionData={this.props.fetchNodeIntrospectionData}
+          nodes={this.props.nodes}
+          nodesInProgress={this.props.nodesInProgress}
+        />
+      </NodesListForm>
+    );
   }
 
   render() {
@@ -107,7 +109,9 @@ class Nodes extends React.Component {
               <FormattedMessage {...messages.registerNodes} />
             </Link>
           </div>
-          <h1><FormattedMessage {...messages.nodes} /></h1>
+          <h1>
+            <FormattedMessage {...messages.nodes} />
+          </h1>
         </div>
         <Loader
           loaded={this.props.nodesLoaded}

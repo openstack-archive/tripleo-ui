@@ -91,9 +91,7 @@ export default class FileList extends React.Component {
           </h4>
         </div>
         <table className="table upload-files">
-          <tbody>
-            {files}
-          </tbody>
+          <tbody>{files}</tbody>
         </table>
       </div>
     );

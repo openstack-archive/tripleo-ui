@@ -149,7 +149,10 @@ const getValidationStatus = validationResults => {
       return 'running';
     case validationResults.last().output.get('status') === 'SUCCESS':
       if (
-        validationResults.last().output.get('stdout', '').includes('Warnings:')
+        validationResults
+          .last()
+          .output.get('stdout', '')
+          .includes('Warnings:')
       ) {
         return 'warning';
       }

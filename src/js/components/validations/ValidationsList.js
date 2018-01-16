@@ -111,7 +111,9 @@ class ValidationsList extends React.Component {
           iconClass="pficon pficon-flag"
           title={this.props.intl.formatMessage(messages.noValidations)}
         >
-          <p><FormattedMessage {...messages.noValidationsMessage} /></p>
+          <p>
+            <FormattedMessage {...messages.noValidationsMessage} />
+          </p>
         </BlankSlate>
       );
     } else {
@@ -170,8 +172,10 @@ class ValidationsList extends React.Component {
               <div className="actions pull-right">
                 <InlineLoader
                   loaded={
-                    !(this.props.validationsLoaded &&
-                      this.props.isFetchingValidations)
+                    !(
+                      this.props.validationsLoaded &&
+                      this.props.isFetchingValidations
+                    )
                   }
                   component="small"
                   content={formatMessage(messages.loadingValidations)}
@@ -180,8 +184,7 @@ class ValidationsList extends React.Component {
                     className="link refresh"
                     onClick={this.refreshValidations.bind(this)}
                   >
-                    <span className="pficon pficon-refresh" />
-                    {' '}
+                    <span className="pficon pficon-refresh" />{' '}
                     <FormattedMessage {...messages.refresh} />
                   </a>
                 </InlineLoader>

@@ -66,22 +66,23 @@ const RegisterNodesForm = ({
   selectedNodeIndex
 }) => (
   <Form onSubmit={handleSubmit} horizontal>
-    {error &&
-      <InlineNotification>
-        {error}
-      </InlineNotification>}
-    {selectedNodeIndex !== -1
-      ? <FieldArray
-          name="nodes"
-          component={RegisterNodesTabPanes}
-          selectedNodeIndex={selectedNodeIndex}
-        />
-      : <BlankSlate
-          iconClass="fa fa-cubes"
-          title={formatMessage(messages.noNodesToRegister)}
-        >
-          <p><FormattedMessage {...messages.addANodeManually} /></p>
-        </BlankSlate>}
+    {error && <InlineNotification>{error}</InlineNotification>}
+    {selectedNodeIndex !== -1 ? (
+      <FieldArray
+        name="nodes"
+        component={RegisterNodesTabPanes}
+        selectedNodeIndex={selectedNodeIndex}
+      />
+    ) : (
+      <BlankSlate
+        iconClass="fa fa-cubes"
+        title={formatMessage(messages.noNodesToRegister)}
+      >
+        <p>
+          <FormattedMessage {...messages.addANodeManually} />
+        </p>
+      </BlankSlate>
+    )}
   </Form>
 );
 RegisterNodesForm.propTypes = {

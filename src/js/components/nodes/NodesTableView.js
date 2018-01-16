@@ -47,7 +47,8 @@ const messages = defineMessages({
   provideNodes: {
     id: 'NodesTableView.provideNodes',
     defaultMessage: 'Provide Nodes',
-    description: '"Providing" the nodes changes the provisioning state to "available" so that ' +
+    description:
+      '"Providing" the nodes changes the provisioning state to "available" so that ' +
       'they can be used in a deployment.'
   },
   deleteNodes: {
@@ -238,7 +239,8 @@ class NodesTableView extends React.Component {
             availableProfiles={this.props.availableProfiles.toArray()}
             onProfileSelected={this.onTagNodesSubmit.bind(this)}
             onCancel={() =>
-              this.setState({ showTagNodesModal: false, submitParameters: {} })}
+              this.setState({ showTagNodesModal: false, submitParameters: {} })
+            }
             show={this.state.showTagNodesModal}
           />
         </Formsy.Form>
