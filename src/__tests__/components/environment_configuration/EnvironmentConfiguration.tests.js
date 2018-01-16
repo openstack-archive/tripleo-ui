@@ -18,8 +18,7 @@ import { Map } from 'immutable';
 import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 
-import EnvironmentConfiguration
-  from '../../../js/components/environment_configuration/EnvironmentConfiguration';
+import EnvironmentConfiguration from '../../../js/components/environment_configuration/EnvironmentConfiguration';
 
 describe('EnvironmentConfiguration component', () => {
   let EnvConfVdom;

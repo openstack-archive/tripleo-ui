@@ -16,15 +16,10 @@
 
 import { Map, fromJS } from 'immutable';
 
-import EnvironmentConfigurationActions
-  from '../../js/actions/EnvironmentConfigurationActions';
-import EnvironmentConfigurationConstants
-  from '../../js/constants/EnvironmentConfigurationConstants';
-import environmentConfigurationReducer
-  from '../../js/reducers/environmentConfigurationReducer';
-import {
-  EnvironmentConfigurationState
-} from '../../js/immutableRecords/environmentConfiguration';
+import EnvironmentConfigurationActions from '../../js/actions/EnvironmentConfigurationActions';
+import EnvironmentConfigurationConstants from '../../js/constants/EnvironmentConfigurationConstants';
+import environmentConfigurationReducer from '../../js/reducers/environmentConfigurationReducer';
+import { EnvironmentConfigurationState } from '../../js/immutableRecords/environmentConfiguration';
 
 const initialState = new EnvironmentConfigurationState();
 
@@ -55,7 +50,8 @@ describe('environmentConfigurationReducer', () => {
   describe('fetchEnvironmentConfigurationPending', () => {
     let newState;
     let action = {
-      type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_PENDING
+      type:
+        EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_PENDING
     };
 
     beforeEach(() => {

@@ -35,7 +35,8 @@ const messages = defineMessages({
   },
   nodeNameRegexp: {
     id: 'RegisterNodeForm.nodeNameRegexp',
-    defaultMessage: 'Name may only consist of RFC3986 unreserved characters: alphanumeric, hyphen (-),' +
+    defaultMessage:
+      'Name may only consist of RFC3986 unreserved characters: alphanumeric, hyphen (-),' +
       ' period (.), underscore (_) and tilde (~) characters.'
   },
   nodeNameMaxLength: {
@@ -92,7 +93,8 @@ const messages = defineMessages({
   },
   macAddressesDescription: {
     id: 'RegisterNodeForm.macAddressesDescription',
-    defaultMessage: 'If you are specifying multiple MAC Addresses, please enter a comma separated list. (e.g. aa:bb:cc:dd:ee:ff,12:34:56:78:90:xx,do:re:mi:fa:so:ra)'
+    defaultMessage:
+      'If you are specifying multiple MAC Addresses, please enter a comma separated list. (e.g. aa:bb:cc:dd:ee:ff,12:34:56:78:90:xx,do:re:mi:fa:so:ra)'
   }
 });
 
@@ -114,7 +116,9 @@ const RegisterNodeFields = ({
 }) => {
   return (
     <div>
-      <h4><FormattedMessage {...messages.nodeDetail} /></h4>
+      <h4>
+        <FormattedMessage {...messages.nodeDetail} />
+      </h4>
       <Fieldset legend={formatMessage(messages.general)}>
         <Field
           name={`${node}.name`}

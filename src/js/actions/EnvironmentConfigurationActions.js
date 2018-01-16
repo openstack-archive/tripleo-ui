@@ -18,8 +18,7 @@ import { defineMessages } from 'react-intl';
 import { normalize, arrayOf } from 'normalizr';
 import yaml from 'js-yaml';
 
-import EnvironmentConfigurationConstants
-  from '../constants/EnvironmentConfigurationConstants';
+import EnvironmentConfigurationConstants from '../constants/EnvironmentConfigurationConstants';
 import { handleErrors } from './ErrorActions';
 import MistralApiService from '../services/MistralApiService';
 import NotificationActions from '../actions/NotificationActions';
@@ -30,7 +29,8 @@ import SwiftApiService from '../services/SwiftApiService';
 const messages = defineMessages({
   envConfigUpdatedNotificationMessage: {
     id: 'EnvironmentConfigurationActions.envConfigUpdatedNotificationMessage',
-    defaultMessage: 'The Environment Configuration has been successfully updated.'
+    defaultMessage:
+      'The Environment Configuration has been successfully updated.'
   },
   envConfigUpdatedNotificationTitle: {
     id: 'EnvironmentConfigurationActions.envConfigUpdatedNotificationTitle',
@@ -48,8 +48,8 @@ export default {
         })
       )
         .then(response => {
-          const entities = normalize(response, arrayOf(topicSchema))
-            .entities || {};
+          const entities =
+            normalize(response, arrayOf(topicSchema)).entities || {};
           dispatch(this.fetchEnvironmentConfigurationSuccess(entities));
         })
         .catch(error => {
@@ -66,20 +66,23 @@ export default {
 
   fetchEnvironmentConfigurationPending() {
     return {
-      type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_PENDING
+      type:
+        EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_PENDING
     };
   },
 
   fetchEnvironmentConfigurationSuccess(entities) {
     return {
-      type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_SUCCESS,
+      type:
+        EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_SUCCESS,
       payload: entities
     };
   },
 
   fetchEnvironmentConfigurationFailed(environment) {
     return {
-      type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_FAILED
+      type:
+        EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_FAILED
     };
   },
 
@@ -128,20 +131,23 @@ export default {
 
   updateEnvironmentConfigurationPending() {
     return {
-      type: EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_PENDING
+      type:
+        EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_PENDING
     };
   },
 
   updateEnvironmentConfigurationSuccess(enabledEnvironments) {
     return {
-      type: EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS,
+      type:
+        EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS,
       payload: enabledEnvironments
     };
   },
 
   updateEnvironmentConfigurationFailed(formErrors = [], formFieldErrors = {}) {
     return {
-      type: EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_FAILED,
+      type:
+        EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_FAILED,
       payload: {
         formErrors,
         formFieldErrors
@@ -154,13 +160,13 @@ export default {
       dispatch(this.fetchEnvironmentPending(environmentPath));
       dispatch(SwiftApiService.getObject(planName, environmentPath))
         .then(response => {
-          const {
-            resource_registry,
-            parameter_defaults
-          } = yaml.safeLoad(response, {
-            filename: environmentPath,
-            json: true
-          });
+          const { resource_registry, parameter_defaults } = yaml.safeLoad(
+            response,
+            {
+              filename: environmentPath,
+              json: true
+            }
+          );
           dispatch(
             this.fetchEnvironmentSuccess({
               file: environmentPath,

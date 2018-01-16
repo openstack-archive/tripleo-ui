@@ -303,11 +303,7 @@ export default injectIntl(NodesTable);
 
 export const NodesTableMaintenanceCell = props => {
   const value = _.result(props.data[props.rowIndex], props.field).toString();
-  return (
-    <DataTableCell {...props}>
-      {value}
-    </DataTableCell>
-  );
+  return <DataTableCell {...props}>{value}</DataTableCell>;
 };
 NodesTableMaintenanceCell.propTypes = {
   data: PropTypes.array.isRequired,
@@ -317,11 +313,7 @@ NodesTableMaintenanceCell.propTypes = {
 
 export const NodesTableMacsCell = props => {
   const value = _.result(props.data[props.rowIndex], props.field).join(', ');
-  return (
-    <DataTableCell {...props}>
-      {value}
-    </DataTableCell>
-  );
+  return <DataTableCell {...props}>{value}</DataTableCell>;
 };
 NodesTableMacsCell.propTypes = {
   data: PropTypes.array.isRequired,

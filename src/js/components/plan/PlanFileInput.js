@@ -104,27 +104,33 @@ class PlanFileInput extends React.Component {
     if (!errorMessage && this.state.unreadableFile) {
       errorMessage = `${this.state.unreadableFile} could not be read.`;
     }
-    return errorMessage
-      ? <span className="help-block">{errorMessage}</span>
-      : false;
+    return errorMessage ? (
+      <span className="help-block">{errorMessage}</span>
+    ) : (
+      false
+    );
   }
 
   renderDescription() {
     let description = this.props.description;
-    return description
-      ? <small className="help-block">{description}</small>
-      : false;
+    return description ? (
+      <small className="help-block">{description}</small>
+    ) : (
+      false
+    );
   }
 
   renderProgress() {
-    return this.state.progress > 0
-      ? <div className="progress active help-block">
-          <div
-            className="progress-bar"
-            style={{ width: `${this.state.progress}%` }}
-          />
-        </div>
-      : false;
+    return this.state.progress > 0 ? (
+      <div className="progress active help-block">
+        <div
+          className="progress-bar"
+          style={{ width: `${this.state.progress}%` }}
+        />
+      </div>
+    ) : (
+      false
+    );
   }
 
   render() {

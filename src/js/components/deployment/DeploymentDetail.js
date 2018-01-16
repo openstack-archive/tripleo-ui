@@ -21,9 +21,7 @@ import { ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {
-  allPreDeploymentValidationsSuccessful
-} from '../../selectors/validations';
+import { allPreDeploymentValidationsSuccessful } from '../../selectors/validations';
 import DeploymentConfirmation from './DeploymentConfirmation';
 import DeploymentProgress from './DeploymentProgress';
 import DeploymentSuccess from './DeploymentSuccess';
@@ -33,9 +31,7 @@ import {
   getCurrentStack,
   getCurrentStackDeploymentProgress
 } from '../../selectors/stacks';
-import {
-  getEnvironmentConfigurationSummary
-} from '../../selectors/environmentConfiguration';
+import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
 import { Loader } from '../ui/Loader';
 import {
   CloseModalButton,
