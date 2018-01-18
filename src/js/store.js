@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
+// test
 import { applyMiddleware, createStore } from 'redux';
 import cookie from 'react-cookie';
 import { fromJS } from 'immutable';
