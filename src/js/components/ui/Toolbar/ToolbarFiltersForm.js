@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { Button, FormGroup, InputGroup, MenuItem } from 'react-bootstrap';
+import { FormGroup, InputGroup, MenuItem } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';

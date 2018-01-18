@@ -18,7 +18,7 @@ import { applyMiddleware, createStore } from 'redux';
 import cookie from 'react-cookie';
 import { fromJS } from 'immutable';
 import thunkMiddleware from 'redux-thunk';
-import createLogger from 'redux-logger';
+import { createLogger } from 'redux-logger';
 import logger, { predicate } from './services/logging/LoggingService';
 
 import { AppConfig } from './immutableRecords/appConfig';

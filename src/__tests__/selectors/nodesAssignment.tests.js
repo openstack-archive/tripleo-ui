@@ -162,54 +162,52 @@ describe('Nodes Assignment selectors', () => {
   });
 
   describe('provides getTotalUntaggedAssignedNodesCount selector', () => {
-    beforeEach(function() {
-      this.nodes = fromJS({
-        node1: {
-          uuid: 'node1',
-          properties: { capabilities: 'boot_option:local' }
-        },
-        node2: {
-          uuid: 'node2',
-          properties: { capabilities: 'boot_option:local,profile:control' }
-        }
-      });
-      this.roles = Map({
-        Controller: new Role({
-          name: 'Controller',
-          identifier: 'control'
-        }),
-        Compute: new Role({
-          name: 'Compute',
-          identifier: 'compute'
-        }),
-        BlockStorage: new Role({
-          name: 'BlockStorage',
-          identifier: 'block-storage'
-        })
-      });
-      this.parametersByRole = Map({
-        Controler: new Parameter({
-          name: 'ControllerCount',
-          default: 1
-        }),
-        Compute: new Parameter({
-          name: 'ComputeCount',
-          default: 1
-        })
-      });
+    const nodes = fromJS({
+      node1: {
+        uuid: 'node1',
+        properties: { capabilities: 'boot_option:local' }
+      },
+      node2: {
+        uuid: 'node2',
+        properties: { capabilities: 'boot_option:local,profile:control' }
+      }
+    });
+    const roles = Map({
+      Controller: new Role({
+        name: 'Controller',
+        identifier: 'control'
+      }),
+      Compute: new Role({
+        name: 'Compute',
+        identifier: 'compute'
+      }),
+      BlockStorage: new Role({
+        name: 'BlockStorage',
+        identifier: 'block-storage'
+      })
+    });
+    const parametersByRole = Map({
+      Controler: new Parameter({
+        name: 'ControllerCount',
+        default: 1
+      }),
+      Compute: new Parameter({
+        name: 'ComputeCount',
+        default: 1
+      })
     });
 
     it('calculates untagged assigned nodes count', function() {
       const result = selectors.getTotalUntaggedAssignedNodesCount.resultFunc(
-        this.nodes,
-        this.roles,
-        this.parametersByRole
+        nodes,
+        roles,
+        parametersByRole
       );
       expect(result).toEqual(1);
     });
 
     it('calculates properly when assigned count is less then tagged', function() {
-      this.nodes = fromJS({
+      const nodes = fromJS({
         node1: {
           uuid: 'node1',
           properties: { capabilities: 'boot_option:local' }
@@ -224,73 +222,71 @@ describe('Nodes Assignment selectors', () => {
         }
       });
       const result = selectors.getTotalUntaggedAssignedNodesCount.resultFunc(
-        this.nodes,
-        this.roles,
-        this.parametersByRole
+        nodes,
+        roles,
+        parametersByRole
       );
       expect(result).toEqual(1);
     });
   });
 
   describe('provides getAvailableNodesCountsByRole selector', () => {
-    beforeEach(function() {
-      this.availableNodes = fromJS({
-        node1: {
-          uuid: 'node1',
-          properties: { capabilities: 'boot_option:local' }
-        },
-        node2: {
-          uuid: 'node2',
-          properties: { capabilities: 'boot_option:local,profile:control' }
-        }
-      });
-      this.untaggedAvailableNodes = fromJS({
-        node1: {
-          uuid: 'node1',
-          properties: { capabilities: 'boot_option:local' }
-        }
-      });
-      this.roles = Map({
-        Controller: new Role({
-          name: 'Controller',
-          title: 'Controller',
-          identifier: 'control'
-        }),
-        Compute: new Role({
-          name: 'Compute',
-          title: 'Compute',
-          identifier: 'compute'
-        }),
-        BlockStorage: new Role({
-          name: 'BlockStorage',
-          title: 'Block Storage',
-          identifier: 'block-storage'
-        })
-      });
-      this.nodeCountParametersByRole = Map({
-        Controller: new Parameter({
-          name: 'ControllerCount',
-          default: 1
-        }),
-        Compute: new Parameter({
-          name: 'ComputeCount',
-          default: 1
-        }),
-        BlockStorage: new Parameter({
-          name: 'BlockStorageCount',
-          default: 0
-        })
-      });
-      this.totalUntaggedAssignedNodesCount = 1;
+    const availableNodes = fromJS({
+      node1: {
+        uuid: 'node1',
+        properties: { capabilities: 'boot_option:local' }
+      },
+      node2: {
+        uuid: 'node2',
+        properties: { capabilities: 'boot_option:local,profile:control' }
+      }
     });
+    const untaggedAvailableNodes = fromJS({
+      node1: {
+        uuid: 'node1',
+        properties: { capabilities: 'boot_option:local' }
+      }
+    });
+    const roles = Map({
+      Controller: new Role({
+        name: 'Controller',
+        title: 'Controller',
+        identifier: 'control'
+      }),
+      Compute: new Role({
+        name: 'Compute',
+        title: 'Compute',
+        identifier: 'compute'
+      }),
+      BlockStorage: new Role({
+        name: 'BlockStorage',
+        title: 'Block Storage',
+        identifier: 'block-storage'
+      })
+    });
+    const nodeCountParametersByRole = Map({
+      Controller: new Parameter({
+        name: 'ControllerCount',
+        default: 1
+      }),
+      Compute: new Parameter({
+        name: 'ComputeCount',
+        default: 1
+      }),
+      BlockStorage: new Parameter({
+        name: 'BlockStorageCount',
+        default: 0
+      })
+    });
+    const totalUntaggedAssignedNodesCount = 1;
 
     it('calculates maximum available nodes count for each role', function() {
       const result = selectors.getAvailableNodesCountsByRole.resultFunc(
-        this.availableNodes,
-        this.untaggedAvailableNodes,
-        this.roles,
-        this.nodeCountParametersByRole,
-        this.totalUntaggedAssignedNodesCount
+        availableNodes,
+        untaggedAvailableNodes,
+        roles,
+        nodeCountParametersByRole,
+        totalUntaggedAssignedNodesCount
       );
       expect(result.get('Controller')).toEqual(1);
       expect(result.get('Compute')).toEqual(1);
@@ -298,7 +294,7 @@ describe('Nodes Assignment selectors', () => {
     });
 
     it('handles cases when assigned count is higher then actual nodes available', function() {
-      this.nodeCountParametersByRole = Map({
+      const nodeCountParametersByRole = Map({
         Controller: new Parameter({
           name: 'ControllerCount',
           default: 4
@@ -312,13 +308,13 @@ describe('Nodes Assignment selectors', () => {
           default: 0
         })
       });
-      this.totalUntaggedAssignedNodesCount = 4;
+      const totalUntaggedAssignedNodesCount = 4;
       const result = selectors.getAvailableNodesCountsByRole.resultFunc(
-        this.availableNodes,
-        this.untaggedAvailableNodes,
-        this.roles,
-        this.nodeCountParametersByRole,
-        this.totalUntaggedAssignedNodesCount
+        availableNodes,
+        untaggedAvailableNodes,
+        roles,
+        nodeCountParametersByRole,
+        totalUntaggedAssignedNodesCount
       );
       expect(result.get('Controller')).toEqual(1);
       expect(result.get('Compute')).toEqual(0);
