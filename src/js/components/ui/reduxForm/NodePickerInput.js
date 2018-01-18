@@ -17,11 +17,12 @@
 import ClassNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const NodePickerInput = props => {
   const {
     increment,
-    input: { value, onChange },
+    input: { name, value, onChange },
     max,
     meta: { error, submitting },
     min
@@ -45,7 +46,7 @@ const NodePickerInput = props => {
         onClick={() => onChange(incrementValue(increment))}
         disabled={submitting || value + increment > max}
       />
-      <NodeCount error={error}>
+      <NodeCount error={error} name={name}>
         <span className="value">{value}</span>
       </NodeCount>
       <PickerArrow
@@ -61,7 +62,8 @@ NodePickerInput.propTypes = {
   input: PropTypes.object.isRequired,
   max: PropTypes.number.isRequired,
   meta: PropTypes.object.isRequired,
-  min: PropTypes.number.isRequired
+  min: PropTypes.number.isRequired,
+  name: PropTypes.string
 };
 NodePickerInput.defaultProps = {
   min: 0
@@ -86,18 +88,24 @@ PickerArrow.propTypes = {
   onClick: PropTypes.func.isRequired
 };
 
-const NodeCount = ({ children, error }) => {
+const NodeCount = ({ children, name, error }) => {
   const classes = ClassNames({
     'node-count': true,
     'text-danger': error
   });
-  return (
-    <div className={classes} title={error}>
-      {children}
-    </div>
+  return error ? (
+    <OverlayTrigger
+      placement="top"
+      overlay={<Tooltip id={name}>{error}</Tooltip>}
+    >
+      <div className={classes}>{children}</div>
+    </OverlayTrigger>
+  ) : (
+    <div className={classes}>{children}</div>
   );
 };
 NodeCount.propTypes = {
   children: PropTypes.node.isRequired,
-  error: PropTypes.string
+  error: PropTypes.node,
+  name: PropTypes.string
 };

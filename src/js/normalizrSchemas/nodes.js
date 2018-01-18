@@ -14,10 +14,22 @@
  * under the License.
  */
 
-import { Schema } from 'normalizr';
+import { schema } from 'normalizr';
 
-export const nodeSchema = new Schema('nodes', { idAttribute: 'uuid' });
-export const portSchema = new Schema('ports', { idAttribute: 'uuid' });
-export const introspectionStatusSchema = new Schema('introspectionStatuses', {
-  idAttribute: 'uuid'
-});
+export const nodeSchema = new schema.Entity(
+  'nodes',
+  {},
+  { idAttribute: 'uuid' }
+);
+export const portSchema = new schema.Entity(
+  'ports',
+  {},
+  { idAttribute: 'uuid' }
+);
+export const introspectionStatusSchema = new schema.Entity(
+  'introspectionStatuses',
+  {},
+  {
+    idAttribute: 'uuid'
+  }
+);

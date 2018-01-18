@@ -206,7 +206,7 @@ class NodesTableView extends React.Component {
   render() {
     return (
       <div>
-        <Formsy.Form
+        <Formsy
           ref="registeredNodesTableForm"
           role="form"
           className="form"
@@ -243,7 +243,7 @@ class NodesTableView extends React.Component {
             }
             show={this.state.showTagNodesModal}
           />
-        </Formsy.Form>
+        </Formsy>
       </div>
     );
   }

@@ -15,7 +15,7 @@
  */
 
 import ClassNames from 'classnames';
-import Formsy from 'formsy-react';
+import { withFormsy } from 'formsy-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -86,4 +86,4 @@ HorizontalTextarea.defaultProps = {
   rows: 3,
   type: 'text'
 };
-export default Formsy.HOC(HorizontalTextarea);
+export default withFormsy(HorizontalTextarea);

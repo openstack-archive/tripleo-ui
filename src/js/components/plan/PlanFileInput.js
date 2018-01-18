@@ -15,7 +15,7 @@
  */
 
 import ClassNames from 'classnames';
-import Formsy from 'formsy-react';
+import { withFormsy } from 'formsy-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -74,7 +74,7 @@ class PlanFileInput extends React.Component {
           this.setState(
             { progress: Math.round(100 / l * processedFilesCount) },
             () => {
-              // if the last file is processed, setValue -> triggers onChange on Formsy.Form
+              // if the last file is processed, setValue -> triggers onChange on Formsy
               if (processedFilesCount === l) {
                 this.props.setValue(files);
                 this.setState({ progress: 0 });
@@ -185,4 +185,4 @@ PlanFileInput.defaultProps = {
   uploadType: 'tarball'
 };
 
-export default Formsy.HOC(PlanFileInput);
+export default withFormsy(PlanFileInput);
