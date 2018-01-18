@@ -18,6 +18,7 @@ import { FormGroup, InputGroup, MenuItem } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
+import { required } from 'redux-form-validators';
 
 import DropdownSelect from '../reduxForm/DropdownSelect';
 
@@ -39,7 +40,7 @@ class ToolbarFiltersForm extends React.Component {
   renderFilterStringField() {
     return (
       <Field
-        validate={value => (value ? undefined : 'Required')}
+        validate={required()}
         autoComplete="off"
         name="filterString"
         component="input"

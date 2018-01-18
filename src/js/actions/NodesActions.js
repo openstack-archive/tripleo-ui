@@ -15,7 +15,7 @@
  */
 
 import { defineMessages } from 'react-intl';
-import { normalize, arrayOf } from 'normalizr';
+import { normalize } from 'normalizr';
 import when from 'when';
 
 import { getNodesByIds } from '../selectors/nodes';
@@ -93,14 +93,13 @@ export default {
           dispatch(IronicInspectorApiService.getIntrospectionStatuses())
         ])
         .then(response => {
-          const nodes = normalize(response[0].nodes, arrayOf(nodeSchema))
-            .entities.nodes;
-          const ports = normalize(response[1].ports, arrayOf(portSchema))
-            .entities.ports;
-          const introspectionStatuses = normalize(
-            response[2].introspection,
-            arrayOf(introspectionStatusSchema)
-          ).entities.introspectionStatuses;
+          const nodes = normalize(response[0].nodes, [nodeSchema]).entities
+            .nodes;
+          const ports = normalize(response[1].ports, [portSchema]).entities
+            .ports;
+          const introspectionStatuses = normalize(response[2].introspection, [
+            introspectionStatusSchema
+          ]).entities.introspectionStatuses;
           dispatch(this.receiveNodes({ nodes, ports, introspectionStatuses }));
         })
         .catch(error => {

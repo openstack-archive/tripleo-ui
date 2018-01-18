@@ -14,20 +14,26 @@
  * under the License.
  */
 
-import { Schema, arrayOf } from 'normalizr';
+import { schema } from 'normalizr';
 
-export const topicSchema = new Schema('topics', { idAttribute: 'title' });
-export const environmentGroupSchema = new Schema('environmentGroups', {
-  idAttribute: entity => (entity.title ? entity.title : entity.description)
-});
-export const environmentSchema = new Schema('environments', {
-  idAttribute: 'file'
-});
+export const environmentSchema = new schema.Entity(
+  'environments',
+  {},
+  {
+    idAttribute: 'file'
+  }
+);
 
-topicSchema.define({
-  environment_groups: arrayOf(environmentGroupSchema)
-});
+export const environmentGroupSchema = new schema.Entity(
+  'environmentGroups',
+  { environments: [environmentSchema] },
+  {
+    idAttribute: entity => (entity.title ? entity.title : entity.description)
+  }
+);
 
-environmentGroupSchema.define({
-  environments: arrayOf(environmentSchema)
-});
+export const topicSchema = new schema.Entity(
+  'topics',
+  { environment_groups: [environmentGroupSchema] },
+  { idAttribute: 'title' }
+);

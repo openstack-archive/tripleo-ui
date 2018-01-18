@@ -15,7 +15,7 @@
  */
 
 import ClassNames from 'classnames';
-import Formsy from 'formsy-react';
+import { withFormsy } from 'formsy-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -74,4 +74,4 @@ GenericInput.propTypes = {
 GenericInput.defaultProps = {
   type: 'text'
 };
-export default Formsy.HOC(GenericInput);
+export default withFormsy(GenericInput);

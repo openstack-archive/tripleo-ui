@@ -18,6 +18,7 @@ import { Col } from 'react-bootstrap';
 import cx from 'classnames';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { Field } from 'redux-form';
+import { numericality } from 'redux-form-validators';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -25,12 +26,7 @@ import React from 'react';
 import FloatingToolbar from '../ui/FloatingToolbar';
 import Link from '../ui/Link';
 import NodePickerInput from '../ui/reduxForm/NodePickerInput';
-import {
-  maxValue,
-  minValue,
-  number,
-  messages as validationMessages
-} from '../ui/reduxForm/validations';
+import { messages as validationMessages } from '../ui/reduxForm/validationMessages';
 
 const messages = defineMessages({
   nodesAssigned: {
@@ -54,20 +50,17 @@ const RoleCard = ({
   availableNodesCount,
   currentPlanName,
   identifier,
-  intl,
   name,
   title,
   ...rest
 }) => {
   const validations = [
-    maxValue(
-      availableNodesCount,
-      intl.formatMessage(validationMessages.maxValue, {
-        max: availableNodesCount
-      })
-    ),
-    minValue(0, intl.formatMessage(validationMessages.minValue, { min: '0' })),
-    number(intl.formatMessage(validationMessages.number))
+    numericality({ int: true, message: validationMessages.number }),
+    numericality({ '>=': 0, msg: validationMessages.minValue }),
+    numericality({
+      '<=': availableNodesCount,
+      msg: validationMessages.maxValue
+    })
   ];
 
   return (

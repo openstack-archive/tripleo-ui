@@ -15,7 +15,7 @@
  */
 
 import ClassNames from 'classnames';
-import Formsy from 'formsy-react';
+import { withFormsy } from 'formsy-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -83,4 +83,4 @@ HorizontalCheckBox.propTypes = {
 HorizontalCheckBox.defaultProps = {
   type: 'checkbox'
 };
-export default Formsy.HOC(HorizontalCheckBox);
+export default withFormsy(HorizontalCheckBox);

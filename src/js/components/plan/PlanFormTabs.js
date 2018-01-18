@@ -16,7 +16,7 @@
 
 import ClassNames from 'classnames';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import Formsy from 'formsy-react';
+import { addValidationRule } from 'formsy-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -169,7 +169,7 @@ _PlanFormTab.defaultProps = { active: false };
 
 const PlanFormTab = injectIntl(_PlanFormTab);
 
-Formsy.addValidationRule('tarballValidator', values => {
+addValidationRule('tarballValidator', values => {
   let files = values['planFiles'];
   // If only one file was uploaded, it should be a tarball
   if (files !== undefined && files.length === 1) {

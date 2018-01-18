@@ -15,7 +15,7 @@
  */
 
 import { defineMessages } from 'react-intl';
-import { normalize, arrayOf } from 'normalizr';
+import { normalize } from 'normalizr';
 import { startSubmit, stopSubmit } from 'redux-form';
 
 import { handleErrors } from './ErrorActions';
@@ -43,8 +43,7 @@ export default {
         })
       )
         .then(response => {
-          const roles =
-            normalize(response, arrayOf(roleSchema)).entities.roles || {};
+          const roles = normalize(response, [roleSchema]).entities.roles || {};
           dispatch(this.fetchRolesSuccess(roles));
         })
         .catch(error => {
@@ -94,7 +93,7 @@ export default {
       const { formatMessage } = getIntl(getState());
       if (status === 'SUCCESS') {
         const roles =
-          normalize(available_roles, arrayOf(roleSchema)).entities.roles || {};
+          normalize(available_roles, [roleSchema]).entities.roles || {};
         dispatch(this.fetchAvailableRolesSuccess(roles));
       } else {
         dispatch(
@@ -146,7 +145,7 @@ export default {
     return (dispatch, getState) => {
       if (status === 'SUCCESS') {
         const roles =
-          normalize(selected_roles, arrayOf(roleSchema)).entities.roles || {};
+          normalize(selected_roles, [roleSchema]).entities.roles || {};
         dispatch(this.selectRolesSuccess(roles));
         dispatch(stopSubmit('selectRoles'));
         history.push('/plans');

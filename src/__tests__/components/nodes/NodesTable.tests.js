@@ -69,7 +69,7 @@ describe('NodesTable component', () => {
       />
     );
     nodesTableVdom = shallowRenderer.getRenderOutput();
-    nodesTableInstance = shallowRenderer._instance._instance;
+    nodesTableInstance = shallowRenderer._instance;
   });
 
   it('should render with initial state', () => {
@@ -106,7 +106,7 @@ describe('NodesTableRoleCell', () => {
       shallowRenderer.render(
         <NodesTableProfileCell data={nodes.toList().toJS()} rowIndex={0} />
       );
-      roleCellInstance = shallowRenderer._instance._instance;
+      roleCellInstance = shallowRenderer._instance;
       expect(roleCellInstance.getAssignedRoleTitle()).toEqual('compute');
     });
 
@@ -115,7 +115,7 @@ describe('NodesTableRoleCell', () => {
       shallowRenderer.render(
         <NodesTableProfileCell data={nodes.toList().toJS()} rowIndex={1} />
       );
-      roleCellInstance = shallowRenderer._instance._instance;
+      roleCellInstance = shallowRenderer._instance;
       expect(roleCellInstance.getAssignedRoleTitle()).toEqual('-');
     });
   });

@@ -15,7 +15,7 @@
  */
 
 import ClassNames from 'classnames';
-import Formsy from 'formsy-react';
+import { withFormsy } from 'formsy-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -73,4 +73,4 @@ GenericCheckBox.propTypes = {
 GenericCheckBox.defaultProps = {
   type: 'checkbox'
 };
-export default Formsy.HOC(GenericCheckBox);
+export default withFormsy(GenericCheckBox);

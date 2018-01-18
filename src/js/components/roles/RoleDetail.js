@@ -191,7 +191,7 @@ class RoleDetail extends React.Component {
     } = this.props;
     return (
       <RoutedModalPanel redirectPath={`/plans/${currentPlanName}`}>
-        <Formsy.Form
+        <Formsy
           ref="roleParametersForm"
           role="form"
           className="form form-horizontal flex-container"
@@ -252,7 +252,7 @@ class RoleDetail extends React.Component {
               </CloseModalButton>
             </ModalFooter>
           ) : null}
-        </Formsy.Form>
+        </Formsy>
       </RoutedModalPanel>
     );
   }

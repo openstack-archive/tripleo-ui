@@ -14,8 +14,6 @@
  * under the License.
  */
 
-import { Schema } from 'normalizr';
+import { schema } from 'normalizr';
 
-export const workflowExecutionSchema = new Schema('executions', {
-  idAttribute: 'id'
-});
+export const workflowExecutionSchema = new schema.Entity('executions');

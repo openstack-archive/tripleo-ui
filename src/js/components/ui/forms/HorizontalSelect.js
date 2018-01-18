@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import Formsy from 'formsy-react';
+import { withFormsy } from 'formsy-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -72,4 +72,4 @@ HorizontalSelect.defaultProps = {
   inputColumnClasses: 'col-sm-10',
   labelColumnClasses: 'col-sm-2'
 };
-export default Formsy.HOC(HorizontalSelect);
+export default withFormsy(HorizontalSelect);

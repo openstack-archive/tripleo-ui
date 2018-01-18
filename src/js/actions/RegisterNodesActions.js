@@ -15,7 +15,7 @@
  */
 
 import { defineMessages } from 'react-intl';
-import { normalize, arrayOf } from 'normalizr';
+import { normalize } from 'normalizr';
 import { Map } from 'immutable';
 
 import { getCurrentPlanName } from '../selectors/plans';
@@ -60,7 +60,7 @@ export default {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       const registeredNodes =
-        normalize(messagePayload.registered_nodes, arrayOf(nodeSchema)).entities
+        normalize(messagePayload.registered_nodes, [nodeSchema]).entities
           .nodes || Map();
       dispatch(NodesActions.addNodes(registeredNodes));
       // TODO(jtomasek): This should not be needed when workflow returns up to date nodes

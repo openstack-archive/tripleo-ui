@@ -102,7 +102,7 @@ class EditPlan extends React.Component {
 
     return plan ? (
       <RoutedModal bsSize="lg" redirectPath="/plans/manage">
-        <Formsy.Form
+        <Formsy
           ref="EditPlanForm"
           role="form"
           className="form-horizontal"
@@ -149,7 +149,7 @@ class EditPlan extends React.Component {
               <FormattedMessage {...messages.cancel} />
             </CloseModalButton>
           </ModalFooter>
-        </Formsy.Form>
+        </Formsy>
       </RoutedModal>
     ) : (
       <Redirect to="/plans" />

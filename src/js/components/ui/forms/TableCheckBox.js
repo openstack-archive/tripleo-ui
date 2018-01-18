@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import Formsy from 'formsy-react';
+import { withFormsy } from 'formsy-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -50,4 +50,4 @@ TableCheckBox.defaultProps = {
   disabled: false,
   type: 'checkbox'
 };
-export default Formsy.HOC(TableCheckBox);
+export default withFormsy(TableCheckBox);
