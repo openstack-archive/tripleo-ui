@@ -137,7 +137,7 @@ class Login extends React.Component {
               </div>
               <div className="col-sm-7 col-md-6 col-lg-5 login">
                 <FormErrorList errors={formErrors.toJS()} />
-                <Formsy.Form
+                <Formsy
                   ref="form"
                   role="form"
                   className="form-horizontal"
@@ -180,7 +180,7 @@ class Login extends React.Component {
                       </button>
                     </div>
                   </div>
-                </Formsy.Form>
+                </Formsy>
               </div>
               <div className="col-sm-5 col-md-6 col-lg-7 details">
                 <p>

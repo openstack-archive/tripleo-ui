@@ -17,6 +17,7 @@
 require('es6-promise').polyfill(); // https://github.com/webpack/css-loader/issues/144
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const I18nPlugin = require('./src/js/plugins/i18n');
+const path = require('path');
 
 module.exports = {
   entry: __dirname + '/src/js/index.js',
@@ -40,8 +41,7 @@ module.exports = {
       // Javascript
       {
         test: /\.js$/,
-        include: /src/,
-        exclude: /src\/js\/workers/,
+        include: [path.resolve(__dirname, 'src')],
         loader: 'babel-loader'
       },
 

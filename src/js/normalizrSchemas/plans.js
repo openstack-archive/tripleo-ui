@@ -14,6 +14,10 @@
  * under the License.
  */
 
-import { Schema } from 'normalizr';
+import { schema } from 'normalizr';
 
-export const planFileSchema = new Schema('planFiles', { idAttribute: 'name' });
+export const planFileSchema = new schema.Entity(
+  'planFiles',
+  {},
+  { idAttribute: 'name' }
+);

@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { normalize, arrayOf } from 'normalizr';
+import { normalize } from 'normalizr';
 
 import { handleErrors } from './ErrorActions';
 import MistralApiService from '../services/MistralApiService';
@@ -28,7 +28,7 @@ export default {
       return dispatch(MistralApiService.getWorkflowExecutions())
         .then(response => {
           const executions =
-            normalize(response, arrayOf(workflowExecutionSchema)).entities
+            normalize(response, [workflowExecutionSchema]).entities
               .executions || {};
           dispatch(this.fetchWorkflowExecutionsSuccess(executions));
         })

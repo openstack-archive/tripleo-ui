@@ -85,8 +85,10 @@ export const NodeListItem = ({
     }
     leftContent={
       <ListViewIcon
+        className={cx({ running: inProgress })}
         size="sm"
-        icon={cx('pficon pficon-server', { running: inProgress })}
+        type="pf"
+        name="server"
       />
     }
     heading={

@@ -15,7 +15,7 @@
  */
 
 import { defineMessages } from 'react-intl';
-import { normalize, arrayOf } from 'normalizr';
+import { normalize } from 'normalizr';
 import when from 'when';
 import yaml from 'js-yaml';
 
@@ -144,8 +144,7 @@ export default {
       return dispatch(SwiftApiService.getContainer(planName))
         .then(response => {
           const planFiles =
-            normalize(response, arrayOf(planFileSchema)).entities.planFiles ||
-            {};
+            normalize(response, [planFileSchema]).entities.planFiles || {};
           dispatch(this.receivePlan(planName, planFiles));
         })
         .catch(error => {

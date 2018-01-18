@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { normalize, arrayOf } from 'normalizr';
+import { normalize } from 'normalizr';
 
 import { handleErrors } from './ErrorActions';
 import HeatApiService from '../services/HeatApiService';
@@ -47,8 +47,7 @@ export default {
       return dispatch(HeatApiService.getStacks())
         .then(response => {
           const stacks =
-            normalize(response.stacks, arrayOf(stackSchema)).entities.stacks ||
-            {};
+            normalize(response.stacks, [stackSchema]).entities.stacks || {};
           dispatch(this.fetchStacksSuccess(stacks));
         })
         .catch(error => {
@@ -83,7 +82,7 @@ export default {
       dispatch(HeatApiService.getResources(stackName, stackId))
         .then(({ resources }) => {
           const res =
-            normalize(resources, arrayOf(stackResourceSchema)).entities
+            normalize(resources, [stackResourceSchema]).entities
               .stackResources || {};
           dispatch(this.fetchResourcesSuccess(res));
         })

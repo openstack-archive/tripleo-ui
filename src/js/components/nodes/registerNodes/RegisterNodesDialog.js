@@ -28,7 +28,7 @@ import {
 } from 'redux-form';
 import { Button, ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { last, omit } from 'lodash';
+import { hasIn, last, omit } from 'lodash';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -132,7 +132,7 @@ class RegisterNodesDialog extends React.Component {
       <NodeTab
         key={index}
         node={node}
-        invalid={!!this.props.syncErrors.nodes[index]}
+        invalid={hasIn(this.props.syncErrors, ['nodes', index])}
         isActive={this.state.selectedNodeId === node.uuid}
         selectNode={this.selectNode.bind(this, node.uuid)}
         removeNode={this.removeNode.bind(this, node.uuid)}

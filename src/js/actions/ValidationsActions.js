@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { normalize, arrayOf } from 'normalizr';
+import { normalize } from 'normalizr';
 import { omit } from 'lodash';
 
 import { handleErrors } from './ErrorActions';
@@ -33,8 +33,7 @@ export default {
       )
         .then(response => {
           const validations =
-            normalize(response, arrayOf(validationSchema)).entities
-              .validations || {};
+            normalize(response, [validationSchema]).entities.validations || {};
           dispatch(this.fetchValidationsSuccess(validations));
         })
         .catch(error => {
