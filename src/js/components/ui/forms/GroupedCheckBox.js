@@ -15,7 +15,7 @@
  */
 
 import ClassNames from 'classnames';
-import Formsy from 'formsy-react';
+import { withFormsy } from 'formsy-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -75,4 +75,4 @@ GroupedCheckBox.propTypes = {
 GroupedCheckBox.defaultProps = {
   type: 'checkbox'
 };
-export default Formsy.HOC(GroupedCheckBox);
+export default withFormsy(GroupedCheckBox);

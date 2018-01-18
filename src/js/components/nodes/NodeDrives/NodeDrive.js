@@ -69,7 +69,7 @@ const NodeDrive = ({ drive }) => {
   const [driveSize, driveSizeUnit] = formatBytes(drive.size);
   return (
     <ListViewItem
-      leftContent={<ListViewIcon size="sm" icon="pficon pficon-volume" />}
+      leftContent={<ListViewIcon size="sm" type="pf" name="volume" />}
       heading={drive.name}
       description={
         drive.rootDisk && <FormattedMessage {...messages.rootDisk} />

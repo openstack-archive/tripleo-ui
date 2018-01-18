@@ -201,7 +201,7 @@ class Parameters extends React.Component {
 
   render() {
     return (
-      <Formsy.Form
+      <Formsy
         ref="parameterConfigurationForm"
         role="form"
         className="form form-horizontal"
@@ -262,7 +262,7 @@ class Parameters extends React.Component {
             <FormattedMessage {...messages.cancel} />
           </CloseModalButton>
         </div>
-      </Formsy.Form>
+      </Formsy>
     );
   }
 }

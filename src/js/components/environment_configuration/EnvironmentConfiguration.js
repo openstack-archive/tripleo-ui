@@ -17,7 +17,7 @@
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import Formsy from 'formsy-react';
+import Formsy, { addValidationRule } from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -180,7 +180,7 @@ class EnvironmentConfiguration extends React.Component {
       });
 
     return (
-      <Formsy.Form
+      <Formsy
         ref="environmentConfigurationForm"
         role="form"
         className="form"
@@ -233,7 +233,7 @@ class EnvironmentConfiguration extends React.Component {
             <FormattedMessage {...messages.cancel} />
           </CloseModalButton>
         </div>
-      </Formsy.Form>
+      </Formsy>
     );
   }
 }
@@ -294,7 +294,7 @@ export default injectIntl(
  * Invalidates input if it is selected and environment it requires is not.
  * example: validations="requiredEnvironments:['some_environment.yaml']"
  */
-Formsy.addValidationRule('requiredEnvironments', function(
+addValidationRule('requiredEnvironments', function(
   values,
   value,
   requiredEnvironmentFieldNames

@@ -69,7 +69,7 @@ describe('DataTable component', () => {
       </DataTable.WrappedComponent>
     );
     DataTableVdom = shallowRenderer.getRenderOutput();
-    DataTableInstance = shallowRenderer._instance._instance;
+    DataTableInstance = shallowRenderer._instance;
   });
 
   it('should render correctly', () => {

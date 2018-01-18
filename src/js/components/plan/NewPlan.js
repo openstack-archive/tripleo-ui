@@ -101,7 +101,7 @@ class NewPlan extends React.Component {
         id="NewPlan__modal"
         redirectPath="/plans/manage"
       >
-        <Formsy.Form
+        <Formsy
           ref="NewPlanForm"
           role="form"
           className="form-horizontal"
@@ -144,7 +144,7 @@ class NewPlan extends React.Component {
               <FormattedMessage {...messages.cancel} />
             </CloseModalButton>
           </ModalFooter>
-        </Formsy.Form>
+        </Formsy>
       </RoutedModal>
     );
   }

@@ -15,7 +15,7 @@
  */
 
 import { defineMessages } from 'react-intl';
-import { normalize, arrayOf } from 'normalizr';
+import { normalize } from 'normalizr';
 import yaml from 'js-yaml';
 
 import EnvironmentConfigurationConstants from '../constants/EnvironmentConfigurationConstants';
@@ -48,8 +48,7 @@ export default {
         })
       )
         .then(response => {
-          const entities =
-            normalize(response, arrayOf(topicSchema)).entities || {};
+          const entities = normalize(response, [topicSchema]).entities || {};
           dispatch(this.fetchEnvironmentConfigurationSuccess(entities));
         })
         .catch(error => {

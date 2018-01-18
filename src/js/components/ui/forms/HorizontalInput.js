@@ -15,7 +15,7 @@
  */
 
 import ClassNames from 'classnames';
-import Formsy from 'formsy-react';
+import { withFormsy } from 'formsy-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -98,4 +98,4 @@ HorizontalInput.defaultProps = {
   labelColumnClasses: 'col-sm-2',
   type: 'text'
 };
-export default Formsy.HOC(HorizontalInput);
+export default withFormsy(HorizontalInput);

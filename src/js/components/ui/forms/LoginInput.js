@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import Formsy from 'formsy-react';
+import { withFormsy } from 'formsy-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -66,4 +66,4 @@ LoginInput.defaultProps = {
   autoFocus: false,
   type: 'text'
 };
-export default Formsy.HOC(LoginInput);
+export default withFormsy(LoginInput);

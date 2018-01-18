@@ -15,7 +15,8 @@
  */
 
 import { defineMessages } from 'react-intl';
-import { normalize, arrayOf } from 'normalizr';
+import { normalize } from 'normalizr';
+import { startSubmit, stopSubmit } from 'redux-form';
 
 import { handleErrors } from './ErrorActions';
 import RolesConstants from '../constants/RolesConstants';
@@ -42,8 +43,7 @@ export default {
         })
       )
         .then(response => {
-          const roles =
-            normalize(response, arrayOf(roleSchema)).entities.roles || {};
+          const roles = normalize(response, [roleSchema]).entities.roles || {};
           dispatch(this.fetchRolesSuccess(roles));
         })
         .catch(error => {
@@ -93,7 +93,7 @@ export default {
       const { formatMessage } = getIntl(getState());
       if (status === 'SUCCESS') {
         const roles =
-          normalize(available_roles, arrayOf(roleSchema)).entities.roles || {};
+          normalize(available_roles, [roleSchema]).entities.roles || {};
         dispatch(this.fetchAvailableRolesSuccess(roles));
       } else {
         dispatch(
@@ -121,6 +121,48 @@ export default {
   fetchAvailableRolesFailed() {
     return {
       type: RolesConstants.FETCH_AVAILABLE_ROLES_FAILED
+    };
+  },
+
+  selectRoles(planName, roleNames) {
+    return (dispatch, getState) => {
+      dispatch(startSubmit('selectRoles'));
+      dispatch(
+        MistralApiService.runWorkflow(MistralConstants.SELECT_ROLES, {
+          container: planName,
+          role_names: roleNames
+        })
+      ).catch(error => {
+        const { name, message } = error;
+        dispatch(
+          stopSubmit('selectRoles', { _error: { title: name, message } })
+        );
+      });
+    };
+  },
+
+  selectRolesFinished({ selected_roles, message, status, ...rest }, history) {
+    return (dispatch, getState) => {
+      if (status === 'SUCCESS') {
+        const roles =
+          normalize(selected_roles, [roleSchema]).entities.roles || {};
+        dispatch(this.selectRolesSuccess(roles));
+        dispatch(stopSubmit('selectRoles'));
+        history.push('/plans');
+      } else {
+        dispatch(
+          stopSubmit('selectRoles', {
+            _error: { message: message.message || message }
+          })
+        );
+      }
+    };
+  },
+
+  selectRolesSuccess(roles) {
+    return {
+      type: RolesConstants.SELECT_ROLES_SUCCESS,
+      payload: roles
     };
   }
 };

@@ -120,7 +120,7 @@ class TagNodesForm extends React.Component {
   render() {
     const { intl: { formatMessage }, onCancel, roles } = this.props;
     return (
-      <Formsy.Form
+      <Formsy
         ref="tagNodesForm"
         className="form form-horizontal"
         onChange={this.checkSelectedProfile.bind(this)}
@@ -188,7 +188,7 @@ class TagNodesForm extends React.Component {
             <FormattedMessage {...messages.cancel} />
           </button>
         </div>
-      </Formsy.Form>
+      </Formsy>
     );
   }
 }
