@@ -41,59 +41,50 @@ const messages = defineMessages({
   }
 });
 
-class DeploymentConfiguration extends React.Component {
-  constructor() {
-    super();
-    this.state = { show: true };
-  }
-  render() {
-    const { location, match } = this.props;
-    return (
-      <RoutedModal
-        id="DeploymentConfiguration__ModalDialog"
-        bsSize="xl"
-        redirectPath={`/plans/${match.params.planName}`}
+const DeploymentConfiguration = ({ location, match }) => (
+  <RoutedModal
+    id="DeploymentConfiguration__ModalDialog"
+    bsSize="xl"
+    redirectPath={`/plans/${match.params.planName}`}
+  >
+    <ModalHeader>
+      <CloseModalXButton />
+      <ModalTitle>
+        <FormattedMessage {...messages.deploymentConfiguration} />
+      </ModalTitle>
+    </ModalHeader>
+
+    <ul className="nav nav-tabs">
+      <NavTab
+        id="DeploymentConfiguration__OverallSettingsTab"
+        to={`${match.url}/environment`}
       >
-        <ModalHeader>
-          <CloseModalXButton />
-          <ModalTitle>
-            <FormattedMessage {...messages.deploymentConfiguration} />
-          </ModalTitle>
-        </ModalHeader>
+        <FormattedMessage {...messages.overallSettings} />
+      </NavTab>
+      <NavTab
+        id="DeploymentConfiguration__ParametersTab"
+        to={`${match.url}/parameters`}
+      >
+        <FormattedMessage {...messages.parameters} />
+      </NavTab>
+    </ul>
 
-        <ul className="nav nav-tabs">
-          <NavTab
-            id="DeploymentConfiguration__OverallSettingsTab"
-            to={`${match.url}/environment`}
-          >
-            <FormattedMessage {...messages.overallSettings} />
-          </NavTab>
-          <NavTab
-            id="DeploymentConfiguration__ParametersTab"
-            to={`${match.url}/parameters`}
-          >
-            <FormattedMessage {...messages.parameters} />
-          </NavTab>
-        </ul>
-
-        <Switch location={location}>
-          <Route
-            path="/plans/:planName/configuration/environment"
-            component={EnvironmentConfiguration}
-          />
-          <Route
-            path="/plans/:planName/configuration/parameters"
-            component={Parameters}
-          />
-          <Redirect
-            from="/plans/:planName/configuration"
-            to={`${match.url}/environment`}
-          />
-        </Switch>
-      </RoutedModal>
-    );
-  }
-}
+    <Switch location={location}>
+      <Route
+        path="/plans/:planName/configuration/environment"
+        component={EnvironmentConfiguration}
+      />
+      <Route
+        path="/plans/:planName/configuration/parameters"
+        component={Parameters}
+      />
+      <Redirect
+        from="/plans/:planName/configuration"
+        to={`${match.url}/environment`}
+      />
+    </Switch>
+  </RoutedModal>
+);
 DeploymentConfiguration.propTypes = {
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired

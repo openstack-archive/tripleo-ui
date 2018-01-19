@@ -15,53 +15,28 @@
  */
 
 import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import Formsy from 'formsy-react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { isObjectLike, mapValues } from 'lodash';
-import { fromJS, is } from 'immutable';
+import { pickBy, isEqual, mapValues } from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CloseModalButton } from '../ui/Modals';
 import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentParameters from './EnvironmentParameters';
 import { getCurrentPlanName } from '../../selectors/plans';
 import { getRootParameters } from '../../selectors/parameters';
 import { getEnabledEnvironments } from '../../selectors/environmentConfiguration';
 import { Loader } from '../ui/Loader';
-import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import ParametersActions from '../../actions/ParametersActions';
-import ParameterInputList from './ParameterInputList';
-import Tab from '../ui/Tab';
+import ParametersForm from './ParametersForm';
+import ParameterInputList from './NewParameterInputList';
+import ParametersSidebar from './ParametersSidebar';
 import TabPane from '../ui/TabPane';
-
-const messages = defineMessages({
-  saveChanges: {
-    id: 'Parameters.saveChanges',
-    defaultMessage: 'Save Changes'
-  },
-  saveAndClose: {
-    id: 'Parameters.saveAndClose',
-    defaultMessage: 'Save And Close'
-  },
-  cancel: {
-    id: 'Parameters.cancel',
-    defaultMessage: 'Cancel'
-  },
-  general: {
-    id: 'Parameters.general',
-    defaultMessage: 'General'
-  }
-});
 
 class Parameters extends React.Component {
   constructor() {
     super();
     this.state = {
-      canSubmit: false,
-      closeOnSubmit: false,
-      selectedTab: 'general'
+      activeTab: 'general'
     };
   }
 
@@ -70,116 +45,23 @@ class Parameters extends React.Component {
       currentPlanName,
       fetchEnvironmentConfiguration,
       fetchParameters,
+      history,
       isFetchingParameters
     } = this.props;
-    fetchEnvironmentConfiguration(currentPlanName);
+    fetchEnvironmentConfiguration(currentPlanName, () =>
+      history.push(`/plans/${currentPlanName}`)
+    );
     !isFetchingParameters && fetchParameters(currentPlanName);
   }
 
-  componentDidUpdate() {
-    this.invalidateForm(this.props.formFieldErrors.toJS());
-  }
-
-  enableButton() {
-    this.setState({ canSubmit: true });
-  }
-
-  disableButton() {
-    this.setState({ canSubmit: false });
-  }
-
-  /**
-   * Filter out non updated parameters, so only parameters which have been actually changed
-   * get sent to updateparameters
-   */
-  _filterFormData(formData) {
-    return fromJS(formData)
-      .filterNot((value, key) => {
-        return is(fromJS(this.props.allParameters.get(key).default), value);
-      })
-      .toJS();
-  }
-
-  /**
-   * Json parameter values are sent as string, this function parses them and checks if they're object
-   * or array. Also, parameters with undefined value are set to null
-   */
-  _jsonParseFormData(formData) {
-    return mapValues(formData, value => {
-      try {
-        const parsedValue = JSON.parse(value);
-        if (isObjectLike(parsedValue)) {
-          return parsedValue;
-        }
-        return value;
-      } catch (e) {
-        return value === undefined ? null : value;
-      }
-    });
-  }
-
-  invalidateForm(formFieldErrors) {
-    this.refs.parameterConfigurationForm.updateInputsWithError(formFieldErrors);
-  }
-
-  handleSubmit(formData, resetForm, invalidateForm) {
-    this.disableButton();
-
-    this.props.updateParameters(
-      this.props.currentPlanName,
-      this._filterFormData(this._jsonParseFormData(formData)),
-      Object.keys(this.refs.parameterConfigurationForm.inputs)
-    );
-
-    if (this.state.closeOnSubmit) {
-      this.setState({
-        closeOnSubmit: false
-      });
-
-      this.props.history.push(`/plans/${this.props.currentPlanName}`);
-    }
-  }
-
-  onSubmitAndClose() {
-    this.setState(
-      {
-        closeOnSubmit: true
-      },
-      this.refs.parameterConfigurationForm.submit
-    );
-  }
-
-  selectTab(tabName) {
-    this.setState({
-      selectedTab: tabName
-    });
-  }
-
-  renderTabs() {
-    return this.props.enabledEnvironments.toList().map(environment => {
-      return (
-        <Tab
-          key={environment.file}
-          title={environment.description}
-          isActive={environment.file === this.state.selectedTab}
-        >
-          <a
-            className="link"
-            onClick={this.selectTab.bind(this, environment.file)}
-          >
-            {environment.title}
-          </a>
-        </Tab>
-      );
-    });
-  }
+  isTabActive = tabName => tabName === this.state.activeTab;
 
   renderTabPanes() {
-    if (this.state.selectedTab === 'general') {
+    if (this.state.activeTab === 'general') {
       return (
         <TabPane isActive>
           <ParameterInputList
-            parameters={this.props.parameters.toList()}
+            parameters={this.props.rootParameters.toList()}
             mistralParameters={this.props.mistralParameters}
           />
         </TabPane>
@@ -188,7 +70,7 @@ class Parameters extends React.Component {
       return this.props.enabledEnvironments.toList().map(environment => {
         return (
           <TabPane
-            isActive={this.state.selectedTab === environment.file}
+            isActive={this.state.activeTab === environment.file}
             key={environment.file}
             renderOnlyActive
           >
@@ -199,75 +81,99 @@ class Parameters extends React.Component {
     }
   }
 
+  /**
+   * Filter out non updated parameters, so only parameters which have been actually changed
+   * get sent to updateparameters
+   */
+  _filterFormData(values, initialValues) {
+    return pickBy(values, (value, key) => !isEqual(value, initialValues[key]));
+  }
+
+  /**
+   * Json parameter values are sent as string, this function parses them and checks if they're object
+   * or array. Also, parameters with undefined value are set to null
+   */
+  _parseJsonTypeValues(values, parameters) {
+    return mapValues(values, (value, key) => {
+      if (parameters.get(key).type.toLowerCase() === 'json') {
+        try {
+          return JSON.parse(value);
+        } catch (e) {
+          return value === undefined ? null : value;
+        }
+      }
+      return value === undefined ? null : value;
+    });
+  }
+
+  handleSubmit = ({ saveAndClose, ...values }, dispatch, { initialValues }) => {
+    const {
+      currentPlanName,
+      history,
+      parameters,
+      updateParameters
+    } = this.props;
+    const updatedValues = this._parseJsonTypeValues(
+      this._filterFormData(values, initialValues),
+      parameters
+    );
+    updateParameters(
+      currentPlanName,
+      updatedValues,
+      saveAndClose && history.push.bind(this, `/plans/${currentPlanName}`)
+    );
+  };
+
+  _convertJsonTypeParameterValueToString(value) {
+    // Heat defaults empty values to empty string also some JSON type parameters
+    // accept empty string as valid value
+    return ['', undefined].includes(value) ? '' : JSON.stringify(value);
+  }
+
+  getFormInitialValues() {
+    return this.props.parameters
+      .map(p => {
+        const value = p.value === undefined ? p.default : p.value;
+        if (p.type.toLowerCase() === 'json') {
+          return this._convertJsonTypeParameterValueToString(value);
+        } else {
+          return value;
+        }
+      })
+      .toJS();
+  }
+
   render() {
+    const { enabledEnvironments, parameters, parametersLoaded } = this.props;
     return (
-      <Formsy
-        ref="parameterConfigurationForm"
-        role="form"
-        className="form form-horizontal"
-        onSubmit={this.handleSubmit.bind(this)}
-        onValid={this.enableButton.bind(this)}
-        onInvalid={this.disableButton.bind(this)}
+      <Loader
+        height={120}
+        content="Fetching Parameters..."
+        loaded={parametersLoaded}
       >
-        <div className="container-fluid">
-          <div className="row row-eq-height">
-            <div className="col-sm-4 sidebar-pf sidebar-pf-left">
-              <ul className="nav nav-pills nav-stacked nav-arrows">
-                <Tab
-                  key="general"
-                  title={this.props.intl.formatMessage(messages.general)}
-                  isActive={'general' === this.state.selectedTab}
-                >
-                  <a
-                    className="link"
-                    onClick={this.selectTab.bind(this, 'general')}
-                  >
-                    <FormattedMessage {...messages.general} />
-                  </a>
-                </Tab>
-                <li className="spacer" />
-                {this.renderTabs()}
-              </ul>
-            </div>
-            <div className="col-sm-8">
-              <Loader
-                height={120}
-                content="Fetching Parameters..."
-                loaded={this.props.parametersLoaded}
-              >
-                <ModalFormErrorList errors={this.props.formErrors.toJS()} />
+        <ParametersForm
+          onSubmit={this.handleSubmit}
+          parameters={parameters}
+          initialValues={this.getFormInitialValues()}
+        >
+          <div className="container-fluid">
+            <div className="row row-eq-height">
+              <ParametersSidebar
+                activateTab={tabName => this.setState({ activeTab: tabName })}
+                enabledEnvironments={enabledEnvironments.toList()}
+                isTabActive={this.isTabActive}
+              />
+              <div className="col-sm-8">
                 <div className="tab-content">{this.renderTabPanes()}</div>
-              </Loader>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="modal-footer">
-          <button
-            type="submit"
-            disabled={!this.state.canSubmit}
-            className="btn btn-primary"
-          >
-            <FormattedMessage {...messages.saveChanges} />
-          </button>
-          <button
-            type="button"
-            disabled={!this.state.canSubmit}
-            onClick={this.onSubmitAndClose.bind(this)}
-            className="btn btn-default"
-          >
-            <FormattedMessage {...messages.saveAndClose} />
-          </button>
-          <CloseModalButton>
-            <FormattedMessage {...messages.cancel} />
-          </CloseModalButton>
-        </div>
-      </Formsy>
+        </ParametersForm>
+      </Loader>
     );
   }
 }
 Parameters.propTypes = {
-  allParameters: ImmutablePropTypes.map.isRequired,
   currentPlanName: PropTypes.string,
   enabledEnvironments: ImmutablePropTypes.map.isRequired,
   fetchEnvironmentConfiguration: PropTypes.func.isRequired,
@@ -280,12 +186,13 @@ Parameters.propTypes = {
   mistralParameters: ImmutablePropTypes.map.isRequired,
   parameters: ImmutablePropTypes.map.isRequired,
   parametersLoaded: PropTypes.bool,
+  rootParameters: ImmutablePropTypes.map.isRequired,
   updateParameters: PropTypes.func
 };
 
 function mapStateToProps(state, ownProps) {
   return {
-    allParameters: state.parameters.parameters,
+    parameters: state.parameters.parameters,
     enabledEnvironments: getEnabledEnvironments(state),
     form: state.parameters.form,
     formErrors: state.parameters.form.get('formErrors'),
@@ -293,7 +200,7 @@ function mapStateToProps(state, ownProps) {
     currentPlanName: getCurrentPlanName(state),
     isFetchingParameters: state.parameters.isFetching,
     mistralParameters: state.parameters.mistralParameters,
-    parameters: getRootParameters(state),
+    rootParameters: getRootParameters(state),
     parametersLoaded: state.parameters.loaded
   };
 }
@@ -315,19 +222,12 @@ function mapDispatchToProps(dispatch, ownProps) {
         )
       );
     },
-    updateParameters: (currentPlanName, data, inputFields, redirect) => {
+    updateParameters: (currentPlanName, data, redirect) => {
       dispatch(
-        ParametersActions.updateParameters(
-          currentPlanName,
-          data,
-          inputFields,
-          redirect
-        )
+        ParametersActions.updateParameters(currentPlanName, data, redirect)
       );
     }
   };
 }
 
-export default injectIntl(
-  connect(mapStateToProps, mapDispatchToProps)(Parameters)
-);
+export default connect(mapStateToProps, mapDispatchToProps)(Parameters);
