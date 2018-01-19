@@ -115,20 +115,13 @@ describe('ParametersActions', () => {
             }
           );
           expect(store.getActions()).toEqual([
-            ReduxFormActions.startSubmit('nodesAssignment'),
-            ParametersActions.updateParametersPending(),
-            ReduxFormActions.stopSubmit('nodesAssignment', {
+            ReduxFormActions.startSubmit('parametersForm'),
+            ReduxFormActions.stopSubmit('parametersForm', {
               _error: {
                 title: 'Parameters could not be updated',
                 message: error.message
               }
-            }),
-            ParametersActions.updateParametersFailed([
-              {
-                title: 'Parameters could not be updated',
-                message: error.message
-              }
-            ])
+            })
           ]);
         });
     });
