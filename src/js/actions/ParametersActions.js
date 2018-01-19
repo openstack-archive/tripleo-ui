@@ -28,6 +28,10 @@ const messages = defineMessages({
     id: 'ParametersActions.parametersUpdatedNotficationTitle',
     defaultMessage: 'Parameters updated'
   },
+  updateParametersFailed: {
+    id: 'ParametersActions.updateParametersFailed',
+    defaultMessage: 'Parameters could not be updated'
+  },
   parametersUpdatedNotficationMessage: {
     id: 'ParametersActions.parametersUpdatedNotficationMessage',
     defaultMessage: 'The Deployment parameters have been successfully updated.'
@@ -108,7 +112,45 @@ export default {
     };
   },
 
-  updateParameters(planName, data, inputFieldNames, redirect) {
+  updateRoleParameters(planName, data, inputFieldNames, redirect) {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
+      dispatch(this.updateParametersPending());
+      return dispatch(
+        MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE, {
+          container: planName,
+          parameters: data
+        })
+      )
+        .then(response => {
+          dispatch(this.updateParametersSuccess(data));
+          dispatch(
+            NotificationActions.notify({
+              title: formatMessage(messages.parametersUpdatedNotficationTitle),
+              message: formatMessage(
+                messages.parametersUpdatedNotficationMessage
+              ),
+              type: 'success'
+            })
+          );
+          if (redirect) {
+            redirect();
+          }
+        })
+        .catch(error => {
+          dispatch(
+            this.updateParametersFailed([
+              {
+                title: formatMessage(messages.updateParametersFailed),
+                message: error.message
+              }
+            ])
+          );
+        });
+    };
+  },
+
+  updateNodesAssignment(planName, data) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(startSubmit('nodesAssignment'));
@@ -131,22 +173,19 @@ export default {
               type: 'success'
             })
           );
-          if (redirect) {
-            redirect();
-          }
         })
         .catch(error => {
           dispatch(
             handleErrors(
               error,
-              'Deployment parameters could not be updated',
+              formatMessage(messages.updateParametersFailed),
               false
             )
           );
           dispatch(
             stopSubmit('nodesAssignment', {
               _error: {
-                title: 'Parameters could not be updated',
+                title: formatMessage(messages.updateParametersFailed),
                 message: error.message
               }
             })
@@ -154,10 +193,40 @@ export default {
           dispatch(
             this.updateParametersFailed([
               {
-                title: 'Parameters could not be updated',
+                title: formatMessage(messages.updateParametersFailed),
                 message: error.message
               }
             ])
+          );
+        });
+    };
+  },
+
+  updateParameters(planName, data, redirect) {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
+      dispatch(startSubmit('parametersForm'));
+      return dispatch(
+        MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE, {
+          container: planName,
+          parameters: data
+        })
+      )
+        .then(response => {
+          dispatch(this.updateParametersSuccess(data));
+          dispatch(stopSubmit('parametersForm'));
+          if (redirect) {
+            redirect();
+          }
+        })
+        .catch(error => {
+          dispatch(
+            stopSubmit('parametersForm', {
+              _error: {
+                title: formatMessage(messages.updateParametersFailed),
+                message: error.message
+              }
+            })
           );
         });
     };

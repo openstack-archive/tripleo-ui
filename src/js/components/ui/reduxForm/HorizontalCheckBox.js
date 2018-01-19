@@ -17,7 +17,7 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Checkbox, Col, FormGroup } from 'react-bootstrap';
+import { Checkbox, Col, ControlLabel, FormGroup } from 'react-bootstrap';
 
 import { getValidationState, InputDescription, InputMessage } from './utils';
 
@@ -35,10 +35,15 @@ const HorizontalCheckBox = ({
 }) => {
   return (
     <FormGroup controlId={id} validationState={getValidationState(meta)}>
-      <Col smOffset={labelColumns} sm={inputColumns}>
-        <Checkbox {...input} {...rest}>
-          <span className={cx({ 'required-pf': required })}>{label}</span>
-        </Checkbox>
+      <Col
+        componentClass={ControlLabel}
+        sm={labelColumns}
+        className={cx({ 'required-pf': required })}
+      >
+        {label}
+      </Col>
+      <Col sm={inputColumns}>
+        <Checkbox {...input} {...rest} />
         <InputMessage {...meta} />
         <InputDescription description={description} />
       </Col>

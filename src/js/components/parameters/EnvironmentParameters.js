@@ -25,7 +25,7 @@ import { getEnvironmentParameters } from '../../selectors/parameters';
 import { getEnvironment } from '../../selectors/environmentConfiguration';
 import InlineNotification from '../ui/InlineNotification';
 import { Loader } from '../ui/Loader';
-import ParameterInputList from './ParameterInputList';
+import ParameterInputList from './NewParameterInputList';
 
 class EnvironmentParameters extends React.Component {
   componentDidMount() {
@@ -41,7 +41,7 @@ class EnvironmentParameters extends React.Component {
       <Loader
         height={120}
         loaded={!isFetchingEnvironment}
-        content="Fetching Parameters..."
+        content="Loading configuration..."
       >
         {environmentError ? (
           <fieldset>
@@ -70,7 +70,6 @@ function mapStateToProps(state, ownProps) {
     currentPlanName: getCurrentPlanName(state),
     environmentError: getEnvironment(state, ownProps.environment).error,
     parameters: getEnvironmentParameters(state, ownProps.environment),
-    parametersLoaded: state.parameters.loaded,
     isFetchingEnvironment: getEnvironment(state, ownProps.environment)
       .isFetching
   };
