@@ -294,7 +294,7 @@ function mapDispatchToProps(dispatch) {
     },
     updateParameters: (currentPlanName, data, inputFields, redirectPath) => {
       dispatch(
-        ParametersActions.updateParameters(
+        ParametersActions.updateRoleParameters(
           currentPlanName,
           data,
           inputFields,
