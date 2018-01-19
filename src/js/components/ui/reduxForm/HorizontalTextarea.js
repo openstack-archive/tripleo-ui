@@ -31,24 +31,22 @@ const HorizontalTextarea = ({
   meta,
   required,
   ...rest
-}) => {
-  return (
-    <FormGroup controlId={id} validationState={getValidationState(meta)}>
-      <Col
-        componentClass={ControlLabel}
-        sm={labelColumns}
-        className={cx({ 'required-pf': required })}
-      >
-        {label}
-      </Col>
-      <Col sm={inputColumns}>
-        <FormControl componentClass="textarea" {...input} {...rest} />
-        <InputMessage {...meta} />
-        <InputDescription description={description} />
-      </Col>
-    </FormGroup>
-  );
-};
+}) => (
+  <FormGroup controlId={id} validationState={getValidationState(meta)}>
+    <Col
+      componentClass={ControlLabel}
+      sm={labelColumns}
+      className={cx({ 'required-pf': required })}
+    >
+      {label}
+    </Col>
+    <Col sm={inputColumns}>
+      <FormControl componentClass="textarea" {...input} {...rest} />
+      <InputMessage {...meta} />
+      <InputDescription description={description} />
+    </Col>
+  </FormGroup>
+);
 HorizontalTextarea.propTypes = {
   description: PropTypes.node,
   id: PropTypes.string.isRequired,
