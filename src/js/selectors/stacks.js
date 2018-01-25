@@ -18,6 +18,7 @@ import { createSelector } from 'reselect';
 import { Map } from 'immutable';
 
 import { Stack } from '../immutableRecords/stacks';
+import { stackStates } from '../constants/StacksConstants';
 import { getCurrentPlanName } from './plans';
 
 const stacksSelector = state => state.stacks.stacks;
@@ -41,10 +42,11 @@ export const getCurrentStack = createSelector(
 export const getCurrentStackDeploymentInProgress = createSelector(
   [stacksSelector, getCurrentPlanName],
   (stacks, currentPlanName) => {
-    return (
-      stacks.get(currentPlanName, new Stack()).stack_status ===
-      'CREATE_IN_PROGRESS'
-    );
+    return [
+      stackStates.CREATE_IN_PROGRESS,
+      stackStates.UPDATE_IN_PROGRESS,
+      stackStates.DELETE_IN_PROGRESS
+    ].includes(stacks.get(currentPlanName, new Stack()).stack_status);
   }
 );
 
