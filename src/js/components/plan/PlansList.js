@@ -73,7 +73,11 @@ class PlansList extends React.Component {
         <PageHeader>
           <FormattedMessage {...messages.plans} />
           <div className="pull-right">
-            <Link to="/plans/manage/new" className="btn btn-primary">
+            <Link
+              to="/plans/manage/new"
+              className="btn btn-primary"
+              id="ListPlans__importPlanButton"
+            >
               <span className="fa fa-plus" />&nbsp;
               <FormattedMessage {...messages.importPlan} />
             </Link>

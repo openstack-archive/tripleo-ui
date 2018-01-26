@@ -50,7 +50,10 @@ const PlanActions = ({ planName, stack }) => {
       return null;
     }
     return (
-      <MenuItemLink to={`/plans/manage/${planName}/edit`}>
+      <MenuItemLink
+        to={`/plans/manage/${planName}/edit`}
+        className="ListPlans__editPlan"
+      >
         <FormattedMessage {...messages.edit} />
       </MenuItemLink>
     );
@@ -60,11 +63,17 @@ const PlanActions = ({ planName, stack }) => {
     <div className="pull-right">
       <DropdownKebab id={`card-actions-${planName}`} pullRight>
         {renderEditAction()}
-        <MenuItemLink to={`/plans/manage/${planName}/export`}>
+        <MenuItemLink
+          to={`/plans/manage/${planName}/export`}
+          className="ListPlans__exportPlan"
+        >
           <FormattedMessage {...messages.export} />
         </MenuItemLink>
         {!stack && (
-          <MenuItemLink to={`/plans/manage/${planName}/delete`}>
+          <MenuItemLink
+            to={`/plans/manage/${planName}/delete`}
+            className="ListPlans__deletePlan"
+          >
             <FormattedMessage {...messages.delete} />
           </MenuItemLink>
         )}
