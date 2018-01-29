@@ -17,8 +17,9 @@
 import ExtendableError from 'es6-error';
 
 class BaseAxiosError extends ExtendableError {
-  constructor(message, e) {
+  constructor(name, message, e) {
     super(message);
+    this.name = name; // name is set explicitly otherwise it gets mangled in minification
     this.config = e.config;
     this.request = e.request;
     this.response = e.response;
@@ -27,25 +28,30 @@ class BaseAxiosError extends ExtendableError {
 
 class AuthenticationError extends BaseAxiosError {
   constructor(e) {
-    super('Authentication failed, please log in again', e);
+    super(
+      'AuthenticationError',
+      'Authentication failed, please log in again',
+      e
+    );
   }
 }
 
 class ConnectionError extends BaseAxiosError {
   constructor(message, e) {
-    super(message, e);
+    super('ConnectionError', message, e);
   }
 }
 
 class MistralApiError extends BaseAxiosError {
   constructor(e) {
-    super(e.response.data.faultstring, e);
+    super('MistralApiError', e.response.data.faultstring, e);
   }
 }
 
 class MistralExecutionError extends ExtendableError {
   constructor(response) {
     super(response.data.output);
+    this.name = 'MistralExecutionError';
     this.response = response;
   }
 }
@@ -55,26 +61,26 @@ class SwiftApiError extends BaseAxiosError {}
 class IronicApiError extends BaseAxiosError {
   constructor(e) {
     const message = JSON.parse(e.response.data.error_message);
-    super(message.faultstring, e);
+    super('IronicApiError', message.faultstring, e);
   }
 }
 
 class IronicInspectorApiError extends BaseAxiosError {
   constructor(e) {
-    super(e.response.data.error.message, e);
+    super('IronicInspectorApiError', e.response.data.error.message, e);
   }
 }
 
 class HeatApiError extends BaseAxiosError {
   constructor(e) {
     const { data } = e.response;
-    super(data.message || data.error.message, e);
+    super('HeatApiError', data.message || data.error.message, e);
   }
 }
 
 class KeystoneApiError extends BaseAxiosError {
   constructor(e) {
-    super(e.response.data.error.message, e);
+    super('KeystoneApiError', e.response.data.error.message, e);
   }
 }
 
