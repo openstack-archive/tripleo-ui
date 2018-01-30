@@ -1,0 +1,45 @@
+- project:
+    check:
+      jobs:
+        - nodejs-npm-run-lint:
+            branches: master
+            vars:
+              node_version: 8
+        - nodejs-npm-run-test:
+            branches: master
+            vars:
+              node_version: 8
+        - nodejs-npm-run-lint:
+            branches: stable/pike
+            vars:
+              node_version: 6
+        - nodejs-npm-run-test:
+            branches: stable/pike
+            vars:
+              node_version: 6
+        - build-javascript-tarball:
+            files:
+              - npm-shrinkwrap.json
+              - package.json
+    gate:
+      jobs:
+        - nodejs-npm-run-lint:
+            branches: master
+            vars:
+              node_version: 8
+        - nodejs-npm-run-test:
+            branches: master
+            vars:
+              node_version: 8
+        - nodejs-npm-run-lint:
+            branches: stable/pike
+            vars:
+              node_version: 6
+        - nodejs-npm-run-test:
+            branches: stable/pike
+            vars:
+              node_version: 6
+        - build-javascript-tarball:
+            files:
+              - npm-shrinkwrap.json
+              - package.json
