@@ -63,11 +63,11 @@ const messages = defineMessages({
   },
   customProfileDescription: {
     id: 'TagNodesForm.customProfileDescription',
-    defaultMessage: 'Lowercase with dashes as a separator. E.g. "block-storage"'
+    defaultMessage: 'Lowercase alphanumeric characters with hyphen as a separator. E.g. "block-storage"'
   },
   customProfileErrorMessage: {
     id: 'TagNodesForm.customProfileErrorMessage',
-    defaultMessage: 'Must be lowercase with dashes as a separator'
+    defaultMessage: 'You entered characters that are not allowed for this value'
   }
 });
 
