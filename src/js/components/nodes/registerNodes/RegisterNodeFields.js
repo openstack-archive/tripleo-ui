@@ -17,13 +17,14 @@
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { Field, formValueSelector } from 'redux-form';
-import { required, format, length, numericality } from 'redux-form-validators';
+import { format, length, numericality, required } from 'redux-form-validators';
 import React from 'react';
 import PropTypes from 'prop-types';
 
 import Fieldset from '../../ui/reduxForm/Fieldset';
 import HorizontalInput from '../../ui/reduxForm/HorizontalInput';
 import HorizontalSelect from '../../ui/reduxForm/HorizontalSelect';
+import { arrayOfFormat } from '../../ui/reduxForm/validators';
 import { NODE_NAME_REGEX, MAC_ADDRESS_REGEX } from '../../../utils/regex';
 import PXEAndIPMITool from './driverFields/PXEAndIPMITool';
 import PXEAndDRAC from './driverFields/PXEAndDRAC';
@@ -31,7 +32,7 @@ import PXEAndDRAC from './driverFields/PXEAndDRAC';
 const messages = defineMessages({
   enterValidMacAddress: {
     id: 'RegisterNodeForm.enterValidMacAddress',
-    defaultMessage: 'Please enter a valid MAC Address.'
+    defaultMessage: 'Please enter a list of valid MAC Addresses.'
   },
   nodeNameRegexp: {
     id: 'RegisterNodeForm.nodeNameRegexp',
@@ -209,12 +210,12 @@ const RegisterNodeFields = ({
           label={formatMessage(messages.nicMacAddresses)}
           description={formatMessage(messages.macAddressesDescription)}
           validate={[
-            format({
+            arrayOfFormat({
               with: MAC_ADDRESS_REGEX,
-              message: formatMessage(messages.enterValidMacAddress)
+              message: messages.enterValidMacAddress
             })
           ]}
-          normalize={value => value.split(',')}
+          parse={value => value.split(',')}
           required
         />
       </Fieldset>
