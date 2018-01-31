@@ -81,13 +81,9 @@ const EnvironmentConfigurationForm = ({
       {children}
     </OverlayLoader>
     <ModalFooter>
-      <Button
-        type="submit"
-        disabled={invalid || pristine || submitting}
-        bsStyle="primary"
-      >
-        <FormattedMessage {...messages.saveChanges} />
-      </Button>
+      <CloseModalButton>
+        <FormattedMessage {...messages.cancel} />
+      </CloseModalButton>   
       <Button
         disabled={invalid || pristine || submitting}
         onClick={handleSubmit(values =>
@@ -96,9 +92,13 @@ const EnvironmentConfigurationForm = ({
       >
         <FormattedMessage {...messages.saveAndClose} />
       </Button>
-      <CloseModalButton>
-        <FormattedMessage {...messages.cancel} />
-      </CloseModalButton>
+      <Button
+        type="submit"
+        disabled={invalid || pristine || submitting}
+        bsStyle="primary"
+      >
+        <FormattedMessage {...messages.saveChanges} />
+      </Button>
     </ModalFooter>
   </Form>
 );

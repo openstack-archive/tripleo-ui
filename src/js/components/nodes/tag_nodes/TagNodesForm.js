@@ -39,7 +39,7 @@ const messages = defineMessages({
   },
   confirm: {
     id: 'TagNodesForm.confirm',
-    defaultMessage: 'Confirm'
+    defaultMessage: 'Tag Nodes'
   },
   cancel: {
     id: 'TagNodesForm.cancel',
@@ -173,19 +173,19 @@ class TagNodesForm extends React.Component {
         </div>
         <div className="modal-footer">
           <button
-            className="btn btn-primary"
-            disabled={!this.state.canSubmit}
-            type="submit"
-          >
-            <FormattedMessage {...messages.confirm} />
-          </button>
-          <button
             type="button"
             className="btn btn-default"
             aria-label="Close"
             onClick={onCancel}
           >
             <FormattedMessage {...messages.cancel} />
+          </button>
+          <button
+            className="btn btn-primary"
+            disabled={!this.state.canSubmit}
+            type="submit"
+          >
+            <FormattedMessage {...messages.confirm} />
           </button>
         </div>
       </Formsy>
