@@ -54,6 +54,7 @@ export const CloseModalXButton = () => (
     render={onHide => (
       <button
         className="close"
+        type="button"
         onClick={onHide}
         aria-hidden="true"
         aria-label="Close"
