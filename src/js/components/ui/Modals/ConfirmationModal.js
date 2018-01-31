@@ -61,11 +61,11 @@ export default class ConfirmationModal extends React.Component {
           <p>{question}</p>
         </ModalBody>
         <ModalFooter>
-          <Button bsStyle="danger" name={confirmActionName} onClick={onConfirm}>
-            {confirmActionTitle || title}
-          </Button>
           <Button aria-label="Close" onClick={onCancel}>
             Cancel
+          </Button>
+          <Button bsStyle="danger" name={confirmActionName} onClick={onConfirm}>
+            {confirmActionTitle || title}
           </Button>
         </ModalFooter>
       </Modal>

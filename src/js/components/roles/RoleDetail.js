@@ -240,6 +240,9 @@ class RoleDetail extends React.Component {
           </Loader>
           {dataLoaded ? (
             <ModalFooter>
+              <CloseModalButton>
+                <FormattedMessage {...messages.cancel} />
+              </CloseModalButton>
               <button
                 type="submit"
                 disabled={!this.state.canSubmit}
@@ -247,9 +250,6 @@ class RoleDetail extends React.Component {
               >
                 <FormattedMessage {...messages.saveChanges} />
               </button>
-              <CloseModalButton>
-                <FormattedMessage {...messages.cancel} />
-              </CloseModalButton>
             </ModalFooter>
           ) : null}
         </Formsy.Form>

@@ -214,13 +214,9 @@ class EnvironmentConfiguration extends React.Component {
         </Loader>
 
         <div className="modal-footer">
-          <button
-            type="submit"
-            disabled={!this.state.canSubmit}
-            className="btn btn-primary"
-          >
-            <FormattedMessage {...messages.saveChanges} />
-          </button>
+          <CloseModalButton>
+            <FormattedMessage {...messages.cancel} />
+          </CloseModalButton>
           <button
             type="button"
             disabled={!this.state.canSubmit}
@@ -229,9 +225,13 @@ class EnvironmentConfiguration extends React.Component {
           >
             <FormattedMessage {...messages.saveAndClose} />
           </button>
-          <CloseModalButton>
-            <FormattedMessage {...messages.cancel} />
-          </CloseModalButton>
+          <button
+            type="submit"
+            disabled={!this.state.canSubmit}
+            className="btn btn-primary"
+          >
+            <FormattedMessage {...messages.saveChanges} />
+          </button>
         </div>
       </Formsy.Form>
     );
