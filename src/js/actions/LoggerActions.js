@@ -78,6 +78,12 @@ export default {
     };
   },
 
+  clearAuthentication() {
+    return {
+      type: LoggerConstants.CLEAR_WS_AUTHENTICATION
+    };
+  },
+
   downloadLogsPending() {
     return {
       type: LoggerConstants.DOWNLOAD_LOGS_PENDING

@@ -30,6 +30,9 @@ export default function loggerReduder(state = initialState, action) {
     case LoggerConstants.WS_AUTHENTICATION_SUCCESS:
       return state.set('authenticated', true);
 
+    case LoggerConstants.CLEAR_WS_AUTHENTICATION:
+      return state.set('authenticated', false);
+
     case LoggerConstants.FLUSH_MESSAGES_SUCCESS:
       return state.set('messages', List());
 

@@ -20,6 +20,7 @@ import KeystoneApiService from '../services/KeystoneApiService';
 import LoginConstants from '../constants/LoginConstants';
 import logger from '../services/logging/LoggingService';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
+import LoggerActions from '../actions/LoggerActions';
 import cookie from 'react-cookie';
 
 export default {
@@ -113,6 +114,7 @@ export default {
   logoutUser() {
     return dispatch => {
       cookie.remove('keystoneAuthTokenId');
+      dispatch(LoggerActions.clearAuthentication());
       ZaqarWebSocketService.close();
       dispatch(this.logoutUserSuccess());
     };

@@ -20,6 +20,7 @@ import thunkMiddleware from 'redux-thunk';
 
 import KeystoneApiService from '../../js/services/KeystoneApiService';
 import LoginActions from '../../js/actions/LoginActions';
+import LoggerActions from '../../js/actions/LoggerActions';
 import { mockGetIntl } from './utils';
 import ZaqarWebSocketService from '../../js/services/ZaqarWebSocketService';
 
@@ -74,6 +75,9 @@ describe('LoginActions', () => {
     store.dispatch(LoginActions.logoutUser());
     expect(cookie.remove).toHaveBeenCalled();
     expect(ZaqarWebSocketService.close).toHaveBeenCalled();
-    expect(store.getActions()).toEqual([LoginActions.logoutUserSuccess()]);
+    expect(store.getActions()).toEqual([
+      LoggerActions.clearAuthentication(),
+      LoginActions.logoutUserSuccess()
+    ]);
   });
 });
