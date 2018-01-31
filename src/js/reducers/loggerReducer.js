@@ -17,6 +17,7 @@
 import { List } from 'immutable';
 import { InitialLoggerState } from '../immutableRecords/logger';
 import LoggerConstants from '../constants/LoggerConstants';
+import LoginConstants from '../constants/LoginConstants';
 
 const initialState = new InitialLoggerState();
 
@@ -29,6 +30,9 @@ export default function loggerReduder(state = initialState, action) {
 
     case LoggerConstants.WS_AUTHENTICATION_SUCCESS:
       return state.set('authenticated', true);
+
+    case LoginConstants.LOGOUT_USER_SUCCESS:
+      return state.set('authenticated', false);
 
     case LoggerConstants.FLUSH_MESSAGES_SUCCESS:
       return state.set('messages', List());

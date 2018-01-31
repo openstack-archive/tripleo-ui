@@ -113,8 +113,8 @@ export default {
   logoutUser() {
     return dispatch => {
       cookie.remove('keystoneAuthTokenId');
-      ZaqarWebSocketService.close();
       dispatch(this.logoutUserSuccess());
+      ZaqarWebSocketService.close();
     };
   },
 
