@@ -14,20 +14,70 @@
  * under the License.
  */
 
-import { debounce } from 'lodash';
+import { Button } from 'patternfly-react';
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import { reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import { OverlayLoader } from '../ui/Loader';
+import FloatingToolbar from '../ui/FloatingToolbar';
 import FormErrorList from '../ui/forms/FormErrorList';
+
+const messages = defineMessages({
+  saveChanges: {
+    id: 'NodesAssignmentForm.saveChanges',
+    defaultMessage: 'Save Changes'
+  },
+  cancel: {
+    id: 'NodesAssignmentForm.cancel',
+    defaultMessage: 'Cancel'
+  },
+  updatingParameters: {
+    id: 'ParametersForm.updatingParameters',
+    defaultMessage: 'Updating configuration...'
+  }
+});
 
 class NodesAssignmentForm extends React.Component {
   render() {
-    const { error, handleSubmit, children } = this.props;
+    const {
+      error,
+      handleSubmit,
+      children,
+      intl: { formatMessage },
+      invalid,
+      pristine,
+      dirty,
+      submitting,
+      reset,
+      valid
+    } = this.props;
     return (
       <form onSubmit={handleSubmit}>
-        <FormErrorList errors={error ? [error] : []} />
-        {children}
+        <OverlayLoader
+          loaded={!submitting}
+          content={formatMessage(messages.updatingParameters)}
+        >
+          <FormErrorList errors={error ? [error] : []} />
+          {children}
+          {valid &&
+            dirty &&
+            !submitting && (
+              <FloatingToolbar bottom right>
+                <Button
+                  disabled={invalid || pristine || submitting}
+                  bsStyle="primary"
+                  type="submit"
+                >
+                  <FormattedMessage {...messages.saveChanges} />
+                </Button>{' '}
+                <Button onClick={() => reset()}>
+                  <FormattedMessage {...messages.cancel} />
+                </Button>
+              </FloatingToolbar>
+            )}
+        </OverlayLoader>
       </form>
     );
   }
@@ -35,38 +85,25 @@ class NodesAssignmentForm extends React.Component {
 NodesAssignmentForm.propTypes = {
   children: PropTypes.node,
   currentPlanName: PropTypes.string.isRequired,
+  dirty: PropTypes.bool.isRequired,
   error: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
+  invalid: PropTypes.bool.isRequired,
   pristine: PropTypes.bool.isRequired,
-  updateParameters: PropTypes.func.isRequired
+  reset: PropTypes.bool.isRequired,
+  submitting: PropTypes.bool.isRequired,
+  updateNodesAssignment: PropTypes.func.isRequired,
+  valid: PropTypes.bool.isRequired
 };
-
-const update = (data, updateParameters, currentPlanName) =>
-  updateParameters(currentPlanName, data);
-
-const debouncedUpdate = debounce(update, 1500);
 
 const form = reduxForm({
   enableReinitialize: true,
   keepDirtyOnReinitialize: true,
   form: 'nodesAssignment',
-  onChange: (
-    values,
-    dispatch,
-    { currentPlanName, dirty, submit, submitting, updateParameters }
-  ) => {
-    if (dirty && !submitting) {
-      // debouncedUpdate(values, updateParameters, currentPlanName);
-      // hacky solution to make handleSubmit work with up to date values
-      // related -> https://github.com/erikras/redux-form/issues/883
-      setTimeout(submit);
-    } else {
-      debouncedUpdate.cancel();
-    }
-  },
-  onSubmit: (values, dispatch, props) => {
-    debouncedUpdate(values, props.updateParameters, props.currentPlanName);
+  onSubmit: (values, dispatch, { updateNodesAssignment, currentPlanName }) => {
+    updateNodesAssignment(currentPlanName, values);
   }
 });
 
-export default form(NodesAssignmentForm);
+export default injectIntl(form(NodesAssignmentForm));
