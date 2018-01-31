@@ -133,6 +133,9 @@ class NewPlan extends React.Component {
           </Loader>
 
           <ModalFooter>
+            <CloseModalButton id="NewPlan__cancelCreatePlanButton">
+              <FormattedMessage {...messages.cancel} />
+            </CloseModalButton>
             <button
               disabled={!this.state.canSubmit}
               className="btn btn-primary"
@@ -140,9 +143,6 @@ class NewPlan extends React.Component {
             >
               <FormattedMessage {...messages.uploadAndCreate} />
             </button>
-            <CloseModalButton id="NewPlan__cancelCreatePlanButton">
-              <FormattedMessage {...messages.cancel} />
-            </CloseModalButton>
           </ModalFooter>
         </Formsy>
       </RoutedModal>
