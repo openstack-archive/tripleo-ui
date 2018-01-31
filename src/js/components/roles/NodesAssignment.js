@@ -47,13 +47,13 @@ const NodesAssignment = ({
   currentPlanName,
   nodeCountParametersByRole,
   roles,
-  updateParameters
+  updateNodesAssignment
 }) => {
   return (
     <NodesAssignmentForm
       currentPlanName={currentPlanName}
       initialValues={assignedNodesCountsByRole.toJS()}
-      updateParameters={updateParameters}
+      updateNodesAssignment={updateNodesAssignment}
     >
       <div className="row row-cards-pf">
         {roles.toList().map(role => {
@@ -87,7 +87,7 @@ NodesAssignment.propTypes = {
   currentPlanName: PropTypes.string.isRequired,
   nodeCountParametersByRole: ImmutablePropTypes.map.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
-  updateParameters: PropTypes.func.isRequired
+  updateNodesAssignment: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -100,7 +100,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    updateParameters: (currentPlanName, data) => {
+    updateNodesAssignment: (currentPlanName, data) => {
       dispatch(ParametersActions.updateNodesAssignment(currentPlanName, data));
     }
   };

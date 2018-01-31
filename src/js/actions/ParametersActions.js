@@ -154,7 +154,6 @@ export default {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(startSubmit('nodesAssignment'));
-      dispatch(this.updateParametersPending());
       return dispatch(
         MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE, {
           container: planName,
@@ -164,24 +163,8 @@ export default {
         .then(response => {
           dispatch(this.updateParametersSuccess(data));
           dispatch(stopSubmit('nodesAssignment'));
-          dispatch(
-            NotificationActions.notify({
-              title: formatMessage(messages.parametersUpdatedNotficationTitle),
-              message: formatMessage(
-                messages.parametersUpdatedNotficationMessage
-              ),
-              type: 'success'
-            })
-          );
         })
         .catch(error => {
-          dispatch(
-            handleErrors(
-              error,
-              formatMessage(messages.updateParametersFailed),
-              false
-            )
-          );
           dispatch(
             stopSubmit('nodesAssignment', {
               _error: {
@@ -189,14 +172,6 @@ export default {
                 message: error.message
               }
             })
-          );
-          dispatch(
-            this.updateParametersFailed([
-              {
-                title: formatMessage(messages.updateParametersFailed),
-                message: error.message
-              }
-            ])
           );
         });
     };
