@@ -84,7 +84,7 @@ class RoleDetail extends React.Component {
 
   componentDidMount() {
     const { currentPlanName } = this.props;
-    this.props.fetchParameters(currentPlanName, `/plans/${currentPlanName}`);
+    this.props.fetchParameters(currentPlanName);
   }
 
   componentDidUpdate() {
@@ -287,9 +287,11 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchParameters: (currentPlanName, redirectPath) => {
+    fetchParameters: currentPlanName => {
       dispatch(
-        ParametersActions.fetchParameters(currentPlanName, redirectPath)
+        ParametersActions.fetchParameters(currentPlanName, () =>
+          ownProps.history.push(`/plans/${currentPlanName}`)
+        )
       );
     },
     updateParameters: (currentPlanName, data, inputFields, redirectPath) => {
