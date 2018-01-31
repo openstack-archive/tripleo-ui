@@ -58,7 +58,7 @@ export const getNodeCountParametersByRoleFromFormValues = createSelector(
         parameter &&
         parameter.set(
           'default',
-          formValues && formValues[parameter.name]
+          formValues && formValues[parameter.name] !== undefined
             ? formValues[parameter.name]
             : parameter.default
         )
@@ -125,7 +125,7 @@ export const getAssignedNodesCountsByRole = createSelector(
 );
 
 export const getTotalAssignedNodesCount = createSelector(
-  getNodeCountParametersByRole,
+  getNodeCountParametersByRoleFromFormValues,
   countParamsByRole =>
     countParamsByRole.reduce(
       (total, parameter) =>
