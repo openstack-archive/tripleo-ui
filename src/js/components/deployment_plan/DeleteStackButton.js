@@ -29,7 +29,7 @@ const messages = defineMessages({
   },
   deleteConfirmationQuestion: {
     id: 'DeleteStackButton.deleteConfirmationQuestion',
-    defaultMessage: 'Are you sure you want to delete the stack?'
+    defaultMessage: 'Are you sure you want to delete the deployment?'
   }
 });
 
@@ -88,9 +88,6 @@ DeleteStackButton.propTypes = {
   loaded: PropTypes.bool.isRequired,
   loaderContent: PropTypes.string.isRequired,
   stack: ImmutablePropTypes.record.isRequired
-};
-DeleteStackButton.defaultProps = {
-  buttonIconClass: 'pficon pficon-delete'
 };
 
 export default injectIntl(DeleteStackButton);
