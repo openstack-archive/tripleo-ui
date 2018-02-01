@@ -1,0 +1,25 @@
+- project:
+    check:
+      jobs:
+        - nodejs-npm-run-lint:
+            vars:
+              node_version: 6
+        - nodejs-npm-run-test:
+            vars:
+              node_version: 6
+        - build-javascript-tarball:
+            files:
+              - npm-shrinkwrap.json
+              - package.json
+    gate:
+      jobs:
+        - nodejs-npm-run-lint:
+            vars:
+              node_version: 6
+        - nodejs-npm-run-test:
+            vars:
+              node_version: 6
+        - build-javascript-tarball:
+            files:
+              - npm-shrinkwrap.json
+              - package.json
