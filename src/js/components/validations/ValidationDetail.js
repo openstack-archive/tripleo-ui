@@ -19,12 +19,21 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { includes } from 'lodash';
-import { ModalHeader, ModalTitle, ModalBody } from 'react-bootstrap';
+import {
+  ModalHeader,
+  ModalTitle,
+  ModalBody,
+  ModalFooter
+} from 'react-bootstrap';
 
-import { CloseModalXButton, Modal } from '../ui/Modals';
+import { CloseModalButton, CloseModalXButton, Modal } from '../ui/Modals';
 import { ValidationStatusIcon } from './ValidationStatusIcon';
 
 const messages = defineMessages({
+  close: {
+    id: 'ValidationDetail.close',
+    defaultMessage: 'Close'
+  },
   description: {
     id: 'ValidationDetail.description',
     defaultMessage: 'Description:'
@@ -152,6 +161,11 @@ class ValidationDetail extends React.Component {
           </p>
           {this.renderValidationOutput()}
         </ModalBody>
+        <ModalFooter>
+          <CloseModalButton>
+            <FormattedMessage {...messages.close} />
+          </CloseModalButton>
+        </ModalFooter>
       </Modal>
     );
   }
