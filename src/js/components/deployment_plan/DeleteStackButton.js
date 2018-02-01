@@ -29,7 +29,7 @@ const messages = defineMessages({
   },
   deleteConfirmationQuestion: {
     id: 'DeleteStackButton.deleteConfirmationQuestion',
-    defaultMessage: 'Are you sure you want to delete the stack?'
+    defaultMessage: 'Are you sure you want to delete the deployment?'
   }
 });
 
@@ -63,7 +63,7 @@ class DeleteStackButton extends React.Component {
             content={this.props.loaderContent}
             inverse
           >
-            <span className={this.props.buttonIconClass} /> {this.props.content}
+            {this.props.content}
           </InlineLoader>
         </button>
         <ConfirmationModal
@@ -80,7 +80,6 @@ class DeleteStackButton extends React.Component {
 }
 
 DeleteStackButton.propTypes = {
-  buttonIconClass: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
   deleteStack: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
@@ -88,9 +87,6 @@ DeleteStackButton.propTypes = {
   loaded: PropTypes.bool.isRequired,
   loaderContent: PropTypes.string.isRequired,
   stack: ImmutablePropTypes.record.isRequired
-};
-DeleteStackButton.defaultProps = {
-  buttonIconClass: 'pficon pficon-delete'
 };
 
 export default injectIntl(DeleteStackButton);
