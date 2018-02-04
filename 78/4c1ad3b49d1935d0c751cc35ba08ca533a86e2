@@ -1,0 +1,8 @@
+Code-Review+2: Ana Krivokapic <akrivoka@redhat.com>
+Workflow+1: Ana Krivokapic <akrivoka@redhat.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Sun, 04 Feb 2018 16:55:57 +0000
+Reviewed-on: https://review.openstack.org/540580
+Project: openstack/tripleo-ui
+Branch: refs/heads/master
