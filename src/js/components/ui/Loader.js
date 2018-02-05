@@ -157,20 +157,14 @@ export const OverlayLoader = ({
   children,
   className,
   component,
-  componentProps,
   containerClassName,
   content,
   loaded,
   ...rest
 }) => (
-  <BaseLoader
-    component={component}
-    componentProps={componentProps}
-    loaded={loaded}
-    originalContent={children}
-  >
-    <div className={containerClassName} style={{ position: 'relative' }}>
-      {children}
+  <div className={containerClassName} style={{ position: 'relative' }}>
+    {children}
+    {!loaded && (
       <div
         className={cx('overlay-loader', className)}
         onClick={e => e.stopPropagation()}
@@ -179,9 +173,9 @@ export const OverlayLoader = ({
         <Spinner />
         {content && <div className="text-center">{content}</div>}
       </div>
-      <div className="clearfix" />
-    </div>
-  </BaseLoader>
+    )}
+    <div className="clearfix" />
+  </div>
 );
 OverlayLoader.propTypes = {
   ...defaultLoaderPropTypes,
