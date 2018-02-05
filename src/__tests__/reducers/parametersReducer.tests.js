@@ -158,8 +158,8 @@ describe('parametersReducer', () => {
       );
     });
 
-    it('sets `isFetching` to false', () => {
-      expect(state.isFetching).toBe(false);
+    it('sets `isUpdating` to false', () => {
+      expect(state.isUpdating).toBe(false);
     });
 
     it('sets errors in  `form`', () => {
@@ -187,8 +187,8 @@ describe('parametersReducer', () => {
       );
     });
 
-    it('sets `isFetching` to true', () => {
-      expect(state.isFetching).toBe(true);
+    it('sets `isUpdating` to true', () => {
+      expect(state.isUpdating).toBe(true);
     });
   });
 
