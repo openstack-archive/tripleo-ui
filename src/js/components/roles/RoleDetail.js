@@ -29,7 +29,7 @@ import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
 import { getCurrentPlanName } from '../../selectors/plans';
 import { getRole } from '../../selectors/roles';
 import { getRoleServices } from '../../selectors/parameters';
-import { Loader } from '../ui/Loader';
+import { Loader, OverlayLoader } from '../ui/Loader';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 import {
   CloseModalButton,
@@ -62,6 +62,10 @@ const messages = defineMessages({
   loadingParameters: {
     id: 'RoleDetail.loadingParameters',
     defaultMessage: 'Loading parameters...'
+  },
+  updatingParameters: {
+    id: 'RoleDetail.updatingParameters',
+    defaultMessage: 'Updating parameters...'
   },
   saveChanges: {
     id: 'RoleDetail.saveChanges',
@@ -147,10 +151,10 @@ class RoleDetail extends React.Component {
     const {
       currentPlanName,
       match: { params: urlParams },
-      parametersLoaded,
+      isFetchingParameters,
       rolesLoaded
     } = this.props;
-    if (rolesLoaded && parametersLoaded) {
+    if (rolesLoaded && !isFetchingParameters) {
       return (
         <ul className="nav nav-tabs">
           <NavTab
@@ -180,15 +184,19 @@ class RoleDetail extends React.Component {
   }
 
   render() {
-    const dataLoaded = this.props.rolesLoaded && this.props.parametersLoaded;
-    const roleName = this.props.role ? this.props.role.name : null;
     const {
       currentPlanName,
       formErrors,
-      intl,
+      intl: { formatMessage },
+      isFetchingParameters,
+      isUpdatingParameters,
       location,
-      match: { params: urlParams }
+      match: { params: urlParams },
+      role,
+      rolesLoaded
     } = this.props;
+    const dataLoaded = rolesLoaded && !isFetchingParameters;
+    const roleName = role ? role.name : null;
     return (
       <RoutedModalPanel redirectPath={`/plans/${currentPlanName}`}>
         <Formsy
@@ -212,31 +220,37 @@ class RoleDetail extends React.Component {
           <ModalFormErrorList errors={formErrors.toJS()} />
           <Loader
             height={60}
-            content={intl.formatMessage(messages.loadingParameters)}
+            content={formatMessage(messages.loadingParameters)}
             component="div"
             componentProps={{ className: 'flex-container' }}
             loaded={dataLoaded}
           >
-            <Switch location={location}>
-              <Route
-                path="/plans/:planName/roles/:roleName/parameters"
-                component={RoleParameters}
-              />
-              <Route
-                path="/plans/:planName/roles/:roleName/services"
-                component={RoleServices}
-              />
-              <Route
-                path="/plans/:planName/roles/:roleName/network-configuration"
-                component={RoleNetworkConfig}
-              />
-              <Redirect
-                from="/plans/:planName/roles/:roleName"
-                to={`/plans/${currentPlanName}/roles/${
-                  urlParams.roleName
-                }/parameters`}
-              />
-            </Switch>
+            <OverlayLoader
+              containerClassName="flex-container"
+              loaded={!isUpdatingParameters}
+              content={formatMessage(messages.updatingParameters)}
+            >
+              <Switch location={location}>
+                <Route
+                  path="/plans/:planName/roles/:roleName/parameters"
+                  component={RoleParameters}
+                />
+                <Route
+                  path="/plans/:planName/roles/:roleName/services"
+                  component={RoleServices}
+                />
+                <Route
+                  path="/plans/:planName/roles/:roleName/network-configuration"
+                  component={RoleNetworkConfig}
+                />
+                <Redirect
+                  from="/plans/:planName/roles/:roleName"
+                  to={`/plans/${currentPlanName}/roles/${
+                    urlParams.roleName
+                  }/parameters`}
+                />
+              </Switch>
+            </OverlayLoader>
           </Loader>
           {dataLoaded ? (
             <ModalFooter>
@@ -264,9 +278,10 @@ RoleDetail.propTypes = {
   formErrors: ImmutablePropTypes.list,
   formFieldErrors: ImmutablePropTypes.map,
   intl: PropTypes.object,
+  isFetchingParameters: PropTypes.bool.isRequired,
+  isUpdatingParameters: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  parametersLoaded: PropTypes.bool.isRequired,
   role: ImmutablePropTypes.record,
   rolesLoaded: PropTypes.bool.isRequired,
   updateParameters: PropTypes.func
@@ -278,7 +293,8 @@ function mapStateToProps(state, props) {
     formErrors: state.parameters.form.get('formErrors'),
     formFieldErrors: state.parameters.form.get('formFieldErrors'),
     allParameters: state.parameters.parameters,
-    parametersLoaded: state.parameters.loaded,
+    isFetchingParameters: state.parameters.isFetching,
+    isUpdatingParameters: state.parameters.isUpdating,
     role: getRole(state, props.match.params.roleName),
     roleServices: getRoleServices(state, props.match.params.roleName),
     rolesLoaded: state.roles.get('loaded')
