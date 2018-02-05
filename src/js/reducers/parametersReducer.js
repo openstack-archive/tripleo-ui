@@ -40,6 +40,7 @@ export default function parametersReducer(state = initialState, action) {
       return state
         .set('loaded', true)
         .set('isFetching', false)
+        .set('isUpdating', false)
         .set(
           'form',
           Map({
@@ -71,10 +72,10 @@ export default function parametersReducer(state = initialState, action) {
         );
 
     case ParametersConstants.UPDATE_PARAMETERS_PENDING:
-      return state.set('isFetching', true);
+      return state.set('isUpdating', true);
 
     case ParametersConstants.UPDATE_PARAMETERS_FAILED:
-      return state.set('isFetching', false).set(
+      return state.set('isUpdating', false).set(
         'form',
         Map({
           formErrors: List.of(...action.payload.formErrors),
