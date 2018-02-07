@@ -139,7 +139,7 @@ class EditPlan extends React.Component {
           </Loader>
           <ModalFooter>
             <button
-              disabled={!this.state.canSubmit}
+              disabled={!this.state.canSubmit || this.props.isTransitioningPlan}
               className="btn btn-primary"
               type="submit"
             >
