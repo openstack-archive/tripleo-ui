@@ -181,7 +181,7 @@ class CurrentPlan extends React.Component {
             </li>
           </ol>
           <div className="page-header page-header-bleed-right">
-            <h1>{currentPlanName}</h1>
+            <h1 id="CurrentPlan__planName">{currentPlanName}</h1>
           </div>
           <ol className="deployment-step-list">
             <DeploymentPlanStep
