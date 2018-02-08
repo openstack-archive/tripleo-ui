@@ -62,8 +62,8 @@ const messages = defineMessages({
 });
 
 const EnvironmentConfigurationForm = ({
-  error,
   children,
+  error,
   onSubmit,
   handleSubmit,
   intl: { formatMessage },
@@ -72,13 +72,14 @@ const EnvironmentConfigurationForm = ({
   submitting,
   initialValues
 }) => (
-  <Form onSubmit={handleSubmit} horizontal>
+  <Form className="flex-container" onSubmit={handleSubmit} horizontal>
     <OverlayLoader
       loaded={!submitting}
       content={formatMessage(messages.updatingEnvironmentConfiguration)}
+      containerClassName="flex-container"
     >
       <ModalFormErrorList errors={error ? [error] : []} />
-      {children}
+      <div className="flex-row">{children}</div>
     </OverlayLoader>
     <ModalFooter>
       <CloseModalButton>

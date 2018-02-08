@@ -71,13 +71,14 @@ const ParametersForm = ({
   submitting,
   initialValues
 }) => (
-  <Form onSubmit={handleSubmit} horizontal>
+  <Form className="flex-container" onSubmit={handleSubmit} horizontal>
     <OverlayLoader
       loaded={!submitting}
       content={formatMessage(messages.updatingParameters)}
+      containerClassName="flex-container"
     >
       <ModalFormErrorList errors={error ? [error] : []} />
-      {children}
+      <div className="flex-row">{children}</div>
     </OverlayLoader>
     <ModalFooter>
       <CloseModalButton>
