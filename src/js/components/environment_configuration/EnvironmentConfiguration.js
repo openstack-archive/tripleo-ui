@@ -128,23 +128,20 @@ class EnvironmentConfiguration extends React.Component {
         height={60}
         loaded={!isFetching}
         content={formatMessage(messages.loadingEnvironmentConfiguration)}
+        componentProps={{ className: 'flex-container' }}
       >
         <EnvironmentConfigurationForm
           allEnvironments={allEnvironments}
           onSubmit={this.handleSubmit}
           initialValues={this.getFormInitialValues()}
         >
-          <div className="container-fluid">
-            <div className="row row-eq-height">
-              <EnvironmentConfigurationSidebar
-                activateTab={tabName => this.setState({ activeTab: tabName })}
-                categories={environmentConfigurationTopics.toList().toJS()}
-                isTabActive={this.isTabActive}
-              />
-              <div className="col-sm-8">
-                <div className="tab-content">{this.renderTopics()}</div>
-              </div>
-            </div>
+          <EnvironmentConfigurationSidebar
+            activateTab={tabName => this.setState({ activeTab: tabName })}
+            categories={environmentConfigurationTopics.toList().toJS()}
+            isTabActive={this.isTabActive}
+          />
+          <div className="col-sm-8 flex-column">
+            <div className="tab-content">{this.renderTopics()}</div>
           </div>
         </EnvironmentConfigurationForm>
       </Loader>
