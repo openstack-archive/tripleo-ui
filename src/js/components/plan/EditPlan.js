@@ -138,6 +138,9 @@ class EditPlan extends React.Component {
             </div>
           </Loader>
           <ModalFooter>
+            <CloseModalButton>
+              <FormattedMessage {...messages.cancel} />
+            </CloseModalButton>
             <button
               disabled={!this.state.canSubmit || this.props.isTransitioningPlan}
               className="btn btn-primary"
@@ -145,9 +148,6 @@ class EditPlan extends React.Component {
             >
               <FormattedMessage {...messages.uploadAndUpdate} />
             </button>
-            <CloseModalButton>
-              <FormattedMessage {...messages.cancel} />
-            </CloseModalButton>
           </ModalFooter>
         </Formsy>
       </RoutedModal>

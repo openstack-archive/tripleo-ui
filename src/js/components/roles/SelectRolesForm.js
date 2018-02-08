@@ -69,6 +69,9 @@ class SelectRolesForm extends React.Component {
           </div>
         </OverlayLoader>
         <ModalFooter>
+          <CloseModalButton>
+            <FormattedMessage {...messages.cancel} />
+          </CloseModalButton>
           <Button
             disabled={invalid || pristine || submitting}
             bsStyle="primary"
@@ -76,9 +79,6 @@ class SelectRolesForm extends React.Component {
           >
             <FormattedMessage {...messages.saveChanges} />
           </Button>
-          <CloseModalButton>
-            <FormattedMessage {...messages.cancel} />
-          </CloseModalButton>
         </ModalFooter>
       </form>
     );
