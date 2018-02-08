@@ -100,15 +100,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    updateParameters: (currentPlanName, data, inputFields, redirectPath) => {
-      dispatch(
-        ParametersActions.updateParameters(
-          currentPlanName,
-          data,
-          inputFields,
-          redirectPath
-        )
-      );
+    updateParameters: (currentPlanName, data) => {
+      dispatch(ParametersActions.updateNodesAssignment(currentPlanName, data));
     }
   };
 };
