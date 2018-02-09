@@ -84,6 +84,12 @@ class KeystoneApiError extends BaseAxiosError {
   }
 }
 
+class NovaApiError extends BaseAxiosError {
+  constructor(e) {
+    super('NovaApiError', e.response.data.error.message, e);
+  }
+}
+
 export {
   BaseAxiosError,
   AuthenticationError,
@@ -94,5 +100,6 @@ export {
   IronicApiError,
   IronicInspectorApiError,
   HeatApiError,
-  KeystoneApiError
+  KeystoneApiError,
+  NovaApiError
 };
