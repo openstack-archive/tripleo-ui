@@ -20,6 +20,7 @@ import { reducer as formReducer } from 'redux-form';
 import appConfig from './appConfig';
 import environmentConfigurationReducer from './environmentConfigurationReducer';
 import filtersReducer from './filtersReducer';
+import flavorsReducer from './flavorsReducer';
 import i18nReducer from './i18nReducer';
 import loggerReducer from './loggerReducer';
 import loginReducer from './loginReducer';
@@ -39,6 +40,7 @@ const appReducer = combineReducers({
   environmentConfiguration: environmentConfigurationReducer,
   executions: workflowExecutionsReducer,
   filters: filtersReducer,
+  flavors: flavorsReducer,
   i18n: i18nReducer,
   logger: loggerReducer,
   login: loginReducer,
