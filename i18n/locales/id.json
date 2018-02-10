@@ -27,7 +27,7 @@
         "DeletePlan.deletePlan": "Hapus Plan",
         "DeletePlan.deletePlanConfirmation": "Apakah Anda yakin ingin menghapus rencana {planName}?",
         "DeletePlan.deletePlanName": "Hapus {planName}",
-        "DeleteStackButton.deleteConfirmationQuestion": "Apakah Anda yakin ingin menghapus stack?",
+        "DeleteStackButton.deleteConfirmationQuestion": "",
         "DeleteStackButton.deleteDeployment": "Hapus Deployment",
         "Deploy.deleteInProgress": "Penghapusan berlangsung",
         "DeployStep.requestingDeploy": "Requesting a deploy...",

@@ -27,7 +27,7 @@
         "DeletePlan.deletePlan": "Plan\u0131 Sil",
         "DeletePlan.deletePlanConfirmation": "{planName} plan\u0131n\u0131 silmek istedi\u011finize emin misiniz?",
         "DeletePlan.deletePlanName": "{planName}'i Sil",
-        "DeleteStackButton.deleteConfirmationQuestion": "Y\u0131\u011f\u0131n\u0131 silmek istedi\u011finize emin misiniz?",
+        "DeleteStackButton.deleteConfirmationQuestion": "",
         "DeleteStackButton.deleteDeployment": "Uygulamay\u0131 Sil",
         "Deploy.deleteInProgress": "Silme s\u00fcr\u00fcyor",
         "DeployStep.requestingDeploy": "Uygulama yerle\u015ftirme isteniyor...",

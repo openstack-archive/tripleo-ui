@@ -27,7 +27,7 @@
         "DeletePlan.deletePlan": "\u5220\u9664\u8ba1\u5212",
         "DeletePlan.deletePlanConfirmation": "\u60a8\u786e\u5b9a\u8981\u5220\u9664\u8ba1\u5212 {planName} \u5417\uff1f",
         "DeletePlan.deletePlanName": "\u5220\u9664 {planName}",
-        "DeleteStackButton.deleteConfirmationQuestion": "\u60a8\u786e\u5b9a\u8981\u5220\u9664\u8fd9\u4e2a\u6808\u5417\uff1f",
+        "DeleteStackButton.deleteConfirmationQuestion": "",
         "DeleteStackButton.deleteDeployment": "\u5220\u9664\u90e8\u7f72",
         "Deploy.deleteInProgress": "\u5220\u9664\u8fdb\u884c\u4e2d",
         "DeployStep.requestingDeploy": "\u6b63\u5728\u8bf7\u6c42\u4e00\u4e2a\u90e8\u7f72 ...",

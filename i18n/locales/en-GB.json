@@ -27,7 +27,7 @@
         "DeletePlan.deletePlan": "Delete Plan",
         "DeletePlan.deletePlanConfirmation": "Are you sure you want to delete plan {planName}?",
         "DeletePlan.deletePlanName": "Delete {planName}",
-        "DeleteStackButton.deleteConfirmationQuestion": "Are you sure you want to delete the stack?",
+        "DeleteStackButton.deleteConfirmationQuestion": "Are you sure you want to delete the deployment?",
         "DeleteStackButton.deleteDeployment": "Delete Deployment",
         "Deploy.deleteInProgress": "Deletion in progress",
         "DeployStep.requestingDeploy": "Requesting a deploy...",
