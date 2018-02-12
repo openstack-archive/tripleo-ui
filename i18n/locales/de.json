@@ -27,7 +27,7 @@
         "DeletePlan.deletePlan": "Plan l\u00f6schen",
         "DeletePlan.deletePlanConfirmation": "Sind Sie sicher, dass Sie den Plan {planName} l\u00f6schen m\u00f6chten?",
         "DeletePlan.deletePlanName": "L\u00f6schen {planName}",
-        "DeleteStackButton.deleteConfirmationQuestion": "SInd Sie sicher, dass Sie den Stack l\u00f6schen m\u00f6chten?",
+        "DeleteStackButton.deleteConfirmationQuestion": "",
         "DeleteStackButton.deleteDeployment": "Bereitstellung l\u00f6schen",
         "Deploy.deleteInProgress": "L\u00f6schen im Gange",
         "DeployStep.requestingDeploy": "Eine Bereitstellung wird angefragt...",

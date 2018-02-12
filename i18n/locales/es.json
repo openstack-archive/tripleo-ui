@@ -27,7 +27,7 @@
         "DeletePlan.deletePlan": "Eliminar plan",
         "DeletePlan.deletePlanConfirmation": "\u00bfSeguro que desea eliminar el plan {planName}?",
         "DeletePlan.deletePlanName": "Eliminar {planName}",
-        "DeleteStackButton.deleteConfirmationQuestion": "\u00bfSeguro que desea eliminar la pila?",
+        "DeleteStackButton.deleteConfirmationQuestion": "",
         "DeleteStackButton.deleteDeployment": "Eliminar despliegue",
         "Deploy.deleteInProgress": "Suprimir en curso",
         "DeployStep.requestingDeploy": "Solicitando un despliegue...",

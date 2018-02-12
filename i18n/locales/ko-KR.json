@@ -27,7 +27,7 @@
         "DeletePlan.deletePlan": "Plan \uc0ad\uc81c",
         "DeletePlan.deletePlanConfirmation": "Plan {planName} \uc744 \uc815\ub9d0\ub85c \uc0ad\uc81c\ud558\uae30\ub97c \uc6d0\ud569\ub2c8\uae4c?",
         "DeletePlan.deletePlanName": "{planName} \uc0ad\uc81c",
-        "DeleteStackButton.deleteConfirmationQuestion": "\ud574\ub2f9 stack\uc744 \uc815\ub9d0\ub85c \uc0ad\uc81c\ud558\uae30\ub97c \uc6d0\ud569\ub2c8\uae4c?",
+        "DeleteStackButton.deleteConfirmationQuestion": "",
         "DeleteStackButton.deleteDeployment": "\ubc30\ud3ec \uc0ad\uc81c",
         "Deploy.deleteInProgress": "\uc0ad\uc81c \uc9c4\ud589 \uc911",
         "DeployStep.requestingDeploy": "\ubc30\ud3ec \uc694\uccad \uc911...",
