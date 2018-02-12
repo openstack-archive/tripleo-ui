@@ -24,5 +24,6 @@ export const FlavorsState = Record({
 
 export const Flavor = Record({
   name: undefined,
-  id: undefined
+  id: undefined,
+  extra_specs: undefined
 });
