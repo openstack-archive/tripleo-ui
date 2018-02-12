@@ -44,6 +44,16 @@ class NovaApiService {
         .then(response => response.data)
         .catch(handleErrors);
   }
+
+  getFlavorExtraSpecs(flavorId) {
+    return dispatch =>
+      dispatch(this.defaultRequest(`/flavors/${flavorId}/os-extra_specs`))
+        .then(response => {
+          response.data.id = flavorId;
+          return response.data;
+        })
+        .catch(handleErrors);
+  }
 }
 
 const handleErrors = e => {
