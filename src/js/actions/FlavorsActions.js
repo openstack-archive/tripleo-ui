@@ -41,14 +41,25 @@ export default {
     };
   },
 
+  // Fetch Nova flavors including os-extra_specs
+  // Unfortunately, we have to make a separate API call for each flavor.
   fetchFlavors() {
     return dispatch => {
       dispatch(this.fetchFlavorsPending());
-      dispatch(NovaApiService.getFlavors())
+      return dispatch(NovaApiService.getFlavors())
         .then(response => {
           const flavors = normalize(response.flavors, [flavorSchema]).entities
             .flavors;
-          dispatch(this.fetchFlavorsSuccess(flavors));
+          return Promise.all(
+            Object.keys(flavors).map(flavorId =>
+              dispatch(NovaApiService.getFlavorProfile(flavorId))
+            )
+          ).then(flavorProfiles => {
+            flavorProfiles.map(profile => {
+              flavors[profile.id].extra_specs = profile.extra_specs;
+            });
+            dispatch(this.fetchFlavorsSuccess(flavors));
+          });
         })
         .catch(error => {
           dispatch(handleErrors(error, 'Flavors could not be loaded.'));
