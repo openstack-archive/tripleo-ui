@@ -16,28 +16,20 @@
 
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import Formsy from 'formsy-react';
-import { fromJS, is } from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { isObjectLike, mapValues } from 'lodash';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
+import { ModalHeader, ModalTitle } from 'react-bootstrap';
 
 import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
 import { getCurrentPlanName } from '../../selectors/plans';
 import { getRole } from '../../selectors/roles';
-import { getRoleServices } from '../../selectors/parameters';
-import { Loader, OverlayLoader } from '../ui/Loader';
-import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
-import {
-  CloseModalButton,
-  CloseModalXButton,
-  RoutedModalPanel
-} from '../ui/Modals';
+import { Loader } from '../ui/Loader';
+import { CloseModalXButton, RoutedModalPanel } from '../ui/Modals';
 import NavTab from '../ui/NavTab';
 import ParametersActions from '../../actions/ParametersActions';
+import ParametersForm from '../parameters/ParametersForm';
 import RoleNetworkConfig from './RoleNetworkConfig';
 import RoleParameters from './RoleParameters';
 import RoleServices from './RoleServices';
@@ -78,74 +70,19 @@ const messages = defineMessages({
 });
 
 class RoleDetail extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      canSubmit: false,
-      show: true
-    };
-  }
-
   componentDidMount() {
     const { currentPlanName } = this.props;
     this.props.fetchParameters(currentPlanName);
   }
 
-  componentDidUpdate() {
-    this.invalidateForm(this.props.formFieldErrors.toJS());
-  }
-
-  enableButton() {
-    this.setState({ canSubmit: true });
-  }
-
-  disableButton() {
-    this.setState({ canSubmit: false });
-  }
-
-  /**
-   * Filter out non updated parameters, so only parameters which have been actually changed
-   * get sent to updateparameters
-   */
-  _filterFormData(formData) {
-    return fromJS(formData)
-      .filterNot((value, key) => {
-        return is(fromJS(this.props.allParameters.get(key).default), value);
-      })
-      .toJS();
-  }
-
-  /**
-   * Json parameter values are sent as string, this function parses them and checks if they're object
-   * or array. Also, parameters with undefined value are set to null
-   */
-  _jsonParseFormData(formData) {
-    return mapValues(formData, value => {
-      try {
-        const parsedValue = JSON.parse(value);
-        if (isObjectLike(parsedValue)) {
-          return parsedValue;
-        }
-        return value;
-      } catch (e) {
-        return value === undefined ? null : value;
-      }
-    });
-  }
-
-  invalidateForm(formFieldErrors) {
-    this.refs.roleParametersForm.updateInputsWithError(formFieldErrors);
-  }
-
-  handleSubmit(formData, resetForm, invalidateForm) {
-    this.disableButton();
-
-    this.props.updateParameters(
-      this.props.currentPlanName,
-      this._filterFormData(this._jsonParseFormData(formData)),
-      Object.keys(this.refs.roleParametersForm.inputs)
+  handleUpdateParameters = (updatedValues, saveAndClose) => {
+    const { currentPlanName, history, updateParameters } = this.props;
+    updateParameters(
+      currentPlanName,
+      updatedValues,
+      saveAndClose && history.push.bind(this, `/plans/${currentPlanName}`)
     );
-  }
+  };
 
   renderRoleTabs() {
     const {
@@ -186,10 +123,8 @@ class RoleDetail extends React.Component {
   render() {
     const {
       currentPlanName,
-      formErrors,
       intl: { formatMessage },
       isFetchingParameters,
-      isUpdatingParameters,
       location,
       match: { params: urlParams },
       role,
@@ -199,87 +134,56 @@ class RoleDetail extends React.Component {
     const roleName = role ? role.name : null;
     return (
       <RoutedModalPanel redirectPath={`/plans/${currentPlanName}`}>
-        <Formsy
-          ref="roleParametersForm"
-          role="form"
-          className="form form-horizontal flex-container"
-          onSubmit={this.handleSubmit.bind(this)}
-          onValid={this.enableButton.bind(this)}
-          onInvalid={this.disableButton.bind(this)}
+        <ModalHeader>
+          <CloseModalXButton />
+          <ModalTitle>
+            <FormattedMessage
+              {...messages.role}
+              values={{ roleName: roleName }}
+            />
+          </ModalTitle>
+        </ModalHeader>
+        <Loader
+          height={60}
+          content={formatMessage(messages.loadingParameters)}
+          component="div"
+          componentProps={{ className: 'flex-container' }}
+          loaded={dataLoaded}
         >
-          <ModalHeader>
-            <CloseModalXButton />
-            <ModalTitle>
-              <FormattedMessage
-                {...messages.role}
-                values={{ roleName: roleName }}
+          <ParametersForm updateParameters={this.handleUpdateParameters}>
+            {this.renderRoleTabs()}
+            <Switch location={location}>
+              <Route
+                path="/plans/:planName/roles/:roleName/parameters"
+                component={RoleParameters}
               />
-            </ModalTitle>
-          </ModalHeader>
-          {this.renderRoleTabs()}
-          <ModalFormErrorList errors={formErrors.toJS()} />
-          <Loader
-            height={60}
-            content={formatMessage(messages.loadingParameters)}
-            component="div"
-            componentProps={{ className: 'flex-container' }}
-            loaded={dataLoaded}
-          >
-            <OverlayLoader
-              containerClassName="flex-container"
-              loaded={!isUpdatingParameters}
-              content={formatMessage(messages.updatingParameters)}
-            >
-              <Switch location={location}>
-                <Route
-                  path="/plans/:planName/roles/:roleName/parameters"
-                  component={RoleParameters}
-                />
-                <Route
-                  path="/plans/:planName/roles/:roleName/services"
-                  component={RoleServices}
-                />
-                <Route
-                  path="/plans/:planName/roles/:roleName/network-configuration"
-                  component={RoleNetworkConfig}
-                />
-                <Redirect
-                  from="/plans/:planName/roles/:roleName"
-                  to={`/plans/${currentPlanName}/roles/${
-                    urlParams.roleName
-                  }/parameters`}
-                />
-              </Switch>
-            </OverlayLoader>
-          </Loader>
-          {dataLoaded ? (
-            <ModalFooter>
-              <CloseModalButton>
-                <FormattedMessage {...messages.cancel} />
-              </CloseModalButton>
-              <button
-                type="submit"
-                disabled={!this.state.canSubmit}
-                className="btn btn-primary"
-              >
-                <FormattedMessage {...messages.saveChanges} />
-              </button>
-            </ModalFooter>
-          ) : null}
-        </Formsy>
+              <Route
+                path="/plans/:planName/roles/:roleName/services"
+                component={RoleServices}
+              />
+              <Route
+                path="/plans/:planName/roles/:roleName/network-configuration"
+                component={RoleNetworkConfig}
+              />
+              <Redirect
+                from="/plans/:planName/roles/:roleName"
+                to={`/plans/${currentPlanName}/roles/${
+                  urlParams.roleName
+                }/parameters`}
+              />
+            </Switch>
+          </ParametersForm>
+        </Loader>
       </RoutedModalPanel>
     );
   }
 }
 RoleDetail.propTypes = {
-  allParameters: ImmutablePropTypes.map.isRequired,
   currentPlanName: PropTypes.string,
   fetchParameters: PropTypes.func,
-  formErrors: ImmutablePropTypes.list,
-  formFieldErrors: ImmutablePropTypes.map,
+  history: PropTypes.object,
   intl: PropTypes.object,
   isFetchingParameters: PropTypes.bool.isRequired,
-  isUpdatingParameters: PropTypes.bool.isRequired,
   location: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   role: ImmutablePropTypes.record,
@@ -290,13 +194,8 @@ RoleDetail.propTypes = {
 function mapStateToProps(state, props) {
   return {
     currentPlanName: getCurrentPlanName(state),
-    formErrors: state.parameters.form.get('formErrors'),
-    formFieldErrors: state.parameters.form.get('formFieldErrors'),
-    allParameters: state.parameters.parameters,
     isFetchingParameters: state.parameters.isFetching,
-    isUpdatingParameters: state.parameters.isUpdating,
     role: getRole(state, props.match.params.roleName),
-    roleServices: getRoleServices(state, props.match.params.roleName),
     rolesLoaded: state.roles.get('loaded')
   };
 }
@@ -310,14 +209,9 @@ function mapDispatchToProps(dispatch, ownProps) {
         )
       );
     },
-    updateParameters: (currentPlanName, data, inputFields, redirectPath) => {
+    updateParameters: (currentPlanName, data, redirectPath) => {
       dispatch(
-        ParametersActions.updateRoleParameters(
-          currentPlanName,
-          data,
-          inputFields,
-          redirectPath
-        )
+        ParametersActions.updateParameters(currentPlanName, data, redirectPath)
       );
     }
   };
