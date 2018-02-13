@@ -15,9 +15,10 @@
  */
 
 import { Button, Form, ModalFooter } from 'react-bootstrap';
+import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { isEqual, pickBy } from 'lodash';
+import { isEqual, pickBy, mapValues } from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { reduxForm } from 'redux-form';
@@ -59,51 +60,51 @@ const messages = defineMessages({
   }
 });
 
-const ParametersForm = ({
-  dispatch,
-  error,
-  children,
-  onSubmit,
-  handleSubmit,
-  intl: { formatMessage },
-  invalid,
-  pristine,
-  submitting,
-  initialValues
-}) => (
-  <Form className="flex-container" onSubmit={handleSubmit} horizontal>
-    <OverlayLoader
-      loaded={!submitting}
-      content={formatMessage(messages.updatingParameters)}
-      containerClassName="flex-container"
-    >
-      <ModalFormErrorList errors={error ? [error] : []} />
-      <div className="flex-row">{children}</div>
-    </OverlayLoader>
-    <ModalFooter>
-      <CloseModalButton>
-        <FormattedMessage {...messages.cancel} />
-      </CloseModalButton>
-      <Button
-        disabled={invalid || pristine || submitting}
-        onClick={handleSubmit(values =>
-          onSubmit({ ...values, saveAndClose: true }, dispatch, {
-            initialValues
-          })
-        )}
+const ParametersForm = props => {
+  const {
+    dispatch,
+    error,
+    children,
+    onSubmit,
+    handleSubmit,
+    intl: { formatMessage },
+    invalid,
+    pristine,
+    submitting
+  } = props;
+  return (
+    <Form className="flex-container" onSubmit={handleSubmit} horizontal>
+      <OverlayLoader
+        loaded={!submitting}
+        content={formatMessage(messages.updatingParameters)}
+        containerClassName="flex-container"
       >
-        <FormattedMessage {...messages.saveAndClose} />
-      </Button>
-      <Button
-        type="submit"
-        disabled={invalid || pristine || submitting}
-        bsStyle="primary"
-      >
-        <FormattedMessage {...messages.saveChanges} />
-      </Button>
-    </ModalFooter>
-  </Form>
-);
+        <ModalFormErrorList errors={error ? [error] : []} />
+        {children}
+      </OverlayLoader>
+      <ModalFooter>
+        <CloseModalButton>
+          <FormattedMessage {...messages.cancel} />
+        </CloseModalButton>
+        <Button
+          disabled={invalid || pristine || submitting}
+          onClick={handleSubmit(values =>
+            onSubmit({ ...values, saveAndClose: true }, dispatch, props)
+          )}
+        >
+          <FormattedMessage {...messages.saveAndClose} />
+        </Button>
+        <Button
+          type="submit"
+          disabled={invalid || pristine || submitting}
+          bsStyle="primary"
+        >
+          <FormattedMessage {...messages.saveChanges} />
+        </Button>
+      </ModalFooter>
+    </Form>
+  );
+};
 ParametersForm.propTypes = {
   children: PropTypes.node,
   dispatch: PropTypes.func.isRequired,
@@ -115,7 +116,8 @@ ParametersForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   parameters: ImmutablePropTypes.map.isRequired,
   pristine: PropTypes.bool.isRequired,
-  submitting: PropTypes.bool.isRequired
+  submitting: PropTypes.bool.isRequired,
+  updateParameters: PropTypes.func.isRequired
 };
 
 const isJSON = value => {
@@ -159,9 +161,74 @@ const validate = (
   return errors;
 };
 
+const convertJsonTypeParameterValueToString = value =>
+  // Heat defaults empty values to empty string also some JSON type parameters
+  // accept empty string as valid value
+  ['', undefined].includes(value) ? '' : JSON.stringify(value);
+
+const getFormInitialValues = parameters => {
+  return parameters
+    .map(p => {
+      const value = p.value === undefined ? p.default : p.value;
+      if (p.type.toLowerCase() === 'json') {
+        return convertJsonTypeParameterValueToString(value);
+      } else {
+        return value;
+      }
+    })
+    .toJS();
+};
+
+/**
+ * Filter out non updated parameters, so only parameters which have been actually changed
+ * get sent to updateparameters
+ */
+const filterFormData = (values, initialValues) => {
+  return pickBy(values, (value, key) => !isEqual(value, initialValues[key]));
+};
+
+/**
+ * Json parameter values are sent as string, this function parses them and checks if they're object
+ * or array. Also, parameters with undefined value are set to null
+ */
+const parseJsonTypeValues = (values, parameters) => {
+  return mapValues(values, (value, key) => {
+    if (parameters.get(key).type.toLowerCase() === 'json') {
+      try {
+        return JSON.parse(value);
+      } catch (e) {
+        return value === undefined ? null : value;
+      }
+    }
+    return value === undefined ? null : value;
+  });
+};
+
+const handleSubmit = (
+  { saveAndClose, ...values },
+  dispatch,
+  { initialValues, parameters, updateParameters }
+) => {
+  const updatedValues = parseJsonTypeValues(
+    filterFormData(values, initialValues),
+    parameters
+  );
+  updateParameters(updatedValues, saveAndClose);
+};
+
+const mapStateToProps = state => {
+  const { parameters } = state.parameters;
+  return {
+    initialValues: getFormInitialValues(parameters),
+    parameters: parameters
+  };
+};
+
 const form = reduxForm({
   form: 'parametersForm',
+  enableReinitialize: true,
+  onSubmit: handleSubmit,
   validate
 });
 
-export default injectIntl(form(ParametersForm));
+export default injectIntl(connect(mapStateToProps, null)(form(ParametersForm)));

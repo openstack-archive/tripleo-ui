@@ -19,7 +19,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import ParameterInputList from '../parameters/ParameterInputList';
+import ParameterInputList from '../parameters/NewParameterInputList';
 import { getRoleParameters } from '../../selectors/parameters';
 import { getRole } from '../../selectors/roles';
 
