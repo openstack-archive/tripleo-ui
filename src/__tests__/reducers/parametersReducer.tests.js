@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { List, Map } from 'immutable';
+import { Map } from 'immutable';
 
 import { ParametersDefaultState } from '../../js/immutableRecords/parameters';
 import ParametersConstants from '../../js/constants/ParametersConstants';
@@ -58,39 +58,6 @@ const parametersActionPayload = {
 };
 
 describe('parametersReducer', () => {
-  describe('FETCH_PARAMETERS_PENDING', () => {
-    let state;
-    const action = {
-      type: ParametersConstants.FETCH_PARAMETERS_PENDING
-    };
-
-    beforeEach(() => {
-      state = parametersReducer(
-        ParametersDefaultState({
-          isFetching: false,
-          form: Map({
-            formErrors: List.of('lorem ipsum'),
-            formFieldErrors: Map({ field: 'foo' })
-          })
-        }),
-        action
-      );
-    });
-
-    it('sets isFetching to `true`', () => {
-      expect(state.isFetching).toBe(true);
-    });
-
-    it('resets form', () => {
-      expect(state.form).toEqual(
-        Map({
-          formErrors: List(),
-          formFieldErrors: Map()
-        })
-      );
-    });
-  });
-
   describe('FETCH_PARAMETERS_SUCCESS', () => {
     let state;
     const action = {
@@ -112,15 +79,6 @@ describe('parametersReducer', () => {
       expect(state.isFetching).toBe(false);
     });
 
-    it('resets form', () => {
-      expect(state.form).toEqual(
-        Map({
-          formErrors: List(),
-          formFieldErrors: Map()
-        })
-      );
-    });
-
     it('sets parameters', () => {
       expect(state.parameters.size).toEqual(1);
       expect(state.parameters.getIn(['parameter1', 'default'])).toEqual('1');
@@ -139,59 +97,6 @@ describe('parametersReducer', () => {
     });
   });
 
-  describe('UPDATE_PARAMETERS_FAILED', () => {
-    let state;
-    const action = {
-      type: ParametersConstants.UPDATE_PARAMETERS_FAILED,
-      payload: {
-        formErrors: [{ foo: 'bar' }],
-        formFieldErrors: { field1: 'fail' }
-      }
-    };
-
-    beforeEach(() => {
-      state = parametersReducer(
-        ParametersDefaultState({
-          isFetching: true
-        }),
-        action
-      );
-    });
-
-    it('sets `isUpdating` to false', () => {
-      expect(state.isUpdating).toBe(false);
-    });
-
-    it('sets errors in  `form`', () => {
-      expect(state.form).toEqual(
-        Map({
-          formErrors: List.of({ foo: 'bar' }),
-          formFieldErrors: Map({ field1: 'fail' })
-        })
-      );
-    });
-  });
-
-  describe('UPDATE_PARAMETERS_PENDING', () => {
-    let state;
-    const action = {
-      type: ParametersConstants.UPDATE_PARAMETERS_PENDING
-    };
-
-    beforeEach(() => {
-      state = parametersReducer(
-        ParametersDefaultState({
-          isFetching: false
-        }),
-        action
-      );
-    });
-
-    it('sets `isUpdating` to true', () => {
-      expect(state.isUpdating).toBe(true);
-    });
-  });
-
   describe('UPDATE_PARAMETERS_SUCCESS', () => {
     let state;
     const action = {
@@ -203,7 +108,6 @@ describe('parametersReducer', () => {
       state = parametersReducer(
         ParametersDefaultState({
           isFetching: true,
-          form: Map({ some: 'value' }),
           parameters: Map(parametersActionPayload.parameters)
         }),
         action
@@ -212,15 +116,6 @@ describe('parametersReducer', () => {
 
     it('sets isFetching to `false`', () => {
       expect(state.isFetching).toBe(false);
-    });
-
-    it('resets form', () => {
-      expect(state.form).toEqual(
-        Map({
-          formErrors: List(),
-          formFieldErrors: Map()
-        })
-      );
     });
 
     it('updates parameters in state with new values', () => {

@@ -18,7 +18,6 @@ import { defineMessages } from 'react-intl';
 import { startSubmit, stopSubmit } from 'redux-form';
 
 import { handleErrors } from './ErrorActions';
-import NotificationActions from '../actions/NotificationActions';
 import ParametersConstants from '../constants/ParametersConstants';
 import MistralApiService from '../services/MistralApiService';
 import MistralConstants from '../constants/MistralConstants';
@@ -89,72 +88,10 @@ export default {
     };
   },
 
-  updateParametersPending() {
-    return {
-      type: ParametersConstants.UPDATE_PARAMETERS_PENDING
-    };
-  },
-
   updateParametersSuccess(updatedParameters) {
     return {
       type: ParametersConstants.UPDATE_PARAMETERS_SUCCESS,
       payload: updatedParameters
-    };
-  },
-
-  updateParametersFailed(formErrors, formFieldErrors) {
-    return {
-      type: ParametersConstants.UPDATE_PARAMETERS_FAILED,
-      payload: {
-        formErrors: formErrors,
-        formFieldErrors: formFieldErrors
-      }
-    };
-  },
-
-  updateRoleParameters(planName, data, inputFieldNames, redirect) {
-    return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      dispatch(this.updateParametersPending());
-      return dispatch(
-        MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE, {
-          container: planName,
-          parameters: data
-        })
-      )
-        .then(response => {
-          const { resources, parameters } = response.heat_resource_tree;
-          const mistralParameters = response.environment_parameters;
-          dispatch(
-            this.updateParametersSuccess({
-              resources,
-              parameters,
-              mistralParameters
-            })
-          );
-          dispatch(
-            NotificationActions.notify({
-              title: formatMessage(messages.parametersUpdatedNotficationTitle),
-              message: formatMessage(
-                messages.parametersUpdatedNotficationMessage
-              ),
-              type: 'success'
-            })
-          );
-          if (redirect) {
-            redirect();
-          }
-        })
-        .catch(error => {
-          dispatch(
-            this.updateParametersFailed([
-              {
-                title: formatMessage(messages.updateParametersFailed),
-                message: error.message
-              }
-            ])
-          );
-        });
     };
   },
 

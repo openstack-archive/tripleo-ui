@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Red Hat Inc.
+ * Copyright 2018 Red Hat Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License. You may obtain
@@ -14,31 +14,30 @@
  * under the License.
  */
 
-import { defineMessages, injectIntl } from 'react-intl';
+import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { isObjectLike } from 'lodash';
 
-import HorizontalInput from '../ui/forms/HorizontalInput';
-import HorizontalNumberInput from '../ui/forms/HorizontalNumberInput';
-import HorizontalArrayInput from '../ui/forms/HorizontalArrayInput';
-import HorizontalTextarea from '../ui/forms/HorizontalTextarea';
-import HorizontalCheckBox from '../ui/forms/HorizontalCheckBox';
+import HorizontalInput from '../ui/reduxForm/HorizontalInput';
+import HorizontalTextarea from '../ui/reduxForm/HorizontalTextarea';
+import HorizontalCheckBox from '../ui/reduxForm/HorizontalCheckBox';
 import HorizontalStaticText from '../ui/forms/HorizontalStaticText';
 
-const messages = defineMessages({
-  enterValidJson: {
-    id: 'ParameterInput.enterValidJson',
-    defaultMessage: 'Please enter a valid JSON string.'
-  }
-});
-
+// TODO(jtomasek): rename this when original Formsy based ParameterInputList and
+// ParameterInput are not used
 class ParameterInput extends React.Component {
-  /**
-   * Process the parameter, generate relevant input
-   */
   render() {
     const { name, label, description, defaultValue, value, type } = this.props;
+    const commonProps = {
+      component: HorizontalInput,
+      name,
+      id: name,
+      label,
+      description,
+      labelColumns: 4,
+      inputColumns: 8
+    };
     if (value) {
       return (
         <HorizontalStaticText
@@ -50,82 +49,50 @@ class ParameterInput extends React.Component {
       );
     } else if (type.toLowerCase() === 'commadelimitedlist') {
       return (
-        <HorizontalArrayInput
-          name={name}
-          title={label}
-          description={description}
-          value={defaultValue}
-          labelColumnClasses="col-sm-4"
-          inputColumnClasses="col-sm-8"
+        <Field
+          {...commonProps}
+          parse={value => value.split(',')}
+          component={HorizontalTextarea}
         />
       );
     } else if (type.toLowerCase() === 'json' || isObjectLike(defaultValue)) {
-      return (
-        <HorizontalTextarea
-          name={name}
-          title={label}
-          description={description}
-          value={defaultValue ? JSON.stringify(defaultValue) : ''}
-          validations="isJson"
-          validationError={this.props.intl.formatMessage(
-            messages.enterValidJson
-          )}
-          labelColumnClasses="col-sm-4"
-          inputColumnClasses="col-sm-8"
-        />
-      );
+      return <Field {...commonProps} component={HorizontalTextarea} />;
     } else if (
       type.toLowerCase() === 'string' &&
       /^.*(Key|Cert|Certificate)$/.test(name)
     ) {
-      return (
-        <HorizontalTextarea
-          name={name}
-          title={label}
-          description={description}
-          value={defaultValue}
-          labelColumnClasses="col-sm-4"
-          inputColumnClasses="col-sm-8"
-        />
-      );
+      return <Field {...commonProps} component={HorizontalTextarea} />;
     } else if (type.toLowerCase() === 'number') {
       return (
-        <HorizontalNumberInput
-          name={name}
-          title={label}
-          description={description}
-          value={defaultValue}
-          labelColumnClasses="col-sm-4"
-          inputColumnClasses="col-sm-8"
+        <Field
+          {...commonProps}
+          type="number"
+          parse={value =>
+            isNaN(parseInt(value)) ? undefined : parseInt(value)
+          }
         />
       );
     } else if (type.toLowerCase() === 'boolean') {
       return (
-        <HorizontalCheckBox
-          name={name}
-          id={name}
-          title={label}
-          description={description}
-          value={defaultValue}
-          labelColumnClasses="col-sm-4"
-          inputColumnClasses="col-sm-8"
+        <Field
+          {...commonProps}
+          type="checkbox"
+          component={HorizontalCheckBox}
         />
       );
     } else {
       return (
-        <HorizontalInput
-          name={name}
-          title={label}
+        <Field
+          {...commonProps}
+          component={HorizontalInput}
           description={description}
-          value={defaultValue}
-          labelColumnClasses="col-sm-4"
-          inputColumnClasses="col-sm-8"
+          labelColumns={4}
+          inputColumns={8}
         />
       );
     }
   }
 }
-
 ParameterInput.propTypes = {
   defaultValue: PropTypes.oneOfType([
     PropTypes.object,
@@ -151,4 +118,4 @@ ParameterInput.defaultProps = {
   defaultValue: ''
 };
 
-export default injectIntl(ParameterInput);
+export default ParameterInput;

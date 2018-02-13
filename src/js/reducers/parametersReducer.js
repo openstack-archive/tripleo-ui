@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { fromJS, List, Map } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
 import EnvironmentConfigurationConstants from '../constants/EnvironmentConfigurationConstants';
 import ParametersConstants from '../constants/ParametersConstants';
@@ -30,9 +30,7 @@ const initialState = new ParametersDefaultState();
 export default function parametersReducer(state = initialState, action) {
   switch (action.type) {
     case ParametersConstants.FETCH_PARAMETERS_PENDING:
-      return state
-        .set('isFetching', true)
-        .set('form', Map({ formErrors: List(), formFieldErrors: Map() }));
+      return state.set('isFetching', true);
 
     case ParametersConstants.FETCH_PARAMETERS_SUCCESS:
     case ParametersConstants.UPDATE_PARAMETERS_SUCCESS: {
@@ -40,14 +38,6 @@ export default function parametersReducer(state = initialState, action) {
       return state
         .set('loaded', true)
         .set('isFetching', false)
-        .set('isUpdating', false)
-        .set(
-          'form',
-          Map({
-            formErrors: List(),
-            formFieldErrors: Map()
-          })
-        )
         .set(
           'resources',
           fromJS(resources).map(resource => new Resource(resource))
@@ -60,28 +50,7 @@ export default function parametersReducer(state = initialState, action) {
     }
 
     case ParametersConstants.FETCH_PARAMETERS_FAILED:
-      return state
-        .set('loaded', true)
-        .set('isFetching', false)
-        .set(
-          'form',
-          Map({
-            formErrors: List(),
-            formFieldErrors: Map()
-          })
-        );
-
-    case ParametersConstants.UPDATE_PARAMETERS_PENDING:
-      return state.set('isUpdating', true);
-
-    case ParametersConstants.UPDATE_PARAMETERS_FAILED:
-      return state.set('isUpdating', false).set(
-        'form',
-        Map({
-          formErrors: List.of(...action.payload.formErrors),
-          formFieldErrors: Map(action.payload.formFieldErrors)
-        })
-      );
+      return state.set('loaded', true).set('isFetching', false);
 
     case EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS:
       return state.set('loaded', false);

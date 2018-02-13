@@ -19,11 +19,6 @@ import { List, Map, Record } from 'immutable';
 export const ParametersDefaultState = Record({
   loaded: false,
   isFetching: false,
-  isUpdating: false,
-  form: Map({
-    formErrors: List(),
-    formFieldErrors: Map()
-  }),
   resources: Map(),
   parameters: Map(),
   mistralParameters: Map()
