@@ -19,6 +19,7 @@ import { fromJS, Map } from 'immutable';
 import * as selectors from '../../js/selectors/nodesAssignment';
 import { Port } from '../../js/immutableRecords/nodes';
 import { Role, RolesState } from '../../js/immutableRecords/roles';
+import { Flavor } from '../../js/immutableRecords/flavors';
 import {
   Parameter,
   ParametersDefaultState
@@ -196,11 +197,35 @@ describe('Nodes Assignment selectors', () => {
         default: 1
       })
     });
+    const flavors = Map({
+      control: new Flavor({
+        id: 'control',
+        name: 'Control',
+        extra_specs: Map({
+          'capabilities:profile': 'control'
+        })
+      }),
+      compute: new Flavor({
+        id: 'compute',
+        name: 'Compute',
+        extra_specs: Map({
+          'capabilities:profile': 'compute'
+        })
+      }),
+      'block-storage': new Flavor({
+        id: 'block-storage',
+        name: 'Block Storage',
+        extra_specs: Map({
+          'capabilities:profile': 'block-storage'
+        })
+      })
+    });
 
     it('calculates untagged assigned nodes count', function() {
       const result = selectors.getTotalUntaggedAssignedNodesCount.resultFunc(
         nodes,
         roles,
+        flavors,
         parametersByRole
       );
       expect(result).toEqual(1);
@@ -224,6 +249,7 @@ describe('Nodes Assignment selectors', () => {
       const result = selectors.getTotalUntaggedAssignedNodesCount.resultFunc(
         nodes,
         roles,
+        flavors,
         parametersByRole
       );
       expect(result).toEqual(1);
@@ -278,6 +304,29 @@ describe('Nodes Assignment selectors', () => {
         default: 0
       })
     });
+    const flavors = Map({
+      control: new Flavor({
+        id: 'control',
+        name: 'Control',
+        extra_specs: Map({
+          'capabilities:profile': 'control'
+        })
+      }),
+      compute: new Flavor({
+        id: 'compute',
+        name: 'Compute',
+        extra_specs: Map({
+          'capabilities:profile': 'compute'
+        })
+      }),
+      'block-storage': new Flavor({
+        id: 'block-storage',
+        name: 'Block Storage',
+        extra_specs: Map({
+          'capabilities:profile': 'block-storage'
+        })
+      })
+    });
     const totalUntaggedAssignedNodesCount = 1;
 
     it('calculates maximum available nodes count for each role', function() {
@@ -285,6 +334,7 @@ describe('Nodes Assignment selectors', () => {
         availableNodes,
         untaggedAvailableNodes,
         roles,
+        flavors,
         nodeCountParametersByRole,
         totalUntaggedAssignedNodesCount
       );
@@ -313,6 +363,7 @@ describe('Nodes Assignment selectors', () => {
         availableNodes,
         untaggedAvailableNodes,
         roles,
+        flavors,
         nodeCountParametersByRole,
         totalUntaggedAssignedNodesCount
       );

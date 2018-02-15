@@ -20,6 +20,7 @@ import { getFormValues } from 'redux-form';
 import { getNodes, getNodeCapabilities } from './nodes';
 import { getParameters } from './parameters';
 import { getRoles } from './roles';
+import { getFlavors } from './flavors';
 
 /**
  *  Return Nodes which are either available or deployed (active) with current Plan
@@ -69,11 +70,19 @@ export const getNodeCountParametersByRoleFromFormValues = createSelector(
  *  Returns sum of untagged assigned Nodes counts across all Roles
  */
 export const getTotalUntaggedAssignedNodesCount = createSelector(
-  [getAvailableNodes, getRoles, getNodeCountParametersByRoleFromFormValues],
-  (nodes, roles, parametersByRole) =>
+  [
+    getAvailableNodes,
+    getRoles,
+    getFlavors,
+    getNodeCountParametersByRoleFromFormValues
+  ],
+  (nodes, roles, flavors, parametersByRole) =>
     roles.reduce((total, role) => {
+      const flavor = flavors.get(role.identifier);
       const taggedCount = nodes.filter(
-        node => getNodeCapabilities(node).profile === role.identifier
+        node =>
+          getNodeCapabilities(node).profile ===
+          flavor.getIn(['extra_specs', 'capabilities:profile'])
       ).size;
       const assignedCount = parametersByRole.getIn([role.name, 'default'], 0);
       const remainder = Math.max(0, assignedCount - taggedCount);
@@ -89,13 +98,24 @@ export const getAvailableNodesCountsByRole = createSelector(
     getAvailableNodes,
     getUntaggedAvailableNodes,
     getRoles,
+    getFlavors,
     getNodeCountParametersByRoleFromFormValues,
     getTotalUntaggedAssignedNodesCount
   ],
-  (nodes, untaggedNodes, roles, parametersByRole, untaggedAssignedCount) =>
+  (
+    nodes,
+    untaggedNodes,
+    roles,
+    flavors,
+    parametersByRole,
+    untaggedAssignedCount
+  ) =>
     roles.map(role => {
+      const flavor = flavors.get(role.identifier);
       const taggedCount = nodes.filter(
-        node => getNodeCapabilities(node).profile === role.identifier
+        node =>
+          getNodeCapabilities(node).profile ===
+          flavor.getIn(['extra_specs', 'capabilities:profile'])
       ).size;
       const assignedCount = parametersByRole.getIn([role.name, 'default'], 0);
       const untaggedCount = untaggedNodes.size;
