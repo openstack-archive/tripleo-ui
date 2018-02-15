@@ -16,8 +16,11 @@
 
 import { createSelector } from 'reselect';
 
-const flavors = state => state.flavors;
+const getFlavors = state => state.flavors.flavors;
 
-export const getFlavors = createSelector([flavors], flavors =>
-  flavors.flavors.sortBy(f => f.name)
+export const getFlavorProfiles = createSelector([getFlavors], flavors =>
+  flavors
+    .map(flavor => flavor.getIn(['extra_specs', 'capabilities:profile']))
+    .filter(profile => profile !== undefined)
+    .sort()
 );

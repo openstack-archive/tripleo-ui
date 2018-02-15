@@ -21,11 +21,9 @@ import { ModalHeader, ModalTitle } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { getAvailableNodeProfiles } from '../../../selectors/nodes';
-import { getCurrentPlan } from '../../../selectors/plans';
-import { getRoles } from '../../../selectors/roles';
+import { getFlavorProfiles } from '../../../selectors/flavors';
 import { CloseModalXButton, Modal } from '../../ui/Modals';
-import RolesActions from '../../../actions/RolesActions';
+import FlavorsActions from '../../../actions/FlavorsActions';
 import TagNodesForm from './TagNodesForm';
 
 const messages = defineMessages({
@@ -37,18 +35,11 @@ const messages = defineMessages({
 
 class TagNodesModal extends React.Component {
   componentDidMount() {
-    const { currentPlan, fetchRoles } = this.props;
-    currentPlan && fetchRoles(currentPlan.name);
+    this.props.fetchFlavors();
   }
 
   render() {
-    const {
-      show,
-      onCancel,
-      onProfileSelected,
-      availableProfiles,
-      roles
-    } = this.props;
+    const { show, onCancel, onProfileSelected, profiles } = this.props;
     return (
       <Modal show={show} onHide={onCancel}>
         <ModalHeader>
@@ -61,31 +52,26 @@ class TagNodesModal extends React.Component {
         <TagNodesForm
           onCancel={onCancel}
           onSubmit={onProfileSelected}
-          profiles={availableProfiles.toArray()}
-          roles={roles.toList()}
+          profiles={profiles.toArray()}
         />
       </Modal>
     );
   }
 }
 TagNodesModal.propTypes = {
-  availableProfiles: ImmutablePropTypes.list.isRequired,
-  currentPlan: ImmutablePropTypes.record,
-  fetchRoles: PropTypes.func.isRequired,
+  fetchFlavors: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   onProfileSelected: PropTypes.func.isRequired,
-  roles: ImmutablePropTypes.map.isRequired,
+  profiles: ImmutablePropTypes.map.isRequired,
   show: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
-  availableProfiles: getAvailableNodeProfiles(state),
-  currentPlan: getCurrentPlan(state),
-  roles: getRoles(state)
+  profiles: getFlavorProfiles(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchRoles: planName => dispatch(RolesActions.fetchRoles(planName))
+  fetchFlavors: () => dispatch(FlavorsActions.fetchFlavors())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TagNodesModal);
