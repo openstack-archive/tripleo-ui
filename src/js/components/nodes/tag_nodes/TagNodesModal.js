@@ -21,11 +21,12 @@ import { ModalHeader, ModalTitle } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { getAvailableNodeProfiles } from '../../../selectors/nodes';
 import { getCurrentPlan } from '../../../selectors/plans';
 import { getRoles } from '../../../selectors/roles';
+import { getFlavors } from '../../../selectors/flavors';
 import { CloseModalXButton, Modal } from '../../ui/Modals';
 import RolesActions from '../../../actions/RolesActions';
+import FlavorsActions from '../../../actions/FlavorsActions';
 import TagNodesForm from './TagNodesForm';
 
 const messages = defineMessages({
@@ -37,18 +38,13 @@ const messages = defineMessages({
 
 class TagNodesModal extends React.Component {
   componentDidMount() {
-    const { currentPlan, fetchRoles } = this.props;
+    const { currentPlan, fetchFlavors, fetchRoles } = this.props;
     currentPlan && fetchRoles(currentPlan.name);
+    fetchFlavors();
   }
 
   render() {
-    const {
-      show,
-      onCancel,
-      onProfileSelected,
-      availableProfiles,
-      roles
-    } = this.props;
+    const { show, onCancel, onProfileSelected, flavors, roles } = this.props;
     return (
       <Modal show={show} onHide={onCancel}>
         <ModalHeader>
@@ -61,7 +57,7 @@ class TagNodesModal extends React.Component {
         <TagNodesForm
           onCancel={onCancel}
           onSubmit={onProfileSelected}
-          profiles={availableProfiles.toArray()}
+          profiles={flavors.toArray()}
           roles={roles.toList()}
         />
       </Modal>
@@ -69,9 +65,10 @@ class TagNodesModal extends React.Component {
   }
 }
 TagNodesModal.propTypes = {
-  availableProfiles: ImmutablePropTypes.list.isRequired,
   currentPlan: ImmutablePropTypes.record,
+  fetchFlavors: PropTypes.func.isRequired,
   fetchRoles: PropTypes.func.isRequired,
+  flavors: ImmutablePropTypes.map.isRequired,
   onCancel: PropTypes.func.isRequired,
   onProfileSelected: PropTypes.func.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
@@ -79,12 +76,13 @@ TagNodesModal.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  availableProfiles: getAvailableNodeProfiles(state),
   currentPlan: getCurrentPlan(state),
+  flavors: getFlavors(state),
   roles: getRoles(state)
 });
 
 const mapDispatchToProps = dispatch => ({
+  fetchFlavors: () => dispatch(FlavorsActions.fetchFlavors()),
   fetchRoles: planName => dispatch(RolesActions.fetchRoles(planName))
 });
 

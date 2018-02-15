@@ -104,7 +104,9 @@ class TagNodesForm extends React.Component {
 
   renderOptions() {
     return this.props.profiles
-      .map((profile, index) => <option key={index}>{profile}</option>)
+      .map((profile, index) => (
+        <option key={index}>{profile.get('name')}</option>
+      ))
       .concat([
         <option key="spacer1" value="spacer" disabled>
           ──────────
