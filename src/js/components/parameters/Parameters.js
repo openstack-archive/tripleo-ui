@@ -144,12 +144,16 @@ class Parameters extends React.Component {
   }
 
   render() {
-    const { enabledEnvironments, parameters, parametersLoaded } = this.props;
+    const {
+      enabledEnvironments,
+      parameters,
+      isFetchingParameters
+    } = this.props;
     return (
       <Loader
         height={120}
         content="Fetching Parameters..."
-        loaded={parametersLoaded}
+        loaded={!isFetchingParameters}
       >
         <ParametersForm
           onSubmit={this.handleSubmit}
@@ -185,7 +189,6 @@ Parameters.propTypes = {
   isFetchingParameters: PropTypes.bool.isRequired,
   mistralParameters: ImmutablePropTypes.map.isRequired,
   parameters: ImmutablePropTypes.map.isRequired,
-  parametersLoaded: PropTypes.bool,
   rootParameters: ImmutablePropTypes.map.isRequired,
   updateParameters: PropTypes.func
 };
@@ -200,8 +203,7 @@ function mapStateToProps(state, ownProps) {
     currentPlanName: getCurrentPlanName(state),
     isFetchingParameters: state.parameters.isFetching,
     mistralParameters: state.parameters.mistralParameters,
-    rootParameters: getRootParameters(state),
-    parametersLoaded: state.parameters.loaded
+    rootParameters: getRootParameters(state)
   };
 }
 
