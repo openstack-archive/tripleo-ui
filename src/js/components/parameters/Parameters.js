@@ -154,23 +154,21 @@ class Parameters extends React.Component {
         height={120}
         content="Fetching Parameters..."
         loaded={!isFetchingParameters}
+        componentProps={{ className: 'flex-container' }}
       >
         <ParametersForm
           onSubmit={this.handleSubmit}
           parameters={parameters}
           initialValues={this.getFormInitialValues()}
+          className="flex-container"
         >
-          <div className="container-fluid">
-            <div className="row row-eq-height">
-              <ParametersSidebar
-                activateTab={tabName => this.setState({ activeTab: tabName })}
-                enabledEnvironments={enabledEnvironments.toList()}
-                isTabActive={this.isTabActive}
-              />
-              <div className="col-sm-8">
-                <div className="tab-content">{this.renderTabPanes()}</div>
-              </div>
-            </div>
+          <ParametersSidebar
+            activateTab={tabName => this.setState({ activeTab: tabName })}
+            enabledEnvironments={enabledEnvironments.toList()}
+            isTabActive={this.isTabActive}
+          />
+          <div className="col-sm-8 flex-column">
+            <div className="tab-content">{this.renderTabPanes()}</div>
           </div>
         </ParametersForm>
       </Loader>

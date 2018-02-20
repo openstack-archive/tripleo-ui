@@ -23,7 +23,7 @@ import React from 'react';
 import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
 import EnvironmentConfiguration from '../environment_configuration/EnvironmentConfiguration';
 import NavTab from '../ui/NavTab';
-import { CloseModalXButton, RoutedModal } from '../ui/Modals';
+import { CloseModalXButton, RoutedModalPanel } from '../ui/Modals';
 import Parameters from '../parameters/Parameters';
 
 const messages = defineMessages({
@@ -42,9 +42,8 @@ const messages = defineMessages({
 });
 
 const DeploymentConfiguration = ({ location, match }) => (
-  <RoutedModal
+  <RoutedModalPanel
     id="DeploymentConfiguration__ModalDialog"
-    bsSize="xl"
     redirectPath={`/plans/${match.params.planName}`}
   >
     <ModalHeader>
@@ -83,7 +82,7 @@ const DeploymentConfiguration = ({ location, match }) => (
         to={`${match.url}/environment`}
       />
     </Switch>
-  </RoutedModal>
+  </RoutedModalPanel>
 );
 DeploymentConfiguration.propTypes = {
   location: PropTypes.object.isRequired,

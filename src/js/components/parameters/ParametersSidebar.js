@@ -34,7 +34,7 @@ const ParametersSidebar = ({
   intl: { formatMessage },
   isTabActive
 }) => (
-  <div className="col-sm-4 sidebar-pf sidebar-pf-left">
+  <div className="col-xs-12 col-sm-4 sidebar-pf sidebar-pf-left flex-column">
     <ul
       id="Parameters__EnvironmentTabsList"
       className="nav nav-pills nav-stacked nav-arrows"

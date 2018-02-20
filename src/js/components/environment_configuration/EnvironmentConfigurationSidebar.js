@@ -25,7 +25,7 @@ const EnvironmentConfigurationSidebar = ({
   categories,
   isTabActive
 }) => (
-  <div className="col-sm-4 sidebar-pf sidebar-pf-left">
+  <div className="col-xs-12 col-sm-4 sidebar-pf sidebar-pf-left flex-column">
     <ul
       id="DeploymentConfiguration__CategoriesList"
       className="nav nav-pills nav-stacked nav-arrows"
