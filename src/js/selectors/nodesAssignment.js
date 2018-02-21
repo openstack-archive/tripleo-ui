@@ -17,9 +17,12 @@
 import { createSelector } from 'reselect';
 import { getFormValues } from 'redux-form';
 
+import { Flavor } from '../immutableRecords/flavors';
 import { getNodes, getNodeCapabilities } from './nodes';
 import { getParameters } from './parameters';
 import { getRoles } from './roles';
+import { getFlavors } from './flavors';
+import { Parameter } from '../immutableRecords/parameters';
 
 /**
  *  Return Nodes which are either available or deployed (active) with current Plan
@@ -66,15 +69,61 @@ export const getNodeCountParametersByRoleFromFormValues = createSelector(
 );
 
 /**
+ *  Returns Overcloud<RoleName>Flavor parameters for each Role
+ */
+export const getFlavorParametersByRole = createSelector(
+  [getRoles, getParameters],
+  (roles, parameters) =>
+    roles.map(role =>
+      parameters.get(`Overcloud${role.name}Flavor`, new Parameter())
+    )
+);
+
+/**
+ *  Returns flavor profile each Role.
+ */
+export const getFlavorProfilesByRole = createSelector(
+  [getFlavorParametersByRole, getFlavors],
+  (flavorParametersByRole, flavors) =>
+    flavorParametersByRole.map(roleFlavorParameter =>
+      flavors
+        .find(
+          flavor => flavor.name === roleFlavorParameter.default,
+          null,
+          new Flavor()
+        )
+        .getIn(['extra_specs', 'capabilities:profile'])
+    )
+);
+
+/**
+ *  Returns number of tagged nodes for each Role
+ */
+export const getTaggedNodesCountByRole = createSelector(
+  [getAvailableNodes, getFlavorProfilesByRole],
+  (nodes, flavorProfilesByRole) =>
+    flavorProfilesByRole.map(
+      (roleFlavorProfile, roleName) =>
+        nodes.filter(node => {
+          const nodeProfile = getNodeCapabilities(node).profile;
+          return nodeProfile && nodeProfile === roleFlavorProfile;
+        }).size
+    )
+);
+
+/**
  *  Returns sum of untagged assigned Nodes counts across all Roles
  */
 export const getTotalUntaggedAssignedNodesCount = createSelector(
-  [getAvailableNodes, getRoles, getNodeCountParametersByRoleFromFormValues],
-  (nodes, roles, parametersByRole) =>
+  [
+    getAvailableNodes,
+    getRoles,
+    getTaggedNodesCountByRole,
+    getNodeCountParametersByRoleFromFormValues
+  ],
+  (nodes, roles, taggedNodesCountByRole, parametersByRole) =>
     roles.reduce((total, role) => {
-      const taggedCount = nodes.filter(
-        node => getNodeCapabilities(node).profile === role.identifier
-      ).size;
+      const taggedCount = taggedNodesCountByRole.get(role.name);
       const assignedCount = parametersByRole.getIn([role.name, 'default'], 0);
       const remainder = Math.max(0, assignedCount - taggedCount);
       return total + remainder;
@@ -89,14 +138,20 @@ export const getAvailableNodesCountsByRole = createSelector(
     getAvailableNodes,
     getUntaggedAvailableNodes,
     getRoles,
+    getTaggedNodesCountByRole,
     getNodeCountParametersByRoleFromFormValues,
     getTotalUntaggedAssignedNodesCount
   ],
-  (nodes, untaggedNodes, roles, parametersByRole, untaggedAssignedCount) =>
+  (
+    nodes,
+    untaggedNodes,
+    roles,
+    taggedNodesCountByRole,
+    parametersByRole,
+    untaggedAssignedCount
+  ) =>
     roles.map(role => {
-      const taggedCount = nodes.filter(
-        node => getNodeCapabilities(node).profile === role.identifier
-      ).size;
+      const taggedCount = taggedNodesCountByRole.get(role.name);
       const assignedCount = parametersByRole.getIn([role.name, 'default'], 0);
       const untaggedCount = untaggedNodes.size;
       return (
