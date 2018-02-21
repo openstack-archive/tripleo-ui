@@ -16,7 +16,6 @@
 
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { pickBy, isEqual, mapValues } from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -81,42 +80,8 @@ class Parameters extends React.Component {
     }
   }
 
-  /**
-   * Filter out non updated parameters, so only parameters which have been actually changed
-   * get sent to updateparameters
-   */
-  _filterFormData(values, initialValues) {
-    return pickBy(values, (value, key) => !isEqual(value, initialValues[key]));
-  }
-
-  /**
-   * Json parameter values are sent as string, this function parses them and checks if they're object
-   * or array. Also, parameters with undefined value are set to null
-   */
-  _parseJsonTypeValues(values, parameters) {
-    return mapValues(values, (value, key) => {
-      if (parameters.get(key).type.toLowerCase() === 'json') {
-        try {
-          return JSON.parse(value);
-        } catch (e) {
-          return value === undefined ? null : value;
-        }
-      }
-      return value === undefined ? null : value;
-    });
-  }
-
-  handleSubmit = ({ saveAndClose, ...values }, dispatch, { initialValues }) => {
-    const {
-      currentPlanName,
-      history,
-      parameters,
-      updateParameters
-    } = this.props;
-    const updatedValues = this._parseJsonTypeValues(
-      this._filterFormData(values, initialValues),
-      parameters
-    );
+  handleUpdateParameters = (updatedValues, saveAndClose) => {
+    const { currentPlanName, history, updateParameters } = this.props;
     updateParameters(
       currentPlanName,
       updatedValues,
@@ -124,31 +89,8 @@ class Parameters extends React.Component {
     );
   };
 
-  _convertJsonTypeParameterValueToString(value) {
-    // Heat defaults empty values to empty string also some JSON type parameters
-    // accept empty string as valid value
-    return ['', undefined].includes(value) ? '' : JSON.stringify(value);
-  }
-
-  getFormInitialValues() {
-    return this.props.parameters
-      .map(p => {
-        const value = p.value === undefined ? p.default : p.value;
-        if (p.type.toLowerCase() === 'json') {
-          return this._convertJsonTypeParameterValueToString(value);
-        } else {
-          return value;
-        }
-      })
-      .toJS();
-  }
-
   render() {
-    const {
-      enabledEnvironments,
-      parameters,
-      isFetchingParameters
-    } = this.props;
+    const { enabledEnvironments, isFetchingParameters } = this.props;
     return (
       <Loader
         height={120}
@@ -156,19 +98,16 @@ class Parameters extends React.Component {
         loaded={!isFetchingParameters}
         componentProps={{ className: 'flex-container' }}
       >
-        <ParametersForm
-          onSubmit={this.handleSubmit}
-          parameters={parameters}
-          initialValues={this.getFormInitialValues()}
-          className="flex-container"
-        >
-          <ParametersSidebar
-            activateTab={tabName => this.setState({ activeTab: tabName })}
-            enabledEnvironments={enabledEnvironments.toList()}
-            isTabActive={this.isTabActive}
-          />
-          <div className="col-sm-8 flex-column">
-            <div className="tab-content">{this.renderTabPanes()}</div>
+        <ParametersForm updateParameters={this.handleUpdateParameters}>
+          <div className="flex-row">
+            <ParametersSidebar
+              activateTab={tabName => this.setState({ activeTab: tabName })}
+              enabledEnvironments={enabledEnvironments.toList()}
+              isTabActive={this.isTabActive}
+            />
+            <div className="col-sm-8 flex-column">
+              <div className="tab-content">{this.renderTabPanes()}</div>
+            </div>
           </div>
         </ParametersForm>
       </Loader>
@@ -180,8 +119,6 @@ Parameters.propTypes = {
   enabledEnvironments: ImmutablePropTypes.map.isRequired,
   fetchEnvironmentConfiguration: PropTypes.func.isRequired,
   fetchParameters: PropTypes.func.isRequired,
-  formErrors: ImmutablePropTypes.list,
-  formFieldErrors: ImmutablePropTypes.map,
   history: PropTypes.object,
   intl: PropTypes.object,
   isFetchingParameters: PropTypes.bool.isRequired,
@@ -196,8 +133,6 @@ function mapStateToProps(state, ownProps) {
     parameters: state.parameters.parameters,
     enabledEnvironments: getEnabledEnvironments(state),
     form: state.parameters.form,
-    formErrors: state.parameters.form.get('formErrors'),
-    formFieldErrors: state.parameters.form.get('formFieldErrors'),
     currentPlanName: getCurrentPlanName(state),
     isFetchingParameters: state.parameters.isFetching,
     mistralParameters: state.parameters.mistralParameters,

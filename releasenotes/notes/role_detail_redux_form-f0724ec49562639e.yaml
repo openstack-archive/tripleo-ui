@@ -1,0 +1,13 @@
+---
+features:
+  - |
+    Improved perfomance in 'Role detail' dialog, a general error is shown when
+    sub-section contains validation error
+  - |
+    Save and Close button has been added to 'Role detail' dialog
+  - |
+    'Role detail' dialog now persists changes when switching between individual
+    tabs
+fixes:
+  - Fixes `bug 1745408 <https://bugs.launchpad.net/tripleo/+bug/1745408>`__
+    Parameters form does not load for large amount of parameters
