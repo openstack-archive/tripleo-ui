@@ -36,8 +36,8 @@ describe('PlansActions', () => {
         .mockReturnValue(() => Promise.resolve());
     });
 
-    it('dispatches actions', () => {
-      return store
+    it('dispatches actions', () =>
+      store
         .dispatch(
           PlansActions.updatePlan('somecloud', {
             someFile: { contents: 'file contents' }
@@ -48,8 +48,7 @@ describe('PlansActions', () => {
           expect(store.getActions()).toEqual([
             PlansActions.updatePlanPending('somecloud')
           ]);
-        });
-    });
+        }));
   });
 
   describe('createPlan', () => {
@@ -67,15 +66,10 @@ describe('PlansActions', () => {
         .mockReturnValue(() => Promise.resolve());
     });
 
-    it('dispatches actions', () => {
-      return store
-        .dispatch(PlansActions.createPlan('somecloud', {}))
-        .then(() => {
-          expect(store.getActions()).toEqual([
-            PlansActions.createPlanPending()
-          ]);
-        });
-    });
+    it('dispatches actions', () =>
+      store.dispatch(PlansActions.createPlan('somecloud', {})).then(() => {
+        expect(store.getActions()).toEqual([PlansActions.createPlanPending()]);
+      }));
   });
 
   describe('deletePlans', () => {
@@ -87,8 +81,8 @@ describe('PlansActions', () => {
         .mockReturnValue(() => Promise.resolve());
     });
 
-    it('dispatches actions', () => {
-      return store
+    it('dispatches actions', () =>
+      store
         .dispatch(PlansActions.deletePlan('somecloud', mockHistory))
         .then(() => {
           expect(store.getActions().map(action => action.type)).toEqual([
@@ -96,8 +90,7 @@ describe('PlansActions', () => {
             'DELETE_PLAN_SUCCESS',
             'NOTIFY'
           ]);
-        });
-    });
+        }));
   });
 
   describe('fetchPlans', () => {
@@ -124,15 +117,14 @@ describe('PlansActions', () => {
         .mockReturnValue(() => Promise.resolve(apiResponseMistral));
     });
 
-    it('dispatches actions', () => {
-      return store.dispatch(PlansActions.fetchPlans()).then(() => {
+    it('dispatches actions', () =>
+      store.dispatch(PlansActions.fetchPlans()).then(() => {
         expect(MistralApiService.runAction).toHaveBeenCalled();
         expect(store.getActions()).toEqual([
           PlansActions.requestPlans(),
           PlansActions.receivePlans(expectedPlans)
         ]);
-      });
-    });
+      }));
   });
 
   describe('fetchPlan', () => {
@@ -152,14 +144,13 @@ describe('PlansActions', () => {
         .mockReturnValue(() => Promise.resolve(apiResponse));
     });
 
-    it('dispatches actions', () => {
-      return store.dispatch(PlansActions.fetchPlan('overcloud')).then(() => {
+    it('dispatches actions', () =>
+      store.dispatch(PlansActions.fetchPlan('overcloud')).then(() => {
         expect(SwiftApiService.getContainer).toHaveBeenCalled();
         expect(store.getActions()).toEqual([
           PlansActions.requestPlan(),
           PlansActions.receivePlan('overcloud', normalizedResponse)
         ]);
-      });
-    });
+      }));
   });
 });

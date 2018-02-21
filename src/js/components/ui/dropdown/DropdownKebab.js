@@ -18,20 +18,14 @@ import { Dropdown } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const DropdownKebab = ({ children, id, pullRight }) => {
-  return (
-    <Dropdown className="dropdown-kebab-pf" id={id} pullRight={pullRight}>
-      <Dropdown.Toggle
-        bsStyle="link"
-        noCaret
-        onClick={e => e.stopPropagation()}
-      >
-        <span className="fa fa-ellipsis-v" />
-      </Dropdown.Toggle>
-      <Dropdown.Menu>{children}</Dropdown.Menu>
-    </Dropdown>
-  );
-};
+const DropdownKebab = ({ children, id, pullRight }) => (
+  <Dropdown className="dropdown-kebab-pf" id={id} pullRight={pullRight}>
+    <Dropdown.Toggle bsStyle="link" noCaret onClick={e => e.stopPropagation()}>
+      <span className="fa fa-ellipsis-v" />
+    </Dropdown.Toggle>
+    <Dropdown.Menu>{children}</Dropdown.Menu>
+  </Dropdown>
+);
 DropdownKebab.propTypes = {
   children: PropTypes.node,
   id: PropTypes.string.isRequired,

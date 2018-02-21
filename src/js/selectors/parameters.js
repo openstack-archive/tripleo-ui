@@ -126,30 +126,27 @@ export const getRoleNetworkConfig = createSelector(
 
 export const getEnvironmentParameters = createSelector(
   [getParametersExclInternal, getResources, getEnvironment],
-  (parameters, resources, environment) => {
-    return (
-      resources
-        // get list of resources from environment resource_registry
-        .filter(r => environment.resourceRegistry.keySeq().includes(r.type))
-        // collect parameter names from those resources
-        .reduce(
-          (result, resource) =>
-            result.union(
-              _extractParameters(
-                resource.parameters,
-                resource.resources,
-                resources
-              )
-            ),
-          Set()
-        )
-        // add parameters from environment's 'parameters' section to the list
-        .union(environment.parameterDefaults.keySeq())
-        .toMap()
-        // convert list of parameter names to map of actual parameter records
-        .update(filterParameters(parameters))
-    );
-  }
+  (parameters, resources, environment) =>
+    resources
+      // get list of resources from environment resource_registry
+      .filter(r => environment.resourceRegistry.keySeq().includes(r.type))
+      // collect parameter names from those resources
+      .reduce(
+        (result, resource) =>
+          result.union(
+            _extractParameters(
+              resource.parameters,
+              resource.resources,
+              resources
+            )
+          ),
+        Set()
+      )
+      // add parameters from environment's 'parameters' section to the list
+      .union(environment.parameterDefaults.keySeq())
+      .toMap()
+      // convert list of parameter names to map of actual parameter records
+      .update(filterParameters(parameters))
 );
 
 /**
@@ -195,8 +192,8 @@ export const getResourceParametersDeep = createSelector(
 /**
  * Recursively extracts Parameter names from a Resource and it's nested Resources
  */
-const _extractParameters = (parameters, nestedResources, allResources) => {
-  return nestedResources.reduce((pars, res) => {
+const _extractParameters = (parameters, nestedResources, allResources) =>
+  nestedResources.reduce((pars, res) => {
     const resource = allResources.get(res);
     return _extractParameters(
       pars
@@ -207,4 +204,3 @@ const _extractParameters = (parameters, nestedResources, allResources) => {
       allResources
     );
   }, parameters);
-};

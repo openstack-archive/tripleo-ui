@@ -27,17 +27,15 @@ import { InitialPlanState } from './immutableRecords/plans';
 import { InitialLoginState } from './immutableRecords/login';
 import { getIntl } from './selectors/i18n';
 
-const hydrateStore = () => {
-  return {
-    appConfig: new AppConfig(window && fromJS(window.tripleOUiConfig)),
-    plans: new InitialPlanState({
-      currentPlanName: getStoredPlanName()
-    }),
-    login: new InitialLoginState({
-      tokenId: cookie.load('keystoneAuthTokenId')
-    })
-  };
-};
+const hydrateStore = () => ({
+  appConfig: new AppConfig(window && fromJS(window.tripleOUiConfig)),
+  plans: new InitialPlanState({
+    currentPlanName: getStoredPlanName()
+  }),
+  login: new InitialLoginState({
+    tokenId: cookie.load('keystoneAuthTokenId')
+  })
+});
 
 function getStoredPlanName() {
   if (window && window.localStorage) {

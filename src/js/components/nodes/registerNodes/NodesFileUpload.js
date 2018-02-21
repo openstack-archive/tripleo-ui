@@ -65,24 +65,22 @@ class NodesFileUpload extends React.Component {
     const file = event.target.files[0];
     const reader = new FileReader();
 
-    reader.onload = (f => {
-      return e => {
-        if (file.name.match(/(\.json)$/)) {
-          this.addNodesFromInstackenvJSON(e.target.result);
-        } else if (file.name.match(/(\.csv)$/)) {
-          // TODO(jtomasek): add CSV file support
-          // this.addNodesFromCSV(e.target.result);
-          notify({
-            title: formatMessage(messages.csvUnsupported),
-            message: formatMessage(messages.selectedFileUnsupported)
-          });
-        } else {
-          notify({
-            title: formatMessage(messages.unsupportedFileFormat),
-            message: formatMessage(messages.provideCsvOrInstackenvJson)
-          });
-        }
-      };
+    reader.onload = (f => e => {
+      if (file.name.match(/(\.json)$/)) {
+        this.addNodesFromInstackenvJSON(e.target.result);
+      } else if (file.name.match(/(\.csv)$/)) {
+        // TODO(jtomasek): add CSV file support
+        // this.addNodesFromCSV(e.target.result);
+        notify({
+          title: formatMessage(messages.csvUnsupported),
+          message: formatMessage(messages.selectedFileUnsupported)
+        });
+      } else {
+        notify({
+          title: formatMessage(messages.unsupportedFileFormat),
+          message: formatMessage(messages.provideCsvOrInstackenvJson)
+        });
+      }
     })(file);
     reader.readAsText(file);
     this.refs.regNodesUploadFileForm.reset();

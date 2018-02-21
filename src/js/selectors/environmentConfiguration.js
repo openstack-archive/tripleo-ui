@@ -30,17 +30,16 @@ export const getEnvironment = (state, environmentFileName) =>
 
 export const getEnabledEnvironments = createSelector(
   getEnvironments,
-  environments => {
-    return environments.filter(environment => environment.get('enabled'));
-  }
+  environments => environments.filter(environment => environment.get('enabled'))
 );
 
 export const getEnvironmentConfigurationSummary = createSelector(
   getEnabledEnvironments,
   environments => {
-    const titlesList = environments.reduce((titlesList, environment) => {
-      return titlesList.push(environment.get('title'));
-    }, List());
+    const titlesList = environments.reduce(
+      (titlesList, environment) => titlesList.push(environment.get('title')),
+      List()
+    );
     return titlesList.toArray().join(', ');
   }
 );
@@ -50,17 +49,16 @@ export const getEnvironmentConfigurationSummary = createSelector(
  */
 export const getTopicsTree = createSelector(
   [topics, environmentGroups, getEnvironments],
-  (topics, environmentGroups, environments) => {
-    return topics.map(topic => {
-      return topic.update('environment_groups', envGroups => {
-        return envGroups.map(envGroup => {
-          return environmentGroups
+  (topics, environmentGroups, environments) =>
+    topics.map(topic =>
+      topic.update('environment_groups', envGroups =>
+        envGroups.map(envGroup =>
+          environmentGroups
             .get(envGroup)
-            .update('environments', envs => {
-              return environments.filter((p, k) => envs.includes(k));
-            });
-        });
-      });
-    });
-  }
+            .update('environments', envs =>
+              environments.filter((p, k) => envs.includes(k))
+            )
+        )
+      )
+    )
 );

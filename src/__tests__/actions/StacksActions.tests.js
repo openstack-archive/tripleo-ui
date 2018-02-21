@@ -35,15 +35,14 @@ describe('StacksActions', () => {
         .mockReturnValue(() => Promise.resolve(serviceResponse));
     });
 
-    it('dispatches actions', () => {
-      return store.dispatch(StacksActions.fetchStacks()).then(() => {
+    it('dispatches actions', () =>
+      store.dispatch(StacksActions.fetchStacks()).then(() => {
         expect(HeatApiService.getStacks).toHaveBeenCalled();
         expect(store.getActions()).toEqual([
           StacksActions.fetchStacksPending(),
           StacksActions.fetchStacksSuccess(normalizedStacks)
         ]);
-      });
-    });
+      }));
   });
 
   describe('fetchStacks (failed)', () => {
@@ -56,15 +55,14 @@ describe('StacksActions', () => {
       ErrorActions.handleErrors = jest.fn().mockReturnValue(() => {});
     });
 
-    it('dispatches actions', () => {
-      return store.dispatch(StacksActions.fetchStacks()).then(() => {
+    it('dispatches actions', () =>
+      store.dispatch(StacksActions.fetchStacks()).then(() => {
         expect(HeatApiService.getStacks).toHaveBeenCalled();
         expect(store.getActions()).toEqual([
           StacksActions.fetchStacksPending(),
           StacksActions.fetchStacksFailed()
         ]);
-      });
-    });
+      }));
   });
 
   // describe('fetchStacks (failed)', () => {

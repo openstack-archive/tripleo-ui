@@ -18,20 +18,18 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Link, Route } from 'react-router-dom';
 
-const NavTab = ({ activeClassName, children, to, exact, location, id }) => {
-  return (
-    <Route
-      location={location}
-      path={typeof to === 'object' ? to.pathname : to}
-      exact={exact}
-      children={({ match, location }) => (
-        <li className={match ? activeClassName : ''} id={id}>
-          <Link to={to}>{children}</Link>
-        </li>
-      )}
-    />
-  );
-};
+const NavTab = ({ activeClassName, children, to, exact, location, id }) => (
+  <Route
+    location={location}
+    path={typeof to === 'object' ? to.pathname : to}
+    exact={exact}
+    children={({ match, location }) => (
+      <li className={match ? activeClassName : ''} id={id}>
+        <Link to={to}>{children}</Link>
+      </li>
+    )}
+  />
+);
 NavTab.propTypes = {
   activeClassName: PropTypes.string.isRequired,
   children: PropTypes.node,

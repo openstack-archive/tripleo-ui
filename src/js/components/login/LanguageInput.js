@@ -22,13 +22,11 @@ import { injectIntl } from 'react-intl';
 class LanguageInput extends React.Component {
   _renderOptions() {
     return this.props.languages
-      .map((langName, langKey) => {
-        return (
-          <option key={`lang-${langKey}`} value={langKey}>
-            {langName}
-          </option>
-        );
-      })
+      .map((langName, langKey) => (
+        <option key={`lang-${langKey}`} value={langKey}>
+          {langName}
+        </option>
+      ))
       .toList();
   }
 

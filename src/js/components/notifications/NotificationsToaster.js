@@ -42,8 +42,9 @@ class NotificationsToaster extends React.Component {
   }
 
   renderNotifications() {
-    return this.props.notifications.toList().map(notification => {
-      return (
+    return this.props.notifications
+      .toList()
+      .map(notification => (
         <Notification
           key={notification.id}
           title={notification.title}
@@ -55,8 +56,7 @@ class NotificationsToaster extends React.Component {
             this.props.removeNotification(notification.id)
           }
         />
-      );
-    });
+      ));
   }
 
   render() {

@@ -32,24 +32,22 @@ const HorizontalCheckBox = ({
   meta,
   required,
   ...rest
-}) => {
-  return (
-    <FormGroup controlId={id} validationState={getValidationState(meta)}>
-      <Col
-        componentClass={ControlLabel}
-        sm={labelColumns}
-        className={cx({ 'required-pf': required })}
-      >
-        {label}
-      </Col>
-      <Col sm={inputColumns}>
-        <Checkbox {...input} {...rest} />
-        <InputMessage {...meta} />
-        <InputDescription description={description} />
-      </Col>
-    </FormGroup>
-  );
-};
+}) => (
+  <FormGroup controlId={id} validationState={getValidationState(meta)}>
+    <Col
+      componentClass={ControlLabel}
+      sm={labelColumns}
+      className={cx({ 'required-pf': required })}
+    >
+      {label}
+    </Col>
+    <Col sm={inputColumns}>
+      <Checkbox {...input} {...rest} />
+      <InputMessage {...meta} />
+      <InputDescription description={description} />
+    </Col>
+  </FormGroup>
+);
 HorizontalCheckBox.propTypes = {
   description: PropTypes.node,
   id: PropTypes.string.isRequired,

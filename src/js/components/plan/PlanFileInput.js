@@ -52,36 +52,32 @@ class PlanFileInput extends React.Component {
       let reader = new FileReader();
       let file = inputFiles[i];
 
-      reader.onerror = (f => {
-        return e => {
-          this.setState({
-            unreadableFile: f.webkitRelativePath
-          });
-        };
+      reader.onerror = (f => e => {
+        this.setState({
+          unreadableFile: f.webkitRelativePath
+        });
       })(file);
 
-      reader.onload = (f => {
-        return e => {
-          const filePath = f.webkitRelativePath.replace(/^[^\/]*\//, '');
-          if (!filePath.match(IGNORED_FILE_PATHS)) {
-            let obj = {
-              name: filePath,
-              content: e.target.result
-            };
-            files.push(obj);
-          }
-          processedFilesCount += 1;
-          this.setState(
-            { progress: Math.round(100 / l * processedFilesCount) },
-            () => {
-              // if the last file is processed, setValue -> triggers onChange on Formsy
-              if (processedFilesCount === l) {
-                this.props.setValue(files);
-                this.setState({ progress: 0 });
-              }
+      reader.onload = (f => e => {
+        const filePath = f.webkitRelativePath.replace(/^[^\/]*\//, '');
+        if (!filePath.match(IGNORED_FILE_PATHS)) {
+          let obj = {
+            name: filePath,
+            content: e.target.result
+          };
+          files.push(obj);
+        }
+        processedFilesCount += 1;
+        this.setState(
+          { progress: Math.round(100 / l * processedFilesCount) },
+          () => {
+            // if the last file is processed, setValue -> triggers onChange on Formsy
+            if (processedFilesCount === l) {
+              this.props.setValue(files);
+              this.setState({ progress: 0 });
             }
-          );
-        };
+          }
+        );
       })(file);
       reader.readAsText(file);
     }

@@ -58,17 +58,13 @@ I18nProvider.defaultProps = {
   messages: {}
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    detectLanguage: language => dispatch(I18nActions.detectLanguage(language))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  detectLanguage: language => dispatch(I18nActions.detectLanguage(language))
+});
 
-const mapStateToProps = state => {
-  return {
-    language: getCurrentLanguage(state),
-    messages: getCurrentLanguageMessages(state)
-  };
-};
+const mapStateToProps = state => ({
+  language: getCurrentLanguage(state),
+  messages: getCurrentLanguageMessages(state)
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(I18nProvider);

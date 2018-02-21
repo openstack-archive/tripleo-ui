@@ -49,19 +49,17 @@ const ParametersSidebar = ({
         </a>
       </Tab>
       <li className="spacer" />
-      {enabledEnvironments.map(environment => {
-        return (
-          <Tab key={environment.file} isActive={isTabActive(environment.file)}>
-            <a
-              className="link"
-              onClick={() => activateTab(environment.file)}
-              title={environment.file}
-            >
-              {environment.title}
-            </a>
-          </Tab>
-        );
-      })}
+      {enabledEnvironments.map(environment => (
+        <Tab key={environment.file} isActive={isTabActive(environment.file)}>
+          <a
+            className="link"
+            onClick={() => activateTab(environment.file)}
+            title={environment.file}
+          >
+            {environment.title}
+          </a>
+        </Tab>
+      ))}
     </ul>
   </div>
 );

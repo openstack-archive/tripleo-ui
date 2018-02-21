@@ -40,9 +40,6 @@ export const getPlans = createSelector(plans, plans => plans);
 // TODO(jtomasek): update this to list 3 last used plans
 export const getAllPlansButCurrent = createSelector(
   [plans, getCurrentPlanName],
-  (plans, currentPlanName) => {
-    return plans
-      .filter(plan => plan.name != currentPlanName)
-      .sortBy(plan => plan.name);
-  }
+  (plans, currentPlanName) =>
+    plans.filter(plan => plan.name != currentPlanName).sortBy(plan => plan.name)
 );

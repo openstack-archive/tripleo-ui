@@ -36,19 +36,17 @@ class ParameterInputList extends React.Component {
       this.props.emptyParametersMessage ||
       this.props.intl.formatMessage(messages.noParameters);
 
-    const parameters = this.props.parameters.map(parameter => {
-      return (
-        <ParameterInput
-          key={parameter.name}
-          name={parameter.name}
-          label={parameter.label}
-          description={parameter.description}
-          defaultValue={parameter.default}
-          value={parameter.value}
-          type={parameter.type}
-        />
-      );
-    });
+    const parameters = this.props.parameters.map(parameter => (
+      <ParameterInput
+        key={parameter.name}
+        name={parameter.name}
+        label={parameter.label}
+        description={parameter.description}
+        defaultValue={parameter.default}
+        value={parameter.value}
+        type={parameter.type}
+      />
+    ));
 
     if (parameters.isEmpty()) {
       return (

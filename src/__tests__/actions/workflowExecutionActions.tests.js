@@ -45,8 +45,8 @@ describe('fetchWorkflowExecutions action', () => {
       .mockReturnValue(() => Promise.resolve(response));
   });
 
-  it('dispatches appropriate actions and normalizes the response', () => {
-    return store
+  it('dispatches appropriate actions and normalizes the response', () =>
+    store
       .dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions())
       .then(() => {
         expect(MistralApiService.getWorkflowExecutions).toHaveBeenCalled();
@@ -56,8 +56,7 @@ describe('fetchWorkflowExecutions action', () => {
             normalizedResponse
           )
         ]);
-      });
-  });
+      }));
 });
 
 describe('updateWorkflowExecution action', () => {
@@ -69,8 +68,8 @@ describe('updateWorkflowExecution action', () => {
       .mockReturnValue(() => Promise.resolve());
   });
 
-  it('dispatches appropriate actions', () => {
-    return store
+  it('dispatches appropriate actions', () =>
+    store
       .dispatch(
         WorkflowExecutionsActions.updateWorkflowExecution('512e', {
           state: 'PAUSED'
@@ -87,6 +86,5 @@ describe('updateWorkflowExecution action', () => {
           }),
           WorkflowExecutionsActions.addWorkflowExecution()
         ]);
-      });
-  });
+      }));
 });

@@ -83,9 +83,7 @@ class DataTable extends React.Component {
   render() {
     let columns = this._getColumns();
 
-    let headers = columns.map(column => {
-      return column.props.header;
-    });
+    let headers = columns.map(column => column.props.header);
 
     let rows = [];
     for (var i = 0; i < this.props.rowsCount; ++i) {

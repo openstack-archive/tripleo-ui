@@ -118,21 +118,19 @@ class NodeExtendedInfo extends React.Component {
           <dd>
             {node
               .getIn(['introspectionData', 'interfaces'])
-              .map((ifc, k) => {
-                return (
-                  <div key={k}>
-                    {k} -{' '}
-                    <span title={intl.formatMessage(messages.macAddress)}>
-                      {ifc.get('mac')}
-                    </span>{' '}
-                    |{' '}
-                    <span title={intl.formatMessage(messages.ipAddress)}>
-                      {ifc.get('ip')}
-                    </span>
-                    {ifc.get('pxe') && '| PXE'}
-                  </div>
-                );
-              })
+              .map((ifc, k) => (
+                <div key={k}>
+                  {k} -{' '}
+                  <span title={intl.formatMessage(messages.macAddress)}>
+                    {ifc.get('mac')}
+                  </span>{' '}
+                  |{' '}
+                  <span title={intl.formatMessage(messages.ipAddress)}>
+                    {ifc.get('ip')}
+                  </span>
+                  {ifc.get('pxe') && '| PXE'}
+                </div>
+              ))
               .toList()}
           </dd>
         </dl>

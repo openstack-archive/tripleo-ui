@@ -53,22 +53,17 @@ class RoleServices extends React.Component {
   }
 
   renderServiceTabs() {
-    return this.props.services.toList().map(service => {
-      return (
-        <Tab
-          key={service.type}
-          title={service.description}
-          isActive={service.id === this.state.selectedService}
-        >
-          <a
-            className="link"
-            onClick={this.selectService.bind(this, service.id)}
-          >
-            {service.type.split('::').pop()}
-          </a>
-        </Tab>
-      );
-    });
+    return this.props.services.toList().map(service => (
+      <Tab
+        key={service.type}
+        title={service.description}
+        isActive={service.id === this.state.selectedService}
+      >
+        <a className="link" onClick={this.selectService.bind(this, service.id)}>
+          {service.type.split('::').pop()}
+        </a>
+      </Tab>
+    ));
   }
 
   render() {

@@ -134,24 +134,22 @@ ValidationsWarning.propTypes = {
 };
 
 export const DeployButton = injectIntl(
-  ({ deploy, disabled, intl, isRequestingPlanDeploy }) => {
-    return (
-      <button
-        type="button"
-        disabled={disabled}
-        className="btn btn-lg btn-primary"
-        onClick={() => deploy()}
+  ({ deploy, disabled, intl, isRequestingPlanDeploy }) => (
+    <button
+      type="button"
+      disabled={disabled}
+      className="btn btn-lg btn-primary"
+      onClick={() => deploy()}
+    >
+      <InlineLoader
+        loaded={!isRequestingPlanDeploy}
+        content={intl.formatMessage(messages.requestingDeploymentLoader)}
       >
-        <InlineLoader
-          loaded={!isRequestingPlanDeploy}
-          content={intl.formatMessage(messages.requestingDeploymentLoader)}
-        >
-          <span className="fa fa-cloud-upload" />{' '}
-          <FormattedMessage {...messages.deployButton} />
-        </InlineLoader>
-      </button>
-    );
-  }
+        <span className="fa fa-cloud-upload" />{' '}
+        <FormattedMessage {...messages.deployButton} />
+      </InlineLoader>
+    </button>
+  )
 );
 DeployButton.propTypes = {
   deploy: PropTypes.func.isRequired,

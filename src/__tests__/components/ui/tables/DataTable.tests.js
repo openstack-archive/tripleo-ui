@@ -34,9 +34,7 @@ const mockNoRowsRenderer = function() {
   return 'There are no items in data';
 };
 
-const mockOnFilter = () => {
-  return 'Filtering Happened';
-};
+const mockOnFilter = () => 'Filtering Happened';
 
 describe('DataTable component', () => {
   let DataTableVdom, DataTableInstance;
