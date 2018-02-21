@@ -35,8 +35,8 @@ describe('HeatApiService', () => {
         .mockReturnValue(() => Promise.resolve(apiResponse));
     });
 
-    it('returns a stack object based on <planName>', () => {
-      return store.dispatch(HeatApiService.getStacks()).then(result => {
+    it('returns a stack object based on <planName>', () =>
+      store.dispatch(HeatApiService.getStacks()).then(result => {
         expect(HeatApiService.defaultRequest).toHaveBeenCalled();
         expect(result).toEqual({
           stacks: [
@@ -44,7 +44,6 @@ describe('HeatApiService', () => {
             { stack_name: 'anothercloud', stack_status: 'CREATE_FAILED' }
           ]
         });
-      });
-    });
+      }));
   });
 });

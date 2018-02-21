@@ -77,8 +77,8 @@ describe('ParametersActions', () => {
         .mockReturnValue(() => Promise.resolve(responseBody));
     });
 
-    it('dispatches actions', () => {
-      return store
+    it('dispatches actions', () =>
+      store
         .dispatch(ParametersActions.fetchParameters('overcloud'))
         .then(() => {
           expect(MistralApiService.runAction).toHaveBeenCalled();
@@ -86,8 +86,7 @@ describe('ParametersActions', () => {
             ParametersActions.fetchParametersPending(),
             ParametersActions.fetchParametersSuccess(normalizedResponse)
           ]);
-        });
-    });
+        }));
   });
 
   describe('updateParameters (fail)', () => {
@@ -101,8 +100,8 @@ describe('ParametersActions', () => {
       ErrorActions.handleErrors = jest.fn().mockReturnValue(() => {});
     });
 
-    it('calls required actions', () => {
-      return store
+    it('calls required actions', () =>
+      store
         .dispatch(
           ParametersActions.updateParameters('overcloud', { foo: 'bar' })
         )
@@ -123,7 +122,6 @@ describe('ParametersActions', () => {
               }
             })
           ]);
-        });
-    });
+        }));
   });
 });

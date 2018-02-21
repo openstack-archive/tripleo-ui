@@ -140,23 +140,18 @@ ValidationsToolbar.propTypes = {
   intl: PropTypes.object,
   validationsCount: PropTypes.number.isRequired
 };
-const mapDispatchToProps = dispatch => {
-  return {
-    addActiveFilter: data =>
-      dispatch(addActiveFilter('validationsToolbar', data)),
-    clearActiveFilters: () =>
-      dispatch(clearActiveFilters('validationsToolbar')),
-    deleteActiveFilter: uuid =>
-      dispatch(deleteActiveFilter('validationsToolbar', uuid))
-  };
-};
-const mapStateToProps = state => {
-  return {
-    activeFilters: getActiveFilters(state, 'validationsToolbar'),
-    filteredValidationsCount: getFilteredValidations(state).size,
-    validationsCount: getValidationsWithResults(state).size
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  addActiveFilter: data =>
+    dispatch(addActiveFilter('validationsToolbar', data)),
+  clearActiveFilters: () => dispatch(clearActiveFilters('validationsToolbar')),
+  deleteActiveFilter: uuid =>
+    dispatch(deleteActiveFilter('validationsToolbar', uuid))
+});
+const mapStateToProps = state => ({
+  activeFilters: getActiveFilters(state, 'validationsToolbar'),
+  filteredValidationsCount: getFilteredValidations(state).size,
+  validationsCount: getValidationsWithResults(state).size
+});
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(ValidationsToolbar)
 );

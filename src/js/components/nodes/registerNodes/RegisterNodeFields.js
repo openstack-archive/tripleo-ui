@@ -114,114 +114,112 @@ const RegisterNodeFields = ({
   node,
   intl: { formatMessage },
   selectedDriver
-}) => {
-  return (
-    <div>
-      <h4>
-        <FormattedMessage {...messages.nodeDetail} />
-      </h4>
-      <Fieldset legend={formatMessage(messages.general)}>
-        <Field
-          name={`${node}.name`}
-          component={HorizontalInput}
-          id={`${node}.name`}
-          label={formatMessage(messages.name)}
-          validate={[
-            format({
-              with: NODE_NAME_REGEX,
-              message: formatMessage(messages.nodeNameRegexp),
-              allowBlank: true
-            }),
-            length({ max: 255 })
-          ]}
-        />
-      </Fieldset>
-      <Fieldset legend={formatMessage(messages.management)}>
-        <Field
-          name={`${node}.pm_type`}
-          component={HorizontalSelect}
-          id={`${node}.pm_type`}
-          label={formatMessage(messages.driver)}
-          validate={required()}
-          required
-        >
-          {['pxe_ipmitool', 'pxe_drac'].map((value, index) => (
-            <option key={index}>{value}</option>
-          ))}
-        </Field>
-        {renderDriverFields(selectedDriver, node)}
-      </Fieldset>
-      <Fieldset legend={formatMessage(messages.hardware)}>
-        <Field
-          name={`${node}.arch`}
-          component={HorizontalSelect}
-          id={`${node}.arch`}
-          label={formatMessage(messages.architecture)}
-        >
-          {[undefined, 'x86_64', 'i386'].map((value, index) => (
-            <option key={index}>{value}</option>
-          ))}
-        </Field>
-        <Field
-          name={`${node}.cpu`}
-          component={HorizontalInput}
-          id={`${node}.cpu`}
-          label={formatMessage(messages.cpuCount)}
-          type="number"
-          min={1}
-          validate={numericality({
-            int: true,
-            '>': 0,
+}) => (
+  <div>
+    <h4>
+      <FormattedMessage {...messages.nodeDetail} />
+    </h4>
+    <Fieldset legend={formatMessage(messages.general)}>
+      <Field
+        name={`${node}.name`}
+        component={HorizontalInput}
+        id={`${node}.name`}
+        label={formatMessage(messages.name)}
+        validate={[
+          format({
+            with: NODE_NAME_REGEX,
+            message: formatMessage(messages.nodeNameRegexp),
             allowBlank: true
-          })}
-        />
-        <Field
-          name={`${node}.memory`}
-          component={HorizontalInput}
-          id={`${node}.memory`}
-          label={formatMessage(messages.memoryMb)}
-          type="number"
-          min={1}
-          validate={numericality({
-            int: true,
-            '>': 0,
-            allowBlank: true
-          })}
-        />
-        <Field
-          name={`${node}.disk`}
-          component={HorizontalInput}
-          id={`${node}.disk`}
-          label={formatMessage(messages.diskGb)}
-          type="number"
-          min={1}
-          validate={numericality({
-            int: true,
-            '>': 0,
-            allowBlank: true
-          })}
-        />
-      </Fieldset>
-      <Fieldset legend={formatMessage(messages.networking)}>
-        <Field
-          name={`${node}.mac`}
-          component={HorizontalInput}
-          id={`${node}.mac`}
-          label={formatMessage(messages.nicMacAddresses)}
-          description={formatMessage(messages.macAddressesDescription)}
-          validate={[
-            arrayOfFormat({
-              with: MAC_ADDRESS_REGEX,
-              message: messages.enterValidMacAddress
-            })
-          ]}
-          parse={value => value.split(',')}
-          required
-        />
-      </Fieldset>
-    </div>
-  );
-};
+          }),
+          length({ max: 255 })
+        ]}
+      />
+    </Fieldset>
+    <Fieldset legend={formatMessage(messages.management)}>
+      <Field
+        name={`${node}.pm_type`}
+        component={HorizontalSelect}
+        id={`${node}.pm_type`}
+        label={formatMessage(messages.driver)}
+        validate={required()}
+        required
+      >
+        {['pxe_ipmitool', 'pxe_drac'].map((value, index) => (
+          <option key={index}>{value}</option>
+        ))}
+      </Field>
+      {renderDriverFields(selectedDriver, node)}
+    </Fieldset>
+    <Fieldset legend={formatMessage(messages.hardware)}>
+      <Field
+        name={`${node}.arch`}
+        component={HorizontalSelect}
+        id={`${node}.arch`}
+        label={formatMessage(messages.architecture)}
+      >
+        {[undefined, 'x86_64', 'i386'].map((value, index) => (
+          <option key={index}>{value}</option>
+        ))}
+      </Field>
+      <Field
+        name={`${node}.cpu`}
+        component={HorizontalInput}
+        id={`${node}.cpu`}
+        label={formatMessage(messages.cpuCount)}
+        type="number"
+        min={1}
+        validate={numericality({
+          int: true,
+          '>': 0,
+          allowBlank: true
+        })}
+      />
+      <Field
+        name={`${node}.memory`}
+        component={HorizontalInput}
+        id={`${node}.memory`}
+        label={formatMessage(messages.memoryMb)}
+        type="number"
+        min={1}
+        validate={numericality({
+          int: true,
+          '>': 0,
+          allowBlank: true
+        })}
+      />
+      <Field
+        name={`${node}.disk`}
+        component={HorizontalInput}
+        id={`${node}.disk`}
+        label={formatMessage(messages.diskGb)}
+        type="number"
+        min={1}
+        validate={numericality({
+          int: true,
+          '>': 0,
+          allowBlank: true
+        })}
+      />
+    </Fieldset>
+    <Fieldset legend={formatMessage(messages.networking)}>
+      <Field
+        name={`${node}.mac`}
+        component={HorizontalInput}
+        id={`${node}.mac`}
+        label={formatMessage(messages.nicMacAddresses)}
+        description={formatMessage(messages.macAddressesDescription)}
+        validate={[
+          arrayOfFormat({
+            with: MAC_ADDRESS_REGEX,
+            message: messages.enterValidMacAddress
+          })
+        ]}
+        parse={value => value.split(',')}
+        required
+      />
+    </Fieldset>
+  </div>
+);
 RegisterNodeFields.propTypes = {
   intl: PropTypes.object.isRequired,
   node: PropTypes.string.isRequired,

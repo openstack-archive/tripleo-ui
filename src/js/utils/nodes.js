@@ -29,8 +29,8 @@ export const parseNodeCapabilities = capabilities => {
 /**
  * Convert Node's capabilities object to string
  */
-export const stringifyNodeCapabilities = capabilities => {
-  return Object.keys(capabilities)
+export const stringifyNodeCapabilities = capabilities =>
+  Object.keys(capabilities)
     .reduce((caps, key) => {
       if (!capabilities[key]) {
         return caps;
@@ -40,7 +40,6 @@ export const stringifyNodeCapabilities = capabilities => {
       }
     }, [])
     .join(',');
-};
 
 /**
  * Set or update Node capability

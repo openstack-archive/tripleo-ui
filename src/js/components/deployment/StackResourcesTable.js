@@ -87,11 +87,9 @@ class StackResourcesTable extends React.Component {
     let dataKeys = ['resource_name', 'resource_status'];
     return filterString
       ? data.filter(row => {
-          let result = dataKeys.filter(dataKey => {
-            return row[dataKey]
-              .toLowerCase()
-              .includes(filterString.toLowerCase());
-          });
+          let result = dataKeys.filter(dataKey =>
+            row[dataKey].toLowerCase().includes(filterString.toLowerCase())
+          );
           return result.length > 0;
         })
       : data;

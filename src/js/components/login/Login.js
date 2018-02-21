@@ -226,12 +226,10 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    chooseLanguage: language => dispatch(I18nActions.chooseLanguage(language)),
-    authenticateUser: (formData, formFields, nextPath) =>
-      dispatch(LoginActions.authenticateUser(formData, formFields, nextPath))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  chooseLanguage: language => dispatch(I18nActions.chooseLanguage(language)),
+  authenticateUser: (formData, formFields, nextPath) =>
+    dispatch(LoginActions.authenticateUser(formData, formFields, nextPath))
+});
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Login));
