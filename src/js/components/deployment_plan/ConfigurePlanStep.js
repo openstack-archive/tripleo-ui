@@ -28,21 +28,19 @@ const messages = defineMessages({
   }
 });
 
-const ConfigurePlanStep = props => {
-  return (
-    <div>
-      <DeploymentConfigurationSummary {...props} />
-      <br />
-      <Link
-        className="btn btn-default"
-        id="ConfigurePlanStep__EditDeploymentLink"
-        to={`/plans/${props.planName}/configuration`}
-      >
-        <FormattedMessage {...messages.editConfigurationLink} />
-      </Link>
-    </div>
-  );
-};
+const ConfigurePlanStep = props => (
+  <div>
+    <DeploymentConfigurationSummary {...props} />
+    <br />
+    <Link
+      className="btn btn-default"
+      id="ConfigurePlanStep__EditDeploymentLink"
+      to={`/plans/${props.planName}/configuration`}
+    >
+      <FormattedMessage {...messages.editConfigurationLink} />
+    </Link>
+  </div>
+);
 ConfigurePlanStep.propTypes = {
   fetchEnvironmentConfiguration: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,

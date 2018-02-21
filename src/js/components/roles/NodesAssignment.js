@@ -38,33 +38,31 @@ const NodesAssignment = ({
   nodeCountParametersByRole,
   roles,
   updateNodesAssignment
-}) => {
-  return (
-    <NodesAssignmentForm
-      currentPlanName={currentPlanName}
-      initialValues={assignedNodesCountsByRole.toJS()}
-      updateNodesAssignment={updateNodesAssignment}
-    >
-      <div className="row row-cards-pf">
-        {roles.toList().map(role => {
-          return (
-            <RoleCard
-              key={role.name}
-              currentPlanName={currentPlanName}
-              name={role.name}
-              title={startCase(role.name)}
-              identifier={role.identifier}
-              assignedNodesCountParameter={nodeCountParametersByRole.get(
-                role.name
-              )}
-              availableNodesCount={availableNodesCountsByRole.get(role.name)}
-            />
-          );
-        })}
-      </div>
-    </NodesAssignmentForm>
-  );
-};
+}) => (
+  <NodesAssignmentForm
+    currentPlanName={currentPlanName}
+    initialValues={assignedNodesCountsByRole.toJS()}
+    updateNodesAssignment={updateNodesAssignment}
+  >
+    <div className="row row-cards-pf">
+      {roles
+        .toList()
+        .map(role => (
+          <RoleCard
+            key={role.name}
+            currentPlanName={currentPlanName}
+            name={role.name}
+            title={startCase(role.name)}
+            identifier={role.identifier}
+            assignedNodesCountParameter={nodeCountParametersByRole.get(
+              role.name
+            )}
+            availableNodesCount={availableNodesCountsByRole.get(role.name)}
+          />
+        ))}
+    </div>
+  </NodesAssignmentForm>
+);
 NodesAssignment.propTypes = {
   assignedNodesCountsByRole: ImmutablePropTypes.map.isRequired,
   availableNodesCountsByRole: ImmutablePropTypes.map.isRequired,
@@ -82,12 +80,10 @@ const mapStateToProps = state => ({
   roles: getRoles(state)
 });
 
-const mapDispatchToProps = dispatch => {
-  return {
-    updateNodesAssignment: (currentPlanName, data) => {
-      dispatch(ParametersActions.updateNodesAssignment(currentPlanName, data));
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  updateNodesAssignment: (currentPlanName, data) => {
+    dispatch(ParametersActions.updateNodesAssignment(currentPlanName, data));
+  }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(NodesAssignment);

@@ -18,21 +18,19 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Link, Route } from 'react-router-dom';
 
-const MenuItemLink = ({ children, to, exact, location, ...rest }) => {
-  return (
-    <Route
-      path={to}
-      exact={exact}
-      children={({ match, location }) => (
-        <li onClick={e => e.stopPropagation()}>
-          <Link {...rest} to={to}>
-            {children}
-          </Link>
-        </li>
-      )}
-    />
-  );
-};
+const MenuItemLink = ({ children, to, exact, location, ...rest }) => (
+  <Route
+    path={to}
+    exact={exact}
+    children={({ match, location }) => (
+      <li onClick={e => e.stopPropagation()}>
+        <Link {...rest} to={to}>
+          {children}
+        </Link>
+      </li>
+    )}
+  />
+);
 
 MenuItemLink.propTypes = {
   children: PropTypes.node,

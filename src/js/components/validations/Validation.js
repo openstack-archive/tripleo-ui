@@ -50,23 +50,21 @@ export default class Validation extends React.Component {
   }
 
   renderValidationGroups() {
-    return this.props.groups.map(group => {
-      return (
-        <div key={group} className="list-view-pf-additional-info-item">
-          <span
-            className="label label-default"
-            onClick={() =>
-              this.props.addActiveFilter({
-                filterBy: 'group',
-                filterString: group
-              })
-            }
-          >
-            <small>{group}</small>
-          </span>
-        </div>
-      );
-    });
+    return this.props.groups.map(group => (
+      <div key={group} className="list-view-pf-additional-info-item">
+        <span
+          className="label label-default"
+          onClick={() =>
+            this.props.addActiveFilter({
+              filterBy: 'group',
+              filterString: group
+            })
+          }
+        >
+          <small>{group}</small>
+        </span>
+      </div>
+    ));
   }
 
   render() {

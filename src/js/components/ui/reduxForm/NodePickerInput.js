@@ -70,18 +70,16 @@ NodePickerInput.defaultProps = {
 };
 export default NodePickerInput;
 
-const PickerArrow = ({ direction, disabled, onClick }) => {
-  return (
-    <button
-      type="button"
-      className={`btn btn-default btn-node-picker btn-node-picker-${direction}`}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      <span className={`fa fa-angle-${direction}`} aria-hidden="true" />
-    </button>
-  );
-};
+const PickerArrow = ({ direction, disabled, onClick }) => (
+  <button
+    type="button"
+    className={`btn btn-default btn-node-picker btn-node-picker-${direction}`}
+    onClick={onClick}
+    disabled={disabled}
+  >
+    <span className={`fa fa-angle-${direction}`} aria-hidden="true" />
+  </button>
+);
 PickerArrow.propTypes = {
   direction: PropTypes.oneOf(['up', 'down']).isRequired,
   disabled: PropTypes.bool.isRequired,

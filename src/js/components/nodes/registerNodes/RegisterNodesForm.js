@@ -36,23 +36,19 @@ const messages = defineMessages({
   }
 });
 
-export const RegisterNodesTabPanes = ({ fields, meta, selectedNodeIndex }) => {
-  return (
-    <div className="tab-content">
-      {fields.map((node, index, fields) => {
-        return (
-          <TabPane
-            key={index}
-            isActive={selectedNodeIndex === index}
-            // renderOnlyActive
-          >
-            <RegisterNodeFields node={node} />
-          </TabPane>
-        );
-      })}
-    </div>
-  );
-};
+export const RegisterNodesTabPanes = ({ fields, meta, selectedNodeIndex }) => (
+  <div className="tab-content">
+    {fields.map((node, index, fields) => (
+      <TabPane
+        key={index}
+        isActive={selectedNodeIndex === index}
+        // renderOnlyActive
+      >
+        <RegisterNodeFields node={node} />
+      </TabPane>
+    ))}
+  </div>
+);
 RegisterNodesTabPanes.propTypes = {
   fields: PropTypes.object.isRequired,
   meta: PropTypes.object.isRequired,

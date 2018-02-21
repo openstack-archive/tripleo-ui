@@ -41,13 +41,12 @@ export const getCurrentStack = createSelector(
  */
 export const getCurrentStackDeploymentInProgress = createSelector(
   [stacksSelector, getCurrentPlanName],
-  (stacks, currentPlanName) => {
-    return [
+  (stacks, currentPlanName) =>
+    [
       stackStates.CREATE_IN_PROGRESS,
       stackStates.UPDATE_IN_PROGRESS,
       stackStates.DELETE_IN_PROGRESS
-    ].includes(stacks.get(currentPlanName, new Stack()).stack_status);
-  }
+    ].includes(stacks.get(currentPlanName, new Stack()).stack_status)
 );
 
 /**
@@ -58,9 +57,9 @@ export const getCurrentStackDeploymentProgress = createSelector(
   resources => {
     let allResources = resources.size;
     if (allResources > 0) {
-      let completeResources = resources.filter(r => {
-        return r.resource_status === 'CREATE_COMPLETE';
-      }).size;
+      let completeResources = resources.filter(
+        r => r.resource_status === 'CREATE_COMPLETE'
+      ).size;
       return Math.ceil(completeResources / allResources * 100);
     }
     return 0;
