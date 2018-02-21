@@ -170,33 +170,29 @@ DeploymentDetail.propTypes = {
   stacksLoaded: PropTypes.bool.isRequired
 };
 
-const mapStateToProps = state => {
-  return {
-    allPreDeploymentValidationsSuccessful: allPreDeploymentValidationsSuccessful(
-      state
-    ),
-    currentPlan: getCurrentPlan(state),
-    currentPlanName: getCurrentPlanName(state),
-    currentStack: getCurrentStack(state),
-    currentStackDeploymentProgress: getCurrentStackDeploymentProgress(state),
-    currentStackResources: state.stacks.resources,
-    currentStackResourcesLoaded: state.stacks.resourcesLoaded,
-    environmentConfigurationSummary: getEnvironmentConfigurationSummary(state),
-    stacksLoaded: state.stacks.isLoaded
-  };
-};
+const mapStateToProps = state => ({
+  allPreDeploymentValidationsSuccessful: allPreDeploymentValidationsSuccessful(
+    state
+  ),
+  currentPlan: getCurrentPlan(state),
+  currentPlanName: getCurrentPlanName(state),
+  currentStack: getCurrentStack(state),
+  currentStackDeploymentProgress: getCurrentStackDeploymentProgress(state),
+  currentStackResources: state.stacks.resources,
+  currentStackResourcesLoaded: state.stacks.resourcesLoaded,
+  environmentConfigurationSummary: getEnvironmentConfigurationSummary(state),
+  stacksLoaded: state.stacks.isLoaded
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    deployPlan: planName => dispatch(PlanActions.deployPlan(planName)),
-    fetchStackResources: stack =>
-      dispatch(StacksActions.fetchResources(stack.stack_name, stack.id)),
-    runPreDeploymentValidations: planName =>
-      dispatch(
-        ValidationsActions.runValidationGroups(['pre-deployment'], planName)
-      )
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  deployPlan: planName => dispatch(PlanActions.deployPlan(planName)),
+  fetchStackResources: stack =>
+    dispatch(StacksActions.fetchResources(stack.stack_name, stack.id)),
+  runPreDeploymentValidations: planName =>
+    dispatch(
+      ValidationsActions.runValidationGroups(['pre-deployment'], planName)
+    )
+});
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(DeploymentDetail)

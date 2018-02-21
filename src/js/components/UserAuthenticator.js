@@ -87,13 +87,11 @@ UserAuthenticator.propTypes = {
   location: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => {
-  return {
-    isAuthenticated: state.login.isAuthenticated,
-    isAuthenticating: state.login.isAuthenticating,
-    keystoneAuthTokenId: state.login.tokenId
-  };
-};
+const mapStateToProps = state => ({
+  isAuthenticated: state.login.isAuthenticated,
+  isAuthenticating: state.login.isAuthenticating,
+  keystoneAuthTokenId: state.login.tokenId
+});
 
 const mapDispatchToProps = dispatch => ({
   authenticateUserViaToken: tokenId =>

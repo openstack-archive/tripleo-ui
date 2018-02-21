@@ -30,11 +30,12 @@ export default function filtersReducer(state = initialState, action) {
       // Don't add a new filter if there already is one with the same
       // filterBy and filterString.
       if (
-        state.getIn([filter, 'activeFilters']).filter(value => {
-          return (
-            value.filterBy === filterBy && value.filterString === filterString
-          );
-        }).size > 0
+        state
+          .getIn([filter, 'activeFilters'])
+          .filter(
+            value =>
+              value.filterBy === filterBy && value.filterString === filterString
+          ).size > 0
       ) {
         return state;
       }

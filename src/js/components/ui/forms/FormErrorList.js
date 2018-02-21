@@ -22,13 +22,11 @@ export default class FormErrorList extends React.Component {
   renderErrors() {
     const { errors } = this.props;
     if (errors.length > 1) {
-      const errorList = errors.map((error, index) => {
-        return (
-          <li key={index}>
-            {error.title} {error.message}
-          </li>
-        );
-      });
+      const errorList = errors.map((error, index) => (
+        <li key={index}>
+          {error.title} {error.message}
+        </li>
+      ));
       return (
         <div>
           <strong>{`${errors.length} Errors Found:`}</strong>

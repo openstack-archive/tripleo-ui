@@ -67,17 +67,15 @@ class Parameters extends React.Component {
         </TabPane>
       );
     } else {
-      return this.props.enabledEnvironments.toList().map(environment => {
-        return (
-          <TabPane
-            isActive={this.state.activeTab === environment.file}
-            key={environment.file}
-            renderOnlyActive
-          >
-            <EnvironmentParameters environment={environment.file} />
-          </TabPane>
-        );
-      });
+      return this.props.enabledEnvironments.toList().map(environment => (
+        <TabPane
+          isActive={this.state.activeTab === environment.file}
+          key={environment.file}
+          renderOnlyActive
+        >
+          <EnvironmentParameters environment={environment.file} />
+        </TabPane>
+      ));
     }
   }
 

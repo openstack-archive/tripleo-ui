@@ -18,18 +18,16 @@ import { Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-export const SortDirectionInput = ({ input: { onChange, value }, title }) => {
-  return (
-    <Button
-      title={title}
-      type="button"
-      bsStyle="link"
-      onClick={() => onChange(value === 'asc' ? 'desc' : 'asc')}
-    >
-      <span className={`fa fa-sort-alpha-${value}`} />
-    </Button>
-  );
-};
+export const SortDirectionInput = ({ input: { onChange, value }, title }) => (
+  <Button
+    title={title}
+    type="button"
+    bsStyle="link"
+    onClick={() => onChange(value === 'asc' ? 'desc' : 'asc')}
+  >
+    <span className={`fa fa-sort-alpha-${value}`} />
+  </Button>
+);
 SortDirectionInput.propTypes = {
   children: PropTypes.node,
   input: PropTypes.object.isRequired,
@@ -50,24 +48,22 @@ const getIconClass = optionKey => {
 export const ContentViewSelectorInput = ({
   input: { onChange, value },
   options
-}) => {
-  return (
-    <div>
-      {Object.keys(options).map(k => (
-        <Button
-          key={k}
-          type="button"
-          bsStyle="link"
-          title={options[k]['title']}
-          id={options[k]['id']}
-          onClick={() => onChange(k)}
-        >
-          <i className={getIconClass(k)} />
-        </Button>
-      ))}
-    </div>
-  );
-};
+}) => (
+  <div>
+    {Object.keys(options).map(k => (
+      <Button
+        key={k}
+        type="button"
+        bsStyle="link"
+        title={options[k]['title']}
+        id={options[k]['id']}
+        onClick={() => onChange(k)}
+      >
+        <i className={getIconClass(k)} />
+      </Button>
+    ))}
+  </div>
+);
 ContentViewSelectorInput.propTypes = {
   input: PropTypes.object.isRequired,
   options: PropTypes.object.isRequired

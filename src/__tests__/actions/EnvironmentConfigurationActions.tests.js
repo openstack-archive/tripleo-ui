@@ -121,8 +121,8 @@ describe('updateEnvironmentConfiguration', () => {
     NotificationActions.notify = jest.fn(() => ({ type: 'NOTIFY' }));
   });
 
-  it('dispatches actions', () => {
-    return store
+  it('dispatches actions', () =>
+    store
       .dispatch(
         EnvironmentConfigurationActions.updateEnvironmentConfiguration('myPlan')
       )
@@ -140,6 +140,5 @@ describe('updateEnvironmentConfiguration', () => {
           stopSubmit('environmentConfigurationForm'),
           NotificationActions.notify({ type: 'NOTIFY' })
         ]);
-      });
-  });
+      }));
 });

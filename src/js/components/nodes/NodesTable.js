@@ -130,11 +130,9 @@ class NodesTable extends React.Component {
     let dataKeys = ['name'];
     return filterString
       ? data.filter(row => {
-          let result = dataKeys.filter(dataKey => {
-            return row[dataKey]
-              .toLowerCase()
-              .includes(filterString.toLowerCase());
-          });
+          let result = dataKeys.filter(dataKey =>
+            row[dataKey].toLowerCase().includes(filterString.toLowerCase())
+          );
           return result.length > 0;
         })
       : data;

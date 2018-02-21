@@ -109,9 +109,9 @@ class RoleDetail extends React.Component {
    */
   _filterFormData(formData) {
     return fromJS(formData)
-      .filterNot((value, key) => {
-        return is(fromJS(this.props.allParameters.get(key).default), value);
-      })
+      .filterNot((value, key) =>
+        is(fromJS(this.props.allParameters.get(key).default), value)
+      )
       .toJS();
   }
 

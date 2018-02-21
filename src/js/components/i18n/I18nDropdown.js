@@ -71,18 +71,14 @@ I18nDropdown.propTypes = {
   languages: ImmutablePropTypes.map.isRequired
 };
 
-const mapStateToProps = state => {
-  return {
-    languages: getEnabledLanguages(state),
-    currentLanguage: getCurrentLanguage(state)
-  };
-};
+const mapStateToProps = state => ({
+  languages: getEnabledLanguages(state),
+  currentLanguage: getCurrentLanguage(state)
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    chooseLanguage: language => dispatch(I18nActions.chooseLanguage(language))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  chooseLanguage: language => dispatch(I18nActions.chooseLanguage(language))
+});
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(I18nDropdown)

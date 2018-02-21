@@ -40,22 +40,20 @@ const EnvironmentCheckBox = ({
   meta,
   required,
   ...rest
-}) => {
-  return (
-    <FormGroup
-      controlId={id}
-      validationState={getValidationState({ ...meta, touched: true })}
-    >
-      <Col smOffset={labelColumns} sm={inputColumns}>
-        <Checkbox {...input} {...rest}>
-          <span className={cx({ 'required-pf': required })}>{label}</span>
-        </Checkbox>
-        <InputMessage {...meta} touched />
-        <InputDescription description={description} />
-      </Col>
-    </FormGroup>
-  );
-};
+}) => (
+  <FormGroup
+    controlId={id}
+    validationState={getValidationState({ ...meta, touched: true })}
+  >
+    <Col smOffset={labelColumns} sm={inputColumns}>
+      <Checkbox {...input} {...rest}>
+        <span className={cx({ 'required-pf': required })}>{label}</span>
+      </Checkbox>
+      <InputMessage {...meta} touched />
+      <InputDescription description={description} />
+    </Col>
+  </FormGroup>
+);
 EnvironmentCheckBox.propTypes = {
   description: PropTypes.node,
   id: PropTypes.string.isRequired,
