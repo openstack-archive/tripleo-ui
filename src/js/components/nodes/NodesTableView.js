@@ -24,7 +24,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Formsy from 'formsy-react';
 
 import {
-  getAvailableNodeProfiles,
   getFilteredNodes,
   getNodesOperationInProgress
 } from '../../selectors/nodes';
@@ -236,7 +235,6 @@ class NodesTableView extends React.Component {
             onCancel={() => this.setState({ showDeleteModal: false })}
           />
           <TagNodesModal
-            availableProfiles={this.props.availableProfiles.toArray()}
             onProfileSelected={this.onTagNodesSubmit.bind(this)}
             onCancel={() =>
               this.setState({ showTagNodesModal: false, submitParameters: {} })
@@ -249,7 +247,6 @@ class NodesTableView extends React.Component {
   }
 }
 NodesTableView.propTypes = {
-  availableProfiles: ImmutablePropTypes.list.isRequired,
   children: PropTypes.node,
   deleteNodes: PropTypes.func.isRequired,
   formErrors: ImmutablePropTypes.list,
@@ -270,7 +267,6 @@ NodesTableView.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    availableProfiles: getAvailableNodeProfiles(state),
     nodes: getFilteredNodes(state),
     nodesInProgress: state.nodes.get('nodesInProgress'),
     nodesOperationInProgress: getNodesOperationInProgress(state),
