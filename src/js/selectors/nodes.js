@@ -15,10 +15,9 @@
  */
 
 import { createSelector } from 'reselect';
-import { List, Map, Set } from 'immutable';
+import { List, Map } from 'immutable';
 
 import { getFilterByName } from './filters';
-import { getRoles } from './roles';
 import { IntrospectionStatus } from '../immutableRecords/nodes';
 import { parseNodeCapabilities } from '../utils/nodes';
 
@@ -117,30 +116,6 @@ export const getFilteredNodes = createSelector(
         nodes =>
           nodesToolbarFilter.get('sortDir') === 'desc' ? nodes.reverse() : nodes
       )
-);
-
-/**
- *  Return a list of profiles collected across all nodes
- */
-export const getProfilesList = createSelector(getNodes, nodes =>
-  nodes
-    .reduce((profiles, v, k) => {
-      const profile = getNodeCapabilities(v).profile;
-      return profile ? profiles.push(profile) : profiles;
-    }, List())
-    .sort()
-);
-
-/**
- *  Return a list of profiles merged with role identifiers
- */
-export const getAvailableNodeProfiles = createSelector(
-  [getProfilesList, getRoles],
-  (profiles, roles) =>
-    Set(roles.toList().map(r => r.identifier))
-      .union(profiles)
-      .toList()
-      .sort()
 );
 
 /*
