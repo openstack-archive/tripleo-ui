@@ -17,6 +17,7 @@
 import { fromJS, Map } from 'immutable';
 
 import * as selectors from '../../js/selectors/nodesAssignment';
+import { Flavor } from '../../js/immutableRecords/flavors';
 import { Port } from '../../js/immutableRecords/nodes';
 import { Role, RolesState } from '../../js/immutableRecords/roles';
 import {
@@ -161,6 +162,145 @@ describe('Nodes Assignment selectors', () => {
     expect(selectors.getUntaggedAvailableNodes(state).size).toEqual(2);
   });
 
+  describe('getFlavorParametersByRole', () => {
+    const roles = Map({
+      Controller: new Role({
+        name: 'Controller'
+      }),
+      Compute: new Role({
+        name: 'Compute'
+      }),
+      BlockStorage: new Role({
+        name: 'BlockStorage'
+      })
+    });
+    const parameters = Map({
+      OvercloudControllerFlavor: new Parameter({
+        name: 'OvercloudControllerFlavor',
+        default: 'control'
+      }),
+      OvercloudComputeFlavor: new Parameter({
+        name: 'OvercloudComputeFlavor',
+        default: 'compute'
+      }),
+      OvercloudBlockStorageFlavor: new Parameter({
+        name: 'OvercloudBlockStorageFlavor',
+        default: 'block-storage'
+      }),
+      AnotherParameter1: new Parameter({
+        name: 'AnotherParameter1',
+        default: 'value 1'
+      }),
+      AnotherParameter2: new Parameter({
+        name: 'AnotherParameter2',
+        default: 'value 2'
+      })
+    });
+
+    it('provides flavor parameters by role', () => {
+      const result = selectors.getFlavorParametersByRole.resultFunc(
+        roles,
+        parameters
+      );
+      expect(result.get('Controller')).toEqual(
+        new Parameter({
+          name: 'OvercloudControllerFlavor',
+          default: 'control'
+        })
+      );
+      expect(result.get('Compute')).toEqual(
+        new Parameter({
+          name: 'OvercloudComputeFlavor',
+          default: 'compute'
+        })
+      );
+      expect(result.get('BlockStorage')).toEqual(
+        new Parameter({
+          name: 'OvercloudBlockStorageFlavor',
+          default: 'block-storage'
+        })
+      );
+    });
+  });
+
+  describe('getFlavorProfilesByRole', () => {
+    const flavors = Map({
+      control: new Flavor({
+        id: 'aaaa',
+        name: 'control',
+        extra_specs: Map({
+          'capabilities:profile': 'control'
+        })
+      }),
+      compute: new Flavor({
+        id: 'bbbb',
+        name: 'compute',
+        extra_specs: Map({
+          'capabilities:profile': 'compute'
+        })
+      }),
+      'block-storage': new Flavor({
+        id: 'cccc',
+        name: 'block-storage',
+        extra_specs: Map({
+          'capabilities:profile': 'block-storage'
+        })
+      })
+    });
+    const flavorParametersByRole = Map({
+      Controller: new Parameter({
+        name: 'OvercloudControllerFlavor',
+        default: 'control'
+      }),
+      Compute: new Parameter({
+        name: 'OvercloudComputeFlavor',
+        default: 'compute'
+      }),
+      BlockStorage: new Parameter({
+        name: 'OvercloudBlockStorageFlavor',
+        default: 'block-storage'
+      })
+    });
+
+    it('provides flavor profiles by role', () => {
+      const result = selectors.getFlavorProfilesByRole.resultFunc(
+        flavorParametersByRole,
+        flavors
+      );
+      expect(result.get('Controller')).toEqual('control');
+      expect(result.get('Compute')).toEqual('compute');
+      expect(result.get('BlockStorage')).toEqual('block-storage');
+    });
+  });
+
+  describe('getTaggedNodesCountByRole', () => {
+    const availableNodes = fromJS({
+      node1: {
+        uuid: 'node1',
+        properties: { capabilities: 'boot_option:local' }
+      },
+      node2: {
+        uuid: 'node2',
+        properties: { capabilities: 'boot_option:local,profile:control' }
+      }
+    });
+    const flavorProfilesByRole = Map({
+      Controller: 'control',
+      Compute: 'compute',
+      BlockStorage: 'block-storage'
+    });
+
+    it('calculates tagged node counts by role', () => {
+      const result = selectors.getTaggedNodesCountByRole.resultFunc(
+        availableNodes,
+        flavorProfilesByRole
+      );
+      expect(result.get('Controller')).toEqual(1);
+      expect(result.get('Compute')).toEqual(0);
+      expect(result.get('BlockStorage')).toEqual(0);
+    });
+  });
+
   describe('provides getTotalUntaggedAssignedNodesCount selector', () => {
     const nodes = fromJS({
       node1: {
@@ -186,6 +326,11 @@ describe('Nodes Assignment selectors', () => {
         identifier: 'block-storage'
       })
     });
+    const taggedNodesCountByRole = Map({
+      Controller: 1,
+      Compute: 0,
+      BlockStorage: 0
+    });
     const parametersByRole = Map({
       Controler: new Parameter({
         name: 'ControllerCount',
@@ -201,6 +346,7 @@ describe('Nodes Assignment selectors', () => {
       const result = selectors.getTotalUntaggedAssignedNodesCount.resultFunc(
         nodes,
         roles,
+        taggedNodesCountByRole,
         parametersByRole
       );
       expect(result).toEqual(1);
@@ -224,6 +370,7 @@ describe('Nodes Assignment selectors', () => {
       const result = selectors.getTotalUntaggedAssignedNodesCount.resultFunc(
         nodes,
         roles,
+        taggedNodesCountByRole,
         parametersByRole
       );
       expect(result).toEqual(1);
@@ -264,6 +411,11 @@ describe('Nodes Assignment selectors', () => {
         identifier: 'block-storage'
       })
     });
+    const taggedNodesCountByRole = Map({
+      Controller: 1,
+      Compute: 0,
+      BlockStorage: 0
+    });
     const nodeCountParametersByRole = Map({
       Controller: new Parameter({
         name: 'ControllerCount',
@@ -285,6 +437,7 @@ describe('Nodes Assignment selectors', () => {
         availableNodes,
         untaggedAvailableNodes,
         roles,
+        taggedNodesCountByRole,
         nodeCountParametersByRole,
         totalUntaggedAssignedNodesCount
       );
@@ -313,6 +466,7 @@ describe('Nodes Assignment selectors', () => {
         availableNodes,
         untaggedAvailableNodes,
         roles,
+        taggedNodesCountByRole,
         nodeCountParametersByRole,
         totalUntaggedAssignedNodesCount
       );
