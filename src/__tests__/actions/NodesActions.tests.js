@@ -177,18 +177,15 @@ describe('Fetching Introspection data success', () => {
       .mockReturnValue(() => Promise.resolve(response));
   });
 
-  it('dispatches fetchNodeIntrospectionDataSuccess', () => {
-    return store
-      .dispatch(NodesActions.fetchNodeIntrospectionData(nodeId))
-      .then(() => {
-        expect(
-          IronicInspectorApiService.getIntrospectionData
-        ).toHaveBeenCalledWith(nodeId);
-        expect(store.getActions()).toEqual([
-          NodesActions.fetchNodeIntrospectionDataSuccess(nodeId, response)
-        ]);
-      });
-  });
+  it('dispatches fetchNodeIntrospectionDataSuccess', () =>
+    store.dispatch(NodesActions.fetchNodeIntrospectionData(nodeId)).then(() => {
+      expect(
+        IronicInspectorApiService.getIntrospectionData
+      ).toHaveBeenCalledWith(nodeId);
+      expect(store.getActions()).toEqual([
+        NodesActions.fetchNodeIntrospectionDataSuccess(nodeId, response)
+      ]);
+    }));
 });
 
 describe('Fetching Introspection data error', () => {
@@ -208,18 +205,15 @@ describe('Fetching Introspection data error', () => {
     ErrorActions.handleErrors = jest.fn().mockReturnValue(() => {});
   });
 
-  it('dispatches fetchNodeIntrospectionDataFailed', () => {
-    return store
-      .dispatch(NodesActions.fetchNodeIntrospectionData(nodeId))
-      .then(() => {
-        expect(
-          IronicInspectorApiService.getIntrospectionData
-        ).toHaveBeenCalledWith(nodeId);
-        expect(store.getActions()).toEqual([
-          NodesActions.fetchNodeIntrospectionDataFailed(nodeId)
-        ]);
-      });
-  });
+  it('dispatches fetchNodeIntrospectionDataFailed', () =>
+    store.dispatch(NodesActions.fetchNodeIntrospectionData(nodeId)).then(() => {
+      expect(
+        IronicInspectorApiService.getIntrospectionData
+      ).toHaveBeenCalledWith(nodeId);
+      expect(store.getActions()).toEqual([
+        NodesActions.fetchNodeIntrospectionDataFailed(nodeId)
+      ]);
+    }));
 });
 
 describe('Asynchronous Introspect Nodes Action', () => {
@@ -235,22 +229,19 @@ describe('Asynchronous Introspect Nodes Action', () => {
       .mockReturnValue(() => {});
   });
 
-  it('dispatches startOperation', () => {
-    return store
-      .dispatch(NodesActions.startNodesIntrospection(nodeIds))
-      .then(() => {
-        expect(MistralApiService.runWorkflow).toHaveBeenCalledWith(
-          MistralConstants.BAREMETAL_INTROSPECT,
-          {
-            node_uuids: nodeIds
-          }
-        );
-        expect(NodesActions.pollNodeslistDuringProgress).toHaveBeenCalled();
-        expect(store.getActions()).toEqual([
-          NodesActions.startOperation(nodeIds)
-        ]);
-      });
-  });
+  it('dispatches startOperation', () =>
+    store.dispatch(NodesActions.startNodesIntrospection(nodeIds)).then(() => {
+      expect(MistralApiService.runWorkflow).toHaveBeenCalledWith(
+        MistralConstants.BAREMETAL_INTROSPECT,
+        {
+          node_uuids: nodeIds
+        }
+      );
+      expect(NodesActions.pollNodeslistDuringProgress).toHaveBeenCalled();
+      expect(store.getActions()).toEqual([
+        NodesActions.startOperation(nodeIds)
+      ]);
+    }));
 });
 
 describe('nodesIntrospectionFinished', () => {
@@ -327,8 +318,8 @@ describe('startProvideNodes Action', () => {
       .mockReturnValue(() => {});
   });
 
-  it('dispatches actions', () => {
-    return store.dispatch(NodesActions.startProvideNodes(nodeIds)).then(() => {
+  it('dispatches actions', () =>
+    store.dispatch(NodesActions.startProvideNodes(nodeIds)).then(() => {
       expect(MistralApiService.runWorkflow).toHaveBeenCalledWith(
         MistralConstants.BAREMETAL_PROVIDE,
         {
@@ -339,8 +330,7 @@ describe('startProvideNodes Action', () => {
       expect(store.getActions()).toEqual([
         NodesActions.startOperation(nodeIds)
       ]);
-    });
-  });
+    }));
 });
 
 describe('provideNodesFinished', () => {
@@ -402,14 +392,13 @@ describe('Update Node thunk action', () => {
       .mockReturnValue(() => Promise.resolve({ uuid: 'someId' }));
   });
 
-  it('dispatches required actions', () => {
-    return store.dispatch(NodesActions.updateNode(nodePatch)).then(() => {
+  it('dispatches required actions', () =>
+    store.dispatch(NodesActions.updateNode(nodePatch)).then(() => {
       expect(store.getActions()).toEqual([
         NodesActions.updateNodePending('someId'),
         NodesActions.updateNodeSuccess({ uuid: 'someId' })
       ]);
-    });
-  });
+    }));
 });
 
 describe('Delete Nodes thunk action', () => {
@@ -422,12 +411,11 @@ describe('Delete Nodes thunk action', () => {
       .mockReturnValue(() => Promise.resolve());
   });
 
-  it('successfully deletes a set of nodes', () => {
-    return store.dispatch(NodesActions.deleteNodes(nodeIds)).then(() => {
+  it('successfully deletes a set of nodes', () =>
+    store.dispatch(NodesActions.deleteNodes(nodeIds)).then(() => {
       expect(store.getActions()).toEqual([
         NodesActions.startOperation(nodeIds),
         NodesActions.deleteNodeSuccess(nodeIds[0])
       ]);
-    });
-  });
+    }));
 });

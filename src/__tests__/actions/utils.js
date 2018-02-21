@@ -18,11 +18,9 @@ import configureMockStore from 'redux-mock-store';
 import thunkMiddleware from 'redux-thunk';
 
 export const mockGetIntl = {
-  getIntl: () => {
-    return {
-      formatMessage: msgObj => msgObj.defaultMessage
-    };
-  }
+  getIntl: () => ({
+    formatMessage: msgObj => msgObj.defaultMessage
+  })
 };
 
 export const mockStore = configureMockStore([

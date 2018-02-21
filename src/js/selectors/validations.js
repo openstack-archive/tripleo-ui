@@ -49,14 +49,13 @@ export const getValidationExecutionsForCurrentPlan = createSelector(
  */
 export const getValidationsWithResults = createSelector(
   [validations, getValidationExecutionsForCurrentPlan],
-  (validations, results) => {
-    return validations.map(validation => {
+  (validations, results) =>
+    validations.map(validation => {
       const validationResults = getValidationResults(validation.id, results);
       return validation
         .set('results', validationResults)
         .set('status', getValidationStatus(validationResults));
-    });
-  }
+    })
 );
 
 /**
@@ -114,29 +113,25 @@ export const getValidationStatusCounts = createSelector(
  * Helper function to get the most recent time a plan has been updated or
  * created.
  */
-export const getMostRecentPlanUpdate = (executions, planName) => {
-  return (
-    executions
-      .filter(
-        execution =>
-          [MistralConstants.PLAN_UPDATE, MistralConstants.PLAN_CREATE].includes(
-            execution.workflow_name
-          ) && execution.getIn(['input', 'container']) === planName
-      )
-      .map(execution => execution.get('updated_at'))
-      .sort()
-      .last() || 0
-  );
-};
+export const getMostRecentPlanUpdate = (executions, planName) =>
+  executions
+    .filter(
+      execution =>
+        [MistralConstants.PLAN_UPDATE, MistralConstants.PLAN_CREATE].includes(
+          execution.workflow_name
+        ) && execution.getIn(['input', 'container']) === planName
+    )
+    .map(execution => execution.get('updated_at'))
+    .sort()
+    .last() || 0;
 
 /**
  * Helper function to get a validation results by validation name
  */
-const getValidationResults = (validationId, results) => {
-  return results.filter(
+const getValidationResults = (validationId, results) =>
+  results.filter(
     result => result.getIn(['input', 'validation_name']) === validationId
   );
-};
 
 /**
  * Helper function to determine validation status based on validation's results

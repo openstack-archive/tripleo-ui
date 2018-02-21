@@ -183,27 +183,23 @@ NodesToolbar.propTypes = {
   submitNodesToolbarForm: PropTypes.func.isRequired,
   updateFilter: PropTypes.func.isRequired
 };
-const mapDispatchToProps = dispatch => {
-  return {
-    clearActiveFilters: () => dispatch(clearActiveFilters('nodesToolbar')),
-    deleteActiveFilter: uuid =>
-      dispatch(deleteActiveFilter('nodesToolbar', uuid)),
-    submitNodesToolbarForm: () => dispatch(submit('nodesToolbar')),
-    addActiveFilter: data => dispatch(addActiveFilter('nodesToolbar', data)),
-    updateFilter: data => dispatch(updateFilter('nodesToolbar', data))
-  };
-};
-const mapStateToProps = state => {
-  return {
-    activeFilters: getActiveFilters(state, 'nodesToolbar'),
-    filteredNodesCount: getFilteredNodes(state).size,
-    filteredNodes: getFilteredNodes(state),
-    nodesToolbarFilter: getFilterByName(state, 'nodesToolbar').delete(
-      'activeFilters'
-    ),
-    nodesCount: getNodes(state).size
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  clearActiveFilters: () => dispatch(clearActiveFilters('nodesToolbar')),
+  deleteActiveFilter: uuid =>
+    dispatch(deleteActiveFilter('nodesToolbar', uuid)),
+  submitNodesToolbarForm: () => dispatch(submit('nodesToolbar')),
+  addActiveFilter: data => dispatch(addActiveFilter('nodesToolbar', data)),
+  updateFilter: data => dispatch(updateFilter('nodesToolbar', data))
+});
+const mapStateToProps = state => ({
+  activeFilters: getActiveFilters(state, 'nodesToolbar'),
+  filteredNodesCount: getFilteredNodes(state).size,
+  filteredNodes: getFilteredNodes(state),
+  nodesToolbarFilter: getFilterByName(state, 'nodesToolbar').delete(
+    'activeFilters'
+  ),
+  nodesCount: getNodes(state).size
+});
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(NodesToolbar)
 );

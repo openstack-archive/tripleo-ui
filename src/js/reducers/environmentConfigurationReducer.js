@@ -50,12 +50,12 @@ export default function environmentConfigurationReducer(
 
     case EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS: {
       const enabledEnvs = fromJS(action.payload);
-      const updatedEnvs = state.environments.map(environment => {
-        return environment.set(
+      const updatedEnvs = state.environments.map(environment =>
+        environment.set(
           'enabled',
           enabledEnvs.includes(environment.get('file'))
-        );
-      });
+        )
+      );
       return state.set('environments', updatedEnvs);
     }
 

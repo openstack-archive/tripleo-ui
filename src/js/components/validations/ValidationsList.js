@@ -117,8 +117,9 @@ class ValidationsList extends React.Component {
         </BlankSlate>
       );
     } else {
-      return validations.toList().map(validation => {
-        return (
+      return validations
+        .toList()
+        .map(validation => (
           <Validation
             key={validation.id}
             name={validation.name}
@@ -139,8 +140,7 @@ class ValidationsList extends React.Component {
             id={validation.id}
             addActiveFilter={this.props.addActiveFilter}
           />
-        );
-      });
+        ));
     }
   }
 
@@ -226,36 +226,32 @@ ValidationsList.propTypes = {
   validationsLoaded: PropTypes.bool.isRequired
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    addActiveFilter: data =>
-      dispatch(addActiveFilter('validationsToolbar', data)),
-    fetchValidations: () => dispatch(ValidationsActions.fetchValidations()),
-    fetchWorkflowExecutions: () =>
-      dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
-    runValidation: (id, currentPlanName) => {
-      dispatch(ValidationsActions.runValidation(id, currentPlanName));
-    },
-    stopValidation: executionId => {
-      dispatch(
-        WorkflowExecutionsActions.updateWorkflowExecution(executionId, {
-          state: 'PAUSED'
-        })
-      );
-    }
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  addActiveFilter: data =>
+    dispatch(addActiveFilter('validationsToolbar', data)),
+  fetchValidations: () => dispatch(ValidationsActions.fetchValidations()),
+  fetchWorkflowExecutions: () =>
+    dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
+  runValidation: (id, currentPlanName) => {
+    dispatch(ValidationsActions.runValidation(id, currentPlanName));
+  },
+  stopValidation: executionId => {
+    dispatch(
+      WorkflowExecutionsActions.updateWorkflowExecution(executionId, {
+        state: 'PAUSED'
+      })
+    );
+  }
+});
 
-const mapStateToProps = state => {
-  return {
-    executionsLoaded: state.executions.get('executionsLoaded'),
-    isFetchingValidations: state.validations.get('isFetching'),
-    validations: getFilteredValidations(state),
-    validationsLoaded: state.validations.get('validationsLoaded'),
-    currentPlanName: getCurrentPlanName(state),
-    showValidations: state.validations.showValidations
-  };
-};
+const mapStateToProps = state => ({
+  executionsLoaded: state.executions.get('executionsLoaded'),
+  isFetchingValidations: state.validations.get('isFetching'),
+  validations: getFilteredValidations(state),
+  validationsLoaded: state.validations.get('validationsLoaded'),
+  currentPlanName: getCurrentPlanName(state),
+  showValidations: state.validations.showValidations
+});
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(ValidationsList)

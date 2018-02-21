@@ -86,14 +86,12 @@ class ValidationDetail extends React.Component {
   }
 
   renderValidationGroups() {
-    return this.props.groups.map(group => {
-      return (
-        <small key={group}>
-          <span className="label label-default">{group}</span>
-          &nbsp;
-        </small>
-      );
-    });
+    return this.props.groups.map(group => (
+      <small key={group}>
+        <span className="label label-default">{group}</span>
+        &nbsp;
+      </small>
+    ));
   }
 
   renderValidationOutput() {

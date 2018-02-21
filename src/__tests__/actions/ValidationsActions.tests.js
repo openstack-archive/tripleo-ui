@@ -81,8 +81,8 @@ describe('FetchValidations action', () => {
       .mockReturnValue(() => Promise.resolve(response));
   });
 
-  it('dispatches appropriate actions and normalizes the response', () => {
-    return store.dispatch(ValidationsActions.fetchValidations()).then(() => {
+  it('dispatches appropriate actions and normalizes the response', () =>
+    store.dispatch(ValidationsActions.fetchValidations()).then(() => {
       expect(MistralApiService.runAction).toHaveBeenCalledWith(
         MistralConstants.VALIDATIONS_LIST
       );
@@ -90,8 +90,7 @@ describe('FetchValidations action', () => {
         ValidationsActions.fetchValidationsPending(),
         ValidationsActions.fetchValidationsSuccess(normalizedResponse)
       ]);
-    });
-  });
+    }));
 });
 
 describe('RunValidation action', () => {
@@ -118,8 +117,8 @@ describe('RunValidation action', () => {
       .mockReturnValue(() => Promise.resolve(addWorkflowExecutionResponse));
   });
 
-  it('dispatches appropriate actions', () => {
-    return store
+  it('dispatches appropriate actions', () =>
+    store
       .dispatch(ValidationsActions.runValidation('512e', 'overcloud'))
       .then(() => {
         expect(MistralApiService.runWorkflow).toHaveBeenCalledWith(
@@ -134,8 +133,7 @@ describe('RunValidation action', () => {
             addWorkflowExecutionResponse
           )
         ]);
-      });
-  });
+      }));
 });
 
 // TODO(jtomasek): this test compares 2 immutable records and even though they're the same

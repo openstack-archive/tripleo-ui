@@ -1,5 +1,6 @@
 {
   "rules": {
+    "arrow-body-style": [2, "as-needed"],
     "default-case": 0,
     "linebreak-style": [2, "unix"],
     "no-cond-assign": [2, "except-parens"],

@@ -32,24 +32,22 @@ const HorizontalInput = ({
   meta,
   required,
   ...rest
-}) => {
-  return (
-    <FormGroup controlId={id} validationState={getValidationState(meta)}>
-      <Col
-        componentClass={ControlLabel}
-        sm={labelColumns}
-        className={cx({ 'required-pf': required })}
-      >
-        {label}
-      </Col>
-      <Col sm={inputColumns}>
-        <FormControl type={type} {...input} {...rest} />
-        <InputMessage {...meta} />
-        <InputDescription description={description} />
-      </Col>
-    </FormGroup>
-  );
-};
+}) => (
+  <FormGroup controlId={id} validationState={getValidationState(meta)}>
+    <Col
+      componentClass={ControlLabel}
+      sm={labelColumns}
+      className={cx({ 'required-pf': required })}
+    >
+      {label}
+    </Col>
+    <Col sm={inputColumns}>
+      <FormControl type={type} {...input} {...rest} />
+      <InputMessage {...meta} />
+      <InputDescription description={description} />
+    </Col>
+  </FormGroup>
+);
 HorizontalInput.propTypes = {
   description: PropTypes.node,
   id: PropTypes.string.isRequired,

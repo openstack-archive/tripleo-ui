@@ -33,31 +33,29 @@ const HorizontalSelect = ({
   meta,
   required,
   ...rest
-}) => {
-  return (
-    <FormGroup controlId={id} validationState={getValidationState(meta)}>
-      <Col
-        componentClass={ControlLabel}
-        sm={labelColumns}
-        className={cx({ 'required-pf': required })}
+}) => (
+  <FormGroup controlId={id} validationState={getValidationState(meta)}>
+    <Col
+      componentClass={ControlLabel}
+      sm={labelColumns}
+      className={cx({ 'required-pf': required })}
+    >
+      {label}
+    </Col>
+    <Col sm={inputColumns}>
+      <FormControl
+        componentClass="select"
+        multiple={multiple}
+        {...rest}
+        {...input}
       >
-        {label}
-      </Col>
-      <Col sm={inputColumns}>
-        <FormControl
-          componentClass="select"
-          multiple={multiple}
-          {...rest}
-          {...input}
-        >
-          {children}
-        </FormControl>
-        <InputMessage {...meta} />
-        <InputDescription description={description} />
-      </Col>
-    </FormGroup>
-  );
-};
+        {children}
+      </FormControl>
+      <InputMessage {...meta} />
+      <InputDescription description={description} />
+    </Col>
+  </FormGroup>
+);
 HorizontalSelect.propTypes = {
   children: PropTypes.node,
   description: PropTypes.node,

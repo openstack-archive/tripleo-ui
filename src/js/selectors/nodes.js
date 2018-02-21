@@ -103,11 +103,11 @@ export const getFilteredNodes = createSelector(
       .update(nodes =>
         nodesToolbarFilter.get('activeFilters').reduce(
           (filteredNodes, filter) =>
-            filteredNodes.filter(node => {
-              return getNodePropertyString(node, filter.filterBy)
+            filteredNodes.filter(node =>
+              getNodePropertyString(node, filter.filterBy)
                 .toLowerCase()
-                .includes(filter.filterString.toLowerCase());
-            }),
+                .includes(filter.filterString.toLowerCase())
+            ),
           nodes
         )
       )

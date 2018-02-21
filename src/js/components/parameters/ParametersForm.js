@@ -166,8 +166,8 @@ const convertJsonTypeParameterValueToString = value =>
   // accept empty string as valid value
   ['', undefined].includes(value) ? '' : JSON.stringify(value);
 
-const getFormInitialValues = parameters => {
-  return parameters
+const getFormInitialValues = parameters =>
+  parameters
     .map(p => {
       const value = p.value === undefined ? p.default : p.value;
       if (p.type.toLowerCase() === 'json') {
@@ -177,22 +177,20 @@ const getFormInitialValues = parameters => {
       }
     })
     .toJS();
-};
 
 /**
  * Filter out non updated parameters, so only parameters which have been actually changed
  * get sent to updateparameters
  */
-const filterFormData = (values, initialValues) => {
-  return pickBy(values, (value, key) => !isEqual(value, initialValues[key]));
-};
+const filterFormData = (values, initialValues) =>
+  pickBy(values, (value, key) => !isEqual(value, initialValues[key]));
 
 /**
  * Json parameter values are sent as string, this function parses them and checks if they're object
  * or array. Also, parameters with undefined value are set to null
  */
-const parseJsonTypeValues = (values, parameters) => {
-  return mapValues(values, (value, key) => {
+const parseJsonTypeValues = (values, parameters) =>
+  mapValues(values, (value, key) => {
     if (parameters.get(key).type.toLowerCase() === 'json') {
       try {
         return JSON.parse(value);
@@ -202,7 +200,6 @@ const parseJsonTypeValues = (values, parameters) => {
     }
     return value === undefined ? null : value;
   });
-};
 
 const handleSubmit = (
   { saveAndClose, ...values },
