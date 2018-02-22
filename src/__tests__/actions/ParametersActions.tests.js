@@ -126,20 +126,4 @@ describe('ParametersActions', () => {
         });
     });
   });
-
-  describe('updateParametersFailed', () => {
-    it('returns ParametersConstants.UPDATE_PARAMETERS_FAILED', () => {
-      expect(
-        ParametersActions.updateParametersFailed([{ foo: 'bar' }], {
-          field1: 'fail'
-        })
-      ).toEqual({
-        type: ParametersConstants.UPDATE_PARAMETERS_FAILED,
-        payload: {
-          formErrors: [{ foo: 'bar' }],
-          formFieldErrors: { field1: 'fail' }
-        }
-      });
-    });
-  });
 });

@@ -27,7 +27,7 @@ import { getEnabledEnvironments } from '../../selectors/environmentConfiguration
 import { Loader } from '../ui/Loader';
 import ParametersActions from '../../actions/ParametersActions';
 import ParametersForm from './ParametersForm';
-import ParameterInputList from './NewParameterInputList';
+import ParameterInputList from './ParameterInputList';
 import ParametersSidebar from './ParametersSidebar';
 import TabPane from '../ui/TabPane';
 

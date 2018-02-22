@@ -23,7 +23,7 @@ import React from 'react';
 
 import { getRoleServices } from '../../selectors/parameters';
 import { getRole } from '../../selectors/roles';
-import ParameterInputList from '../parameters/NewParameterInputList';
+import ParameterInputList from '../parameters/ParameterInputList';
 import Tab from '../ui/Tab';
 
 const messages = defineMessages({
