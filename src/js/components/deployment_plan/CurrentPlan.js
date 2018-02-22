@@ -34,11 +34,13 @@ import { getEnvironmentConfigurationSummary } from '../../selectors/environmentC
 import { getCurrentPlan } from '../../selectors/plans';
 import { getDeploymentStatus } from '../../actions/DeploymentActions';
 import ConfigurePlanStep from './ConfigurePlanStep';
+import ConfigureNetworkStep from './ConfigureNetworkStep';
 import { DeploymentPlanStep } from './DeploymentPlanStep';
 import DeployStep from './DeployStep';
 import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
 import HardwareStep from './HardwareStep';
 import { Loader } from '../ui/Loader';
+import NetworkConfiguration from '../networkConfiguration/NetworkConfiguration';
 import ParametersActions from '../../actions/ParametersActions';
 import RoleDetail from '../roles/RoleDetail';
 import RolesStep from './RolesStep';
@@ -59,6 +61,10 @@ const messages = defineMessages({
   deploymentConfigurationStepHeader: {
     id: 'CurrentPlan.deploymentConfigurationStepHeader',
     defaultMessage: 'Specify Deployment Configuration'
+  },
+  configureNetworkStepHeader: {
+    id: 'CurrentPlan.configureNetworkStepHeader',
+    defaultMessage: 'Configure Network'
   },
   deployStepHeader: {
     id: 'CurrentPlan.deployStepHeader',
@@ -85,6 +91,12 @@ const messages = defineMessages({
       'unassign nodes already assigned to the role. You can also customize role-specific ' +
       'settings in this step. Click the icon in the top-right corner of each role to ' +
       'see these role-specific settings.'
+  },
+  configureNetworkStepTooltip: {
+    id: 'CurrentPlan.configureNetworkStepTooltip',
+    defaultMessage:
+      'This step lets user manage deployment networks, assign them to deployment roles, ' +
+      'and configure network interfaces'
   },
   deployStepTooltip: {
     id: 'CurrentPlan.deploymentStepTooltip',
@@ -167,6 +179,13 @@ class CurrentPlan extends React.Component {
               <RolesStep />
             </DeploymentPlanStep>
             <DeploymentPlanStep
+              title={formatMessage(messages.configureNetworkStepHeader)}
+              disabled={disableDeploymentSteps}
+              tooltip={formatMessage(messages.configureNetworkStepTooltip)}
+            >
+              <ConfigureNetworkStep planName={currentPlanName} />
+            </DeploymentPlanStep>
+            <DeploymentPlanStep
               title={formatMessage(messages.deployStepHeader)}
               tooltip={formatMessage(messages.deployStepTooltip)}
             >
@@ -188,6 +207,10 @@ class CurrentPlan extends React.Component {
             <Route
               path="/plans/:planName/roles/:roleName"
               component={RoleDetail}
+            />
+            <Route
+              path="/plans/:planName/network-configuration"
+              component={NetworkConfiguration}
             />
             <Route
               path="/plans/:planName/deployment-confirmation"
