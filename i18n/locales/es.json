@@ -203,7 +203,6 @@
         "PXEAndIPMIToolDriverFields.password": "Contrase\u00f1a IPMI",
         "PXEAndIPMIToolDriverFields.port": "Puerto IPMI",
         "PXEAndIPMIToolDriverFields.user": "Usuario IPMI",
-        "ParameterInput.enterValidJson": "Introduzca una cadena JSON v\u00e1lida.",
         "ParameterInputList.noParameters": "Actualmente no existen par\u00e1metros para configurar en esta secci\u00f3n.",
         "Parameters.general": "General",
         "ParametersActions.parametersUpdatedNotficationMessage": "Los par\u00e1metros del despliegue han sido actualizados correctamente.",

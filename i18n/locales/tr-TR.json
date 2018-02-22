@@ -203,7 +203,6 @@
         "PXEAndIPMIToolDriverFields.password": "IPMI Parolas\u0131",
         "PXEAndIPMIToolDriverFields.port": "IPMI Ba\u011flant\u0131 Noktas\u0131",
         "PXEAndIPMIToolDriverFields.user": "IPMI Kullan\u0131c\u0131 ad\u0131",
-        "ParameterInput.enterValidJson": "L\u00fctfen ge\u00e7erli JSON karakter dizisi girin.",
         "ParameterInputList.noParameters": "\u015eu an bu k\u0131s\u0131mda yap\u0131land\u0131r\u0131lacak parametre yok.",
         "Parameters.general": "Genel",
         "ParametersActions.parametersUpdatedNotficationMessage": "Uygulama parametreleri ba\u015far\u0131yla g\u00fcncellendi.",
