@@ -70,12 +70,9 @@ const messages = defineMessages({
   hardwareStepTooltip: {
     id: 'CurrentPlan.hardwareStepTooltip',
     defaultMessage:
-      'This step registers and introspects your nodes. Registration involves ' +
-      'defining the power management details of each node so that you so that the director can ' +
-      'control them during the introspection and provisioning stages. After registration, you ' +
-      'introspect the nodes, which identifies the hardware each node uses and builds a profile of ' +
-      'each node. After registration and introspection, you can assign these nodes into specific ' +
-      'roles in your overcloud.'
+      'Registration of hardware involves defining the power management details of each node ' +
+      'so that the application can control them during introspection and provisioning. ' +
+      'Introspection identifies the hardware each node uses and builds a profile of each node.'
   },
   configurePlanStepTooltip: {
     id: 'CurrentPlan.configurePlanStepTooltip',
@@ -87,22 +84,16 @@ const messages = defineMessages({
   configureRolesStepTooltip: {
     id: 'CurrentPlan.configureRolesStepTooltip',
     defaultMessage:
-      'This step assigns and removes nodes from roles in your overcloud. On each ' +
-      "role's selection dialog, you can tag available nodes into the role or untag nodes already " +
-      'assigned to the role. Click "Assign Nodes" for a particular role to open the selection ' +
-      'dialog and start assigning nodes. ' +
-      'You can also customize role-specific settings in this step. For example, you can compose ' +
-      'services on each role and customize specific parameters related to each role. Click the ' +
-      'pencil icon in the top-right corner of each role to see these role-specific settings'
+      'On each roles selection dialog, you can assign available nodes into the role or' +
+      'unassign nodes already assigned to the role. You can also customize role-specific' +
+      'settings in this step. Click the pencil icon in the top-right corner of each role to ' +
+      'see these role-specific settings.'
   },
   deployStepTooltip: {
     id: 'CurrentPlan.deploymentStepTooltip',
     defaultMessage:
-      'This step performs the deployment of the overcloud. Once the deployment ' +
-      'begins, the director tracks the progress and provides a report of each completed, running, ' +
-      'or failed step. When the deployment completes, the director displays the current overcloud ' +
-      'status and login details, which you use to interact with your overcloud. Click "Deploy" to ' +
-      'start the deployment.'
+      'This step starts the deployment of the overcloud. Once the deployment begins, you can ' +
+      'track the progress and see a report of each completed, running, or failed step.'
   }
 });
 
