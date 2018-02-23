@@ -28,10 +28,13 @@ import React, { Component } from 'react';
 
 import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
 import { getCurrentPlanName } from '../../selectors/plans';
+import { getNetworks } from '../../selectors/networks';
 import { getRoles } from '../../selectors/roles';
 import { getParameters } from '../../selectors/parameters';
 import { Loader } from '../ui/Loader';
+import NetworkTopology from './NetworkTopology';
 import ParametersActions from '../../actions/ParametersActions';
+import NetworksActions from '../../actions/NetworksActions';
 import RolesActions from '../../actions/RolesActions';
 import {
   CloseModalXButton,
@@ -57,21 +60,28 @@ const messages = defineMessages({
 class NetworkConfiguration extends Component {
   componentDidMount() {
     const {
+      currentPlanName,
+      fetchNetworks,
       fetchParameters,
       fetchRoles,
+      isFetchingNetworks,
       isFetchingParameters,
       isFetchingRoles
     } = this.props;
-    !isFetchingRoles && fetchRoles();
-    !isFetchingParameters && fetchParameters();
+    !isFetchingRoles && fetchRoles(currentPlanName);
+    !isFetchingParameters && fetchParameters(currentPlanName);
+    !isFetchingNetworks && fetchNetworks(currentPlanName);
   }
 
   render() {
     const {
       currentPlanName,
       intl: { formatMessage },
+      isFetchingNetworks,
       isFetchingRoles,
-      isFetchingParameters
+      isFetchingParameters,
+      networks,
+      roles
     } = this.props;
     return (
       <RoutedModalPanel
@@ -87,14 +97,16 @@ class NetworkConfiguration extends Component {
 
         <Loader
           height={60}
-          loaded={!isFetchingRoles && !isFetchingParameters}
+          loaded={
+            !isFetchingRoles && !isFetchingParameters && !isFetchingNetworks
+          }
           className="flex-container"
           content={formatMessage(messages.loadingData)}
           componentProps={{ className: 'flex-container' }}
         >
           <ModalBody className="flex-container">
             {/*<NetworkConfigurationToolbar/>*/}
-            {/*<NetworkTopology roles={roles} />*/}
+            <NetworkTopology networks={networks} roles={roles} />
           </ModalBody>
         </Loader>
         <ModalFooter>
@@ -108,11 +120,14 @@ class NetworkConfiguration extends Component {
 }
 NetworkConfiguration.propTypes = {
   currentPlanName: PropTypes.string.isRequired,
+  fetchNetworks: PropTypes.func.isRequired,
   fetchParameters: PropTypes.func.isRequired,
   fetchRoles: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,
+  isFetchingNetworks: PropTypes.bool.isRequired,
   isFetchingParameters: PropTypes.bool.isRequired,
   isFetchingRoles: PropTypes.bool.isRequired,
+  networks: ImmutablePropTypes.map.isRequired,
   parameters: ImmutablePropTypes.map.isRequired,
   parametersLoaded: PropTypes.bool.isRequired,
   roles: ImmutablePropTypes.map.isRequired,
@@ -123,13 +138,16 @@ const mapStateToProps = state => ({
   currentPlanName: getCurrentPlanName(state),
   parameters: getParameters(state),
   parametersLoaded: state.parameters.loaded,
+  isFetchingNetworks: state.networks.isFetching,
   isFetchingParameters: state.parameters.isFetching,
+  networks: getNetworks(state),
   roles: getRoles(state),
   rolesLoaded: state.roles.loaded,
   isFetchingRoles: state.roles.isFetching
 });
 
 const mapDispatchToProps = dispatch => ({
+  fetchNetworks: planName => dispatch(NetworksActions.fetchNetworks(planName)),
   fetchRoles: planName => dispatch(RolesActions.fetchRoles(planName)),
   fetchParameters: planName =>
     dispatch(ParametersActions.fetchParameters(planName))
