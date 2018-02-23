@@ -31,6 +31,7 @@ import { getCurrentPlanName } from '../../selectors/plans';
 import { getRoles } from '../../selectors/roles';
 import { getParameters } from '../../selectors/parameters';
 import { Loader } from '../ui/Loader';
+import NetworkTopology from './NetworkTopology';
 import ParametersActions from '../../actions/ParametersActions';
 import RolesActions from '../../actions/RolesActions';
 import {
@@ -57,13 +58,14 @@ const messages = defineMessages({
 class NetworkConfiguration extends Component {
   componentDidMount() {
     const {
+      currentPlanName,
       fetchParameters,
       fetchRoles,
       isFetchingParameters,
       isFetchingRoles
     } = this.props;
-    !isFetchingRoles && fetchRoles();
-    !isFetchingParameters && fetchParameters();
+    !isFetchingRoles && fetchRoles(currentPlanName);
+    !isFetchingParameters && fetchParameters(currentPlanName);
   }
 
   render() {
@@ -71,7 +73,8 @@ class NetworkConfiguration extends Component {
       currentPlanName,
       intl: { formatMessage },
       isFetchingRoles,
-      isFetchingParameters
+      isFetchingParameters,
+      roles
     } = this.props;
     return (
       <RoutedModalPanel
@@ -94,7 +97,7 @@ class NetworkConfiguration extends Component {
         >
           <ModalBody className="flex-container">
             {/*<NetworkConfigurationToolbar/>*/}
-            {/*<NetworkTopology roles={roles} />*/}
+            <NetworkTopology roles={roles} />
           </ModalBody>
         </Loader>
         <ModalFooter>

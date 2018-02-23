@@ -1,0 +1,110 @@
+/*
+  Copyright 2018 Red Hat Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may
+  not use this file except in compliance with the License. You may obtain
+  a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations
+  under the License.
+ */
+
+.network-topology {
+  background: #f8f8f8;
+  padding: 15px;
+  & > .flex-column {
+    overflow-x: auto;
+  }
+}
+
+.network-roles-list {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.network-roles-group {
+  flex: 1 1 0;
+  margin: 0 10px;
+  &:first-child { margin-left: 0;}
+  &:last-child { margin-right: 0;}
+}
+
+.network-role-card {
+  flex-grow: 0;
+  margin: 0 10px;
+  &:first-child { margin-left: 0;}
+  &:last-child { margin-right: 0;}
+  .card-pf {
+    margin: 0;
+  }
+  .card-pf-title {
+    font-size: 16px !important;
+  }
+  &.undercloud {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 200px;
+  }
+}
+
+.role-networks-list {
+  display: flex;
+  justify-content: space-evenly;
+  .role-network {
+    .role-network-line {
+      position: absolute;
+      border-right: 1px solid;
+      background-color: inherit;
+      &:after {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        bottom: -5px;
+        left: -5px;
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+        border: 1px solid;
+        background-color: inherit;
+        border-color: inherit;
+      }
+    }
+  }
+}
+
+.network {
+  width: 100%;
+  min-width: 500px;
+  margin-top: 30px;
+  text-align: center;
+  position: relative;
+
+  .network-line {
+    margin: 0 10px;
+    border-top: 1px solid;
+    &:before, &:after {
+      content: "";
+      position: absolute;
+      top: -5px;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      border: 1px solid;
+      border-color: inherit;
+    }
+    &:before { left: 0; }
+    &:after { right: 0; }
+  }
+
+  .network-box {
+    color: white;
+    padding: 3px;
+    width: 200px;
+    margin: 0 auto;
+  }
+}
