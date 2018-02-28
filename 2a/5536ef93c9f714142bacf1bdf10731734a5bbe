@@ -1,0 +1,8 @@
+Code-Review+2: Julie Pichon <jpichon@redhat.com>
+Workflow+1: Julie Pichon <jpichon@redhat.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Wed, 28 Feb 2018 10:31:39 +0000
+Reviewed-on: https://review.openstack.org/548454
+Project: openstack/tripleo-ui
+Branch: refs/heads/master
