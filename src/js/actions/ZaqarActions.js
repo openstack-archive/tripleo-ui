@@ -30,6 +30,7 @@ import {
   deploymentFinished,
   configDownloadMessage
 } from './DeploymentActions';
+import NetworksActions from './NetworksActions';
 
 export default {
   handleAuthenticationSuccess(message, dispatch) {
@@ -201,6 +202,15 @@ export default {
           dispatch(
             handleWorkflowMessage(payload.execution.id, execution =>
               dispatch(RolesActions.selectRolesFinished(execution))
+            )
+          );
+          break;
+        }
+
+        case MistralConstants.NETWORK_LIST: {
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(NetworksActions.fetchNetworksFinished(execution))
             )
           );
           break;
