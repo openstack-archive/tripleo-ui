@@ -24,6 +24,7 @@ import flavorsReducer from './flavorsReducer';
 import i18nReducer from './i18nReducer';
 import loggerReducer from './loggerReducer';
 import loginReducer from './loginReducer';
+import networkReducer from './networksReducer';
 import nodesReducer from './nodesReducer';
 import notificationsReducer from './notificationsReducer';
 import parametersReducer from './parametersReducer';
@@ -44,6 +45,7 @@ const appReducer = combineReducers({
   i18n: i18nReducer,
   logger: loggerReducer,
   login: loginReducer,
+  networks: networkReducer,
   nodes: nodesReducer,
   notifications: notificationsReducer,
   parameters: parametersReducer,
