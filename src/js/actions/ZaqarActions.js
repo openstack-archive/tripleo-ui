@@ -23,6 +23,7 @@ import RolesActions from './RolesActions';
 import ValidationsActions from './ValidationsActions';
 import MistralConstants from '../constants/MistralConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
+import NetworksActions from './NetworksActions';
 
 export default {
   handleAuthenticationSuccess(message, dispatch) {
@@ -99,6 +100,11 @@ export default {
         case MistralConstants.SELECT_ROLES: {
           // case 'tripleo.roles.v1.select_roles': {
           dispatch(RolesActions.selectRolesFinished(payload, history));
+          break;
+        }
+
+        case MistralConstants.NETWORK_LIST: {
+          dispatch(NetworksActions.fetchNetworksFinished(payload));
           break;
         }
 
