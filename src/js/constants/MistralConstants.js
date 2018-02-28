@@ -26,6 +26,7 @@ export default {
   CREATE_CONTAINER: 'tripleo.plan.create_container',
   DEPLOYMENT_DEPLOY_PLAN: 'tripleo.deployment.v1.deploy_plan',
   DOWNLOAD_LOGS: 'tripleo.plan_management.v1.download_logs',
+  NETWORK_LIST: 'tripleo.plan_management.v1.list_networks',
   PARAMETERS_GET: 'tripleo.parameters.get_flatten',
   PARAMETERS_UPDATE: 'tripleo.parameters.update',
   PLAN_CREATE: 'tripleo.plan_management.v1.create_deployment_plan',
