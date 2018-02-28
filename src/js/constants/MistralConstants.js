@@ -31,6 +31,7 @@ export default {
   UNDEPLOY_PLAN: 'tripleo.deployment.v1.undeploy_plan',
   DOWNLOAD_LOGS: 'tripleo.plan_management.v1.download_logs',
   HEAT_STACKS_GET: 'tripleo.stack.v1._heat_stacks_get',
+  NETWORK_LIST: 'tripleo.plan_management.v1.list_networks',
   PARAMETERS_GET: 'tripleo.parameters.get_flatten',
   PARAMETERS_UPDATE: 'tripleo.parameters.update',
   PLAN_CREATE: 'tripleo.plan_management.v1.create_deployment_plan',
