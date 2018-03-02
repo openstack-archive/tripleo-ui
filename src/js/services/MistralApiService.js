@@ -24,7 +24,6 @@ import {
   ConnectionError
 } from './errors';
 import { getServiceUrl, getAuthTokenId } from '../selectors/auth';
-import MistralConstants from '../constants/MistralConstants';
 
 class MistralApiService {
   defaultRequest(path, additionalAttributes) {
@@ -57,6 +56,21 @@ class MistralApiService {
         .then(response => {
           response.data.executions.map(parseExecutionAttrs);
           return when.resolve(response.data.executions);
+        })
+        .catch(handleErrors);
+  }
+
+  /**
+   * Get a Workflow execution
+   * Mistral API: GET /v2/executions/:execution_id
+   * @param {executionId} Execution ID
+   */
+  getWorkflowExecution(executionId) {
+    return dispatch =>
+      dispatch(this.defaultRequest('/executions/' + executionId))
+        .then(response => {
+          const execution = parseExecutionAttrs(response.data);
+          return when.resolve(execution);
         })
         .catch(handleErrors);
   }
@@ -105,11 +119,8 @@ class MistralApiService {
 
           if (response.data.state === 'ERROR') {
             return when.reject(new MistralExecutionError(response));
-          } else if (workflowName === MistralConstants.VALIDATIONS_RUN) {
-            // Running validation is special case when whole execution needs to be returned
-            return when.resolve(response.data);
           } else {
-            return when.resolve(response.data.output.result);
+            return when.resolve(response.data);
           }
         })
         .catch(e => {
