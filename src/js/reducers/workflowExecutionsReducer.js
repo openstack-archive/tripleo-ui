@@ -14,16 +14,15 @@
  * under the License.
  */
 
-import { fromJS, Map, OrderedMap } from 'immutable';
+import { fromJS } from 'immutable';
 
 import WorkflowExecutionsConstants from '../constants/WorkflowExecutionsConstants';
-import { WorkflowExecution } from '../immutableRecords/workflowExecutions';
+import {
+  WorkflowExecution,
+  WorkflowExecutionsState
+} from '../immutableRecords/workflowExecutions';
 
-const initialState = Map({
-  executionsLoaded: false,
-  isFetching: false,
-  executions: OrderedMap()
-});
+const initialState = new WorkflowExecutionsState();
 
 export default function workflowExecutionsReducer(
   state = initialState,

@@ -32,6 +32,7 @@ import {
 } from '../normalizrSchemas/nodes';
 import MistralConstants from '../constants/MistralConstants';
 import { setNodeCapability } from '../utils/nodes';
+import { startWorkflow } from './WorkflowActions';
 
 const messages = defineMessages({
   introspectionNotificationMessage: {
@@ -255,9 +256,11 @@ export default {
       dispatch(this.startOperation(nodeIds));
       dispatch(this.pollNodeslistDuringProgress());
       return dispatch(
-        MistralApiService.runWorkflow(MistralConstants.BAREMETAL_PROVIDE, {
-          node_uuids: nodeIds
-        })
+        startWorkflow(
+          MistralConstants.BAREMETAL_PROVIDE,
+          { node_uuids: nodeIds },
+          execution => dispatch(this.provideNodesFinished(execution))
+        )
       ).catch(error => {
         dispatch(handleErrors(error, 'Selected Nodes could not be provided'));
         dispatch(this.finishOperation(nodeIds));
@@ -265,28 +268,29 @@ export default {
     };
   },
 
-  provideNodesFinished(messagePayload) {
+  provideNodesFinished(execution) {
+    const { input, output, state } = execution;
     return (dispatch, getState) => {
-      const nodeIds = messagePayload.execution.input.node_uuids;
+      const nodeIds = input.node_uuids;
       dispatch(this.finishOperation(nodeIds));
       dispatch(this.fetchNodes());
 
-      switch (messagePayload.status) {
+      switch (state) {
         case 'SUCCESS': {
           dispatch(
             NotificationActions.notify({
               type: 'success',
               title: 'Nodes are available',
-              message: messagePayload.message
+              message: output.message
             })
           );
           break;
         }
-        case 'FAILED': {
+        case 'ERROR': {
           dispatch(
             NotificationActions.notify({
               title: 'Some Nodes could not be provided',
-              message: messagePayload.message
+              message: output.message
                 .filter(message => message.result)
                 .map(message => message.result)
             })

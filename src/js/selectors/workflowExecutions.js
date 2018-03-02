@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Red Hat Inc.
+ * Copyright 2018 Red Hat Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License. You may obtain
@@ -14,22 +14,6 @@
  * under the License.
  */
 
-import { Map, OrderedMap, Record } from 'immutable';
-
-export const WorkflowExecutionsState = Record({
-  executionsLoaded: false,
-  isFetching: false,
-  executions: OrderedMap()
-});
-
-export const WorkflowExecution = Record({
-  description: undefined,
-  id: undefined,
-  input: Map(),
-  output: Map(),
-  params: Map(),
-  state: undefined,
-  state_info: undefined,
-  updated_at: 0,
-  workflow_name: undefined
-});
+export const getWorkflowExecutions = state => state.executions.executions;
+export const getWorkflowExecution = (state, executionId) =>
+  state.executions.executions.get(executionId);

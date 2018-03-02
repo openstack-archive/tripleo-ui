@@ -23,6 +23,7 @@ import RolesActions from './RolesActions';
 import ValidationsActions from './ValidationsActions';
 import MistralConstants from '../constants/MistralConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
+import { handleWorkflowMessage } from './WorkflowActions';
 
 export default {
   handleAuthenticationSuccess(message, dispatch) {
@@ -54,7 +55,11 @@ export default {
           break;
 
         case MistralConstants.BAREMETAL_PROVIDE:
-          dispatch(NodesActions.provideNodesFinished(payload));
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(NodesActions.provideNodesFinished(execution))
+            )
+          );
           break;
 
         case MistralConstants.BAREMETAL_MANAGE:
