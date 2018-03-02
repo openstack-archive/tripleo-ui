@@ -21,15 +21,10 @@ limitations under the License.`;
 
 module.exports = env => {
   return merge(CommonConfig, {
+    mode: 'production',
     devtool: 'source-map',
     plugins: [
-      new webpack.optimize.UglifyJsPlugin({
-        sourceMap: true
-      }),
-      new webpack.BannerPlugin(license),
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify('production')
-      })
+      new webpack.BannerPlugin(license)
     ]
   });
 };
