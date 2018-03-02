@@ -77,7 +77,7 @@ const RoleCard = ({
             className="link pull-right"
             title="Edit Role parameters"
           >
-            <span className="pficon pficon-settings" />
+            <span className="pficon pficon-edit" />
           </Link>
         </FloatingToolbar>
         <h2 className="card-pf-title">{title}</h2>
