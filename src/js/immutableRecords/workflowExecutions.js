@@ -14,7 +14,13 @@
  * under the License.
  */
 
-import { Map, Record } from 'immutable';
+import { Map, OrderedMap, Record } from 'immutable';
+
+export const WorkflowExecutionsState = Record({
+  executionsLoaded: false,
+  isFetching: false,
+  executions: OrderedMap()
+});
 
 export const WorkflowExecution = Record({
   description: undefined,

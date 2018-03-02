@@ -34,6 +34,7 @@ import { availableRolesReducer } from './rolesReducer';
 import stacksReducer from './stacksReducer';
 import validationsReducer from './validationsReducer';
 import workflowExecutionsReducer from './workflowExecutionsReducer';
+import workflowExecutionMessageTimeoutsReducer from './workflowExecutionMessageTimeoutsReducer';
 
 const appReducer = combineReducers({
   appConfig,
@@ -53,7 +54,8 @@ const appReducer = combineReducers({
   availableRoles: availableRolesReducer,
   stacks: stacksReducer,
   validations: validationsReducer,
-  form: formReducer
+  form: formReducer,
+  workflowExecutionMessageTimeouts: workflowExecutionMessageTimeoutsReducer
 });
 
 export default appReducer;
