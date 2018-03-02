@@ -22,6 +22,7 @@ import NodesActions from '../../js/actions/NodesActions';
 import * as ErrorActions from '../../js/actions/ErrorActions';
 import NodesConstants from '../../js/constants/NodesConstants';
 import MistralConstants from '../../js/constants/MistralConstants';
+import * as WorkflowActions from '../../js/actions/WorkflowActions';
 
 const mockGetNodesResponse = [{ uuid: 1 }, { uuid: 2 }];
 
@@ -319,7 +320,7 @@ describe('startProvideNodes Action', () => {
   const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
 
   beforeEach(() => {
-    MistralApiService.runWorkflow = jest
+    WorkflowActions.startWorkflow = jest
       .fn()
       .mockReturnValue(() => Promise.resolve({ state: 'RUNNING' }));
     NodesActions.pollNodeslistDuringProgress = jest
@@ -329,12 +330,7 @@ describe('startProvideNodes Action', () => {
 
   it('dispatches actions', () => {
     return store.dispatch(NodesActions.startProvideNodes(nodeIds)).then(() => {
-      expect(MistralApiService.runWorkflow).toHaveBeenCalledWith(
-        MistralConstants.BAREMETAL_PROVIDE,
-        {
-          node_uuids: nodeIds
-        }
-      );
+      expect(WorkflowActions.startWorkflow).toHaveBeenCalled();
       expect(NodesActions.pollNodeslistDuringProgress).toHaveBeenCalled();
       expect(store.getActions()).toEqual([
         NodesActions.startOperation(nodeIds)
