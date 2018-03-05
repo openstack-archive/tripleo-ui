@@ -81,7 +81,6 @@ class Nodes extends React.Component {
               className="btn btn-primary"
               id="Nodes__registerNodesLink"
             >
-              <span className="fa fa-plus" />&nbsp;
               <FormattedMessage {...messages.registerNodes} />
             </Link>
           </div>
