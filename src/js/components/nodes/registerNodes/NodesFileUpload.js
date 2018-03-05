@@ -91,7 +91,6 @@ class NodesFileUpload extends React.Component {
   render() {
     return (
       <Button onClick={() => this.refs.regNodesUploadFileInput.click()}>
-        <span className="fa fa-upload" />
         <FormattedMessage {...messages.uploadFromFile} />
 
         <form ref="regNodesUploadFileForm">

@@ -203,7 +203,6 @@ class RegisterNodesDialog extends React.Component {
             <div className="col-sm-4 col-lg-3 sidebar-pf sidebar-pf-left">
               <div className="nav-stacked-actions">
                 <Button onClick={e => this.addNode()}>
-                  <span className="fa fa-plus" />{' '}
                   <FormattedMessage {...messages.addNew} />
                 </Button>
                 &nbsp; <FormattedMessage {...messages.or} /> &nbsp;
