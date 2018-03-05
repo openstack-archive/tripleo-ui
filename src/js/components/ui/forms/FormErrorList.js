@@ -16,7 +16,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import * as _ from 'lodash';
+import { isEmpty } from 'lodash';
 
 export default class FormErrorList extends React.Component {
   renderErrors() {
@@ -46,7 +46,7 @@ export default class FormErrorList extends React.Component {
   }
 
   render() {
-    if (_.isEmpty(this.props.errors)) {
+    if (isEmpty(this.props.errors)) {
       return null;
     } else {
       return (
