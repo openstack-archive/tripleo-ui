@@ -20,7 +20,6 @@ import NodesActions from './NodesActions';
 import PlansActions from './PlansActions';
 import RegisterNodesActions from './RegisterNodesActions';
 import RolesActions from './RolesActions';
-import ValidationsActions from './ValidationsActions';
 import MistralConstants from '../constants/MistralConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 import { handleWorkflowMessage } from './WorkflowActions';
@@ -67,7 +66,18 @@ export default {
           break;
 
         case MistralConstants.VALIDATIONS_RUN: {
-          dispatch(ValidationsActions.runValidationMessage(payload));
+          // TODO(jtomasek): this conditional is a workaround for proper handling
+          // of a message notifying that validation workflow has started. In that
+          // case we want to keep original polling interval.
+          // Ideally, validation workflow would send a message with
+          // different type rather than sending the same type on start and end
+          let pollTimeout;
+          if (payload.status === 'RUNNING') {
+            pollTimeout = 30000;
+          }
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, undefined, pollTimeout)
+          );
           break;
         }
 
