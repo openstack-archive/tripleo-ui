@@ -1,0 +1,9 @@
+Code-Review+2: Jiri Tomasek <jtomasek@redhat.com>
+Code-Review+2: Honza Pokorny <honza@redhat.com>
+Workflow+1: Honza Pokorny <honza@redhat.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Tue, 06 Mar 2018 18:57:01 +0000
+Reviewed-on: https://review.openstack.org/549812
+Project: openstack/tripleo-ui
+Branch: refs/heads/master
