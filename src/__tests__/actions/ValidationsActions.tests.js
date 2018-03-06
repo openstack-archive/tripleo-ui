@@ -14,13 +14,10 @@
  * under the License.
  */
 
-import { Map } from 'immutable';
-
 import MistralApiService from '../../js/services/MistralApiService';
 import ValidationsActions from '../../js/actions/ValidationsActions';
 import ValidationsConstants from '../../js/constants/ValidationsConstants';
-import WorkflowExecutionsActions from '../../js/actions/WorkflowExecutionsActions';
-import { WorkflowExecution } from '../../js/immutableRecords/workflowExecutions';
+import * as WorkflowActions from '../../js/actions/WorkflowActions';
 import MistralConstants from '../../js/constants/MistralConstants';
 import { mockStore } from './utils';
 
@@ -96,7 +93,7 @@ describe('FetchValidations action', () => {
 
 describe('RunValidation action', () => {
   const store = mockStore({});
-  const addWorkflowExecutionResponse = {
+  const execution = {
     state_info: null,
     created_at: '2016-07-19 13:22:29.588140',
     description: '',
@@ -113,77 +110,23 @@ describe('RunValidation action', () => {
   };
 
   beforeEach(() => {
-    MistralApiService.runWorkflow = jest
+    WorkflowActions.startWorkflow = jest
       .fn()
-      .mockReturnValue(() => Promise.resolve(addWorkflowExecutionResponse));
+      .mockReturnValue(() => Promise.resolve(execution));
   });
 
   it('dispatches appropriate actions', () => {
     return store
       .dispatch(ValidationsActions.runValidation('512e', 'overcloud'))
       .then(() => {
-        expect(MistralApiService.runWorkflow).toHaveBeenCalledWith(
+        expect(WorkflowActions.startWorkflow).toHaveBeenCalledWith(
           MistralConstants.VALIDATIONS_RUN,
           {
             validation_name: '512e',
             plan: 'overcloud'
           }
         );
-        expect(store.getActions()).toEqual([
-          WorkflowExecutionsActions.addWorkflowExecution(
-            addWorkflowExecutionResponse
-          )
-        ]);
+        expect(store.getActions()).toEqual([]);
       });
-  });
-});
-
-// TODO(jtomasek): this test compares 2 immutable records and even though they're the same
-// the test resolves as failing
-xdescribe('runValidationMessage action', () => {
-  beforeEach(() => {
-    spyOn(WorkflowExecutionsActions, 'addWorkflowExecutionFromMessage');
-  });
-
-  it('creates WorkflowExecution from message and adds it', () => {
-    const messagePayload = {
-      status: 'RUNNING',
-      validation_name: 'check-network-gateway',
-      execution: {
-        input: {
-          validation_name: 'check-network-gateway',
-          queue_name: 'tripleo',
-          plan: 'plan'
-        },
-        params: {},
-        id: '6e610e0d-b87d-408e-8800-34de0dada52b'
-      },
-      plan: 'plan'
-    };
-
-    const expectedExecution = new WorkflowExecution({
-      description: undefined,
-      id: '6e610e0d-b87d-408e-8800-34de0dada52b',
-      input: Map({
-        validation_name: 'check-network-gateway',
-        queue_name: 'tripleo',
-        plan: 'plan'
-      }),
-      output: Map({
-        status: 'RUNNING',
-        validation_name: 'check-network-gateway',
-        plan: 'plan'
-      }),
-      params: Map(),
-      state: 'RUNNING',
-      state_info: undefined,
-      updated_at: undefined,
-      workflow_name: MistralConstants.VALIDATIONS_RUN
-    });
-
-    ValidationsActions.runValidationMessage(messagePayload)(() => {}, () => {});
-    expect(
-      WorkflowExecutionsActions.addWorkflowExecutionFromMessage
-    ).toHaveBeenCalledWith(expectedExecution);
   });
 });
