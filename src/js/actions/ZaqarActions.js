@@ -41,16 +41,28 @@ export default {
       switch (type) {
         case MistralConstants.BAREMETAL_REGISTER_OR_UPDATE:
           dispatch(
-            RegisterNodesActions.nodesRegistrationFinished(payload, history)
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(
+                RegisterNodesActions.nodesRegistrationFinished(execution)
+              )
+            )
           );
           break;
 
         case MistralConstants.BAREMETAL_INTROSPECT:
-          dispatch(NodesActions.nodesIntrospectionFinished(payload));
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(NodesActions.nodesIntrospectionFinished(execution))
+            )
+          );
           break;
 
         case MistralConstants.BAREMETAL_INTROSPECT_INTERNAL:
-          dispatch(NodesActions.nodeIntrospectionFinished(payload));
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(NodesActions.nodeIntrospectionFinished(execution))
+            )
+          );
           break;
 
         case MistralConstants.BAREMETAL_PROVIDE:
@@ -62,7 +74,11 @@ export default {
           break;
 
         case MistralConstants.BAREMETAL_MANAGE:
-          dispatch(NodesActions.manageNodesFinished(payload));
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(NodesActions.manageNodesFinished(execution))
+            )
+          );
           break;
 
         case MistralConstants.VALIDATIONS_RUN: {

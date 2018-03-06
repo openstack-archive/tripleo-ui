@@ -67,18 +67,20 @@ describe('nodesRegistrationFinished', () => {
       })
     });
 
-    const messagePayload = {
-      status: 'SUCCESS',
-      registered_nodes: [
-        {
-          uuid: 1,
-          name: 'node1'
-        },
-        {
-          uuid: 2,
-          name: 'node2'
-        }
-      ]
+    const execution = {
+      state: 'SUCCESS',
+      output: {
+        registered_nodes: [
+          {
+            uuid: 1,
+            name: 'node1'
+          },
+          {
+            uuid: 2,
+            name: 'node2'
+          }
+        ]
+      }
     };
     const normalizedRegisteredNodes = {
       1: { uuid: 1, name: 'node1' },
@@ -92,9 +94,7 @@ describe('nodesRegistrationFinished', () => {
       message: 'The nodes were successfully registered.'
     };
 
-    store.dispatch(
-      RegisterNodesActions.nodesRegistrationFinished(messagePayload)
-    );
+    store.dispatch(RegisterNodesActions.nodesRegistrationFinished(execution));
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
     expect(store.getActions()).toEqual([
       NodesActions.addNodes(normalizedRegisteredNodes),
@@ -116,25 +116,27 @@ describe('nodesRegistrationFinished', () => {
       })
     });
 
-    const messagePayload = {
-      status: 'FAILED',
-      message: {
-        message: [
+    const execution = {
+      state: 'ERROR',
+      output: {
+        message: {
+          message: [
+            {
+              result: 'Nodes registration failed for some reason'
+            }
+          ]
+        },
+        registered_nodes: [
           {
-            result: 'Nodes registration failed for some reason'
+            uuid: 1,
+            name: 'node1'
+          },
+          {
+            uuid: 2,
+            name: 'node2'
           }
         ]
-      },
-      registered_nodes: [
-        {
-          uuid: 1,
-          name: 'node1'
-        },
-        {
-          uuid: 2,
-          name: 'node2'
-        }
-      ]
+      }
     };
     const normalizedRegisteredNodes = {
       1: { uuid: 1, name: 'node1' },
@@ -147,9 +149,7 @@ describe('nodesRegistrationFinished', () => {
       }
     ];
 
-    store.dispatch(
-      RegisterNodesActions.nodesRegistrationFinished(messagePayload)
-    );
+    store.dispatch(RegisterNodesActions.nodesRegistrationFinished(execution));
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
     expect(store.getActions()).toEqual([
       NodesActions.addNodes(normalizedRegisteredNodes),
