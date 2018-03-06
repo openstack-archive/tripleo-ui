@@ -46,11 +46,11 @@ import { OverlayLoader } from '../../ui/Loader';
 import NotificationActions from '../../../actions/NotificationActions';
 import RegisterNodesActions from '../../../actions/RegisterNodesActions';
 import RegisterNodesForm from './RegisterNodesForm';
-import NodesFileUpload from './NodesFileUpload';
-import NodeTab from './NodeTab';
-
 import MistralApiService from '../../../services/MistralApiService';
 import MistralConstants from '../../../constants/MistralConstants';
+import NodesFileUpload from './NodesFileUpload';
+import NodeTab from './NodeTab';
+import { startWorkflow } from '../../../actions/WorkflowActions';
 
 const messages = defineMessages({
   noNodesToRegister: {
@@ -144,6 +144,7 @@ class RegisterNodesDialog extends React.Component {
     // TODO(jtomasek): remove this once tripleo-common supports passing uuid from client
     // errors on incoming message will include uuids so we can act om nodes list page
     const nodesToRegister = values.nodes.map(node => omit(node, 'uuid'));
+    const { resetForm, history, startNodesRegistration } = this.props;
 
     // run tripleo.baremetal.validate_nodes action here explicitly to be able to catch
     // validation issues and then close the modal and reset form
@@ -154,20 +155,24 @@ class RegisterNodesDialog extends React.Component {
     )
       .then(response =>
         dispatch(
-          MistralApiService.runWorkflow(
+          startWorkflow(
             MistralConstants.BAREMETAL_REGISTER_OR_UPDATE,
             {
               nodes_json: nodesToRegister,
               kernel_name: 'bm-deploy-kernel',
               ramdisk_name: 'bm-deploy-ramdisk'
-            }
+            },
+            execution =>
+              dispatch(
+                RegisterNodesActions.nodesRegistrationFinished(execution)
+              )
           )
         )
       )
       .then(response => {
-        this.props.resetForm();
-        this.props.history.push('/nodes');
-        this.props.startNodesRegistration(nodesToRegister);
+        resetForm();
+        history.push('/nodes');
+        startNodesRegistration(nodesToRegister);
       })
       .catch(error => {
         dispatch(handleErrors(error, 'Nodes registration failed', false));
@@ -198,7 +203,6 @@ class RegisterNodesDialog extends React.Component {
             containerClassName="row row-eq-height"
             loaded={!submitting}
             content={formatMessage(messages.registeringNodes)}
-            componentProps={{ className: 'row row-eq-height' }}
           >
             <div className="col-sm-4 col-lg-3 sidebar-pf sidebar-pf-left">
               <div className="nav-stacked-actions">

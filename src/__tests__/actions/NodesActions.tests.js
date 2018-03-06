@@ -16,7 +16,6 @@
 
 import IronicApiService from '../../js/services/IronicApiService';
 import IronicInspectorApiService from '../../js/services/IronicInspectorApiService';
-import MistralApiService from '../../js/services/MistralApiService';
 import { mockStore } from './utils';
 import NodesActions from '../../js/actions/NodesActions';
 import * as ErrorActions from '../../js/actions/ErrorActions';
@@ -222,7 +221,7 @@ describe('Asynchronous Introspect Nodes Action', () => {
   const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
 
   beforeEach(() => {
-    MistralApiService.runWorkflow = jest
+    WorkflowActions.startWorkflow = jest
       .fn()
       .mockReturnValue(() => Promise.resolve({ state: 'RUNNING' }));
     NodesActions.pollNodeslistDuringProgress = jest
@@ -232,11 +231,14 @@ describe('Asynchronous Introspect Nodes Action', () => {
 
   it('dispatches startOperation', () =>
     store.dispatch(NodesActions.startNodesIntrospection(nodeIds)).then(() => {
-      expect(MistralApiService.runWorkflow).toHaveBeenCalledWith(
+      expect(WorkflowActions.startWorkflow).toHaveBeenCalledWith(
         MistralConstants.BAREMETAL_INTROSPECT,
         {
-          node_uuids: nodeIds
-        }
+          node_uuids: nodeIds,
+          max_retry_attempts: 1
+        },
+        expect.any(Function),
+        15 * 60 * 1000
       );
       expect(NodesActions.pollNodeslistDuringProgress).toHaveBeenCalled();
       expect(store.getActions()).toEqual([
@@ -252,23 +254,15 @@ describe('nodesIntrospectionFinished', () => {
 
   it('handles successful nodes introspection', () => {
     const store = mockStore({});
-    const messagePayload = {
-      execution: {
-        input: {
-          node_uuids: ['598612eb-f21b-435e-a868-7bb74e576cc2']
-        }
+    const execution = {
+      input: {
+        node_uuids: ['598612eb-f21b-435e-a868-7bb74e576cc2']
       },
-      status: 'SUCCESS',
-      message: 'Nodes Introspection was successful',
-      introspected_nodes: {
-        '598612eb-f21b-435e-a868-7bb74e576cc2': { finished: true, error: null }
-      },
-      execution_id: '622eb415-a522-4016-b5f6-6e9e0b3f687a',
-      queue_name: 'tripleo',
-      ttl: 3600
+      output: {},
+      state: 'SUCCESS'
     };
 
-    store.dispatch(NodesActions.nodesIntrospectionFinished(messagePayload));
+    store.dispatch(NodesActions.nodesIntrospectionFinished(execution));
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
     const actions = store.getActions();
     expect(Object.keys(actions).map(key => actions[key].type)).toEqual([
@@ -279,24 +273,15 @@ describe('nodesIntrospectionFinished', () => {
 
   it('handles failed nodes introspection', () => {
     const store = mockStore({});
-    const messagePayload = {
-      execution: {
-        input: {
-          node_uuids: ['598612eb-f21b-435e-a868-7bb74e576cc2']
-        }
+    const execution = {
+      input: {
+        node_uuids: ['598612eb-f21b-435e-a868-7bb74e576cc2']
       },
-      status: 'FAILED',
-      message: [
-        { message: 'Nodes Introspection failed' },
-        { message: 'Some error occurred during introspection' }
-      ],
-      introspected_nodes: {},
-      execution_id: '622eb415-a522-4016-b5f6-6e9e0b3f687a',
-      queue_name: 'tripleo',
-      ttl: 3600
+      output: { message: 'Some error occurred during introspection' },
+      state: 'ERROR'
     };
 
-    store.dispatch(NodesActions.nodesIntrospectionFinished(messagePayload));
+    store.dispatch(NodesActions.nodesIntrospectionFinished(execution));
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
     const actions = store.getActions();
     expect(Object.keys(actions).map(key => actions[key].type)).toEqual([
@@ -336,13 +321,15 @@ describe('provideNodesFinished', () => {
 
   it('handles success', () => {
     const store = mockStore({});
-    const messagePayload = {
-      status: 'SUCCESS',
-      message: 'Nodes were successfully made available',
-      execution: { input: { node_uuids: [] } }
+    const execution = {
+      input: {
+        node_uuids: ['598612eb-f21b-435e-a868-7bb74e576cc2']
+      },
+      output: {},
+      state: 'SUCCESS'
     };
 
-    store.dispatch(NodesActions.nodesIntrospectionFinished(messagePayload));
+    store.dispatch(NodesActions.nodesIntrospectionFinished(execution));
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
     const actions = store.getActions();
     expect(Object.keys(actions).map(key => actions[key].type)).toEqual([
@@ -353,13 +340,15 @@ describe('provideNodesFinished', () => {
 
   it('handles failure', () => {
     const store = mockStore({});
-    const messagePayload = {
-      status: 'FAILED',
-      message: [{ result: 'Failed to set nodes to available.' }],
-      execution: { input: { node_uuids: [] } }
+    const execution = {
+      input: {
+        node_uuids: ['598612eb-f21b-435e-a868-7bb74e576cc2']
+      },
+      output: {},
+      state: 'ERROR'
     };
 
-    store.dispatch(NodesActions.nodesIntrospectionFinished(messagePayload));
+    store.dispatch(NodesActions.nodesIntrospectionFinished(execution));
     expect(NodesActions.fetchNodes).toHaveBeenCalled();
     const actions = store.getActions();
     expect(Object.keys(actions).map(key => actions[key].type)).toEqual([

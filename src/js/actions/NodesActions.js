@@ -22,7 +22,6 @@ import { getNodesByIds } from '../selectors/nodes';
 import { handleErrors } from './ErrorActions';
 import IronicApiService from '../services/IronicApiService';
 import IronicInspectorApiService from '../services/IronicInspectorApiService';
-import MistralApiService from '../services/MistralApiService';
 import NodesConstants from '../constants/NodesConstants';
 import NotificationActions from './NotificationActions';
 import {
@@ -46,6 +45,10 @@ const messages = defineMessages({
   introspectionFailedNotificationTitle: {
     id: 'NodesActions.introspectionFailedNotificationTitle',
     defaultMessage: 'Nodes Introspection Failed'
+  },
+  nodeIntrospectionFailedNotificationTitle: {
+    id: 'NodesActions.nodeIntrospectionFailedNotificationTitle',
+    defaultMessage: 'Node Introspection Failed'
   }
 });
 
@@ -160,10 +163,18 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.startOperation(nodeIds));
       dispatch(this.pollNodeslistDuringProgress());
+      // Nodes are introspected in batches of 20, each batch 15 minutes
+      const timeout = Math.ceil(nodeIds.length / 20) * 15 * 60 * 1000;
       return dispatch(
-        MistralApiService.runWorkflow(MistralConstants.BAREMETAL_INTROSPECT, {
-          node_uuids: nodeIds
-        })
+        startWorkflow(
+          MistralConstants.BAREMETAL_INTROSPECT,
+          {
+            node_uuids: nodeIds,
+            max_retry_attempts: 1
+          },
+          execution => dispatch(this.nodesIntrospectionFinished(execution)),
+          timeout
+        )
       ).catch(error => {
         dispatch(
           handleErrors(error, 'Selected Nodes could not be introspected')
@@ -173,14 +184,18 @@ export default {
     };
   },
 
-  nodesIntrospectionFinished(messagePayload) {
+  nodesIntrospectionFinished(execution) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      const nodeIds = messagePayload.execution.input.node_uuids;
+      const {
+        input: { node_uuids: nodeIds },
+        output: { message },
+        state
+      } = execution;
       dispatch(this.finishOperation(nodeIds));
       dispatch(this.fetchNodes());
 
-      switch (messagePayload.status) {
+      switch (state) {
         case 'SUCCESS': {
           dispatch(
             NotificationActions.notify({
@@ -191,15 +206,13 @@ export default {
           );
           break;
         }
-        case 'FAILED': {
+        case 'ERROR': {
           dispatch(
             NotificationActions.notify({
               title: formatMessage(
                 messages.introspectionFailedNotificationTitle
               ),
-              message: messagePayload.message
-                .filter(m => m.message)
-                .map(m => m.message)
+              message: message
             })
           );
           break;
@@ -210,17 +223,23 @@ export default {
     };
   },
 
-  nodeIntrospectionFinished(messagePayload) {
+  nodeIntrospectionFinished(execution) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      const nodeId = messagePayload.execution.input.node_uuid;
+      const {
+        input: { node_uuid: nodeId },
+        output: { message },
+        state
+      } = execution;
       dispatch(this.finishOperation([nodeId]));
 
-      if (messagePayload.status === 'FAILED') {
+      if (state === 'ERROR') {
         dispatch(
           NotificationActions.notify({
-            title: formatMessage(messages.introspectionFailedNotificationTitle),
-            message: messagePayload.message
+            title: formatMessage(
+              messages.nodeIntrospectionFailedNotificationTitle
+            ),
+            message: message
           })
         );
       }
@@ -308,9 +327,13 @@ export default {
       dispatch(this.startOperation(nodeIds));
       dispatch(this.pollNodeslistDuringProgress());
       dispatch(
-        MistralApiService.runWorkflow(MistralConstants.BAREMETAL_MANAGE, {
-          node_uuids: nodeIds
-        })
+        startWorkflow(
+          MistralConstants.BAREMETAL_MANAGE,
+          {
+            node_uuids: nodeIds
+          },
+          execution => dispatch(this.manageNodesFinished(execution))
+        )
       ).catch(error => {
         dispatch(handleErrors(error, 'Selected Nodes could not be managed'));
         dispatch(this.finishOperation(nodeIds));
@@ -318,28 +341,32 @@ export default {
     };
   },
 
-  manageNodesFinished(messagePayload) {
+  manageNodesFinished(execution) {
     return (dispatch, getState) => {
-      const nodeIds = messagePayload.execution.input.node_uuids;
+      const {
+        input: { node_uuids: nodeIds },
+        output: { message },
+        state
+      } = execution;
       dispatch(this.finishOperation(nodeIds));
       dispatch(this.fetchNodes());
 
-      switch (messagePayload.status) {
+      switch (state) {
         case 'SUCCESS': {
           dispatch(
             NotificationActions.notify({
               type: 'success',
               title: 'Nodes are manageable',
-              message: messagePayload.message
+              message: message
             })
           );
           break;
         }
-        case 'FAILED': {
+        case 'ERROR': {
           dispatch(
             NotificationActions.notify({
               title: 'Some Nodes could not be managed',
-              message: messagePayload.message
+              message: message
                 .filter(message => message.result)
                 .map(message => message.result)
             })
