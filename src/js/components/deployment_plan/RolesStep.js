@@ -20,6 +20,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
+import FlavorsActions from '../../actions/FlavorsActions';
 import { getCurrentPlanName } from '../../selectors/plans';
 import { getNodes } from '../../selectors/nodes';
 import {
@@ -54,8 +55,10 @@ const RolesStep = ({
   allNodesCount,
   availableNodesCount,
   currentPlanName,
+  fetchFlavors,
   fetchRoles,
   fetchNodes,
+  flavorsLoaded,
   intl,
   isFetchingNodes,
   isFetchingParameters,
@@ -92,9 +95,10 @@ const RolesStep = ({
         </InlineLoader>
       </p>
       <Roles
+        fetchFlavors={fetchFlavors}
         fetchRoles={fetchRoles.bind(this, currentPlanName)}
         fetchNodes={fetchNodes}
-        loaded={rolesLoaded && nodesLoaded}
+        loaded={rolesLoaded && nodesLoaded && flavorsLoaded}
       />
     </div>
   );
@@ -103,8 +107,10 @@ RolesStep.propTypes = {
   allNodesCount: PropTypes.number.isRequired,
   availableNodesCount: PropTypes.number.isRequired,
   currentPlanName: PropTypes.string,
+  fetchFlavors: PropTypes.func.isRequired,
   fetchNodes: PropTypes.func.isRequired,
   fetchRoles: PropTypes.func.isRequired,
+  flavorsLoaded: PropTypes.bool.isRequired,
   intl: PropTypes.object,
   isFetchingNodes: PropTypes.bool.isRequired,
   isFetchingParameters: PropTypes.bool.isRequired,
@@ -117,6 +123,7 @@ const mapStateToProps = state => ({
   allNodesCount: getNodes(state).size,
   availableNodesCount: getAvailableNodes(state).size,
   currentPlanName: getCurrentPlanName(state),
+  flavorsLoaded: state.flavors.isLoaded,
   isFetchingNodes: state.nodes.get('isFetching'),
   isFetchingParameters: state.parameters.isFetching,
   rolesLoaded: state.roles.loaded,
@@ -124,6 +131,7 @@ const mapStateToProps = state => ({
   totalAssignedNodesCount: getTotalAssignedNodesCount(state)
 });
 const mapDispatchToProps = dispatch => ({
+  fetchFlavors: () => dispatch(FlavorsActions.fetchFlavors()),
   fetchRoles: planName => dispatch(RolesActions.fetchRoles(planName)),
   fetchNodes: () => dispatch(NodesActions.fetchNodes())
 });

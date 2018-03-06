@@ -34,6 +34,7 @@ class Roles extends React.Component {
   componentDidMount() {
     this.props.fetchRoles();
     this.props.fetchNodes();
+    this.props.fetchFlavors();
   }
 
   render() {
@@ -56,6 +57,7 @@ class Roles extends React.Component {
   }
 }
 Roles.propTypes = {
+  fetchFlavors: PropTypes.func.isRequired,
   fetchNodes: PropTypes.func.isRequired,
   fetchRoles: PropTypes.func.isRequired,
   intl: PropTypes.object,
