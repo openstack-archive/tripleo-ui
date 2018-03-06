@@ -56,12 +56,12 @@ export default {
     };
   },
 
-  nodesRegistrationFinished(messagePayload) {
+  nodesRegistrationFinished(execution) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
+      const { output: { message, registered_nodes }, state } = execution;
       const registeredNodes =
-        normalize(messagePayload.registered_nodes, [nodeSchema]).entities
-          .nodes || Map();
+        normalize(registered_nodes, [nodeSchema]).entities.nodes || Map();
       dispatch(NodesActions.addNodes(registeredNodes));
       // TODO(jtomasek): This should not be needed when workflow returns up to date nodes
       dispatch(NodesActions.fetchNodes());
@@ -74,7 +74,7 @@ export default {
         )
       );
 
-      switch (messagePayload.status) {
+      switch (state) {
         case 'SUCCESS': {
           dispatch(
             NotificationActions.notify({
@@ -86,13 +86,11 @@ export default {
           dispatch(this.nodesRegistrationSuccess());
           break;
         }
-        case 'FAILED': {
+        case 'ERROR': {
           const errors = [
             {
               title: 'Nodes Registration Failed',
-              message: messagePayload.message.message
-                .filter(m => m.result)
-                .map(m => m.result)
+              message: message.message.filter(m => m.result).map(m => m.result)
             }
           ];
           // TODO(jtomasek): repopulate nodes registration form with failed nodes provided by message
