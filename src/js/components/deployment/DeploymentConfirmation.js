@@ -146,7 +146,6 @@ export const DeployButton = injectIntl(
           loaded={!isRequestingPlanDeploy}
           content={intl.formatMessage(messages.requestingDeploymentLoader)}
         >
-          <span className="fa fa-cloud-upload" />{' '}
           <FormattedMessage {...messages.deployButton} />
         </InlineLoader>
       </button>

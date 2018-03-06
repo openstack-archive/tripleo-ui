@@ -78,7 +78,6 @@ class PlansList extends React.Component {
               className="btn btn-primary"
               id="ListPlans__importPlanButton"
             >
-              <span className="fa fa-plus" />&nbsp;
               <FormattedMessage {...messages.importPlan} />
             </Link>
           </div>
