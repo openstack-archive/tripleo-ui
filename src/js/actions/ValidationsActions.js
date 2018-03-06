@@ -15,14 +15,13 @@
  */
 
 import { normalize } from 'normalizr';
-import { omit } from 'lodash';
 
 import { handleErrors } from './ErrorActions';
 import MistralApiService from '../services/MistralApiService';
-import WorkflowExecutionsActions from './WorkflowExecutionsActions';
 import ValidationsConstants from '../constants/ValidationsConstants';
 import { validationSchema } from '../normalizrSchemas/validations';
 import MistralConstants from '../constants/MistralConstants';
+import { startWorkflow } from './WorkflowActions';
 
 export default {
   fetchValidations() {
@@ -65,34 +64,13 @@ export default {
   runValidation(id, currentPlanName) {
     return (dispatch, getState) =>
       dispatch(
-        MistralApiService.runWorkflow(MistralConstants.VALIDATIONS_RUN, {
+        startWorkflow(MistralConstants.VALIDATIONS_RUN, {
           validation_name: id,
           plan: currentPlanName
         })
-      )
-        .then(response => {
-          dispatch(WorkflowExecutionsActions.addWorkflowExecution(response));
-        })
-        .catch(error => {
-          dispatch(handleErrors(error, 'Error running validation'));
-        });
-  },
-
-  runValidationMessage(messagePayload) {
-    return (dispatch, getState) => {
-      // convert messagePayload to execution-like response
-      const execution = {
-        id: messagePayload.execution.id,
-        input: messagePayload.execution.input,
-        output: omit(messagePayload, 'execution'),
-        params: messagePayload.execution.params,
-        state: messagePayload.status,
-        workflow_name: MistralConstants.VALIDATIONS_RUN,
-        // TODO(jtomasek): replace this with messagePayload.execution.updated_at once message provides it
-        updated_at: new Date(Date.now()) // setting this explicitly as message does not provide it
-      };
-      dispatch(WorkflowExecutionsActions.addWorkflowExecution(execution));
-    };
+      ).catch(error => {
+        dispatch(handleErrors(error, 'Error running validation'));
+      });
   },
 
   runValidationGroups(groups, currentPlanName) {
