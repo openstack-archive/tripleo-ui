@@ -57,11 +57,11 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0, // https://stackoverflow.com/questions/28636832/firefox-overflow-y-not-working-with-nested-flexbox
 }
 
 .flex-row {
   display: flex;
-  flex-wrap: wrap;
   height: 100%;
   overflow-y: auto; // important for correct responsive behavior
 }
