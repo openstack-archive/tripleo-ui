@@ -278,6 +278,7 @@
         "Roles.loadingDeploymentRoles": "\u30c7\u30d7\u30ed\u30a4\u30e1\u30f3\u30c8\u30ed\u30fc\u30eb\u3092\u8aad\u307f\u8fbc\u307f\u4e2d...",
         "RolesStep.loadingNodes": "\u30ce\u30fc\u30c9\u3092\u8aad\u307f\u8fbc\u307f\u4e2d...",
         "RolesStep.loadingParameters": "\u30d1\u30e9\u30e1\u30fc\u30bf\u30fc\u3092\u8aad\u307f\u8fbc\u307f\u4e2d...",
+        "RolesStep.nodesAvailableToAssign": "\u5408\u8a08 {allNodesCount, number} \u30ce\u30fc\u30c9 ({totalAssignedNodesCount, number} \u304c\u30ed\u30fc\u30eb\u306b\u5272\u308a\u5f53\u3066\u6e08\u307f\u3001{nodesCount, number} \u304c\u5272\u308a\u5f53\u3066\u53ef\u80fd\u3001 {nodesRequireActionCount, number} \u304c\u8981\u30a2\u30af\u30b7\u30e7\u30f3)",
         "SelectAll.deselectAllText": "\u3059\u3079\u3066\u9078\u629e\u89e3\u9664",
         "SelectAll.selectAllText": "\u3059\u3079\u3066\u9078\u629e",
         "StackResourcesTable.loadingResources": "\u30ea\u30bd\u30fc\u30b9\u3092\u8aad\u307f\u8fbc\u307f\u4e2d...",
