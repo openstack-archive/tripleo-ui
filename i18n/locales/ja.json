@@ -31,7 +31,7 @@
         "DeployStep.requestingDeploy": "\u30c7\u30d7\u30ed\u30a4\u3092\u8981\u6c42\u4e2d...",
         "DeployStep.validateAndDeploy": "\u691c\u8a3c\u3068\u30c7\u30d7\u30ed\u30a4",
         "DeploymentConfiguration.deploymentConfiguration": "\u30c7\u30d7\u30ed\u30a4\u30e1\u30f3\u30c8\u306e\u8a2d\u5b9a",
-        "DeploymentConfiguration.overallSettings": "\u5168\u4f53\u306e\u8a2d\u5b9a",
+        "DeploymentConfiguration.overallSettings": "\u5168\u822c\u8a2d\u5b9a",
         "DeploymentConfiguration.parameters": "\u30d1\u30e9\u30e1\u30fc\u30bf\u30fc",
         "DeploymentConfigurationSummary.loadingCurrentConfiguration": "\u73fe\u5728\u306e\u30c7\u30d7\u30ed\u30a4\u30e1\u30f3\u30c8\u8a2d\u5b9a\u3092\u8aad\u307f\u8fbc\u307f\u4e2d...",
         "DeploymentConfirmation.deployButton": "\u30c7\u30d7\u30ed\u30a4",
