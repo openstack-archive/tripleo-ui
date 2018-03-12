@@ -1,0 +1,8 @@
+Code-Review+2: Julie Pichon <jpichon@redhat.com>
+Workflow+1: Julie Pichon <jpichon@redhat.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Mon, 12 Mar 2018 11:40:34 +0000
+Reviewed-on: https://review.openstack.org/551732
+Project: openstack/tripleo-ui
+Branch: refs/heads/stable/pike
