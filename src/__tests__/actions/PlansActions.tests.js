@@ -15,17 +15,22 @@
  */
 
 import MistralApiService from '../../js/services/MistralApiService';
+import MistralConstants from '../../js/constants/MistralConstants';
 import { mockStore } from './utils';
 import mockHistory from '../mocks/history';
 import PlansActions from '../../js/actions/PlansActions';
 import SwiftApiService from '../../js/services/SwiftApiService';
 import storage from '../mocks/storage';
+import * as WorkflowActions from '../../js/actions/WorkflowActions';
 
 window.localStorage = window.sessionStorage = storage;
 
 describe('PlansActions', () => {
   describe('updatePlan', () => {
     const store = mockStore({});
+    const execution = {
+      id: 'some-uuid'
+    };
 
     beforeEach(() => {
       MistralApiService.runWorkflow = jest
@@ -34,6 +39,9 @@ describe('PlansActions', () => {
       SwiftApiService.createObject = jest
         .fn()
         .mockReturnValue(() => Promise.resolve());
+      WorkflowActions.startWorkflow = jest
+        .fn()
+        .mockReturnValue(() => Promise.resolve(execution));
     });
 
     it('dispatches actions', () =>
@@ -44,7 +52,14 @@ describe('PlansActions', () => {
           })
         )
         .then(() => {
-          expect(MistralApiService.runWorkflow).toHaveBeenCalled();
+          expect(WorkflowActions.startWorkflow).toHaveBeenCalledWith(
+            MistralConstants.PLAN_UPDATE,
+            {
+              container: 'somecloud'
+            },
+            expect.any(Function),
+            2 * 60 * 1000
+          );
           expect(store.getActions()).toEqual([
             PlansActions.updatePlanPending('somecloud')
           ]);
@@ -53,21 +68,29 @@ describe('PlansActions', () => {
 
   describe('createPlan', () => {
     const store = mockStore({});
+    const execution = {
+      id: 'some-uuid'
+    };
 
     beforeEach(() => {
       MistralApiService.runAction = jest
         .fn()
         .mockReturnValue(() => Promise.resolve());
-      MistralApiService.runWorkflow = jest
+      WorkflowActions.startWorkflow = jest
         .fn()
-        .mockReturnValue(() => Promise.resolve());
-      SwiftApiService.createObject = jest
-        .fn()
-        .mockReturnValue(() => Promise.resolve());
+        .mockReturnValue(() => Promise.resolve(execution));
     });
 
     it('dispatches actions', () =>
       store.dispatch(PlansActions.createPlan('somecloud', {})).then(() => {
+        expect(WorkflowActions.startWorkflow).toHaveBeenCalledWith(
+          MistralConstants.PLAN_CREATE,
+          {
+            container: 'somecloud'
+          },
+          expect.any(Function),
+          2 * 60 * 1000
+        );
         expect(store.getActions()).toEqual([PlansActions.createPlanPending()]);
       }));
   });

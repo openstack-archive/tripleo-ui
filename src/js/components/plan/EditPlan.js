@@ -159,7 +159,6 @@ class EditPlan extends React.Component {
 
 EditPlan.propTypes = {
   fetchPlan: PropTypes.func,
-  history: PropTypes.object,
   intl: PropTypes.object,
   isTransitioningPlan: PropTypes.bool,
   match: PropTypes.object,
@@ -184,12 +183,10 @@ function mapDispatchToProps(dispatch, ownProps) {
       dispatch(PlansActions.fetchPlan(planName));
     },
     updatePlan: (planName, files) => {
-      dispatch(PlansActions.updatePlan(planName, files, ownProps.history));
+      dispatch(PlansActions.updatePlan(planName, files));
     },
     updatePlanFromTarball: (planName, files) => {
-      dispatch(
-        PlansActions.updatePlanFromTarball(planName, files, ownProps.history)
-      );
+      dispatch(PlansActions.updatePlanFromTarball(planName, files));
     }
   };
 }

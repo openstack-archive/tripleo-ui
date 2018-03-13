@@ -1,0 +1,7 @@
+---
+fixes:
+  - |
+    Fixes `Bug 1753474 <https://bugs.launchpad.net/tripleo/+bug/1753474>`__
+    Running Mistral workflows is now more robust. In case when UI does not receive
+    a message about a workflow being finished, it will start periodically checking
+    the workflow execution to proactively get the result
