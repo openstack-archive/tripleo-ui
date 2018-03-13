@@ -22,6 +22,7 @@ export const AppConfig = Record({
   ironic: undefined,
   'ironic-inspector': undefined,
   mistral: undefined,
+  nova: undefined,
   swift: undefined,
   'zaqar-websocket': undefined,
   zaqarDefaultQueue: 'tripleo',
