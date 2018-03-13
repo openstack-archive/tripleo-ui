@@ -19,10 +19,12 @@ import { normalize } from 'normalizr';
 import { startSubmit, stopSubmit } from 'redux-form';
 
 import { handleErrors } from './ErrorActions';
+import history from '../utils/history';
 import RolesConstants from '../constants/RolesConstants';
 import { roleSchema } from '../normalizrSchemas/roles';
 import MistralApiService from '../services/MistralApiService';
 import MistralConstants from '../constants/MistralConstants';
+import { startWorkflow } from './WorkflowActions';
 
 const messages = defineMessages({
   availableRolesNotLoaded: {
@@ -77,10 +79,16 @@ export default {
       const { formatMessage } = getIntl(getState());
       dispatch(this.fetchAvailableRolesPending());
       dispatch(
-        MistralApiService.runWorkflow(MistralConstants.LIST_AVAILABLE_ROLES, {
-          container: planName
-        })
+        startWorkflow(
+          MistralConstants.LIST_AVAILABLE_ROLES,
+          {
+            container: planName
+          },
+          execution => dispatch(this.fetchAvailableRolesFinished(execution))
+        )
       ).catch(error => {
+        history.push('/plans');
+        dispatch(this.fetchAvailableRolesFailed());
         dispatch(
           handleErrors(error, formatMessage(messages.availableRolesNotLoaded))
         );
@@ -88,19 +96,19 @@ export default {
     };
   },
 
-  fetchAvailableRolesFinished({ available_roles, message, status }, history) {
+  fetchAvailableRolesFinished({ output: { available_roles, message }, state }) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      if (status === 'SUCCESS') {
+      if (state === 'SUCCESS') {
         const roles =
           normalize(available_roles, [roleSchema]).entities.roles || {};
         dispatch(this.fetchAvailableRolesSuccess(roles));
       } else {
+        history.push('/plans');
+        dispatch(this.fetchAvailableRolesFailed());
         dispatch(
           handleErrors(message, formatMessage(messages.availableRolesNotLoaded))
         );
-        history.push('/plans');
-        dispatch(this.fetchAvailableRolesFailed());
       }
     };
   },
@@ -128,10 +136,14 @@ export default {
     return (dispatch, getState) => {
       dispatch(startSubmit('selectRoles'));
       dispatch(
-        MistralApiService.runWorkflow(MistralConstants.SELECT_ROLES, {
-          container: planName,
-          role_names: roleNames
-        })
+        startWorkflow(
+          MistralConstants.SELECT_ROLES,
+          {
+            container: planName,
+            role_names: roleNames
+          },
+          execution => dispatch(this.selectRolesFinished(execution))
+        )
       ).catch(error => {
         const { name, message } = error;
         dispatch(
@@ -141,9 +153,9 @@ export default {
     };
   },
 
-  selectRolesFinished({ selected_roles, message, status, ...rest }, history) {
+  selectRolesFinished({ output: { selected_roles, message }, state }) {
     return (dispatch, getState) => {
-      if (status === 'SUCCESS') {
+      if (state === 'SUCCESS') {
         const roles =
           normalize(selected_roles, [roleSchema]).entities.roles || {};
         dispatch(this.selectRolesSuccess(roles));
