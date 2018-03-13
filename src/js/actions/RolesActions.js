@@ -23,6 +23,7 @@ import RolesConstants from '../constants/RolesConstants';
 import { roleSchema } from '../normalizrSchemas/roles';
 import MistralApiService from '../services/MistralApiService';
 import MistralConstants from '../constants/MistralConstants';
+import { startWorkflow } from './WorkflowActions';
 
 const messages = defineMessages({
   availableRolesNotLoaded: {
@@ -77,7 +78,7 @@ export default {
       const { formatMessage } = getIntl(getState());
       dispatch(this.fetchAvailableRolesPending());
       dispatch(
-        MistralApiService.runWorkflow(MistralConstants.LIST_AVAILABLE_ROLES, {
+        startWorkflow(MistralConstants.LIST_AVAILABLE_ROLES, {
           container: planName
         })
       ).catch(error => {
@@ -128,7 +129,7 @@ export default {
     return (dispatch, getState) => {
       dispatch(startSubmit('selectRoles'));
       dispatch(
-        MistralApiService.runWorkflow(MistralConstants.SELECT_ROLES, {
+        startWorkflow(MistralConstants.SELECT_ROLES, {
           container: planName,
           role_names: roleNames
         })
