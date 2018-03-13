@@ -10,6 +10,7 @@ window.tripleOUiConfig = {
   // 'ironic': 'https://192.168.24.2/ironic',
   // 'ironic-inspector': 'https://192.168.24.2/ironic-inspector',
   // 'mistral': 'https://192.168.24.2/mistral/v2',
+  // 'nova': 'https://192.168.24.2/nova/v2.1',
   // 'swift': 'https://192.168.24.2/swift/v1/AUTH_%(project_id)s',
   // 'zaqar-websocket': 'wss://192.168.24.2/zaqar',
 
