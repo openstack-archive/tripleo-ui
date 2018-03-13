@@ -24,6 +24,7 @@ import NotificationActions from '../actions/NotificationActions';
 import MistralConstants from '../constants/MistralConstants';
 import MistralApiService from '../services/MistralApiService';
 import { getServiceUrl } from '../selectors/auth';
+import { startWorkflow } from './WorkflowActions';
 
 const messages = defineMessages({
   downloadLogsFailedNotificationTitle: {
@@ -125,9 +126,7 @@ export default {
   downloadLogs() {
     return dispatch => {
       dispatch(this.downloadLogsPending());
-      dispatch(
-        MistralApiService.runWorkflow(MistralConstants.DOWNLOAD_LOGS)
-      ).catch(error => {
+      dispatch(startWorkflow(MistralConstants.DOWNLOAD_LOGS, {})).catch(error => {
         dispatch(handleErrors(error, 'Failed to download logs'));
         dispatch(this.downloadLogsFailed());
       });
