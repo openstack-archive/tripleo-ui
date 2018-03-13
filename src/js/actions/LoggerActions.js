@@ -22,8 +22,8 @@ import LoggerConstants from '../constants/LoggerConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 import NotificationActions from '../actions/NotificationActions';
 import MistralConstants from '../constants/MistralConstants';
-import MistralApiService from '../services/MistralApiService';
 import { getServiceUrl } from '../selectors/auth';
+import { startWorkflow } from './WorkflowActions';
 
 const messages = defineMessages({
   downloadLogsFailedNotificationTitle: {
@@ -97,27 +97,26 @@ export default {
     };
   },
 
-  downloadLogsFinished(payload) {
+  downloadLogsFinished(execution) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      if (payload.status === 'FAILED' || !payload.tempurl) {
+      const { output: { tempurl, message }, state } = execution;
+      if (state === 'ERROR' || !tempurl) {
         dispatch(this.downloadLogsFailed());
         dispatch(
           NotificationActions.notify({
             title: formatMessage(messages.downloadLogsFailedNotificationTitle),
-            message: payload.message,
+            message,
             type: 'error'
           })
         );
       } else {
         let urlParser = document.createElement('a');
-        urlParser.href = payload.tempurl;
+        urlParser.href = tempurl;
         let url = urlParser.hostname;
         urlParser.href = getServiceUrl(getState(), 'swift');
         let swiftUrl = urlParser.hostname;
-        dispatch(
-          this.downloadLogsSuccess(payload.tempurl.replace(url, swiftUrl))
-        );
+        dispatch(this.downloadLogsSuccess(tempurl.replace(url, swiftUrl)));
       }
     };
   },
@@ -126,7 +125,9 @@ export default {
     return dispatch => {
       dispatch(this.downloadLogsPending());
       dispatch(
-        MistralApiService.runWorkflow(MistralConstants.DOWNLOAD_LOGS)
+        startWorkflow(MistralConstants.DOWNLOAD_LOGS, {}, execution =>
+          dispatch(this.downloadLogsFinished(execution))
+        )
       ).catch(error => {
         dispatch(handleErrors(error, 'Failed to download logs'));
         dispatch(this.downloadLogsFailed());

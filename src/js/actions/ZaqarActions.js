@@ -118,7 +118,11 @@ export default {
         }
 
         case MistralConstants.DOWNLOAD_LOGS: {
-          dispatch(LoggerActions.downloadLogsFinished(payload));
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(LoggerActions.downloadLogsFinished(execution))
+            )
+          );
           break;
         }
 
