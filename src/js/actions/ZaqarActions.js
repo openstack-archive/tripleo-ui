@@ -123,13 +123,21 @@ export default {
         }
 
         case MistralConstants.LIST_AVAILABLE_ROLES: {
-          dispatch(RolesActions.fetchAvailableRolesFinished(payload, history));
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(RolesActions.fetchAvailableRolesFinished(execution))
+            )
+          );
           break;
         }
         // TODO(jtomasek): change this back once underlining tripleo-common patch is fixed
         case MistralConstants.SELECT_ROLES: {
           // case 'tripleo.roles.v1.select_roles': {
-          dispatch(RolesActions.selectRolesFinished(payload, history));
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(RolesActions.selectRolesFinished(execution))
+            )
+          );
           break;
         }
 
