@@ -98,22 +98,38 @@ export default {
         }
 
         case MistralConstants.PLAN_CREATE: {
-          dispatch(PlansActions.createPlanFinished(payload, history));
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(PlansActions.createPlanFinished(execution))
+            )
+          );
           break;
         }
 
         case MistralConstants.PLAN_UPDATE: {
-          dispatch(PlansActions.updatePlanFinished(payload, history));
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(PlansActions.updatePlanFinished(execution))
+            )
+          );
           break;
         }
 
         case MistralConstants.DEPLOYMENT_DEPLOY_PLAN: {
-          dispatch(PlansActions.deployPlanFinished(payload));
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(PlansActions.deployPlanFinished(execution))
+            )
+          );
           break;
         }
 
         case MistralConstants.PLAN_EXPORT: {
-          dispatch(PlansActions.exportPlanFinished(payload));
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(PlansActions.exportPlanFinished(execution))
+            )
+          );
           break;
         }
 

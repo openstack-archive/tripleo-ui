@@ -20,6 +20,7 @@ import when from 'when';
 import yaml from 'js-yaml';
 
 import { handleErrors } from './ErrorActions';
+import history from '../utils/history';
 import MistralApiService from '../services/MistralApiService';
 import NotificationActions from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
@@ -29,6 +30,7 @@ import SwiftApiService from '../services/SwiftApiService';
 import MistralConstants from '../constants/MistralConstants';
 import { PLAN_ENVIRONMENT } from '../constants/PlansConstants';
 import { getServiceUrl } from '../selectors/auth';
+import { startWorkflow } from './WorkflowActions';
 
 const messages = defineMessages({
   planCreatedNotificationTitle: {
@@ -177,16 +179,21 @@ export default {
     };
   },
 
-  updatePlan(planName, planFiles, history) {
+  updatePlan(planName, planFiles) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.updatePlanPending(planName));
       return dispatch(uploadFilesToContainer(planName, planFiles))
         .then(response =>
           dispatch(
-            MistralApiService.runWorkflow(MistralConstants.PLAN_UPDATE, {
-              container: planName
-            })
+            startWorkflow(
+              MistralConstants.PLAN_UPDATE,
+              {
+                container: planName
+              },
+              execution => dispatch(this.updatePlanFinished(execution)),
+              2 * 60 * 1000
+            )
           )
         )
         .catch(error => {
@@ -203,16 +210,21 @@ export default {
     };
   },
 
-  updatePlanFromTarball(planName, file, history) {
+  updatePlanFromTarball(planName, file) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.updatePlanPending(planName));
       return dispatch(SwiftApiService.uploadTarball(planName, file))
         .then(response => {
           dispatch(
-            MistralApiService.runWorkflow(MistralConstants.PLAN_UPDATE, {
-              container: planName
-            })
+            startWorkflow(
+              MistralConstants.PLAN_UPDATE,
+              {
+                container: planName
+              },
+              execution => dispatch(this.updatePlanFinished(execution)),
+              2 * 60 * 1000
+            )
           );
         })
         .catch(error => {
@@ -229,17 +241,21 @@ export default {
     };
   },
 
-  updatePlanFinished(payload, history) {
+  updatePlanFinished(execution) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      const planName = payload.execution.input.container;
-      if (payload.status === 'SUCCESS') {
+      const {
+        input: { container: planName },
+        output: { message },
+        state
+      } = execution;
+      if (state === 'SUCCESS') {
         dispatch(this.updatePlanSuccess(planName));
         dispatch(
           NotificationActions.notify({
             title: formatMessage(messages.planUpdatedNotificationTitle),
             message: formatMessage(messages.planUpdatedNotificationMessage, {
-              planName: planName
+              planName
             }),
             type: 'success'
           })
@@ -249,10 +265,7 @@ export default {
       } else {
         dispatch(
           this.updatePlanFailed(planName, [
-            {
-              title: formatMessage(messages.planUpdateFailed),
-              message: payload.message
-            }
+            { title: formatMessage(messages.planUpdateFailed), message }
           ])
         );
       }
@@ -295,9 +308,14 @@ export default {
         .then(response => dispatch(uploadFilesToContainer(planName, planFiles)))
         .then(response =>
           dispatch(
-            MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
-              container: planName
-            })
+            startWorkflow(
+              MistralConstants.PLAN_CREATE,
+              {
+                container: planName
+              },
+              execution => dispatch(this.createPlanFinished(execution)),
+              2 * 60 * 1000
+            )
           )
         )
         .catch(error => {
@@ -324,9 +342,14 @@ export default {
         )
         .then(response =>
           dispatch(
-            MistralApiService.runWorkflow(MistralConstants.PLAN_CREATE, {
-              container: planName
-            })
+            startWorkflow(
+              MistralConstants.PLAN_CREATE,
+              {
+                container: planName
+              },
+              execution => dispatch(this.createPlanFinished(execution)),
+              2 * 60 * 1000
+            )
           )
         )
         .catch(error => {
@@ -340,18 +363,22 @@ export default {
     };
   },
 
-  createPlanFinished(payload, history) {
+  createPlanFinished(execution) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      if (payload.status === 'SUCCESS') {
-        const planName = payload.execution.input.container;
+      const {
+        input: { container: planName },
+        output: { message },
+        state
+      } = execution;
+      if (state === 'SUCCESS') {
         dispatch(this.createPlanSuccess());
         dispatch(
           NotificationActions.notify({
             type: 'success',
             title: formatMessage(messages.planCreatedNotificationTitle),
             message: formatMessage(messages.planCreatedNotificationMessage, {
-              planName: planName
+              planName
             })
           })
         );
@@ -359,9 +386,7 @@ export default {
         history.push('/plans/manage');
       } else {
         dispatch(
-          this.createPlanFailed([
-            { title: 'Plan creation failed', message: payload.message }
-          ])
+          this.createPlanFailed([{ title: 'Plan creation failed', message }])
         );
       }
     };
@@ -444,10 +469,14 @@ export default {
     return dispatch => {
       dispatch(this.deployPlanPending(planName));
       dispatch(
-        MistralApiService.runWorkflow(MistralConstants.DEPLOYMENT_DEPLOY_PLAN, {
-          container: planName,
-          timeout: 240
-        })
+        startWorkflow(
+          MistralConstants.DEPLOYMENT_DEPLOY_PLAN,
+          {
+            container: planName,
+            timeout: 240
+          },
+          execution => dispatch(this.deployPlanFinished(execution))
+        )
       )
         .then(response => {
           dispatch(StackActions.fetchStacks());
@@ -461,20 +490,24 @@ export default {
     };
   },
 
-  deployPlanFinished(payload) {
+  deployPlanFinished(execution) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      if (payload.status === 'FAILED') {
-        dispatch(this.deployPlanFailed(payload.execution.input.container));
+      const {
+        input: { container: planName },
+        output: { message },
+        state
+      } = execution;
+      if (state === 'ERROR') {
+        dispatch(this.deployPlanFailed(planName));
         dispatch(
           NotificationActions.notify({
             title: formatMessage(messages.deploymentFailedNotificationTitle),
-            message: payload.message,
-            type: 'error'
+            message
           })
         );
       } else {
-        dispatch(this.deployPlanSuccess(payload.execution.input.container));
+        dispatch(this.deployPlanSuccess(planName));
         dispatch(StackActions.fetchStacks());
       }
     };
@@ -505,9 +538,13 @@ export default {
     return dispatch => {
       dispatch(this.exportPlanPending(planName));
       dispatch(
-        MistralApiService.runWorkflow(MistralConstants.PLAN_EXPORT, {
-          plan: planName
-        })
+        startWorkflow(
+          MistralConstants.PLAN_EXPORT,
+          {
+            plan: planName
+          },
+          execution => dispatch(this.exportPlanFinished(execution))
+        )
       ).catch(error => {
         dispatch(handleErrors(error, `Plan ${planName} could not be exported`));
         dispatch(this.exportPlanFailed(planName));
@@ -515,27 +552,29 @@ export default {
     };
   },
 
-  exportPlanFinished(payload) {
+  exportPlanFinished(execution) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
-      if (payload.status === 'FAILED' || !payload.tempurl) {
-        dispatch(this.exportPlanFailed(payload.execution.input.plan));
+      const {
+        input: { plan },
+        output: { message, tempurl },
+        state
+      } = execution;
+      if (state === 'ERROR' || !tempurl) {
+        dispatch(this.exportPlanFailed(plan));
         dispatch(
           NotificationActions.notify({
             title: formatMessage(messages.exportFailedNotificationTitle),
-            message: payload.message,
-            type: 'error'
+            message
           })
         );
       } else {
         let urlParser = document.createElement('a');
-        urlParser.href = payload.tempurl;
+        urlParser.href = tempurl;
         let url = urlParser.hostname;
         urlParser.href = getServiceUrl(getState(), 'swift');
         let swiftUrl = urlParser.hostname;
-        dispatch(
-          this.exportPlanSuccess(payload.tempurl.replace(url, swiftUrl))
-        );
+        dispatch(this.exportPlanSuccess(tempurl.replace(url, swiftUrl)));
       }
     };
   }
