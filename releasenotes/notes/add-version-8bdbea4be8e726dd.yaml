@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Fixes `bug 1731972 <https://launchpad.net/bugs/1731972>`__
+    Add tripleo-ui version and git sha to debug modal

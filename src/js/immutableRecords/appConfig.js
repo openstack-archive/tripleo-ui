@@ -28,5 +28,7 @@ export const AppConfig = Record({
   zaqarDefaultQueue: 'tripleo',
   zaqarLoggerQueue: 'tripleo-ui-logging',
   excludedLanguages: List(),
-  loggers: List(['console', 'zaqar'])
+  loggers: List(['console', 'zaqar']),
+  version: undefined,
+  gitSha: undefined
 });
