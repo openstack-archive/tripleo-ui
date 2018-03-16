@@ -23,6 +23,8 @@
         "DebugScreen.downloadLogsMessage": "Ihre angefragte Datei ist fertig. Bitte klicken Sie den Button unten zum Download. M\u00f6glicherweise m\u00fcssen Sie mit enem Rechts-Klick w\u00e4hlen \"Speichern unter...\".",
         "DebugScreen.downloadingLogsLoader": "Downloading logs...",
         "DebugScreen.error": "Beim Vorbereiten des Log-Download ist ein Fehler aufgetreten.",
+        "DebugScreen.gitSha": "",
+        "DebugScreen.version": "Version",
         "DeletePlan.cancel": "Abbrechen",
         "DeletePlan.deletePlan": "Plan l\u00f6schen",
         "DeletePlan.deletePlanConfirmation": "Sind Sie sicher, dass Sie den Plan {planName} l\u00f6schen m\u00f6chten?",

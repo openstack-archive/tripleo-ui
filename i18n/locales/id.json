@@ -23,6 +23,8 @@
         "DebugScreen.downloadLogsMessage": "File yang anda minta sudah siap. Silahkan klik tombol di bawah ini untuk mendownload export. Anda mungkin perlu klik kanan tombol dan pilih \"Save link as ...\".",
         "DebugScreen.downloadingLogsLoader": "Downloading log ...",
         "DebugScreen.error": "Terjadi kesalahan saat menyiapkan log download.",
+        "DebugScreen.gitSha": "",
+        "DebugScreen.version": "Version",
         "DeletePlan.cancel": "Cancel",
         "DeletePlan.deletePlan": "Hapus Plan",
         "DeletePlan.deletePlanConfirmation": "Apakah Anda yakin ingin menghapus rencana {planName}?",

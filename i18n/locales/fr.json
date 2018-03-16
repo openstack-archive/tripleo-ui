@@ -23,6 +23,8 @@
         "DebugScreen.downloadLogsMessage": "",
         "DebugScreen.downloadingLogsLoader": "T\u00e9l\u00e9chargement des logs...",
         "DebugScreen.error": "Une erreur s'est produite lors de la pr\u00e9paration du t\u00e9l\u00e9chargement des logs.",
+        "DebugScreen.gitSha": "",
+        "DebugScreen.version": "Version",
         "DeletePlan.cancel": "Annuler",
         "DeletePlan.deletePlan": "Supprimer le plan",
         "DeletePlan.deletePlanConfirmation": "\u00cates-vous s\u00fbr de vouloir supprimer le plan {planName}?",

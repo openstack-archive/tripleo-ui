@@ -23,6 +23,8 @@
         "DebugScreen.downloadLogsMessage": "\u60a8\u8bf7\u6c42\u7684\u8ba1\u5212\u5df2\u7ecf\u5c31\u7eea\u3002\u8bf7\u70b9\u51fb\u4e0b\u9762\u7684\u6309\u94ae\u4e0b\u8f7d\u8be5\u5bfc\u51fa\u3002\u4f60\u9700\u8981\u70b9\u51fb\u53f3\u952e\uff0c\u5e76\u9009\u62e9\u201c\u4fdd\u5b58\u94fe\u63a5\u4e3a...\u201d\u3002",
         "DebugScreen.downloadingLogsLoader": "\u6b63\u5728\u4e0b\u8f7d\u65e5\u5fd7",
         "DebugScreen.error": "\u5728\u51c6\u5907\u65e5\u5fd7\u4e0b\u8f7d\u65f6\u51fa\u73b0\u4e00\u4e2a\u9519\u8bef\u3002",
+        "DebugScreen.gitSha": "",
+        "DebugScreen.version": "\u7248\u672c",
         "DeletePlan.cancel": "\u53d6\u6d88",
         "DeletePlan.deletePlan": "\u5220\u9664\u8ba1\u5212",
         "DeletePlan.deletePlanConfirmation": "\u60a8\u786e\u5b9a\u8981\u5220\u9664\u8ba1\u5212 {planName} \u5417\uff1f",

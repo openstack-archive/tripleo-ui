@@ -23,6 +23,8 @@
         "DebugScreen.downloadLogsMessage": "El archivo solicitado est\u00e1 listo. Por favor haga click sobre el bot\u00f3n para descargarlo. Es posible que necesite hacer click-derecho y seleccionar \"Guardar enlace como...\".",
         "DebugScreen.downloadingLogsLoader": "Descargando logs...",
         "DebugScreen.error": "Ha ocurrido un error al preparar la descarga de los logs.",
+        "DebugScreen.gitSha": "",
+        "DebugScreen.version": "Versi\u00f3n",
         "DeletePlan.cancel": "Cancelar",
         "DeletePlan.deletePlan": "Eliminar plan",
         "DeletePlan.deletePlanConfirmation": "\u00bfSeguro que desea eliminar el plan {planName}?",
