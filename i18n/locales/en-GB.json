@@ -23,7 +23,7 @@
         "DebugScreen.downloadLogsMessage": "The file you requested is ready. Please click the button below to download the export. You might need to right-click the button and choose \"Save link as...\".",
         "DebugScreen.downloadingLogsLoader": "Downloading logs...",
         "DebugScreen.error": "An error has occurred while preparing the log download.",
-        "DebugScreen.gitSha": "",
+        "DebugScreen.gitSha": "Git Sha",
         "DebugScreen.version": "Version",
         "DeletePlan.cancel": "Cancel",
         "DeletePlan.deletePlan": "Delete Plan",
