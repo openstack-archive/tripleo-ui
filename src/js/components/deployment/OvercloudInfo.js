@@ -24,15 +24,15 @@ import { Loader } from '../ui/Loader';
 const messages = defineMessages({
   loadingOvercloudInformation: {
     id: 'OvercloudInfo.loadingOvercloudInformation',
-    defaultMessage: 'Loading overcloud information...'
+    defaultMessage: 'Loading deployment information...'
   },
   overcloudInformationHeader: {
     id: 'OvercloudInfo.overcloudInformationHeader',
-    defaultMessage: 'Overcloud information:'
+    defaultMessage: 'Deployment Information'
   },
   overcloudIpAddress: {
     id: 'OvercloudInfo.overcloudIpAddress',
-    defaultMessage: 'Overcloud IP address:'
+    defaultMessage: 'Deployment IP address:'
   },
   password: {
     id: 'OvercloudInfo.password',
