@@ -15,8 +15,8 @@
  */
 
 import { defineMessages, injectIntl } from 'react-intl';
-import { Field } from 'redux-form';
 import { format, required } from 'redux-form-validators';
+import { Field } from 'redux-form';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -41,7 +41,8 @@ export const DriverFields = ({
   passwordLabel,
   portLabel,
   node,
-  userLabel
+  userLabel,
+  customDriverFields
 }) => (
   <div>
     <Field
@@ -90,10 +91,12 @@ export const DriverFields = ({
       validate={required()}
       required
     />
+    {customDriverFields}
   </div>
 );
 DriverFields.propTypes = {
   addressLabel: PropTypes.string.isRequired,
+  customDriverFields: PropTypes.object,
   intl: PropTypes.object.isRequired,
   node: PropTypes.string.isRequired,
   passwordLabel: PropTypes.string.isRequired,

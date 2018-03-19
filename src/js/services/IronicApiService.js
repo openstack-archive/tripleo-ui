@@ -57,6 +57,17 @@ class IronicApiService {
         .catch(handleErrors);
   }
 
+  /**
+   * Ironic API: GET /v1/drivers
+   * @returns {array} of (available) drivers
+   */
+  getDrivers() {
+    return dispatch =>
+      dispatch(this.defaultRequest('/drivers'))
+        .then(response => response.data)
+        .catch(handleErrors);
+  }
+
   patchNode(nodePatch) {
     return dispatch =>
       dispatch(

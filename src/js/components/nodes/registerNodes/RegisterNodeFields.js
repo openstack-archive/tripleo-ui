@@ -20,6 +20,7 @@ import { Field, formValueSelector } from 'redux-form';
 import { format, length, numericality, required } from 'redux-form-validators';
 import React from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import Fieldset from '../../ui/reduxForm/Fieldset';
 import HorizontalInput from '../../ui/reduxForm/HorizontalInput';
@@ -28,6 +29,9 @@ import { arrayOfFormat } from '../../ui/reduxForm/validators';
 import { NODE_NAME_REGEX, MAC_ADDRESS_REGEX } from '../../../utils/regex';
 import PXEAndIPMITool from './driverFields/PXEAndIPMITool';
 import PXEAndDRAC from './driverFields/PXEAndDRAC';
+import Redfish from './driverFields/Redfish';
+import IBoot from './driverFields/IBoot';
+import Ilo from './driverFields/Ilo';
 
 const messages = defineMessages({
   enterValidMacAddress: {
@@ -101,19 +105,32 @@ const messages = defineMessages({
 
 const renderDriverFields = (driverName, node) => {
   switch (driverName) {
-    case 'pxe_ipmitool':
+    case 'ipmi':
       return <PXEAndIPMITool node={node} />;
-    case 'pxe_drac':
+    case 'idrac':
       return <PXEAndDRAC node={node} />;
+    case 'redfish':
+      return <Redfish node={node} />;
+    case 'ilo':
+      return <Ilo node={node} />;
+    case 'pxe_iboot_iscsi':
+      return <IBoot node={node} />;
     default:
       return null;
   }
 };
 
+const renderDriverOptions = drivers => {
+  return drivers.map((value, index) => (
+    <option key={index}>{value.name}</option>
+  ));
+};
+
 const RegisterNodeFields = ({
   node,
   intl: { formatMessage },
-  selectedDriver
+  selectedDriver,
+  drivers
 }) => {
   return (
     <div>
@@ -145,9 +162,7 @@ const RegisterNodeFields = ({
           validate={required()}
           required
         >
-          {['pxe_ipmitool', 'pxe_drac'].map((value, index) => (
-            <option key={index}>{value}</option>
-          ))}
+          {renderDriverOptions(drivers)}
         </Field>
         {renderDriverFields(selectedDriver, node)}
       </Fieldset>
@@ -223,6 +238,7 @@ const RegisterNodeFields = ({
   );
 };
 RegisterNodeFields.propTypes = {
+  drivers: ImmutablePropTypes.list.isRequired,
   intl: PropTypes.object.isRequired,
   node: PropTypes.string.isRequired,
   selectedDriver: PropTypes.string.isRequired
