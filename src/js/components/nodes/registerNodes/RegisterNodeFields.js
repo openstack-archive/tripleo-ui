@@ -20,6 +20,7 @@ import { Field, formValueSelector } from 'redux-form';
 import { format, length, numericality, required } from 'redux-form-validators';
 import React from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import Fieldset from '../../ui/reduxForm/Fieldset';
 import HorizontalInput from '../../ui/reduxForm/HorizontalInput';
@@ -110,10 +111,17 @@ const renderDriverFields = (driverName, node) => {
   }
 };
 
+const renderDriverOptions = (drivers) => {
+  return drivers.map((value, index) => (
+    <option key={index}>{value.name}</option>
+  ))
+};
+
 const RegisterNodeFields = ({
   node,
   intl: { formatMessage },
-  selectedDriver
+  selectedDriver,
+  drivers
 }) => {
   return (
     <div>
@@ -145,9 +153,7 @@ const RegisterNodeFields = ({
           validate={required()}
           required
         >
-          {['pxe_ipmitool', 'pxe_drac'].map((value, index) => (
-            <option key={index}>{value}</option>
-          ))}
+          {renderDriverOptions(drivers)}
         </Field>
         {renderDriverFields(selectedDriver, node)}
       </Fieldset>
@@ -225,7 +231,8 @@ const RegisterNodeFields = ({
 RegisterNodeFields.propTypes = {
   intl: PropTypes.object.isRequired,
   node: PropTypes.string.isRequired,
-  selectedDriver: PropTypes.string.isRequired
+  selectedDriver: PropTypes.string.isRequired,
+  drivers: ImmutablePropTypes.list.isRequired
 };
 
 const selector = formValueSelector('registerNodesForm');
