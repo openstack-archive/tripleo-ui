@@ -19,6 +19,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, FieldArray } from 'redux-form';
 import { Form } from 'react-bootstrap';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import BlankSlate from '../../ui/BlankSlate';
 import InlineNotification from '../../ui/InlineNotification';
@@ -36,7 +37,12 @@ const messages = defineMessages({
   }
 });
 
-export const RegisterNodesTabPanes = ({ fields, meta, selectedNodeIndex }) => {
+export const RegisterNodesTabPanes = ({
+  fields,
+  meta,
+  selectedNodeIndex,
+  drivers
+}) => {
   return (
     <div className="tab-content">
       {fields.map((node, index, fields) => {
@@ -46,7 +52,7 @@ export const RegisterNodesTabPanes = ({ fields, meta, selectedNodeIndex }) => {
             isActive={selectedNodeIndex === index}
             // renderOnlyActive
           >
-            <RegisterNodeFields node={node} />
+            <RegisterNodeFields node={node} drivers={drivers} />
           </TabPane>
         );
       })}
@@ -54,6 +60,7 @@ export const RegisterNodesTabPanes = ({ fields, meta, selectedNodeIndex }) => {
   );
 };
 RegisterNodesTabPanes.propTypes = {
+  drivers: ImmutablePropTypes.list.isRequired,
   fields: PropTypes.object.isRequired,
   meta: PropTypes.object.isRequired,
   selectedNodeIndex: PropTypes.number.isRequired
@@ -63,7 +70,8 @@ const RegisterNodesForm = ({
   error,
   handleSubmit,
   intl: { formatMessage },
-  selectedNodeIndex
+  selectedNodeIndex,
+  drivers
 }) => (
   <Form onSubmit={handleSubmit} horizontal>
     {error && <InlineNotification>{error}</InlineNotification>}
@@ -72,6 +80,7 @@ const RegisterNodesForm = ({
         name="nodes"
         component={RegisterNodesTabPanes}
         selectedNodeIndex={selectedNodeIndex}
+        drivers={drivers}
       />
     ) : (
       <BlankSlate
@@ -86,6 +95,7 @@ const RegisterNodesForm = ({
   </Form>
 );
 RegisterNodesForm.propTypes = {
+  drivers: ImmutablePropTypes.list.isRequired,
   error: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,

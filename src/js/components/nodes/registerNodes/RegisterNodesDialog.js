@@ -48,9 +48,12 @@ import RegisterNodesActions from '../../../actions/RegisterNodesActions';
 import RegisterNodesForm from './RegisterNodesForm';
 import NodesFileUpload from './NodesFileUpload';
 import NodeTab from './NodeTab';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
+import DriversActions from '../../../actions/DriversActions';
 import MistralApiService from '../../../services/MistralApiService';
 import MistralConstants from '../../../constants/MistralConstants';
+import { getDrivers } from '../../../selectors/drivers';
 
 const messages = defineMessages({
   noNodesToRegister: {
@@ -95,13 +98,11 @@ class RegisterNodesDialog extends React.Component {
     // handle selecting node when user closes and reopens the dialog
     const lastNode = last(this.props.nodesToRegister);
     lastNode && this.selectNode(lastNode.uuid);
+    this.props.fetchDrivers();
   }
 
   addNode(node) {
-    const newNode = Object.assign(
-      { uuid: uuid.v4(), pm_type: 'pxe_ipmitool' },
-      node
-    );
+    const newNode = Object.assign({ uuid: uuid.v4(), pm_type: 'ipmi' }, node);
     this.props.addNode(newNode);
     this.selectNode(newNode.uuid);
   }
@@ -217,6 +218,7 @@ class RegisterNodesDialog extends React.Component {
             </div>
             <div className="col-sm-8 col-lg-9">
               <RegisterNodesForm
+                drivers={this.props.drivers.toList()}
                 onSubmit={this.handleFormSubmit.bind(this)}
                 selectedNodeIndex={this.getNodeIndexById(
                   this.state.selectedNodeId
@@ -244,6 +246,8 @@ class RegisterNodesDialog extends React.Component {
 }
 RegisterNodesDialog.propTypes = {
   addNode: PropTypes.func.isRequired,
+  drivers: ImmutablePropTypes.map.isRequired,
+  fetchDrivers: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   intl: PropTypes.object,
   invalid: PropTypes.bool.isRequired,
@@ -271,7 +275,8 @@ function mapStateToProps(state) {
         nodes: []
       }
     ).nodes,
-    submitting: isSubmitting('registerNodesForm')(state)
+    submitting: isSubmitting('registerNodesForm')(state),
+    drivers: getDrivers(state)
   };
 }
 
@@ -284,7 +289,8 @@ function mapDispatchToProps(dispatch) {
     startNodesRegistration: nodes =>
       dispatch(RegisterNodesActions.startNodesRegistration(nodes)),
     submitForm: () => dispatch(submit('registerNodesForm')),
-    notify: notification => dispatch(NotificationActions.notify(notification))
+    notify: notification => dispatch(NotificationActions.notify(notification)),
+    fetchDrivers: () => dispatch(DriversActions.fetchDrivers())
   };
 }
 

@@ -19,6 +19,7 @@ import { reducer as formReducer } from 'redux-form';
 
 import appConfig from './appConfig';
 import environmentConfigurationReducer from './environmentConfigurationReducer';
+import driversReducer from './driversReducer';
 import filtersReducer from './filtersReducer';
 import flavorsReducer from './flavorsReducer';
 import i18nReducer from './i18nReducer';
@@ -37,6 +38,7 @@ import workflowExecutionsReducer from './workflowExecutionsReducer';
 
 const appReducer = combineReducers({
   appConfig,
+  drivers: driversReducer,
   environmentConfiguration: environmentConfigurationReducer,
   executions: workflowExecutionsReducer,
   filters: filtersReducer,
