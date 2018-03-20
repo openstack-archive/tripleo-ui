@@ -29,7 +29,8 @@ import DeploymentFailure from './DeploymentFailure';
 import { getCurrentPlan, getCurrentPlanName } from '../../selectors/plans';
 import {
   getCurrentStack,
-  getCurrentStackDeploymentProgress
+  getCurrentStackDeploymentProgress,
+  getOvercloudInfo
 } from '../../selectors/stacks';
 import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
 import { Loader } from '../ui/Loader';
@@ -101,6 +102,7 @@ class DeploymentDetail extends React.Component {
       return (
         <DeploymentSuccess
           stack={currentStack}
+          overcloudInfo={this.props.overcloudInfo}
           stackResources={currentStackResources}
           stackResourcesLoaded={currentStackResourcesLoaded}
         />
@@ -166,6 +168,7 @@ DeploymentDetail.propTypes = {
   environmentConfigurationSummary: PropTypes.string,
   fetchStackResources: PropTypes.func.isRequired,
   intl: PropTypes.object,
+  overcloudInfo: ImmutablePropTypes.map.isRequired,
   runPreDeploymentValidations: PropTypes.func.isRequired,
   stacksLoaded: PropTypes.bool.isRequired
 };
@@ -182,6 +185,7 @@ const mapStateToProps = state => {
     currentStackResources: state.stacks.resources,
     currentStackResourcesLoaded: state.stacks.resourcesLoaded,
     environmentConfigurationSummary: getEnvironmentConfigurationSummary(state),
+    overcloudInfo: getOvercloudInfo(state),
     stacksLoaded: state.stacks.isLoaded
   };
 };

@@ -36,7 +36,7 @@ class DeploymentSuccess extends React.Component {
           <p>{this.props.stack.stack_status_reason}</p>
         </InlineNotification>
         <OvercloudInfo
-          stackResourcesLoaded={this.props.stackResourcesLoaded}
+          overcloudInfo={this.props.overcloudInfo}
           stack={this.props.stack}
           stackResources={this.props.stackResources}
         />
@@ -47,9 +47,9 @@ class DeploymentSuccess extends React.Component {
 
 DeploymentSuccess.propTypes = {
   intl: PropTypes.object,
+  overcloudInfo: ImmutablePropTypes.map.isRequired,
   stack: ImmutablePropTypes.record.isRequired,
-  stackResources: ImmutablePropTypes.map.isRequired,
-  stackResourcesLoaded: PropTypes.bool.isRequired
+  stackResources: ImmutablePropTypes.map.isRequired
 };
 
 export default injectIntl(DeploymentSuccess);
