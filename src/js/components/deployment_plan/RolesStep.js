@@ -28,6 +28,7 @@ import {
   getTotalAssignedNodesCount
 } from '../../selectors/nodesAssignment';
 import { InlineLoader } from '../ui/Loader';
+import { Link } from 'react-router-dom';
 import NodesActions from '../../actions/NodesActions';
 import Roles from '../roles/Roles';
 import RolesActions from '../../actions/RolesActions';
@@ -40,6 +41,10 @@ const messages = defineMessages({
   loadingParameters: {
     id: 'RolesStep.loadingParameters',
     defaultMessage: 'Loading Parameters...'
+  },
+  manageRoles: {
+    id: 'RolesStep.manageRoles',
+    defaultMessage: 'Manage Roles'
   },
   nodesAvailableToAssign: {
     id: 'RolesStep.nodesAvailableToAssign',
@@ -100,6 +105,12 @@ const RolesStep = ({
         fetchNodes={fetchNodes}
         loaded={rolesLoaded && nodesLoaded && flavorsLoaded}
       />
+      <Link
+        className="btn btn-default"
+        to={`/plans/${currentPlanName}/select-roles`}
+      >
+        <FormattedMessage {...messages.manageRoles} />
+      </Link>
     </div>
   );
 };

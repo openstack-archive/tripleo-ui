@@ -15,9 +15,7 @@
  */
 
 import { connect } from 'react-redux';
-import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router-dom';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { startCase } from 'lodash';
@@ -32,14 +30,6 @@ import { getRoles } from '../../selectors/roles';
 import NodesAssignmentForm from './NodesAssignmentForm';
 import ParametersActions from '../../actions/ParametersActions';
 import RoleCard from './RoleCard';
-import FloatingToolbar from '../ui/FloatingToolbar';
-
-const messages = defineMessages({
-  manageRolesLink: {
-    id: 'NodesAssignment.manageRolesLink',
-    defaultMessage: 'Manage Roles'
-  }
-});
 
 const NodesAssignment = ({
   assignedNodesCountsByRole,
@@ -72,12 +62,6 @@ const NodesAssignment = ({
           );
         })}
       </div>
-      <FloatingToolbar bottom right>
-        <Link to={`/plans/${currentPlanName}/select-roles`}>
-          <span className="pficon pficon-maintenance" />{' '}
-          <FormattedMessage {...messages.manageRolesLink} />
-        </Link>
-      </FloatingToolbar>
     </NodesAssignmentForm>
   );
 };
