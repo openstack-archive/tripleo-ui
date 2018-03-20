@@ -168,14 +168,32 @@ _PlanFormTab.propTypes = {
 _PlanFormTab.defaultProps = { active: false };
 
 const PlanFormTab = injectIntl(_PlanFormTab);
+const TARBALL = '1f8b80';
+let valid = true;
+
+function getHeader(blob, validateHeader) {
+  let fileReader = new FileReader();
+  fileReader.onloadend = function(e) {
+    let arr = new Uint8Array(e.target.result).subarray(0, 4);
+    let header = '';
+    for (let i = 0; i < arr.length; i++) {
+      header += arr[i].toString(16);
+    }
+    validateHeader(header);
+  };
+  fileReader.readAsArrayBuffer(blob);
+}
+
+function validateHeader(header) {
+  valid = header === TARBALL;
+}
 
 addValidationRule('tarballValidator', values => {
   let files = values['planFiles'];
   // If only one file was uploaded, it should be a tarball
   if (files !== undefined && files.length === 1) {
-    if (!files[0].name.endsWith('.tar.gz') && !files[0].name.endsWith('.tgz')) {
-      return false;
-    }
+    const blob = files[0].file.slice(0, 4);
+    getHeader(blob, validateHeader);
   }
-  return true;
+  return valid;
 });
