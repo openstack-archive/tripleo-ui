@@ -171,9 +171,6 @@ class CurrentPlan extends React.Component {
               {currentPlanName}
             </li>
           </ol>
-          <div className="page-header page-header-bleed-right">
-            <h1 id="CurrentPlan__planName">{currentPlanName}</h1>
-          </div>
           <ol className="deployment-step-list">
             <DeploymentPlanStep
               title={formatMessage(messages.hardwareStepHeader)}
