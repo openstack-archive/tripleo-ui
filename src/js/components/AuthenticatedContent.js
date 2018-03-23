@@ -87,8 +87,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchPlans: () => dispatch(PlansActions.fetchPlans()),
   fetchWorkflowExecutions: () =>
     dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
-  initializeZaqarConnection: () =>
-    dispatch(ZaqarWebSocketService.init(ownProps.history))
+  initializeZaqarConnection: () => dispatch(ZaqarWebSocketService.init())
 });
 
 const mapStateToProps = state => ({

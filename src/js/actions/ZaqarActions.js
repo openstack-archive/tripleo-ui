@@ -34,7 +34,7 @@ export default {
     }
   },
 
-  messageReceived(message, history) {
+  messageReceived(message) {
     return (dispatch, getState) => {
       this.handleAuthenticationSuccess(message, dispatch);
       const { type, payload } = message.body;

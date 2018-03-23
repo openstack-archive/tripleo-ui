@@ -17,7 +17,6 @@
 import MistralApiService from '../../js/services/MistralApiService';
 import MistralConstants from '../../js/constants/MistralConstants';
 import { mockStore } from './utils';
-import mockHistory from '../mocks/history';
 import PlansActions from '../../js/actions/PlansActions';
 import SwiftApiService from '../../js/services/SwiftApiService';
 import storage from '../mocks/storage';
@@ -105,15 +104,13 @@ describe('PlansActions', () => {
     });
 
     it('dispatches actions', () =>
-      store
-        .dispatch(PlansActions.deletePlan('somecloud', mockHistory))
-        .then(() => {
-          expect(store.getActions().map(action => action.type)).toEqual([
-            'DELETE_PLAN_PENDING',
-            'DELETE_PLAN_SUCCESS',
-            'NOTIFY'
-          ]);
-        }));
+      store.dispatch(PlansActions.deletePlan('somecloud')).then(() => {
+        expect(store.getActions().map(action => action.type)).toEqual([
+          'DELETE_PLAN_PENDING',
+          'DELETE_PLAN_SUCCESS',
+          'NOTIFY'
+        ]);
+      }));
   });
 
   describe('fetchPlans', () => {

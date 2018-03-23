@@ -119,7 +119,7 @@ DeletePlan.propTypes = {
 function mapDispatchToProps(dispatch, ownProps) {
   return {
     deletePlan: planName => {
-      dispatch(PlansActions.deletePlan(planName, ownProps.history));
+      dispatch(PlansActions.deletePlan(planName));
     }
   };
 }

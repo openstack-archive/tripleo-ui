@@ -413,7 +413,7 @@ export default {
     };
   },
 
-  deletePlan(planName, history) {
+  deletePlan(planName) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
       dispatch(this.deletePlanPending(planName));
