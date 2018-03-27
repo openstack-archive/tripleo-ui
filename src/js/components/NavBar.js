@@ -27,6 +27,7 @@ import LoginActions from '../actions/LoginActions';
 import NavTab from './ui/NavTab';
 import I18nDropdown from './i18n/I18nDropdown';
 import StatusDropdown from './StatusDropdown';
+import UserDropdown from './UserDropdown';
 import ValidationsActions from '../actions/ValidationsActions';
 import ValidationsList from './validations/ValidationsList';
 import ValidationsToggle from './validations/ValidationsToggle';
@@ -37,10 +38,6 @@ const messages = defineMessages({
   toggleNavigation: {
     id: 'NavBar.toggleNavigation',
     defaultMessage: 'Toggle navigation'
-  },
-  logoutLink: {
-    id: 'NavBar.logoutLink',
-    defaultMessage: 'Logout'
   },
   plansTab: {
     id: 'NavBar.plansTab',
@@ -118,12 +115,6 @@ class NavBar extends React.Component {
             id="tripleo-navbar-collapse"
           >
             <ul className="nav navbar-nav navbar-utility">
-              <li>
-                <a id="NavBar__username">
-                  <span className="pficon pficon-user" />
-                  {this.props.user.get('name')}
-                </a>
-              </li>
               {this._renderLanguageDropdown()}
               {this._renderHelpDropdown()}
               <ValidationsToggle
@@ -133,15 +124,10 @@ class NavBar extends React.Component {
                 validationStatusCounts={validationStatusCounts}
                 validationsLoaded={validationsLoaded}
               />
-              <li>
-                <a
-                  href="#"
-                  onClick={this.logout.bind(this)}
-                  id="NavBar__logoutLink"
-                >
-                  <FormattedMessage {...messages.logoutLink} />
-                </a>
-              </li>
+              <UserDropdown
+                name={this.props.user.get('name')}
+                logout={this.logout.bind(this)}
+              />
             </ul>
             <ul className="nav navbar-nav navbar-primary">
               <NavTab to="/plans" id="NavBar__PlansTab">
