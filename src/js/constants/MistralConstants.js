@@ -20,7 +20,7 @@ export default {
   BAREMETAL_MANAGE: 'tripleo.baremetal.v1.manage',
   BAREMETAL_PROVIDE: 'tripleo.baremetal.v1.provide',
   BAREMETAL_REGISTER_OR_UPDATE: 'tripleo.baremetal.v1.register_or_update',
-  BAREMETAL_VALIDATE_NODES: 'tripleo.baremetal.validate_nodes',
+  BAREMETAL_VALIDATE_NODES: 'tripleo.baremetal.v1.validate_nodes',
   CAPABILITIES_GET: 'tripleo.heat_capabilities.get',
   CAPABILITIES_UPDATE: 'tripleo.heat_capabilities.update',
   CREATE_CONTAINER: 'tripleo.plan.create_container',
@@ -36,7 +36,7 @@ export default {
   ROLE_LIST: 'tripleo.role.list',
   LIST_AVAILABLE_ROLES: 'tripleo.plan_management.v1.list_available_roles',
   SELECT_ROLES: 'tripleo.plan_management.v1.select_roles',
-  VALIDATIONS_LIST: 'tripleo.validations.list_validations',
+  VALIDATIONS_LIST: 'tripleo.validations.v1.list',
   VALIDATIONS_RUN: 'tripleo.validations.v1.run_validation',
   VALIDATIONS_RUN_GROUPS: 'tripleo.validations.v1.run_groups'
 };
