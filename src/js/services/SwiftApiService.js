@@ -106,12 +106,7 @@ const handleErrors = e => {
       case 401:
         return when.reject(new AuthenticationError(e));
       default:
-        return when.reject(
-          new SwiftApiError(
-            `Swift API Error: ${e.response.status} - ${e.response.data}`,
-            e
-          )
-        );
+        return when.reject(new SwiftApiError(e));
     }
   } else if (e.request) {
     return when.reject(
