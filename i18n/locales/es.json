@@ -157,6 +157,7 @@
         "NodesActions.introspectionFailedNotificationTitle": "Introspecci\u00f3n de los nodos fallida",
         "NodesActions.introspectionNotificationMessage": "Los nodos seleccionados han sido introspeccionados correctamente.",
         "NodesActions.introspectionNotificationTitle": "Introspecci\u00f3n de los nodos finalizada",
+        "NodesActions.nodeIntrospectionFailedNotificationTitle": "",
         "NodesAssignmentForm.cancel": "Cancelar",
         "NodesAssignmentForm.saveChanges": "Guardar cambios",
         "NodesListForm.operationInProgressValidationMessage": "Existen operaciones en progreso en los nodos seleccionados",
