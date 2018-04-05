@@ -23,28 +23,31 @@ import { Link, Route, Switch, withRouter } from 'react-router-dom';
 
 import DeploymentConfiguration from './DeploymentConfiguration';
 import DeploymentDetail from '../deployment/DeploymentDetail';
-import { getAllPlansButCurrent } from '../../selectors/plans';
 import {
-  getCurrentStack,
-  getCurrentStackDeploymentProgress,
-  getCurrentStackDeploymentInProgress,
-  getOvercloudInfo
-} from '../../selectors/stacks';
+  getCurrentPlanDeploymentStatus,
+  getCurrentPlanDeploymentStatusLoaded
+} from '../../selectors/deployment';
+// import {
+//   getCurrentStack,
+//   getCurrentStackDeploymentProgress,
+//   getOvercloudInfo
+// } from '../../selectors/stacks';
 import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
 import { getCurrentPlan } from '../../selectors/plans';
+import { getDeploymentStatus } from '../../actions/DeploymentActions';
 import ConfigurePlanStep from './ConfigurePlanStep';
 import { DeploymentPlanStep } from './DeploymentPlanStep';
 import DeployStep from './DeployStep';
 import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
 import HardwareStep from './HardwareStep';
-import NotificationActions from '../../actions/NotificationActions';
+import { Loader } from '../ui/Loader';
 import ParametersActions from '../../actions/ParametersActions';
-import PlansActions from '../../actions/PlansActions';
+// import PlansActions from '../../actions/PlansActions';
 import RoleDetail from '../roles/RoleDetail';
 import RolesStep from './RolesStep';
-import StacksActions from '../../actions/StacksActions';
-import stackStates from '../../constants/StacksConstants';
-import ValidationsActions from '../../actions/ValidationsActions';
+// import StacksActions from '../../actions/StacksActions';
+// import stackStates from '../../constants/StacksConstants';
+// import ValidationsActions from '../../actions/ValidationsActions';
 
 const messages = defineMessages({
   backToAllPlans: {
@@ -94,70 +97,97 @@ const messages = defineMessages({
     defaultMessage:
       'This step starts the deployment of the overcloud. Once the deployment begins, you can ' +
       'track the progress and see a report of each completed, running, or failed step.'
+  },
+  loadingDeploymentStatus: {
+    id: 'CurrentPlan.loadingDeploymentStatus',
+    defaultMessage: 'Loading Deployment Status'
   }
 });
 
 class CurrentPlan extends React.Component {
   componentDidMount() {
-    this.props.fetchStacks();
+    // this.props.fetchStacks();
+    this.props.getDeploymentStatus(this.props.currentPlan.name);
     this.fetchParameters();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.currentPlan !== this.props.currentPlan) {
-      this.props.fetchStacks();
-      this.fetchParameters();
-      this.props.fetchStacks();
-    }
-    this.postDeploymentValidationsCheck(nextProps.currentStack);
-    this.pollCurrentStack(nextProps.currentStack);
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.currentPlan !== this.props.currentPlan) {
+  //     this.props.fetchStacks();
+  //     this.fetchParameters();
+  //     this.props.fetchStacks();
+  //   }
+  //   this.postDeploymentValidationsCheck(nextProps.currentStack);
+  //   this.pollCurrentStack(nextProps.currentStack);
+  // }
 
-  componentWillUnmount() {
-    clearTimeout(this.stackProgressTimeout);
-  }
+  // componentWillUnmount() {
+  //   clearTimeout(this.stackProgressTimeout);
+  // }
 
   fetchParameters() {
     !this.props.isFetchingParameters &&
       this.props.fetchParameters(this.props.currentPlan.name);
   }
 
-  pollCurrentStack(currentStack) {
-    if (currentStack) {
-      if (currentStack.stack_status.match(/PROGRESS/)) {
-        clearTimeout(this.stackProgressTimeout);
-        this.stackProgressTimeout = setTimeout(() => {
-          this.props.fetchStacks();
-          this.props.fetchStackResources(currentStack);
-        }, 20000);
-      }
-    }
-  }
+  // pollCurrentStack(currentStack) {
+  //   if (currentStack) {
+  //     if (currentStack.stack_status.match(/PROGRESS/)) {
+  //       clearTimeout(this.stackProgressTimeout);
+  //       this.stackProgressTimeout = setTimeout(() => {
+  //         this.props.fetchStacks();
+  //         this.props.fetchStackResources(currentStack);
+  //       }, 20000);
+  //     }
+  //   }
+  // }
 
-  postDeploymentValidationsCheck(nextStack) {
-    const { currentStack, currentPlan } = this.props;
-    const progressStates = [
-      stackStates.UPDATE_IN_PROGRESS,
-      stackStates.CREATE_IN_PROGRESS
-    ];
-    const successStates = [
-      stackStates.UPDATE_COMPLETE,
-      stackStates.CREATE_COMPLETE
-    ];
-    if (
-      currentStack &&
-      nextStack &&
-      progressStates.includes(currentStack.stack_status) &&
-      successStates.includes(nextStack.stack_status)
-    ) {
-      this.props.runPostDeploymentValidations(currentPlan.name);
-    }
-  }
+  // postDeploymentValidationsCheck(nextStack) {
+  //   const { currentStack, currentPlan } = this.props;
+  //   const progressStates = [
+  //     stackStates.UPDATE_IN_PROGRESS,
+  //     stackStates.CREATE_IN_PROGRESS
+  //   ];
+  //   const successStates = [
+  //     stackStates.UPDATE_COMPLETE,
+  //     stackStates.CREATE_COMPLETE
+  //   ];
+  //   if (
+  //     currentStack &&
+  //     nextStack &&
+  //     progressStates.includes(currentStack.stack_status) &&
+  //     successStates.includes(nextStack.stack_status)
+  //   ) {
+  //     this.props.runPostDeploymentValidations(currentPlan.name);
+  //   }
+  // }
 
   render() {
-    const { intl: { formatMessage }, currentPlan } = this.props;
+    const {
+      intl: { formatMessage },
+      currentPlan,
+      deploymentStatus,
+      deploymentStatusLoaded,
+      // currentStackDeploymentProgress,
+      environmentConfigurationSummary,
+      environmentConfigurationLoaded,
+      isFetchingEnvironmentConfiguration,
+      // currentStack,
+      // currentStackResources,
+      // deleteStack,
+      // deployPlan,
+      // fetchStackEnvironment,
+      fetchEnvironmentConfiguration
+      // fetchStackResource,
+      // overcloudInfo,
+      // isRequestingStackDelete,
+      // stacksLoaded
+    } = this.props;
 
     const currentPlanName = currentPlan.name;
+    const disableDeploymentSteps = ['DEPLOYING', 'UNDEPLOYING'].includes(
+      deploymentStatus.status || deploymentStatusLoaded
+    );
     return (
       <div className="row">
         <div className="col-sm-12">
@@ -177,29 +207,27 @@ class CurrentPlan extends React.Component {
           <ol className="deployment-step-list">
             <DeploymentPlanStep
               title={formatMessage(messages.hardwareStepHeader)}
-              disabled={this.props.currentStackDeploymentInProgress}
+              disabled={disableDeploymentSteps}
               tooltip={formatMessage(messages.hardwareStepTooltip)}
             >
               <HardwareStep />
             </DeploymentPlanStep>
             <DeploymentPlanStep
               title={formatMessage(messages.deploymentConfigurationStepHeader)}
-              disabled={this.props.currentStackDeploymentInProgress}
+              disabled={disableDeploymentSteps}
               tooltip={formatMessage(messages.configurePlanStepTooltip)}
             >
               <ConfigurePlanStep
-                fetchEnvironmentConfiguration={
-                  this.props.fetchEnvironmentConfiguration
-                }
-                summary={this.props.environmentConfigurationSummary}
+                fetchEnvironmentConfiguration={fetchEnvironmentConfiguration}
+                summary={environmentConfigurationSummary}
                 planName={currentPlanName}
-                isFetching={this.props.isFetchingEnvironmentConfiguration}
-                loaded={this.props.environmentConfigurationLoaded}
+                isFetching={isFetchingEnvironmentConfiguration}
+                loaded={environmentConfigurationLoaded}
               />
             </DeploymentPlanStep>
             <DeploymentPlanStep
               title={formatMessage(messages.configureRolesStepHeader)}
-              disabled={this.props.currentStackDeploymentInProgress}
+              disabled={disableDeploymentSteps}
               tooltip={formatMessage(messages.configureRolesStepTooltip)}
             >
               <RolesStep />
@@ -208,21 +236,25 @@ class CurrentPlan extends React.Component {
               title={formatMessage(messages.deployStepHeader)}
               tooltip={formatMessage(messages.deployStepTooltip)}
             >
-              <DeployStep
-                currentPlan={currentPlan}
-                currentStack={this.props.currentStack}
-                currentStackResources={this.props.currentStackResources}
-                currentStackDeploymentProgress={
-                  this.props.currentStackDeploymentProgress
-                }
-                deleteStack={this.props.deleteStack}
-                deployPlan={this.props.deployPlan}
-                fetchStackEnvironment={this.props.fetchStackEnvironment}
-                fetchStackResource={this.props.fetchStackResource}
-                overcloudInfo={this.props.overcloudInfo}
-                isRequestingStackDelete={this.props.isRequestingStackDelete}
-                stacksLoaded={this.props.stacksLoaded}
-              />
+              <Loader
+                loaded={deploymentStatusLoaded}
+                content={formatMessage(messages.loadingDeploymentStatus)}
+              >
+                <DeployStep
+                  currentPlan={currentPlan}
+                  deploymentStatus={deploymentStatus}
+                  // currentStack={currentStack}
+                  // currentStackResources={currentStackResources}
+                  // currentStackDeploymentProgress={currentStackDeploymentProgress}
+                  // deleteStack={deleteStack}
+                  // deployPlan={deployPlan}
+                  // fetchStackEnvironment={fetchStackEnvironment}
+                  // fetchStackResource={fetchStackResource}
+                  // overcloudInfo={overcloudInfo}
+                  // isRequestingStackDelete={isRequestingStackDelete}
+                  // stacksLoaded={stacksLoaded}
+                />
+              </Loader>
             </DeploymentPlanStep>
           </ol>
         </div>
@@ -247,61 +279,59 @@ class CurrentPlan extends React.Component {
 
 CurrentPlan.propTypes = {
   currentPlan: ImmutablePropTypes.record,
-  currentStack: ImmutablePropTypes.record,
-  currentStackDeploymentInProgress: PropTypes.bool,
-  currentStackDeploymentProgress: PropTypes.number.isRequired,
-  currentStackResources: ImmutablePropTypes.map,
-  deleteStack: PropTypes.func,
-  deployPlan: PropTypes.func,
+  deploymentStatus: PropTypes.object,
+  deploymentStatusLoaded: PropTypes.bool.isRequired,
+  // currentStack: ImmutablePropTypes.record,
+  // currentStackDeploymentProgress: PropTypes.number.isRequired,
+  // currentStackResources: ImmutablePropTypes.map,
+  // deleteStack: PropTypes.func,
+  // deployPlan: PropTypes.func,
   environmentConfigurationLoaded: PropTypes.bool,
   environmentConfigurationSummary: PropTypes.string,
   fetchEnvironmentConfiguration: PropTypes.func,
   fetchParameters: PropTypes.func,
-  fetchStackEnvironment: PropTypes.func,
-  fetchStackResource: PropTypes.func,
-  fetchStackResources: PropTypes.func.isRequired,
-  fetchStacks: PropTypes.func,
-  inactivePlans: ImmutablePropTypes.map,
+  // fetchStackEnvironment: PropTypes.func,
+  // fetchStackResource: PropTypes.func,
+  // fetchStackResources: PropTypes.func.isRequired,
+  // fetchStacks: PropTypes.func,
+  getDeploymentStatus: PropTypes.func.isRequired,
   intl: PropTypes.object,
   isFetchingEnvironmentConfiguration: PropTypes.bool,
-  isFetchingParameters: PropTypes.bool,
-  isRequestingStackDelete: PropTypes.bool,
-  notify: PropTypes.func,
-  overcloudInfo: ImmutablePropTypes.map.isRequired,
-  route: PropTypes.object,
-  runPostDeploymentValidations: PropTypes.func.isRequired,
-  stacksLoaded: PropTypes.bool.isRequired
+  isFetchingParameters: PropTypes.bool
+  // isRequestingStackDelete: PropTypes.bool,
+  // overcloudInfo: ImmutablePropTypes.map.isRequired,
+  // runPostDeploymentValidations: PropTypes.func.isRequired,
+  // stacksLoaded: PropTypes.bool.isRequired
 };
 
 export function mapStateToProps(state, props) {
   return {
     currentPlan: getCurrentPlan(state),
-    currentStack: getCurrentStack(state),
-    currentStackResources: state.stacks.resources,
-    currentStackDeploymentInProgress: getCurrentStackDeploymentInProgress(
-      state
-    ),
-    currentStackDeploymentProgress: getCurrentStackDeploymentProgress(state),
+    deploymentStatus: getCurrentPlanDeploymentStatus(state),
+    deploymentStatusLoaded: getCurrentPlanDeploymentStatusLoaded(state),
+    // currentStack: getCurrentStack(state),
+    // currentStackResources: state.stacks.resources,
+    // currentStackDeploymentProgress: getCurrentStackDeploymentProgress(state),
     environmentConfigurationLoaded: state.environmentConfiguration.loaded,
     environmentConfigurationSummary: getEnvironmentConfigurationSummary(state),
     isFetchingEnvironmentConfiguration:
       state.environmentConfiguration.isFetching,
-    isFetchingParameters: state.parameters.isFetching,
-    overcloudInfo: getOvercloudInfo(state),
-    isRequestingStackDelete: state.stacks.get('isRequestingStackDelete'),
-    inactivePlans: getAllPlansButCurrent(state),
-    stacksLoaded: state.stacks.get('isLoaded')
+    isFetchingParameters: state.parameters.isFetching
+    // overcloudInfo: getOvercloudInfo(state),
+    // isRequestingStackDelete: state.stacks.get('isRequestingStackDelete'),
+    // stacksLoaded: state.stacks.get('isLoaded')
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    deleteStack: (stackName, stackId) => {
-      dispatch(StacksActions.deleteStack(stackName, stackId));
-    },
-    deployPlan: planName => dispatch(PlansActions.deployPlan(planName)),
-    fetchStackEnvironment: stack =>
-      dispatch(StacksActions.fetchEnvironment(stack)),
+    getDeploymentStatus: planName => dispatch(getDeploymentStatus(planName)),
+    // deleteStack: (stackName, stackId) => {
+    //   dispatch(StacksActions.deleteStack(stackName, stackId));
+    // },
+    // deployPlan: planName => dispatch(PlansActions.deployPlan(planName)),
+    // fetchStackEnvironment: stack =>
+    //   dispatch(StacksActions.fetchEnvironment(stack)),
     fetchEnvironmentConfiguration: (planName, parentPath) => {
       dispatch(
         EnvironmentConfigurationActions.fetchEnvironmentConfiguration(
@@ -311,18 +341,17 @@ function mapDispatchToProps(dispatch) {
       );
     },
     fetchParameters: planName =>
-      dispatch(ParametersActions.fetchParameters(planName)),
-    fetchStackResources: stack =>
-      dispatch(StacksActions.fetchResources(stack.stack_name, stack.id)),
-    fetchStackResource: (stack, resourceName) =>
-      dispatch(StacksActions.fetchResource(stack, resourceName)),
-    fetchStacks: () => dispatch(StacksActions.fetchStacks()),
-    notify: notification => dispatch(NotificationActions.notify(notification)),
-    runPostDeploymentValidations: planName => {
-      dispatch(
-        ValidationsActions.runValidationGroups(['post-deployment'], planName)
-      );
-    }
+      dispatch(ParametersActions.fetchParameters(planName))
+    // fetchStackResources: stack =>
+    //   dispatch(StacksActions.fetchResources(stack.stack_name, stack.id)),
+    // fetchStackResource: (stack, resourceName) =>
+    //   dispatch(StacksActions.fetchResource(stack, resourceName)),
+    // fetchStacks: () => dispatch(StacksActions.fetchStacks()),
+    // runPostDeploymentValidations: planName => {
+    //   dispatch(
+    //     ValidationsActions.runValidationGroups(['post-deployment'], planName)
+    //   );
+    // }
   };
 }
 

@@ -116,9 +116,17 @@ export default {
         }
 
         case MistralConstants.DEPLOYMENT_DEPLOY_PLAN: {
+          // TODO(jtomasek): this conditional is a workaround for proper handling
+          // of a message notifying that deployment workflow has started. In that
+          // case we want to keep original polling interval.
+          debugger;
+          let pollTimeout;
+          if (payload.status === 'RUNNING') {
+            pollTimeout = 90 * 60 * 1000;
+          }
           dispatch(
             handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(PlansActions.deployPlanFinished(execution))
+              dispatch(PlansActions.deployPlanFinished(execution), pollTimeout)
             )
           );
           break;

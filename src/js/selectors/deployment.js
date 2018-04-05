@@ -22,6 +22,8 @@ import { deploymentStates as ds } from '../constants/DeploymentConstants';
 
 const deploymentStatusByPlan = state =>
   state.deploymentStatus.deploymentStatusByPlan;
+const getDeploymentStatusUIByPlan = state =>
+  state.deploymentStatus.deploymentStatusUI;
 
 export const getDeploymentStatusByPlan = createSelector(
   deploymentStatusByPlan,
@@ -57,4 +59,16 @@ export const getCurrentPlanDeploymentStatus = createSelector(
   [getCurrentPlanName, getDeploymentStatusByPlan],
   (currentPlanName, planDeploymentStates) =>
     planDeploymentStates.get(currentPlanName, {})
+);
+
+export const getCurrentPlanDeploymentStatusLoaded = createSelector(
+  [getCurrentPlanName, getDeploymentStatusUIByPlan],
+  (currentPlanName, planDeploymentUIStates) =>
+    planDeploymentUIStates.getIn([currentPlanName, 'isLoaded'], false)
+);
+
+export const getCurrentPlanDeploymentStatusIsFetching = createSelector(
+  [getCurrentPlanName, getDeploymentStatusUIByPlan],
+  (currentPlanName, planDeploymentUIStates) =>
+    planDeploymentUIStates.getIn([currentPlanName, 'isFetching'], false)
 );
