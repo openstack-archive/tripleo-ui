@@ -24,6 +24,7 @@ import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import DeploymentConfiguration from './DeploymentConfiguration';
 import DeploymentDetail from '../deployment/DeploymentDetail';
 import { getAllPlansButCurrent } from '../../selectors/plans';
+import { getCurrentPlanDeploymentStatus } from '../../selectors/deployment';
 import {
   getCurrentStack,
   getCurrentStackDeploymentProgress,
@@ -32,6 +33,7 @@ import {
 } from '../../selectors/stacks';
 import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
 import { getCurrentPlan } from '../../selectors/plans';
+import { getDeploymentStatus } from '../../actions/DeploymentActions';
 import ConfigurePlanStep from './ConfigurePlanStep';
 import { DeploymentPlanStep } from './DeploymentPlanStep';
 import DeployStep from './DeployStep';
@@ -100,6 +102,7 @@ const messages = defineMessages({
 class CurrentPlan extends React.Component {
   componentDidMount() {
     this.props.fetchStacks();
+    this.props.getDeploymentStatus(this.props.currentPlan.name);
     this.fetchParameters();
   }
 
@@ -155,7 +158,26 @@ class CurrentPlan extends React.Component {
   }
 
   render() {
-    const { intl: { formatMessage }, currentPlan } = this.props;
+    const {
+      intl: { formatMessage },
+      currentPlan,
+      currentPlanDeploymentStatus,
+      currentStackDeploymentProgress,
+      currentStackDeploymentInProgress,
+      environmentConfigurationSummary,
+      environmentConfigurationLoaded,
+      isFetchingEnvironmentConfiguration,
+      currentStack,
+      currentStackResources,
+      deleteStack,
+      deployPlan,
+      fetchStackEnvironment,
+      fetchEnvironmentConfiguration,
+      fetchStackResource,
+      overcloudInfo,
+      isRequestingStackDelete,
+      stacksLoaded
+    } = this.props;
 
     const currentPlanName = currentPlan.name;
     return (
@@ -177,29 +199,27 @@ class CurrentPlan extends React.Component {
           <ol className="deployment-step-list">
             <DeploymentPlanStep
               title={formatMessage(messages.hardwareStepHeader)}
-              disabled={this.props.currentStackDeploymentInProgress}
+              disabled={currentStackDeploymentInProgress}
               tooltip={formatMessage(messages.hardwareStepTooltip)}
             >
               <HardwareStep />
             </DeploymentPlanStep>
             <DeploymentPlanStep
               title={formatMessage(messages.deploymentConfigurationStepHeader)}
-              disabled={this.props.currentStackDeploymentInProgress}
+              disabled={currentStackDeploymentInProgress}
               tooltip={formatMessage(messages.configurePlanStepTooltip)}
             >
               <ConfigurePlanStep
-                fetchEnvironmentConfiguration={
-                  this.props.fetchEnvironmentConfiguration
-                }
-                summary={this.props.environmentConfigurationSummary}
+                fetchEnvironmentConfiguration={fetchEnvironmentConfiguration}
+                summary={environmentConfigurationSummary}
                 planName={currentPlanName}
-                isFetching={this.props.isFetchingEnvironmentConfiguration}
-                loaded={this.props.environmentConfigurationLoaded}
+                isFetching={isFetchingEnvironmentConfiguration}
+                loaded={environmentConfigurationLoaded}
               />
             </DeploymentPlanStep>
             <DeploymentPlanStep
               title={formatMessage(messages.configureRolesStepHeader)}
-              disabled={this.props.currentStackDeploymentInProgress}
+              disabled={currentStackDeploymentInProgress}
               tooltip={formatMessage(messages.configureRolesStepTooltip)}
             >
               <RolesStep />
@@ -209,21 +229,21 @@ class CurrentPlan extends React.Component {
               tooltip={formatMessage(messages.deployStepTooltip)}
             >
               <DeployStep
+                currentPlanDeploymentStatus={currentPlanDeploymentStatus}
                 currentPlan={currentPlan}
-                currentStack={this.props.currentStack}
-                currentStackResources={this.props.currentStackResources}
-                currentStackDeploymentProgress={
-                  this.props.currentStackDeploymentProgress
-                }
-                deleteStack={this.props.deleteStack}
-                deployPlan={this.props.deployPlan}
-                fetchStackEnvironment={this.props.fetchStackEnvironment}
-                fetchStackResource={this.props.fetchStackResource}
-                overcloudInfo={this.props.overcloudInfo}
-                isRequestingStackDelete={this.props.isRequestingStackDelete}
-                stacksLoaded={this.props.stacksLoaded}
+                currentStack={currentStack}
+                currentStackResources={currentStackResources}
+                currentStackDeploymentProgress={currentStackDeploymentProgress}
+                deleteStack={deleteStack}
+                deployPlan={deployPlan}
+                fetchStackEnvironment={fetchStackEnvironment}
+                fetchStackResource={fetchStackResource}
+                overcloudInfo={overcloudInfo}
+                isRequestingStackDelete={isRequestingStackDelete}
+                stacksLoaded={stacksLoaded}
               />
             </DeploymentPlanStep>
+            <li>Status: {currentPlanDeploymentStatus.status}</li>
           </ol>
         </div>
         <Switch>
@@ -247,6 +267,7 @@ class CurrentPlan extends React.Component {
 
 CurrentPlan.propTypes = {
   currentPlan: ImmutablePropTypes.record,
+  currentPlanDeploymentStatus: PropTypes.object,
   currentStack: ImmutablePropTypes.record,
   currentStackDeploymentInProgress: PropTypes.bool,
   currentStackDeploymentProgress: PropTypes.number.isRequired,
@@ -276,6 +297,7 @@ CurrentPlan.propTypes = {
 export function mapStateToProps(state, props) {
   return {
     currentPlan: getCurrentPlan(state),
+    currentPlanDeploymentStatus: getCurrentPlanDeploymentStatus(state),
     currentStack: getCurrentStack(state),
     currentStackResources: state.stacks.resources,
     currentStackDeploymentInProgress: getCurrentStackDeploymentInProgress(
@@ -296,6 +318,7 @@ export function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    getDeploymentStatus: planName => dispatch(getDeploymentStatus(planName)),
     deleteStack: (stackName, stackId) => {
       dispatch(StacksActions.deleteStack(stackName, stackId));
     },
