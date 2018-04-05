@@ -25,6 +25,7 @@ export default {
   CAPABILITIES_UPDATE: 'tripleo.heat_capabilities.update',
   CREATE_CONTAINER: 'tripleo.plan.create_container',
   DEPLOYMENT_DEPLOY_PLAN: 'tripleo.deployment.v1.deploy_plan',
+  UNDEPLOY_PLAN: 'tripleo.deployment.v1.undeploy_plan',
   DOWNLOAD_LOGS: 'tripleo.plan_management.v1.download_logs',
   PARAMETERS_GET: 'tripleo.parameters.get_flatten',
   PARAMETERS_UPDATE: 'tripleo.parameters.update',
