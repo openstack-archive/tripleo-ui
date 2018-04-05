@@ -157,6 +157,7 @@
         "NodesActions.introspectionFailedNotificationTitle": "Nodes Introspection Failed",
         "NodesActions.introspectionNotificationMessage": "Selected nodes (node yang dipilih) introspektif berhasil.",
         "NodesActions.introspectionNotificationTitle": "Nodes Introspection Complete",
+        "NodesActions.nodeIntrospectionFailedNotificationTitle": "",
         "NodesAssignmentForm.cancel": "Cancel",
         "NodesAssignmentForm.saveChanges": "Save Changes",
         "NodesListForm.operationInProgressValidationMessage": "Ada operasi yang sedang berlangsung pada beberapa Node yang dipilih",

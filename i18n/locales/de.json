@@ -157,6 +157,7 @@
         "NodesActions.introspectionFailedNotificationTitle": "Knotenintrospektiion fehlgeschlagen",
         "NodesActions.introspectionNotificationMessage": "Ausgew\u00e4hlte Knoten wurden erfolgreich introspektiert.",
         "NodesActions.introspectionNotificationTitle": "Knotenintrospektion komplett",
+        "NodesActions.nodeIntrospectionFailedNotificationTitle": "",
         "NodesAssignmentForm.cancel": "Abbrechen",
         "NodesAssignmentForm.saveChanges": "\u00c4nderungen speichern",
         "NodesListForm.operationInProgressValidationMessage": "In einigen der ausgew\u00e4hlten Knoten l\u00e4uft eine Operation",
