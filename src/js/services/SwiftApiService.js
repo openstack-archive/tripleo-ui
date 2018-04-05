@@ -109,6 +109,7 @@ const handleErrors = e => {
         return when.reject(
           new SwiftApiError(
             `Swift API Error: ${e.response.status} - ${e.response.data}`,
+            e.message,
             e
           )
         );
