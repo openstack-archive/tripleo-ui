@@ -18,6 +18,7 @@ import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 
 import appConfig from './appConfig';
+import deploymentStatus from './deploymentStatus';
 import environmentConfigurationReducer from './environmentConfigurationReducer';
 import filtersReducer from './filtersReducer';
 import flavorsReducer from './flavorsReducer';
@@ -38,6 +39,7 @@ import workflowExecutionTimeoutsReducer from './workflowExecutionTimeoutsReducer
 
 const appReducer = combineReducers({
   appConfig,
+  deploymentStatus: deploymentStatus,
   environmentConfiguration: environmentConfigurationReducer,
   executions: workflowExecutionsReducer,
   filters: filtersReducer,
