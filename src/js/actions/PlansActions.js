@@ -473,13 +473,16 @@ export default {
           MistralConstants.DEPLOYMENT_DEPLOY_PLAN,
           {
             container: planName,
-            timeout: 240
+            timeout: 240,
+            config_download: true
           },
-          execution => dispatch(this.deployPlanFinished(execution))
+          execution => dispatch(this.deployPlanFinished(execution)),
+          90 * 60 * 1000
         )
       )
-        .then(response => {
-          dispatch(StackActions.fetchStacks());
+        .then(execution => {
+          dispatch(this.deployPlanSuccess(planName));
+          // dispatch(updateDeploymentState(...))
         })
         .catch(error => {
           dispatch(
@@ -499,7 +502,7 @@ export default {
         state
       } = execution;
       if (state === 'ERROR') {
-        dispatch(this.deployPlanFailed(planName));
+        // update plan state here
         dispatch(
           NotificationActions.notify({
             title: formatMessage(messages.deploymentFailedNotificationTitle),
@@ -507,7 +510,7 @@ export default {
           })
         );
       } else {
-        dispatch(this.deployPlanSuccess(planName));
+        // dispatch(this.deployPlanSuccess(planName));
         dispatch(StackActions.fetchStacks());
       }
     };
