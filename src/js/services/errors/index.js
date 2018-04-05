@@ -56,7 +56,12 @@ class MistralExecutionError extends ExtendableError {
   }
 }
 
-class SwiftApiError extends BaseAxiosError {}
+class SwiftApiError extends BaseAxiosError {
+  constructor(e) {
+    const message = `${e.response.status} - ${e.response.data}`;
+    super('SwiftApiError', message, e);
+  }
+}
 
 class IronicApiError extends BaseAxiosError {
   constructor(e) {
