@@ -60,6 +60,7 @@ class DeploymentFailure extends React.Component {
             </Link>
           </p>
         </InlineNotification>
+        {/*
         <DeleteStackButton
           content={formatMessage(messages.deleteDeployment)}
           deleteStack={deleteStack}
@@ -68,6 +69,7 @@ class DeploymentFailure extends React.Component {
           loaderContent={formatMessage(messages.requestingDeletion)}
           stack={stack}
         />
+        */}
       </div>
     );
   }

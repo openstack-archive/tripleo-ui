@@ -17,8 +17,6 @@
 import { createSelector } from 'reselect';
 import { Map } from 'immutable';
 
-import { Stack } from '../immutableRecords/stacks';
-import { stackStates } from '../constants/StacksConstants';
 import { getCurrentPlanName } from './plans';
 
 const stacksSelector = state => state.stacks.stacks;
@@ -33,20 +31,6 @@ const stackResourceDetailsSelector = state => state.stacks.resourceDetails;
 export const getCurrentStack = createSelector(
   [stacksSelector, getCurrentPlanName],
   (stacks, currentPlanName) => stacks.get(currentPlanName)
-);
-
-/**
- * Returns a flag for the deployment progress of the current plan
- * (true if the plan is currently being deployed, false it not).
- */
-export const getCurrentStackDeploymentInProgress = createSelector(
-  [stacksSelector, getCurrentPlanName],
-  (stacks, currentPlanName) =>
-    [
-      stackStates.CREATE_IN_PROGRESS,
-      stackStates.UPDATE_IN_PROGRESS,
-      stackStates.DELETE_IN_PROGRESS
-    ].includes(stacks.get(currentPlanName, new Stack()).stack_status)
 );
 
 /**
