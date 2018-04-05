@@ -58,7 +58,7 @@ const messages = defineMessages({
 
 class DeploymentConfirmation extends React.Component {
   componentDidMount() {
-    this.props.runPreDeploymentValidations(this.props.currentPlan.name);
+    // this.props.runPreDeploymentValidations(this.props.currentPlan.name);
   }
 
   render() {
