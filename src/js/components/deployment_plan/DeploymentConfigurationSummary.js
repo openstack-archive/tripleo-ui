@@ -46,14 +46,16 @@ class DeploymentConfigurationSummary extends React.Component {
 
   render() {
     return (
-      <InlineLoader
-        loaded={this.props.loaded}
-        content={this.props.intl.formatMessage(
-          messages.loadingCurrentConfiguration
-        )}
-      >
-        {this.props.summary}
-      </InlineLoader>
+      <p>
+        <InlineLoader
+          loaded={this.props.loaded}
+          content={this.props.intl.formatMessage(
+            messages.loadingCurrentConfiguration
+          )}
+        >
+          {this.props.summary}
+        </InlineLoader>
+      </p>
     );
   }
 }

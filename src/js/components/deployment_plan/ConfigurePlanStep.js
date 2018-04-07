@@ -31,7 +31,6 @@ const messages = defineMessages({
 const ConfigurePlanStep = props => (
   <div>
     <DeploymentConfigurationSummary {...props} />
-    <br />
     <Link
       className="btn btn-default"
       id="ConfigurePlanStep__EditDeploymentLink"
