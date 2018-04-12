@@ -326,7 +326,7 @@
         "Toolbar.activeFilters": "Active Filters:",
         "Toolbar.clearAllActiveFilters": "Clear All Filters",
         "UserAuthenticator.authenticating": "Authenticating...",
-        "UserDropdown.logout": "",
+        "UserDropdown.logout": "Log Out",
         "ValidationDetail.close": "Close",
         "ValidationDetail.description": "Description:",
         "ValidationDetail.groups": "Groups:",
