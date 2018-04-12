@@ -46,25 +46,27 @@ What to do when dependencies change
 
 This applies both to adding *new* dependencies, and upgrading *existing* ones.
 
-1.  Make the required changes in ``package.json``
-2.  ``$ rm -rf node_modules``
-3.  ``$ npm cache clean``
-4.  ``$ npm install``
-5.  ``$ npm shrinkwrap``
-6.  Commit those changes along with your dependency changes in ``tripleo-ui``.
-    Your patch should only include the necessary changes to update the
-    dependency.  Submit another patch for your feature/bugfix.  In the
-    commit message, add a link to the dependency (GitHub or similar), and
-    indicate the project's license.  We use the "workflow" field on this
-    patch to indicate whether a packager has reviewed the changes: "-1" means
-    this has not happened, or there are issues with the new dependency; "+1"
-    means it's been reviewed, and the change is approved.
-7.  Update the `openstack-tripleo-ui-deps`_ package.  Currently, this is done by
-    submitting a pull request on GitHub.  There are plans in place to move the
-    workflow for this repository to the gerrit system.
-8.  Update the `openstack-tripleo-ui`_ spec so that it points to the new version
-    of `openstack-tripleo-ui-deps`_.  This is done by submitting a patch via
-    `gerrit`_.
+#.  Make the required changes in ``package.json``
+#.  ``$ rm -rf node_modules``
+#.  ``$ npm cache clean``
+#.  ``$ npm install``
+#.  ``$ npm shrinkwrap``
+#.  Commit those changes along with your dependency changes in
+    ``tripleo-ui``. In the commit message, add a link to the dependency
+    (GitHub or similar), and indicate the project's license.
+#.  When you submit the patch, the native npm jobs will pass but the
+    undercloud gate job will fail because the dependency isn't yet in
+    the `openstack-tripleo-ui-deps`_ package. This is expected. Have
+    the patch be normally reviewed.
+#.  Once it's about ready to merge, ask RDO to review the licensing.
+#.  Update the `openstack-tripleo-ui-deps`_ package.  Currently, this
+    is done by submitting a pull request on GitHub.  There are plans in
+    place to move the workflow for this repository to the gerrit
+    system.
+#.  (Once per release) Update the `openstack-tripleo-ui`_ spec so that
+    it points to the new version of `openstack-tripleo-ui-deps`_. This
+    is done by submitting a patch via `gerrit`_.
+#.  Recheck the patch. All jobs now pass.
 
 .. _here: http://tarballs.openstack.org/tripleo-ui/
 .. _openstack-tripleo-ui-deps: https://github.com/rdo-common/openstack-tripleo-ui-deps
