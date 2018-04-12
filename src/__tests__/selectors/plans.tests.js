@@ -14,36 +14,4 @@
  * under the License.
  */
 
-import { Map } from 'immutable';
-
-import { Plan } from '../../js/immutableRecords/plans';
-import { getAllPlansButCurrent } from '../../js/selectors/plans';
-import { InitialPlanState } from '../../js/immutableRecords/plans';
-
-describe('plans selectors', () => {
-  describe('getAllPlansButCurrent()', () => {
-    const state = {
-      plans: new InitialPlanState({
-        currentPlanName: 'plan1',
-        isFetchingPlans: false,
-        all: Map({
-          plan1: new Plan({
-            name: 'plan1',
-            transition: false,
-            files: Map()
-          }),
-          plan2: new Plan({
-            name: 'plan2',
-            transition: false,
-            files: Map()
-          })
-        })
-      })
-    };
-
-    it('provides selector to list all Plans except for the currently selected one', () => {
-      expect(getAllPlansButCurrent(state).size).toEqual(1);
-      expect(getAllPlansButCurrent(state).first().name).toEqual('plan2');
-    });
-  });
-});
+describe('plans selectors', () => {});

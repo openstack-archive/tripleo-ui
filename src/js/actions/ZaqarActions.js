@@ -14,6 +14,7 @@
  * under the License.
  */
 
+import { deploymentStates } from '../constants/DeploymentConstants';
 import { get } from 'lodash';
 import LoggerActions from './LoggerActions';
 import NodesActions from './NodesActions';
@@ -23,6 +24,10 @@ import RolesActions from './RolesActions';
 import MistralConstants from '../constants/MistralConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 import { handleWorkflowMessage } from './WorkflowActions';
+import {
+  startDeploymentSuccess,
+  deploymentFinished
+} from './DeploymentActions';
 
 export default {
   handleAuthenticationSuccess(message, dispatch) {
@@ -116,11 +121,15 @@ export default {
         }
 
         case MistralConstants.DEPLOYMENT_DEPLOY_PLAN: {
-          dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(PlansActions.deployPlanFinished(execution))
-            )
-          );
+          if (payload.deployment_status === deploymentStates.DEPLOYING) {
+            dispatch(startDeploymentSuccess(payload.plan_name));
+          } else {
+            dispatch(
+              handleWorkflowMessage(payload.execution_id, execution =>
+                dispatch(deploymentFinished(execution))
+              )
+            );
+          }
           break;
         }
 

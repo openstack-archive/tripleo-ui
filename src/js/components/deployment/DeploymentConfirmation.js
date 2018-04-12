@@ -58,17 +58,19 @@ const messages = defineMessages({
 
 class DeploymentConfirmation extends React.Component {
   componentDidMount() {
-    this.props.runPreDeploymentValidations(this.props.currentPlan.name);
+    // this.props.runPreDeploymentValidations(this.props.currentPlan.name);
   }
 
   render() {
     const {
       allValidationsSuccessful,
       currentPlan,
-      deployPlan,
+      startDeployment,
       environmentSummary
     } = this.props;
 
+    const buttonDisabled = false;
+    //   deploymentStatus.status === deploymentStates.STARTING_DEPLOYMENT;
     return (
       <div className="flex-column deployment-summary">
         <BlankSlate
@@ -91,8 +93,8 @@ class DeploymentConfirmation extends React.Component {
             <FormattedMessage {...messages.deploymentConfirmation} />
           </p>
           <DeployButton
-            disabled={currentPlan.isRequestingPlanDeploy}
-            deploy={deployPlan.bind(this, currentPlan.name)}
+            disabled={buttonDisabled}
+            deploy={startDeployment.bind(this, currentPlan.name)}
             isRequestingPlanDeploy={currentPlan.isRequestingPlanDeploy}
           />
         </BlankSlate>
@@ -103,10 +105,10 @@ class DeploymentConfirmation extends React.Component {
 DeploymentConfirmation.propTypes = {
   allValidationsSuccessful: PropTypes.bool.isRequired,
   currentPlan: ImmutablePropTypes.record.isRequired,
-  deployPlan: PropTypes.func.isRequired,
   environmentSummary: PropTypes.string.isRequired,
   intl: PropTypes.object,
-  runPreDeploymentValidations: PropTypes.func.isRequired
+  runPreDeploymentValidations: PropTypes.func.isRequired,
+  startDeployment: PropTypes.func.isRequired
 };
 
 export default injectIntl(DeploymentConfirmation);
@@ -142,7 +144,7 @@ export const DeployButton = injectIntl(
       onClick={() => deploy()}
     >
       <InlineLoader
-        loaded={!isRequestingPlanDeploy}
+        loaded={!disabled}
         content={intl.formatMessage(messages.requestingDeploymentLoader)}
       >
         <FormattedMessage {...messages.deployButton} />
@@ -153,6 +155,5 @@ export const DeployButton = injectIntl(
 DeployButton.propTypes = {
   deploy: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
-  intl: PropTypes.object,
-  isRequestingPlanDeploy: PropTypes.bool.isRequired
+  intl: PropTypes.object
 };

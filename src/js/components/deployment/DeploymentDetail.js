@@ -39,7 +39,7 @@ import {
   CloseModalXButton,
   RoutedModalPanel
 } from '../ui/Modals';
-import PlanActions from '../../actions/PlansActions';
+import { startDeployment } from '../../actions/DeploymentActions';
 import { stackStates } from '../../constants/StacksConstants';
 import StacksActions from '../../actions/StacksActions';
 import ValidationsActions from '../../actions/ValidationsActions';
@@ -69,7 +69,7 @@ class DeploymentDetail extends React.Component {
       currentStackDeploymentProgress,
       currentStackResources,
       currentStackResourcesLoaded,
-      deployPlan,
+      startDeployment,
       environmentConfigurationSummary,
       fetchStackResources,
       runPreDeploymentValidations
@@ -83,7 +83,7 @@ class DeploymentDetail extends React.Component {
         <DeploymentConfirmation
           allValidationsSuccessful={allPreDeploymentValidationsSuccessful}
           currentPlan={currentPlan}
-          deployPlan={deployPlan}
+          startDeployment={startDeployment}
           environmentSummary={environmentConfigurationSummary}
           runPreDeploymentValidations={runPreDeploymentValidations}
         />
@@ -137,6 +137,7 @@ class DeploymentDetail extends React.Component {
             />
           </ModalTitle>
         </ModalHeader>
+        {/*
         <Loader
           loaded={stacksLoaded}
           className="flex-container"
@@ -144,8 +145,11 @@ class DeploymentDetail extends React.Component {
           componentProps={{ className: 'flex-container' }}
           height={40}
         >
-          {this.renderStatus()}
+      */}
+        {this.renderStatus()}
+        {/*
         </Loader>
+        */}
         <ModalFooter>
           <CloseModalButton>
             <FormattedMessage {...messages.close} />
@@ -164,7 +168,7 @@ DeploymentDetail.propTypes = {
   currentStackDeploymentProgress: PropTypes.number.isRequired,
   currentStackResources: ImmutablePropTypes.map,
   currentStackResourcesLoaded: PropTypes.bool.isRequired,
-  deployPlan: PropTypes.func.isRequired,
+  startDeployment: PropTypes.func.isRequired,
   environmentConfigurationSummary: PropTypes.string,
   fetchStackResources: PropTypes.func.isRequired,
   intl: PropTypes.object,
@@ -189,7 +193,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  deployPlan: planName => dispatch(PlanActions.deployPlan(planName)),
+  startDeployment: planName => dispatch(startDeployment(planName)),
   fetchStackResources: stack =>
     dispatch(StacksActions.fetchResources(stack.stack_name, stack.id)),
   runPreDeploymentValidations: planName =>

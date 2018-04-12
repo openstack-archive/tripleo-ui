@@ -25,7 +25,6 @@ import MistralApiService from '../services/MistralApiService';
 import NotificationActions from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
 import { planFileSchema } from '../normalizrSchemas/plans';
-import StackActions from '../actions/StacksActions';
 import SwiftApiService from '../services/SwiftApiService';
 import MistralConstants from '../constants/MistralConstants';
 import { PLAN_ENVIRONMENT } from '../constants/PlansConstants';
@@ -60,10 +59,6 @@ const messages = defineMessages({
   planDeletedNotificationMessage: {
     id: 'PlansActions.planDeletedNotificationMessage',
     defaultMessage: 'The plan {planName} was successfully deleted.'
-  },
-  deploymentFailedNotificationTitle: {
-    id: 'PlansActions.deploymentFailedNotificationTitle',
-    defaultMessage: 'Deployment Failed'
   },
   exportFailedNotificationTitle: {
     id: 'PlansActions.exportFailedNotificationTitle',
@@ -441,75 +436,6 @@ export default {
           );
           dispatch(this.deletePlanFailed(planName));
         });
-    };
-  },
-
-  deployPlanPending(planName) {
-    return {
-      type: PlansConstants.START_DEPLOYMENT_PENDING,
-      payload: planName
-    };
-  },
-
-  deployPlanSuccess(planName) {
-    return {
-      type: PlansConstants.START_DEPLOYMENT_SUCCESS,
-      payload: planName
-    };
-  },
-
-  deployPlanFailed(planName) {
-    return {
-      type: PlansConstants.START_DEPLOYMENT_FAILED,
-      payload: planName
-    };
-  },
-
-  deployPlan(planName) {
-    return dispatch => {
-      dispatch(this.deployPlanPending(planName));
-      dispatch(
-        startWorkflow(
-          MistralConstants.DEPLOYMENT_DEPLOY_PLAN,
-          {
-            container: planName,
-            timeout: 240
-          },
-          execution => dispatch(this.deployPlanFinished(execution))
-        )
-      )
-        .then(response => {
-          dispatch(StackActions.fetchStacks());
-        })
-        .catch(error => {
-          dispatch(
-            handleErrors(error, `Plan ${planName} could not be deployed`)
-          );
-          dispatch(this.deployPlanFailed(planName));
-        });
-    };
-  },
-
-  deployPlanFinished(execution) {
-    return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      const {
-        input: { container: planName },
-        output: { message },
-        state
-      } = execution;
-      if (state === 'ERROR') {
-        dispatch(this.deployPlanFailed(planName));
-        dispatch(
-          NotificationActions.notify({
-            title: formatMessage(messages.deploymentFailedNotificationTitle),
-            message
-          })
-        );
-      } else {
-        dispatch(this.deployPlanSuccess(planName));
-        dispatch(StackActions.fetchStacks());
-      }
     };
   },
 
