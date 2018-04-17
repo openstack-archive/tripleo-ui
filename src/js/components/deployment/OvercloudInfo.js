@@ -18,6 +18,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { Loader } from '../ui/Loader';
 
@@ -67,7 +68,25 @@ const OvercloudInfo = ({ intl, overcloudInfo }) => {
             <FormattedMessage {...messages.username} /> admin
           </li>
           <li>
-            <FormattedMessage {...messages.password} /> {password}
+            <FormattedMessage {...messages.password} />{' '}
+            <input
+              style={{ border: 'none' }}
+              id="password"
+              type="password"
+              readOnly
+              value={password}
+            />
+            <CopyToClipboard text={password}>
+              <button
+                type="button"
+                id="copy"
+                className="btn btn-default btn-xs"
+                title="Copy to Clipboard"
+                style={{ margin: '0 0 0 -20px' }}
+              >
+                Copy
+              </button>
+            </CopyToClipboard>
           </li>
         </ul>
       </Loader>
