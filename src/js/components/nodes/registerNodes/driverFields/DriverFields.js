@@ -21,7 +21,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import HorizontalInput from '../../../ui/reduxForm/HorizontalInput';
-import HorizontalTextarea from '../../../ui/reduxForm/HorizontalTextarea';
 import { IPV4_REGEX, FQDN_REGEX, PORT_REGEX } from '../../../../utils/regex';
 
 const messages = defineMessages({
@@ -84,10 +83,11 @@ export const DriverFields = ({
     />
     <Field
       name={`${node}.pm_password`}
-      component={HorizontalTextarea}
+      component={HorizontalInput}
       id={`${node}.pm_password`}
       label={passwordLabel}
       validate={required()}
+      type="password"
       required
     />
   </div>

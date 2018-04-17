@@ -6667,6 +6667,14 @@
       "integrity": "sha1-Z29us8OZl8LuGsOpJP1hJHSPV40=",
       "dev": true
     },
+    "copy-to-clipboard": {
+      "version": "3.0.8",
+      "resolved": "https://registry.npmjs.org/copy-to-clipboard/-/copy-to-clipboard-3.0.8.tgz",
+      "integrity": "sha512-c3GdeY8qxCHGezVb1EFQfHYK/8NZRemgcTIzPq7PuxjHAf/raKibn2QdhHPb/y6q74PMgH6yizaDZlRmw6QyKw==",
+      "requires": {
+        "toggle-selection": "1.0.6"
+      }
+    },
     "core-js": {
       "version": "2.4.1",
       "resolved": "https://registry.npmjs.org/core-js/-/core-js-2.4.1.tgz",
@@ -15046,6 +15054,15 @@
         }
       }
     },
+    "react-copy-to-clipboard": {
+      "version": "5.0.1",
+      "resolved": "https://registry.npmjs.org/react-copy-to-clipboard/-/react-copy-to-clipboard-5.0.1.tgz",
+      "integrity": "sha512-ELKq31/E3zjFs5rDWNCfFL4NvNFQvGRoJdAKReD/rUPA+xxiLPQmZBZBvy2vgH7V0GE9isIQpT9WXbwIVErYdA==",
+      "requires": {
+        "copy-to-clipboard": "3.0.8",
+        "prop-types": "15.6.0"
+      }
+    },
     "react-dom": {
       "version": "16.2.0",
       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-16.2.0.tgz",
@@ -15214,6 +15231,11 @@
         "react-transition-group": "2.2.1",
         "warning": "3.0.0"
       }
+    },
+    "react-password-mask": {
+      "version": "3.3.0",
+      "resolved": "https://registry.npmjs.org/react-password-mask/-/react-password-mask-3.3.0.tgz",
+      "integrity": "sha512-B4s7TlPUSlWVoSMZxKqVlv2pD7ZVIkcmlGUjmUrRH+jHuKJ63r5ZzLKWUWXW8q3rLU7s/bVQBW2q/c1uTumr4g=="
     },
     "react-portal": {
       "version": "4.1.2",
@@ -17324,6 +17346,11 @@
           }
         }
       }
+    },
+    "toggle-selection": {
+      "version": "1.0.6",
+      "resolved": "https://registry.npmjs.org/toggle-selection/-/toggle-selection-1.0.6.tgz",
+      "integrity": "sha1-bkWxJj8gF/oKzH2J14sVuL932jI="
     },
     "toposort": {
       "version": "1.0.6",
