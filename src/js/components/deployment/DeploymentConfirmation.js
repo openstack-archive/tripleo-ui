@@ -44,15 +44,17 @@ const messages = defineMessages({
     id: 'DeploymentConfirmation.summary',
     defaultMessage: 'Summary:'
   },
-  validationsWarningTitle: {
-    id: 'DeploymentConfirmation.validationsWarningTitle',
-    defaultMessage: 'Not all pre-deployment validations have passed.'
-  },
-  validationsWarningMessage: {
-    id: 'DeploymentConfirmation.validationsWarningMessage',
+  validationsNotificationTitle: {
+    id: 'DeploymentConfirmation.validationsNotificationTitle',
     defaultMessage:
-      'It is highly recommended that you resolve all validation issues before ' +
-      'continuing.'
+      'The pre-deployment validations have been started automatically.'
+  },
+  validationsNotificationMessage: {
+    id: 'DeploymentConfirmation.validationsNotificationMessage',
+    defaultMessage:
+      'It is recommended to wait until these validations finish running ' +
+      'and any errors have been resolved before continuing with ' +
+      'the deployment.'
   }
 });
 
@@ -116,11 +118,11 @@ export const ValidationsWarning = injectIntl(
     if (!allValidationsSuccessful) {
       return (
         <InlineNotification
-          type="warning"
-          title={intl.formatMessage(messages.validationsWarningTitle)}
+          type="info"
+          title={intl.formatMessage(messages.validationsNotificationTitle)}
         >
           <p>
-            <FormattedMessage {...messages.validationsWarningMessage} />
+            <FormattedMessage {...messages.validationsNotificationMessage} />
           </p>
         </InlineNotification>
       );
