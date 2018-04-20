@@ -18,7 +18,6 @@ import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { startCase } from 'lodash';
 
 import {
   getAssignedNodesCountsByRole,
@@ -52,7 +51,7 @@ const NodesAssignment = ({
             key={role.name}
             currentPlanName={currentPlanName}
             name={role.name}
-            title={startCase(role.name)}
+            title={role.name}
             identifier={role.identifier}
             assignedNodesCountParameter={nodeCountParametersByRole.get(
               role.name
