@@ -17,6 +17,7 @@
 import { createSelector } from 'reselect';
 import { getFormValues } from 'redux-form';
 
+import { getCurrentStackServerIds } from './stacks';
 import { Flavor } from '../immutableRecords/flavors';
 import { getNodes, getNodeCapabilities } from './nodes';
 import { getParameters } from './parameters';
@@ -27,12 +28,19 @@ import { Parameter } from '../immutableRecords/parameters';
 /**
  *  Return Nodes which are either available or deployed (active) with current Plan
  */
-export const getAvailableNodes = createSelector(getNodes, nodes =>
-  nodes
-    .filter(node =>
-      ['available', 'active'].includes(node.get('provision_state'))
-    )
-    .filter(node => !node.get('maintenance'))
+export const getAvailableNodes = createSelector(
+  [getNodes, getCurrentStackServerIds],
+  (nodes, serverIds) =>
+    nodes
+      .filter(node =>
+        ['available', 'active'].includes(node.get('provision_state'))
+      )
+      .filter(
+        node =>
+          node.get('provision_state') === 'active' &&
+          !serverIds.includes(node.get('instance_uuid'))
+      )
+      .filter(node => !node.get('maintenance'))
 );
 
 export const getUntaggedAvailableNodes = createSelector(
