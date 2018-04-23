@@ -22,8 +22,8 @@ import { withRouter } from 'react-router-dom';
 
 import FlavorsActions from '../../actions/FlavorsActions';
 import { getCurrentPlanName } from '../../selectors/plans';
-import { getNodes } from '../../selectors/nodes';
 import {
+  getAccessibleNodes,
   getAvailableNodes,
   getTotalAssignedNodesCount
 } from '../../selectors/nodesAssignment';
@@ -131,7 +131,7 @@ RolesStep.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  allNodesCount: getNodes(state).size,
+  allNodesCount: getAccessibleNodes(state).size,
   availableNodesCount: getAvailableNodes(state).size,
   currentPlanName: getCurrentPlanName(state),
   flavorsLoaded: state.flavors.isLoaded,
