@@ -24,6 +24,8 @@ import {
   Parameter,
   ParametersDefaultState
 } from '../../js/immutableRecords/parameters';
+import { StacksState } from '../../js/immutableRecords/stacks';
+import { InitialPlanState } from '../../js/immutableRecords/plans';
 
 describe('Nodes Assignment selectors', () => {
   const state = {
@@ -143,6 +145,12 @@ describe('Nodes Assignment selectors', () => {
           identifier: 'block-storage'
         })
       })
+    }),
+    plans: new InitialPlanState({
+      all: Map()
+    }),
+    stacks: new StacksState({
+      stacks: Map()
     }),
     parameters: new ParametersDefaultState({
       parameters: Map({
