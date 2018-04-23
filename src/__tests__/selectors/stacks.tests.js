@@ -14,10 +14,11 @@
  * under the License.
  */
 
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map, List } from 'immutable';
 
 import {
   getCurrentStackDeploymentInProgress,
+  getCurrentStackServerIds,
   getCurrentStack,
   getOvercloudInfo
 } from '../../js/selectors/stacks';
@@ -139,6 +140,47 @@ describe('stacks selectors', () => {
       expect(getCurrentStack(state)).toEqual(
         Stack({ stack_name: 'overcloud', stack_status: 'CREATE_COMPLETE' })
       );
+    });
+  });
+
+  describe('getCurrentStackServerIds()', () => {
+    const state = {
+      stacks: new StacksState({
+        stacks: Map({
+          overcloud: Stack({
+            stack_name: 'overcloud',
+            stack_status: 'CREATE_COMPLETE',
+            outputs: List([
+              fromJS({
+                output_key: 'ServerIdData',
+                output_value: {
+                  server_ids: {
+                    Controller: ['1', '2'],
+                    Computer: ['3']
+                  }
+                }
+              })
+            ])
+          }),
+          anothercloud: Stack({
+            stack_name: 'anothercloud',
+            stack_status: 'CREATE_FAILED'
+          })
+        })
+      }),
+      plans: new InitialPlanState({
+        currentPlanName: 'overcloud',
+        plansLoaded: true,
+        all: Map({
+          overcloud: new Plan({
+            name: 'overcloud'
+          })
+        })
+      })
+    };
+
+    it('returns the correct server ids', () => {
+      expect(getCurrentStackServerIds(state)).toEqual(List(['1', '2', '3']));
     });
   });
 
