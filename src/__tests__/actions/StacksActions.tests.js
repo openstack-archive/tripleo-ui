@@ -25,14 +25,28 @@ describe('StacksActions', () => {
     const serviceResponse = {
       stacks: [{ stack_name: 'overcloud', stack_status: 'CREATE_COMPLETE' }]
     };
+    const getStackResponse = {
+      stack: {
+        stack_name: 'overcloud',
+        stack_status: 'CREATE_COMPLETE',
+        outputs: []
+      }
+    };
     const normalizedStacks = {
-      overcloud: { stack_name: 'overcloud', stack_status: 'CREATE_COMPLETE' }
+      overcloud: {
+        stack_name: 'overcloud',
+        stack_status: 'CREATE_COMPLETE',
+        outputs: []
+      }
     };
 
     beforeEach(() => {
       HeatApiService.getStacks = jest
         .fn()
         .mockReturnValue(() => Promise.resolve(serviceResponse));
+      HeatApiService.getStack = jest
+        .fn()
+        .mockReturnValue(() => Promise.resolve(getStackResponse));
     });
 
     it('dispatches actions', () =>
