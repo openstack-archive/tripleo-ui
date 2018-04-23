@@ -42,6 +42,7 @@ export const Stack = Record({
   stack_status_reason: undefined,
   stack_user_project_id: undefined,
   tags: Map(),
+  outputs: List(),
   updated_time: undefined
 });
 

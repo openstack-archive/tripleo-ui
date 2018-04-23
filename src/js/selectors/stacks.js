@@ -15,7 +15,7 @@
  */
 
 import { createSelector } from 'reselect';
-import { Map } from 'immutable';
+import { List, Map } from 'immutable';
 
 import { Stack } from '../immutableRecords/stacks';
 import { stackStates } from '../constants/StacksConstants';
@@ -33,6 +33,25 @@ const stackResourceDetailsSelector = state => state.stacks.resourceDetails;
 export const getCurrentStack = createSelector(
   [stacksSelector, getCurrentPlanName],
   (stacks, currentPlanName) => stacks.get(currentPlanName)
+);
+
+/**
+ * Returns a list of nova server ids from stack output
+ */
+export const getCurrentStackServerIds = createSelector(
+  getCurrentStack,
+  (currentStack = Map()) =>
+    currentStack
+      .get('outputs', List())
+      .find(
+        output => output.get('output_key') === 'ServerIdData',
+        undefined,
+        Map()
+      )
+      .getIn(['output_value', 'server_ids'], Map())
+      .valueSeq()
+      .flatten()
+      .toList()
 );
 
 /**

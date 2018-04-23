@@ -45,9 +45,17 @@ export default {
     return (dispatch, getState) => {
       dispatch(this.fetchStacksPending());
       return dispatch(HeatApiService.getStacks())
-        .then(response => {
+        .then(response =>
+          Promise.all(
+            response.stacks.map(stack =>
+              dispatch(HeatApiService.getStack(stack.stack_name, stack.id))
+            )
+          )
+        )
+        .then(responses => {
           const stacks =
-            normalize(response.stacks, [stackSchema]).entities.stacks || {};
+            normalize(responses.map(r => r.stack), [stackSchema]).entities
+              .stacks || {};
           dispatch(this.fetchStacksSuccess(stacks));
         })
         .catch(error => {
