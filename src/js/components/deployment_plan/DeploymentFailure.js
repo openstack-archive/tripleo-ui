@@ -14,15 +14,17 @@
  * under the License.
  */
 
+import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router-dom';
 
-import DeleteStackButton from './DeleteStackButton';
+import { deploymentStatusMessages } from '../../constants/DeploymentConstants';
+import { getCurrentPlanDeploymentStatus } from '../../selectors/deployment';
 import InlineNotification from '../ui/InlineNotification';
-import { deploymentStatusMessages } from '../../constants/StacksConstants';
+import { sanitizeMessage } from '../../utils';
+import StacksActions from '../../actions/StacksActions';
 
 const messages = defineMessages({
   deleteDeployment: {
@@ -42,43 +44,43 @@ const messages = defineMessages({
 class DeploymentFailure extends React.Component {
   render() {
     const {
-      currentPlanName,
-      deleteStack,
-      intl: { formatMessage },
-      isRequestingStackDelete,
-      stack
+      deploymentStatus: { status, message },
+      planName,
+      intl: { formatMessage }
     } = this.props;
-    const status = formatMessage(deploymentStatusMessages[stack.stack_status]);
 
     return (
       <div>
-        <InlineNotification type="error" title={status}>
-          <p>
-            {stack.stack_status_reason}{' '}
-            <Link to={`/plans/${currentPlanName}/deployment-detail`}>
-              <FormattedMessage {...messages.moreDetails} />
-            </Link>
-          </p>
+        <InlineNotification
+          type="error"
+          title={formatMessage(deploymentStatusMessages[status], { planName })}
+        >
+          <p>{sanitizeMessage(message)}</p>
+          <Link to={`/plans/${planName}/deployment-detail`}>
+            <FormattedMessage {...messages.moreDetails} />
+          </Link>
         </InlineNotification>
-        <DeleteStackButton
-          content={formatMessage(messages.deleteDeployment)}
-          deleteStack={deleteStack}
-          disabled={isRequestingStackDelete}
-          loaded={!isRequestingStackDelete}
-          loaderContent={formatMessage(messages.requestingDeletion)}
-          stack={stack}
-        />
       </div>
     );
   }
 }
 
 DeploymentFailure.propTypes = {
-  currentPlanName: PropTypes.string.isRequired,
-  deleteStack: PropTypes.func.isRequired,
+  deploymentStatus: PropTypes.object.isRequired,
   intl: PropTypes.object,
-  isRequestingStackDelete: PropTypes.bool,
-  stack: ImmutablePropTypes.record.isRequired
+  planName: PropTypes.string.isRequired
 };
 
-export default injectIntl(DeploymentFailure);
+const mapStateToProps = (state, props) => ({
+  deploymentStatus: getCurrentPlanDeploymentStatus(state)
+});
+
+const mapDispatchToProps = (dispatch, { planName }) => ({
+  deleteStack: () => {
+    dispatch(StacksActions.deleteStack(planName, ''));
+  }
+});
+
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(DeploymentFailure)
+);

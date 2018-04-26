@@ -16,115 +16,71 @@
 
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { allPreDeploymentValidationsSuccessful } from '../../selectors/validations';
-import DeploymentConfirmation from './DeploymentConfirmation';
 import DeploymentProgress from './DeploymentProgress';
-import DeploymentSuccess from './DeploymentSuccess';
 import DeploymentFailure from './DeploymentFailure';
-import { getCurrentPlan, getCurrentPlanName } from '../../selectors/plans';
-import {
-  getCurrentStack,
-  getCurrentStackDeploymentProgress,
-  getOvercloudInfo
-} from '../../selectors/stacks';
-import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
+import { deploymentStates } from '../../constants/DeploymentConstants';
+import { getCurrentPlanName } from '../../selectors/plans';
 import { Loader } from '../ui/Loader';
 import {
   CloseModalButton,
   CloseModalXButton,
   RoutedModalPanel
 } from '../ui/Modals';
-import PlanActions from '../../actions/PlansActions';
-import { stackStates } from '../../constants/StacksConstants';
-import StacksActions from '../../actions/StacksActions';
-import ValidationsActions from '../../actions/ValidationsActions';
+import {
+  getCurrentPlanDeploymentStatus,
+  getCurrentPlanDeploymentStatusUI
+} from '../../selectors/deployment';
 
 const messages = defineMessages({
   close: {
     id: 'DeploymentDetail.close',
     defaultMessage: 'Close'
   },
-  loadingStacksLoader: {
-    id: 'DeploymentDetail.loadingStacksLoader',
-    defaultMessage: 'Loading Stacks...'
-  },
   modalTitle: {
     id: 'DeploymentDetail.modalTitle',
     defaultMessage: 'Plan {planName} deployment'
+  },
+  loadingDeploymentStatus: {
+    id: 'DeploymentDetail.loadingDeploymentStatus',
+    defaultMessage: 'Loading Deployment Status'
   }
 });
 
 class DeploymentDetail extends React.Component {
   renderStatus() {
-    const {
-      allPreDeploymentValidationsSuccessful,
-      currentPlan,
-      currentPlanName,
-      currentStack,
-      currentStackDeploymentProgress,
-      currentStackResources,
-      currentStackResourcesLoaded,
-      deployPlan,
-      environmentConfigurationSummary,
-      fetchStackResources,
-      runPreDeploymentValidations
-    } = this.props;
+    const { currentPlanName, deploymentStatus } = this.props;
 
-    if (
-      !currentStack ||
-      currentStack.stack_status === stackStates.DELETE_COMPLETE
-    ) {
-      return (
-        <DeploymentConfirmation
-          allValidationsSuccessful={allPreDeploymentValidationsSuccessful}
-          currentPlan={currentPlan}
-          deployPlan={deployPlan}
-          environmentSummary={environmentConfigurationSummary}
-          runPreDeploymentValidations={runPreDeploymentValidations}
-        />
-      );
-    } else if (currentStack.stack_status.match(/PROGRESS/)) {
-      return (
-        <DeploymentProgress
-          stack={currentStack}
-          stackResources={currentStackResources}
-          deploymentProgress={currentStackDeploymentProgress}
-          stackResourcesLoaded={currentStackResourcesLoaded}
-          fetchStackResources={fetchStackResources}
-        />
-      );
-    } else if (currentStack.stack_status.match(/COMPLETE/)) {
-      return (
-        <DeploymentSuccess
-          stack={currentStack}
-          overcloudInfo={this.props.overcloudInfo}
-          stackResources={currentStackResources}
-          stackResourcesLoaded={currentStackResourcesLoaded}
-        />
-      );
-    } else {
-      return (
-        <DeploymentFailure
-          fetchStackResources={fetchStackResources}
-          stack={currentStack}
-          stackResources={currentStackResources}
-          stackResourcesLoaded={currentStackResourcesLoaded}
-          planName={currentPlanName}
-        />
-      );
+    switch (deploymentStatus.status) {
+      case deploymentStates.DEPLOYING:
+      case deploymentStates.UNDEPLOYING:
+        return <DeploymentProgress planName={currentPlanName} />;
+      case deploymentStates.DEPLOY_SUCCESS:
+        return (
+          <div>
+            {deploymentStatus.status}
+            {deploymentStatus.message}
+          </div>
+        );
+      case deploymentStates.DEPLOY_FAILED:
+        return <DeploymentFailure planName={currentPlanName} />;
+      case deploymentStates.UNDEPLOY_FAILED:
+        // TODO(jtomasek): handle undeploy failure
+        return 'undeploy failed';
+      case deploymentStates.UNKNOWN:
+      default:
+        return null;
     }
   }
 
   render() {
     const {
       currentPlanName,
-      intl: { formatMessage },
-      stacksLoaded
+      deploymentStatusLoaded,
+      intl: { formatMessage }
     } = this.props;
     return (
       <RoutedModalPanel redirectPath={`/plans/${currentPlanName}`}>
@@ -138,9 +94,9 @@ class DeploymentDetail extends React.Component {
           </ModalTitle>
         </ModalHeader>
         <Loader
-          loaded={stacksLoaded}
+          loaded={deploymentStatusLoaded}
           className="flex-container"
-          content={formatMessage(messages.loadingStacksLoader)}
+          content={formatMessage(messages.loadingDeploymentStatus)}
           componentProps={{ className: 'flex-container' }}
           height={40}
         >
@@ -157,47 +113,17 @@ class DeploymentDetail extends React.Component {
 }
 
 DeploymentDetail.propTypes = {
-  allPreDeploymentValidationsSuccessful: PropTypes.bool.isRequired,
-  currentPlan: ImmutablePropTypes.record.isRequired,
   currentPlanName: PropTypes.string.isRequired,
-  currentStack: ImmutablePropTypes.record,
-  currentStackDeploymentProgress: PropTypes.number.isRequired,
-  currentStackResources: ImmutablePropTypes.map,
-  currentStackResourcesLoaded: PropTypes.bool.isRequired,
-  deployPlan: PropTypes.func.isRequired,
-  environmentConfigurationSummary: PropTypes.string,
-  fetchStackResources: PropTypes.func.isRequired,
-  intl: PropTypes.object,
-  overcloudInfo: ImmutablePropTypes.map.isRequired,
-  runPreDeploymentValidations: PropTypes.func.isRequired,
-  stacksLoaded: PropTypes.bool.isRequired
+  deploymentStatus: PropTypes.object.isRequired,
+  deploymentStatusLoaded: PropTypes.bool.isRequired,
+  intl: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-  allPreDeploymentValidationsSuccessful: allPreDeploymentValidationsSuccessful(
-    state
-  ),
-  currentPlan: getCurrentPlan(state),
+const mapStateToProps = (state, props) => ({
   currentPlanName: getCurrentPlanName(state),
-  currentStack: getCurrentStack(state),
-  currentStackDeploymentProgress: getCurrentStackDeploymentProgress(state),
-  currentStackResources: state.stacks.resources,
-  currentStackResourcesLoaded: state.stacks.resourcesLoaded,
-  environmentConfigurationSummary: getEnvironmentConfigurationSummary(state),
-  overcloudInfo: getOvercloudInfo(state),
-  stacksLoaded: state.stacks.isLoaded
+  deploymentStatusLoaded: getCurrentPlanDeploymentStatusUI(state).isLoaded,
+  deploymentStatus: getCurrentPlanDeploymentStatus(state),
+  deploymentStatusUIError: getCurrentPlanDeploymentStatusUI(state).error
 });
 
-const mapDispatchToProps = dispatch => ({
-  deployPlan: planName => dispatch(PlanActions.deployPlan(planName)),
-  fetchStackResources: stack =>
-    dispatch(StacksActions.fetchResources(stack.stack_name, stack.id)),
-  runPreDeploymentValidations: planName =>
-    dispatch(
-      ValidationsActions.runValidationGroups(['pre-deployment'], planName)
-    )
-});
-
-export default injectIntl(
-  connect(mapStateToProps, mapDispatchToProps)(DeploymentDetail)
-);
+export default injectIntl(connect(mapStateToProps)(DeploymentDetail));

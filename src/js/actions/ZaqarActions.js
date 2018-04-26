@@ -14,15 +14,21 @@
  * under the License.
  */
 
+import { deploymentStates } from '../constants/DeploymentConstants';
 import { get } from 'lodash';
 import LoggerActions from './LoggerActions';
 import NodesActions from './NodesActions';
 import PlansActions from './PlansActions';
 import RegisterNodesActions from './RegisterNodesActions';
 import RolesActions from './RolesActions';
+import StacksActions from './StacksActions';
 import MistralConstants from '../constants/MistralConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 import { handleWorkflowMessage } from './WorkflowActions';
+import {
+  getDeploymentStatusSuccess,
+  deploymentFinished
+} from './DeploymentActions';
 
 export default {
   handleAuthenticationSuccess(message, dispatch) {
@@ -116,10 +122,53 @@ export default {
         }
 
         case MistralConstants.DEPLOYMENT_DEPLOY_PLAN: {
+          if (payload.deployment_status === deploymentStates.DEPLOYING) {
+            const { message, plan_name, deployment_status } = payload;
+            dispatch(
+              getDeploymentStatusSuccess(plan_name, {
+                status: deployment_status,
+                message
+              })
+            );
+          } else {
+            dispatch(
+              handleWorkflowMessage(payload.execution_id, execution =>
+                dispatch(deploymentFinished(execution))
+              )
+            );
+          }
+          break;
+        }
+
+        case MistralConstants.HEAT_STACKS_GET: {
+          const { stack, stack: { stack_name, id } } = payload;
+          dispatch(StacksActions.fetchStackSuccess(stack));
+          !getState().stacks.isFetchingResources &&
+            dispatch(StacksActions.fetchResources(stack_name, id));
+          break;
+        }
+
+        case MistralConstants.CONFIG_DOWNLOAD_DEPLOY: {
+          const { message, plan_name, deployment_status } = payload;
+          // respond only to messages notifying on deployment_status
+          if (deployment_status) {
+            dispatch(
+              getDeploymentStatusSuccess(plan_name, {
+                status: deployment_status,
+                message
+              })
+            );
+          }
+          break;
+        }
+
+        case MistralConstants.ANSIBLE_PLAYBOOK_DEPLOY_STEPS: {
+          const { message, plan_name } = payload;
           dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(PlansActions.deployPlanFinished(execution))
-            )
+            getDeploymentStatusSuccess(plan_name, {
+              configDownloadMessage: message,
+              status: deploymentStates.DEPLOYING
+            })
           );
           break;
         }
