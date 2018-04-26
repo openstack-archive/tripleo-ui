@@ -31,6 +31,7 @@ import MistralConstants from '../constants/MistralConstants';
 import { PLAN_ENVIRONMENT } from '../constants/PlansConstants';
 import { getServiceUrl } from '../selectors/auth';
 import { startWorkflow } from './WorkflowActions';
+import { sanitizeMessage } from '../utils';
 
 const messages = defineMessages({
   planCreatedNotificationTitle: {
@@ -265,7 +266,10 @@ export default {
       } else {
         dispatch(
           this.updatePlanFailed(planName, [
-            { title: formatMessage(messages.planUpdateFailed), message }
+            {
+              title: formatMessage(messages.planUpdateFailed),
+              message: sanitizeMessage(message)
+            }
           ])
         );
       }
@@ -386,7 +390,9 @@ export default {
         history.push('/plans/manage');
       } else {
         dispatch(
-          this.createPlanFailed([{ title: 'Plan creation failed', message }])
+          this.createPlanFailed([
+            { title: 'Plan creation failed', message: sanitizeMessage(message) }
+          ])
         );
       }
     };
@@ -565,7 +571,7 @@ export default {
         dispatch(
           NotificationActions.notify({
             title: formatMessage(messages.exportFailedNotificationTitle),
-            message
+            message: sanitizeMessage(message)
           })
         );
       } else {
