@@ -98,12 +98,12 @@ class StackResourcesTable extends React.Component {
   render() {
     let filteredData = this._filterData(
       this.state.filterString,
-      this.props.resources.toList().toJS()
+      this.props.resources.toJS()
     );
     return (
       <DataTable
         {...this.props}
-        data={this.props.resources.toList().toJS()}
+        data={this.props.resources.toJS()}
         rowsCount={filteredData.length}
         noRowsRenderer={this.renderNoResourcesFound.bind(this)}
         onFilter={this.onFilter.bind(this)}
@@ -152,7 +152,7 @@ class StackResourcesTable extends React.Component {
 StackResourcesTable.propTypes = {
   intl: PropTypes.object,
   isFetchingResources: PropTypes.bool.isRequired,
-  resources: ImmutablePropTypes.map.isRequired
+  resources: ImmutablePropTypes.list.isRequired
 };
 
 export default injectIntl(StackResourcesTable);

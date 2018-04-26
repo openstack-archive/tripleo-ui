@@ -24,7 +24,5 @@ export const stackSchema = new schema.Entity(
 export const stackResourceSchema = new schema.Entity(
   'stackResources',
   {},
-  {
-    idAttribute: 'resource_name'
-  }
+  { idAttribute: 'resource_name' }
 );

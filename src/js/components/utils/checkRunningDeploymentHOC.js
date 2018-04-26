@@ -14,19 +14,18 @@
  * under the License.
  */
 
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
 import React from 'react';
-
-import { getCurrentPlanName } from '../../selectors/plans';
-import { getCurrentStackDeploymentInProgress } from '../../selectors/stacks';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import NotificationActions from '../../actions/NotificationActions';
+import { getCurrentPlanDeploymentIsInProgress } from '../../selectors/deployment';
+import { getCurrentPlanName } from '../../selectors/plans';
 
 export const checkRunningDeployment = WrappedComponent => {
   class CheckRunningDeploymentHOC extends React.Component {
     componentDidMount() {
-      if (this.props.currentStackDeploymentInProgress) {
+      if (this.props.deploymentInProgress) {
         this.props.notify({
           title: 'Not allowed',
           message: `A deployment for the plan ${
@@ -38,7 +37,7 @@ export const checkRunningDeployment = WrappedComponent => {
     }
 
     render() {
-      return this.props.currentStackDeploymentInProgress ? (
+      return this.props.deploymentInProgress ? (
         <Redirect to={`/plans/${this.props.currentPlanName}`} />
       ) : (
         <WrappedComponent {...this.props} />
@@ -47,13 +46,13 @@ export const checkRunningDeployment = WrappedComponent => {
   }
   CheckRunningDeploymentHOC.propTypes = {
     currentPlanName: PropTypes.string,
-    currentStackDeploymentInProgress: PropTypes.bool.isRequired,
+    deploymentInProgress: PropTypes.bool.isRequired,
     notify: PropTypes.func.isRequired
   };
 
   const mapStateToProps = state => ({
     currentPlanName: getCurrentPlanName(state),
-    currentStackDeploymentInProgress: getCurrentStackDeploymentInProgress(state)
+    deploymentInProgress: getCurrentPlanDeploymentIsInProgress(state)
   });
 
   const mapDispatchToProps = dispatch => ({

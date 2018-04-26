@@ -14,59 +14,78 @@
  * under the License.
  */
 
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { ModalBody } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { deploymentStatusMessages } from '../../constants/StacksConstants';
+import DeleteStackButton from '../deployment_plan/DeleteStackButton';
+import { deploymentStatusMessages } from '../../constants/DeploymentConstants';
+import { getCurrentStack } from '../../selectors/stacks';
+import { getCurrentPlanDeploymentStatus } from '../../selectors/deployment';
 import InlineNotification from '../ui/InlineNotification';
-import StackResourcesTable from './StackResourcesTable';
-
-const messages = defineMessages({
-  resources: {
-    id: 'DeploymentFailure.resources',
-    defaultMessage: 'Resources'
-  }
-});
+import { sanitizeMessage } from '../../utils';
+import StacksActions from '../../actions/StacksActions';
 
 class DeploymentFailure extends React.Component {
   componentDidMount() {
-    this.props.fetchStackResources(this.props.stack);
+    const { fetchStacks, isFetchingStacks } = this.props;
+    !isFetchingStacks && fetchStacks();
   }
 
   render() {
-    const status = this.props.intl.formatMessage(
-      deploymentStatusMessages[this.props.stack.stack_status]
-    );
+    const {
+      deploymentStatus: { status, message },
+      deleteStack,
+      intl: { formatMessage },
+      isRequestingStackDelete,
+      planName,
+      stack
+    } = this.props;
 
     return (
       <ModalBody className="flex-container">
-        <InlineNotification type="error" title={status}>
-          <p>{this.props.stack.stack_status_reason}</p>
+        <InlineNotification
+          type="error"
+          title={formatMessage(deploymentStatusMessages[status], { planName })}
+        >
+          <p>{sanitizeMessage(message)}</p>
         </InlineNotification>
-        <h2>
-          <FormattedMessage {...messages.resources} />
-        </h2>
-        <div className="flex-column">
-          <StackResourcesTable
-            isFetchingResources={!this.props.stackResourcesLoaded}
-            resources={this.props.stackResources.reverse()}
-          />
-        </div>
+        <DeleteStackButton
+          deleteStack={deleteStack.bind(this, stack)}
+          disabled={isRequestingStackDelete || !stack}
+          loaded={!isRequestingStackDelete}
+        />
       </ModalBody>
     );
   }
 }
 
 DeploymentFailure.propTypes = {
-  fetchStackResources: PropTypes.func.isRequired,
+  deleteStack: PropTypes.func.isRequired,
+  deploymentStatus: PropTypes.object.isRequired,
+  fetchStacks: PropTypes.func.isRequired,
   intl: PropTypes.object,
+  isFetchingStacks: PropTypes.bool.isRequired,
+  isRequestingStackDelete: PropTypes.bool.isRequired,
   planName: PropTypes.string.isRequired,
-  stack: ImmutablePropTypes.record.isRequired,
-  stackResources: ImmutablePropTypes.map.isRequired,
-  stackResourcesLoaded: PropTypes.bool.isRequired
+  stack: ImmutablePropTypes.record
 };
 
-export default injectIntl(DeploymentFailure);
+const mapStateToProps = (state, props) => ({
+  deploymentStatus: getCurrentPlanDeploymentStatus(state),
+  isFetchingStacks: state.stacks.isFetching,
+  isRequestingStackDelete: state.stacks.isRequestingStackDelete,
+  stack: getCurrentStack(state)
+});
+
+const mapDispatchToProps = dispatch => ({
+  deleteStack: stack => dispatch(StacksActions.deleteStack(stack)),
+  fetchStacks: () => dispatch(StacksActions.fetchStacks())
+});
+
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(DeploymentFailure)
+);
