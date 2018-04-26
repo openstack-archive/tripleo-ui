@@ -17,7 +17,6 @@
 import { fromJS, Map, List } from 'immutable';
 
 import {
-  getCurrentStackDeploymentInProgress,
   getCurrentStackServerIds,
   getCurrentStack,
   getOvercloudInfo
@@ -181,85 +180,6 @@ describe('stacks selectors', () => {
 
     it('returns the correct server ids', () => {
       expect(getCurrentStackServerIds(state)).toEqual(List(['1', '2', '3']));
-    });
-  });
-
-  describe('getCurrentStackDeploymentInProgress', () => {
-    it("returns true if the current plan's deployment is in progress", () => {
-      const state = {
-        stacks: new StacksState({
-          stacks: Map({
-            overcloud: Stack({
-              stack_name: 'overcloud',
-              stack_status: 'CREATE_IN_PROGRESS'
-            }),
-            anothercloud: Stack({
-              stack_name: 'anothercloud',
-              stack_status: 'CREATE_FAILED'
-            })
-          })
-        }),
-        plans: new InitialPlanState({
-          currentPlanName: 'overcloud',
-          plansLoaded: true,
-          all: Map({
-            overcloud: new Plan({
-              name: 'overcloud'
-            })
-          })
-        })
-      };
-      expect(getCurrentStackDeploymentInProgress(state)).toBe(true);
-    });
-
-    it("returns false if the current plan's deployment is not in progress", () => {
-      const state = {
-        stacks: new StacksState({
-          stacks: Map({
-            overcloud: Stack({
-              stack_name: 'overcloud',
-              stack_status: 'CREATE_FAILED'
-            }),
-            anothercloud: Stack({
-              stack_name: 'anothercloud',
-              stack_status: 'CREATE_IN_PROGRESS'
-            })
-          })
-        }),
-        plans: new InitialPlanState({
-          currentplanname: 'overcloud',
-          plansLoaded: true,
-          all: Map({
-            overcloud: new Plan({
-              name: 'overcloud'
-            })
-          })
-        })
-      };
-      expect(getCurrentStackDeploymentInProgress(state)).toBe(false);
-    });
-
-    it('returns false if the current plan does not have an associated stack', () => {
-      const state = {
-        stacks: new StacksState({
-          stacks: Map({
-            anothercloud: Stack({
-              stack_name: 'anothercloud',
-              stack_status: 'CREATE_IN_PROGRESS'
-            })
-          })
-        }),
-        plans: new InitialPlanState({
-          currentplanname: 'overcloud',
-          plansLoaded: true,
-          all: Map({
-            overcloud: new Plan({
-              name: 'overcloud'
-            })
-          })
-        })
-      };
-      expect(getCurrentStackDeploymentInProgress(state)).toBe(false);
     });
   });
 });

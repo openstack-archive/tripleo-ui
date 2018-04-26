@@ -14,110 +14,96 @@
  * under the License.
  */
 
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import DeploymentSuccess from './DeploymentSuccess';
 import DeploymentFailure from './DeploymentFailure';
 import DeploymentProgress from './DeploymentProgress';
-import Link from '../ui/Link';
-import { InlineLoader, Loader } from '../ui/Loader';
-import { stackStates } from '../../constants/StacksConstants';
+import {
+  deploymentStates,
+  deploymentStatusMessages
+} from '../../constants/DeploymentConstants';
+import {
+  getCurrentPlanDeploymentStatus,
+  getCurrentPlanDeploymentStatusUI
+} from '../../selectors/deployment';
+import { InlineLoader } from '../ui/Loader';
+import InlineNotification from '../ui/InlineNotification';
 
 const messages = defineMessages({
-  validateAndDeploy: {
-    id: 'DeployStep.validateAndDeploy',
-    defaultMessage: 'Validate and Deploy'
-  },
   requestingDeploy: {
     id: 'DeployStep.requestingDeploy',
     defaultMessage: 'Requesting a deploy...'
+  },
+  validateAndDeploy: {
+    id: 'DeployStep.validateAndDeploy',
+    defaultMessage: 'Validate and Deploy'
   }
 });
 
 export const DeployStep = ({
   currentPlan,
-  currentStack,
-  currentStackResources,
-  currentStackDeploymentProgress,
-  deleteStack,
-  deployPlan,
-  fetchStackResource,
-  fetchStackEnvironment,
-  intl,
-  isRequestingStackDelete,
-  overcloudInfo,
-  stacksLoaded
+  deploymentStatus,
+  intl: { formatMessage },
+  deploymentStatusUIError
 }) => {
-  if (
-    !currentStack ||
-    currentStack.stack_status === stackStates.DELETE_COMPLETE
-  ) {
-    return (
-      <Loader loaded={stacksLoaded}>
+  switch (deploymentStatus.status) {
+    case deploymentStates.DEPLOYING:
+    case deploymentStates.UNDEPLOYING:
+      return <DeploymentProgress planName={currentPlan.name} />;
+    case deploymentStates.DEPLOY_SUCCESS:
+      return <DeploymentSuccess />;
+    case deploymentStates.DEPLOY_FAILED:
+      return <DeploymentFailure planName={currentPlan.name} />;
+    case deploymentStates.UNDEPLOY_FAILED:
+      // we may not want to store the message in case the undeploy fails
+      // so we can get back to previous state
+      return 'undeploy failed';
+    case deploymentStates.UNKNOWN:
+      return (
+        <InlineNotification
+          title={formatMessage(deploymentStatusMessages.UNKNOWN, {
+            planName: currentPlan.name
+          })}
+        >
+          {deploymentStatusUIError}
+        </InlineNotification>
+      );
+    default:
+      const disabled =
+        deploymentStatus.status === deploymentStates.STARTING_DEPLOYMENT;
+      return (
         <Link
-          className="link btn btn-primary btn-lg"
-          disabled={currentPlan.isRequestingPlanDeploy}
-          to={`/plans/${currentPlan.name}/deployment-detail`}
+          to={`/plans/${currentPlan.name}/deployment-confirmation`}
+          className="btn btn-primary btn-lg link"
+          disabled={disabled}
         >
           <InlineLoader
-            loaded={!currentPlan.isRequestingPlanDeploy}
-            content={intl.formatMessage(messages.requestingDeploy)}
+            loaded={!disabled}
+            content={formatMessage(messages.requestingDeploy)}
           >
             <FormattedMessage {...messages.validateAndDeploy} />
           </InlineLoader>
         </Link>
-      </Loader>
-    );
-  } else if (currentStack.stack_status.match(/PROGRESS/)) {
-    return (
-      <DeploymentProgress
-        currentPlanName={currentPlan.name}
-        stack={currentStack}
-        isRequestingStackDelete={isRequestingStackDelete}
-        deleteStack={deleteStack}
-        deploymentProgress={currentStackDeploymentProgress}
-      />
-    );
-  } else if (currentStack.stack_status.match(/COMPLETE/)) {
-    return (
-      <DeploymentSuccess
-        stack={currentStack}
-        stackResources={currentStackResources}
-        isRequestingStackDelete={isRequestingStackDelete}
-        overcloudInfo={overcloudInfo}
-        deleteStack={deleteStack}
-        fetchStackResource={fetchStackResource}
-        fetchStackEnvironment={fetchStackEnvironment}
-      />
-    );
-  } else {
-    return (
-      <DeploymentFailure
-        currentPlanName={currentPlan.name}
-        deleteStack={deleteStack}
-        isRequestingStackDelete={isRequestingStackDelete}
-        stack={currentStack}
-      />
-    );
+      );
   }
 };
 
 DeployStep.propTypes = {
   currentPlan: ImmutablePropTypes.record.isRequired,
-  currentStack: ImmutablePropTypes.record,
-  currentStackDeploymentProgress: PropTypes.number.isRequired,
-  currentStackResources: ImmutablePropTypes.map,
-  deleteStack: PropTypes.func.isRequired,
-  deployPlan: PropTypes.func.isRequired,
-  fetchStackEnvironment: PropTypes.func.isRequired,
-  fetchStackResource: PropTypes.func.isRequired,
-  intl: PropTypes.object,
-  isRequestingStackDelete: PropTypes.bool.isRequired,
-  overcloudInfo: ImmutablePropTypes.map.isRequired,
-  stacksLoaded: PropTypes.bool.isRequired
+  deploymentStatus: PropTypes.object.isRequired,
+  deploymentStatusUIError: PropTypes.string,
+  intl: PropTypes.object
 };
 
-export default injectIntl(DeployStep);
+const mapStateToProps = (state, props) => ({
+  deploymentStatus: getCurrentPlanDeploymentStatus(state),
+  deploymentStatusUIError: getCurrentPlanDeploymentStatusUI(state).error
+});
+
+export default injectIntl(connect(mapStateToProps)(DeployStep));
