@@ -24,6 +24,7 @@ import NotificationActions from '../actions/NotificationActions';
 import MistralConstants from '../constants/MistralConstants';
 import { getServiceUrl } from '../selectors/auth';
 import { startWorkflow } from './WorkflowActions';
+import { sanitizeMessage } from '../utils';
 
 const messages = defineMessages({
   downloadLogsFailedNotificationTitle: {
@@ -106,7 +107,7 @@ export default {
         dispatch(
           NotificationActions.notify({
             title: formatMessage(messages.downloadLogsFailedNotificationTitle),
-            message,
+            message: sanitizeMessage(message),
             type: 'error'
           })
         );
