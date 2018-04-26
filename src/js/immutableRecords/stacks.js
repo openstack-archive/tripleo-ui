@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { List, Map, OrderedMap, Record } from 'immutable';
+import { List, Map, Record } from 'immutable';
 
 export const StacksState = Record({
   currentStackEnvironment: Map(),
@@ -25,7 +25,7 @@ export const StacksState = Record({
   isFetchingEnvironment: false,
   environmentLoaded: false,
   resourcesLoaded: false,
-  resources: OrderedMap(),
+  resources: List(),
   resourceDetails: Map(),
   stacks: Map()
 });
@@ -51,6 +51,7 @@ export const StackResource = Record({
   creation_time: undefined,
   links: List(),
   logical_resource_id: undefined,
+  parent_resource: undefined,
   physical_resource_id: undefined,
   required_by: List(),
   resource_name: undefined,

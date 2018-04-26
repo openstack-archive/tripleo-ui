@@ -40,6 +40,13 @@ export default function stacksReducer(state = initialState, action) {
         .set('isFetching', false)
         .set('stacks', Map());
 
+    case StacksConstants.FETCH_STACK_SUCCESS: {
+      return state.setIn(
+        ['stacks', action.payload.stack_name],
+        new Stack(fromJS(action.payload))
+      );
+    }
+
     case StacksConstants.FETCH_RESOURCES_PENDING:
       return state.set('isFetchingResources', true);
 
