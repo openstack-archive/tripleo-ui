@@ -14,71 +14,96 @@
  * under the License.
  */
 
-import { defineMessages, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import DeleteStackButton from './DeleteStackButton';
-import { deploymentStatusMessages } from '../../constants/StacksConstants';
+import { deploymentStatusMessages } from '../../constants/DeploymentConstants';
+import { getCurrentPlanDeploymentStatus } from '../../selectors/deployment';
+import { getCurrentStack, getOvercloudInfo } from '../../selectors/stacks';
 import InlineNotification from '../ui/InlineNotification';
 import OvercloudInfo from '../deployment/OvercloudInfo';
-
-const messages = defineMessages({
-  deleteDeployment: {
-    id: 'DeploymentSuccess.deleteDeployment',
-    defaultMessage: 'Delete Deployment'
-  },
-  requestingDeletion: {
-    id: 'DeploymentSuccess.requestingDeletion',
-    defaultMessage: 'Requesting Deletion of Deployment'
-  }
-});
+import { Loader } from '../ui/Loader';
+import StacksActions from '../../actions/StacksActions';
 
 class DeploymentSuccess extends React.Component {
   componentDidMount() {
-    this.props.fetchStackResource(this.props.stack, 'PublicVirtualIP');
-    this.props.fetchStackEnvironment(this.props.stack);
+    this.props.fetchStacks();
+  }
+
+  fetchOvercloudInfo() {
+    const { fetchStackEnvironment, fetchStackResource, stack } = this.props;
+    fetchStackResource(stack, 'PublicVirtualIP');
+    fetchStackEnvironment(stack);
   }
 
   render() {
-    const { formatMessage } = this.props.intl;
-    const status = formatMessage(
-      deploymentStatusMessages[this.props.stack.stack_status]
-    );
+    const {
+      intl: { formatMessage },
+      stack,
+      stacksLoaded,
+      overcloudInfo,
+      deleteStack,
+      deploymentStatus: { status, message },
+      isRequestingStackDelete
+    } = this.props;
 
     return (
-      <div>
-        <InlineNotification type="success" title={status}>
-          <p>{this.props.stack.stack_status_reason}</p>
+      <Loader loaded={stacksLoaded}>
+        <InlineNotification
+          type="success"
+          title={formatMessage(deploymentStatusMessages[status])}
+        >
+          <p>{message}</p>
         </InlineNotification>
+
         <OvercloudInfo
-          overcloudInfo={this.props.overcloudInfo}
-          stack={this.props.stack}
-          stackResources={this.props.stackResources}
+          overcloudInfo={overcloudInfo}
+          fetchOvercloudInfo={this.fetchOvercloudInfo.bind(this)}
         />
         <DeleteStackButton
-          content={formatMessage(messages.deleteDeployment)}
-          deleteStack={this.props.deleteStack}
-          disabled={this.props.isRequestingStackDelete}
-          loaded={!this.props.isRequestingStackDelete}
-          loaderContent={formatMessage(messages.requestingDeletion)}
-          stack={this.props.stack}
+          deleteStack={deleteStack.bind(this, stack)}
+          disabled={isRequestingStackDelete}
+          loaded={!isRequestingStackDelete}
         />
-      </div>
+      </Loader>
     );
   }
 }
 
 DeploymentSuccess.propTypes = {
   deleteStack: PropTypes.func.isRequired,
+  deploymentStatus: ImmutablePropTypes.record.isRequired,
   fetchStackEnvironment: PropTypes.func.isRequired,
   fetchStackResource: PropTypes.func.isRequired,
+  fetchStacks: PropTypes.func.isRequired,
   intl: PropTypes.object,
   isRequestingStackDelete: PropTypes.bool,
   overcloudInfo: ImmutablePropTypes.map.isRequired,
-  stack: ImmutablePropTypes.record.isRequired,
-  stackResources: ImmutablePropTypes.map.isRequired
+  stack: ImmutablePropTypes.record,
+  stacksLoaded: PropTypes.bool.isRequired
 };
 
-export default injectIntl(DeploymentSuccess);
+const mapStateToProps = state => ({
+  deploymentStatus: getCurrentPlanDeploymentStatus(state),
+  isRequestingStackDelete: state.stacks.isRequestingStackDelete,
+  overcloudInfo: getOvercloudInfo(state),
+  stack: getCurrentStack(state),
+  stacksLoaded: state.stacks.isLoaded
+});
+
+const mapDispatchToProps = dispatch => ({
+  deleteStack: planName => dispatch(StacksActions.deleteStack(planName, '')),
+  fetchStacks: () => dispatch(StacksActions.fetchStacks()),
+  fetchStackEnvironment: stack =>
+    dispatch(StacksActions.fetchEnvironment(stack)),
+  fetchStackResource: (stack, resourceName) =>
+    dispatch(StacksActions.fetchResource(stack, resourceName))
+});
+
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(DeploymentSuccess)
+);

@@ -26,8 +26,7 @@ export const Plan = Record({
   title: undefined,
   description: undefined,
   transition: false,
-  files: Map(),
-  isRequestingPlanDeploy: false
+  files: Map()
 });
 
 export const PlanFile = Record({
