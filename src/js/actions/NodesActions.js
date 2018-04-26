@@ -32,6 +32,7 @@ import {
 import MistralConstants from '../constants/MistralConstants';
 import { setNodeCapability } from '../utils/nodes';
 import { startWorkflow } from './WorkflowActions';
+import { sanitizeMessage } from '../utils';
 
 const messages = defineMessages({
   introspectionNotificationMessage: {
@@ -212,7 +213,7 @@ export default {
               title: formatMessage(
                 messages.introspectionFailedNotificationTitle
               ),
-              message: message
+              message: sanitizeMessage(message)
             })
           );
           break;
@@ -239,7 +240,7 @@ export default {
             title: formatMessage(
               messages.nodeIntrospectionFailedNotificationTitle
             ),
-            message: message
+            message: sanitizeMessage(message)
           })
         );
       }
@@ -300,7 +301,7 @@ export default {
             NotificationActions.notify({
               type: 'success',
               title: 'Nodes are available',
-              message: output.message
+              message: sanitizeMessage(output.message)
             })
           );
           break;
@@ -309,9 +310,7 @@ export default {
           dispatch(
             NotificationActions.notify({
               title: 'Some Nodes could not be provided',
-              message: output.message
-                .filter(message => message.result)
-                .map(message => message.result)
+              message: sanitizeMessage(output.message)
             })
           );
           break;
@@ -357,7 +356,7 @@ export default {
             NotificationActions.notify({
               type: 'success',
               title: 'Nodes are manageable',
-              message: message
+              message: sanitizeMessage(message)
             })
           );
           break;
@@ -366,9 +365,7 @@ export default {
           dispatch(
             NotificationActions.notify({
               title: 'Some Nodes could not be managed',
-              message: message
-                .filter(message => message.result)
-                .map(message => message.result)
+              message: sanitizeMessage(message)
             })
           );
           break;
