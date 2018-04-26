@@ -32,7 +32,8 @@ export default keyMirror({
   FETCH_RESOURCES_FAILED: null,
   FETCH_STACKS_PENDING: null,
   FETCH_STACKS_SUCCESS: null,
-  FETCH_STACKS_FAILED: null
+  FETCH_STACKS_FAILED: null,
+  FETCH_STACK_SUCCESS: null
 });
 
 export const stackStates = keyMirror({
