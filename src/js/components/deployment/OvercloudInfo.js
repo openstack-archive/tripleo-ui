@@ -17,7 +17,7 @@
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Component } from 'react';
 
 import { Loader } from '../ui/Loader';
 
@@ -44,38 +44,46 @@ const messages = defineMessages({
   }
 });
 
-const OvercloudInfo = ({ intl, overcloudInfo }) => {
-  const ip = overcloudInfo.get('ipAddress');
-  const password = overcloudInfo.get('adminPassword');
+class OvercloudInfo extends Component {
+  componentDidMount() {
+    this.props.fetchOvercloudInfo();
+  }
 
-  // TODO(honza) add SSL
+  render() {
+    const { intl: { formatMessage }, overcloudInfo } = this.props;
+    const ip = overcloudInfo.get('ipAddress');
+    const password = overcloudInfo.get('adminPassword');
 
-  return (
-    <div>
-      <h4>
-        <FormattedMessage {...messages.overcloudInformationHeader} />
-      </h4>
-      <Loader
-        loaded={!!(ip && password)}
-        content={intl.formatMessage(messages.loadingOvercloudInformation)}
-      >
-        <ul className="list">
-          <li>
-            <FormattedMessage {...messages.overcloudIpAddress} /> {ip}
-          </li>
-          <li>
-            <FormattedMessage {...messages.username} /> admin
-          </li>
-          <li>
-            <FormattedMessage {...messages.password} /> {password}
-          </li>
-        </ul>
-      </Loader>
-      <br />
-    </div>
-  );
-};
+    // TODO(honza) add SSL
+
+    return (
+      <div>
+        <h4>
+          <FormattedMessage {...messages.overcloudInformationHeader} />
+        </h4>
+        <Loader
+          loaded={!!(ip && password)}
+          content={formatMessage(messages.loadingOvercloudInformation)}
+        >
+          <ul className="list">
+            <li>
+              <FormattedMessage {...messages.overcloudIpAddress} /> {ip}
+            </li>
+            <li>
+              <FormattedMessage {...messages.username} /> admin
+            </li>
+            <li>
+              <FormattedMessage {...messages.password} /> {password}
+            </li>
+          </ul>
+        </Loader>
+        <br />
+      </div>
+    );
+  }
+}
 OvercloudInfo.propTypes = {
+  fetchOvercloudInfo: PropTypes.func.isRequired,
   intl: PropTypes.object,
   overcloudInfo: ImmutablePropTypes.map.isRequired
 };
