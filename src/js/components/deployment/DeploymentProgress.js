@@ -14,75 +14,166 @@
  * under the License.
  */
 
+import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { ModalBody } from 'react-bootstrap';
+import { ModalBody, ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import {
-  deploymentStatusMessages as statusMessages,
-  stackStates
-} from '../../constants/StacksConstants';
+  getCurrentStack,
+  getCurrentStackDeploymentProgress,
+  getCreateCompleteResources
+} from '../../selectors/stacks';
+import { getCurrentPlanDeploymentStatus } from '../../selectors/deployment';
 import { InlineLoader } from '../ui/Loader';
-import ProgressBar from '../ui/ProgressBar';
 import StackResourcesTable from './StackResourcesTable';
+import { stackStates } from '../../constants/StacksConstants';
 
 const messages = defineMessages({
   resources: {
     id: 'DeploymentSuccess.resources',
     defaultMessage: 'Resources'
+  },
+  cancelDeployment: {
+    id: 'DeploymentProgress.cancelDeployment',
+    defaultMessage: 'Cancel Deployment'
+  },
+  requestingDeletion: {
+    id: 'DeploymentProgress.requestingDeletion',
+    defaultMessage: 'Requesting Deletion of Deployment'
+  },
+  initializingDeployment: {
+    id: 'DeploymentProgress.initializingDeployment',
+    defaultMessage: 'Initializing {planName} plan deployment'
+  },
+  deployingPlan: {
+    id: 'DeploymentProgress.deployingPlan',
+    defaultMessage:
+      'Deploying {planName} plan ({completeResourcesCount} of {resourcesCount} resources)'
+  },
+  configuringPlan: {
+    id: 'DeploymentProgress.configuringPlan',
+    defaultMessage: 'Configuring {planName} deployment'
   }
 });
 
-export default class DeploymentProgress extends React.Component {
-  componentDidMount() {
-    this.props.fetchStackResources(this.props.stack);
-  }
-
-  renderProgressBar() {
-    return this.props.stack.stack_status === stackStates.CREATE_IN_PROGRESS ? (
-      <ProgressBar
-        value={this.props.deploymentProgress}
-        label={this.props.deploymentProgress + '%'}
-        labelPosition="topRight"
-      />
-    ) : null;
-  }
-
+class DeploymentProgress extends React.Component {
   render() {
-    const statusMessage = (
-      <strong>
-        <FormattedMessage {...statusMessages[this.props.stack.stack_status]} />
-      </strong>
-    );
+    const {
+      deploymentStatus: { ansibleMessage, message },
+      planName,
+      resourcesCount,
+      completeResourcesCount,
+      resources,
+      resourcesLoaded,
+      stackDeploymentProgress,
+      stack
+    } = this.props;
 
     return (
       <ModalBody className="flex-container">
-        <div>
-          <div className="progress-description">
-            <InlineLoader content={statusMessage} />
-          </div>
-          {this.renderProgressBar()}
-        </div>
-        <h2>
-          <FormattedMessage {...messages.resources} />
-        </h2>
-        <div className="flex-column">
-          <StackResourcesTable
-            isFetchingResources={!this.props.stackResourcesLoaded}
-            resources={this.props.stackResources.reverse()}
-          />
-        </div>
+        {!stack && (
+          <Fragment>
+            <div className="progress-description">
+              <InlineLoader />
+              <FormattedMessage
+                {...messages.initializingDeployment}
+                values={{ planName: <strong>{planName}</strong> }}
+              />
+            </div>
+            {message && <pre>{message}</pre>}
+          </Fragment>
+        )}
+        {stack &&
+          stack.stack_status !== stackStates.CREATE_COMPLETE && (
+            <Fragment>
+              <div className="progress-description">
+                <InlineLoader />
+                <FormattedMessage
+                  {...messages.deployingPlan}
+                  values={{
+                    planName: <strong>{planName}</strong>,
+                    resourcesCount,
+                    completeResourcesCount
+                  }}
+                />
+              </div>
+              <ProgressBar
+                now={stackDeploymentProgress}
+                label={<span>{stackDeploymentProgress + '%'}</span>}
+                className="progress-label-top-right"
+              />
+              {message && <pre>{message}</pre>}
+              <h2>
+                <FormattedMessage {...messages.resources} />
+              </h2>
+              <div className="flex-container">
+                <div className="flex-column">
+                  <StackResourcesTable
+                    isFetchingResources={!resourcesLoaded}
+                    resources={resources.reverse()}
+                  />
+                </div>
+              </div>
+            </Fragment>
+          )}
+        {stack &&
+          stack.stack_status === stackStates.CREATE_COMPLETE && (
+            <Fragment>
+              <div className="progress-description">
+                <InlineLoader />
+                <FormattedMessage
+                  {...messages.configuringPlan}
+                  values={{ planName: <strong>{planName}</strong> }}
+                />
+              </div>
+              <ProgressBar active striped now={100} />
+              {message && <pre>{message}</pre>}
+              {ansibleMessage && (
+                <div className="flex-container">
+                  <pre className="flex-column">{ansibleMessage}</pre>
+                </div>
+              )}
+            </Fragment>
+          )}
       </ModalBody>
     );
   }
 }
 
 DeploymentProgress.propTypes = {
-  deploymentProgress: PropTypes.number.isRequired,
-  fetchStackResources: PropTypes.func.isRequired,
-  stack: ImmutablePropTypes.record.isRequired,
-  stackResources: ImmutablePropTypes.map.isRequired,
-  stackResourcesLoaded: PropTypes.bool.isRequired
+  completeResourcesCount: PropTypes.number,
+  deploymentStatus: PropTypes.object.isRequired,
+  fetchResources: PropTypes.func.isRequired,
+  fetchStacks: PropTypes.func.isRequired,
+  intl: PropTypes.object,
+  isFetchingStacks: PropTypes.bool.isRequired,
+  planName: PropTypes.string.isRequired,
+  resources: ImmutablePropTypes.list,
+  resourcesCount: PropTypes.number,
+  resourcesLoaded: PropTypes.bool.isRequired,
+  stack: ImmutablePropTypes.record,
+  stackDeploymentProgress: PropTypes.number.isRequired
 };
+
+const mapStateToProps = (state, props) => ({
+  completeResourcesCount: getCreateCompleteResources(state).size,
+  stack: getCurrentStack(state),
+  deploymentStatus: getCurrentPlanDeploymentStatus(state),
+  isFetchingStacks: state.stacks.isFetching,
+  stackDeploymentProgress: getCurrentStackDeploymentProgress(state),
+  resourcesCount: state.stacks.resources.size,
+  resources: state.stacks.resources,
+  resourcesLoaded: state.stacks.resourcesLoaded
+});
+
+const mapDispatchToProps = (dispatch, { planName }) => ({
+  deleteStack: () => dispatch(StacksActions.deleteStack(planName, '')),
+  fetchStacks: () => dispatch(StacksActions.fetchStacks()),
+  fetchResources: (stackName, stackId) =>
+    dispatch(StacksActions.fetchResources(stackName, stackId))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeploymentProgress);
