@@ -17,6 +17,7 @@
 import logger from '../services/logging/LoggingService';
 import LoginActions from './LoginActions';
 import NotificationActions from './NotificationActions';
+import { sanitizeMessage } from '../utils';
 
 export const handleErrors = (
   error,
@@ -28,7 +29,7 @@ export const handleErrors = (
       LoginActions.userAuthFailure([
         {
           title: 'Unauthorized',
-          message: error.message
+          message: sanitizeMessage(error.message)
         }
       ])
     );
@@ -37,7 +38,7 @@ export const handleErrors = (
       dispatch(
         NotificationActions.notify({
           title,
-          message: error.message
+          message: sanitizeMessage(error.message)
         })
       );
     }
