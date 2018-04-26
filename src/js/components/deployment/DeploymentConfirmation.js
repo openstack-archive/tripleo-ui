@@ -14,16 +14,36 @@
  * under the License.
  */
 
-import ImmutablePropTypes from 'react-immutable-proptypes';
+import { connect } from 'react-redux';
+import { ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 
+import { allPreDeploymentValidationsSuccessful } from '../../selectors/validations';
 import BlankSlate from '../ui/BlankSlate';
+import {
+  CloseModalButton,
+  CloseModalXButton,
+  RoutedModalPanel
+} from '../ui/Modals';
+import { deploymentStates } from '../../constants/DeploymentConstants';
+import { getCurrentPlanName } from '../../selectors/plans';
+import {
+  getCurrentPlanDeploymentStatus,
+  getCurrentPlanDeploymentStatusUI
+} from '../../selectors/deployment';
+import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
 import InlineNotification from '../ui/InlineNotification';
 import { InlineLoader } from '../ui/Loader';
+import { startDeployment } from '../../actions/DeploymentActions';
+import ValidationsActions from '../../actions/ValidationsActions';
 
 const messages = defineMessages({
+  close: {
+    id: 'DeploymentDetail.close',
+    defaultMessage: 'Close'
+  },
   deployButton: {
     id: 'DeploymentConfirmation.deployButton',
     defaultMessage: 'Deploy'
@@ -35,6 +55,10 @@ const messages = defineMessages({
   deploymentConfirmationHeader: {
     id: 'DeploymentConfirmation.deploymentConfirmationHeader',
     defaultMessage: 'Deploy Plan {planName}'
+  },
+  modalTitle: {
+    id: 'DeploymentDetail.modalTitle',
+    defaultMessage: 'Plan {planName} deployment'
   },
   requestingDeploymentLoader: {
     id: 'DeploymentConfirmation.requestingDeploymentLoader',
@@ -60,58 +84,99 @@ const messages = defineMessages({
 
 class DeploymentConfirmation extends React.Component {
   componentDidMount() {
-    this.props.runPreDeploymentValidations(this.props.currentPlan.name);
+    this.props.runPreDeploymentValidations(this.props.currentPlanName);
   }
 
   render() {
     const {
       allValidationsSuccessful,
-      currentPlan,
-      deployPlan,
+      currentPlanName,
+      deploymentStatus,
+      startDeployment,
       environmentSummary
     } = this.props;
 
+    const buttonDisabled =
+      deploymentStatus.status === deploymentStates.STARTING_DEPLOYMENT;
+
     return (
-      <div className="flex-column deployment-summary">
-        <BlankSlate
-          iconClass="fa fa-cloud-upload"
-          title={this.props.intl.formatMessage(
-            messages.deploymentConfirmationHeader,
-            { planName: currentPlan.name }
-          )}
-        >
-          <p>
-            <strong>
-              <FormattedMessage {...messages.summary} />
-            </strong>{' '}
-            {environmentSummary}
-          </p>
-          <ValidationsWarning
-            allValidationsSuccessful={allValidationsSuccessful}
-          />
-          <p>
-            <FormattedMessage {...messages.deploymentConfirmation} />
-          </p>
-          <DeployButton
-            disabled={currentPlan.isRequestingPlanDeploy}
-            deploy={deployPlan.bind(this, currentPlan.name)}
-            isRequestingPlanDeploy={currentPlan.isRequestingPlanDeploy}
-          />
-        </BlankSlate>
-      </div>
+      <RoutedModalPanel redirectPath={`/plans/${currentPlanName}`}>
+        <ModalHeader>
+          <CloseModalXButton />
+          <ModalTitle>
+            <FormattedMessage
+              {...messages.modalTitle}
+              values={{ planName: currentPlanName }}
+            />
+          </ModalTitle>
+        </ModalHeader>
+        <div className="flex-container">
+          <div className="flex-column deployment-summary">
+            <BlankSlate
+              iconClass="fa fa-cloud-upload"
+              title={this.props.intl.formatMessage(
+                messages.deploymentConfirmationHeader,
+                { planName: currentPlanName }
+              )}
+            >
+              <p>
+                <strong>
+                  <FormattedMessage {...messages.summary} />
+                </strong>{' '}
+                {environmentSummary}
+              </p>
+              <ValidationsWarning
+                allValidationsSuccessful={allValidationsSuccessful}
+              />
+              <p>
+                <FormattedMessage {...messages.deploymentConfirmation} />
+              </p>
+              <DeployButton
+                disabled={buttonDisabled}
+                deploy={startDeployment.bind(this, currentPlanName)}
+              />
+            </BlankSlate>
+          </div>
+        </div>
+        <ModalFooter>
+          <CloseModalButton>
+            <FormattedMessage {...messages.close} />
+          </CloseModalButton>
+        </ModalFooter>
+      </RoutedModalPanel>
     );
   }
 }
 DeploymentConfirmation.propTypes = {
   allValidationsSuccessful: PropTypes.bool.isRequired,
-  currentPlan: ImmutablePropTypes.record.isRequired,
-  deployPlan: PropTypes.func.isRequired,
+  currentPlanName: PropTypes.string.isRequired,
+  deploymentStatus: PropTypes.object.isRequired,
   environmentSummary: PropTypes.string.isRequired,
   intl: PropTypes.object,
-  runPreDeploymentValidations: PropTypes.func.isRequired
+  runPreDeploymentValidations: PropTypes.func.isRequired,
+  startDeployment: PropTypes.func.isRequired
 };
 
-export default injectIntl(DeploymentConfirmation);
+const mapStateToProps = (state, props) => ({
+  currentPlanName: getCurrentPlanName(state),
+  allValidationsSuccessful: allPreDeploymentValidationsSuccessful(state),
+  deploymentStatusLoaded: getCurrentPlanDeploymentStatusUI(state).isLoaded,
+  deploymentStatus: getCurrentPlanDeploymentStatus(state),
+  deploymentStatusUIError: getCurrentPlanDeploymentStatusUI(state).error,
+  environmentSummary: getEnvironmentConfigurationSummary(state)
+});
+
+const mapDispatchToProps = dispatch => ({
+  startDeployment: planName => dispatch(startDeployment(planName)),
+  runPreDeploymentValidations: planName =>
+    dispatch(
+      ValidationsActions.runValidationGroups(['pre-deployment'], planName)
+    )
+});
+
+export default injectIntl(
+  connect(mapStateToProps, mapDispatchToProps)(DeploymentConfirmation)
+);
 
 export const ValidationsWarning = injectIntl(
   ({ allValidationsSuccessful, intl }) => {
@@ -144,7 +209,7 @@ export const DeployButton = injectIntl(
       onClick={() => deploy()}
     >
       <InlineLoader
-        loaded={!isRequestingPlanDeploy}
+        loaded={!disabled}
         content={intl.formatMessage(messages.requestingDeploymentLoader)}
       >
         <FormattedMessage {...messages.deployButton} />
@@ -155,6 +220,5 @@ export const DeployButton = injectIntl(
 DeployButton.propTypes = {
   deploy: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
-  intl: PropTypes.object,
-  isRequestingPlanDeploy: PropTypes.bool.isRequired
+  intl: PropTypes.object
 };
