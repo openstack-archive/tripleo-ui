@@ -19,7 +19,7 @@ import { normalize } from 'normalizr';
 import { handleErrors } from './ErrorActions';
 import HeatApiService from '../services/HeatApiService';
 import StacksConstants from '../constants/StacksConstants';
-import { stackSchema, stackResourceSchema } from '../normalizrSchemas/stacks';
+import { stackSchema } from '../normalizrSchemas/stacks';
 
 export default {
   fetchStacksPending() {
@@ -65,6 +65,13 @@ export default {
     };
   },
 
+  fetchStackSuccess(stack) {
+    return {
+      type: StacksConstants.FETCH_STACK_SUCCESS,
+      payload: stack
+    };
+  },
+
   fetchResourcesPending() {
     return {
       type: StacksConstants.FETCH_RESOURCES_PENDING
@@ -88,12 +95,9 @@ export default {
     return dispatch => {
       dispatch(this.fetchResourcesPending());
       dispatch(HeatApiService.getResources(stackName, stackId))
-        .then(({ resources }) => {
-          const res =
-            normalize(resources, [stackResourceSchema]).entities
-              .stackResources || {};
-          dispatch(this.fetchResourcesSuccess(res));
-        })
+        .then(({ resources }) =>
+          dispatch(this.fetchResourcesSuccess(resources))
+        )
         .catch(error => {
           dispatch(handleErrors(error, 'Stack Resources could not be loaded'));
           dispatch(this.fetchResourcesFailed());

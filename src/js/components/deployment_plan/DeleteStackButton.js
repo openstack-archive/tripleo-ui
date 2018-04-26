@@ -14,12 +14,11 @@
  * under the License.
  */
 
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import { ConfirmationModal } from '../ui/Modals';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { InlineLoader } from '../ui/Loader';
 
 const messages = defineMessages({
@@ -30,6 +29,10 @@ const messages = defineMessages({
   deleteConfirmationQuestion: {
     id: 'DeleteStackButton.deleteConfirmationQuestion',
     defaultMessage: 'Are you sure you want to delete the deployment?'
+  },
+  requestingDeletion: {
+    id: 'DeploymentSuccess.requestingDeletion',
+    defaultMessage: 'Requesting Deletion of Deployment'
   }
 });
 
@@ -42,7 +45,7 @@ class DeleteStackButton extends React.Component {
   }
 
   confirmDelete() {
-    this.props.deleteStack(this.props.stack);
+    this.props.deleteStack();
     this.setState({ showDeleteModal: false });
   }
 
@@ -60,10 +63,10 @@ class DeleteStackButton extends React.Component {
         >
           <InlineLoader
             loaded={this.props.loaded}
-            content={this.props.loaderContent}
+            content={formatMessage(messages.requestingDeletion)}
             inverse
           >
-            {this.props.content}
+            <FormattedMessage {...messages.deleteDeployment} />
           </InlineLoader>
         </button>
         <ConfirmationModal
@@ -80,13 +83,10 @@ class DeleteStackButton extends React.Component {
 }
 
 DeleteStackButton.propTypes = {
-  content: PropTypes.string.isRequired,
   deleteStack: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   intl: PropTypes.object,
-  loaded: PropTypes.bool.isRequired,
-  loaderContent: PropTypes.string.isRequired,
-  stack: ImmutablePropTypes.record.isRequired
+  loaded: PropTypes.bool.isRequired
 };
 
 export default injectIntl(DeleteStackButton);
