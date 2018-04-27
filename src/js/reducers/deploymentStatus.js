@@ -18,6 +18,7 @@ import { Map } from 'immutable';
 import { combineReducers } from 'redux';
 
 import {
+  CONFIG_DOWNLOAD_MESSAGE,
   DEPLOYMENT_FAILED,
   DEPLOYMENT_SUCCESS,
   GET_DEPLOYMENT_STATUS_FAILED,
@@ -46,6 +47,11 @@ export const deploymentStatusByPlan = (state = Map(), { type, payload }) => {
         state
           .get(payload.planName, new DeploymentStatus())
           .merge(Map(payload.deploymentStatus))
+      );
+    case CONFIG_DOWNLOAD_MESSAGE:
+      return state.updateIn(
+        [payload.planName, 'configDownloadMessages'],
+        messages => messages.push(payload.message)
       );
     case START_DEPLOYMENT_PENDING:
       return state.set(
