@@ -71,6 +71,21 @@ describe('deploymentStatusByPlan reducer', () => {
       ).toEqual('tripleo.v1.deployment.deploy_plan');
     });
   });
+
+  describe('configDownloadMessage', () => {
+    it('stores config download messages', () => {
+      const newState = deploymentStatusByPlan(
+        undefined,
+        DeploymentActions.configDownloadMessage('overcloud', 'message 1')
+      );
+      expect(newState.getIn(['overcloud', 'status'])).toEqual(
+        deploymentStates.UNDEPLOYED
+      );
+      expect(
+        newState.getIn(['overcloud', 'configDownloadMessages']).size
+      ).toEqual(1);
+    });
+  });
 });
 
 describe('deploymentStatusUI reducer', () => {

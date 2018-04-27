@@ -27,7 +27,8 @@ import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 import { handleWorkflowMessage } from './WorkflowActions';
 import {
   getDeploymentStatusSuccess,
-  deploymentFinished
+  deploymentFinished,
+  configDownloadMessage
 } from './DeploymentActions';
 
 export default {
@@ -164,12 +165,7 @@ export default {
 
         case MistralConstants.ANSIBLE_PLAYBOOK_DEPLOY_STEPS: {
           const { message, plan_name } = payload;
-          dispatch(
-            getDeploymentStatusSuccess(plan_name, {
-              configDownloadMessage: message,
-              status: deploymentStates.DEPLOYING
-            })
-          );
+          dispatch(configDownloadMessage(plan_name, message));
           break;
         }
 

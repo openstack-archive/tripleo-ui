@@ -14,10 +14,11 @@
  * under the License.
  */
 
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import { combineReducers } from 'redux';
 
 import {
+  CONFIG_DOWNLOAD_MESSAGE,
   DEPLOYMENT_FAILED,
   DEPLOYMENT_SUCCESS,
   GET_DEPLOYMENT_STATUS_FAILED,
@@ -43,6 +44,12 @@ export const deploymentStatusByPlan = (state = Map(), { type, payload }) => {
     case GET_DEPLOYMENT_STATUS_SUCCESS:
       return state.update(payload.planName, new DeploymentStatus(), status =>
         status.merge(Map(payload.deploymentStatus))
+      );
+    case CONFIG_DOWNLOAD_MESSAGE:
+      return state.update(payload.planName, new DeploymentStatus(), status =>
+        status.update('configDownloadMessages', List(), messages =>
+          messages.push(payload.message)
+        )
       );
     case START_DEPLOYMENT_PENDING:
       return state.set(
