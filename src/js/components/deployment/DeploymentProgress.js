@@ -21,6 +21,7 @@ import { ModalBody, ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 
+import ConfigDownloadMessagesList from './ConfigDownloadMessagesList';
 import {
   getCurrentStack,
   getCurrentStackDeploymentProgress,
@@ -62,7 +63,7 @@ const messages = defineMessages({
 class DeploymentProgress extends React.Component {
   render() {
     const {
-      deploymentStatus: { configDownloadMessage, message },
+      deploymentStatus: { configDownloadMessages, message },
       planName,
       resourcesCount,
       completeResourcesCount,
@@ -135,11 +136,9 @@ class DeploymentProgress extends React.Component {
               </div>
               <ProgressBar active striped now={100} />
               {message && <pre>{message}</pre>}
-              {configDownloadMessage && (
-                <div className="flex-container">
-                  <pre className="flex-column">{configDownloadMessage}</pre>
-                </div>
-              )}
+              <ConfigDownloadMessagesList
+                messages={configDownloadMessages.toJS()}
+              />
             </Fragment>
           )}
       </ModalBody>
