@@ -14,12 +14,12 @@
  * under the License.
  */
 
-import { Record } from 'immutable';
+import { Record, List } from 'immutable';
 
 import { deploymentStates } from '../constants/DeploymentConstants';
 
 export const DeploymentStatus = Record({
-  configDownloadMessage: undefined,
+  configDownloadMessages: List(),
   message: undefined,
   status: deploymentStates.UNDEPLOYED,
   type: undefined
