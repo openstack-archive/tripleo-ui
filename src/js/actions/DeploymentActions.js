@@ -17,6 +17,7 @@
 import yaml from 'js-yaml';
 
 import {
+  CONFIG_DOWNLOAD_MESSAGE,
   GET_DEPLOYMENT_STATUS_FAILED,
   GET_DEPLOYMENT_STATUS_PENDING,
   GET_DEPLOYMENT_STATUS_SUCCESS,
@@ -75,6 +76,11 @@ export const getDeploymentStatus = planName => dispatch => {
       }
     });
 };
+
+export const configDownloadMessage = (planName, message) => ({
+  type: CONFIG_DOWNLOAD_MESSAGE,
+  payload: { planName, message }
+});
 
 export const startDeploymentPending = planName => ({
   type: START_DEPLOYMENT_PENDING,

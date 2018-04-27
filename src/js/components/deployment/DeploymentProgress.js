@@ -21,6 +21,7 @@ import { ModalBody, ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 
+import AnsibleMessagesList from './AnsibleMessagesList';
 import {
   getCurrentStack,
   getCurrentStackDeploymentProgress,
@@ -62,7 +63,7 @@ const messages = defineMessages({
 class DeploymentProgress extends React.Component {
   render() {
     const {
-      deploymentStatus: { ansibleMessage, message },
+      deploymentStatus: { ansibleMessages, message },
       planName,
       resourcesCount,
       completeResourcesCount,
@@ -131,11 +132,7 @@ class DeploymentProgress extends React.Component {
               </div>
               <ProgressBar active striped now={100} />
               {message && <pre>{message}</pre>}
-              {ansibleMessage && (
-                <div className="flex-container">
-                  <pre className="flex-column">{ansibleMessage}</pre>
-                </div>
-              )}
+              <AnsibleMessagesList messages={ansibleMessages.toJS()} />
             </Fragment>
           )}
       </ModalBody>
