@@ -21,6 +21,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
 
+import Breadcrumbs from '../ui/Breadcrumbs';
 import DeploymentConfiguration from './DeploymentConfiguration';
 import DeploymentDetail from '../deployment/DeploymentDetail';
 import { getAllPlansButCurrent } from '../../selectors/plans';
@@ -161,7 +162,7 @@ class CurrentPlan extends React.Component {
     return (
       <div className="row">
         <div className="col-sm-12">
-          <ol className="breadcrumb">
+          <Breadcrumbs>
             <li>
               <Link to="/plans/manage" id="CurrentPlan__allPlans">
                 <FormattedMessage {...messages.backToAllPlans} />
@@ -170,10 +171,7 @@ class CurrentPlan extends React.Component {
             <li className="active" id="CurrentPlan__breadcrumb">
               {currentPlanName}
             </li>
-          </ol>
-          <div className="page-header page-header-bleed-right">
-            <h1 id="CurrentPlan__planName">{currentPlanName}</h1>
-          </div>
+          </Breadcrumbs>
           <ol className="deployment-step-list">
             <DeploymentPlanStep
               title={formatMessage(messages.hardwareStepHeader)}
