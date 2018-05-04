@@ -46,7 +46,6 @@ class DeploymentFailure extends React.Component {
     const {
       deploymentStatus: { status, message },
       planName,
-      // deleteStack,
       intl: { formatMessage }
     } = this.props;
 

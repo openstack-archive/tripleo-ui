@@ -57,11 +57,30 @@ export const getCreateCompleteResources = createSelector(
   resources => resources.filter(r => r.resource_status === 'CREATE_COMPLETE')
 );
 
+export const getDeleteCompleteResources = createSelector(
+  [stackResourcesSelector],
+  resources => resources.filter(r => r.resource_status === 'DELETE_COMPLETE')
+);
+
 /**
  * Returns calculated percentage of deployment progress
  */
 export const getCurrentStackDeploymentProgress = createSelector(
   [stackResourcesSelector, getCreateCompleteResources],
+  (resources, completeResources) => {
+    let allResources = resources.size;
+    if (allResources > 0) {
+      return Math.ceil(completeResources.size / allResources * 100);
+    }
+    return 0;
+  }
+);
+
+/**
+ * Returns calculated percentage of deletion progress
+ */
+export const getCurrentStackDeletionProgress = createSelector(
+  [stackResourcesSelector, getDeleteCompleteResources],
   (resources, completeResources) => {
     let allResources = resources.size;
     if (allResources > 0) {
