@@ -28,5 +28,6 @@ export const DeploymentStatus = Record({
 export const DeploymentStatusUI = Record({
   error: undefined,
   isLoaded: false,
-  isFetching: false
+  isFetching: false,
+  isPendingRequest: false
 });
