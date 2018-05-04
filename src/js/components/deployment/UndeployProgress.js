@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Red Hat Inc.
+ * Copyright 2018 Red Hat Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License. You may obtain
@@ -21,11 +21,9 @@ import { ModalBody, ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 
-import ConfigDownloadMessagesList from './ConfigDownloadMessagesList';
 import {
   getCurrentStack,
-  getCurrentStackDeploymentProgress,
-  getCreateCompleteResources
+  getCurrentStackDeletionProgress
 } from '../../selectors/stacks';
 import { getCurrentPlanDeploymentStatus } from '../../selectors/deployment';
 import { InlineLoader, Loader } from '../ui/Loader';
@@ -34,34 +32,27 @@ import { stackStates } from '../../constants/StacksConstants';
 
 const messages = defineMessages({
   resources: {
-    id: 'DeploymentSuccess.resources',
+    id: 'UndeployProgress.resources',
     defaultMessage: 'Resources'
   },
-  initializingDeployment: {
-    id: 'DeploymentProgress.initializingDeployment',
-    defaultMessage: 'Initializing {planName} plan deployment'
+  initializingUndeploy: {
+    id: 'UndeployProgress.initializingDeployment',
+    defaultMessage: 'Initializing {planName} plan deployment deletion'
   },
-  deployingPlan: {
-    id: 'DeploymentProgress.deployingPlan',
-    defaultMessage:
-      'Deploying {planName} plan ({completeResourcesCount} of {resourcesCount} resources)'
-  },
-  configuringPlan: {
-    id: 'DeploymentProgress.configuringPlan',
-    defaultMessage: 'Configuring {planName} deployment'
+  undeployingPlan: {
+    id: 'UndeployProgress.undeployingPlan',
+    defaultMessage: 'Deleting {planName} plan deployment'
   }
 });
 
-class DeploymentProgress extends React.Component {
+class UndeployProgress extends React.Component {
   render() {
     const {
-      deploymentStatus: { configDownloadMessages, message },
+      deploymentStatus: { message },
       planName,
-      resourcesCount,
-      completeResourcesCount,
       resources,
       resourcesLoaded,
-      stackDeploymentProgress,
+      stackDeletionProgress,
       stack,
       stacksLoaded
     } = this.props;
@@ -72,39 +63,37 @@ class DeploymentProgress extends React.Component {
           loaded={stacksLoaded}
           componentProps={{ className: 'flex-container' }}
         >
-          {!stack && (
-            <Fragment>
-              <div className="progress-description">
-                <InlineLoader />
-                <FormattedMessage
-                  {...messages.initializingDeployment}
-                  values={{ planName: <strong>{planName}</strong> }}
-                />
-              </div>
-              <ProgressBar
-                now={0}
-                label={<span>0%</span>}
-                className="progress-label-top-right"
-              />
-            </Fragment>
-          )}
           {stack &&
-            stack.stack_status !== stackStates.CREATE_COMPLETE && (
+            stack.stack_status !== stackStates.DELETE_IN_PROGRESS && (
               <Fragment>
                 <div className="progress-description">
                   <InlineLoader />
                   <FormattedMessage
-                    {...messages.deployingPlan}
-                    values={{
-                      planName: <strong>{planName}</strong>,
-                      resourcesCount,
-                      completeResourcesCount
-                    }}
+                    {...messages.initializingUndeploy}
+                    values={{ planName: <strong>{planName}</strong> }}
                   />
                 </div>
                 <ProgressBar
-                  now={stackDeploymentProgress}
-                  label={<span>{stackDeploymentProgress + '%'}</span>}
+                  now={0}
+                  label={<span>0%</span>}
+                  className="progress-label-top-right"
+                />
+              </Fragment>
+            )}
+          {stack &&
+            stack.stack_status === stackStates.DELETE_IN_PROGRESS && (
+              <Fragment>
+                <div className="progress-description">
+                  <InlineLoader />
+                  <FormattedMessage
+                    {...messages.undeployingPlan}
+                    values={{ planName: <strong>{planName}</strong> }}
+                  />
+                </div>
+                <ProgressBar
+                  bsStyle="danger"
+                  now={stackDeletionProgress}
+                  label={<span>{stackDeletionProgress + '%'}</span>}
                   className="progress-label-top-right"
                 />
                 {message && <pre>{message}</pre>}
@@ -121,31 +110,31 @@ class DeploymentProgress extends React.Component {
                 </div>
               </Fragment>
             )}
-          {stack &&
-            stack.stack_status === stackStates.CREATE_COMPLETE && (
-              <Fragment>
-                <div className="progress-description">
-                  <InlineLoader />
-                  <FormattedMessage
-                    {...messages.configuringPlan}
-                    values={{ planName: <strong>{planName}</strong> }}
-                  />
-                </div>
-                <ProgressBar active striped now={100} />
-                {message && <pre>{message}</pre>}
-                <ConfigDownloadMessagesList
-                  messages={configDownloadMessages.toJS()}
+          {!stack && (
+            <Fragment>
+              <div className="progress-description">
+                <InlineLoader />
+                <FormattedMessage
+                  {...messages.undeployingPlan}
+                  values={{ planName: <strong>{planName}</strong> }}
                 />
-              </Fragment>
-            )}
+              </div>
+              <ProgressBar
+                bsStyle="danger"
+                now={100}
+                label={<span>{100 + '%'}</span>}
+                className="progress-label-top-right"
+              />
+              {message && <pre>{message}</pre>}
+            </Fragment>
+          )}
         </Loader>
       </ModalBody>
     );
   }
 }
 
-DeploymentProgress.propTypes = {
-  completeResourcesCount: PropTypes.number,
+UndeployProgress.propTypes = {
   deploymentStatus: PropTypes.object.isRequired,
   fetchResources: PropTypes.func.isRequired,
   fetchStacks: PropTypes.func.isRequired,
@@ -153,22 +142,19 @@ DeploymentProgress.propTypes = {
   isFetchingStacks: PropTypes.bool.isRequired,
   planName: PropTypes.string.isRequired,
   resources: ImmutablePropTypes.list,
-  resourcesCount: PropTypes.number,
   resourcesLoaded: PropTypes.bool.isRequired,
   stack: ImmutablePropTypes.record,
-  stackDeploymentProgress: PropTypes.number.isRequired,
+  stackDeletionProgress: PropTypes.number.isRequired,
   stacksLoaded: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = (state, props) => ({
-  completeResourcesCount: getCreateCompleteResources(state).size,
   deploymentStatus: getCurrentPlanDeploymentStatus(state),
   isFetchingStacks: state.stacks.isFetching,
-  resourcesCount: state.stacks.resources.size,
   resources: state.stacks.resources,
   resourcesLoaded: state.stacks.resourcesLoaded,
   stack: getCurrentStack(state),
-  stackDeploymentProgress: getCurrentStackDeploymentProgress(state),
+  stackDeletionProgress: getCurrentStackDeletionProgress(state),
   stacksLoaded: state.stacks.isLoaded
 });
 
@@ -178,4 +164,4 @@ const mapDispatchToProps = (dispatch, { planName }) => ({
     dispatch(StacksActions.fetchResources(stackName, stackId))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(DeploymentProgress);
+export default connect(mapStateToProps, mapDispatchToProps)(UndeployProgress);
