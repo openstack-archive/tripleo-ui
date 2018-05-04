@@ -27,6 +27,11 @@ import {
   START_DEPLOYMENT_FAILED,
   START_DEPLOYMENT_PENDING,
   START_DEPLOYMENT_SUCCESS,
+  START_UNDEPLOY_FAILED,
+  START_UNDEPLOY_PENDING,
+  START_UNDEPLOY_SUCCESS,
+  UNDEPLOY_FAILED,
+  UNDEPLOY_SUCCESS,
   deploymentStates
 } from '../constants/DeploymentConstants';
 import {
@@ -51,23 +56,10 @@ export const deploymentStatusByPlan = (state = Map(), { type, payload }) => {
           messages.push(payload.message)
         )
       );
-    case START_DEPLOYMENT_PENDING:
-      return state.set(
-        payload,
-        new DeploymentStatus({ status: deploymentStates.STARTING_DEPLOYMENT })
-      );
     case START_DEPLOYMENT_SUCCESS:
       return state.set(
         payload,
         new DeploymentStatus({ status: deploymentStates.DEPLOYING })
-      );
-    case START_DEPLOYMENT_FAILED:
-      return state.set(
-        payload.planName,
-        new DeploymentStatus({
-          status: deploymentStates.UNDEPLOYED,
-          message: payload.message
-        })
       );
     case DEPLOYMENT_SUCCESS:
       return state.set(
@@ -82,6 +74,27 @@ export const deploymentStatusByPlan = (state = Map(), { type, payload }) => {
         payload.planName,
         new DeploymentStatus({
           status: deploymentStates.DEPLOY_FAILED,
+          message: payload.message
+        })
+      );
+    case START_UNDEPLOY_SUCCESS:
+      return state.set(
+        payload,
+        new DeploymentStatus({ status: deploymentStates.UNDEPLOYING })
+      );
+    case UNDEPLOY_SUCCESS:
+      return state.set(
+        payload.planName,
+        new DeploymentStatus({
+          status: deploymentStates.UNDEPLOYED,
+          message: payload.message
+        })
+      );
+    case UNDEPLOY_FAILED:
+      return state.set(
+        payload.planName,
+        new DeploymentStatus({
+          status: deploymentStates.UNDEPLOY_FAILED,
           message: payload.message
         })
       );
@@ -112,6 +125,14 @@ export const deploymentStatusUI = (state = Map(), { type, payload }) => {
           error: undefined
         })
       );
+    case START_DEPLOYMENT_PENDING:
+    case START_UNDEPLOY_PENDING:
+      return state.setIn([payload, 'isPendingRequest'], true);
+    case START_DEPLOYMENT_SUCCESS:
+    case START_DEPLOYMENT_FAILED:
+    case START_UNDEPLOY_SUCCESS:
+    case START_UNDEPLOY_FAILED:
+      return state.setIn([payload, 'isPendingRequest'], false);
     default:
       return state;
   }

@@ -21,6 +21,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import DeploymentProgress from './DeploymentProgress';
+import UndeployProgress from './UndeployProgress';
 import DeploymentFailure from './DeploymentFailure';
 import { deploymentStates } from '../../constants/DeploymentConstants';
 import { getCurrentPlanName } from '../../selectors/plans';
@@ -56,21 +57,12 @@ class DeploymentDetail extends React.Component {
 
     switch (deploymentStatus.status) {
       case deploymentStates.DEPLOYING:
-      case deploymentStates.UNDEPLOYING:
         return <DeploymentProgress planName={currentPlanName} />;
-      case deploymentStates.DEPLOY_SUCCESS:
-        return (
-          <div>
-            {deploymentStatus.status}
-            {deploymentStatus.message}
-          </div>
-        );
+      case deploymentStates.UNDEPLOYING:
+        return <UndeployProgress planName={currentPlanName} />;
+      case deploymentStates.UNDEPLOY_FAILED:
       case deploymentStates.DEPLOY_FAILED:
         return <DeploymentFailure planName={currentPlanName} />;
-      case deploymentStates.UNDEPLOY_FAILED:
-        // TODO(jtomasek): handle undeploy failure
-        return 'undeploy failed';
-      case deploymentStates.UNKNOWN:
       default:
         return null;
     }

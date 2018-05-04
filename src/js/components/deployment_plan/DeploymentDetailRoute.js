@@ -22,7 +22,7 @@ import DeploymentDetail from '../deployment/DeploymentDetail';
 import { deploymentStates as ds } from '../../constants/DeploymentConstants';
 
 const DeploymentDetailRoute = ({ currentPlanName, deploymentStatus }) =>
-  [ds.DEPLOYING, ds.UNDEPLOYING, ds.DEPLOY_FAILED].includes(
+  [ds.DEPLOYING, ds.UNDEPLOYING, ds.DEPLOY_FAILED, ds.UNDEPLOY_FAILED].includes(
     deploymentStatus
   ) ? (
     <DeploymentDetail />
