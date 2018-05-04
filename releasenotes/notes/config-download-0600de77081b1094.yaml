@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    Added integration of config-download deployment as a default deployment way
+    using TripleO-UI. Config Download feature splits deployment into 2 parts, at
+    first, Heat creates all the deployment data necessary via SoftwareDeployment
+    resources to perform the Overcloud installation and configuration. In second
+    part, using downloaded data from Heat, Ansible playbooks and tasks are
+    generated and are then used by the Undercloud to complete the configuration
+    of the Overcloud.

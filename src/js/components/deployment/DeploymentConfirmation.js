@@ -27,7 +27,6 @@ import {
   CloseModalXButton,
   RoutedModalPanel
 } from '../ui/Modals';
-import { deploymentStates } from '../../constants/DeploymentConstants';
 import { getCurrentPlanName } from '../../selectors/plans';
 import {
   getCurrentPlanDeploymentStatus,
@@ -91,13 +90,10 @@ class DeploymentConfirmation extends React.Component {
     const {
       allValidationsSuccessful,
       currentPlanName,
-      deploymentStatus,
       startDeployment,
-      environmentSummary
+      environmentSummary,
+      isPendingDeploymentRequest
     } = this.props;
-
-    const buttonDisabled =
-      deploymentStatus.status === deploymentStates.STARTING_DEPLOYMENT;
 
     return (
       <RoutedModalPanel redirectPath={`/plans/${currentPlanName}`}>
@@ -132,7 +128,7 @@ class DeploymentConfirmation extends React.Component {
                 <FormattedMessage {...messages.deploymentConfirmation} />
               </p>
               <DeployButton
-                disabled={buttonDisabled}
+                disabled={isPendingDeploymentRequest}
                 deploy={startDeployment.bind(this, currentPlanName)}
               />
             </BlankSlate>
@@ -153,6 +149,7 @@ DeploymentConfirmation.propTypes = {
   deploymentStatus: PropTypes.object.isRequired,
   environmentSummary: PropTypes.string.isRequired,
   intl: PropTypes.object,
+  isPendingDeploymentRequest: PropTypes.bool.isRequired,
   runPreDeploymentValidations: PropTypes.func.isRequired,
   startDeployment: PropTypes.func.isRequired
 };
@@ -163,7 +160,9 @@ const mapStateToProps = (state, props) => ({
   deploymentStatusLoaded: getCurrentPlanDeploymentStatusUI(state).isLoaded,
   deploymentStatus: getCurrentPlanDeploymentStatus(state),
   deploymentStatusUIError: getCurrentPlanDeploymentStatusUI(state).error,
-  environmentSummary: getEnvironmentConfigurationSummary(state)
+  environmentSummary: getEnvironmentConfigurationSummary(state),
+  isPendingDeploymentRequest: getCurrentPlanDeploymentStatusUI(state)
+    .isPendingRequest
 });
 
 const mapDispatchToProps = dispatch => ({
