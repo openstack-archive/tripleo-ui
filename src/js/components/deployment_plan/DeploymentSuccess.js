@@ -22,11 +22,16 @@ import React, { Fragment } from 'react';
 
 import DeleteStackButton from './DeleteStackButton';
 import { deploymentStatusMessages } from '../../constants/DeploymentConstants';
-import { getCurrentPlanDeploymentStatus } from '../../selectors/deployment';
+import {
+  getCurrentPlanDeploymentStatus,
+  getCurrentPlanDeploymentStatusUI
+} from '../../selectors/deployment';
 import { getCurrentStack, getOvercloudInfo } from '../../selectors/stacks';
+import { getCurrentPlanName } from '../../selectors/plans';
 import InlineNotification from '../ui/InlineNotification';
 import OvercloudInfo from '../deployment/OvercloudInfo';
 import { Loader } from '../ui/Loader';
+import { startUndeploy } from '../../actions/DeploymentActions';
 import StacksActions from '../../actions/StacksActions';
 
 class DeploymentSuccess extends React.Component {
@@ -43,12 +48,13 @@ class DeploymentSuccess extends React.Component {
   render() {
     const {
       intl: { formatMessage },
+      isPendingRequest,
       stack,
       stacksLoaded,
       overcloudInfo,
-      deleteStack,
-      deploymentStatus: { status, message },
-      isRequestingStackDelete
+      planName,
+      undeployPlan,
+      deploymentStatus: { status, message }
     } = this.props;
 
     return (
@@ -67,9 +73,8 @@ class DeploymentSuccess extends React.Component {
               fetchOvercloudInfo={this.fetchOvercloudInfo.bind(this)}
             />
             <DeleteStackButton
-              deleteStack={deleteStack.bind(this, stack)}
-              disabled={isRequestingStackDelete}
-              loaded={!isRequestingStackDelete}
+              deleteStack={undeployPlan.bind(this, planName)}
+              disabled={isPendingRequest}
             />
           </Fragment>
         )}
@@ -79,28 +84,30 @@ class DeploymentSuccess extends React.Component {
 }
 
 DeploymentSuccess.propTypes = {
-  deleteStack: PropTypes.func.isRequired,
   deploymentStatus: ImmutablePropTypes.record.isRequired,
   fetchStackEnvironment: PropTypes.func.isRequired,
   fetchStackResource: PropTypes.func.isRequired,
   fetchStacks: PropTypes.func.isRequired,
   intl: PropTypes.object,
-  isRequestingStackDelete: PropTypes.bool,
+  isPendingRequest: PropTypes.bool.isRequired,
   overcloudInfo: ImmutablePropTypes.map.isRequired,
+  planName: PropTypes.string.isRequired,
   stack: ImmutablePropTypes.record,
-  stacksLoaded: PropTypes.bool.isRequired
+  stacksLoaded: PropTypes.bool.isRequired,
+  undeployPlan: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   deploymentStatus: getCurrentPlanDeploymentStatus(state),
-  isRequestingStackDelete: state.stacks.isRequestingStackDelete,
+  planName: getCurrentPlanName(state),
   overcloudInfo: getOvercloudInfo(state),
   stack: getCurrentStack(state),
-  stacksLoaded: state.stacks.isLoaded
+  stacksLoaded: state.stacks.isLoaded,
+  isPendingRequest: getCurrentPlanDeploymentStatusUI(state).isPendingRequest
 });
 
 const mapDispatchToProps = dispatch => ({
-  deleteStack: planName => dispatch(StacksActions.deleteStack(planName, '')),
+  undeployPlan: planName => dispatch(startUndeploy(planName)),
   fetchStacks: () => dispatch(StacksActions.fetchStacks()),
   fetchStackEnvironment: stack =>
     dispatch(StacksActions.fetchEnvironment(stack)),
