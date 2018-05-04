@@ -22,9 +22,7 @@ import DeploymentConfirmation from '../deployment/DeploymentConfirmation';
 import { deploymentStates as ds } from '../../constants/DeploymentConstants';
 
 const DeploymentConfirmationRoute = ({ currentPlanName, deploymentStatus }) =>
-  [ds.UNDEPLOYED, ds.UNKNOWN, ds.STARTING_DEPLOYMENT].includes(
-    deploymentStatus
-  ) ? (
+  [ds.UNDEPLOYED, ds.UNKNOWN].includes(deploymentStatus) ? (
     <DeploymentConfirmation />
   ) : (
     <Redirect to={`/plans/${currentPlanName}`} />

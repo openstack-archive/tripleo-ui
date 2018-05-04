@@ -28,6 +28,7 @@ import { handleWorkflowMessage } from './WorkflowActions';
 import {
   getDeploymentStatusSuccess,
   deploymentFinished,
+  undeployFinished,
   configDownloadMessage
 } from './DeploymentActions';
 
@@ -166,6 +167,25 @@ export default {
         case MistralConstants.ANSIBLE_PLAYBOOK_DEPLOY_STEPS: {
           const { message, plan_name } = payload;
           dispatch(configDownloadMessage(plan_name, message));
+          break;
+        }
+
+        case MistralConstants.UNDEPLOY_PLAN: {
+          if (payload.deployment_status === deploymentStates.UNDEPLOYING) {
+            const { message, plan_name, deployment_status } = payload;
+            dispatch(
+              getDeploymentStatusSuccess(plan_name, {
+                status: deployment_status,
+                message
+              })
+            );
+          } else {
+            dispatch(
+              handleWorkflowMessage(payload.execution_id, execution =>
+                dispatch(undeployFinished(execution))
+              )
+            );
+          }
           break;
         }
 
