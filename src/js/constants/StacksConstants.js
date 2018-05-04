@@ -18,9 +18,6 @@ import keyMirror from 'keymirror';
 import { defineMessages } from 'react-intl';
 
 export default keyMirror({
-  DELETE_STACK_PENDING: null,
-  DELETE_STACK_FAILED: null,
-  DELETE_STACK_SUCCESS: null,
   FETCH_STACK_ENVIRONMENT_SUCCESS: null,
   FETCH_STACK_ENVIRONMENT_PENDING: null,
   FETCH_STACK_ENVIRONMENT_FAILED: null,

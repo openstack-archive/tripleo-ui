@@ -27,6 +27,11 @@ import {
   START_DEPLOYMENT_FAILED,
   START_DEPLOYMENT_PENDING,
   START_DEPLOYMENT_SUCCESS,
+  START_UNDEPLOY_FAILED,
+  START_UNDEPLOY_PENDING,
+  START_UNDEPLOY_SUCCESS,
+  UNDEPLOY_FAILED,
+  UNDEPLOY_SUCCESS,
   deploymentStates
 } from '../constants/DeploymentConstants';
 import {
@@ -85,6 +90,27 @@ export const deploymentStatusByPlan = (state = Map(), { type, payload }) => {
           message: payload.message
         })
       );
+    case START_UNDEPLOY_SUCCESS:
+      return state.set(
+        payload,
+        new DeploymentStatus({ status: deploymentStates.UNDEPLOYING })
+      );
+    case UNDEPLOY_SUCCESS:
+      return state.set(
+        payload.planName,
+        new DeploymentStatus({
+          status: deploymentStates.UNDEPLOYED,
+          message: payload.message
+        })
+      );
+    case UNDEPLOY_FAILED:
+      return state.set(
+        payload.planName,
+        new DeploymentStatus({
+          status: deploymentStates.UNDEPLOY_FAILED,
+          message: payload.message
+        })
+      );
     default:
       return state;
   }
@@ -112,6 +138,11 @@ export const deploymentStatusUI = (state = Map(), { type, payload }) => {
           error: undefined
         })
       );
+    case START_UNDEPLOY_PENDING:
+      return state.setIn([payload, 'isPendingRequest'], true);
+    case START_UNDEPLOY_SUCCESS:
+    case START_UNDEPLOY_FAILED:
+      return state.setIn([payload, 'isPendingRequest'], false);
     default:
       return state;
   }

@@ -62,7 +62,7 @@ class DeleteStackButton extends React.Component {
           className="link btn btn-danger"
         >
           <InlineLoader
-            loaded={this.props.loaded}
+            loaded={!this.props.disabled}
             content={formatMessage(messages.requestingDeletion)}
             inverse
           >
@@ -85,8 +85,7 @@ class DeleteStackButton extends React.Component {
 DeleteStackButton.propTypes = {
   deleteStack: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
-  intl: PropTypes.object,
-  loaded: PropTypes.bool.isRequired
+  intl: PropTypes.object
 };
 
 export default injectIntl(DeleteStackButton);

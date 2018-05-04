@@ -65,12 +65,9 @@ class DeploymentDetail extends React.Component {
             {deploymentStatus.message}
           </div>
         );
+      case deploymentStates.UNDEPLOY_FAILED:
       case deploymentStates.DEPLOY_FAILED:
         return <DeploymentFailure planName={currentPlanName} />;
-      case deploymentStates.UNDEPLOY_FAILED:
-        // we may not want to store the message in case the undeploy fails
-        // so we can get back to previous state
-        return 'undeploy failed';
       case deploymentStates.UNKNOWN:
       default:
         return null;
