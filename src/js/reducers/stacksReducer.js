@@ -17,7 +17,7 @@
 import { fromJS, Map } from 'immutable';
 
 import { Stack, StackResource, StacksState } from '../immutableRecords/stacks';
-import StacksConstants, { stackStates } from '../constants/StacksConstants';
+import StacksConstants from '../constants/StacksConstants';
 import PlansConstants from '../constants/PlansConstants';
 
 const initialState = new StacksState();
@@ -89,20 +89,6 @@ export default function stacksReducer(state = initialState, action) {
 
     case PlansConstants.PLAN_CHOSEN:
       return initialState;
-
-    case StacksConstants.DELETE_STACK_SUCCESS:
-      return state
-        .set('isRequestingStackDelete', false)
-        .setIn(
-          ['stacks', action.payload, 'stack_status'],
-          stackStates.DELETE_IN_PROGRESS
-        );
-
-    case StacksConstants.DELETE_STACK_FAILED:
-      return state.set('isRequestingStackDelete', false);
-
-    case StacksConstants.DELETE_STACK_PENDING:
-      return state.set('isRequestingStackDelete', true);
 
     default:
       return state;
