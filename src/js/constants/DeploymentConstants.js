@@ -26,11 +26,15 @@ export const START_DEPLOYMENT_SUCCESS = 'START_DEPLOYMENT_SUCCESS';
 export const START_DEPLOYMENT_PENDING = 'START_DEPLOYMENT_PENDING';
 export const DEPLOYMENT_FAILED = 'DEPLOYMENT_FAILED';
 export const DEPLOYMENT_SUCCESS = 'DEPLOYMENT_SUCCESS';
+export const START_UNDEPLOY_FAILED = 'START_UNDEPLOY_FAILED';
+export const START_UNDEPLOY_SUCCESS = 'START_UNDEPLOY_SUCCESS';
+export const START_UNDEPLOY_PENDING = 'START_UNDEPLOY_PENDING';
+export const UNDEPLOY_FAILED = 'UNDEPLOY_FAILED';
+export const UNDEPLOY_SUCCESS = 'UNDEPLOY_SUCCESS';
 
 export const deploymentStates = keyMirror({
   UNDEPLOYED: null,
   DEPLOY_SUCCESS: null,
-  STARTING_DEPLOYMENT: null,
   DEPLOYING: null,
   UNDEPLOYING: null,
   DEPLOY_FAILED: null,
@@ -53,7 +57,8 @@ export const deploymentStatusMessages = defineMessages({
   },
   UNDEPLOYING: {
     id: 'DeploymentStatus.undeploying',
-    defaultMessage: 'Undeploy in progress'
+    defaultMessage:
+      'Deletion of {planName} plan deployment is currently in progress'
   },
   DEPLOY_FAILED: {
     id: 'DeploymentStatus.deploymentFailed',
