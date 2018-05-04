@@ -59,11 +59,8 @@ export const DeployStep = ({
     case deploymentStates.DEPLOY_SUCCESS:
       return <DeploymentSuccess />;
     case deploymentStates.DEPLOY_FAILED:
-      return <DeploymentFailure planName={currentPlan.name} />;
     case deploymentStates.UNDEPLOY_FAILED:
-      // we may not want to store the message in case the undeploy fails
-      // so we can get back to previous state
-      return 'undeploy failed';
+      return <DeploymentFailure planName={currentPlan.name} />;
     case deploymentStates.UNKNOWN:
       return (
         <InlineNotification
