@@ -25,7 +25,12 @@ import {
   START_DEPLOYMENT_PENDING,
   START_DEPLOYMENT_SUCCESS,
   DEPLOYMENT_FAILED,
-  DEPLOYMENT_SUCCESS
+  DEPLOYMENT_SUCCESS,
+  START_UNDEPLOY_FAILED,
+  START_UNDEPLOY_PENDING,
+  START_UNDEPLOY_SUCCESS,
+  UNDEPLOY_FAILED,
+  UNDEPLOY_SUCCESS
 } from '../constants/DeploymentConstants';
 import { handleErrors } from './ErrorActions';
 import MistralConstants from '../constants/MistralConstants';
@@ -91,9 +96,9 @@ export const startDeploymentSuccess = planName => ({
   payload: planName
 });
 
-export const startDeploymentFailed = (planName, message) => ({
+export const startDeploymentFailed = planName => ({
   type: START_DEPLOYMENT_FAILED,
-  payload: { planName, message }
+  payload: planName
 });
 
 export const startDeployment = planName => dispatch => {
@@ -141,5 +146,69 @@ export const deploymentFinished = execution => (
     dispatch(deploymentFailed(planName, message));
   } else {
     dispatch(deploymentSuccess(planName, message));
+  }
+};
+
+export const startUndeployPending = planName => ({
+  type: START_UNDEPLOY_PENDING,
+  payload: planName
+});
+
+export const startUndeploySuccess = planName => ({
+  type: START_UNDEPLOY_SUCCESS,
+  payload: planName
+});
+
+export const startUndeployFailed = planName => ({
+  type: START_UNDEPLOY_FAILED,
+  payload: planName
+});
+
+export const startUndeploy = planName => dispatch => {
+  dispatch(startUndeployPending(planName));
+  dispatch(
+    startWorkflow(
+      MistralConstants.UNDEPLOY_PLAN,
+      {
+        container: planName,
+        timeout: 240
+      },
+      execution => dispatch(undeployFinished(execution)),
+      3 * 60 * 1000
+    )
+  )
+    .then(execution => dispatch(startUndeploySuccess(planName)))
+    .catch(error => {
+      dispatch(
+        handleErrors(error, `Plan ${planName} deployment could not be deleted`)
+      );
+      dispatch(startUndeployFailed(planName));
+    });
+};
+
+export const undeploySuccess = (planName, message) => ({
+  type: UNDEPLOY_SUCCESS,
+  payload: { planName, message }
+});
+
+export const undeployFailed = (planName, message) => ({
+  type: UNDEPLOY_FAILED,
+  payload: { planName, message }
+});
+
+export const undeployFinished = execution => (
+  dispatch,
+  getState,
+  { getIntl }
+) => {
+  const {
+    input: { container: planName },
+    output: { message },
+    state
+  } = execution;
+  if (state === 'ERROR') {
+    dispatch(undeployFailed(planName, message));
+  } else {
+    dispatch(undeploySuccess(planName, message));
   }
 };

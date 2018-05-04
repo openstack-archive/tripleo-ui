@@ -174,41 +174,5 @@ export default {
           dispatch(this.fetchEnvironmentFailed(stack));
         });
     };
-  },
-
-  deleteStackSuccess(stackName) {
-    return {
-      type: StacksConstants.DELETE_STACK_SUCCESS,
-      payload: stackName
-    };
-  },
-
-  deleteStackFailed() {
-    return {
-      type: StacksConstants.DELETE_STACK_FAILED
-    };
-  },
-
-  deleteStackPending() {
-    return {
-      type: StacksConstants.DELETE_STACK_PENDING
-    };
-  },
-
-  /**
-   * Starts a delete request for a stack.
-   */
-  deleteStack(stack) {
-    return dispatch => {
-      dispatch(this.deleteStackPending());
-      dispatch(HeatApiService.deleteStack(stack.stack_name, stack.id))
-        .then(response => {
-          dispatch(this.deleteStackSuccess(stack.stack_name));
-        })
-        .catch(error => {
-          dispatch(handleErrors(error, 'Stack could not be deleted'));
-          dispatch(this.deleteStackFailed());
-        });
-    };
   }
 };

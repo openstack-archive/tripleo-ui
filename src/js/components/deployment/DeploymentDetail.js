@@ -21,6 +21,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import DeploymentProgress from './DeploymentProgress';
+import UndeployProgress from './UndeployProgress';
 import DeploymentFailure from './DeploymentFailure';
 import { deploymentStates } from '../../constants/DeploymentConstants';
 import { getCurrentPlanName } from '../../selectors/plans';
@@ -56,8 +57,9 @@ class DeploymentDetail extends React.Component {
 
     switch (deploymentStatus.status) {
       case deploymentStates.DEPLOYING:
-      case deploymentStates.UNDEPLOYING:
         return <DeploymentProgress planName={currentPlanName} />;
+      case deploymentStates.UNDEPLOYING:
+        return <UndeployProgress planName={currentPlanName} />;
       case deploymentStates.DEPLOY_SUCCESS:
         return (
           <div>
@@ -65,12 +67,9 @@ class DeploymentDetail extends React.Component {
             {deploymentStatus.message}
           </div>
         );
+      case deploymentStates.UNDEPLOY_FAILED:
       case deploymentStates.DEPLOY_FAILED:
         return <DeploymentFailure planName={currentPlanName} />;
-      case deploymentStates.UNDEPLOY_FAILED:
-        // we may not want to store the message in case the undeploy fails
-        // so we can get back to previous state
-        return 'undeploy failed';
       case deploymentStates.UNKNOWN:
       default:
         return null;
