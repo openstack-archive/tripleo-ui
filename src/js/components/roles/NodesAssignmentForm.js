@@ -36,6 +36,14 @@ const messages = defineMessages({
   updatingParameters: {
     id: 'ParametersForm.updatingParameters',
     defaultMessage: 'Updating configuration...'
+  },
+  nodeCountsErrorTitle: {
+    id: 'NodesAssignmentForm.nodeCountsErrorTitle',
+    defaultMessage: "Node counts don't fit available nodes."
+  },
+  nodeCountsErrorMessage: {
+    id: 'NodesAssignmentForm.nodeCountsErrorMessage',
+    defaultMessage: 'Please update the node counts.'
   }
 });
 
@@ -59,7 +67,18 @@ class NodesAssignmentForm extends React.Component {
           loaded={!submitting}
           content={formatMessage(messages.updatingParameters)}
         >
-          <FormErrorList errors={error ? [error] : []} />
+          {invalid && (
+            <div className="col-sm-12">
+              <FormErrorList
+                errors={[
+                  {
+                    title: formatMessage(messages.nodeCountsErrorTitle),
+                    message: formatMessage(messages.nodeCountsErrorMessage)
+                  }
+                ]}
+              />
+            </div>
+          )}
           {children}
           {valid &&
             dirty &&
