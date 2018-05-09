@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, compose } from 'redux';
 import cookie from 'react-cookie';
 import { fromJS } from 'immutable';
 import thunkMiddleware from 'redux-thunk';
@@ -58,12 +58,17 @@ const loggerMiddleware = createLogger({
   colors: false
 });
 
+// Integrate redux-devtools Chrome extension
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 const store = createStore(
   appReducer,
   hydrateStore(),
-  applyMiddleware(
-    thunkMiddleware.withExtraArgument({ getIntl }),
-    loggerMiddleware
+  composeEnhancers(
+    applyMiddleware(
+      thunkMiddleware.withExtraArgument({ getIntl }),
+      loggerMiddleware
+    )
   )
 );
 
