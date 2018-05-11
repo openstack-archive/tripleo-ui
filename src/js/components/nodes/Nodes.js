@@ -24,7 +24,7 @@ import { Route } from 'react-router-dom';
 
 import { getFilterByName } from '../../selectors/filters';
 import { getFilteredNodes, nodesInProgress } from '../../selectors/nodes';
-import { Loader } from '../ui/Loader';
+import { Loader, InlineLoader } from '../ui/Loader';
 import NodeDrives from './NodeDrives/NodeDrives';
 import NodesActions from '../../actions/NodesActions';
 import NodesListForm from './NodesListView/NodesListForm';
@@ -37,6 +37,10 @@ const messages = defineMessages({
   loadingNodes: {
     id: 'Nodes.loadingNodes',
     defaultMessage: 'Loading Nodes...'
+  },
+  refreshResults: {
+    id: 'Nodes.refreshResults',
+    defaultMessage: 'Refresh Results'
   },
   registerNodes: {
     id: 'Nodes.registerNodes',
@@ -54,6 +58,11 @@ const messages = defineMessages({
 
 class Nodes extends React.Component {
   componentDidMount() {
+    this.props.fetchNodes();
+  }
+
+  refreshResults(e) {
+    e.preventDefault();
     this.props.fetchNodes();
   }
 
@@ -76,6 +85,21 @@ class Nodes extends React.Component {
       <div>
         <div className="page-header">
           <div className="pull-right">
+            <InlineLoader
+              loaded={!(this.props.fetchingNodes && this.props.nodesLoaded)}
+              content={this.props.intl.formatMessage(messages.loadingNodes)}
+              component="span"
+            >
+              <a
+                id="Nodes__refreshResultsLink"
+                className="link btn btn-link"
+                onClick={this.refreshResults.bind(this)}
+              >
+                <span className="pficon pficon-refresh" />&nbsp;
+                <FormattedMessage {...messages.refreshResults} />
+              </a>
+            </InlineLoader>
+            &nbsp;
             <Link
               to="/nodes/register"
               className="btn btn-primary"
