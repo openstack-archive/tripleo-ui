@@ -19,7 +19,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import DeploymentSuccess from './DeploymentSuccess';
 import DeploymentFailure from './DeploymentFailure';
@@ -35,6 +35,8 @@ import {
 } from '../../selectors/deployment';
 import { InlineLoader } from '../ui/Loader';
 import InlineNotification from '../ui/InlineNotification';
+import { recoverDeploymentStatus } from '../../actions/DeploymentActions';
+import RecoverDeploymentStatusButton from '../deployment/RecoverDeploymentStatusButton';
 
 const messages = defineMessages({
   requestingDeploy: {
@@ -52,7 +54,8 @@ export const DeployStep = ({
   deploymentStatus,
   deploymentStatusUIError,
   intl: { formatMessage },
-  isPendingDeploymentRequest
+  isPendingDeploymentRequest,
+  recoverDeploymentStatus
 }) => {
   switch (deploymentStatus.status) {
     case deploymentStates.DEPLOYING:
@@ -66,13 +69,16 @@ export const DeployStep = ({
       return <DeploymentFailure planName={currentPlan.name} />;
     case deploymentStates.UNKNOWN:
       return (
-        <InlineNotification
-          title={formatMessage(deploymentStatusMessages.UNKNOWN, {
-            planName: currentPlan.name
-          })}
-        >
-          {deploymentStatusUIError}
-        </InlineNotification>
+        <Fragment>
+          <InlineNotification
+            title={formatMessage(deploymentStatusMessages.UNKNOWN, {
+              planName: currentPlan.name
+            })}
+          >
+            {deploymentStatusUIError}
+          </InlineNotification>
+          <RecoverDeploymentStatusButton />
+        </Fragment>
       );
     default:
       return (
@@ -97,7 +103,8 @@ DeployStep.propTypes = {
   deploymentStatus: PropTypes.object.isRequired,
   deploymentStatusUIError: PropTypes.string,
   intl: PropTypes.object,
-  isPendingDeploymentRequest: PropTypes.bool.isRequired
+  isPendingDeploymentRequest: PropTypes.bool.isRequired,
+  recoverDeploymentStatus: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, props) => ({
@@ -107,4 +114,6 @@ const mapStateToProps = (state, props) => ({
     .isPendingRequest
 });
 
-export default injectIntl(connect(mapStateToProps)(DeployStep));
+export default injectIntl(
+  connect(mapStateToProps, { recoverDeploymentStatus })(DeployStep)
+);
