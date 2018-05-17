@@ -30,11 +30,16 @@ import {
   START_UNDEPLOY_PENDING,
   START_UNDEPLOY_SUCCESS,
   UNDEPLOY_FAILED,
-  UNDEPLOY_SUCCESS
+  UNDEPLOY_SUCCESS,
+  RECOVER_DEPLOYMENT_STATUS_FAILED,
+  RECOVER_DEPLOYMENT_STATUS_SUCCESS,
+  RECOVER_DEPLOYMENT_STATUS_PENDING
 } from '../constants/DeploymentConstants';
 import { handleErrors } from './ErrorActions';
 import MistralConstants from '../constants/MistralConstants';
+import { sanitizeMessage } from '../utils';
 import { startWorkflow } from './WorkflowActions';
+import NotificationActions from './NotificationActions';
 import SwiftApiService from '../services/SwiftApiService';
 
 export const getDeploymentStatusPending = planName => ({
@@ -67,17 +72,13 @@ export const getDeploymentStatus = planName => dispatch => {
       dispatch(getDeploymentStatusSuccess(planName, { status, message, type }));
     })
     .catch(error => {
-      if (error.name === 'SwiftApiError' && error.response.status === 404) {
-        dispatch(getDeploymentStatusSuccess(planName));
-      } else {
-        dispatch(
-          handleErrors(
-            error,
-            `Plan ${planName} deployment status could not be loaded`
-          )
-        );
-        dispatch(getDeploymentStatusFailed(planName, error.message));
-      }
+      dispatch(
+        handleErrors(
+          error,
+          `Plan ${planName} deployment status could not be loaded`
+        )
+      );
+      dispatch(getDeploymentStatusFailed(planName, error.message));
     });
 };
 
@@ -210,5 +211,69 @@ export const undeployFinished = execution => (
     dispatch(undeployFailed(planName, message));
   } else {
     dispatch(undeploySuccess(planName, message));
+  }
+};
+
+export const recoverDeploymentStatusFailed = planName => ({
+  type: RECOVER_DEPLOYMENT_STATUS_FAILED,
+  payload: planName
+});
+
+export const recoverDeploymentStatusSuccess = planName => ({
+  type: RECOVER_DEPLOYMENT_STATUS_SUCCESS,
+  payload: planName
+});
+
+export const recoverDeploymentStatusPending = planName => ({
+  type: RECOVER_DEPLOYMENT_STATUS_PENDING,
+  payload: planName
+});
+
+export const recoverDeploymentStatus = planName => dispatch => {
+  dispatch(recoverDeploymentStatusPending(planName));
+  dispatch(
+    startWorkflow(
+      MistralConstants.RECOVER_DEPLOYMENT_STATUS,
+      { container: planName },
+      execution => dispatch(recoverDeploymentStatusFinished(execution))
+    )
+  ).catch(error => {
+    dispatch(
+      handleErrors(
+        error,
+        `Plan ${planName} deployment status could not be recovered`
+      )
+    );
+    dispatch(recoverDeploymentStatusFailed(planName));
+  });
+};
+
+export const recoverDeploymentStatusFinished = execution => (
+  dispatch,
+  getState,
+  { getIntl }
+) => {
+  const {
+    input: { container: planName },
+    output: { message, deployment_status: status },
+    state
+  } = execution;
+  if (state === 'ERROR') {
+    dispatch(
+      NotificationActions.notify({
+        title: `Plan ${planName} deployment status could not be recovered`,
+        message: sanitizeMessage(message)
+      })
+    );
+    dispatch(recoverDeploymentStatusFailed(planName));
+  } else {
+    dispatch(recoverDeploymentStatusSuccess(planName));
+    dispatch(
+      getDeploymentStatusSuccess(planName, {
+        status,
+        message,
+        type: execution.workflow_name
+      })
+    );
   }
 };
