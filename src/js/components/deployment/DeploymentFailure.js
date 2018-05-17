@@ -22,6 +22,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import DeleteStackButton from '../deployment_plan/DeleteStackButton';
+import RecoverDeploymentStatusButton from '../deployment/RecoverDeploymentStatusButton';
 import { deploymentStatusMessages } from '../../constants/DeploymentConstants';
 import { getCurrentStack } from '../../selectors/stacks';
 import {
@@ -63,6 +64,7 @@ class DeploymentFailure extends React.Component {
             disabled={isPendingRequest}
           />
         )}
+        {!stack && <RecoverDeploymentStatusButton />}
       </ModalBody>
     );
   }
