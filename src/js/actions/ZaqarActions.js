@@ -33,7 +33,8 @@ import {
   getDeploymentStatusSuccess,
   deploymentFinished,
   undeployFinished,
-  configDownloadMessage
+  configDownloadMessage,
+  recoverDeploymentStatusFinished
 } from './DeploymentActions';
 import NetworksActions from './NetworksActions';
 
@@ -200,6 +201,14 @@ export default {
           }
           break;
         }
+
+        case MistralConstants.RECOVER_DEPLOYMENT_STATUS:
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(recoverDeploymentStatusFinished(execution))
+            )
+          );
+          break;
 
         case MistralConstants.PLAN_EXPORT: {
           dispatch(
