@@ -32,6 +32,9 @@ import {
   START_UNDEPLOY_SUCCESS,
   UNDEPLOY_FAILED,
   UNDEPLOY_SUCCESS,
+  RECOVER_DEPLOYMENT_STATUS_FAILED,
+  RECOVER_DEPLOYMENT_STATUS_SUCCESS,
+  RECOVER_DEPLOYMENT_STATUS_PENDING,
   deploymentStates
 } from '../constants/DeploymentConstants';
 import {
@@ -127,11 +130,14 @@ export const deploymentStatusUI = (state = Map(), { type, payload }) => {
       );
     case START_DEPLOYMENT_PENDING:
     case START_UNDEPLOY_PENDING:
+    case RECOVER_DEPLOYMENT_STATUS_PENDING:
       return state.setIn([payload, 'isPendingRequest'], true);
     case START_DEPLOYMENT_SUCCESS:
     case START_DEPLOYMENT_FAILED:
     case START_UNDEPLOY_SUCCESS:
     case START_UNDEPLOY_FAILED:
+    case RECOVER_DEPLOYMENT_STATUS_SUCCESS:
+    case RECOVER_DEPLOYMENT_STATUS_FAILED:
       return state.setIn([payload, 'isPendingRequest'], false);
     default:
       return state;
