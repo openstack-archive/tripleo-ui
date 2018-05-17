@@ -22,6 +22,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import DeleteStackButton from '../deployment_plan/DeleteStackButton';
+import RecoverDeploymentStatusButton from '../deployment/RecoverDeploymentStatusButton';
 import { deploymentStatusMessages } from '../../constants/DeploymentConstants';
 import { getCurrentStack } from '../../selectors/stacks';
 import {
@@ -57,12 +58,15 @@ class DeploymentFailure extends React.Component {
         >
           <p>{sanitizeMessage(message)}</p>
         </InlineNotification>
-        {stack && (
-          <DeleteStackButton
-            deleteStack={undeployPlan.bind(this, planName)}
-            disabled={isPendingRequest}
-          />
-        )}
+        <div>
+          {stack && (
+            <DeleteStackButton
+              deleteStack={undeployPlan.bind(this, planName)}
+              disabled={isPendingRequest}
+            />
+          )}
+          {!stack && <RecoverDeploymentStatusButton />}
+        </div>
       </ModalBody>
     );
   }
