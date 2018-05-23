@@ -35,7 +35,7 @@ class UserDropdown extends React.Component {
     return (
       <li>
         <Dropdown>
-          <DropdownToggle>
+          <DropdownToggle id="UserDropdown__toggle">
             <span className="pficon pficon-user" /> {this.props.name}
             <b className="caret" />
           </DropdownToggle>

@@ -27,6 +27,7 @@ export default class DropdownToggle extends React.Component {
     return (
       <a
         className={this.props.className}
+        id={this.props.id}
         data-toggle="dropdown"
         onClick={this.handleClick.bind(this)}
       >
@@ -38,6 +39,7 @@ export default class DropdownToggle extends React.Component {
 DropdownToggle.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
+  id: PropTypes.string,
   toggleDropdown: PropTypes.func
 };
 
