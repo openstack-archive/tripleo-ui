@@ -39,7 +39,7 @@ class UserDropdown extends React.Component {
             <span className="pficon pficon-user" /> {this.props.name}
             <b className="caret" />
           </DropdownToggle>
-          <DropdownItem onClick={this.props.logout}>
+          <DropdownItem onClick={this.props.logout} id="NavBar__logoutLink">
             <FormattedMessage {...messages.logout} />
           </DropdownItem>
         </Dropdown>

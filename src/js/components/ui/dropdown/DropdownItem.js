@@ -49,7 +49,11 @@ export default class DropdownItem extends React.Component {
     if (this.props.onClick) {
       return (
         <li className={ClassNames(this.props.className, classes)}>
-          <a className="link" onClick={this.handleClick.bind(this)}>
+          <a
+            className="link"
+            id={this.props.id}
+            onClick={this.handleClick.bind(this)}
+          >
             {this.props.children}
           </a>
         </li>
@@ -58,7 +62,9 @@ export default class DropdownItem extends React.Component {
 
     return (
       <li className={ClassNames(this.props.className, classes)}>
-        <a className="link">{this.props.children}</a>
+        <a className="link" id={this.props.id}>
+          {this.props.children}
+        </a>
       </li>
     );
   }
@@ -72,6 +78,7 @@ DropdownItem.propTypes = {
   className: PropTypes.string,
   disabled: PropTypes.bool,
   divider: PropTypes.bool,
+  id: PropTypes.string,
   onClick: PropTypes.func,
   to: PropTypes.string,
   toggleDropdown: PropTypes.func
