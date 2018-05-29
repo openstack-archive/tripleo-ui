@@ -16,6 +16,7 @@
 
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React, { Component } from 'react';
+import { debounce } from 'lodash';
 
 import NetworkListItem from './NetworkListItem';
 import RolesList from './RolesList';
@@ -25,17 +26,22 @@ export default class NetworkTopology extends Component {
     super();
     this.networkLineElements = {};
     this.state = { networkLinePositions: {} };
+
+    this.calculateNetworkPositions = debounce(
+      this.calculateNetworkPositions,
+      100
+    );
   }
+
   componentDidMount() {
     this.calculateNetworkPositions();
   }
 
-  calculateNetworkPositions = () => {
+  calculateNetworkPositions = () =>
     Object.keys(this.networkLineElements).map(key => {
       const rect = this.networkLineElements[key].getBoundingClientRect();
       this.setState(state => (state.networkLinePositions[key] = rect.y));
     });
-  };
 
   render() {
     const { roles, networks } = this.props;

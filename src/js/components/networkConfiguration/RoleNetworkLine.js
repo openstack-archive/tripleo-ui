@@ -18,14 +18,38 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const RoleNetworkLine = ({ className, style, ...rest }) => (
-  <li className={cx('role-network', className)} {...rest}>
-    <div className="role-network-line" style={style} />
-  </li>
-);
+import { getNetworkColorStyle } from './utils';
+
+class RoleNetworkLine extends React.Component {
+  getStartingPoint = lineElement => lineElement.getBoundingClientRect().y;
+
+  render() {
+    const { className, networkName, networkLinePosition, ...rest } = this.props;
+    const { backgroundColor, borderColor } = getNetworkColorStyle(networkName);
+    return (
+      <li
+        className={cx('role-network', className)}
+        ref={el => (this.element = el)}
+        {...rest}
+      >
+        <div
+          className="role-network-line"
+          style={{
+            transform:
+              networkLinePosition &&
+              `scaleY(${networkLinePosition -
+                this.getStartingPoint(this.element)}) translateY(50%)`,
+            opacity: networkLinePosition && 1,
+            backgroundColor,
+            borderColor
+          }}
+        />
+      </li>
+    );
+  }
+}
 RoleNetworkLine.propTypes = {
-  className: PropTypes.string,
-  style: PropTypes.object.isRequired
+  className: PropTypes.string
 };
 
 export default RoleNetworkLine;

@@ -19,25 +19,24 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import RoleNetworkLine from './RoleNetworkLine';
-import { getNetworkColorStyle } from './utils';
 
 export class RoleCard extends Component {
-  state = { roleBottomY: 0 };
-  componentDidMount() {
-    this.setState({ roleBottomY: this.getRoleBottomY(this.element) });
-  }
+  // state = { roleBottomY: 0 };
+  // componentDidMount() {
+  //   this.setState({ roleBottomY: this.getRoleBottomY(this.element) });
+  // }
 
-  getRoleBottomY(roleCardElement) {
-    const rect = roleCardElement.getBoundingClientRect();
-    return rect.y + rect.height;
-  }
+  // getRoleBottomY(roleCardElement) {
+  //   const rect = roleCardElement.getBoundingClientRect();
+  //   return rect.y + rect.height;
+  // }
 
   render() {
     const { name, networks, networkLinePositions } = this.props;
     return (
       <div
         className="card-pf card-pf-view card-pf-view-select card-pf-accented"
-        ref={el => (this.element = el)}
+        // ref={el => (this.element = el)}
       >
         <div className="card-pf-body">
           <h2 className="card-pf-title">{name}</h2>
@@ -45,19 +44,8 @@ export class RoleCard extends Component {
             {networks.map(network => (
               <RoleNetworkLine
                 key={network}
-                style={{
-                  height: networkLinePositions[network]
-                    ? networkLinePositions[network] - this.state.roleBottomY
-                    : 0,
-                  bottom: networkLinePositions[network]
-                    ? -networkLinePositions[network] +
-                      this.state.roleBottomY -
-                      2
-                    : 0,
-                  backgroundColor: getNetworkColorStyle(network)
-                    .backgroundColor,
-                  borderColor: getNetworkColorStyle(network).borderColor
-                }}
+                networkName={network}
+                networkLinePosition={networkLinePositions[network]}
               />
             ))}
           </ul>
