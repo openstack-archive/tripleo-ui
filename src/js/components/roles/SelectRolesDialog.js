@@ -44,7 +44,7 @@ const messages = defineMessages({
 
 class SelectRolesDialog extends React.Component {
   componentDidMount() {
-    this.props.fetchAvailableRoles();
+    this.props.fetchAvailableRoles(this.props.currentPlanName);
   }
 
   handleFormSubmit = (values, dispatch, formProps) => {
