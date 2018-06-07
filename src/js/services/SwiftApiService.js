@@ -81,7 +81,7 @@ class SwiftApiService {
       )
         .then(response => response.data)
         .catch(error => {
-          // Swift doesn't add CORS headers to sucessful PUT requests,
+          // Swift doesn't add CORS headers to successful PUT requests,
           // so a failed request is counted as success if *all* of the
           // following criteria a true:
           //   - status is 0
