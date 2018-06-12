@@ -1,7 +1,7 @@
 Team and repository tags
 ========================
 
-[![Team and repository tags](http://governance.openstack.org/badges/tripleo-ui.svg)](http://governance.openstack.org/reference/tags/index.html)
+[![Team and repository tags](https://governance.openstack.org/tc/badges/tripleo-ui.svg)](http://governance.openstack.org/reference/tags/index.html)
 
 TripleO UI
 ==========
