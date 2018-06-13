@@ -57,6 +57,7 @@ class SelectRolesForm extends React.Component {
       pristine,
       submitting
     } = this.props;
+    console.log('ERRRORRRRR', error);
     return (
       <form onSubmit={handleSubmit}>
         <OverlayLoader
@@ -95,7 +96,7 @@ SelectRolesForm.propTypes = {
   submitting: PropTypes.bool.isRequired
 };
 
-const validateForm = (values, { availableRoles }) => {
+const validateForm = (values, { availableRoles, intl: { formatMessage } }) => {
   const errors = {};
   const selectedRoleNames = Object.keys(pickBy(values));
   const selectedRoles = availableRoles.filter((r, k) =>
@@ -103,7 +104,7 @@ const validateForm = (values, { availableRoles }) => {
   );
   if (!selectedRoles.some(r => r.tags.includes('primary'))) {
     errors._error = {
-      message: <FormattedMessage {...messages.primaryRoleValidationError} />
+      message: formatMessage(messages.primaryRoleValidationError)
     };
   }
   return errors;

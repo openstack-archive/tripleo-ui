@@ -18,13 +18,15 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { isEmpty } from 'lodash';
 
+import { sanitizeMessage } from '../../../utils';
+
 export default class FormErrorList extends React.Component {
   renderErrors() {
     const { errors } = this.props;
     if (errors.length > 1) {
       const errorList = errors.map((error, index) => (
         <li key={index}>
-          {error.title} {error.message}
+          {error.title} {sanitizeMessage(error.message)}
         </li>
       ));
       return (
@@ -37,7 +39,7 @@ export default class FormErrorList extends React.Component {
       return (
         <p>
           {errors[0].title && <strong>{errors[0].title}</strong>}{' '}
-          {errors[0].message}
+          {sanitizeMessage(errors[0].message)}
         </p>
       );
     }
