@@ -1,7 +1,7 @@
 ---
 features:
   - |
-    Improved perfomance in 'Deployment configuration' -> 'Parameters' section,
+    Improved performance in 'Deployment configuration' -> 'Parameters' section,
     a general error is shown when sub-section contains validation error
 fixes:
   - Fixes `bug 1745408 <https://bugs.launchpad.net/tripleo/+bug/1745408>`__
