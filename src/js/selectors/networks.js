@@ -16,7 +16,24 @@
 
 import { createSelector } from 'reselect';
 
+import { getResources } from './parameters';
+
 const networks = state =>
   state.networks.networks.sortBy(network => network.name);
 
 export const getNetworks = createSelector(networks, networks => networks);
+
+export const getNetworkResourcesByNetwork = createSelector(
+  [getResources, getNetworks],
+  (resources, networks) =>
+    networks.map(network =>
+      resources.find(
+        resource => resource.type === `OS::TripleO::Network::${network.name}`
+      )
+    )
+);
+
+export const getNetworkResourceExistsByNetwork = createSelector(
+  getNetworkResourcesByNetwork,
+  networkResources => networkResources.map(resource => !!resource)
+);

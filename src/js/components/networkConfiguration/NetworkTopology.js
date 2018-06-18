@@ -14,14 +14,43 @@
  * under the License.
  */
 
+import { connect } from 'react-redux';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import { getCurrentPlanName } from '../../selectors/plans';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { debounce } from 'lodash';
+import { Alert } from 'patternfly-react';
+import { Link } from 'react-router-dom';
 
+import {
+  getNetworks,
+  getNetworkResourceExistsByNetwork
+} from '../../selectors/networks';
+import { getParameters } from '../../selectors/parameters';
+import { getRoles } from '../../selectors/roles';
 import RolesList from './RolesList';
 import NetworksList from './NetworksList';
 
-export default class NetworkTopology extends Component {
+const messages = defineMessages({
+  networkIsolationWarningTitle: {
+    id: 'NetworkConfiguration.networkIsolationWarningTitle',
+    defaultMessage: 'Some networks are unavailable.'
+  },
+  networkIsolationWarningText: {
+    id: 'NetworkConfiguration.networkIsolationWarningText',
+    defaultMessage:
+      '{enableNetworkIsolationLink} to make use of these networks.',
+    description:
+      'This message is combined with NetworkConfiguration.networkIsolationWarningLink'
+  },
+  networkIsolationWarningLink: {
+    id: 'NetworkConfiguration.networkIsolationWarningLink',
+    defaultMessage: 'Enable network isolation'
+  }
+});
+class NetworkTopology extends Component {
   constructor() {
     super();
     this.networkLineElements = {};
@@ -44,24 +73,64 @@ export default class NetworkTopology extends Component {
     });
 
   render() {
-    const { roles, networks, parameters } = this.props;
+    const {
+      currentPlanName,
+      roles,
+      networkResourceExistsByNetwork,
+      networks,
+      parameters
+    } = this.props;
     return (
-      <div className="network-topology">
-        <RolesList
-          roles={roles}
-          networkLinePositions={this.state.networkLinePositions}
-        />
-        <NetworksList
-          networks={networks}
-          parameters={parameters}
-          networkLineElements={this.networkLineElements}
-        />
+      <div className="flex-container">
+        {networkResourceExistsByNetwork.includes(false) && (
+          <Alert type="info">
+            <strong>
+              <FormattedMessage {...messages.networkIsolationWarningTitle} />
+            </strong>{' '}
+            <FormattedMessage
+              {...messages.networkIsolationWarningText}
+              values={{
+                enableNetworkIsolationLink: (
+                  <Link to={`/plans/${currentPlanName}/configuration`}>
+                    <FormattedMessage
+                      {...messages.networkIsolationWarningLink}
+                    />
+                  </Link>
+                )
+              }}
+            />
+          </Alert>
+        )}
+        <div className="network-topology">
+          <RolesList
+            roles={roles}
+            networkLinePositions={this.state.networkLinePositions}
+          />
+          <NetworksList
+            networks={networks}
+            networkResourceExistsByNetwork={networkResourceExistsByNetwork}
+            parameters={parameters}
+            networkLineElements={this.networkLineElements}
+          />
+        </div>
       </div>
     );
   }
 }
 NetworkTopology.propTypes = {
+  currentPlanName: PropTypes.string.isRequired,
+  networkResourceExistsByNetwork: ImmutablePropTypes.map.isRequired,
   networks: ImmutablePropTypes.map.isRequired,
   parameters: ImmutablePropTypes.map.isRequired,
   roles: ImmutablePropTypes.map.isRequired
 };
+
+const mapStateToProps = state => ({
+  currentPlanName: getCurrentPlanName(state),
+  networkResourceExistsByNetwork: getNetworkResourceExistsByNetwork(state),
+  networks: getNetworks(state),
+  parameters: getParameters(state),
+  roles: getRoles(state)
+});
+
+export default connect(mapStateToProps)(NetworkTopology);
