@@ -16,7 +16,6 @@
 
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import {
   ModalHeader,
   ModalTitle,
@@ -28,9 +27,6 @@ import React, { Component } from 'react';
 
 import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
 import { getCurrentPlanName } from '../../selectors/plans';
-import { getNetworks } from '../../selectors/networks';
-import { getRoles } from '../../selectors/roles';
-import { getParameters } from '../../selectors/parameters';
 import { Loader } from '../ui/Loader';
 import NetworkTopology from './NetworkTopology';
 import ParametersActions from '../../actions/ParametersActions';
@@ -79,10 +75,7 @@ class NetworkConfiguration extends Component {
       intl: { formatMessage },
       isFetchingNetworks,
       isFetchingRoles,
-      isFetchingParameters,
-      networks,
-      parameters,
-      roles
+      isFetchingParameters
     } = this.props;
     return (
       <RoutedModalPanel
@@ -107,11 +100,7 @@ class NetworkConfiguration extends Component {
         >
           <ModalBody className="flex-container">
             {/*<NetworkConfigurationToolbar/>*/}
-            <NetworkTopology
-              networks={networks}
-              roles={roles}
-              parameters={parameters}
-            />
+            <NetworkTopology />
           </ModalBody>
         </Loader>
         <ModalFooter>
@@ -131,19 +120,13 @@ NetworkConfiguration.propTypes = {
   intl: PropTypes.object.isRequired,
   isFetchingNetworks: PropTypes.bool.isRequired,
   isFetchingParameters: PropTypes.bool.isRequired,
-  isFetchingRoles: PropTypes.bool.isRequired,
-  networks: ImmutablePropTypes.map.isRequired,
-  parameters: ImmutablePropTypes.map.isRequired,
-  roles: ImmutablePropTypes.map.isRequired
+  isFetchingRoles: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
   currentPlanName: getCurrentPlanName(state),
-  parameters: getParameters(state),
   isFetchingNetworks: state.networks.isFetching,
   isFetchingParameters: state.parameters.isFetching,
-  networks: getNetworks(state),
-  roles: getRoles(state),
   isFetchingRoles: state.roles.isFetching
 });
 
