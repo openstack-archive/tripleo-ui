@@ -15,10 +15,12 @@
  */
 
 import cx from 'classnames';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import { getNetworkColorStyle } from './utils';
+import { getNetworkResourceExistsByNetwork } from '../../selectors/networks';
 
 class RoleNetworkLine extends React.Component {
   getStartingPoint = nicElement => {
@@ -27,14 +29,17 @@ class RoleNetworkLine extends React.Component {
   };
 
   render() {
-    const { className, networkName, networkLinePosition, ...rest } = this.props;
-    const { backgroundColor, borderColor } = getNetworkColorStyle(networkName);
+    const {
+      className,
+      disabled,
+      networkName,
+      networkLinePosition
+    } = this.props;
+    const { backgroundColor, borderColor } = getNetworkColorStyle(
+      disabled ? 'disabled' : networkName
+    );
     return (
-      <li
-        className={cx('role-nic', className)}
-        ref={el => (this.element = el)}
-        {...rest}
-      >
+      <li className={cx('role-nic', className)} ref={el => (this.element = el)}>
         <div
           className="role-network-line"
           style={{
@@ -67,8 +72,18 @@ class RoleNetworkLine extends React.Component {
 }
 RoleNetworkLine.propTypes = {
   className: PropTypes.string,
+  disabled: PropTypes.bool.isRequired,
   networkLinePosition: PropTypes.number,
   networkName: PropTypes.string.isRequired
 };
+RoleNetworkLine.defaultProps = {
+  disabled: false
+};
 
-export default RoleNetworkLine;
+const mapStateToProps = (state, { networkName }) => ({
+  disabled: !getNetworkResourceExistsByNetwork(state)
+    .set('Provisioning', true)
+    .get(networkName)
+});
+
+export default connect(mapStateToProps)(RoleNetworkLine);
