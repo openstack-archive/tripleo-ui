@@ -22,6 +22,7 @@ export const networksColorStyles = {
   StorageMgmt: { backgroundColor: '#3f9c35', borderColor: '#2d7623' },
   Tenant: { backgroundColor: '#007a87', borderColor: '#005c66' },
   Management: { backgroundColor: '#8461f7', borderColor: '#703fec' },
+  disabled: { backgroundColor: '#d1d1d1', borderColor: '#bbbbbb' },
   default: { backgroundColor: '#6ca100', borderColor: '#486b00' }
 };
 

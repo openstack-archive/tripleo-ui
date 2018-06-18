@@ -20,7 +20,12 @@ import React, { Fragment } from 'react';
 
 import NetworkListItem from './NetworkListItem';
 
-const NetworksList = ({ networks, parameters, networkLineElements }) => {
+const NetworksList = ({
+  networks,
+  parameters,
+  networkLineElements,
+  networkResourceExistsByNetwork
+}) => {
   const ctlPlaneDefaultRoute = parameters.get('ControlPlaneDefaultRoute');
   const ctlPlaneSubnetCidr = parameters.get('ControlPlaneSubnetCidr');
   return (
@@ -57,6 +62,7 @@ const NetworksList = ({ networks, parameters, networkLineElements }) => {
             lineRef={el => (networkLineElements[network] = el)}
             key={network}
             name={network}
+            disabled={!networkResourceExistsByNetwork.get(network)}
           >
             {netCidr && (
               <small title={`${netCidr.name} - ${netCidr.description}`}>
@@ -76,6 +82,7 @@ const NetworksList = ({ networks, parameters, networkLineElements }) => {
 };
 NetworksList.propTypes = {
   networkLineElements: PropTypes.object.isRequired,
+  networkResourceExistsByNetwork: ImmutablePropTypes.map.isRequired,
   networks: ImmutablePropTypes.map.isRequired,
   parameters: ImmutablePropTypes.map.isRequired
 };

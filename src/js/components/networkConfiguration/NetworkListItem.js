@@ -20,8 +20,17 @@ import React, { Fragment } from 'react';
 
 import { getNetworkColorStyle } from './utils';
 
-const NetworkListItem = ({ className, lineRef, name, children, ...rest }) => {
-  const { borderColor, backgroundColor } = getNetworkColorStyle(name);
+const NetworkListItem = ({
+  className,
+  lineRef,
+  name,
+  children,
+  disabled,
+  ...rest
+}) => {
+  const { borderColor, backgroundColor } = getNetworkColorStyle(
+    disabled ? 'disabled' : name
+  );
   return (
     <Fragment>
       <div ref={lineRef} className="network-line" style={{ borderColor }} />
@@ -37,8 +46,12 @@ const NetworkListItem = ({ className, lineRef, name, children, ...rest }) => {
 NetworkListItem.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
+  disabled: PropTypes.bool.isRequired,
   lineRef: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired
+};
+NetworkListItem.defaultProps = {
+  disabled: false
 };
 
 export default NetworkListItem;
