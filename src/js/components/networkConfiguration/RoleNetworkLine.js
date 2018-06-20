@@ -21,63 +21,67 @@ import React from 'react';
 
 import { getNetworkColorStyle } from './utils';
 import { getNetworkResourceExistsByNetwork } from '../../selectors/networks';
+import { NetworksHighlightContext } from './NetworksHighlighter';
 
 class RoleNetworkLine extends React.Component {
-  getStartingPoint = nicElement => {
-    const rect = nicElement.getBoundingClientRect();
-    return rect.y + rect.height;
-  };
-
   render() {
-    const {
-      className,
-      disabled,
-      networkName,
-      networkLinePosition
-    } = this.props;
-    const { backgroundColor, borderColor } = getNetworkColorStyle(
-      disabled ? 'disabled' : networkName
-    );
     return (
-      <li className={cx('role-nic', className)} ref={el => (this.element = el)}>
-        <div
-          className="role-network-line"
-          style={{
-            transform: networkLinePosition && 'rotateX(0deg)',
-            height:
-              networkLinePosition &&
-              networkLinePosition - this.getStartingPoint(this.element),
-            bottom:
-              networkLinePosition &&
-              -(networkLinePosition - this.getStartingPoint(this.element)),
-            opacity: networkLinePosition && 1,
-            backgroundColor,
-            borderColor
-          }}
-        />
-        <div
-          className="role-network-point"
-          style={{
-            bottom:
-              networkLinePosition &&
-              -(networkLinePosition - this.getStartingPoint(this.element) + 5),
-            opacity: networkLinePosition && 1,
-            backgroundColor,
-            borderColor
-          }}
-        />
-      </li>
+      <NetworksHighlightContext.Consumer>
+        {({ highlightedNetworks, setHighlightedNetworks }) => {
+          const {
+            className,
+            disabled,
+            lineRef,
+            networkName,
+            networkLineHeight
+          } = this.props;
+
+          const highlighted = highlightedNetworks.includes(networkName);
+
+          const { backgroundColor, borderColor } = getNetworkColorStyle(
+            disabled ? 'disabled' : networkName
+          );
+
+          return (
+            <li className={cx('role-nic', className)} ref={lineRef}>
+              <div
+                style={{
+                  height: networkLineHeight,
+                  bottom: -networkLineHeight,
+                  backgroundColor,
+                  borderColor
+                }}
+                className={cx('role-network-line', {
+                  highlighted,
+                  in: networkLineHeight > 0
+                })}
+              />
+              <div
+                className={cx('role-network-point', { highlighted })}
+                style={{
+                  bottom: -networkLineHeight - 5,
+                  opacity: 1,
+                  backgroundColor,
+                  borderColor
+                }}
+              />
+            </li>
+          );
+        }}
+      </NetworksHighlightContext.Consumer>
     );
   }
 }
 RoleNetworkLine.propTypes = {
   className: PropTypes.string,
   disabled: PropTypes.bool.isRequired,
-  networkLinePosition: PropTypes.number,
+  lineRef: PropTypes.func.isRequired,
+  networkLineHeight: PropTypes.number.isRequired,
   networkName: PropTypes.string.isRequired
 };
 RoleNetworkLine.defaultProps = {
-  disabled: false
+  disabled: false,
+  networkLineHeight: 0
 };
 
 const mapStateToProps = (state, { networkName }) => ({

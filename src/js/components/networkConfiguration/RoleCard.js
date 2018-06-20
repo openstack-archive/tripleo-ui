@@ -17,15 +17,20 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { set } from 'lodash';
 
 import RoleNetworkLine from './RoleNetworkLine';
 
 export class RoleCard extends Component {
   render() {
-    const { role: { name, networks }, networkLinePositions } = this.props;
+    const {
+      networkLineHeights,
+      role: { name, networks },
+      roleNetworkLineElements
+    } = this.props;
     const allNetworks = networks.unshift('Provisioning');
     return (
-      <div className="card-pf card-pf-view card-pf-view-select role-card">
+      <div className="card-pf card-pf-view role-card">
         <div className="card-pf-body">
           <h2 className="card-pf-title">{name}</h2>
         </div>
@@ -33,9 +38,12 @@ export class RoleCard extends Component {
           <ul className="role-networks-list list-unstyled">
             {allNetworks.map(network => (
               <RoleNetworkLine
+                lineRef={el =>
+                  set(roleNetworkLineElements, [name, network], el)
+                }
                 key={network}
                 networkName={network}
-                networkLinePosition={networkLinePositions[network]}
+                networkLineHeight={networkLineHeights[network]}
               />
             ))}
           </ul>
@@ -45,8 +53,12 @@ export class RoleCard extends Component {
   }
 }
 RoleCard.propTypes = {
-  networkLinePositions: PropTypes.object,
-  role: ImmutablePropTypes.record.isRequired
+  networkLineHeights: PropTypes.object.isRequired,
+  role: ImmutablePropTypes.record.isRequired,
+  roleNetworkLineElements: PropTypes.object.isRequired
+};
+RoleCard.defaultProps = {
+  networkLineHeights: {}
 };
 
 export default RoleCard;

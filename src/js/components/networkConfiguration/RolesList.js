@@ -22,7 +22,7 @@ import { splitListIntoChunks } from '../../utils/immutablejs';
 import RoleCard from './RoleCard';
 import { Role } from '../../immutableRecords/roles';
 
-const RolesList = ({ roles, networkLinePositions }) => {
+const RolesList = ({ roles, networkLineHeights, roleNetworkLineElements }) => {
   const rolesChunks = splitListIntoChunks(roles.toList(), 2);
   return (
     <Fragment>
@@ -32,15 +32,17 @@ const RolesList = ({ roles, networkLinePositions }) => {
           .map(role => (
             <RoleCard
               key={role.name}
-              networkLinePositions={networkLinePositions}
+              networkLineHeights={networkLineHeights[role.name]}
               role={role}
+              roleNetworkLineElements={roleNetworkLineElements}
             />
           ))}
       </div>
       <div className="roles-list">
         <RoleCard
+          networkLineHeights={networkLineHeights['Undercloud']}
           role={new Role({ name: 'Undercloud', identifier: 'undercloud' })}
-          networkLinePositions={networkLinePositions}
+          roleNetworkLineElements={roleNetworkLineElements}
         />
       </div>
       <div className="roles-list">
@@ -49,8 +51,9 @@ const RolesList = ({ roles, networkLinePositions }) => {
           .map(role => (
             <RoleCard
               key={role.name}
-              networkLinePositions={networkLinePositions}
+              networkLineHeights={networkLineHeights[role.name]}
               role={role}
+              roleNetworkLineElements={roleNetworkLineElements}
             />
           ))}
       </div>
@@ -58,8 +61,12 @@ const RolesList = ({ roles, networkLinePositions }) => {
   );
 };
 RolesList.propTypes = {
-  networkLinePositions: PropTypes.object.isRequired,
+  networkLineHeights: PropTypes.object.isRequired,
+  roleNetworkLineElements: PropTypes.object.isRequired,
   roles: ImmutablePropTypes.map.isRequired
+};
+RolesList.defaultProps = {
+  networkLineHeights: {}
 };
 
 export default RolesList;
