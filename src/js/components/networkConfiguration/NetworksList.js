@@ -28,6 +28,7 @@ const NetworksList = ({
 }) => {
   const ctlPlaneDefaultRoute = parameters.get('ControlPlaneDefaultRoute');
   const ctlPlaneSubnetCidr = parameters.get('ControlPlaneSubnetCidr');
+
   return (
     <Fragment>
       <NetworkListItem

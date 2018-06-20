@@ -27,6 +27,7 @@ import {
 } from '../../selectors/networks';
 import { getParameters } from '../../selectors/parameters';
 import { getRoles } from '../../selectors/roles';
+import NetworksHighlighter from './NetworksHighlighter';
 import RolesList from './RolesList';
 import NetworksList from './NetworksList';
 
@@ -37,27 +38,39 @@ const messages = defineMessages({
       'Resource definition for some networks is missing. Please enable Network Isolation.'
   }
 });
-class NetworkTopology extends Component {
-  constructor() {
-    super();
-    this.networkLineElements = {};
-    this.state = { networkLinePositions: {} };
 
-    this.calculateNetworkPositions = debounce(
-      this.calculateNetworkPositions,
+class NetworkTopology extends Component {
+  constructor(props) {
+    super(props);
+    this.networkLineElements = {};
+    this.roleNetworkLineElements = {};
+    this.state = { networkLineHeights: {} };
+
+    this.calculateNetworkLineHeights = debounce(
+      this.calculateNetworkLineHeights,
       100
     );
   }
 
   componentDidMount() {
-    this.calculateNetworkPositions();
+    this.calculateNetworkLineHeights();
   }
 
-  calculateNetworkPositions = () =>
-    Object.keys(this.networkLineElements).map(key => {
-      const rect = this.networkLineElements[key].getBoundingClientRect();
-      this.setState(state => (state.networkLinePositions[key] = rect.y));
-    });
+  calculateNetworkLineHeights = () => {
+    const resultObject = Object.assign({}, this.roleNetworkLineElements);
+    Object.keys(this.roleNetworkLineElements).forEach(role =>
+      Object.keys(this.roleNetworkLineElements[role]).forEach(network => {
+        const { y, height } = this.roleNetworkLineElements[role][
+          network
+        ].getBoundingClientRect();
+        const start = y + height;
+        const end = this.networkLineElements[network].getBoundingClientRect().y;
+        resultObject[role][network] = end - start;
+      })
+    );
+
+    this.setState({ networkLineHeights: resultObject });
+  };
 
   render() {
     const {
@@ -67,7 +80,7 @@ class NetworkTopology extends Component {
       parameters
     } = this.props;
     return (
-      <div>
+      <NetworksHighlighter>
         {networkResourceExistsByNetwork.includes(false) && (
           <Alert type="info">
             <FormattedMessage {...messages.networkIsolationWarning} />
@@ -76,7 +89,8 @@ class NetworkTopology extends Component {
         <div className="network-topology">
           <RolesList
             roles={roles}
-            networkLinePositions={this.state.networkLinePositions}
+            networkLineHeights={this.state.networkLineHeights}
+            roleNetworkLineElements={this.roleNetworkLineElements}
           />
           <NetworksList
             networks={networks}
@@ -85,7 +99,7 @@ class NetworkTopology extends Component {
             networkLineElements={this.networkLineElements}
           />
         </div>
-      </div>
+      </NetworksHighlighter>
     );
   }
 }

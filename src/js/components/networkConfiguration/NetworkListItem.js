@@ -14,11 +14,13 @@
  * under the License.
  */
 
+import cx from 'classnames';
 import { startCase } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 
 import { getNetworkColorStyle } from './utils';
+import { NetworksHighlightContext } from './NetworksHighlighter';
 
 const NetworkListItem = ({
   className,
@@ -32,15 +34,35 @@ const NetworkListItem = ({
     disabled ? 'disabled' : name
   );
   return (
-    <Fragment>
-      <div ref={lineRef} className="network-line" style={{ borderColor }} />
-      <div className="network" style={{ backgroundColor }}>
-        <h5>
-          <strong>{startCase(name)}</strong>
-        </h5>
-        {children}
-      </div>
-    </Fragment>
+    <NetworksHighlightContext.Consumer>
+      {({ highlightedNetworks, setHighlightedNetworks }) => (
+        <Fragment>
+          <div
+            className={cx('network-line', {
+              highlighted: highlightedNetworks.includes(name)
+            })}
+          >
+            <div className="network-line-ends" style={{ borderColor }} />
+            <div
+              ref={lineRef}
+              className="network-line-edge"
+              style={{ borderColor }}
+            />
+          </div>
+          <div
+            className="network"
+            style={{ backgroundColor }}
+            onMouseEnter={() => setHighlightedNetworks([name])}
+            onMouseLeave={() => setHighlightedNetworks([])}
+          >
+            <h5>
+              <strong>{startCase(name)}</strong>
+            </h5>
+            {children}
+          </div>
+        </Fragment>
+      )}
+    </NetworksHighlightContext.Consumer>
   );
 };
 NetworkListItem.propTypes = {
