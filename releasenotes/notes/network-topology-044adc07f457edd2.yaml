@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    Added network topology view accessible under Network Configuration step in
+    Deployment plan overview page. Network topology diagram represents
+    Deployment roles, networks and draws connections based on roles-networks
+    assignment. Diagram also shows high level information about each network.
+    When a network is hovered, all it's connections are highlighted for easy
+    identification of assigned Roles.

@@ -21,6 +21,7 @@ import React from 'react';
 
 import { getNetworkColorStyle } from './utils';
 import { getNetworkResourceExistsByNetwork } from '../../selectors/networks';
+import { NetworksHighlightContext } from './NetworksHighlighter';
 
 class RoleNetworkLine extends React.Component {
   getStartingPoint = nicElement => {
@@ -29,44 +30,63 @@ class RoleNetworkLine extends React.Component {
   };
 
   render() {
-    const {
-      className,
-      disabled,
-      networkName,
-      networkLinePosition
-    } = this.props;
-    const { backgroundColor, borderColor } = getNetworkColorStyle(
-      disabled ? 'disabled' : networkName
-    );
     return (
-      <li className={cx('role-nic', className)} ref={el => (this.element = el)}>
-        <div
-          className="role-network-line"
-          style={{
-            transform: networkLinePosition && 'rotateX(0deg)',
-            height:
-              networkLinePosition &&
-              networkLinePosition - this.getStartingPoint(this.element),
-            bottom:
-              networkLinePosition &&
-              -(networkLinePosition - this.getStartingPoint(this.element)),
-            opacity: networkLinePosition && 1,
-            backgroundColor,
-            borderColor
-          }}
-        />
-        <div
-          className="role-network-point"
-          style={{
-            bottom:
-              networkLinePosition &&
-              -(networkLinePosition - this.getStartingPoint(this.element) + 5),
-            opacity: networkLinePosition && 1,
-            backgroundColor,
-            borderColor
-          }}
-        />
-      </li>
+      <NetworksHighlightContext.Consumer>
+        {({ highlightedNetworks, setHighlightedNetworks }) => {
+          const {
+            className,
+            disabled,
+            networkName,
+            networkLinePosition
+          } = this.props;
+
+          const { backgroundColor, borderColor } = getNetworkColorStyle(
+            disabled ? 'disabled' : networkName
+          );
+
+          const highlighted = highlightedNetworks.includes(networkName);
+          return (
+            <li
+              className={cx('role-nic', className)}
+              ref={el => (this.element = el)}
+            >
+              <div
+                style={{
+                  height:
+                    networkLinePosition &&
+                    networkLinePosition - this.getStartingPoint(this.element),
+                  bottom:
+                    networkLinePosition &&
+                    -(
+                      networkLinePosition - this.getStartingPoint(this.element)
+                    ),
+                  backgroundColor,
+                  borderColor
+                }}
+                className={cx('role-network-line', {
+                  highlighted,
+                  in: networkLinePosition
+                })}
+              />
+              <div
+                className={cx('role-network-point', { highlighted })}
+                style={{
+                  bottom:
+                    networkLinePosition &&
+                    -(
+                      networkLinePosition -
+                      this.getStartingPoint(this.element) +
+                      5
+                    ),
+                  opacity: networkLinePosition && 1,
+                  backgroundColor,
+                  borderColor
+                }}
+              />
+            </li>
+          );
+        }}
+      </NetworksHighlightContext.Consumer>
     );
   }
 }

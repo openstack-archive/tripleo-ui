@@ -27,6 +27,7 @@ import {
 } from '../../selectors/networks';
 import { getParameters } from '../../selectors/parameters';
 import { getRoles } from '../../selectors/roles';
+import NetworksHighlighter from './NetworksHighlighter';
 import RolesList from './RolesList';
 import NetworksList from './NetworksList';
 
@@ -37,6 +38,7 @@ const messages = defineMessages({
       'Resource definition for some networks is missing. Please enable Network Isolation.'
   }
 });
+
 class NetworkTopology extends Component {
   constructor() {
     super();
@@ -67,7 +69,7 @@ class NetworkTopology extends Component {
       parameters
     } = this.props;
     return (
-      <div>
+      <NetworksHighlighter>
         {networkResourceExistsByNetwork.includes(false) && (
           <Alert type="info">
             <FormattedMessage {...messages.networkIsolationWarning} />
@@ -85,7 +87,7 @@ class NetworkTopology extends Component {
             networkLineElements={this.networkLineElements}
           />
         </div>
-      </div>
+      </NetworksHighlighter>
     );
   }
 }

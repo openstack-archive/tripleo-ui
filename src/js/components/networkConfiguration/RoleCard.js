@@ -31,7 +31,7 @@ export class RoleCard extends Component {
     return (
       <div
         className={cx(
-          'card-pf card-pf-view card-pf-view-select card-pf-accented role-card',
+          'card-pf card-pf-view card-pf-accented role-card',
           identifier
         )}
       >
