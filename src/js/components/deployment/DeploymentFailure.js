@@ -45,6 +45,7 @@ class DeploymentFailure extends React.Component {
       deploymentStatus: { status, message },
       undeployPlan,
       intl: { formatMessage },
+      isFetchingStacks,
       isPendingRequest,
       planName,
       stack
@@ -52,20 +53,25 @@ class DeploymentFailure extends React.Component {
 
     return (
       <ModalBody className="flex-container">
-        <InlineNotification
-          type="error"
-          title={formatMessage(deploymentStatusMessages[status], { planName })}
-        >
-          <p>{sanitizeMessage(message)}</p>
-        </InlineNotification>
+        <div className="flex-column">
+          <InlineNotification
+            type="error"
+            title={formatMessage(deploymentStatusMessages[status], {
+              planName
+            })}
+          >
+            <p>{sanitizeMessage(message)}</p>
+          </InlineNotification>
+        </div>
         <div>
-          {stack && (
-            <DeleteStackButton
-              deleteStack={undeployPlan.bind(this, planName)}
-              disabled={isPendingRequest}
-            />
-          )}
-          {!stack && <RecoverDeploymentStatusButton />}
+          {isFetchingStacks ||
+            (stack && (
+              <DeleteStackButton
+                deleteStack={undeployPlan.bind(this, planName)}
+                disabled={isPendingRequest}
+              />
+            ))}
+          {isFetchingStacks || (!stack && <RecoverDeploymentStatusButton />)}
         </div>
       </ModalBody>
     );
