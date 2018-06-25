@@ -34,7 +34,8 @@ import {
   deploymentFinished,
   undeployFinished,
   configDownloadMessage,
-  recoverDeploymentStatusFinished
+  recoverDeploymentStatusFinished,
+  getDeploymentFailuresFinished
 } from './DeploymentActions';
 import NetworksActions from './NetworksActions';
 
@@ -206,6 +207,14 @@ export default {
           dispatch(
             handleWorkflowMessage(payload.execution.id, execution =>
               dispatch(recoverDeploymentStatusFinished(execution))
+            )
+          );
+          break;
+
+        case MistralConstants.GET_DEPLOYMENT_FAILURES:
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(getDeploymentFailuresFinished(execution))
             )
           );
           break;
