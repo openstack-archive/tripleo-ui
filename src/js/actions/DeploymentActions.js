@@ -35,6 +35,11 @@ import {
   RECOVER_DEPLOYMENT_STATUS_SUCCESS,
   RECOVER_DEPLOYMENT_STATUS_PENDING
 } from '../constants/DeploymentConstants';
+import {
+  GET_DEPLOYMENT_FAILURES_PENDING,
+  GET_DEPLOYMENT_FAILURES_SUCCESS,
+  GET_DEPLOYMENT_FAILURES_FAILED
+} from '../constants/DeploymentFailuresConstants';
 import { handleErrors } from './ErrorActions';
 import MistralConstants from '../constants/MistralConstants';
 import { sanitizeMessage } from '../utils';
@@ -275,5 +280,78 @@ export const recoverDeploymentStatusFinished = execution => (
         type: execution.workflow_name
       })
     );
+  }
+};
+
+export const getDeploymentFailuresPending = () => ({
+  type: GET_DEPLOYMENT_FAILURES_PENDING
+});
+
+export const getDeploymentFailuresSuccess = failures => ({
+  type: GET_DEPLOYMENT_FAILURES_SUCCESS,
+  payload: failures
+});
+
+export const getDeploymentFailuresFailed = () => ({
+  type: GET_DEPLOYMENT_FAILURES_FAILED
+});
+
+export const getDeploymentFailures = planName => dispatch => {
+  dispatch(getDeploymentFailuresPending());
+  dispatch(
+    startWorkflow(
+      MistralConstants.GET_DEPLOYMENT_FAILURES,
+      { plan: planName },
+      execution => dispatch(getDeploymentFailuresFinished(execution))
+    )
+  ).catch(error => {
+    dispatch(handleErrors(error, `Deployment failures could not be loaded`));
+    dispatch(getDeploymentFailuresFailed());
+  });
+};
+
+export const getDeploymentFailuresFinished = execution => (
+  dispatch,
+  getState,
+  { getIntl }
+) => {
+  const {
+    output: { message, deployment_failures: deploymentFailures },
+    state
+  } = execution;
+  if (state === 'ERROR') {
+    dispatch(
+      NotificationActions.notify({
+        title: `Deployment failures could not be loaded`,
+        message: sanitizeMessage(message)
+      })
+    );
+    dispatch(getDeploymentFailuresFailed());
+  } else {
+    const df = {
+      'newTHT-novacompute-0': [
+        [
+          'Template /etc/ssh/ssh_known_hosts',
+          {
+            msg:
+              "AnsibleUndefinedVariable: 'dict object' has no attribute u'newtht-novacompute-0'",
+            changed: false,
+            _ansible_no_log: false
+          }
+        ]
+      ],
+      'newTHT-controller-0': [
+        [
+          'Template /etc/ssh/ssh_known_hosts',
+          {
+            msg:
+              "AnsibleUndefinedVariable: 'dict object' has no attribute u'newtht-novacompute-0'",
+            changed: false,
+            _ansible_no_log: false
+          }
+        ]
+      ]
+    };
+    dispatch(getDeploymentFailuresSuccess(df));
   }
 };

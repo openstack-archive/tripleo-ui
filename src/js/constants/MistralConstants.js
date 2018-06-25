@@ -30,6 +30,7 @@ export default {
   DEPLOYMENT_DEPLOY_PLAN: 'tripleo.deployment.v1.deploy_plan',
   UNDEPLOY_PLAN: 'tripleo.deployment.v1.undeploy_plan',
   RECOVER_DEPLOYMENT_STATUS: 'tripleo.deployment.v1.recover_deployment_status',
+  GET_DEPLOYMENT_FAILURES: 'tripleo.deployment.v1.get_deployment_failures',
   DOWNLOAD_LOGS: 'tripleo.plan_management.v1.download_logs',
   HEAT_STACKS_LIST: 'tripleo.stack.v1._heat_stacks_list',
   PARAMETERS_GET: 'tripleo.parameters.get_flatten',

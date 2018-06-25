@@ -22,7 +22,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import DeleteStackButton from '../deployment_plan/DeleteStackButton';
-import RecoverDeploymentStatusButton from '../deployment/RecoverDeploymentStatusButton';
+import RecoverDeploymentStatusButton from './RecoverDeploymentStatusButton';
+import DeploymentFailures from './DeploymentFailures';
 import { deploymentStatusMessages } from '../../constants/DeploymentConstants';
 import { getCurrentStack } from '../../selectors/stacks';
 import {
@@ -45,6 +46,7 @@ class DeploymentFailure extends React.Component {
       deploymentStatus: { status, message },
       undeployPlan,
       intl: { formatMessage },
+      isFetchingStacks,
       isPendingRequest,
       planName,
       stack
@@ -52,20 +54,26 @@ class DeploymentFailure extends React.Component {
 
     return (
       <ModalBody className="flex-container">
-        <InlineNotification
-          type="error"
-          title={formatMessage(deploymentStatusMessages[status], { planName })}
-        >
-          <p>{sanitizeMessage(message)}</p>
-        </InlineNotification>
+        <div className="flex-column">
+          <InlineNotification
+            type="error"
+            title={formatMessage(deploymentStatusMessages[status], {
+              planName
+            })}
+          >
+            <p>{sanitizeMessage(message)}</p>
+          </InlineNotification>
+        </div>
         <div>
-          {stack && (
-            <DeleteStackButton
-              deleteStack={undeployPlan.bind(this, planName)}
-              disabled={isPendingRequest}
-            />
-          )}
-          {!stack && <RecoverDeploymentStatusButton />}
+          {isFetchingStacks ||
+            (stack && (
+              <DeleteStackButton
+                deleteStack={() => undeployPlan()}
+                disabled={isPendingRequest}
+              />
+            ))}
+          {isFetchingStacks || (!stack && <RecoverDeploymentStatusButton />)}
+          <DeploymentFailures />
         </div>
       </ModalBody>
     );
@@ -90,8 +98,8 @@ const mapStateToProps = (state, props) => ({
   stack: getCurrentStack(state)
 });
 
-const mapDispatchToProps = dispatch => ({
-  undeployPlan: planName => dispatch(startUndeploy(planName)),
+const mapDispatchToProps = (dispatch, { planName }) => ({
+  undeployPlan: () => dispatch(startUndeploy(planName)),
   fetchStacks: () => dispatch(StacksActions.fetchStacks())
 });
 
