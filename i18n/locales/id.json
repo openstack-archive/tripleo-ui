@@ -159,6 +159,7 @@
         "NodeProvisionState.provisionStateLabel": "Provision State:",
         "Nodes.loadingNodes": "Loading Nodes...",
         "Nodes.nodes": "Nodes",
+        "Nodes.refreshResults": "Refresh Results",
         "Nodes.registerNodes": "Register Nodes",
         "Nodes.registeringNodes": "Registering Nodes...",
         "NodesActions.introspectionFailedNotificationTitle": "Nodes Introspection Failed",

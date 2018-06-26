@@ -159,6 +159,7 @@
         "NodeProvisionState.provisionStateLabel": "Estado de provisi\u00f3n:",
         "Nodes.loadingNodes": "Cargando nodos...",
         "Nodes.nodes": "Nodos",
+        "Nodes.refreshResults": "Actualizar resultados",
         "Nodes.registerNodes": "Registrar nodos",
         "Nodes.registeringNodes": "Registrando nodos...",
         "NodesActions.introspectionFailedNotificationTitle": "Introspecci\u00f3n de los nodos fallida",

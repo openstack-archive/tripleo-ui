@@ -159,6 +159,7 @@
         "NodeProvisionState.provisionStateLabel": "\u30d7\u30ed\u30d3\u30b8\u30e7\u30cb\u30f3\u30b0\u306e\u72b6\u614b:",
         "Nodes.loadingNodes": "\u30ce\u30fc\u30c9\u3092\u8aad\u307f\u8fbc\u307f\u4e2d...",
         "Nodes.nodes": "\u30ce\u30fc\u30c9",
+        "Nodes.refreshResults": "\u30ea\u30d5\u30ec\u30c3\u30b7\u30e5",
         "Nodes.registerNodes": "\u30ce\u30fc\u30c9\u306e\u767b\u9332",
         "Nodes.registeringNodes": "\u30ce\u30fc\u30c9\u3092\u767b\u9332\u4e2d...",
         "NodesActions.introspectionFailedNotificationTitle": "\u30ce\u30fc\u30c9\u306e\u30a4\u30f3\u30c8\u30ed\u30b9\u30da\u30af\u30b7\u30e7\u30f3\u306b\u5931\u6557\u3057\u307e\u3057\u305f",

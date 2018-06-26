@@ -159,6 +159,7 @@
         "NodeProvisionState.provisionStateLabel": "Haz\u0131rl\u0131k Durumu:",
         "Nodes.loadingNodes": "D\u00fc\u011f\u00fcmler Y\u00fckleniyor...",
         "Nodes.nodes": "D\u00fc\u011f\u00fcmler",
+        "Nodes.refreshResults": "Tazeleme Sonu\u00e7lar\u0131",
         "Nodes.registerNodes": "D\u00fc\u011f\u00fcmleri Kaydet",
         "Nodes.registeringNodes": "D\u00fc\u011f\u00fcmler Kaydediliyor...",
         "NodesActions.introspectionFailedNotificationTitle": "D\u00fc\u011f\u00fcm G\u00f6zlemi Ba\u015far\u0131s\u0131z",

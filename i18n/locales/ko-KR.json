@@ -159,6 +159,7 @@
         "NodeProvisionState.provisionStateLabel": "\ud504\ub85c\ube44\uc804 \uc0c1\ud0dc:",
         "Nodes.loadingNodes": "\ub178\ub4dc\ub97c \ubd88\ub7ec\uc624\ub294 \uc911...",
         "Nodes.nodes": "\ub178\ub4dc",
+        "Nodes.refreshResults": "\uac31\uc2e0 \uacb0\uacfc",
         "Nodes.registerNodes": "\ub178\ub4dc \ub4f1\ub85d",
         "Nodes.registeringNodes": "\ub178\ub4dc \ub4f1\ub85d\uc911...",
         "NodesActions.introspectionFailedNotificationTitle": "\ub178\ub4dc Introspection \uc2e4\ud328",
