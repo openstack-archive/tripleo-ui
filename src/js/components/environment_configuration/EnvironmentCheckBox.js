@@ -30,7 +30,6 @@ import {
  * always touched
  */
 const EnvironmentCheckBox = ({
-  id,
   label,
   labelColumns,
   inputColumns,
@@ -41,10 +40,7 @@ const EnvironmentCheckBox = ({
   required,
   ...rest
 }) => (
-  <FormGroup
-    controlId={id}
-    validationState={getValidationState({ ...meta, touched: true })}
-  >
+  <FormGroup validationState={getValidationState({ ...meta, touched: true })}>
     <Col smOffset={labelColumns} sm={inputColumns}>
       <Checkbox {...input} {...rest}>
         <span className={cx({ 'required-pf': required })}>{label}</span>
