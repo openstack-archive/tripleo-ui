@@ -22,9 +22,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { getCurrentPlanName, getPlans } from '../../selectors/plans';
+import {
+  getDeploymentStatusByPlan,
+  getDeploymentStatusUIByPlan
+} from '../../selectors/deployment';
 import { PageHeader } from '../ui/PageHeader';
 import PlansActions from '../../actions/PlansActions';
-import StacksActions from '../../actions/StacksActions';
+import { getDeploymentStatus } from '../../actions/DeploymentActions';
 import NoPlans from './NoPlans';
 import PlanCard from './cards/PlanCard';
 import ImportPlanCard from './cards/ImportPlanCard';
@@ -41,33 +45,18 @@ const messages = defineMessages({
 });
 
 class PlansList extends React.Component {
-  constructor() {
-    super();
-  }
-
   componentWillMount() {
     this.props.fetchPlans();
-    this.props.fetchStacks();
-  }
-
-  renderCard(plan) {
-    const stack = this.props.stacks.get(plan.name);
-    return (
-      <PlanCard
-        key={plan.name}
-        plan={plan}
-        currentPlanName={this.props.currentPlanName}
-        stack={stack}
-      />
-    );
-  }
-
-  renderCards() {
-    let plans = this.props.plans.toArray();
-    return plans.map(plan => this.renderCard(plan));
   }
 
   render() {
+    const {
+      plans,
+      currentPlanName,
+      deploymentStates,
+      deploymentStatesUI,
+      getDeploymentStatus
+    } = this.props;
     return (
       <div>
         <PageHeader>
@@ -82,14 +71,28 @@ class PlansList extends React.Component {
             </Link>
           </div>
         </PageHeader>
-        {this.props.plans.isEmpty() ? (
+        {plans.isEmpty() ? (
           <NoPlans />
         ) : (
           <div className="panel panel-default">
             <div className="cards-pf">
               <div className="row row-cards-pf">
                 <ImportPlanCard />
-                {this.renderCards()}
+                {plans
+                  .toList()
+                  .map(plan => (
+                    <PlanCard
+                      key={plan.name}
+                      plan={plan}
+                      currentPlanName={currentPlanName}
+                      status={deploymentStates.getIn([plan.name, 'status'])}
+                      statusLoaded={deploymentStatesUI.getIn(
+                        [plan.name, 'isLoaded'],
+                        false
+                      )}
+                      getDeploymentStatus={getDeploymentStatus}
+                    />
+                  ))}
               </div>
             </div>
           </div>
@@ -100,26 +103,27 @@ class PlansList extends React.Component {
 }
 
 PlansList.propTypes = {
-  children: PropTypes.node,
   currentPlanName: PropTypes.string,
-  fetchPlans: PropTypes.func,
-  fetchStacks: PropTypes.func,
-  plans: ImmutablePropTypes.map,
-  stacks: ImmutablePropTypes.map
+  deploymentStates: ImmutablePropTypes.map.isRequired,
+  deploymentStatesUI: ImmutablePropTypes.map.isRequired,
+  fetchPlans: PropTypes.func.isRequired,
+  getDeploymentStatus: PropTypes.func.isRequired,
+  plans: ImmutablePropTypes.map.isRequired
 };
 
 function mapStateToProps(state) {
   return {
     currentPlanName: getCurrentPlanName(state),
     plans: getPlans(state),
-    stacks: state.stacks.get('stacks')
+    deploymentStates: getDeploymentStatusByPlan(state),
+    deploymentStatesUI: getDeploymentStatusUIByPlan(state)
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchPlans: () => dispatch(PlansActions.fetchPlans()),
-    fetchStacks: () => dispatch(StacksActions.fetchStacks())
+    getDeploymentStatus: planName => dispatch(getDeploymentStatus(planName))
   };
 }
 

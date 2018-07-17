@@ -18,19 +18,14 @@ import ClassNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import {
-  defineMessages,
-  injectIntl,
-  FormattedDate,
-  FormattedTime
-} from 'react-intl';
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 
 import { InlineLoader, OverlayLoader } from '../../ui/Loader';
 import PlanActions from './PlanActions';
 import {
-  stackStates,
-  deploymentStatusMessages
-} from '../../../constants/StacksConstants';
+  deploymentStates,
+  shortDeploymentStatusMessages
+} from '../../../constants/DeploymentConstants';
 
 const messages = defineMessages({
   deleting: {
@@ -41,65 +36,50 @@ const messages = defineMessages({
     id: 'PlanCard.updatingPlan',
     defaultMessage: 'Updating {planName}...'
   },
-  notDeployed: {
-    id: 'PlanCard.notDeployed',
-    defaultMessage: 'Not deployed'
+  loadingStatus: {
+    id: 'PlanCard.loadingStatus',
+    defaultMessage: 'Loading deployment status...'
   }
 });
 
 class PlanCard extends React.Component {
-  renderStackIcon() {
-    const { stack } = this.props;
-    if (stack) {
-      switch (stack.get('stack_status')) {
-        case stackStates.CREATE_IN_PROGRESS:
-        case stackStates.UPDATE_IN_PROGRESS:
-        case stackStates.DELETE_IN_PROGRESS:
-          return <InlineLoader />;
+  componentDidMount() {
+    this.props.getDeploymentStatus(this.props.plan.name);
+  }
 
-        case stackStates.CREATE_COMPLETE:
-        case stackStates.UPDATE_COMPLETE:
-          return <span className="pficon pficon-ok" />;
-
-        case stackStates.CREATE_FAILED:
-        case stackStates.UPDATE_FAILED:
-          return <span className="pficon pficon-error-circle-o" />;
-      }
+  renderStatusIcon() {
+    const { status } = this.props;
+    switch (status) {
+      case deploymentStates.DEPLOYING:
+      case deploymentStates.UNDEPLOYING:
+        return <InlineLoader />;
+      case deploymentStates.DEPLOY_SUCCESS:
+        return <span className="pficon pficon-ok" />;
+      case deploymentStates.DEPLOY_FAILED:
+      case deploymentStates.UNDEPLOY_FAILED:
+        return <span className="pficon pficon-error-circle-o" />;
+      case deploymentStates.UNKNOWN:
+        return <span className="pficon pficon-warning-triangle-o" />;
+      default:
+        return null;
     }
   }
 
-  getDeploymentStatus(stack) {
-    return this.props.intl.formatMessage(
-      stack
-        ? deploymentStatusMessages[stack.get('stack_status')]
-        : messages.notDeployed
-    );
-  }
-
-  renderStackInfo() {
-    const { stack } = this.props;
-    let modified = null;
-
-    if (stack) {
-      const time = stack.get('updated_time') || stack.get('creation_time');
-      modified = (
-        <span>
-          <strong>Last modified:</strong>
-          &nbsp;
-          <FormattedDate value={time} />
-          &nbsp;
-          <FormattedTime value={time} />
-        </span>
-      );
-    }
-
+  renderStatusInfo() {
+    const { plan, status, statusLoaded, intl: { formatMessage } } = this.props;
     return (
       <ul className="list-unstyled">
         <li>
-          <strong>Status:</strong> {this.renderStackIcon(stack)}{' '}
-          {this.getDeploymentStatus(stack)}
+          <strong>Status:</strong> {this.renderStatusIcon(plan.name)}{' '}
+          {status && (
+            <InlineLoader
+              loaded={statusLoaded}
+              content={formatMessage(messages.loadingStatus)}
+            >
+              <FormattedMessage {...shortDeploymentStatusMessages[status]} />
+            </InlineLoader>
+          )}
         </li>
-        <li>{modified}</li>
       </ul>
     );
   }
@@ -110,7 +90,7 @@ class PlanCard extends React.Component {
       intl: { formatMessage },
       history,
       plan,
-      stack
+      status
     } = this.props;
     const cardClasses = ClassNames({
       'plan-card card-pf card-pf-view card-pf-view-select card-pf-view-single-select': true,
@@ -136,12 +116,12 @@ class PlanCard extends React.Component {
           >
             <h2 className="card-pf-title">
               {plan.name}
-              <PlanActions planName={plan.name} stack={stack} />
+              <PlanActions planName={plan.name} status={status} />
             </h2>
             {plan.description && (
               <div className="card-pf-body">{plan.description}</div>
             )}
-            <div className="card-pf-footer">{this.renderStackInfo()}</div>
+            <div className="card-pf-footer">{this.renderStatusInfo()}</div>
           </OverlayLoader>
         </div>
       </div>
@@ -151,10 +131,12 @@ class PlanCard extends React.Component {
 
 PlanCard.propTypes = {
   currentPlanName: PropTypes.string,
+  getDeploymentStatus: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
   plan: PropTypes.object.isRequired,
-  stack: PropTypes.object
+  status: PropTypes.string,
+  statusLoaded: PropTypes.bool.isRequired
 };
 
 export default withRouter(injectIntl(PlanCard));

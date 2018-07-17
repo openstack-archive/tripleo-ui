@@ -23,13 +23,15 @@ import { mockStore } from '../../actions/utils';
 import PlansList from '../../../js/components/plan/PlansList';
 import FileList from '../../../js/components/plan/FileList';
 import { InitialPlanState, PlanFile } from '../../../js/immutableRecords/plans';
-import { StacksState } from '../../../js/immutableRecords/stacks';
 
 describe('PlansList component', () => {
   let output;
   const store = mockStore({
-    plans: new InitialPlanState(),
-    stacks: new StacksState()
+    plans: new InitialPlanState({ currentPlanName: 'overcloud' }),
+    deploymentStatus: {
+      deploymentStatusByPlan: Map(),
+      deploymentStatusUI: Map()
+    }
   });
 
   beforeEach(() => {
