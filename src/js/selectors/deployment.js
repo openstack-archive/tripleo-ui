@@ -23,9 +23,9 @@ import {
 } from '../immutableRecords/deploymentStatus';
 import { deploymentStates as ds } from '../constants/DeploymentConstants';
 
-const getDeploymentStatusByPlan = state =>
+export const getDeploymentStatusByPlan = state =>
   state.deploymentStatus.deploymentStatusByPlan;
-const getDeploymentStatusUIByPlan = state =>
+export const getDeploymentStatusUIByPlan = state =>
   state.deploymentStatus.deploymentStatusUI;
 
 export const getCurrentPlanDeploymentStatus = createSelector(
