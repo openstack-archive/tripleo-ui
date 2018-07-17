@@ -48,6 +48,36 @@ export const deploymentStates = keyMirror({
   UNKNOWN: null
 });
 
+export const shortDeploymentStatusMessages = defineMessages({
+  UNDEPLOYED: {
+    id: 'DeploymentStatusShort.undeployed',
+    defaultMessage: 'Not deployed'
+  },
+  DEPLOY_SUCCESS: {
+    id: 'DeploymentStatusShort.deployed',
+    defaultMessage: 'Deployment succeeded'
+  },
+  DEPLOYING: {
+    id: 'DeploymentStatusShort.deploying',
+    defaultMessage: 'Deployment in progress'
+  },
+  UNDEPLOYING: {
+    id: 'DeploymentStatusShort.undeploying',
+    defaultMessage: 'Deployment deletion in progress'
+  },
+  DEPLOY_FAILED: {
+    id: 'DeploymentStatusShort.deploymentFailed',
+    defaultMessage: 'Deployment failed'
+  },
+  UNDEPLOY_FAILED: {
+    id: 'DeploymentStatusShort.undeployFailed',
+    defaultMessage: 'Undeploy failed'
+  },
+  UNKNOWN: {
+    id: 'DeploymentStatusShort.unknown',
+    defaultMessage: 'Deployment status could not be loaded'
+  }
+});
 export const deploymentStatusMessages = defineMessages({
   UNDEPLOYED: {
     id: 'DeploymentStatus.undeployed',

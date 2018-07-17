@@ -20,7 +20,7 @@ import React from 'react';
 
 import DropdownKebab from '../../ui/dropdown/DropdownKebab';
 import MenuItemLink from '../../ui/dropdown/MenuItemLink';
-import { stackStates } from '../../../constants/StacksConstants';
+import { deploymentStates } from '../../../constants/DeploymentConstants';
 
 const messages = defineMessages({
   edit: {
@@ -37,50 +37,38 @@ const messages = defineMessages({
   }
 });
 
-const PlanActions = ({ planName, stack }) => {
-  const renderEditAction = () => {
-    if (
-      stack &&
-      [
-        stackStates.CREATE_IN_PROGRESS,
-        stackStates.UPDATE_IN_PROGRESS,
-        stackStates.DELETE_IN_PROGRESS
-      ].includes(stack.get('stack_status'))
-    ) {
-      return null;
-    }
-    return (
-      <MenuItemLink
-        to={`/plans/manage/${planName}/edit`}
-        className="ListPlans__editPlan"
-      >
-        <FormattedMessage {...messages.edit} />
-      </MenuItemLink>
-    );
-  };
+const canRenderDeleteAction = status => status === deploymentStates.UNDEPLOYED;
+const canRenderEditAction = status =>
+  ![deploymentStates.DEPLOYING, deploymentStates.UNDEPLOYING].includes(status);
 
-  return (
-    <div className="pull-right">
-      <DropdownKebab id={`card-actions-${planName}`} pullRight>
-        {renderEditAction()}
+const PlanActions = ({ planName, status }) => (
+  <div className="pull-right">
+    <DropdownKebab id={`card-actions-${planName}`} pullRight>
+      {canRenderEditAction(status) && (
         <MenuItemLink
-          to={`/plans/manage/${planName}/export`}
-          className="ListPlans__exportPlan"
+          to={`/plans/manage/${planName}/edit`}
+          className="ListPlans__editPlan"
         >
-          <FormattedMessage {...messages.export} />
+          <FormattedMessage {...messages.edit} />
         </MenuItemLink>
-        {!stack && (
-          <MenuItemLink
-            to={`/plans/manage/${planName}/delete`}
-            className="ListPlans__deletePlan"
-          >
-            <FormattedMessage {...messages.delete} />
-          </MenuItemLink>
-        )}
-      </DropdownKebab>
-    </div>
-  );
-};
+      )}
+      <MenuItemLink
+        to={`/plans/manage/${planName}/export`}
+        className="ListPlans__exportPlan"
+      >
+        <FormattedMessage {...messages.export} />
+      </MenuItemLink>
+      {canRenderDeleteAction(status) && (
+        <MenuItemLink
+          to={`/plans/manage/${planName}/delete`}
+          className="ListPlans__deletePlan"
+        >
+          <FormattedMessage {...messages.delete} />
+        </MenuItemLink>
+      )}
+    </DropdownKebab>
+  </div>
+);
 PlanActions.propTypes = {
   planName: PropTypes.string.isRequired,
   stack: PropTypes.object
