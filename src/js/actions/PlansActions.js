@@ -18,6 +18,7 @@ import { defineMessages } from 'react-intl';
 import { normalize } from 'normalizr';
 import when from 'when';
 import yaml from 'js-yaml';
+import { startSubmit, stopSubmit } from 'redux-form';
 
 import { handleErrors } from './ErrorActions';
 import history from '../utils/history';
@@ -40,6 +41,10 @@ const messages = defineMessages({
   planCreatedNotificationMessage: {
     id: 'PlansActions.planCreatedNotificationMessage',
     defaultMessage: 'The plan {planName} was successfully created.'
+  },
+  planCreationFailed: {
+    id: 'PlansActions.planCreationFailedNotificationMessage',
+    defaultMessage: 'Plan creation failed'
   },
   planUpdatedNotificationTitle: {
     id: 'PlansActions.planUpdatedNotificationTitle',
@@ -271,34 +276,17 @@ export default {
     };
   },
 
-  cancelCreatePlan() {
+  createPlanSuccess(planName) {
     return {
-      type: PlansConstants.CANCEL_CREATE_PLAN
-    };
-  },
-
-  createPlanPending() {
-    return {
-      type: PlansConstants.CREATE_PLAN_PENDING
-    };
-  },
-
-  createPlanSuccess() {
-    return {
-      type: PlansConstants.CREATE_PLAN_SUCCESS
-    };
-  },
-
-  createPlanFailed(errors) {
-    return {
-      type: PlansConstants.CREATE_PLAN_FAILED,
-      payload: errors
+      type: PlansConstants.CREATE_PLAN_SUCCESS,
+      payload: planName
     };
   },
 
   createPlan(planName, planFiles) {
-    return dispatch => {
-      dispatch(this.createPlanPending());
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
+      dispatch(startSubmit('newPlanForm'));
       return dispatch(
         MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
           container: planName
@@ -318,19 +306,22 @@ export default {
           )
         )
         .catch(error => {
-          dispatch(handleErrors(error, 'Plan creation failed', false));
           dispatch(
-            this.createPlanFailed([
-              { title: 'Plan creation failed', message: error.message }
-            ])
+            stopSubmit('newPlanForm', {
+              _error: {
+                title: formatMessage(messages.planCreationFailed),
+                message: error.message
+              }
+            })
           );
         });
     };
   },
 
   createPlanFromTarball(planName, file) {
-    return dispatch => {
-      dispatch(this.createPlanPending());
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
+      dispatch(startSubmit('newPlanForm'));
       dispatch(
         MistralApiService.runAction(MistralConstants.CREATE_CONTAINER, {
           container: planName
@@ -352,11 +343,13 @@ export default {
           )
         )
         .catch(error => {
-          dispatch(handleErrors(error, 'Plan creation failed', false));
           dispatch(
-            this.createPlanFailed([
-              { title: 'Plan creation failed', message: error.message }
-            ])
+            stopSubmit('newPlanForm', {
+              _error: {
+                title: formatMessage(messages.planCreationFailed),
+                message: error.message
+              }
+            })
           );
         });
     };
@@ -371,7 +364,8 @@ export default {
         state
       } = execution;
       if (state === 'SUCCESS') {
-        dispatch(this.createPlanSuccess());
+        dispatch(stopSubmit('newPlanForm'));
+        dispatch(this.createPlanSuccess(planName));
         dispatch(
           NotificationActions.notify({
             type: 'success',
@@ -385,9 +379,12 @@ export default {
         history.push('/plans/manage');
       } else {
         dispatch(
-          this.createPlanFailed([
-            { title: 'Plan creation failed', message: sanitizeMessage(message) }
-          ])
+          stopSubmit('newPlanForm', {
+            _error: {
+              title: formatMessage(messages.planCreationFailed),
+              message: sanitizeMessage(message)
+            }
+          })
         );
       }
     };
@@ -523,11 +520,7 @@ export const uploadFilesToContainer = (container, files) => dispatch =>
   when.all(
     Object.keys(files).map(fileName =>
       dispatch(
-        SwiftApiService.createObject(
-          container,
-          fileName,
-          files[fileName].contents
-        )
+        SwiftApiService.createObject(container, fileName, files[fileName])
       )
     )
   );

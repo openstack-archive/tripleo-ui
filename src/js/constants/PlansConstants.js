@@ -30,13 +30,12 @@ export default keyMirror({
   UPDATE_PLAN_PENDING: null,
   UPDATE_PLAN_SUCCESS: null,
   UPDATE_PLAN_FAILED: null,
-  CANCEL_CREATE_PLAN: null,
-  CREATE_PLAN_PENDING: null,
   CREATE_PLAN_SUCCESS: null,
-  CREATE_PLAN_FAILED: null,
   EXPORT_PLAN_PENDING: null,
   EXPORT_PLAN_SUCCESS: null,
   EXPORT_PLAN_FAILED: null
 });
 
 export const PLAN_ENVIRONMENT = 'plan-environment.yaml';
+export const UNREADABLE_FILE = '#UNREADABLE_FILE';
+export const IGNORED_FILE_PATHS = /(^\.git.*|^releasenotes\/.*|^ci\/.*)$/;
