@@ -74,8 +74,8 @@ describe('FileList component', () => {
 
   it('renders a list of selected files, ordered alphabetically', () => {
     let tableRows = getTableRows(Map(), [
-      { name: 'foo.yaml', content: 'foo' },
-      { name: 'bar.yaml', content: 'bar' }
+      { filePath: 'foo.yaml', contents: 'foo' },
+      { filePath: 'bar.yaml', contents: 'bar' }
     ]);
     expect(tableRows[0].key).toBe('bar.yaml');
     expect(tableRows[1].key).toBe('foo.yaml');
@@ -89,8 +89,8 @@ describe('FileList component', () => {
         'bar.yaml': new PlanFile({ name: 'bar.yaml' })
       }),
       [
-        { name: 'foo.yaml', content: 'foo' },
-        { name: 'bar.yaml', content: 'bar' }
+        { filePath: 'foo.yaml', contents: 'foo' },
+        { filePath: 'bar.yaml', contents: 'bar' }
       ]
     );
     expect(tableRows[0].key).toBe('bar.yaml');
@@ -105,9 +105,9 @@ describe('FileList component', () => {
         'bar.yaml': new PlanFile({ name: 'bar.yaml' })
       }),
       [
-        { name: 'foo.yaml', content: 'foo' },
-        { name: 'bar.yaml', content: 'changed' },
-        { name: 'foobar.yaml', content: 'foobar' }
+        { filePath: 'foo.yaml', contents: 'foo' },
+        { filePath: 'bar.yaml', contents: 'changed' },
+        { filePath: 'foobar.yaml', contents: 'foobar' }
       ]
     );
     expect(tableRows[0].key).toBe('foobar.yaml');
