@@ -39,11 +39,14 @@ export default class FileList extends React.Component {
     }
     if (selectedFiles.length > 0) {
       selectedFiles.forEach(file => {
-        let existing = files[file.name];
+        let existing = files[file.filePath];
         let info = !existing
           ? Map({ newFile: !planFiles.isEmpty() })
           : Map({ newFile: false });
-        files[file.name] = PlanFile({ name: file.name, info: info });
+        files[file.filePath] = new PlanFile({
+          name: file.filePath,
+          info: info
+        });
       });
     }
     return Map(files)
@@ -68,7 +71,10 @@ export default class FileList extends React.Component {
   }
 
   render() {
-    if (this.props.planFiles.size === 0 && this.props.selectedFiles === 0) {
+    if (
+      this.props.planFiles.size === 0 &&
+      this.props.selectedFiles.length === 0
+    ) {
       return null;
     }
     let files = this.getMergedFiles(

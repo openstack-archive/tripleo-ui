@@ -31,7 +31,7 @@ class PlanFileInput extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.uploadType === 'folder') {
+    if (this.props.uploadType === 'directory') {
       // Attributes not in react's whitelist need to be added after mounting.
       this.refs[this.props.name].setAttribute(
         'webkitdirectory',
@@ -88,7 +88,7 @@ class PlanFileInput extends React.Component {
   }
 
   processFiles(event) {
-    if (this.props.uploadType === 'folder') {
+    if (this.props.uploadType === 'directory') {
       this.processFolderFiles.bind(this)(event.target.files);
     } else {
       this.processTarball.bind(this)(event.target.files[0]);
