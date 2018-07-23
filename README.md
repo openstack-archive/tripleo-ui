@@ -3,6 +3,9 @@ Team and repository tags
 
 [![Team and repository tags](https://governance.openstack.org/tc/badges/tripleo-ui.svg)](http://governance.openstack.org/reference/tags/index.html)
 
+Release notes for the project can be found at:
+  https://docs.openstack.org/releasenotes/tripleo-ui
+
 TripleO UI
 ==========
 
