@@ -18,7 +18,6 @@ import { List, Map, Record } from 'immutable';
 
 export const StacksState = Record({
   currentStackEnvironment: Map(),
-  isRequestingStackDelete: false,
   isLoaded: false,
   isFetching: false,
   isFetchingResources: false,

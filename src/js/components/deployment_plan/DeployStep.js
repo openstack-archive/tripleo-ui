@@ -24,6 +24,7 @@ import React from 'react';
 import DeploymentSuccess from './DeploymentSuccess';
 import DeploymentFailure from './DeploymentFailure';
 import DeploymentProgress from './DeploymentProgress';
+import UndeployProgress from './UndeployProgress';
 import {
   deploymentStates,
   deploymentStatusMessages
@@ -49,20 +50,20 @@ const messages = defineMessages({
 export const DeployStep = ({
   currentPlan,
   deploymentStatus,
+  deploymentStatusUIError,
   intl: { formatMessage },
-  deploymentStatusUIError
+  isPendingDeploymentRequest
 }) => {
   switch (deploymentStatus.status) {
     case deploymentStates.DEPLOYING:
-    case deploymentStates.UNDEPLOYING:
       return <DeploymentProgress planName={currentPlan.name} />;
+    case deploymentStates.UNDEPLOYING:
+      return <UndeployProgress planName={currentPlan.name} />;
     case deploymentStates.DEPLOY_SUCCESS:
       return <DeploymentSuccess />;
     case deploymentStates.DEPLOY_FAILED:
-      return <DeploymentFailure planName={currentPlan.name} />;
     case deploymentStates.UNDEPLOY_FAILED:
-      // TODO(jtomasek): handle undeploy failure
-      return 'undeploy failed';
+      return <DeploymentFailure planName={currentPlan.name} />;
     case deploymentStates.UNKNOWN:
       return (
         <InlineNotification
@@ -74,16 +75,14 @@ export const DeployStep = ({
         </InlineNotification>
       );
     default:
-      const disabled =
-        deploymentStatus.status === deploymentStates.STARTING_DEPLOYMENT;
       return (
         <Link
           to={`/plans/${currentPlan.name}/deployment-confirmation`}
           className="btn btn-primary btn-lg link"
-          disabled={disabled}
+          disabled={isPendingDeploymentRequest}
         >
           <InlineLoader
-            loaded={!disabled}
+            loaded={!isPendingDeploymentRequest}
             content={formatMessage(messages.requestingDeploy)}
           >
             <FormattedMessage {...messages.validateAndDeploy} />
@@ -97,12 +96,15 @@ DeployStep.propTypes = {
   currentPlan: ImmutablePropTypes.record.isRequired,
   deploymentStatus: PropTypes.object.isRequired,
   deploymentStatusUIError: PropTypes.string,
-  intl: PropTypes.object
+  intl: PropTypes.object,
+  isPendingDeploymentRequest: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = (state, props) => ({
   deploymentStatus: getCurrentPlanDeploymentStatus(state),
-  deploymentStatusUIError: getCurrentPlanDeploymentStatusUI(state).error
+  deploymentStatusUIError: getCurrentPlanDeploymentStatusUI(state).error,
+  isPendingDeploymentRequest: getCurrentPlanDeploymentStatusUI(state)
+    .isPendingRequest
 });
 
 export default injectIntl(connect(mapStateToProps)(DeployStep));
