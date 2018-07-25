@@ -1,0 +1,11 @@
+Code-Review+2: Alex Schultz <aschultz@redhat.com>
+Workflow+1: Alex Schultz <aschultz@redhat.com>
+Code-Review+1: daixianmeng <daixianmeng@yovole.com>
+Code-Review+2: Jiri Tomasek <jtomasek@redhat.com>
+Workflow+1: Jiri Tomasek <jtomasek@redhat.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Wed, 25 Jul 2018 11:20:15 +0000
+Reviewed-on: https://review.openstack.org/585538
+Project: openstack/tripleo-ui
+Branch: refs/heads/master
