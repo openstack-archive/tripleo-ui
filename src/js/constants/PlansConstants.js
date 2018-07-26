@@ -15,12 +15,17 @@
  */
 
 import keyMirror from 'keymirror';
+import { defineMessages } from 'react-intl';
 
 export default keyMirror({
-  REQUEST_PLANS: null,
-  RECEIVE_PLANS: null,
-  REQUEST_PLAN: null,
-  RECEIVE_PLAN: null,
+  FETCH_PLANS_PENDING: null,
+  FETCH_PLANS_SUCCESS: null,
+  FETCH_PLAN_FILES_PENDING: null,
+  FETCH_PLAN_FILES_SUCCESS: null,
+  FETCH_PLAN_FILES_FAILED: null,
+  FETCH_PLAN_DETAILS_PENDING: null,
+  FETCH_PLAN_DETAILS_SUCCESS: null,
+  FETCH_PLAN_DETAILS_FAILED: null,
   REQUEST_PLAN_DELETE: null,
   RECEIVE_PLAN_DELETE: null,
   PLAN_CHOSEN: null,
@@ -39,3 +44,18 @@ export default keyMirror({
 export const PLAN_ENVIRONMENT = 'plan-environment.yaml';
 export const UNREADABLE_FILE = '#UNREADABLE_FILE';
 export const IGNORED_FILE_PATHS = /(^\.git.*|^releasenotes\/.*|^ci\/.*)$/;
+
+export const planTransitionMessages = defineMessages({
+  deleting: {
+    id: 'PlanCard.deletingPlan',
+    defaultMessage: 'Deleting {planName}...'
+  },
+  updating: {
+    id: 'PlanCard.updatingPlan',
+    defaultMessage: 'Updating {planName}...'
+  },
+  loading: {
+    id: 'PlanCard.loadingPlan',
+    defaultMessage: 'Loading {planName} details...'
+  }
+});

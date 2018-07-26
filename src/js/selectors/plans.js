@@ -15,10 +15,25 @@
  */
 
 import { createSelector } from 'reselect';
+import { List } from 'immutable';
 
 export const plans = state => state.plans.get('all').sortBy(plan => plan.name);
+
 export const getPlan = (state, planName) =>
   state.plans.getIn(['all', planName]);
+
+export const getPlanFiles = (state, planName) =>
+  state.plans.getIn(['planFilesByPlan', planName], List());
+
+export const getPlanTransitionsByPlan = state =>
+  state.plans.get('planTransitionsByPlan');
+
+export const getPlanTransitions = (state, planName) =>
+  state.plans.getIn(['planTransitionsByPlan', planName], List());
+
+export const getPlanEnvironmentsByPlan = state =>
+  state.plans.get('planEnvironmentsByPlan');
+
 export const currentPlanName = state => state.plans.currentPlanName;
 
 export const getCurrentPlan = createSelector(
@@ -30,6 +45,12 @@ export const getCurrentPlan = createSelector(
 export const getCurrentPlanName = createSelector(
   getCurrentPlan,
   currentPlan => currentPlan && currentPlan.name
+);
+
+export const getIsLoadingPlan = createSelector(
+  getPlanTransitions,
+  planTransitions =>
+    planTransitions.filter(transition => transition === 'loading').size > 0
 );
 
 export const getPlans = createSelector(plans, plans => plans);
