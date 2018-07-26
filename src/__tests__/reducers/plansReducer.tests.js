@@ -20,7 +20,8 @@ import CurrentPlanActions from '../../js/actions/CurrentPlanActions';
 import {
   InitialPlanState,
   Plan,
-  PlanFile
+  PlanFile,
+  PlanEnvironment
 } from '../../js/immutableRecords/plans';
 import PlansActions from '../../js/actions/PlansActions';
 import plansReducer from '../../js/reducers/plansReducer';
@@ -46,13 +47,13 @@ describe('plansReducer state', () => {
     });
   });
 
-  describe('REQUEST_PLANSLIST', () => {
+  describe('FETCH_PLANS_PENDING', () => {
     let state;
 
     beforeEach(() => {
       state = plansReducer(
         Map({ isFetchingPlans: false }),
-        PlansActions.requestPlans()
+        PlansActions.fetchPlansPending()
       );
     });
 
@@ -61,19 +62,16 @@ describe('plansReducer state', () => {
     });
   });
 
-  describe('RECEIVE_PLANSLIST', () => {
+  describe('FETCH_PLANS_SUCCESS', () => {
     let state;
 
     beforeEach(() => {
       state = plansReducer(
         Map({
           isFetchingPlans: true,
-          all: List()
+          all: Map()
         }),
-        PlansActions.receivePlans([
-          { name: 'overcloud', description: 'Default deployment plan' },
-          { name: 'another-cloud', description: 'My custom plan' }
-        ])
+        PlansActions.fetchPlansSuccess(['overcloud', 'another-cloud'])
       );
     });
 
@@ -81,7 +79,7 @@ describe('plansReducer state', () => {
       expect(state.get('isFetchingPlans')).toBe(false);
     });
 
-    it('sets `all` to a list of Plan records', () => {
+    it('sets `all` to a Map of Plan records', () => {
       expect(state.get('all').size).toEqual(2);
       state.get('all').forEach(item => {
         expect(item instanceof Plan).toBe(true);
@@ -89,40 +87,120 @@ describe('plansReducer state', () => {
     });
   });
 
-  describe('RECEIVE_PLAN', () => {
-    let state, plan;
+  describe('FETCH_PLAN_FILES_PENDING', () => {
+    it('adds the transition', () => {
+      const state = new InitialPlanState();
+      const newState = plansReducer(
+        state,
+        PlansActions.fetchPlanFilesPending('overcloud')
+      );
+
+      expect(newState.getIn(['planTransitionsByPlan', 'overcloud'])).toEqual(
+        List(['loading'])
+      );
+    });
+  });
+
+  describe('FETCH_PLAN_FILES_SUCCESS', () => {
+    let planFiles, plan, state, newState;
 
     beforeEach(() => {
-      state = plansReducer(
-        Map({
-          all: Map({
-            'some-cloud': new Plan({
-              name: 'some-cloud',
-              description: 'some cloud desc'
-            }),
-            overcloud: new Plan({
-              name: 'overcloud',
-              description: 'Default deployment plan'
-            })
-          })
-        }),
-        PlansActions.receivePlan('overcloud', {
-          'capabilities_map.yaml': { name: 'capabilities_map.yaml' },
-          'foo.yaml': { name: 'foo.yaml' }
-        })
+      planFiles = [{ name: 'capabilities-map.yaml' }, { name: 'foo.yaml' }];
+      plan = 'overcloud';
+      state = new InitialPlanState({
+        all: Map({ overcloud: new Plan({ name: 'overcloud' }) }),
+        planTransitionsByPlan: Map({ overcloud: List(['loading']) })
+      });
+      newState = plansReducer(
+        state,
+        PlansActions.fetchPlanFilesSuccess(plan, planFiles)
       );
-      plan = state.getIn(['all', 'overcloud']);
     });
 
-    it('updates the plan records `files` attributes', () => {
-      expect(plan.get('files')).toEqual(
-        Map({
-          'capabilities_map.yaml': new PlanFile({
-            name: 'capabilities_map.yaml'
-          }),
-          'foo.yaml': new PlanFile({ name: 'foo.yaml' })
-        })
+    it('stops the loading transition', () => {
+      expect(newState.getIn(['planTransitionsByPlan', plan])).toEqual(List());
+    });
+
+    it('sets planFilesByPlan', () => {
+      const expectedPlanFiles = List([
+        new PlanFile({ name: 'capabilities-map.yaml' }),
+        new PlanFile({ name: 'foo.yaml' })
+      ]);
+      expect(newState.getIn(['planFilesByPlan', plan])).toEqual(
+        expectedPlanFiles
       );
+    });
+  });
+
+  describe('FETCH_PLAN_FILES_FAILED', () => {
+    const plan = 'overcloud';
+    const state = new InitialPlanState({
+      planTransitionsByPlan: Map({ [plan]: List(['loading']) })
+    });
+    const newState = plansReducer(
+      state,
+      PlansActions.fetchPlanFilesFailed(plan)
+    );
+
+    it('stops the loading transition', () => {
+      expect(newState.getIn(['planTransitionsByPlan', plan])).toEqual(List());
+    });
+  });
+
+  describe('FETCH_PLAN_DETAILS_PENDING', () => {
+    it('adds the transition', () => {
+      const state = new InitialPlanState();
+      const newState = plansReducer(
+        state,
+        PlansActions.fetchPlanDetailsPending('overcloud')
+      );
+
+      expect(newState.getIn(['planTransitionsByPlan', 'overcloud'])).toEqual(
+        List(['loading'])
+      );
+    });
+  });
+
+  describe('FETCH_PLAN_DETAILS_SUCCESS', () => {
+    let planEnvironment, plan, state, newState;
+
+    beforeEach(() => {
+      planEnvironment = { description: 'Description' };
+      plan = 'overcloud';
+      state = new InitialPlanState({
+        all: Map({ overcloud: new Plan({ name: 'overcloud' }) }),
+        planTransitionsByPlan: Map({ overcloud: List(['loading']) })
+      });
+      newState = plansReducer(
+        state,
+        PlansActions.fetchPlanDetailsSuccess(plan, planEnvironment)
+      );
+    });
+
+    it('stops the loading transition', () => {
+      expect(newState.getIn(['planTransitionsByPlan', plan])).toEqual(List());
+    });
+
+    it('sets planEnvironmentsByPlan', () => {
+      const expectedPlanEnvironment = new PlanEnvironment(planEnvironment);
+      expect(newState.getIn(['planEnvironmentsByPlan', plan])).toEqual(
+        expectedPlanEnvironment
+      );
+    });
+  });
+
+  describe('FETCH_PLAN_DETAILS_FAILED', () => {
+    const plan = 'overcloud';
+    const state = new InitialPlanState({
+      planTransitionsByPlan: Map({ [plan]: List(['loading']) })
+    });
+    const newState = plansReducer(
+      state,
+      PlansActions.fetchPlanDetailsFailed(plan)
+    );
+
+    it('stops the loading transition', () => {
+      expect(newState.getIn(['planTransitionsByPlan', plan])).toEqual(List());
     });
   });
 
@@ -142,7 +220,7 @@ describe('plansReducer state', () => {
   });
 
   describe('Plan deletion', () => {
-    let state = Map({
+    let state = new InitialPlanState({
       all: Map({
         overcloud: new Plan({ name: 'overcloud' }),
         somecloud: new Plan({ name: 'somecloud' })
@@ -150,13 +228,14 @@ describe('plansReducer state', () => {
     });
     let newState;
 
-    it('DELETE_PLAN_PENDING sets `transition` in plan Record to `deleting`', () => {
+    it('DELETE_PLAN_PENDING sets adds `deleting` transition', () => {
       newState = plansReducer(
         state,
         PlansActions.deletePlanPending('somecloud')
       );
-      let plan = newState.getIn(['all', 'somecloud']);
-      expect(plan.get('transition')).toBe('deleting');
+      expect(newState.getIn(['planTransitionsByPlan', 'somecloud'])).toEqual(
+        List(['deleting'])
+      );
     });
 
     it('DELETE_PLAN_SUCCESS removes the plan Record', () => {
@@ -169,6 +248,9 @@ describe('plansReducer state', () => {
           overcloud: new Plan({ name: 'overcloud' })
         })
       );
+      expect(newState.getIn(['planTransitionsByPlan', 'somecloud'])).toEqual(
+        List()
+      );
     });
 
     it('DELETE_PLAN_FAILED sets `transition` in plan Record to false', () => {
@@ -176,8 +258,9 @@ describe('plansReducer state', () => {
         newState,
         PlansActions.deletePlanFailed('somecloud')
       );
-      let plan = newState.getIn(['all', 'somecloud']);
-      expect(plan.get('transition')).toBe(false);
+      expect(newState.getIn(['planTransitionsByPlan', 'somecloud'])).toEqual(
+        List()
+      );
     });
   });
 });

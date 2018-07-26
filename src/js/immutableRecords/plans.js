@@ -14,19 +14,10 @@
  * under the License.
  */
 
-import { List, Map, Record } from 'immutable';
+import { Map, Record, List } from 'immutable';
 
-/**
- * The transition property is either false or one of the following strings:
- *   - `deleting`
- *   - `updating`
- */
 export const Plan = Record({
-  name: '',
-  title: undefined,
-  description: undefined,
-  transition: false,
-  files: Map()
+  name: ''
 });
 
 export const PlanFile = Record({
@@ -34,13 +25,24 @@ export const PlanFile = Record({
   info: Map()
 });
 
+export const PlanEnvironment = Record({
+  version: undefined,
+  name: undefined,
+  description: undefined,
+  template: undefined,
+  environments: List(),
+  parameter_defaults: Map(),
+  passwords: Map()
+});
+
 export const InitialPlanState = Record({
   currentPlanName: undefined,
   isFetchingPlans: false,
   plansLoaded: false,
-  isTransitioningPlan: false,
-  planFormErrors: List(),
   all: Map(),
+  planFilesByPlan: Map(),
+  planEnvironmentsByPlan: Map(),
+  planTransitionsByPlan: Map(),
   isExportingPlan: false,
   planExportUrl: ''
 });
