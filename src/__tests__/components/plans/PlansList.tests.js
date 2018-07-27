@@ -15,14 +15,14 @@
  */
 
 import { IntlProvider } from 'react-intl';
-import { Map } from 'immutable';
+import { Map, Set } from 'immutable';
 import React from 'react';
 import ReactShallowRenderer from 'react-test-renderer/shallow';
 
 import { mockStore } from '../../actions/utils';
 import PlansList from '../../../js/components/plan/PlansList';
 import FileList from '../../../js/components/plan/FileList';
-import { InitialPlanState, PlanFile } from '../../../js/immutableRecords/plans';
+import { InitialPlanState } from '../../../js/immutableRecords/plans';
 
 describe('PlansList component', () => {
   let output;
@@ -61,19 +61,13 @@ let getTableRows = (planFiles, selectedFiles) => {
 
 describe('FileList component', () => {
   it('renders a list of plan files, ordered alphabetically', () => {
-    let tableRows = getTableRows(
-      Map({
-        'foo.yaml': new PlanFile({ name: 'foo.yaml' }),
-        'bar.yaml': new PlanFile({ name: 'bar.yaml' })
-      }),
-      []
-    );
+    let tableRows = getTableRows(Set(['foo.yaml', 'bar.yaml']), []);
     expect(tableRows[0].key).toBe('bar.yaml');
     expect(tableRows[1].key).toBe('foo.yaml');
   });
 
   it('renders a list of selected files, ordered alphabetically', () => {
-    let tableRows = getTableRows(Map(), [
+    let tableRows = getTableRows(Set(), [
       { filePath: 'foo.yaml', contents: 'foo' },
       { filePath: 'bar.yaml', contents: 'bar' }
     ]);
@@ -82,39 +76,28 @@ describe('FileList component', () => {
   });
 
   it('merges a list of selected files and planfiles', () => {
-    let tableRows = getTableRows(
-      Map({
-        'foobar.yaml': new PlanFile({ name: 'foobar.yaml' }),
-        'foo.yaml': new PlanFile({ name: 'foo.yaml' }),
-        'bar.yaml': new PlanFile({ name: 'bar.yaml' })
-      }),
-      [
-        { filePath: 'foo.yaml', contents: 'foo' },
-        { filePath: 'bar.yaml', contents: 'bar' }
-      ]
-    );
+    let tableRows = getTableRows(Set(['foobar.yaml', 'foo.yaml', 'bar.yaml']), [
+      { filePath: 'foo.yaml', contents: 'foo' },
+      { filePath: 'bar.yaml', contents: 'bar' }
+    ]);
     expect(tableRows[0].key).toBe('bar.yaml');
     expect(tableRows[1].key).toBe('foo.yaml');
     expect(tableRows[2].key).toBe('foobar.yaml');
   });
 
   it('adds classes and sorts files based on differences in selected files and planfiles', () => {
-    let tableRows = getTableRows(
-      Map({
-        'foo.yaml': new PlanFile({ name: 'foo.yaml' }),
-        'bar.yaml': new PlanFile({ name: 'bar.yaml' })
-      }),
-      [
-        { filePath: 'foo.yaml', contents: 'foo' },
-        { filePath: 'bar.yaml', contents: 'changed' },
-        { filePath: 'foobar.yaml', contents: 'foobar' }
-      ]
-    );
-    expect(tableRows[0].key).toBe('foobar.yaml');
+    let tableRows = getTableRows(Set(['old.yaml', 'foo.yaml', 'bar.yaml']), [
+      { filePath: 'foo.yaml', contents: 'foo' },
+      { filePath: 'bar.yaml', contents: 'changed' },
+      { filePath: 'foobar.yaml', contents: 'foobar' }
+    ]);
+    expect(tableRows[0].key).toBe('bar.yaml');
     expect(tableRows[0].props.children.props.className).toBe('new-plan-file');
-    expect(tableRows[1].key).toBe('bar.yaml');
-    expect(tableRows[1].props.children.props.className).toBe('');
-    expect(tableRows[2].key).toBe('foo.yaml');
-    expect(tableRows[2].props.children.props.className).toBe('');
+    expect(tableRows[1].key).toBe('foo.yaml');
+    expect(tableRows[1].props.children.props.className).toBe('new-plan-file');
+    expect(tableRows[2].key).toBe('foobar.yaml');
+    expect(tableRows[2].props.children.props.className).toBe('new-plan-file');
+    expect(tableRows[3].key).toBe('old.yaml');
+    expect(tableRows[3].props.children.props.className).toBe('');
   });
 });

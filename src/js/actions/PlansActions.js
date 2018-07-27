@@ -124,8 +124,8 @@ export default {
           dispatch(this.fetchPlanFilesSuccess(planName, response));
         })
         .catch(error => {
-          dispatch(this.fetchPlanFilesFailed(planName));
           dispatch(handleErrors(error, 'Plan could not be loaded'));
+          dispatch(this.fetchPlanFilesFailed(planName));
         });
     };
   },
@@ -161,10 +161,10 @@ export default {
           )
         )
         .catch(error => {
-          dispatch(this.fetchPlanDetailsFailed(planName));
           if (error.response && error.response.status !== 404) {
             dispatch(handleErrors(error, 'Plan details could not be loaded'));
           }
+          dispatch(this.fetchPlanDetailsFailed(planName));
         });
     };
   },
@@ -183,19 +183,17 @@ export default {
     };
   },
 
-  updatePlanFailed(planName, errors) {
+  updatePlanFailed(planName) {
     return {
       type: PlansConstants.UPDATE_PLAN_FAILED,
-      payload: {
-        planName,
-        errors
-      }
+      payload: planName
     };
   },
 
   updatePlan(planName, planFiles) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
+      dispatch(startSubmit('editPlanForm'));
       dispatch(this.updatePlanPending(planName));
       return dispatch(uploadFilesToContainer(planName, planFiles))
         .then(response =>
@@ -211,19 +209,21 @@ export default {
           )
         )
         .catch(error => {
-          dispatch(handleErrors(error, 'Plan update failed', false));
-          dispatch(
-            this.updatePlanFailed(planName, [
-              {
+          dispatch(this.updatePlanFailed(planName));
+          return dispatch(
+            stopSubmit('editPlanForm', {
+              _error: {
                 title: formatMessage(messages.planUpdateFailed),
                 message: error.message
               }
-            ])
+            })
           );
         });
     };
   },
 
+  // TODO(jtomasek): This is currently not used, revive this when plan update is
+  // also available via tarball upload
   updatePlanFromTarball(planName, file) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
@@ -277,13 +277,14 @@ export default {
         dispatch(this.fetchPlans());
         history.push('/plans/manage');
       } else {
-        dispatch(
-          this.updatePlanFailed(planName, [
-            {
+        dispatch(this.updatePlanFailed(planName));
+        return dispatch(
+          stopSubmit('editPlanForm', {
+            _error: {
               title: formatMessage(messages.planUpdateFailed),
               message: sanitizeMessage(message)
             }
-          ])
+          })
         );
       }
     };
