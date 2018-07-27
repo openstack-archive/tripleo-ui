@@ -26,6 +26,7 @@ import { CloseModalXButton, RoutedModal } from '../ui/Modals';
 import { getPlan, getPlanFiles, getIsLoadingPlan } from '../../selectors/plans';
 import PlansActions from '../../actions/PlansActions';
 import EditPlanForm from './EditPlanForm';
+import EditPlanFormTabs from './EditPlanFormTabs';
 import { Loader } from '../ui/Loader';
 import { planTransitionMessages } from '../../constants/PlansConstants';
 
@@ -45,9 +46,14 @@ class EditPlan extends React.Component {
     this.props.fetchPlanFiles(this.props.match.params.planName);
   }
 
-  handleFormSubmit = ({ planUploadType, files, tarball }, dispatch, props) => {
-    debugger;
-    return null;
+  handleFormSubmit = (
+    { planName, planUploadType, files, tarball },
+    dispatch,
+    props
+  ) => {
+    let planFiles = {};
+    files.map(({ filePath, contents }) => (planFiles[filePath] = contents));
+    return this.props.updatePlan(planName, planFiles);
   };
 
   render() {
@@ -84,19 +90,12 @@ class EditPlan extends React.Component {
           <EditPlanForm
             onSubmit={this.handleFormSubmit}
             initialValues={{
+              planName: plan.name,
               planUploadType: 'directory',
-              files: planFiles.toJS()
+              files: []
             }}
           >
-            {/*
-            <PlanEditFormTabs
-              selectedFiles={this.state.selectedFiles}
-              planName={plan.name}
-              planFiles={plan.files}
-              setUploadType={this.setUploadType.bind(this)}
-              uploadType={this.state.uploadType}
-            />
-            */}
+            <EditPlanFormTabs planName={plan.name} planFiles={planFiles} />
           </EditPlanForm>
         </Loader>
       </RoutedModal>
@@ -112,7 +111,7 @@ EditPlan.propTypes = {
   isLoadingPlan: PropTypes.bool.isRequired,
   match: PropTypes.object,
   plan: ImmutablePropTypes.record,
-  planFiles: ImmutablePropTypes.list.isRequired,
+  planFiles: ImmutablePropTypes.set.isRequired,
   updatePlan: PropTypes.func,
   updatePlanFromTarball: PropTypes.func
 };
