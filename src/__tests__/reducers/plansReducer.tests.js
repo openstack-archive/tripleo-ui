@@ -14,13 +14,12 @@
  * under the License.
  */
 
-import { List, Map } from 'immutable';
+import { Set, List, Map } from 'immutable';
 
 import CurrentPlanActions from '../../js/actions/CurrentPlanActions';
 import {
   InitialPlanState,
   Plan,
-  PlanFile,
   PlanEnvironment
 } from '../../js/immutableRecords/plans';
 import PlansActions from '../../js/actions/PlansActions';
@@ -122,10 +121,7 @@ describe('plansReducer state', () => {
     });
 
     it('sets planFilesByPlan', () => {
-      const expectedPlanFiles = List([
-        new PlanFile({ name: 'capabilities-map.yaml' }),
-        new PlanFile({ name: 'foo.yaml' })
-      ]);
+      const expectedPlanFiles = Set(['capabilities-map.yaml', 'foo.yaml']);
       expect(newState.getIn(['planFilesByPlan', plan])).toEqual(
         expectedPlanFiles
       );
