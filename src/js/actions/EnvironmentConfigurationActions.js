@@ -97,7 +97,8 @@ export default {
       return dispatch(
         MistralApiService.runAction(MistralConstants.CAPABILITIES_UPDATE, {
           environments: data,
-          container: planName
+          container: planName,
+          sort_environments: true
         })
       )
         .then(response => {
