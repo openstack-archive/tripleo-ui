@@ -23,6 +23,10 @@ import { Field } from 'redux-form';
 import Radio from '../ui/reduxForm/Radio';
 
 const messages = defineMessages({
+  default: {
+    id: 'PlanUploadTypeRadios.useDefaultTemplates',
+    defaultMessage: 'Use Default Templates'
+  },
   directory: {
     id: 'PlanUploadTypeRadios.localDirectory',
     defaultMessage: 'Local Directory'
@@ -37,39 +41,36 @@ const messages = defineMessages({
   }
 });
 
-const PlanUploadTypeRadios = ({ labelColumns, inputColumns }) => (
+const PlanUploadTypeRadios = ({ labelColumns, inputColumns, options }) => (
   <FormGroup controlId="planUploadType">
     <Col componentClass={ControlLabel} sm={labelColumns}>
       <FormattedMessage {...messages.uploadType} />
     </Col>
     <Col sm={inputColumns}>
-      <Field
-        name="planUploadType"
-        component={Radio}
-        type="radio"
-        value="tarball"
-      >
-        <FormattedMessage {...messages.tarball} />
-      </Field>
-      <Field
-        name="planUploadType"
-        component={Radio}
-        type="radio"
-        value="directory"
-      >
-        <FormattedMessage {...messages.directory} />
-      </Field>
+      {options.map(option => (
+        <Field
+          key={option}
+          name="planUploadType"
+          component={Radio}
+          type="radio"
+          value={option}
+        >
+          <FormattedMessage {...messages[option]} />
+        </Field>
+      ))}
     </Col>
   </FormGroup>
 );
 
 PlanUploadTypeRadios.propTypes = {
   inputColumns: PropTypes.number.isRequired,
-  labelColumns: PropTypes.number.isRequired
+  labelColumns: PropTypes.number.isRequired,
+  options: PropTypes.array.isRequired
 };
 PlanUploadTypeRadios.defaultProps = {
   inputColumns: 7,
-  labelColumns: 3
+  labelColumns: 3,
+  options: ['default', 'tarball', 'directory']
 };
 
 export default PlanUploadTypeRadios;
