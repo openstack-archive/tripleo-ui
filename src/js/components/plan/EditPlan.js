@@ -51,9 +51,16 @@ class EditPlan extends React.Component {
     dispatch,
     props
   ) => {
-    let planFiles = {};
-    files.map(({ filePath, contents }) => (planFiles[filePath] = contents));
-    return this.props.updatePlan(planName, planFiles);
+    switch (planUploadType) {
+      case 'tarball':
+        return this.props.updatePlanFromTarball(planName, tarball);
+      case 'directory':
+        let planFiles = {};
+        files.map(({ filePath, contents }) => (planFiles[filePath] = contents));
+        return this.props.updatePlan(planName, planFiles);
+      default:
+        return null;
+    }
   };
 
   render() {
