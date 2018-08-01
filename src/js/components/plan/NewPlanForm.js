@@ -85,7 +85,7 @@ NewPlanForm.propTypes = {
 const form = reduxForm({
   form: 'newPlanForm',
   initialValues: {
-    planUploadType: 'tarball',
+    planUploadType: 'default',
     files: []
   }
 });
