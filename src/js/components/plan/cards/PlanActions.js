@@ -37,7 +37,8 @@ const messages = defineMessages({
   }
 });
 
-const canRenderDeleteAction = status => status === deploymentStates.UNDEPLOYED;
+const canRenderDeleteAction = status =>
+  [deploymentStates.UNDEPLOYED, deploymentStates.UNKNOWN].includes(status);
 const canRenderEditAction = status =>
   ![deploymentStates.DEPLOYING, deploymentStates.UNDEPLOYING].includes(status);
 

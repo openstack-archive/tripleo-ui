@@ -27,6 +27,7 @@ import HorizontalDirectoryInput, {
 } from '../ui/reduxForm/HorizontalDirectoryInput';
 import TabPane from '../ui/TabPane';
 import PlanUploadTypeRadios from './PlanUploadTypeRadios';
+import { GIT_URL_REGEX } from '../../constants/PlansConstants';
 
 const messages = defineMessages({
   addPlanName: {
@@ -60,6 +61,19 @@ const messages = defineMessages({
     id: 'PlanFieldsTab.directoryInputDescription',
     defaultMessage:
       'Provide a directory of Heat templates which defines a deployment plan.'
+  },
+  gitUrl: {
+    id: 'PlanFormTabs.gitUrl',
+    defaultMessage: 'Git Repository URL'
+  },
+  gitUrlInputDescription: {
+    id: 'PlanFieldsTab.gitUrlInputDescription',
+    defaultMessage:
+      'Provide a Git repository URL containing Heat templates which define a deployment plan.'
+  },
+  gitUrlValidationError: {
+    id: 'PlanFormTabs.gitUrlValidationError',
+    defaultMessage: 'Please provide a valid Git repository URL.'
   }
 });
 
@@ -112,6 +126,21 @@ const PlanFieldsTab = ({ active, intl: { formatMessage }, planUploadType }) => (
             }}
           />
         }
+        required
+      />
+    )}
+    {planUploadType === 'git' && (
+      <Field
+        id="gitUrl"
+        name="gitUrl"
+        component={HorizontalInput}
+        label={formatMessage(messages.gitUrl)}
+        labelColumns={3}
+        validate={format({
+          with: GIT_URL_REGEX,
+          message: formatMessage(messages.gitUrlValidationError)
+        })}
+        description={formatMessage(messages.gitUrlInputDescription)}
         required
       />
     )}

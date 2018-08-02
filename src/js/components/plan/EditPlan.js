@@ -47,7 +47,7 @@ class EditPlan extends React.Component {
   }
 
   handleFormSubmit = (
-    { planName, planUploadType, files, tarball },
+    { planName, planUploadType, files, tarball, gitUrl },
     dispatch,
     props
   ) => {
@@ -58,6 +58,8 @@ class EditPlan extends React.Component {
         let planFiles = {};
         files.map(({ filePath, contents }) => (planFiles[filePath] = contents));
         return this.props.updatePlan(planName, planFiles);
+      case 'git':
+        return this.props.updatePlanFromGit(planName, gitUrl);
       default:
         return null;
     }
@@ -119,8 +121,9 @@ EditPlan.propTypes = {
   match: PropTypes.object,
   plan: ImmutablePropTypes.record,
   planFiles: ImmutablePropTypes.set.isRequired,
-  updatePlan: PropTypes.func,
-  updatePlanFromTarball: PropTypes.func
+  updatePlan: PropTypes.func.isRequired,
+  updatePlanFromGit: PropTypes.func.isRequired,
+  updatePlanFromTarball: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, { match: { params: { planName } } }) => ({
@@ -138,6 +141,9 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   },
   updatePlanFromTarball: (planName, files) => {
     dispatch(PlansActions.updatePlanFromTarball(planName, files));
+  },
+  updatePlanFromGit: (planName, gitUrl) => {
+    dispatch(PlansActions.updatePlanFromGit(planName, gitUrl));
   }
 });
 

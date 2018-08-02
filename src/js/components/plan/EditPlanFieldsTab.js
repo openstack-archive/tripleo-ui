@@ -18,15 +18,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
-import { file } from 'redux-form-validators';
+import { file, format } from 'redux-form-validators';
 
 import HorizontalStaticText from '../ui/forms/HorizontalStaticText';
+import HorizontalInput from '../ui/reduxForm/HorizontalInput';
 import HorizontalDirectoryInput, {
   validateDirectoryInput
 } from '../ui/reduxForm/HorizontalDirectoryInput';
 import HorizontalFileInput from '../ui/reduxForm/HorizontalFileInput';
 import PlanUploadTypeRadios from './PlanUploadTypeRadios';
 import TabPane from '../ui/TabPane';
+import { GIT_URL_REGEX } from '../../constants/PlansConstants';
 
 const messages = defineMessages({
   planFiles: {
@@ -50,6 +52,19 @@ const messages = defineMessages({
     id: 'PlanFieldsTab.tarballInputDescription',
     defaultMessage:
       'Provided tarball must not contain root directory, when creating the tarball use following command: {command}'
+  },
+  gitUrl: {
+    id: 'PlanFormTabs.gitUrl',
+    defaultMessage: 'Git Repository URL'
+  },
+  gitUrlInputDescription: {
+    id: 'PlanFieldsTab.gitUrlInputDescription',
+    defaultMessage:
+      'Provide a Git repository URL containing Heat templates which define a deployment plan.'
+  },
+  gitUrlValidationError: {
+    id: 'PlanFormTabs.gitUrlValidationError',
+    defaultMessage: 'Provide valid Git repository URL'
   }
 });
 
@@ -66,7 +81,7 @@ const PlanFieldsTab = ({
       inputColumnClasses="col-sm-7"
       labelColumnClasses="col-sm-3"
     />
-    <PlanUploadTypeRadios options={['tarball', 'directory']} />
+    <PlanUploadTypeRadios options={['directory', 'tarball', 'git']} />
     {planUploadType === 'directory' && (
       <Field
         id="files"
@@ -100,6 +115,21 @@ const PlanFieldsTab = ({
             }}
           />
         }
+        required
+      />
+    )}
+    {planUploadType === 'git' && (
+      <Field
+        id="gitUrl"
+        name="gitUrl"
+        component={HorizontalInput}
+        label={formatMessage(messages.gitUrl)}
+        labelColumns={3}
+        validate={format({
+          with: GIT_URL_REGEX,
+          message: formatMessage(messages.gitUrlValidationError)
+        })}
+        description={formatMessage(messages.gitUrlInputDescription)}
         required
       />
     )}
