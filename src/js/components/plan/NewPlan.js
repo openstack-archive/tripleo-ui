@@ -34,19 +34,23 @@ const messages = defineMessages({
 
 class NewPlan extends React.Component {
   handleFormSubmit = (
-    { planName, planUploadType, files, tarball },
+    { planName, planUploadType, files, tarball, gitUrl },
     dispatch,
     props
   ) => {
-    let planFiles = {};
     switch (planUploadType) {
       case 'tarball':
         return this.props.createPlanFromTarball(planName, tarball);
       case 'directory':
+        let planFiles = {};
         files.map(({ filePath, contents }) => (planFiles[filePath] = contents));
         return this.props.createPlan(planName, planFiles);
-      default:
+      case 'git':
+        return this.props.createPlanFromGit(planName, gitUrl);
+      case 'default':
         return this.props.createDefaultPlan(planName);
+      default:
+        return null;
     }
   };
 
@@ -69,6 +73,7 @@ class NewPlan extends React.Component {
 NewPlan.propTypes = {
   createDefaultPlan: PropTypes.func,
   createPlan: PropTypes.func,
+  createPlanFromGit: PropTypes.func,
   createPlanFromTarball: PropTypes.func,
   intl: PropTypes.object
 };
@@ -83,6 +88,9 @@ function mapDispatchToProps(dispatch) {
     },
     createPlanFromTarball: (planName, archiveContents) => {
       dispatch(PlansActions.createPlanFromTarball(planName, archiveContents));
+    },
+    createPlanFromGit: (planName, gitUrl) => {
+      dispatch(PlansActions.createPlanFromGit(planName, gitUrl));
     }
   };
 }
