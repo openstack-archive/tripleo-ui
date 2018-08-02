@@ -35,6 +35,10 @@ const messages = defineMessages({
     id: 'PlanUploadTypeRadios.tarArchive',
     defaultMessage: 'Tar Archive (.tar.gz or .tgz)'
   },
+  git: {
+    id: 'PlanUploadTypeRadios.gitUrl',
+    defaultMessage: 'Git Repository URL'
+  },
   uploadType: {
     id: 'PlanUploadTypeRadios.uploadType',
     defaultMessage: 'Upload Type'
@@ -70,7 +74,7 @@ PlanUploadTypeRadios.propTypes = {
 PlanUploadTypeRadios.defaultProps = {
   inputColumns: 7,
   labelColumns: 3,
-  options: ['default', 'tarball', 'directory']
+  options: ['default', 'directory', 'tarball', 'git']
 };
 
 export default PlanUploadTypeRadios;

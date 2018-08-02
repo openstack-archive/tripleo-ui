@@ -44,6 +44,7 @@ export default keyMirror({
 export const PLAN_ENVIRONMENT = 'plan-environment.yaml';
 export const UNREADABLE_FILE = '#UNREADABLE_FILE';
 export const IGNORED_FILE_PATHS = /(^\.git.*|^releasenotes\/.*|^ci\/.*)$/;
+export const GIT_URL_REGEX = /((git|ssh|http(s)?)|(git@[\w.]+))(:(\/\/)?)([\w.@:/\-~]+)(\.git)(\/)?/;
 
 export const planTransitionMessages = defineMessages({
   deleting: {
