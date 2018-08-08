@@ -29,6 +29,7 @@ import NavBar from './NavBar';
 import Nodes from './nodes/Nodes';
 import Plans from './plan/Plans.js';
 import PlansActions from '../actions/PlansActions';
+import StacksActions from '../actions/StacksActions';
 import WorkflowExecutionsActions from '../actions/WorkflowExecutionsActions';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 
@@ -43,14 +44,21 @@ class AuthenticatedContent extends React.Component {
   componentDidMount() {
     this.props.initializeZaqarConnection();
     this.props.fetchPlans();
+    this.props.fetchStacks();
     this.props.fetchWorkflowExecutions();
   }
 
   render() {
-    const { currentPlanName, intl, plansLoaded, showValidations } = this.props;
+    const {
+      currentPlanName,
+      intl,
+      plansLoaded,
+      showValidations,
+      stacksLoaded
+    } = this.props;
     return (
       <GlobalLoader
-        loaded={plansLoaded}
+        loaded={plansLoaded && stacksLoaded}
         content={intl.formatMessage(messages.loadingDeployments)}
       >
         <NavBar />
@@ -75,16 +83,19 @@ AuthenticatedContent.propTypes = {
   children: PropTypes.node,
   currentPlanName: PropTypes.string,
   dispatch: PropTypes.func,
-  fetchPlans: PropTypes.func,
+  fetchPlans: PropTypes.func.isRequired,
+  fetchStacks: PropTypes.func.isRequired,
   fetchWorkflowExecutions: PropTypes.func,
   initializeZaqarConnection: PropTypes.func.isRequired,
   intl: PropTypes.object,
-  plansLoaded: PropTypes.bool,
-  showValidations: PropTypes.bool.isRequired
+  plansLoaded: PropTypes.bool.isRequired,
+  showValidations: PropTypes.bool.isRequired,
+  stacksLoaded: PropTypes.bool.isRequired
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchPlans: () => dispatch(PlansActions.fetchPlans()),
+  fetchStacks: () => dispatch(StacksActions.fetchStacks()),
   fetchWorkflowExecutions: () =>
     dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
   initializeZaqarConnection: () => dispatch(ZaqarWebSocketService.init())
@@ -92,7 +103,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 
 const mapStateToProps = state => ({
   currentPlanName: getCurrentPlanName(state),
-  plansLoaded: state.plans.get('plansLoaded'),
+  plansLoaded: state.plans.plansLoaded,
+  stacksLoaded: state.stacks.isLoaded,
   showValidations: state.validations.showValidations
 });
 
