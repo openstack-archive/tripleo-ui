@@ -26,7 +26,8 @@ export const StacksState = Record({
   resourcesLoaded: false,
   resources: List(),
   resourceDetails: Map(),
-  stacks: Map()
+  stacks: Map(),
+  stacksOutputs: Map()
 });
 
 export const Stack = Record({
@@ -41,7 +42,6 @@ export const Stack = Record({
   stack_status_reason: undefined,
   stack_user_project_id: undefined,
   tags: Map(),
-  outputs: List(),
   updated_time: undefined
 });
 

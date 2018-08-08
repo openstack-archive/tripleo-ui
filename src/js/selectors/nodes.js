@@ -20,6 +20,7 @@ import { List, Map } from 'immutable';
 import { getFilterByName } from './filters';
 import { IntrospectionStatus } from '../immutableRecords/nodes';
 import { parseNodeCapabilities } from '../utils/nodes';
+import { getServerIdsByStack } from './stacks';
 
 export const getNodes = state =>
   state.nodes.get('all').sortBy(n => n.get('uuid'));
@@ -43,8 +44,14 @@ export const nodesToolbarFilter = state =>
  *  Return Nodes including mac addresses as string at macs attribute
  */
 export const getDetailedNodes = createSelector(
-  [getNodes, getPorts, getIntrospectionStatuses, getIntrospectionData],
-  (nodes, ports, introspectionStatuses, introspectionData) =>
+  [
+    getNodes,
+    getPorts,
+    getIntrospectionStatuses,
+    getIntrospectionData,
+    getServerIdsByStack
+  ],
+  (nodes, ports, introspectionStatuses, introspectionData, serverIdsByStack) =>
     nodes.map(node =>
       node
         .set(
@@ -57,6 +64,12 @@ export const getDetailedNodes = createSelector(
         .set(
           'introspectionStatus',
           introspectionStatuses.get(node.get('uuid'), new IntrospectionStatus())
+        )
+        .set(
+          'planName',
+          serverIdsByStack.findKey(serverIds =>
+            serverIds.includes(node.get('instance_uuid'))
+          )
         )
         .setIn(
           ['introspectionData', 'interfaces'],

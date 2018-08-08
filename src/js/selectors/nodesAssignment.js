@@ -17,7 +17,7 @@
 import { createSelector } from 'reselect';
 import { getFormValues } from 'redux-form';
 
-import { getCurrentStackServerIds } from './stacks';
+import { getCurrentPlanServerIds } from './stacks';
 import { Flavor } from '../immutableRecords/flavors';
 import { getNodes, getNodeCapabilities } from './nodes';
 import { getParameters } from './parameters';
@@ -29,7 +29,7 @@ import { Parameter } from '../immutableRecords/parameters';
  *  Return Nodes which are not deployed by any other plan
  */
 export const getAccessibleNodes = createSelector(
-  [getNodes, getCurrentStackServerIds],
+  [getNodes, getCurrentPlanServerIds],
   (nodes, serverIds) =>
     nodes.filter(
       node =>
@@ -42,7 +42,7 @@ export const getAccessibleNodes = createSelector(
  *  Return Nodes which are either available or deployed (active) with current Plan
  */
 export const getAvailableNodes = createSelector(
-  [getAccessibleNodes, getCurrentStackServerIds],
+  [getAccessibleNodes, getCurrentPlanServerIds],
   (nodes, serverIds) =>
     nodes.filter(
       node =>
