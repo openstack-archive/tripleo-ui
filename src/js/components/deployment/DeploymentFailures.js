@@ -25,6 +25,7 @@ import { Panel } from 'react-bootstrap';
 import { getCurrentPlanName } from '../../selectors/plans';
 import { getDeploymentFailures } from '../../actions/DeploymentActions';
 import { Loader } from '../ui/Loader';
+import { sanitizeMessage } from '../../utils';
 
 const messages = defineMessages({
   viewDetails: {
@@ -84,7 +85,7 @@ class DeploymentFailures extends Component {
             <Panel.Toggle className="pull-right">
               <FormattedMessage {...messages.viewDetails} />
             </Panel.Toggle>
-            {outputs.msg}
+            {sanitizeMessage(outputs.msg)}
             <div className="clearfix" />
           </Panel.Heading>
           <Panel.Collapse>
