@@ -26,7 +26,7 @@ export const Network = Record({
   name: undefined,
   ip_subnet: undefined,
   vlan: undefined,
-  enabled: undefined,
+  enabled: true,
   vip: undefined,
   allocation_pools: List(),
   ipv6_allocation_pools: List(),

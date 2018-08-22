@@ -70,8 +70,9 @@ class NetworkTopology extends Component {
   }
 
   calculateNetworkLineHeights = () => {
-    const resultObject = Object.assign({}, this.roleNetworkLineElements);
-    Object.keys(this.roleNetworkLineElements).forEach(role =>
+    let resultObject = {};
+    Object.keys(this.roleNetworkLineElements).forEach(role => {
+      resultObject[role] = {};
       Object.keys(this.roleNetworkLineElements[role]).forEach(network => {
         const { y, height } = this.roleNetworkLineElements[role][
           network
@@ -79,9 +80,8 @@ class NetworkTopology extends Component {
         const start = y + height;
         const end = this.networkLineElements[network].getBoundingClientRect().y;
         resultObject[role][network] = end - start;
-      })
-    );
-
+      });
+    });
     this.setState({ networkLineHeights: resultObject });
   };
 
