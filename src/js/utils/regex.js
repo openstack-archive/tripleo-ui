@@ -24,8 +24,9 @@ export const IPV4_REGEX = new RegExp(
   /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
 );
 
+// Based on regex from Regular Expressions Cookbook, with added case insensitivity.
 export const FQDN_REGEX = new RegExp(
-  /^(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?$/
+  /^\b((?=[a-z0-9-]{1,63}\.)[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63}\b/i
 );
 
 export const PORT_REGEX = new RegExp(
