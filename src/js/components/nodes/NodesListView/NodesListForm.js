@@ -22,7 +22,13 @@ import PropTypes from 'prop-types';
 import { Form, reduxForm } from 'redux-form';
 import { pickBy } from 'lodash';
 
-import NodesActions from '../../../actions/NodesActions';
+import {
+  deleteNodes,
+  startManageNodes,
+  startNodesIntrospection,
+  startProvideNodes,
+  tagNodes
+} from '../../../actions/NodesActions';
 import { getFilteredNodes, nodesInProgress } from '../../../selectors/nodes';
 
 const messages = defineMessages({
@@ -123,12 +129,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  deleteNodes: nodeIds => dispatch(NodesActions.deleteNodes(nodeIds)),
-  introspectNodes: nodeIds =>
-    dispatch(NodesActions.startNodesIntrospection(nodeIds)),
-  manageNodes: nodeIds => dispatch(NodesActions.startManageNodes(nodeIds)),
-  provideNodes: nodeIds => dispatch(NodesActions.startProvideNodes(nodeIds)),
-  tagNodes: (nodeIds, tag) => dispatch(NodesActions.tagNodes(nodeIds, tag))
+  deleteNodes: nodeIds => dispatch(deleteNodes(nodeIds)),
+  introspectNodes: nodeIds => dispatch(startNodesIntrospection(nodeIds)),
+  manageNodes: nodeIds => dispatch(startManageNodes(nodeIds)),
+  provideNodes: nodeIds => dispatch(startProvideNodes(nodeIds)),
+  tagNodes: (nodeIds, tag) => dispatch(tagNodes(nodeIds, tag))
 });
 
 export default injectIntl(

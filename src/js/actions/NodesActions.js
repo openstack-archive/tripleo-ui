@@ -53,389 +53,337 @@ const messages = defineMessages({
   }
 });
 
-export default {
-  startOperation(nodeIds) {
-    return {
-      type: NodesConstants.START_NODES_OPERATION,
-      payload: nodeIds
-    };
-  },
+export const startOperation = nodeIds => ({
+  type: NodesConstants.START_NODES_OPERATION,
+  payload: nodeIds
+});
 
-  finishOperation(nodeIds) {
-    return {
-      type: NodesConstants.FINISH_NODES_OPERATION,
-      payload: nodeIds
-    };
-  },
+export const finishOperation = nodeIds => ({
+  type: NodesConstants.FINISH_NODES_OPERATION,
+  payload: nodeIds
+});
 
-  addNodes(nodes) {
-    return {
-      type: NodesConstants.ADD_NODES,
-      payload: nodes
-    };
-  },
+export const addNodes = nodes => ({
+  type: NodesConstants.ADD_NODES,
+  payload: nodes
+});
 
-  requestNodes() {
-    return {
-      type: NodesConstants.REQUEST_NODES
-    };
-  },
+export const requestNodes = () => ({
+  type: NodesConstants.REQUEST_NODES
+});
 
-  receiveNodes(entities) {
-    return {
-      type: NodesConstants.RECEIVE_NODES,
-      payload: entities
-    };
-  },
+export const receiveNodes = entities => ({
+  type: NodesConstants.RECEIVE_NODES,
+  payload: entities
+});
 
-  fetchNodes() {
-    return (dispatch, getState) => {
-      dispatch(this.requestNodes());
-      return when
-        .all([
-          dispatch(IronicApiService.getNodes()),
-          dispatch(IronicApiService.getPorts()),
-          dispatch(IronicInspectorApiService.getIntrospectionStatuses())
-        ])
-        .then(response => {
-          const nodes = normalize(response[0].nodes, [nodeSchema]).entities
-            .nodes;
-          const ports = normalize(response[1].ports, [portSchema]).entities
-            .ports;
-          const introspectionStatuses = normalize(response[2].introspection, [
-            introspectionStatusSchema
-          ]).entities.introspectionStatuses;
-          dispatch(this.receiveNodes({ nodes, ports, introspectionStatuses }));
-        })
-        .catch(error => {
-          dispatch(handleErrors(error, 'Nodes could not be loaded'));
-          dispatch(this.receiveNodes({}));
-        });
-    };
-  },
+export const fetchNodes = () => (dispatch, getState) => {
+  dispatch(requestNodes());
+  return when
+    .all([
+      dispatch(IronicApiService.getNodes()),
+      dispatch(IronicApiService.getPorts()),
+      dispatch(IronicInspectorApiService.getIntrospectionStatuses())
+    ])
+    .then(response => {
+      const nodes = normalize(response[0].nodes, [nodeSchema]).entities.nodes;
+      const ports = normalize(response[1].ports, [portSchema]).entities.ports;
+      const introspectionStatuses = normalize(response[2].introspection, [
+        introspectionStatusSchema
+      ]).entities.introspectionStatuses;
+      dispatch(receiveNodes({ nodes, ports, introspectionStatuses }));
+    })
+    .catch(error => {
+      dispatch(handleErrors(error, 'Nodes could not be loaded'));
+      dispatch(receiveNodes({}));
+    });
+};
 
-  fetchNodeIntrospectionDataSuccess(nodeId, data) {
-    return {
-      type: NodesConstants.FETCH_NODE_INTROSPECTION_DATA_SUCCESS,
-      payload: { nodeId, data }
-    };
-  },
+export const fetchNodeIntrospectionDataSuccess = (nodeId, data) => ({
+  type: NodesConstants.FETCH_NODE_INTROSPECTION_DATA_SUCCESS,
+  payload: { nodeId, data }
+});
 
-  fetchNodeIntrospectionDataFailed(nodeId) {
-    return {
-      type: NodesConstants.FETCH_NODE_INTROSPECTION_DATA_FAILED,
-      payload: nodeId
-    };
-  },
+export const fetchNodeIntrospectionDataFailed = nodeId => ({
+  type: NodesConstants.FETCH_NODE_INTROSPECTION_DATA_FAILED,
+  payload: nodeId
+});
 
-  fetchNodeIntrospectionData(nodeId) {
-    return dispatch =>
-      dispatch(IronicInspectorApiService.getIntrospectionData(nodeId))
-        .then(response => {
-          dispatch(this.fetchNodeIntrospectionDataSuccess(nodeId, response));
-        })
-        .catch(error => {
-          dispatch(
-            handleErrors(error, 'Node introspection data could not be loaded')
-          );
-          dispatch(this.fetchNodeIntrospectionDataFailed(nodeId));
-        });
-  },
+export const fetchNodeIntrospectionData = nodeId => dispatch =>
+  dispatch(IronicInspectorApiService.getIntrospectionData(nodeId))
+    .then(response => {
+      dispatch(fetchNodeIntrospectionDataSuccess(nodeId, response));
+    })
+    .catch(error => {
+      dispatch(
+        handleErrors(error, 'Node introspection data could not be loaded')
+      );
+      dispatch(fetchNodeIntrospectionDataFailed(nodeId));
+    });
 
-  /*
+/*
    * Poll fetchNodes until no node is in progress
    */
-  pollNodeslistDuringProgress() {
-    return (dispatch, getState) => {
-      const nodesState = getState().nodes;
-      if (nodesState.get('nodesInProgress').size > 0) {
-        // Only fetch nodes if there's currently no unfinished request.
-        if (!nodesState.get('isFetching')) {
-          dispatch(this.fetchNodes());
-        }
-        setTimeout(() => {
-          dispatch(this.pollNodeslistDuringProgress());
-        }, 5000);
-      }
-    };
-  },
-
-  startNodesIntrospection(nodeIds) {
-    return (dispatch, getState) => {
-      dispatch(this.startOperation(nodeIds));
-      dispatch(this.pollNodeslistDuringProgress());
-      // Nodes are introspected in batches of 20, each batch 15 minutes
-      const timeout = Math.ceil(nodeIds.length / 20) * 15 * 60 * 1000;
-      return dispatch(
-        startWorkflow(
-          MistralConstants.BAREMETAL_INTROSPECT,
-          {
-            node_uuids: nodeIds,
-            max_retry_attempts: 1
-          },
-          this.nodesIntrospectionFinished,
-          timeout
-        )
-      ).catch(error => {
-        dispatch(
-          handleErrors(error, 'Selected Nodes could not be introspected')
-        );
-        dispatch(this.finishOperation(nodeIds));
-      });
-    };
-  },
-
-  nodesIntrospectionFinished(execution) {
-    return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      const {
-        input: { node_uuids: nodeIds },
-        output: { message },
-        state
-      } = execution;
-      dispatch(this.finishOperation(nodeIds));
-      dispatch(this.fetchNodes());
-
-      switch (state) {
-        case 'SUCCESS': {
-          dispatch(
-            NotificationActions.notify({
-              type: 'success',
-              title: formatMessage(messages.introspectionNotificationTitle),
-              message: formatMessage(messages.introspectionNotificationMessage)
-            })
-          );
-          break;
-        }
-        case 'ERROR': {
-          dispatch(
-            NotificationActions.notify({
-              title: formatMessage(
-                messages.introspectionFailedNotificationTitle
-              ),
-              message: sanitizeMessage(message)
-            })
-          );
-          break;
-        }
-        default:
-          break;
-      }
-    };
-  },
-
-  nodeIntrospectionFinished(execution) {
-    return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      const {
-        input: { node_uuid: nodeId },
-        output: { message },
-        state
-      } = execution;
-      dispatch(this.finishOperation([nodeId]));
-
-      if (state === 'ERROR') {
-        dispatch(
-          NotificationActions.notify({
-            title: formatMessage(
-              messages.nodeIntrospectionFailedNotificationTitle
-            ),
-            message: sanitizeMessage(message)
-          })
-        );
-      }
-    };
-  },
-
-  tagNodes(nodeIds, tag) {
-    return (dispatch, getState) => {
-      const nodes = getNodesByIds(getState(), nodeIds);
-      nodes.map(node => {
-        dispatch(
-          this.updateNode({
-            uuid: node.get('uuid'),
-            patches: [
-              {
-                op: 'replace',
-                path: '/properties/capabilities',
-                value: setNodeCapability(
-                  node.getIn(['properties', 'capabilities']),
-                  'profile',
-                  tag
-                )
-              }
-            ]
-          })
-        );
-      });
-    };
-  },
-
-  startProvideNodes(nodeIds) {
-    return (dispatch, getState) => {
-      dispatch(this.startOperation(nodeIds));
-      dispatch(this.pollNodeslistDuringProgress());
-      return dispatch(
-        startWorkflow(
-          MistralConstants.BAREMETAL_PROVIDE,
-          { node_uuids: nodeIds },
-          this.provideNodesFinished
-        )
-      ).catch(error => {
-        dispatch(handleErrors(error, 'Selected Nodes could not be provided'));
-        dispatch(this.finishOperation(nodeIds));
-      });
-    };
-  },
-
-  provideNodesFinished(execution) {
-    const { input, output, state } = execution;
-    return (dispatch, getState) => {
-      const nodeIds = input.node_uuids;
-      dispatch(this.finishOperation(nodeIds));
-      dispatch(this.fetchNodes());
-
-      switch (state) {
-        case 'SUCCESS': {
-          dispatch(
-            NotificationActions.notify({
-              type: 'success',
-              title: 'Nodes are available',
-              message: sanitizeMessage(output.message)
-            })
-          );
-          break;
-        }
-        case 'ERROR': {
-          dispatch(
-            NotificationActions.notify({
-              title: 'Some Nodes could not be provided',
-              message: sanitizeMessage(output.message)
-            })
-          );
-          break;
-        }
-        default:
-          break;
-      }
-    };
-  },
-
-  startManageNodes(nodeIds) {
-    return (dispatch, getState) => {
-      dispatch(this.startOperation(nodeIds));
-      dispatch(this.pollNodeslistDuringProgress());
-      dispatch(
-        startWorkflow(
-          MistralConstants.BAREMETAL_MANAGE,
-          { node_uuids: nodeIds },
-          this.manageNodesFinished
-        )
-      ).catch(error => {
-        dispatch(handleErrors(error, 'Selected Nodes could not be managed'));
-        dispatch(this.finishOperation(nodeIds));
-      });
-    };
-  },
-
-  manageNodesFinished(execution) {
-    return (dispatch, getState) => {
-      const {
-        input: { node_uuids: nodeIds },
-        output: { message },
-        state
-      } = execution;
-      dispatch(this.finishOperation(nodeIds));
-      dispatch(this.fetchNodes());
-
-      switch (state) {
-        case 'SUCCESS': {
-          dispatch(
-            NotificationActions.notify({
-              type: 'success',
-              title: 'Nodes are manageable',
-              message: sanitizeMessage(message)
-            })
-          );
-          break;
-        }
-        case 'ERROR': {
-          dispatch(
-            NotificationActions.notify({
-              title: 'Some Nodes could not be managed',
-              message: sanitizeMessage(message)
-            })
-          );
-          break;
-        }
-        default:
-          break;
-      }
-    };
-  },
-
-  updateNode(nodePatch) {
-    return (dispatch, getState) => {
-      dispatch(this.updateNodePending(nodePatch.uuid));
-      return dispatch(IronicApiService.patchNode(nodePatch))
-        .then(response => {
-          dispatch(this.updateNodeSuccess(response));
-        })
-        .catch(error => {
-          dispatch(handleErrors(error, 'Node could not be updated'));
-          dispatch(this.updateNodeFailed(nodePatch.uuid));
-        });
-    };
-  },
-
-  updateNodePending(nodeId) {
-    return {
-      type: NodesConstants.UPDATE_NODE_PENDING,
-      payload: nodeId
-    };
-  },
-
-  updateNodeFailed(nodeId) {
-    return {
-      type: NodesConstants.UPDATE_NODE_FAILED,
-      payload: nodeId
-    };
-  },
-
-  updateNodeSuccess(node) {
-    return {
-      type: NodesConstants.UPDATE_NODE_SUCCESS,
-      payload: node
-    };
-  },
-
-  deleteNodes(nodeIds) {
-    return dispatch => {
-      dispatch(this.startOperation(nodeIds));
-      return Promise.all(
-        nodeIds.map(nodeId =>
-          dispatch(IronicApiService.deleteNode(nodeId))
-            .then(response => dispatch(this.deleteNodeSuccess(nodeId)))
-            .catch(error => {
-              dispatch(handleErrors(error, 'Node could not be deleted'));
-              dispatch(this.deleteNodeFailed(nodeId));
-            })
-        )
-      );
-    };
-  },
-
-  deleteNodeSuccess(nodeId) {
-    return {
-      type: NodesConstants.DELETE_NODE_SUCCESS,
-      payload: nodeId
-    };
-  },
-
-  deleteNodeFailed(nodeId) {
-    return {
-      type: NodesConstants.DELETE_NODE_FAILED,
-      payload: nodeId
-    };
+export const pollNodeslistDuringProgress = () => (dispatch, getState) => {
+  const nodesState = getState().nodes;
+  if (nodesState.get('nodesInProgress').size > 0) {
+    // Only fetch nodes if there's currently no unfinished request.
+    if (!nodesState.get('isFetching')) {
+      dispatch(fetchNodes());
+    }
+    setTimeout(() => {
+      dispatch(pollNodeslistDuringProgress());
+    }, 5000);
   }
 };
+
+export const startNodesIntrospection = nodeIds => (dispatch, getState) => {
+  dispatch(startOperation(nodeIds));
+  dispatch(pollNodeslistDuringProgress());
+  // Nodes are introspected in batches of 20, each batch 15 minutes
+  const timeout = Math.ceil(nodeIds.length / 20) * 15 * 60 * 1000;
+  return dispatch(
+    startWorkflow(
+      MistralConstants.BAREMETAL_INTROSPECT,
+      {
+        node_uuids: nodeIds,
+        max_retry_attempts: 1
+      },
+      nodesIntrospectionFinished,
+      timeout
+    )
+  ).catch(error => {
+    dispatch(handleErrors(error, 'Selected Nodes could not be introspected'));
+    dispatch(finishOperation(nodeIds));
+  });
+};
+
+export const nodesIntrospectionFinished = execution => (
+  dispatch,
+  getState,
+  { getIntl }
+) => {
+  const { formatMessage } = getIntl(getState());
+  const {
+    input: { node_uuids: nodeIds },
+    output: { message },
+    state
+  } = execution;
+  dispatch(finishOperation(nodeIds));
+  dispatch(fetchNodes());
+
+  switch (state) {
+    case 'SUCCESS': {
+      dispatch(
+        NotificationActions.notify({
+          type: 'success',
+          title: formatMessage(messages.introspectionNotificationTitle),
+          message: formatMessage(messages.introspectionNotificationMessage)
+        })
+      );
+      break;
+    }
+    case 'ERROR': {
+      dispatch(
+        NotificationActions.notify({
+          title: formatMessage(messages.introspectionFailedNotificationTitle),
+          message: sanitizeMessage(message)
+        })
+      );
+      break;
+    }
+    default:
+      break;
+  }
+};
+
+export const nodeIntrospectionFinished = execution => (
+  dispatch,
+  getState,
+  { getIntl }
+) => {
+  const { formatMessage } = getIntl(getState());
+  const {
+    input: { node_uuid: nodeId },
+    output: { message },
+    state
+  } = execution;
+  dispatch(finishOperation([nodeId]));
+
+  if (state === 'ERROR') {
+    dispatch(
+      NotificationActions.notify({
+        title: formatMessage(messages.nodeIntrospectionFailedNotificationTitle),
+        message: sanitizeMessage(message)
+      })
+    );
+  }
+};
+
+export const tagNodes = (nodeIds, tag) => (dispatch, getState) => {
+  const nodes = getNodesByIds(getState(), nodeIds);
+  nodes.map(node => {
+    dispatch(
+      updateNode({
+        uuid: node.get('uuid'),
+        patches: [
+          {
+            op: 'replace',
+            path: '/properties/capabilities',
+            value: setNodeCapability(
+              node.getIn(['properties', 'capabilities']),
+              'profile',
+              tag
+            )
+          }
+        ]
+      })
+    );
+  });
+};
+
+export const startProvideNodes = nodeIds => (dispatch, getState) => {
+  dispatch(startOperation(nodeIds));
+  dispatch(pollNodeslistDuringProgress());
+  return dispatch(
+    startWorkflow(
+      MistralConstants.BAREMETAL_PROVIDE,
+      { node_uuids: nodeIds },
+      provideNodesFinished
+    )
+  ).catch(error => {
+    dispatch(handleErrors(error, 'Selected Nodes could not be provided'));
+    dispatch(finishOperation(nodeIds));
+  });
+};
+
+export const provideNodesFinished = execution => (dispatch, getState) => {
+  const { input, output, state } = execution;
+  const nodeIds = input.node_uuids;
+  dispatch(finishOperation(nodeIds));
+  dispatch(fetchNodes());
+
+  switch (state) {
+    case 'SUCCESS': {
+      dispatch(
+        NotificationActions.notify({
+          type: 'success',
+          title: 'Nodes are available',
+          message: sanitizeMessage(output.message)
+        })
+      );
+      break;
+    }
+    case 'ERROR': {
+      dispatch(
+        NotificationActions.notify({
+          title: 'Some Nodes could not be provided',
+          message: sanitizeMessage(output.message)
+        })
+      );
+      break;
+    }
+    default:
+      break;
+  }
+};
+
+export const startManageNodes = nodeIds => (dispatch, getState) => {
+  dispatch(startOperation(nodeIds));
+  dispatch(pollNodeslistDuringProgress());
+  dispatch(
+    startWorkflow(
+      MistralConstants.BAREMETAL_MANAGE,
+      { node_uuids: nodeIds },
+      manageNodesFinished
+    )
+  ).catch(error => {
+    dispatch(handleErrors(error, 'Selected Nodes could not be managed'));
+    dispatch(finishOperation(nodeIds));
+  });
+};
+
+export const manageNodesFinished = execution => (dispatch, getState) => {
+  const {
+    input: { node_uuids: nodeIds },
+    output: { message },
+    state
+  } = execution;
+  dispatch(finishOperation(nodeIds));
+  dispatch(fetchNodes());
+
+  switch (state) {
+    case 'SUCCESS': {
+      dispatch(
+        NotificationActions.notify({
+          type: 'success',
+          title: 'Nodes are manageable',
+          message: sanitizeMessage(message)
+        })
+      );
+      break;
+    }
+    case 'ERROR': {
+      dispatch(
+        NotificationActions.notify({
+          title: 'Some Nodes could not be managed',
+          message: sanitizeMessage(message)
+        })
+      );
+      break;
+    }
+    default:
+      break;
+  }
+};
+
+export const updateNode = nodePatch => (dispatch, getState) => {
+  dispatch(updateNodePending(nodePatch.uuid));
+  return dispatch(IronicApiService.patchNode(nodePatch))
+    .then(response => {
+      dispatch(updateNodeSuccess(response));
+    })
+    .catch(error => {
+      dispatch(handleErrors(error, 'Node could not be updated'));
+      dispatch(updateNodeFailed(nodePatch.uuid));
+    });
+};
+
+export const updateNodePending = nodeId => ({
+  type: NodesConstants.UPDATE_NODE_PENDING,
+  payload: nodeId
+});
+
+export const updateNodeFailed = nodeId => ({
+  type: NodesConstants.UPDATE_NODE_FAILED,
+  payload: nodeId
+});
+
+export const updateNodeSuccess = node => ({
+  type: NodesConstants.UPDATE_NODE_SUCCESS,
+  payload: node
+});
+
+export const deleteNodes = nodeIds => dispatch => {
+  dispatch(startOperation(nodeIds));
+  return Promise.all(
+    nodeIds.map(nodeId =>
+      dispatch(IronicApiService.deleteNode(nodeId))
+        .then(response => dispatch(deleteNodeSuccess(nodeId)))
+        .catch(error => {
+          dispatch(handleErrors(error, 'Node could not be deleted'));
+          dispatch(deleteNodeFailed(nodeId));
+        })
+    )
+  );
+};
+
+export const deleteNodeSuccess = nodeId => ({
+  type: NodesConstants.DELETE_NODE_SUCCESS,
+  payload: nodeId
+});
+
+export const deleteNodeFailed = nodeId => ({
+  type: NodesConstants.DELETE_NODE_FAILED,
+  payload: nodeId
+});
