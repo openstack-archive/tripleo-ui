@@ -200,10 +200,8 @@ export default {
           dispatch(
             startWorkflow(
               MistralConstants.PLAN_UPDATE,
-              {
-                container: planName
-              },
-              execution => dispatch(this.updatePlanFinished(execution)),
+              { container: planName },
+              this.updatePlanFinished,
               2 * 60 * 1000
             )
           )
@@ -232,10 +230,8 @@ export default {
           dispatch(
             startWorkflow(
               MistralConstants.PLAN_UPDATE,
-              {
-                container: planName
-              },
-              execution => dispatch(this.updatePlanFinished(execution)),
+              { container: planName },
+              this.updatePlanFinished,
               2 * 60 * 1000
             )
           );
@@ -266,7 +262,7 @@ export default {
             container: planName,
             source_url: gitUrl
           },
-          execution => dispatch(this.updatePlanFinished(execution)),
+          this.updatePlanFinished,
           2 * 60 * 1000
         )
       ).catch(error => {
@@ -339,10 +335,8 @@ export default {
           dispatch(
             startWorkflow(
               MistralConstants.PLAN_CREATE,
-              {
-                container: planName
-              },
-              execution => dispatch(this.createPlanFinished(execution)),
+              { container: planName },
+              this.createPlanFinished,
               2 * 60 * 1000
             )
           )
@@ -376,10 +370,8 @@ export default {
           dispatch(
             startWorkflow(
               MistralConstants.PLAN_CREATE,
-              {
-                container: planName
-              },
-              execution => dispatch(this.createPlanFinished(execution)),
+              { container: planName },
+              this.createPlanFinished,
               2 * 60 * 1000
             )
           )
@@ -408,7 +400,7 @@ export default {
             container: planName,
             use_default_templates: true
           },
-          execution => dispatch(this.createPlanFinished(execution)),
+          this.createPlanFinished,
           2 * 60 * 1000
         )
       ).catch(error => {
@@ -435,7 +427,7 @@ export default {
             container: planName,
             source_url: gitUrl
           },
-          execution => dispatch(this.createPlanFinished(execution)),
+          this.createPlanFinished,
           2 * 60 * 1000
         )
       ).catch(error => {
@@ -461,7 +453,7 @@ export default {
       } = execution;
       if (state === 'SUCCESS') {
         dispatch(stopSubmit('newPlanForm'));
-        dispatch(this.createPlanSuccess(planName));
+        dispatch(createPlanSuccess(planName));
         dispatch(
           NotificationActions.notify({
             type: 'success',
@@ -564,10 +556,8 @@ export default {
       dispatch(
         startWorkflow(
           MistralConstants.PLAN_EXPORT,
-          {
-            plan: planName
-          },
-          execution => dispatch(this.exportPlanFinished(execution))
+          { plan: planName },
+          this.exportPlanFinished
         )
       ).catch(error => {
         dispatch(handleErrors(error, `Plan ${planName} could not be exported`));
@@ -603,6 +593,11 @@ export default {
     };
   }
 };
+
+const createPlanSuccess = planName => ({
+  type: PlansConstants.CREATE_PLAN_SUCCESS,
+  payload: planName
+});
 
 /*
   * Uploads a number of files to a container.

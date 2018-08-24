@@ -162,10 +162,7 @@ class RegisterNodesDialog extends React.Component {
               kernel_name: 'bm-deploy-kernel',
               ramdisk_name: 'bm-deploy-ramdisk'
             },
-            execution =>
-              dispatch(
-                RegisterNodesActions.nodesRegistrationFinished(execution)
-              )
+            RegisterNodesActions.nodesRegistrationFinished
           )
         )
       )

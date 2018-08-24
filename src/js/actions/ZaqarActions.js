@@ -56,42 +56,45 @@ export default {
       switch (type) {
         case MistralConstants.BAREMETAL_REGISTER_OR_UPDATE:
           dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(
-                RegisterNodesActions.nodesRegistrationFinished(execution)
-              )
+            handleWorkflowMessage(
+              payload.execution.id,
+              RegisterNodesActions.nodesRegistrationFinished
             )
           );
           break;
 
         case MistralConstants.BAREMETAL_INTROSPECT:
           dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(NodesActions.nodesIntrospectionFinished(execution))
+            handleWorkflowMessage(
+              payload.execution.id,
+              NodesActions.nodesIntrospectionFinished
             )
           );
           break;
 
         case MistralConstants.BAREMETAL_INTROSPECT_INTERNAL:
           dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(NodesActions.nodeIntrospectionFinished(execution))
+            handleWorkflowMessage(
+              payload.execution.id,
+              NodesActions.nodeIntrospectionFinished
             )
           );
           break;
 
         case MistralConstants.BAREMETAL_PROVIDE:
           dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(NodesActions.provideNodesFinished(execution))
+            handleWorkflowMessage(
+              payload.execution.id,
+              NodesActions.provideNodesFinished
             )
           );
           break;
 
         case MistralConstants.BAREMETAL_MANAGE:
           dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(NodesActions.manageNodesFinished(execution))
+            handleWorkflowMessage(
+              payload.execution.id,
+              NodesActions.manageNodesFinished
             )
           );
           break;
@@ -114,8 +117,9 @@ export default {
 
         case MistralConstants.PLAN_CREATE: {
           dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(PlansActions.createPlanFinished(execution))
+            handleWorkflowMessage(
+              payload.execution.id,
+              PlansActions.createPlanFinished
             )
           );
           break;
@@ -123,8 +127,9 @@ export default {
 
         case MistralConstants.PLAN_UPDATE: {
           dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(PlansActions.updatePlanFinished(execution))
+            handleWorkflowMessage(
+              payload.execution.id,
+              PlansActions.updatePlanFinished
             )
           );
           break;
@@ -141,9 +146,7 @@ export default {
             );
           } else {
             dispatch(
-              handleWorkflowMessage(payload.execution_id, execution =>
-                dispatch(deploymentFinished(execution))
-              )
+              handleWorkflowMessage(payload.execution_id, deploymentFinished)
             );
           }
           break;
@@ -195,9 +198,7 @@ export default {
             );
           } else {
             dispatch(
-              handleWorkflowMessage(payload.execution_id, execution =>
-                dispatch(undeployFinished(execution))
-              )
+              handleWorkflowMessage(payload.execution_id, undeployFinished)
             );
           }
           break;
@@ -205,24 +206,27 @@ export default {
 
         case MistralConstants.RECOVER_DEPLOYMENT_STATUS:
           dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(recoverDeploymentStatusFinished(execution))
+            handleWorkflowMessage(
+              payload.execution.id,
+              recoverDeploymentStatusFinished
             )
           );
           break;
 
         case MistralConstants.GET_DEPLOYMENT_FAILURES:
           dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(getDeploymentFailuresFinished(execution))
+            handleWorkflowMessage(
+              payload.execution.id,
+              getDeploymentFailuresFinished
             )
           );
           break;
 
         case MistralConstants.PLAN_EXPORT: {
           dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(PlansActions.exportPlanFinished(execution))
+            handleWorkflowMessage(
+              payload.execution.id,
+              PlansActions.exportPlanFinished
             )
           );
           break;
@@ -230,8 +234,9 @@ export default {
 
         case MistralConstants.DOWNLOAD_LOGS: {
           dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(LoggerActions.downloadLogsFinished(execution))
+            handleWorkflowMessage(
+              payload.execution.id,
+              LoggerActions.downloadLogsFinished
             )
           );
           break;
@@ -239,8 +244,9 @@ export default {
 
         case MistralConstants.LIST_AVAILABLE_ROLES: {
           dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(RolesActions.fetchAvailableRolesFinished(execution))
+            handleWorkflowMessage(
+              payload.execution.id,
+              RolesActions.fetchAvailableRolesFinished
             )
           );
           break;
@@ -249,8 +255,9 @@ export default {
         case MistralConstants.SELECT_ROLES: {
           // case 'tripleo.roles.v1.select_roles': {
           dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(RolesActions.selectRolesFinished(execution))
+            handleWorkflowMessage(
+              payload.execution.id,
+              RolesActions.selectRolesFinished
             )
           );
           break;
@@ -258,8 +265,9 @@ export default {
 
         case MistralConstants.NETWORK_LIST: {
           dispatch(
-            handleWorkflowMessage(payload.execution.id, execution =>
-              dispatch(NetworksActions.fetchNetworksFinished(execution))
+            handleWorkflowMessage(
+              payload.execution.id,
+              NetworksActions.fetchNetworksFinished
             )
           );
           break;

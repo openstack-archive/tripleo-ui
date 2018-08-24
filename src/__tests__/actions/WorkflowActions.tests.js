@@ -92,7 +92,7 @@ describe('pollWorkflowExecution action with finished execution', () => {
     MistralApiService.getWorkflowExecution = jest
       .fn()
       .mockReturnValue(() => Promise.resolve(execution));
-    const onFinished = jest.fn();
+    const onFinished = jest.fn().mockReturnValue(jest.fn());
 
     return store
       .dispatch(WorkflowActions.pollWorkflowExecution(execution.id, onFinished))
