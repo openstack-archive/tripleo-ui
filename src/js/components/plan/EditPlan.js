@@ -24,7 +24,12 @@ import { Redirect } from 'react-router-dom';
 
 import { CloseModalXButton, RoutedModal } from '../ui/Modals';
 import { getPlan, getPlanFiles, getIsLoadingPlan } from '../../selectors/plans';
-import PlansActions from '../../actions/PlansActions';
+import {
+  fetchPlanFiles,
+  updatePlan,
+  updatePlanFromGit,
+  updatePlanFromTarball
+} from '../../actions/PlansActions';
 import EditPlanForm from './EditPlanForm';
 import EditPlanFormTabs from './EditPlanFormTabs';
 import { Loader } from '../ui/Loader';
@@ -134,16 +139,16 @@ const mapStateToProps = (state, { match: { params: { planName } } }) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchPlanFiles: planName => {
-    dispatch(PlansActions.fetchPlanFiles(planName));
+    dispatch(fetchPlanFiles(planName));
   },
   updatePlan: (planName, files) => {
-    dispatch(PlansActions.updatePlan(planName, files));
+    dispatch(updatePlan(planName, files));
   },
   updatePlanFromTarball: (planName, files) => {
-    dispatch(PlansActions.updatePlanFromTarball(planName, files));
+    dispatch(updatePlanFromTarball(planName, files));
   },
   updatePlanFromGit: (planName, gitUrl) => {
-    dispatch(PlansActions.updatePlanFromGit(planName, gitUrl));
+    dispatch(updatePlanFromGit(planName, gitUrl));
   }
 });
 

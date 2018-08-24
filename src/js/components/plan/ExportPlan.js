@@ -26,7 +26,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { CloseModalButton, CloseModalXButton, RoutedModal } from '../ui/Modals';
-import PlansActions from '../../actions/PlansActions';
+import { exportPlan } from '../../actions/PlansActions';
 import { Loader } from '../ui/Loader';
 
 const messages = defineMessages({
@@ -139,7 +139,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    exportPlan: planName => dispatch(PlansActions.exportPlan(planName))
+    exportPlan: planName => dispatch(exportPlan(planName))
   };
 }
 

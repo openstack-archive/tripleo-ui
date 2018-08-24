@@ -33,7 +33,7 @@ import {
   getDeploymentStatusUIByPlan
 } from '../../selectors/deployment';
 import { PageHeader } from '../ui/PageHeader';
-import PlansActions from '../../actions/PlansActions';
+import { fetchPlans, fetchPlanDetails } from '../../actions/PlansActions';
 import { getDeploymentStatus } from '../../actions/DeploymentActions';
 import NoPlans from './NoPlans';
 import PlanCard from './cards/PlanCard';
@@ -139,10 +139,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchPlans: () => dispatch(PlansActions.fetchPlans()),
+    fetchPlans: () => dispatch(fetchPlans()),
     getDeploymentStatus: planName => dispatch(getDeploymentStatus(planName)),
-    fetchPlanDetails: planName =>
-      dispatch(PlansActions.fetchPlanDetails(planName))
+    fetchPlanDetails: planName => dispatch(fetchPlanDetails(planName))
   };
 }
 

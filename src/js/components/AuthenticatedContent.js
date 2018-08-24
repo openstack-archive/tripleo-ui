@@ -28,8 +28,8 @@ import { GlobalLoader } from './ui/Loader';
 import NavBar from './NavBar';
 import Nodes from './nodes/Nodes';
 import Plans from './plan/Plans.js';
-import PlansActions from '../actions/PlansActions';
 import StacksActions from '../actions/StacksActions';
+import { fetchPlans } from '../actions/PlansActions';
 import WorkflowExecutionsActions from '../actions/WorkflowExecutionsActions';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 
@@ -94,8 +94,8 @@ AuthenticatedContent.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchPlans: () => dispatch(PlansActions.fetchPlans()),
   fetchStacks: () => dispatch(StacksActions.fetchStacks()),
+  fetchPlans: () => dispatch(fetchPlans()),
   fetchWorkflowExecutions: () =>
     dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
   initializeZaqarConnection: () => dispatch(ZaqarWebSocketService.init())
