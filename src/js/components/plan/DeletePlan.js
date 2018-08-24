@@ -26,7 +26,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { CloseModalButton, CloseModalXButton, RoutedModal } from '../ui/Modals';
-import PlansActions from '../../actions/PlansActions';
+import { deletePlan } from '../../actions/PlansActions';
 
 const messages = defineMessages({
   deletePlan: {
@@ -118,9 +118,7 @@ DeletePlan.propTypes = {
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    deletePlan: planName => {
-      dispatch(PlansActions.deletePlan(planName));
-    }
+    deletePlan: planName => dispatch(deletePlan(planName))
   };
 }
 
