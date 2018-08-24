@@ -14,11 +14,9 @@
  * under the License.
  */
 
-import ClassNames from 'classnames';
+import cx from 'classnames';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Map } from 'immutable';
-import { PlanFile } from '../../immutableRecords/plans';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -30,65 +28,10 @@ const messages = defineMessages({
 });
 
 export default class FileList extends React.Component {
-  getMergedFiles(planFiles, selectedFiles) {
-    let files = {};
-    if (!planFiles.isEmpty()) {
-      planFiles.map(file => {
-        files[file.name] = file;
-      });
-    }
-    if (selectedFiles.length > 0) {
-      selectedFiles.forEach(file => {
-        let existing = files[file.filePath];
-        let info = !existing
-          ? Map({ newFile: !planFiles.isEmpty() })
-          : Map({ newFile: false });
-        files[file.filePath] = new PlanFile({
-          name: file.filePath,
-          info: info
-        });
-      });
-    }
-    return Map(files)
-      .sort((fileA, fileB) => {
-        let [aName, aNew] = [
-          fileA.name.toLowerCase(),
-          fileA.getIn(['info', 'newFile'])
-        ];
-        let [bName, bNew] = [
-          fileB.name.toLowerCase(),
-          fileB.getIn(['info', 'newFile'])
-        ];
-        if (aNew && !bNew) {
-          return -1;
-        } else if (!aNew && bNew) {
-          return 1;
-        } else {
-          return aName > bName ? 1 : -1;
-        }
-      })
-      .toArray();
-  }
-
   render() {
-    if (
-      this.props.planFiles.size === 0 &&
-      this.props.selectedFiles.length === 0
-    ) {
-      return null;
-    }
-    let files = this.getMergedFiles(
-      this.props.planFiles,
-      this.props.selectedFiles
-    ).map(file => {
-      let info = file.info.toJS() || {};
-      let classes = ClassNames({ 'new-plan-file': info.newFile });
-      return (
-        <tr key={file.name}>
-          <td className={classes}>{file.name}</td>
-        </tr>
-      );
-    });
+    const { planFiles, selectedFiles } = this.props;
+    const selectedFilesPaths = selectedFiles.map(file => file.filePath);
+    const mergedFiles = planFiles.union(selectedFilesPaths).sort();
     return (
       <div className="panel panel-default">
         <div className="panel-heading" role="tab" id="plan-files-list-panel">
@@ -97,7 +40,18 @@ export default class FileList extends React.Component {
           </h4>
         </div>
         <table className="table upload-files">
-          <tbody>{files}</tbody>
+          <tbody>
+            {mergedFiles.toArray().map(file => {
+              const classes = cx({
+                'new-plan-file': selectedFilesPaths.includes(file)
+              });
+              return (
+                <tr key={file}>
+                  <td className={classes}>{file}</td>
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
       </div>
     );
@@ -105,11 +59,6 @@ export default class FileList extends React.Component {
 }
 
 FileList.propTypes = {
-  planFiles: ImmutablePropTypes.map,
-  selectedFiles: PropTypes.array
-};
-
-FileList.defaultProps = {
-  planFiles: Map(),
-  selectedFiles: []
+  planFiles: ImmutablePropTypes.set.isRequired,
+  selectedFiles: PropTypes.array.isRequired
 };

@@ -20,11 +20,6 @@ export const Plan = Record({
   name: ''
 });
 
-export const PlanFile = Record({
-  name: '',
-  info: Map()
-});
-
 export const PlanEnvironment = Record({
   version: undefined,
   name: undefined,

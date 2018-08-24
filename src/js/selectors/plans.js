@@ -15,7 +15,7 @@
  */
 
 import { createSelector } from 'reselect';
-import { List } from 'immutable';
+import { List, Set } from 'immutable';
 
 export const plans = state => state.plans.get('all').sortBy(plan => plan.name);
 
@@ -23,7 +23,7 @@ export const getPlan = (state, planName) =>
   state.plans.getIn(['all', planName]);
 
 export const getPlanFiles = (state, planName) =>
-  state.plans.getIn(['planFilesByPlan', planName], List());
+  state.plans.getIn(['planFilesByPlan', planName], Set());
 
 export const getPlanTransitionsByPlan = state =>
   state.plans.get('planTransitionsByPlan');
