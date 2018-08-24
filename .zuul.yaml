@@ -1,4 +1,8 @@
 - project:
+    templates:
+      - nodejs8-jobs
+      - nodejs8-publish-to-npm
+      - release-notes-jobs
     check:
       jobs:
         - nodejs-npm-run-lint:
