@@ -14,14 +14,17 @@
  * under the License.
  */
 
+import when from 'when';
+
 import IronicApiService from '../../js/services/IronicApiService';
 import IronicInspectorApiService from '../../js/services/IronicInspectorApiService';
 import { mockStore } from './utils';
-import NodesActions from '../../js/actions/NodesActions';
+import * as NodesActions from '../../js/actions/NodesActions';
 import * as ErrorActions from '../../js/actions/ErrorActions';
 import NodesConstants from '../../js/constants/NodesConstants';
 import MistralConstants from '../../js/constants/MistralConstants';
 import * as WorkflowActions from '../../js/actions/WorkflowActions';
+import { NodesState } from '../../js/immutableRecords/nodes';
 
 const mockGetNodesResponse = [{ uuid: 1 }, { uuid: 2 }];
 
@@ -217,16 +220,13 @@ describe('Fetching Introspection data error', () => {
 });
 
 describe('Asynchronous Introspect Nodes Action', () => {
-  const store = mockStore({});
+  const store = mockStore({ nodes: new NodesState() });
   const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
 
   beforeEach(() => {
     WorkflowActions.startWorkflow = jest
       .fn()
       .mockReturnValue(() => Promise.resolve({ state: 'RUNNING' }));
-    NodesActions.pollNodeslistDuringProgress = jest
-      .fn()
-      .mockReturnValue(() => {});
   });
 
   it('dispatches startOperation', () =>
@@ -240,7 +240,6 @@ describe('Asynchronous Introspect Nodes Action', () => {
         expect.any(Function),
         15 * 60 * 1000
       );
-      expect(NodesActions.pollNodeslistDuringProgress).toHaveBeenCalled();
       expect(store.getActions()).toEqual([
         NodesActions.startOperation(nodeIds)
       ]);
@@ -249,7 +248,7 @@ describe('Asynchronous Introspect Nodes Action', () => {
 
 describe('nodesIntrospectionFinished', () => {
   beforeEach(() => {
-    NodesActions.fetchNodes = jest.fn().mockReturnValue(() => {});
+    when.all = jest.fn().mockReturnValue(Promise.resolve([]));
   });
 
   it('handles successful nodes introspection', () => {
@@ -263,10 +262,10 @@ describe('nodesIntrospectionFinished', () => {
     };
 
     store.dispatch(NodesActions.nodesIntrospectionFinished(execution));
-    expect(NodesActions.fetchNodes).toHaveBeenCalled();
     const actions = store.getActions();
     expect(Object.keys(actions).map(key => actions[key].type)).toEqual([
       'FINISH_NODES_OPERATION',
+      'REQUEST_NODES',
       'NOTIFY'
     ]);
   });
@@ -282,32 +281,28 @@ describe('nodesIntrospectionFinished', () => {
     };
 
     store.dispatch(NodesActions.nodesIntrospectionFinished(execution));
-    expect(NodesActions.fetchNodes).toHaveBeenCalled();
     const actions = store.getActions();
     expect(Object.keys(actions).map(key => actions[key].type)).toEqual([
       'FINISH_NODES_OPERATION',
+      'REQUEST_NODES',
       'NOTIFY'
     ]);
   });
 });
 
 describe('startProvideNodes Action', () => {
-  const store = mockStore({});
+  const store = mockStore({ nodes: new NodesState() });
   const nodeIds = ['598612eb-f21b-435e-a868-7bb74e576cc2'];
 
   beforeEach(() => {
     WorkflowActions.startWorkflow = jest
       .fn()
       .mockReturnValue(() => Promise.resolve({ state: 'RUNNING' }));
-    NodesActions.pollNodeslistDuringProgress = jest
-      .fn()
-      .mockReturnValue(() => {});
   });
 
   it('dispatches actions', () =>
     store.dispatch(NodesActions.startProvideNodes(nodeIds)).then(() => {
       expect(WorkflowActions.startWorkflow).toHaveBeenCalled();
-      expect(NodesActions.pollNodeslistDuringProgress).toHaveBeenCalled();
       expect(store.getActions()).toEqual([
         NodesActions.startOperation(nodeIds)
       ]);
@@ -316,7 +311,7 @@ describe('startProvideNodes Action', () => {
 
 describe('provideNodesFinished', () => {
   beforeEach(() => {
-    NodesActions.fetchNodes = jest.fn().mockReturnValue(() => {});
+    when.all = jest.fn().mockReturnValue(Promise.resolve([]));
   });
 
   it('handles success', () => {
@@ -330,10 +325,10 @@ describe('provideNodesFinished', () => {
     };
 
     store.dispatch(NodesActions.nodesIntrospectionFinished(execution));
-    expect(NodesActions.fetchNodes).toHaveBeenCalled();
     const actions = store.getActions();
     expect(Object.keys(actions).map(key => actions[key].type)).toEqual([
       'FINISH_NODES_OPERATION',
+      'REQUEST_NODES',
       'NOTIFY'
     ]);
   });
@@ -349,10 +344,10 @@ describe('provideNodesFinished', () => {
     };
 
     store.dispatch(NodesActions.nodesIntrospectionFinished(execution));
-    expect(NodesActions.fetchNodes).toHaveBeenCalled();
     const actions = store.getActions();
     expect(Object.keys(actions).map(key => actions[key].type)).toEqual([
       'FINISH_NODES_OPERATION',
+      'REQUEST_NODES',
       'NOTIFY'
     ]);
   });

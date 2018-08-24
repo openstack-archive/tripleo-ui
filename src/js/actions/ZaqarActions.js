@@ -20,7 +20,12 @@ import { normalize } from 'normalizr';
 import { deploymentStates } from '../constants/DeploymentConstants';
 import { getCurrentStack } from '../selectors/stacks';
 import LoggerActions from './LoggerActions';
-import NodesActions from './NodesActions';
+import {
+  nodesIntrospectionFinished,
+  nodeIntrospectionFinished,
+  provideNodesFinished,
+  manageNodesFinished
+} from './NodesActions';
 import {
   createPlanFinished,
   updatePlanFinished,
@@ -70,8 +75,8 @@ export default {
         case MistralConstants.BAREMETAL_INTROSPECT:
           dispatch(
             handleWorkflowMessage(
-              payload.execution.id,
-              NodesActions.nodesIntrospectionFinished
+              payload.execution_id,
+              nodesIntrospectionFinished
             )
           );
           break;
@@ -79,27 +84,21 @@ export default {
         case MistralConstants.BAREMETAL_INTROSPECT_INTERNAL:
           dispatch(
             handleWorkflowMessage(
-              payload.execution.id,
-              NodesActions.nodeIntrospectionFinished
+              payload.execution_id,
+              nodeIntrospectionFinished
             )
           );
           break;
 
         case MistralConstants.BAREMETAL_PROVIDE:
           dispatch(
-            handleWorkflowMessage(
-              payload.execution.id,
-              NodesActions.provideNodesFinished
-            )
+            handleWorkflowMessage(payload.execution_id, provideNodesFinished)
           );
           break;
 
         case MistralConstants.BAREMETAL_MANAGE:
           dispatch(
-            handleWorkflowMessage(
-              payload.execution.id,
-              NodesActions.manageNodesFinished
-            )
+            handleWorkflowMessage(payload.execution_id, manageNodesFinished)
           );
           break;
 

@@ -21,7 +21,7 @@ import { Map } from 'immutable';
 import { getCurrentPlanName } from '../selectors/plans';
 import RegisterNodesConstants from '../constants/RegisterNodesConstants';
 import NotificationActions from './NotificationActions';
-import NodesActions from './NodesActions';
+import { addNodes, fetchNodes } from './NodesActions';
 import { nodeSchema } from '../normalizrSchemas/nodes';
 import ValidationsActions from './ValidationsActions';
 
@@ -43,7 +43,7 @@ export default {
       // add nodes to the list and add operation using startNodesOperation action.
       // Remove registerNodesReducer and track the progress on each node.
       // Introduce separate reducer for tracking operations: nodeOperationsById
-      // dispatch(NodesActions.addNodes(nodes.map(node => new Node(node))));
+      // dispatch(addNodes(nodes.map(node => new Node(node))));
       // dispatch(startOperation(nodes.map(node => node.uuid), 'register'))
       // addNodes(nodesToRegister.map(node => new Node))
       dispatch(this.nodesRegistrationPending());
@@ -62,9 +62,9 @@ export default {
       const { output: { message, registered_nodes }, state } = execution;
       const registeredNodes =
         normalize(registered_nodes, [nodeSchema]).entities.nodes || Map();
-      dispatch(NodesActions.addNodes(registeredNodes));
+      dispatch(addNodes(registeredNodes));
       // TODO(jtomasek): This should not be needed when workflow returns up to date nodes
-      dispatch(NodesActions.fetchNodes());
+      dispatch(fetchNodes());
 
       // run pre-introspection validations
       dispatch(

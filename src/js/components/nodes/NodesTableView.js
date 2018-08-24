@@ -29,7 +29,12 @@ import {
 } from '../../selectors/nodes';
 import { ConfirmationModal } from '../ui/Modals';
 import FormErrorList from '../ui/forms/FormErrorList';
-import NodesActions from '../../actions/NodesActions';
+import {
+  deleteNodes,
+  startNodesIntrospection,
+  startProvideNodes,
+  tagNodes
+} from '../../actions/NodesActions';
 import NodesTable from './NodesTable';
 import TagNodesModal from './tag_nodes/TagNodesModal';
 import { findClosestWithAttribute } from '../utils/Dom';
@@ -276,11 +281,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    deleteNodes: nodeIds => dispatch(NodesActions.deleteNodes(nodeIds)),
-    introspectNodes: nodeIds =>
-      dispatch(NodesActions.startNodesIntrospection(nodeIds)),
-    provideNodes: nodeIds => dispatch(NodesActions.startProvideNodes(nodeIds)),
-    tagNodes: (nodeIds, tag) => dispatch(NodesActions.tagNodes(nodeIds, tag))
+    deleteNodes: nodeIds => dispatch(deleteNodes(nodeIds)),
+    introspectNodes: nodeIds => dispatch(startNodesIntrospection(nodeIds)),
+    provideNodes: nodeIds => dispatch(startProvideNodes(nodeIds)),
+    tagNodes: (nodeIds, tag) => dispatch(tagNodes(nodeIds, tag))
   };
 }
 

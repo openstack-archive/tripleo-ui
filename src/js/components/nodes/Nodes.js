@@ -26,7 +26,10 @@ import { getFilterByName } from '../../selectors/filters';
 import { getFilteredNodes, nodesInProgress } from '../../selectors/nodes';
 import { Loader, InlineLoader } from '../ui/Loader';
 import NodeDrives from './NodeDrives/NodeDrives';
-import NodesActions from '../../actions/NodesActions';
+import {
+  fetchNodes,
+  fetchNodeIntrospectionData
+} from '../../actions/NodesActions';
 import NodesListForm from './NodesListView/NodesListForm';
 import NodesListView from './NodesListView/NodesListView';
 import NodesToolbar from './NodesToolbar/NodesToolbar';
@@ -178,10 +181,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchNodes: () => dispatch(NodesActions.fetchNodes()),
   fetchStacks: () => dispatch(StacksActions.fetchStacks()),
+  fetchNodes: () => dispatch(fetchNodes()),
   fetchNodeIntrospectionData: nodeId =>
-    dispatch(NodesActions.fetchNodeIntrospectionData(nodeId))
+    dispatch(fetchNodeIntrospectionData(nodeId))
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Nodes));
