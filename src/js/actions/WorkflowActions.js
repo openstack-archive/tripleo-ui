@@ -72,7 +72,7 @@ export const pollWorkflowExecution = (
         dispatch(setWorkflowTimeout(executionId, t));
       } else {
         dispatch(cancelWorkflowTimeout(executionId));
-        onFinished && onFinished(execution);
+        onFinished && dispatch(onFinished(execution));
       }
     })
     .catch(error =>

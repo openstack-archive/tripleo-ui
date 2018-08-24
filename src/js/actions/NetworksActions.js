@@ -38,10 +38,8 @@ export default {
       dispatch(
         startWorkflow(
           MistralConstants.NETWORK_LIST,
-          {
-            container: planName
-          },
-          execution => dispatch(this.fetchNetworksFinished(execution))
+          { container: planName },
+          this.fetchNetworksFinished
         )
       ).catch(error => {
         dispatch(

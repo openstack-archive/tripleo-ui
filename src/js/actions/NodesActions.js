@@ -173,7 +173,7 @@ export default {
             node_uuids: nodeIds,
             max_retry_attempts: 1
           },
-          execution => dispatch(this.nodesIntrospectionFinished(execution)),
+          this.nodesIntrospectionFinished,
           timeout
         )
       ).catch(error => {
@@ -279,7 +279,7 @@ export default {
         startWorkflow(
           MistralConstants.BAREMETAL_PROVIDE,
           { node_uuids: nodeIds },
-          execution => dispatch(this.provideNodesFinished(execution))
+          this.provideNodesFinished
         )
       ).catch(error => {
         dispatch(handleErrors(error, 'Selected Nodes could not be provided'));
@@ -328,10 +328,8 @@ export default {
       dispatch(
         startWorkflow(
           MistralConstants.BAREMETAL_MANAGE,
-          {
-            node_uuids: nodeIds
-          },
-          execution => dispatch(this.manageNodesFinished(execution))
+          { node_uuids: nodeIds },
+          this.manageNodesFinished
         )
       ).catch(error => {
         dispatch(handleErrors(error, 'Selected Nodes could not be managed'));
