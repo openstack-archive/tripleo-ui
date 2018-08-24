@@ -2,7 +2,7 @@
     templates:
       - nodejs8-jobs
       - nodejs8-publish-to-npm
-      - release-notes-jobs
+      - release-notes-jobs-python3
     check:
       jobs:
         - tripleo-ci-centos-7-undercloud-oooq:
