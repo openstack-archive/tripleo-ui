@@ -46,31 +46,6 @@ describe('plansReducer state', () => {
     });
   });
 
-  describe('CREATE_PLAN_PENDING', () => {
-    it('sets isTransitioningPlan to `true`', () => {
-      let state = plansReducer(
-        new InitialPlanState(),
-        PlansActions.createPlanPending()
-      );
-      expect(state.isTransitioningPlan).toBe(true);
-    });
-  });
-
-  describe('CREATE_PLAN_SUCCESS', () => {
-    let state;
-
-    beforeEach(() => {
-      state = plansReducer(
-        new InitialPlanState({ isTransitioningPlan: true }),
-        PlansActions.createPlanSuccess()
-      );
-    });
-
-    it('sets isTransitioningPlan to `false`', () => {
-      expect(state.isTransitioningPlan).toBe(false);
-    });
-  });
-
   describe('REQUEST_PLANSLIST', () => {
     let state;
 

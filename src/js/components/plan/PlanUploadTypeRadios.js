@@ -17,59 +17,59 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { FormGroup, ControlLabel, Col } from 'patternfly-react';
+import { Field } from 'redux-form';
+
+import Radio from '../ui/reduxForm/Radio';
 
 const messages = defineMessages({
-  localFolder: {
-    id: 'PlanUploadTypeRadios.localFolder',
-    defaultMessage: 'Local Folder'
+  directory: {
+    id: 'PlanUploadTypeRadios.localDirectory',
+    defaultMessage: 'Local Directory'
   },
-  tarArchive: {
+  tarball: {
     id: 'PlanUploadTypeRadios.tarArchive',
     defaultMessage: 'Tar Archive (.tar.gz or .tgz)'
+  },
+  uploadType: {
+    id: 'PlanUploadTypeRadios.uploadType',
+    defaultMessage: 'Upload Type'
   }
 });
 
-export default class PlanUploadTypeRadios extends React.Component {
-  render() {
-    return (
-      <div className="form-group">
-        <label className={`${this.props.labelColumnClasses} control-label`}>
-          {this.props.title}
-        </label>
-
-        <div className={this.props.inputColumnClasses}>
-          <label className="radio-inline" htmlFor="checkbox-tarball">
-            <input
-              type="radio"
-              id="checkbox-tarball"
-              name="uploadType"
-              value="tarball"
-              onChange={this.props.setUploadType}
-              defaultChecked
-            />{' '}
-            <FormattedMessage {...messages.tarArchive} />
-          </label>
-          <label className="radio-inline" htmlFor="checkbox-folder">
-            <input
-              ref="checkbox-folder"
-              type="radio"
-              id="checkbox-folder"
-              name="uploadType"
-              onChange={this.props.setUploadType}
-              value="folder"
-            />{' '}
-            <FormattedMessage {...messages.localFolder} />
-          </label>
-        </div>
-      </div>
-    );
-  }
-}
+const PlanUploadTypeRadios = ({ labelColumns, inputColumns }) => (
+  <FormGroup controlId="planUploadType">
+    <Col componentClass={ControlLabel} sm={labelColumns}>
+      <FormattedMessage {...messages.uploadType} />
+    </Col>
+    <Col sm={inputColumns}>
+      <Field
+        name="planUploadType"
+        component={Radio}
+        type="radio"
+        value="tarball"
+      >
+        <FormattedMessage {...messages.tarball} />
+      </Field>
+      <Field
+        name="planUploadType"
+        component={Radio}
+        type="radio"
+        value="directory"
+      >
+        <FormattedMessage {...messages.directory} />
+      </Field>
+    </Col>
+  </FormGroup>
+);
 
 PlanUploadTypeRadios.propTypes = {
-  inputColumnClasses: PropTypes.string.isRequired,
-  labelColumnClasses: PropTypes.string.isRequired,
-  setUploadType: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  uploadType: PropTypes.string.isRequired
+  inputColumns: PropTypes.number.isRequired,
+  labelColumns: PropTypes.number.isRequired
 };
+PlanUploadTypeRadios.defaultProps = {
+  inputColumns: 7,
+  labelColumns: 3
+};
+
+export default PlanUploadTypeRadios;
