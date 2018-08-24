@@ -21,7 +21,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { CloseModalXButton, RoutedModal } from '../ui/Modals';
-import PlansActions from '../../actions/PlansActions';
+import {
+  createPlan,
+  createDefaultPlan,
+  createPlanFromGit,
+  createPlanFromTarball
+} from '../../actions/PlansActions';
 import PlanFormTabs from './PlanFormTabs';
 import NewPlanForm from './NewPlanForm';
 
@@ -81,16 +86,16 @@ NewPlan.propTypes = {
 function mapDispatchToProps(dispatch) {
   return {
     createPlan: (planName, files) => {
-      dispatch(PlansActions.createPlan(planName, files));
+      dispatch(createPlan(planName, files));
     },
     createDefaultPlan: planName => {
-      dispatch(PlansActions.createDefaultPlan(planName));
+      dispatch(createDefaultPlan(planName));
     },
     createPlanFromTarball: (planName, archiveContents) => {
-      dispatch(PlansActions.createPlanFromTarball(planName, archiveContents));
+      dispatch(createPlanFromTarball(planName, archiveContents));
     },
     createPlanFromGit: (planName, gitUrl) => {
-      dispatch(PlansActions.createPlanFromGit(planName, gitUrl));
+      dispatch(createPlanFromGit(planName, gitUrl));
     }
   };
 }

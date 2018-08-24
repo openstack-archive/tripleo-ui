@@ -20,7 +20,7 @@ import yaml from 'js-yaml';
 import MistralApiService from '../../js/services/MistralApiService';
 import MistralConstants from '../../js/constants/MistralConstants';
 import { mockStore } from './utils';
-import PlansActions from '../../js/actions/PlansActions';
+import * as PlansActions from '../../js/actions/PlansActions';
 import SwiftApiService from '../../js/services/SwiftApiService';
 import storage from '../mocks/storage';
 import * as WorkflowActions from '../../js/actions/WorkflowActions';
