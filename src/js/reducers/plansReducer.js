@@ -14,40 +14,99 @@
  * under the License.
  */
 
-import { fromJS, List, Map } from 'immutable';
+import { List, Map } from 'immutable';
 
-import { InitialPlanState, Plan, PlanFile } from '../immutableRecords/plans';
+import {
+  InitialPlanState,
+  Plan,
+  PlanFile,
+  PlanEnvironment
+} from '../immutableRecords/plans';
 import PlansConstants from '../constants/PlansConstants';
 
 const initialState = new InitialPlanState();
 
 export default function plansReducer(state = initialState, action) {
   switch (action.type) {
-    case PlansConstants.REQUEST_PLAN:
-      return state;
-
-    case PlansConstants.RECEIVE_PLAN: {
-      let filesMap = fromJS(action.payload.planFiles).map(
-        file => new PlanFile({ name: file.get('name') })
-      );
-      let newState = state.updateIn(
-        ['all', action.payload.planName],
-        new Plan({ name: action.payload.planName }),
-        plan => plan.set('files', filesMap)
-      );
-      return newState;
-    }
-
-    case PlansConstants.REQUEST_PLANS:
+    case PlansConstants.FETCH_PLANS_PENDING:
       return state.set('isFetchingPlans', true);
 
-    case PlansConstants.RECEIVE_PLANS: {
+    case PlansConstants.FETCH_PLANS_SUCCESS: {
+      return (
+        state
+          .set('isFetchingPlans', false)
+          .set('plansLoaded', true)
+          // TODO(jtomasek): this could get simplified to List of plan names
+          .set(
+            'all',
+            Map(action.payload.map(plan => [plan, new Plan({ name: plan })]))
+          )
+      );
+    }
+
+    case PlansConstants.FETCH_PLAN_FILES_PENDING:
+    case PlansConstants.FETCH_PLAN_DETAILS_PENDING:
+      return state.updateIn(
+        ['planTransitionsByPlan', action.payload],
+        List(),
+        addTransition('loading')
+      );
+
+    case PlansConstants.FETCH_PLAN_FILES_SUCCESS: {
+      const { planName, planFiles } = action.payload;
       return state
-        .set('isFetchingPlans', false)
-        .set('plansLoaded', true)
-        .set(
-          'all',
-          Map(action.payload.map(plan => [plan.name, new Plan(plan)]))
+        .setIn(
+          ['planFilesByPlan', planName],
+          List(planFiles.map(planFile => new PlanFile({ name: planFile.name })))
+        )
+        .updateIn(
+          ['planTransitionsByPlan', planName],
+          List(),
+          removeTransition('loading')
+        );
+    }
+
+    case PlansConstants.FETCH_PLAN_FILES_FAILED: {
+      return state
+        .setIn(['planFilesByPlan', action.payload], undefined)
+        .updateIn(
+          ['planTransitionsByPlan', action.payload],
+          List(),
+          removeTransition('loading')
+        );
+    }
+
+    case PlansConstants.FETCH_PLAN_DETAILS_FAILED: {
+      return state
+        .setIn(['planEnvironmentsByPlan', action.payload], undefined)
+        .updateIn(
+          ['planTransitionsByPlan', action.payload],
+          List(),
+          removeTransition('loading')
+        );
+    }
+
+    case PlansConstants.FETCH_PLAN_DETAILS_SUCCESS: {
+      const { planName, planEnvironment } = action.payload;
+      return state
+        .setIn(
+          ['planEnvironmentsByPlan', planName],
+          new PlanEnvironment(planEnvironment)
+        )
+        .updateIn(
+          ['planTransitionsByPlan', planName],
+          List(),
+          removeTransition('deleting')
+        );
+    }
+
+    case PlansConstants.FETCH_PLAN_DETAILS_FAILED: {
+      return state
+        .setIn(['planEnvironmentsByPlan', action.payload], undefined)
+        .updateIn(
+          ['planTransitionsByPlan', action.payload],
+          List(),
+          removeTransition('loading')
         );
     }
 
@@ -55,36 +114,51 @@ export default function plansReducer(state = initialState, action) {
       return state.set('currentPlanName', action.payload);
 
     case PlansConstants.DELETE_PLAN_PENDING: {
-      return state.setIn(['all', action.payload, 'transition'], 'deleting');
+      return state.updateIn(
+        ['planTransitionsByPlan', action.payload],
+        List(),
+        addTransition('deleting')
+      );
     }
 
     case PlansConstants.DELETE_PLAN_SUCCESS: {
-      return state.set('all', state.get('all').remove(action.payload));
+      return state
+        .update('all', plans => plans.remove(action.payload))
+        .updateIn(
+          ['planTransitionsByPlan', action.payload],
+          List(),
+          removeTransition('deleting')
+        );
     }
 
     case PlansConstants.DELETE_PLAN_FAILED: {
-      return state.setIn(['all', action.payload, 'transition'], false);
+      return state.updateIn(
+        ['planTransitionsByPlan', action.payload],
+        List(),
+        removeTransition('deleting')
+      );
     }
 
     case PlansConstants.CREATE_PLAN_SUCCESS:
-      return state;
+      return state.setIn(
+        ['all', action.payload],
+        new Plan({ name: action.payload })
+      );
 
     case PlansConstants.UPDATE_PLAN_PENDING:
-      return state
-        .setIn(['all', action.payload, 'transition'], 'updating')
-        .set('isTransitioningPlan', true)
-        .set('planFormErrors', List());
+      return state.updateIn(
+        ['planTransitionsByPlan', action.payload],
+        List(),
+        removeTransition('updating')
+      );
 
     case PlansConstants.UPDATE_PLAN_SUCCESS:
-      return state
-        .setIn(['all', action.payload, 'transition'], false)
-        .set('isTransitioningPlan', false);
-
     case PlansConstants.UPDATE_PLAN_FAILED:
-      return state
-        .setIn(['all', action.payload.planName, 'transition'], false)
-        .set('isTransitioningPlan', false)
-        .set('planFormErrors', List(action.payload.errors));
+      return state.updateIn(
+        ['planTransitionsByPlan', action.payload],
+        List(),
+        removeTransition('updating')
+      );
 
     case PlansConstants.EXPORT_PLAN_PENDING: {
       return state.set('isExportingPlan', true);
@@ -104,3 +178,18 @@ export default function plansReducer(state = initialState, action) {
       return state;
   }
 }
+
+/**
+ * Helper function to remove transition from plan transitions
+ * @param {Immutable List} transitions
+ * @param {string} remove - a transition to remove
+ */
+export const removeTransition = remove => transitions =>
+  transitions.delete(transitions.findIndex(value => value === remove));
+
+/**
+ * Helper function to add transition to plan transitions
+ * @param {Immutable List} transitions
+ * @param {string} add - a transition to add
+ */
+export const addTransition = add => transitions => transitions.unshift(add);

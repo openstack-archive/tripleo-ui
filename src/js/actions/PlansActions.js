@@ -15,7 +15,6 @@
  */
 
 import { defineMessages } from 'react-intl';
-import { normalize } from 'normalizr';
 import when from 'when';
 import yaml from 'js-yaml';
 import { startSubmit, stopSubmit } from 'redux-form';
@@ -25,7 +24,6 @@ import history from '../utils/history';
 import MistralApiService from '../services/MistralApiService';
 import NotificationActions from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
-import { planFileSchema } from '../normalizrSchemas/plans';
 import SwiftApiService from '../services/SwiftApiService';
 import MistralConstants from '../constants/MistralConstants';
 import { PLAN_ENVIRONMENT } from '../constants/PlansConstants';
@@ -73,85 +71,100 @@ const messages = defineMessages({
 });
 
 export default {
-  requestPlans() {
+  fetchPlansPending() {
     return {
-      type: PlansConstants.REQUEST_PLANS
+      type: PlansConstants.FETCH_PLANS_PENDING
     };
   },
 
-  receivePlans(plans) {
+  fetchPlansSuccess(plans) {
     return {
-      type: PlansConstants.RECEIVE_PLANS,
+      type: PlansConstants.FETCH_PLANS_SUCCESS,
       payload: plans
     };
   },
 
   fetchPlans() {
     return dispatch => {
-      dispatch(this.requestPlans());
-      return (
-        dispatch(MistralApiService.runAction(MistralConstants.PLAN_LIST))
-          // TODO(jtomasek): This block should be done on Mistral action side
-          .then(planNames =>
-            when
-              .all(
-                planNames.map(name =>
-                  dispatch(SwiftApiService.getObject(name, PLAN_ENVIRONMENT))
-                )
-              )
-              .then(planEnvs =>
-                planNames.map(planName => {
-                  for (let i = 0; i < planEnvs.length; i++) {
-                    const { name, description } = yaml.safeLoad(planEnvs[i]);
-                    if (name === planName) {
-                      return { name, description };
-                    }
-                  }
-                  return { name: planName };
-                })
-              )
-              .catch(error => {
-                dispatch(
-                  handleErrors(error, 'Plan descriptions could not be loaded')
-                );
-                return planNames.map(name => ({ name }));
-              })
-          )
-          .then(plans => dispatch(this.receivePlans(plans)))
-          .catch(error =>
-            dispatch(handleErrors(error, 'Plans could not be loaded'))
-          )
-      );
+      dispatch(this.fetchPlansPending());
+      return dispatch(MistralApiService.runAction(MistralConstants.PLAN_LIST))
+        .then(plans => dispatch(this.fetchPlansSuccess(plans)))
+        .catch(error =>
+          dispatch(handleErrors(error, 'Plans could not be loaded'))
+        );
     };
   },
 
-  requestPlan() {
+  fetchPlanFilesPending(planName) {
     return {
-      type: PlansConstants.REQUEST_PLAN
+      type: PlansConstants.FETCH_PLAN_FILES_PENDING,
+      payload: planName
     };
   },
 
-  receivePlan(planName, planFiles) {
+  fetchPlanFilesSuccess(planName, planFiles) {
     return {
-      type: PlansConstants.RECEIVE_PLAN,
-      payload: {
-        planName: planName,
-        planFiles: planFiles
-      }
+      type: PlansConstants.FETCH_PLAN_FILES_SUCCESS,
+      payload: { planName, planFiles }
     };
   },
 
-  fetchPlan(planName) {
+  fetchPlanFilesFailed(planName) {
+    return {
+      type: PlansConstants.FETCH_PLAN_FILES_FAILED,
+      payload: planName
+    };
+  },
+
+  fetchPlanFiles(planName) {
     return dispatch => {
-      dispatch(this.requestPlan());
+      dispatch(this.fetchPlanFilesPending(planName));
       return dispatch(SwiftApiService.getContainer(planName))
         .then(response => {
-          const planFiles =
-            normalize(response, [planFileSchema]).entities.planFiles || {};
-          dispatch(this.receivePlan(planName, planFiles));
+          dispatch(this.fetchPlanFilesSuccess(planName, response));
         })
         .catch(error => {
+          dispatch(this.fetchPlanFilesFailed(planName));
           dispatch(handleErrors(error, 'Plan could not be loaded'));
+        });
+    };
+  },
+
+  fetchPlanDetailsPending(planName) {
+    return {
+      type: PlansConstants.FETCH_PLAN_DETAILS_PENDING,
+      payload: planName
+    };
+  },
+
+  fetchPlanDetailsSuccess(planName, planEnvironment) {
+    return {
+      type: PlansConstants.FETCH_PLAN_DETAILS_SUCCESS,
+      payload: { planName, planEnvironment }
+    };
+  },
+
+  fetchPlanDetailsFailed(planName) {
+    return {
+      type: PlansConstants.FETCH_PLAN_DETAILS_FAILED,
+      payload: planName
+    };
+  },
+
+  fetchPlanDetails(planName) {
+    return dispatch => {
+      dispatch(this.fetchPlanDetailsPending(planName));
+      return dispatch(SwiftApiService.getObject(planName, PLAN_ENVIRONMENT))
+        .then(response =>
+          dispatch(
+            this.fetchPlanDetailsSuccess(planName, yaml.safeLoad(response))
+          )
+        )
+        .catch(error => {
+          dispatch(this.fetchPlanDetailsFailed(planName));
+          if (error.response && error.response.status !== 404) {
+            dispatch(handleErrors(error, 'Plan details could not be loaded'));
+          }
         });
     };
   },
@@ -375,7 +388,6 @@ export default {
             })
           })
         );
-        dispatch(this.fetchPlans());
         history.push('/plans/manage');
       } else {
         dispatch(
