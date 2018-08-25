@@ -16,13 +16,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
+import { file } from 'redux-form-validators';
 
 import HorizontalStaticText from '../ui/forms/HorizontalStaticText';
 import HorizontalDirectoryInput, {
   validateDirectoryInput
 } from '../ui/reduxForm/HorizontalDirectoryInput';
+import HorizontalFileInput from '../ui/reduxForm/HorizontalFileInput';
+import PlanUploadTypeRadios from './PlanUploadTypeRadios';
 import TabPane from '../ui/TabPane';
 
 const messages = defineMessages({
@@ -38,10 +41,24 @@ const messages = defineMessages({
     id: 'EditPlanFieldsTab.directoryInputDescription',
     defaultMessage:
       'Provide a directory with files you want to update, the directory structure must map the plan directory structure.'
+  },
+  planTarball: {
+    id: 'PlanFormTabs.planTarball',
+    defaultMessage: 'Plan Tarball'
+  },
+  tarballInputDescription: {
+    id: 'PlanFieldsTab.tarballInputDescription',
+    defaultMessage:
+      'Provided tarball must not contain root directory, when creating the tarball use following command: {command}'
   }
 });
 
-const PlanFieldsTab = ({ active, intl: { formatMessage }, planName }) => (
+const PlanFieldsTab = ({
+  active,
+  intl: { formatMessage },
+  planName,
+  planUploadType
+}) => (
   <TabPane isActive={active}>
     <HorizontalStaticText
       title={formatMessage(messages.planName)}
@@ -49,22 +66,50 @@ const PlanFieldsTab = ({ active, intl: { formatMessage }, planName }) => (
       inputColumnClasses="col-sm-7"
       labelColumnClasses="col-sm-3"
     />
-    <Field
-      id="files"
-      name="files"
-      component={HorizontalDirectoryInput}
-      label={formatMessage(messages.planFiles)}
-      labelColumns={3}
-      validate={validateDirectoryInput}
-      description={formatMessage(messages.directoryInputDescription)}
-      required
-    />
+    <PlanUploadTypeRadios />
+    {planUploadType === 'directory' && (
+      <Field
+        id="files"
+        name="files"
+        component={HorizontalDirectoryInput}
+        label={formatMessage(messages.planFiles)}
+        labelColumns={3}
+        validate={validateDirectoryInput}
+        description={formatMessage(messages.directoryInputDescription)}
+        required
+      />
+    )}
+    {planUploadType === 'tarball' && (
+      <Field
+        id="tarball"
+        name="tarball"
+        component={HorizontalFileInput}
+        type="file"
+        label={formatMessage(messages.planTarball)}
+        labelColumns={3}
+        validate={file({ accept: 'application/x-gzip, application/gzip' })}
+        description={
+          <FormattedMessage
+            {...messages.tarballInputDescription}
+            values={{
+              command: (
+                <code style={{ whiteSpace: 'nowrap' }}>
+                  tar -czf heat-templates.tar.gz -C tripleo-heat-templates/ .
+                </code>
+              )
+            }}
+          />
+        }
+        required
+      />
+    )}
   </TabPane>
 );
 PlanFieldsTab.propTypes = {
   active: PropTypes.bool.isRequired,
   intl: PropTypes.object,
-  planName: PropTypes.string.isRequired
+  planName: PropTypes.string.isRequired,
+  planUploadType: PropTypes.string.isRequired
 };
 PlanFieldsTab.defaultProps = { active: false };
 
