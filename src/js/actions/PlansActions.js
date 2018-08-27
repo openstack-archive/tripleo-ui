@@ -368,6 +368,33 @@ export default {
     };
   },
 
+  createDefaultPlan(planName) {
+    return (dispatch, getState, { getIntl }) => {
+      const { formatMessage } = getIntl(getState());
+      dispatch(startSubmit('newPlanForm'));
+      return dispatch(
+        startWorkflow(
+          MistralConstants.PLAN_CREATE,
+          {
+            container: planName,
+            use_default_templates: true
+          },
+          execution => dispatch(this.createPlanFinished(execution)),
+          2 * 60 * 1000
+        )
+      ).catch(error => {
+        dispatch(
+          stopSubmit('newPlanForm', {
+            _error: {
+              title: formatMessage(messages.planCreationFailed),
+              message: error.message
+            }
+          })
+        );
+      });
+    };
+  },
+
   createPlanFinished(execution) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());

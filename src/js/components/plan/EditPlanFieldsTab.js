@@ -66,7 +66,7 @@ const PlanFieldsTab = ({
       inputColumnClasses="col-sm-7"
       labelColumnClasses="col-sm-3"
     />
-    <PlanUploadTypeRadios />
+    <PlanUploadTypeRadios options={['tarball', 'directory']} />
     {planUploadType === 'directory' && (
       <Field
         id="files"

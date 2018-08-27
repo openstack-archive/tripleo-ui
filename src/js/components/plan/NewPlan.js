@@ -46,7 +46,7 @@ class NewPlan extends React.Component {
         files.map(({ filePath, contents }) => (planFiles[filePath] = contents));
         return this.props.createPlan(planName, planFiles);
       default:
-        return null;
+        return this.props.createDefaultPlan(planName);
     }
   };
 
@@ -67,6 +67,7 @@ class NewPlan extends React.Component {
   }
 }
 NewPlan.propTypes = {
+  createDefaultPlan: PropTypes.func,
   createPlan: PropTypes.func,
   createPlanFromTarball: PropTypes.func,
   intl: PropTypes.object
@@ -76,6 +77,9 @@ function mapDispatchToProps(dispatch) {
   return {
     createPlan: (planName, files) => {
       dispatch(PlansActions.createPlan(planName, files));
+    },
+    createDefaultPlan: planName => {
+      dispatch(PlansActions.createDefaultPlan(planName));
     },
     createPlanFromTarball: (planName, archiveContents) => {
       dispatch(PlansActions.createPlanFromTarball(planName, archiveContents));
