@@ -157,6 +157,8 @@
         "NodesActions.introspectionNotificationTitle": "\u8282\u70b9\u5185\u7701\u5b8c\u6210",
         "NodesAssignment.manageRolesLink": "\u7ba1\u7406\u89d2\u8272",
         "NodesAssignmentForm.cancel": "\u53d6\u6d88",
+        "NodesAssignmentForm.nodeCountsErrorMessage": "",
+        "NodesAssignmentForm.nodeCountsErrorTitle": "",
         "NodesAssignmentForm.saveChanges": "\u4fdd\u5b58\u53d8\u66f4",
         "NodesListForm.operationInProgressValidationMessage": "\u67d0\u4e9b\u9009\u4e2d\u7684\u8282\u70b9\u4e0a\u6709\u4e00\u4e2a\u64cd\u4f5c\u6b63\u5728\u8fdb\u884c\u4e2d\u3002",
         "NodesListForm.selectNodesValidationMessage": "\u9996\u5148\u8bf7\u9009\u62e9\u8282\u70b9",
