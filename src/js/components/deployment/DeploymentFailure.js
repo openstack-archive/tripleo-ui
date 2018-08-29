@@ -23,6 +23,7 @@ import React from 'react';
 
 import DeleteStackButton from '../deployment_plan/DeleteStackButton';
 import RecoverDeploymentStatusButton from './RecoverDeploymentStatusButton';
+import RedeployPlanButton from './RedeployPlanButton';
 import DeploymentFailures from './DeploymentFailures';
 import { deploymentStatusMessages } from '../../constants/DeploymentConstants';
 import { stackStates } from '../../constants/StacksConstants';
@@ -55,6 +56,7 @@ class DeploymentFailure extends React.Component {
     const {
       deploymentStatus: { status, message },
       undeployPlan,
+      startDeployment,
       intl: { formatMessage },
       isFetchingStacks,
       isPendingRequest,
@@ -66,6 +68,12 @@ class DeploymentFailure extends React.Component {
       <ModalBody className="flex-container">
         <div className="page-header">
           <div className="pull-right">
+            {isFetchingStacks || (
+              <RedeployPlanButton
+                redeploy={() => startDeployment()}
+                disabled={isPendingRequest}
+              />
+            )}
             {isFetchingStacks ||
               (stack && (
                 <DeleteStackButton
@@ -114,6 +122,7 @@ DeploymentFailure.propTypes = {
   isPendingRequest: PropTypes.bool.isRequired,
   planName: PropTypes.string.isRequired,
   stack: ImmutablePropTypes.record,
+  startDeployment: PropTypes.func.isRequired,
   undeployPlan: PropTypes.func.isRequired
 };
 
@@ -126,6 +135,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch, { planName }) => ({
   undeployPlan: () => dispatch(startUndeploy(planName)),
+  startDeployment: () => dispatch(startDeployment(planName)),
   fetchStacks: () => dispatch(StacksActions.fetchStacks())
 });
 
