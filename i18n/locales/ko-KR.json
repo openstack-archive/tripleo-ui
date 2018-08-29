@@ -157,6 +157,8 @@
         "NodesActions.introspectionNotificationTitle": "\ub178\ub4dc Introspection \uc644\ub8cc",
         "NodesAssignment.manageRolesLink": "\uc5ed\ud560 \uad00\ub9ac",
         "NodesAssignmentForm.cancel": "\ucde8\uc18c",
+        "NodesAssignmentForm.nodeCountsErrorMessage": "",
+        "NodesAssignmentForm.nodeCountsErrorTitle": "",
         "NodesAssignmentForm.saveChanges": "\ubcc0\uacbd\uc0ac\ud56d \uc800\uc7a5",
         "NodesListForm.operationInProgressValidationMessage": "\uc120\ud0dd\ud55c \ub178\ub4dc \uc911 \uc77c\ubd80\uc5d0\uc11c \uc9c4\ud589\uc911\uc778 \uc791\uc5c5\uc774 \uc788\uc2b5\ub2c8\ub2e4",
         "NodesListForm.selectNodesValidationMessage": "\uba3c\uc800 \ub178\ub4dc\ub97c \uc120\ud0dd\ud558\uc2ed\uc2dc\uc624.",

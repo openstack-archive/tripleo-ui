@@ -157,6 +157,8 @@
         "NodesActions.introspectionNotificationTitle": "Knotenintrospektion komplett",
         "NodesAssignment.manageRolesLink": "Rollen verwalten",
         "NodesAssignmentForm.cancel": "Abbrechen",
+        "NodesAssignmentForm.nodeCountsErrorMessage": "",
+        "NodesAssignmentForm.nodeCountsErrorTitle": "",
         "NodesAssignmentForm.saveChanges": "\u00c4nderungen speichern",
         "NodesListForm.operationInProgressValidationMessage": "In einigen der ausgew\u00e4hlten Knoten l\u00e4uft eine Operation",
         "NodesListForm.selectNodesValidationMessage": "Bitte zuerst Knoten ausw\u00e4hlen",

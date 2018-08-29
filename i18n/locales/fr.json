@@ -157,6 +157,8 @@
         "NodesActions.introspectionNotificationTitle": "Introspection des n\u0153uds termin\u00e9",
         "NodesAssignment.manageRolesLink": "",
         "NodesAssignmentForm.cancel": "Annuler",
+        "NodesAssignmentForm.nodeCountsErrorMessage": "",
+        "NodesAssignmentForm.nodeCountsErrorTitle": "",
         "NodesAssignmentForm.saveChanges": "Enregistrer les changements",
         "NodesListForm.operationInProgressValidationMessage": "Il y a une op\u00e9ration en cours sur certains des n\u0153uds s\u00e9lectionn\u00e9s",
         "NodesListForm.selectNodesValidationMessage": "Merci de s\u00e9lectionner des n\u0153uds d'abord",
