@@ -16,15 +16,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Button } from 'patternfly-react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-
 import { defineMessages } from 'react-intl';
-import { getCurrentPlanName } from '../../selectors/plans';
-import { getCurrentPlanDeploymentStatusUI } from '../../selectors/deployment';
+
 import { InlineLoader } from '../ui/Loader';
-import { recoverDeploymentStatus } from '../../actions/DeploymentActions';
 
 const messages = defineMessages({
   recoveringDeploymentStatus: {
@@ -37,17 +33,14 @@ const messages = defineMessages({
   }
 });
 const RecoverDeploymentStatusButton = ({
-  currentPlanName,
+  disabled,
+  isPending,
   intl: { formatMessage },
-  isPendingRequest,
   recoverDeploymentStatus
 }) => (
-  <Button
-    disabled={isPendingRequest}
-    onClick={() => recoverDeploymentStatus(currentPlanName)}
-  >
+  <Button disabled={disabled} onClick={recoverDeploymentStatus}>
     <InlineLoader
-      loaded={!isPendingRequest}
+      loaded={!isPending}
       content={formatMessage(messages.recoveringDeploymentStatus)}
     >
       <FormattedMessage {...messages.recoverDeploymentStatus} />
@@ -55,18 +48,10 @@ const RecoverDeploymentStatusButton = ({
   </Button>
 );
 RecoverDeploymentStatusButton.propTypes = {
-  currentPlanName: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
   intl: PropTypes.object.isRequired,
-  isPendingRequest: PropTypes.bool.isRequired,
+  isPending: PropTypes.bool.isRequired,
   recoverDeploymentStatus: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-  currentPlanName: getCurrentPlanName(state),
-  isPendingRequest: getCurrentPlanDeploymentStatusUI(state).isPendingRequest
-});
-export default injectIntl(
-  connect(mapStateToProps, { recoverDeploymentStatus })(
-    RecoverDeploymentStatusButton
-  )
-);
+export default injectIntl(RecoverDeploymentStatusButton);

@@ -18,6 +18,7 @@ import { fromJS, Map, List } from 'immutable';
 
 import { Stack, StackResource, StacksState } from '../immutableRecords/stacks';
 import StacksConstants from '../constants/StacksConstants';
+import { START_DEPLOYMENT_PENDING } from '../constants/DeploymentConstants';
 
 const initialState = new StacksState();
 
@@ -83,6 +84,11 @@ export default function stacksReducer(state = initialState, action) {
           ['resourceDetails', action.payload.resource_name],
           new StackResource(fromJS(action.payload))
         );
+
+    case START_DEPLOYMENT_PENDING:
+      return state
+        .set('resources', initialState.resources)
+        .deleteIn(['stacks', action.payload]);
 
     default:
       return state;

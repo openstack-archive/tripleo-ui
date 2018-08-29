@@ -20,6 +20,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import DeploymentActions from '../deployment/DeploymentActions';
+import { REDEPLOY, UNDEPLOY } from '../../constants/DeploymentActionsConstants';
 import { deploymentStatusMessages } from '../../constants/DeploymentConstants';
 import { getCurrentPlanDeploymentStatus } from '../../selectors/deployment';
 import InlineNotification from '../ui/InlineNotification';
@@ -59,6 +61,7 @@ class DeploymentFailure extends React.Component {
             <FormattedMessage {...messages.moreDetails} />
           </Link>
         </InlineNotification>
+        <DeploymentActions actions={[REDEPLOY, UNDEPLOY]} />
       </div>
     );
   }

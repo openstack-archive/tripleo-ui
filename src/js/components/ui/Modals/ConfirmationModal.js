@@ -43,6 +43,7 @@ export default class ConfirmationModal extends React.Component {
 
   render() {
     const {
+      bsStyle,
       show,
       onCancel,
       question,
@@ -64,7 +65,11 @@ export default class ConfirmationModal extends React.Component {
           <Button aria-label="Close" onClick={onCancel}>
             Cancel
           </Button>
-          <Button bsStyle="danger" name={confirmActionName} onClick={onConfirm}>
+          <Button
+            bsStyle={bsStyle}
+            name={confirmActionName}
+            onClick={onConfirm}
+          >
             {confirmActionTitle || title}
           </Button>
         </ModalFooter>
@@ -73,6 +78,7 @@ export default class ConfirmationModal extends React.Component {
   }
 }
 ConfirmationModal.propTypes = {
+  bsStyle: PropTypes.string.isRequired,
   confirmActionName: PropTypes.string,
   confirmActionTitle: PropTypes.string,
   iconClass: PropTypes.string,
@@ -83,5 +89,6 @@ ConfirmationModal.propTypes = {
   title: PropTypes.string.isRequired
 };
 ConfirmationModal.defaultProps = {
+  bsStyle: 'danger',
   question: 'Are you sure?'
 };

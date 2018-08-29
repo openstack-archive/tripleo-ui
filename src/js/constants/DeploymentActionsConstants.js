@@ -14,22 +14,6 @@
  * under the License.
  */
 
-import { Record, List } from 'immutable';
-
-import { deploymentStates } from '../constants/DeploymentConstants';
-
-export const DeploymentStatus = Record({
-  configDownloadMessages: List(),
-  message: undefined,
-  status: deploymentStates.UNDEPLOYED,
-  type: undefined
-});
-
-export const DeploymentStatusUI = Record({
-  error: undefined,
-  isLoaded: false,
-  isFetching: false,
-  isPendingRecoverStatus: false,
-  isPendingDeployment: false,
-  isPendingUndeploy: false
-});
+export const REDEPLOY = 'REDEPLOY';
+export const UNDEPLOY = 'UNDEPLOY';
+export const RECOVER_STATUS = 'RECOVER_STATUS';
