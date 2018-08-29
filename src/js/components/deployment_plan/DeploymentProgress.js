@@ -22,6 +22,8 @@ import { ProgressBar } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 
+import DeploymentActions from '../deployment/DeploymentActions';
+import { UNDEPLOY } from '../../constants/DeploymentActionsConstants';
 import { deploymentStatusMessages } from '../../constants/DeploymentConstants';
 import { stackStates } from '../../constants/StacksConstants';
 import { getCurrentPlanDeploymentStatus } from '../../selectors/deployment';
@@ -70,6 +72,11 @@ class DeploymentProgress extends React.Component {
     !isFetchingStacks && fetchStacks();
   }
 
+  isStackComplete(stack) {
+    const { CREATE_COMPLETE, UPDATE_COMPLETE } = stackStates;
+    return [CREATE_COMPLETE, UPDATE_COMPLETE].includes(stack.stack_status);
+  }
+
   render() {
     const {
       deploymentStatus: { status, message },
@@ -112,7 +119,7 @@ class DeploymentProgress extends React.Component {
             </Fragment>
           )}
           {stack &&
-            stack.stack_status !== stackStates.CREATE_COMPLETE && (
+            !this.isStackComplete(stack) && (
               <Fragment>
                 <div className="progress-description">
                   <InlineLoader />
@@ -134,7 +141,7 @@ class DeploymentProgress extends React.Component {
               </Fragment>
             )}
           {stack &&
-            stack.stack_status === stackStates.CREATE_COMPLETE && (
+            this.isStackComplete(stack) && (
               <Fragment>
                 <div className="progress-description">
                   <InlineLoader />
@@ -147,6 +154,7 @@ class DeploymentProgress extends React.Component {
                 {message && <pre>{message}</pre>}
               </Fragment>
             )}
+          {stack && <DeploymentActions actions={[UNDEPLOY]} />}
         </Loader>
       </div>
     );

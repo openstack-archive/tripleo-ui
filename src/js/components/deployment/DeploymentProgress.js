@@ -53,6 +53,11 @@ const messages = defineMessages({
 });
 
 class DeploymentProgress extends React.Component {
+  isStackComplete(stack) {
+    const { CREATE_COMPLETE, UPDATE_COMPLETE } = stackStates;
+    return [CREATE_COMPLETE, UPDATE_COMPLETE].includes(stack.stack_status);
+  }
+
   render() {
     const {
       deploymentStatus: { configDownloadMessages, message },
@@ -89,7 +94,7 @@ class DeploymentProgress extends React.Component {
             </Fragment>
           )}
           {stack &&
-            stack.stack_status !== stackStates.CREATE_COMPLETE && (
+            !this.isStackComplete(stack) && (
               <Fragment>
                 <div className="progress-description">
                   <InlineLoader />
@@ -122,7 +127,7 @@ class DeploymentProgress extends React.Component {
               </Fragment>
             )}
           {stack &&
-            stack.stack_status === stackStates.CREATE_COMPLETE && (
+            this.isStackComplete(stack) && (
               <Fragment>
                 <div className="progress-description">
                   <InlineLoader />

@@ -162,7 +162,7 @@ const mapStateToProps = (state, props) => ({
   deploymentStatusUIError: getCurrentPlanDeploymentStatusUI(state).error,
   environmentSummary: getEnvironmentConfigurationSummary(state),
   isPendingDeploymentRequest: getCurrentPlanDeploymentStatusUI(state)
-    .isPendingRequest
+    .isPendingDeployment
 });
 
 const mapDispatchToProps = dispatch => ({

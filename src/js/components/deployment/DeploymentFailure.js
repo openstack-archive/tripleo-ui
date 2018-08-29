@@ -21,21 +21,15 @@ import { ModalBody } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import DeleteStackButton from '../deployment_plan/DeleteStackButton';
-import RecoverDeploymentStatusButton from './RecoverDeploymentStatusButton';
 import DeploymentFailures from './DeploymentFailures';
 import { deploymentStatusMessages } from '../../constants/DeploymentConstants';
 import { stackStates } from '../../constants/StacksConstants';
 import { getCurrentStack } from '../../selectors/stacks';
-import {
-  getCurrentPlanDeploymentStatus,
-  getCurrentPlanDeploymentStatusUI
-} from '../../selectors/deployment';
+import { getCurrentPlanDeploymentStatus } from '../../selectors/deployment';
 import InlineNotification from '../ui/InlineNotification';
 import { Loader } from '../ui/Loader';
 import { sanitizeMessage } from '../../utils';
 import StacksActions from '../../actions/StacksActions';
-import { startUndeploy } from '../../actions/DeploymentActions';
 import StackResources from './StackResources';
 
 const messages = defineMessages({
@@ -54,10 +48,8 @@ class DeploymentFailure extends React.Component {
   render() {
     const {
       deploymentStatus: { status, message },
-      undeployPlan,
       intl: { formatMessage },
       isFetchingStacks,
-      isPendingRequest,
       planName,
       stack
     } = this.props;
@@ -65,16 +57,6 @@ class DeploymentFailure extends React.Component {
     return (
       <ModalBody className="flex-container">
         <div className="page-header">
-          <div className="pull-right">
-            {isFetchingStacks ||
-              (stack && (
-                <DeleteStackButton
-                  deleteStack={() => undeployPlan()}
-                  disabled={isPendingRequest}
-                />
-              ))}
-            {isFetchingStacks || (!stack && <RecoverDeploymentStatusButton />)}
-          </div>
           <h2>
             <FormattedMessage
               {...deploymentStatusMessages[status]}
@@ -111,21 +93,17 @@ DeploymentFailure.propTypes = {
   fetchStacks: PropTypes.func.isRequired,
   intl: PropTypes.object,
   isFetchingStacks: PropTypes.bool.isRequired,
-  isPendingRequest: PropTypes.bool.isRequired,
   planName: PropTypes.string.isRequired,
-  stack: ImmutablePropTypes.record,
-  undeployPlan: PropTypes.func.isRequired
+  stack: ImmutablePropTypes.record
 };
 
 const mapStateToProps = (state, props) => ({
   deploymentStatus: getCurrentPlanDeploymentStatus(state),
   isFetchingStacks: state.stacks.isFetching,
-  isPendingRequest: getCurrentPlanDeploymentStatusUI(state).isPendingRequest,
   stack: getCurrentStack(state)
 });
 
 const mapDispatchToProps = (dispatch, { planName }) => ({
-  undeployPlan: () => dispatch(startUndeploy(planName)),
   fetchStacks: () => dispatch(StacksActions.fetchStacks())
 });
 

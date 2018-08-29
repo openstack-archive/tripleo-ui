@@ -129,16 +129,20 @@ export const deploymentStatusUI = (state = Map(), { type, payload }) => {
         })
       );
     case START_DEPLOYMENT_PENDING:
+      return state.setIn([payload, 'isPendingDeployment'], true);
     case START_UNDEPLOY_PENDING:
+      return state.setIn([payload, 'isPendingUndeploy'], true);
     case RECOVER_DEPLOYMENT_STATUS_PENDING:
-      return state.setIn([payload, 'isPendingRequest'], true);
+      return state.setIn([payload, 'isPendingRecoverStatus'], true);
     case START_DEPLOYMENT_SUCCESS:
     case START_DEPLOYMENT_FAILED:
+      return state.setIn([payload, 'isPendingDeployment'], false);
     case START_UNDEPLOY_SUCCESS:
     case START_UNDEPLOY_FAILED:
+      return state.setIn([payload, 'isPendingUndeploy'], false);
     case RECOVER_DEPLOYMENT_STATUS_SUCCESS:
     case RECOVER_DEPLOYMENT_STATUS_FAILED:
-      return state.setIn([payload, 'isPendingRequest'], false);
+      return state.setIn([payload, 'isPendingRecoverStatus'], false);
     default:
       return state;
   }
