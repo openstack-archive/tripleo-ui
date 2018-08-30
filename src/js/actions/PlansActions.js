@@ -222,11 +222,10 @@ export default {
     };
   },
 
-  // TODO(jtomasek): This is currently not used, revive this when plan update is
-  // also available via tarball upload
   updatePlanFromTarball(planName, file) {
     return (dispatch, getState, { getIntl }) => {
       const { formatMessage } = getIntl(getState());
+      dispatch(startSubmit('editPlanForm'));
       dispatch(this.updatePlanPending(planName));
       return dispatch(SwiftApiService.uploadTarball(planName, file))
         .then(response => {
@@ -242,14 +241,14 @@ export default {
           );
         })
         .catch(error => {
-          dispatch(handleErrors(error, 'Plan update failed', false));
-          dispatch(
-            this.updatePlanFailed(planName, [
-              {
+          dispatch(this.updatePlanFailed(planName));
+          return dispatch(
+            stopSubmit('editPlanForm', {
+              _error: {
                 title: formatMessage(messages.planUpdateFailed),
                 message: error.message
               }
-            ])
+            })
           );
         });
     };

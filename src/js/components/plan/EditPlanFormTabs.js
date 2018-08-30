@@ -58,7 +58,7 @@ class EditPlanFormTabs extends React.Component {
   }
 
   render() {
-    const { files, planFiles } = this.props;
+    const { files, planFiles, planUploadType } = this.props;
     return (
       <div>
         <ul className="nav nav-tabs">
@@ -78,6 +78,7 @@ class EditPlanFormTabs extends React.Component {
           <EditPlanFieldsTab
             active={this.isActiveTab('editPlan')}
             planName={this.props.planName}
+            planUploadType={planUploadType}
           />
           <PlanFilesTab
             active={this.isActiveTab('planFiles')}
@@ -92,7 +93,8 @@ class EditPlanFormTabs extends React.Component {
 EditPlanFormTabs.propTypes = {
   files: PropTypes.array.isRequired,
   planFiles: ImmutablePropTypes.set.isRequired,
-  planName: PropTypes.string.isRequired
+  planName: PropTypes.string.isRequired,
+  planUploadType: PropTypes.string.isRequired
 };
 EditPlanFormTabs.defaultProps = {
   currentTtab: 'editPlan'
@@ -100,6 +102,6 @@ EditPlanFormTabs.defaultProps = {
 
 const selector = formValueSelector('editPlanForm');
 
-const mapStateToProps = state => ({ files: selector(state, 'files') });
+const mapStateToProps = state => selector(state, 'planUploadType', 'files');
 
 export default injectIntl(connect(mapStateToProps)(EditPlanFormTabs));

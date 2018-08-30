@@ -29,7 +29,10 @@ class SwiftApiService {
             baseURL: getServiceUrl(getState(), 'swift'),
             url: path,
             method: 'GET',
-            headers: { 'X-Auth-Token': getAuthTokenId(getState()) }
+            headers: {
+              'X-Auth-Token': getAuthTokenId(getState()),
+              Accept: 'application/json'
+            }
           },
           additionalAttributes
         )
