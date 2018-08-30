@@ -18,10 +18,13 @@ import { createSelector } from 'reselect';
 
 import { getResources } from './parameters';
 
-const networks = state =>
-  state.networks.networks.sortBy(network => network.name);
+const networks = state => state.networks.networks;
 
-export const getNetworks = createSelector(networks, networks => networks);
+export const getNetworks = createSelector(networks, networks =>
+  // TODO(jtomasek): remove the filter once networks directory is enabled and
+  // network-data.yaml includes only enabled networks
+  networks.filter(n => n.enabled).sortBy(n => n.name)
+);
 
 export const getNetworkResourcesByNetwork = createSelector(
   [getResources, getNetworks],
