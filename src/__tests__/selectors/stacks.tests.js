@@ -17,7 +17,7 @@
 import { fromJS, Map, List } from 'immutable';
 
 import {
-  getCurrentStackServerIds,
+  getCurrentPlanServerIds,
   getCurrentStack,
   getOvercloudInfo
 } from '../../js/selectors/stacks';
@@ -142,29 +142,31 @@ describe('stacks selectors', () => {
     });
   });
 
-  describe('getCurrentStackServerIds()', () => {
+  describe('getCurrentPlanServerIds()', () => {
     const state = {
       stacks: new StacksState({
         stacks: Map({
           overcloud: Stack({
             stack_name: 'overcloud',
-            stack_status: 'CREATE_COMPLETE',
-            outputs: List([
-              fromJS({
-                output_key: 'ServerIdData',
-                output_value: {
-                  server_ids: {
-                    Controller: ['1', '2'],
-                    Compute: ['3']
-                  }
-                }
-              })
-            ])
+            stack_status: 'CREATE_COMPLETE'
           }),
           anothercloud: Stack({
             stack_name: 'anothercloud',
             stack_status: 'CREATE_FAILED'
           })
+        }),
+        stacksOutputs: Map({
+          overcloud: List([
+            fromJS({
+              output_key: 'ServerIdData',
+              output_value: {
+                server_ids: {
+                  Controller: ['1', '2'],
+                  Compute: ['3']
+                }
+              }
+            })
+          ])
         })
       }),
       plans: new InitialPlanState({
@@ -179,7 +181,7 @@ describe('stacks selectors', () => {
     };
 
     it('returns the correct server ids', () => {
-      expect(getCurrentStackServerIds(state)).toEqual(List(['1', '2', '3']));
+      expect(getCurrentPlanServerIds(state)).toEqual(List(['1', '2', '3']));
     });
   });
 });
