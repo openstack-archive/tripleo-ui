@@ -15,6 +15,7 @@
  */
 
 import { startSubmit } from 'redux-form';
+import yaml from 'js-yaml';
 
 import MistralApiService from '../../js/services/MistralApiService';
 import MistralConstants from '../../js/constants/MistralConstants';
@@ -118,22 +119,7 @@ describe('PlansActions', () => {
   describe('fetchPlans', () => {
     const store = mockStore({});
     const apiResponseMistral = ['overcloud', 'another-cloud'];
-    const expectedPlans = [
-      { name: 'overcloud', description: 'Default deployment plan' },
-      { name: 'another-cloud', description: 'My custom plan' }
-    ];
-
     beforeEach(() => {
-      SwiftApiService.getObject = jest
-        .fn()
-        .mockReturnValueOnce(() =>
-          Promise.resolve(
-            'name: overcloud\ndescription: Default deployment plan'
-          )
-        )
-        .mockReturnValueOnce(() =>
-          Promise.resolve('name: another-cloud\ndescription: My custom plan')
-        );
       MistralApiService.runAction = jest
         .fn()
         .mockReturnValue(() => Promise.resolve(apiResponseMistral));
@@ -141,24 +127,43 @@ describe('PlansActions', () => {
 
     it('dispatches actions', () =>
       store.dispatch(PlansActions.fetchPlans()).then(() => {
-        expect(MistralApiService.runAction).toHaveBeenCalled();
+        expect(MistralApiService.runAction).toHaveBeenCalledWith(
+          MistralConstants.PLAN_LIST
+        );
         expect(store.getActions()).toEqual([
-          PlansActions.requestPlans(),
-          PlansActions.receivePlans(expectedPlans)
+          PlansActions.fetchPlansPending(),
+          PlansActions.fetchPlansSuccess(apiResponseMistral)
         ]);
       }));
   });
 
-  describe('fetchPlan', () => {
+  describe('fetchPlanDetails', () => {
+    const store = mockStore({});
+    const planEnvironment = { description: 'Description' };
+
+    beforeEach(() => {
+      SwiftApiService.getObject = jest
+        .fn()
+        .mockReturnValue(() => Promise.resolve(yaml.safeDump(planEnvironment)));
+      yaml.safeLoad = jest.fn().mockReturnValue(planEnvironment);
+    });
+
+    it('dispatches actions', () =>
+      store.dispatch(PlansActions.fetchPlanDetails('overcloud')).then(() => {
+        expect(SwiftApiService.getObject).toHaveBeenCalled();
+        expect(store.getActions()).toEqual([
+          PlansActions.fetchPlanDetailsPending('overcloud'),
+          PlansActions.fetchPlanDetailsSuccess('overcloud', planEnvironment)
+        ]);
+      }));
+  });
+
+  describe('fetchPlanFiles', () => {
     const store = mockStore({});
     let apiResponse = [
       { name: 'overcloud.yaml' },
       { name: 'capabilities_map.yaml' }
     ];
-    const normalizedResponse = {
-      'overcloud.yaml': { name: 'overcloud.yaml' },
-      'capabilities_map.yaml': { name: 'capabilities_map.yaml' }
-    };
 
     beforeEach(() => {
       SwiftApiService.getContainer = jest
@@ -167,11 +172,11 @@ describe('PlansActions', () => {
     });
 
     it('dispatches actions', () =>
-      store.dispatch(PlansActions.fetchPlan('overcloud')).then(() => {
+      store.dispatch(PlansActions.fetchPlanFiles('overcloud')).then(() => {
         expect(SwiftApiService.getContainer).toHaveBeenCalled();
         expect(store.getActions()).toEqual([
-          PlansActions.requestPlan(),
-          PlansActions.receivePlan('overcloud', normalizedResponse)
+          PlansActions.fetchPlanFilesPending('overcloud'),
+          PlansActions.fetchPlanFilesSuccess('overcloud', apiResponse)
         ]);
       }));
   });

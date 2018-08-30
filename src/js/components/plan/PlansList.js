@@ -20,8 +20,14 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { List } from 'immutable';
 
-import { getCurrentPlanName, getPlans } from '../../selectors/plans';
+import {
+  getCurrentPlanName,
+  getPlans,
+  getPlanTransitionsByPlan,
+  getPlanEnvironmentsByPlan
+} from '../../selectors/plans';
 import {
   getDeploymentStatusByPlan,
   getDeploymentStatusUIByPlan
@@ -55,7 +61,10 @@ class PlansList extends React.Component {
       currentPlanName,
       deploymentStates,
       deploymentStatesUI,
-      getDeploymentStatus
+      fetchPlanDetails,
+      getDeploymentStatus,
+      planEnvironments,
+      planTransitions
     } = this.props;
     return (
       <div>
@@ -83,7 +92,8 @@ class PlansList extends React.Component {
                   .map(plan => (
                     <PlanCard
                       key={plan.name}
-                      plan={plan}
+                      planName={plan.name}
+                      transitions={planTransitions.get(plan.name, List())}
                       currentPlanName={currentPlanName}
                       status={deploymentStates.getIn([plan.name, 'status'])}
                       statusLoaded={deploymentStatesUI.getIn(
@@ -91,6 +101,8 @@ class PlansList extends React.Component {
                         false
                       )}
                       getDeploymentStatus={getDeploymentStatus}
+                      fetchPlanDetails={fetchPlanDetails}
+                      planDetails={planEnvironments.get(plan.name)}
                     />
                   ))}
               </div>
@@ -106,8 +118,11 @@ PlansList.propTypes = {
   currentPlanName: PropTypes.string,
   deploymentStates: ImmutablePropTypes.map.isRequired,
   deploymentStatesUI: ImmutablePropTypes.map.isRequired,
+  fetchPlanDetails: PropTypes.func.isRequired,
   fetchPlans: PropTypes.func.isRequired,
   getDeploymentStatus: PropTypes.func.isRequired,
+  planEnvironments: ImmutablePropTypes.map.isRequired,
+  planTransitions: ImmutablePropTypes.map.isRequired,
   plans: ImmutablePropTypes.map.isRequired
 };
 
@@ -115,6 +130,8 @@ function mapStateToProps(state) {
   return {
     currentPlanName: getCurrentPlanName(state),
     plans: getPlans(state),
+    planEnvironments: getPlanEnvironmentsByPlan(state),
+    planTransitions: getPlanTransitionsByPlan(state),
     deploymentStates: getDeploymentStatusByPlan(state),
     deploymentStatesUI: getDeploymentStatusUIByPlan(state)
   };
@@ -123,7 +140,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchPlans: () => dispatch(PlansActions.fetchPlans()),
-    getDeploymentStatus: planName => dispatch(getDeploymentStatus(planName))
+    getDeploymentStatus: planName => dispatch(getDeploymentStatus(planName)),
+    fetchPlanDetails: planName =>
+      dispatch(PlansActions.fetchPlanDetails(planName))
   };
 }
 
