@@ -25,6 +25,8 @@ import { roleSchema } from '../normalizrSchemas/roles';
 import MistralApiService from '../services/MistralApiService';
 import MistralConstants from '../constants/MistralConstants';
 import { startWorkflow } from './WorkflowActions';
+import NotificationActions from './NotificationActions';
+import { sanitizeMessage } from '../utils';
 
 const messages = defineMessages({
   availableRolesNotLoaded: {
@@ -107,7 +109,10 @@ export default {
         history.push('/plans');
         dispatch(this.fetchAvailableRolesFailed());
         dispatch(
-          handleErrors(message, formatMessage(messages.availableRolesNotLoaded))
+          NotificationActions.notify({
+            title: formatMessage(messages.availableRolesNotLoaded),
+            message: sanitizeMessage(message)
+          })
         );
       }
     };
