@@ -28,6 +28,10 @@ const messages = defineMessages({
     id: 'NodeProvisionState.provisionStateLabel',
     defaultMessage: 'Provision State:'
   },
+  deploymentPlan: {
+    id: 'NodeProvisionState.deploymentPlanLabel',
+    defaultMessage: 'Deployment Plan:'
+  },
   maintenance: {
     id: 'NodeMaintenanceState.maintenanceWarning',
     defaultMessage: 'Maintenance'
@@ -101,6 +105,20 @@ export const NodeProvisionState = ({
 NodeProvisionState.propTypes = {
   provisionState: PropTypes.string.isRequired,
   targetProvisionState: PropTypes.string
+};
+
+export const NodeDeploymentPlan = ({ planName, ...rest }) =>
+  planName ? (
+    <span {...rest}>
+      {' | '}
+      <strong>
+        <FormattedMessage {...messages.deploymentPlan} />
+      </strong>&nbsp;
+      {planName}
+    </span>
+  ) : null;
+NodeDeploymentPlan.propTypes = {
+  planName: PropTypes.string
 };
 
 export const NodeIntrospectionStatus = ({

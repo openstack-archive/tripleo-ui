@@ -29,7 +29,8 @@ import {
   NodeIntrospectionStatus,
   NodeMaintenanceState,
   NodePowerState,
-  NodeProvisionState
+  NodeProvisionState,
+  NodeDeploymentPlan
 } from './NodeStates';
 import { parseNodeCapabilities } from '../../../utils/nodes';
 
@@ -118,6 +119,10 @@ export const NodeListItem = ({
           className="NodeListItem__nodeProvisionState"
           provisionState={node.get('provision_state')}
           targetProvisionState={node.get('target_provision_state')}
+        />
+        <NodeDeploymentPlan
+          className="NodeListItem__nodeDeploymentPlan"
+          planName={node.get('planName')}
         />
       </div>
     }

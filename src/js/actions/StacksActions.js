@@ -65,13 +65,6 @@ export default {
     };
   },
 
-  fetchStackSuccess(stack) {
-    return {
-      type: StacksConstants.FETCH_STACK_SUCCESS,
-      payload: stack
-    };
-  },
-
   fetchResourcesPending() {
     return {
       type: StacksConstants.FETCH_RESOURCES_PENDING

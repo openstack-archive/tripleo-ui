@@ -14,11 +14,10 @@
  * under the License.
  */
 
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map, List } from 'immutable';
 
 import { Stack, StackResource, StacksState } from '../immutableRecords/stacks';
 import StacksConstants from '../constants/StacksConstants';
-import PlansConstants from '../constants/PlansConstants';
 
 const initialState = new StacksState();
 
@@ -28,10 +27,15 @@ export default function stacksReducer(state = initialState, action) {
       return state.set('isFetching', true);
 
     case StacksConstants.FETCH_STACKS_SUCCESS: {
+      const stacks = fromJS(action.payload);
       return state
         .set('isLoaded', true)
         .set('isFetching', false)
-        .set('stacks', fromJS(action.payload).map(stack => new Stack(stack)));
+        .set('stacks', stacks.map(stack => new Stack(stack)))
+        .mergeIn(
+          ['stacksOutputs'],
+          stacks.map(stack => stack.get('outputs', List()))
+        );
     }
 
     case StacksConstants.FETCH_STACKS_FAILED:
@@ -39,13 +43,6 @@ export default function stacksReducer(state = initialState, action) {
         .set('isLoaded', true)
         .set('isFetching', false)
         .set('stacks', Map());
-
-    case StacksConstants.FETCH_STACK_SUCCESS: {
-      return state.setIn(
-        ['stacks', action.payload.stack_name],
-        new Stack(fromJS(action.payload))
-      );
-    }
 
     case StacksConstants.FETCH_RESOURCES_PENDING:
       return state.set('isFetchingResources', true);
@@ -86,9 +83,6 @@ export default function stacksReducer(state = initialState, action) {
           ['resourceDetails', action.payload.resource_name],
           new StackResource(fromJS(action.payload))
         );
-
-    case PlansConstants.PLAN_CHOSEN:
-      return initialState;
 
     default:
       return state;

@@ -32,6 +32,7 @@ import NodesListView from './NodesListView/NodesListView';
 import NodesToolbar from './NodesToolbar/NodesToolbar';
 import NodesTableView from './NodesTableView';
 import RegisterNodesDialog from './registerNodes/RegisterNodesDialog';
+import StacksActions from '../../actions/StacksActions';
 
 const messages = defineMessages({
   loadingNodes: {
@@ -58,12 +59,20 @@ const messages = defineMessages({
 
 class Nodes extends React.Component {
   componentDidMount() {
-    this.props.fetchNodes();
+    const {
+      fetchNodes,
+      fetchStacks,
+      fetchingStacks,
+      fetchingNodes
+    } = this.props;
+    fetchingNodes || fetchNodes();
+    fetchingStacks || fetchStacks();
   }
 
   refreshResults(e) {
     e.preventDefault();
     this.props.fetchNodes();
+    this.props.fetchStacks();
   }
 
   renderContentView() {
@@ -81,13 +90,21 @@ class Nodes extends React.Component {
   }
 
   render() {
+    const {
+      fetchingNodes,
+      fetchingStacks,
+      nodesLoaded,
+      intl: { formatMessage },
+      isRegistering,
+      stacksLoaded
+    } = this.props;
     return (
       <div>
         <div className="page-header">
           <div className="pull-right">
             <InlineLoader
-              loaded={!(this.props.fetchingNodes && this.props.nodesLoaded)}
-              content={this.props.intl.formatMessage(messages.loadingNodes)}
+              loaded={!(fetchingNodes || fetchingStacks)}
+              content={formatMessage(messages.loadingNodes)}
               component="span"
             >
               <a
@@ -113,14 +130,14 @@ class Nodes extends React.Component {
           </h1>
         </div>
         <Loader
-          loaded={this.props.nodesLoaded}
-          content={this.props.intl.formatMessage(messages.loadingNodes)}
+          loaded={nodesLoaded && stacksLoaded}
+          content={formatMessage(messages.loadingNodes)}
           height={80}
         >
           <NodesToolbar />
           <Loader
-            loaded={!this.props.isRegistering}
-            content={this.props.intl.formatMessage(messages.registeringNodes)}
+            loaded={!isRegistering}
+            content={formatMessage(messages.registeringNodes)}
             height={80}
           />
           {this.renderContentView()}
@@ -135,12 +152,15 @@ Nodes.propTypes = {
   contentView: PropTypes.string.isRequired,
   fetchNodeIntrospectionData: PropTypes.func.isRequired,
   fetchNodes: PropTypes.func.isRequired,
+  fetchStacks: PropTypes.func.isRequired,
   fetchingNodes: PropTypes.bool.isRequired,
+  fetchingStacks: PropTypes.bool.isRequired,
   intl: PropTypes.object.isRequired,
   isRegistering: PropTypes.bool.isRequired,
   nodes: ImmutablePropTypes.map.isRequired,
   nodesInProgress: ImmutablePropTypes.set.isRequired,
-  nodesLoaded: PropTypes.bool.isRequired
+  nodesLoaded: PropTypes.bool.isRequired,
+  stacksLoaded: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -152,11 +172,14 @@ const mapStateToProps = state => ({
   fetchingNodes: state.nodes.get('isFetching'),
   nodes: getFilteredNodes(state),
   nodesInProgress: nodesInProgress(state),
-  nodesLoaded: state.nodes.get('isLoaded')
+  nodesLoaded: state.nodes.get('isLoaded'),
+  fetchingStacks: state.stacks.isFetching,
+  stacksLoaded: state.stacks.isLoaded
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchNodes: () => dispatch(NodesActions.fetchNodes()),
+  fetchStacks: () => dispatch(StacksActions.fetchStacks()),
   fetchNodeIntrospectionData: nodeId =>
     dispatch(NodesActions.fetchNodeIntrospectionData(nodeId))
 });

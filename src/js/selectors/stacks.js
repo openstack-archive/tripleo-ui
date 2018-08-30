@@ -20,6 +20,7 @@ import { List, Map } from 'immutable';
 import { getCurrentPlanName } from './plans';
 
 const stacksSelector = state => state.stacks.stacks;
+const stacksOutputsSelector = state => state.stacks.stacksOutputs;
 const currentStackEnvironmentSelector = state =>
   state.stacks.currentStackEnvironment;
 const stackResourcesSelector = state => state.stacks.resources;
@@ -34,22 +35,28 @@ export const getCurrentStack = createSelector(
 );
 
 /**
- * Returns a list of nova server ids from stack output
+ * Returns a list of nova server ids from stack keyed by stack name
  */
-export const getCurrentStackServerIds = createSelector(
-  getCurrentStack,
-  (currentStack = Map()) =>
-    currentStack
-      .get('outputs', List())
-      .find(
-        output => output.get('output_key') === 'ServerIdData',
-        undefined,
-        Map()
-      )
-      .getIn(['output_value', 'server_ids'], Map())
-      .valueSeq()
-      .flatten()
-      .toList()
+export const getServerIdsByStack = createSelector(
+  stacksOutputsSelector,
+  stacks =>
+    stacks.map(outputs =>
+      outputs
+        .find(
+          output => output.get('output_key') === 'ServerIdData',
+          undefined,
+          Map()
+        )
+        .getIn(['output_value', 'server_ids'], Map())
+        .valueSeq()
+        .flatten()
+        .toList()
+    )
+);
+
+export const getCurrentPlanServerIds = createSelector(
+  [getServerIdsByStack, getCurrentPlanName],
+  (serverIdsByStack, planName) => serverIdsByStack.get(planName, List())
 );
 
 export const getCreateCompleteResources = createSelector(
