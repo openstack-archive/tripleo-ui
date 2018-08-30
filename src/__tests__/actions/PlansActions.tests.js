@@ -98,6 +98,33 @@ describe('PlansActions', () => {
       }));
   });
 
+  describe('createDefaultPlan', () => {
+    const store = mockStore({});
+    const execution = {
+      id: 'some-uuid'
+    };
+
+    beforeEach(() => {
+      WorkflowActions.startWorkflow = jest
+        .fn()
+        .mockReturnValue(() => Promise.resolve(execution));
+    });
+
+    it('dispatches actions', () =>
+      store.dispatch(PlansActions.createDefaultPlan('somecloud')).then(() => {
+        expect(WorkflowActions.startWorkflow).toHaveBeenCalledWith(
+          MistralConstants.PLAN_CREATE,
+          {
+            container: 'somecloud',
+            use_default_templates: true
+          },
+          expect.any(Function),
+          2 * 60 * 1000
+        );
+        expect(store.getActions()).toEqual([startSubmit('newPlanForm')]);
+      }));
+  });
+
   describe('deletePlans', () => {
     const store = mockStore({});
 
