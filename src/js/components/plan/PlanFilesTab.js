@@ -18,6 +18,7 @@ import ClassNames from 'classnames';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Set } from 'immutable';
 
 import FileList from './FileList';
 
@@ -28,11 +29,12 @@ const PlanFilesTab = ({ active, ...rest }) => (
 );
 PlanFilesTab.propTypes = {
   active: PropTypes.bool.isRequired,
-  planFiles: ImmutablePropTypes.map,
-  selectedFiles: PropTypes.array
+  planFiles: ImmutablePropTypes.set.isRequired,
+  selectedFiles: PropTypes.array.isRequired
 };
 PlanFilesTab.defaultProps = {
-  active: false
+  active: false,
+  planFiles: Set()
 };
 
 export default PlanFilesTab;

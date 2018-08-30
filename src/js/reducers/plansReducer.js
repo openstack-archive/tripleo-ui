@@ -14,12 +14,11 @@
  * under the License.
  */
 
-import { List, Map } from 'immutable';
+import { List, Map, Set } from 'immutable';
 
 import {
   InitialPlanState,
   Plan,
-  PlanFile,
   PlanEnvironment
 } from '../immutableRecords/plans';
 import PlansConstants from '../constants/PlansConstants';
@@ -57,7 +56,7 @@ export default function plansReducer(state = initialState, action) {
       return state
         .setIn(
           ['planFilesByPlan', planName],
-          List(planFiles.map(planFile => new PlanFile({ name: planFile.name })))
+          Set(planFiles.map(planFile => planFile.name))
         )
         .updateIn(
           ['planTransitionsByPlan', planName],
@@ -149,7 +148,7 @@ export default function plansReducer(state = initialState, action) {
       return state.updateIn(
         ['planTransitionsByPlan', action.payload],
         List(),
-        removeTransition('updating')
+        addTransition('updating')
       );
 
     case PlansConstants.UPDATE_PLAN_SUCCESS:

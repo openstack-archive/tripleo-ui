@@ -63,6 +63,7 @@ describe('PlansActions', () => {
             2 * 60 * 1000
           );
           expect(store.getActions()).toEqual([
+            startSubmit('editPlanForm'),
             PlansActions.updatePlanPending('somecloud')
           ]);
         }));
