@@ -14,6 +14,8 @@
  * under the License.
  */
 
+import { startSubmit } from 'redux-form';
+
 import MistralApiService from '../../js/services/MistralApiService';
 import MistralConstants from '../../js/constants/MistralConstants';
 import { mockStore } from './utils';
@@ -90,7 +92,7 @@ describe('PlansActions', () => {
           expect.any(Function),
           2 * 60 * 1000
         );
-        expect(store.getActions()).toEqual([PlansActions.createPlanPending()]);
+        expect(store.getActions()).toEqual([startSubmit('newPlanForm')]);
       }));
   });
 

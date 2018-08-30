@@ -16,161 +16,64 @@
 
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import Formsy from 'formsy-react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { ModalHeader, ModalTitle, ModalFooter } from 'react-bootstrap';
+import { ModalHeader, ModalTitle } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { CloseModalButton, CloseModalXButton, RoutedModal } from '../ui/Modals';
-import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
+import { CloseModalXButton, RoutedModal } from '../ui/Modals';
 import PlansActions from '../../actions/PlansActions';
 import PlanFormTabs from './PlanFormTabs';
-import { Loader } from '../ui/Loader';
+import NewPlanForm from './NewPlanForm';
 
 const messages = defineMessages({
-  cancel: {
-    id: 'NewPlan.cancel',
-    defaultMessage: 'Cancel'
-  },
   importPlan: {
     id: 'NewPlan.importPlan',
     defaultMessage: 'Import Plan'
-  },
-  creatingPlanLoader: {
-    id: 'NewPlan.creatingPlanLoader',
-    defaultMessage: 'Creating plan...'
-  },
-  uploadAndCreate: {
-    id: 'NewPlan.uploadAndCreate',
-    defaultMessage: 'Upload Files and Create Plan'
   }
 });
 
 class NewPlan extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      files: [],
-      selectedFiles: undefined,
-      canSubmit: false,
-      uploadType: 'tarball'
-    };
-  }
-
-  setUploadType(e) {
-    this.setState({
-      uploadType: e.target.value === 'folder' ? 'folder' : 'tarball'
-    });
-  }
-
-  onPlanFilesChange(currentValues, isChanged) {
-    let files = currentValues.planFiles;
-    if (files && files != []) {
-      this.setState({ selectedFiles: currentValues.planFiles });
-    }
-  }
-
-  onFormSubmit(formData, resetForm, invalidateForm) {
+  handleFormSubmit = (
+    { planName, planUploadType, files, tarball },
+    dispatch,
+    props
+  ) => {
     let planFiles = {};
-    if (this.state.uploadType === 'folder') {
-      this.state.selectedFiles.map(item => {
-        planFiles[item.name] = {};
-        planFiles[item.name].contents = item.content;
-      });
-      this.props.createPlan(formData.planName, planFiles);
-    } else {
-      let file = this.state.selectedFiles[0].file;
-      this.props.createPlanFromTarball(formData.planName, file);
+    switch (planUploadType) {
+      case 'tarball':
+        return this.props.createPlanFromTarball(planName, tarball);
+      case 'directory':
+        files.map(({ filePath, contents }) => (planFiles[filePath] = contents));
+        return this.props.createPlan(planName, planFiles);
+      default:
+        return null;
     }
-  }
-
-  onFormValid() {
-    this.setState({ canSubmit: true });
-  }
-
-  onFormInvalid() {
-    this.setState({ canSubmit: false });
-  }
+  };
 
   render() {
     return (
-      <RoutedModal
-        onHide={() => this.props.cancelCreatePlan()}
-        bsSize="lg"
-        id="NewPlan__modal"
-        redirectPath="/plans/manage"
-      >
-        <Formsy
-          ref="NewPlanForm"
-          role="form"
-          className="form-horizontal"
-          onChange={this.onPlanFilesChange.bind(this)}
-          onValidSubmit={this.onFormSubmit.bind(this)}
-          onValid={this.onFormValid.bind(this)}
-          onInvalid={this.onFormInvalid.bind(this)}
-        >
-          <ModalHeader>
-            <CloseModalXButton />
-            <ModalTitle>
-              <FormattedMessage {...messages.importPlan} />
-            </ModalTitle>
-          </ModalHeader>
-          <Loader
-            loaded={!this.props.isTransitioningPlan}
-            size="lg"
-            height={100}
-            content={this.props.intl.formatMessage(messages.creatingPlanLoader)}
-          >
-            <ModalFormErrorList errors={this.props.planFormErrors.toJS()} />
-            <div className="modal-body">
-              <PlanFormTabs
-                selectedFiles={this.state.selectedFiles}
-                setUploadType={this.setUploadType.bind(this)}
-                uploadType={this.state.uploadType}
-              />
-            </div>
-          </Loader>
-
-          <ModalFooter>
-            <CloseModalButton id="NewPlan__cancelCreatePlanButton">
-              <FormattedMessage {...messages.cancel} />
-            </CloseModalButton>
-            <button
-              disabled={!this.state.canSubmit || this.props.isTransitioningPlan}
-              className="btn btn-primary"
-              type="submit"
-            >
-              <FormattedMessage {...messages.uploadAndCreate} />
-            </button>
-          </ModalFooter>
-        </Formsy>
+      <RoutedModal bsSize="lg" id="NewPlan__modal" redirectPath="/plans/manage">
+        <ModalHeader>
+          <CloseModalXButton />
+          <ModalTitle>
+            <FormattedMessage {...messages.importPlan} />
+          </ModalTitle>
+        </ModalHeader>
+        <NewPlanForm onSubmit={this.handleFormSubmit}>
+          <PlanFormTabs />
+        </NewPlanForm>
       </RoutedModal>
     );
   }
 }
 NewPlan.propTypes = {
-  cancelCreatePlan: PropTypes.func,
   createPlan: PropTypes.func,
   createPlanFromTarball: PropTypes.func,
-  intl: PropTypes.object,
-  isTransitioningPlan: PropTypes.bool,
-  location: PropTypes.object,
-  planFormErrors: ImmutablePropTypes.list
+  intl: PropTypes.object
 };
-
-function mapStateToProps(state) {
-  return {
-    isTransitioningPlan: state.plans.isTransitioningPlan,
-    planFormErrors: state.plans.planFormErrors
-  };
-}
 
 function mapDispatchToProps(dispatch) {
   return {
-    cancelCreatePlan: () => {
-      dispatch(PlansActions.cancelCreatePlan());
-    },
     createPlan: (planName, files) => {
       dispatch(PlansActions.createPlan(planName, files));
     },
@@ -180,6 +83,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default injectIntl(
-  connect(mapStateToProps, mapDispatchToProps)(NewPlan)
-);
+export default injectIntl(connect(null, mapDispatchToProps)(NewPlan));
