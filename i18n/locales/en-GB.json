@@ -157,6 +157,8 @@
         "NodesActions.introspectionNotificationTitle": "Nodes Introspection Complete",
         "NodesAssignment.manageRolesLink": "Manage Roles",
         "NodesAssignmentForm.cancel": "Cancel",
+        "NodesAssignmentForm.nodeCountsErrorMessage": "Please adjust the node counts.",
+        "NodesAssignmentForm.nodeCountsErrorTitle": "The number of nodes selected exceeds the number that are available.",
         "NodesAssignmentForm.saveChanges": "Save Changes",
         "NodesListForm.operationInProgressValidationMessage": "There is an operation in progress on some of the selected Nodes",
         "NodesListForm.selectNodesValidationMessage": "Please select Nodes first",

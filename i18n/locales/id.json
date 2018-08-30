@@ -157,6 +157,8 @@
         "NodesActions.introspectionNotificationTitle": "Nodes Introspection Complete",
         "NodesAssignment.manageRolesLink": "Mengelola Roles",
         "NodesAssignmentForm.cancel": "Cancel",
+        "NodesAssignmentForm.nodeCountsErrorMessage": "",
+        "NodesAssignmentForm.nodeCountsErrorTitle": "",
         "NodesAssignmentForm.saveChanges": "Save Changes",
         "NodesListForm.operationInProgressValidationMessage": "Ada operasi yang sedang berlangsung pada beberapa Node yang dipilih",
         "NodesListForm.selectNodesValidationMessage": "Silahkan pilih Nodes dulu",
