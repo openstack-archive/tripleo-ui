@@ -189,6 +189,7 @@
         "NodePowerState.poweringOn": "Encendiendo",
         "NodePowerState.rebooting": "Reiniciando",
         "NodePowerState.unknownPowerState": "Desconocido",
+        "NodeProvisionState.deploymentPlanLabel": "",
         "NodeProvisionState.provisionStateLabel": "Estado de provisi\u00f3n:",
         "Nodes.loadingNodes": "Cargando nodos...",
         "Nodes.nodes": "Nodos",

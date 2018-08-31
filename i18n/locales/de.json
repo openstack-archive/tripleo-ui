@@ -189,6 +189,7 @@
         "NodePowerState.poweringOn": "Strom an",
         "NodePowerState.rebooting": "Neu Starten",
         "NodePowerState.unknownPowerState": "Unbekannt",
+        "NodeProvisionState.deploymentPlanLabel": "",
         "NodeProvisionState.provisionStateLabel": "Bereitstellungsstatus:",
         "Nodes.loadingNodes": "Lade Knoten...",
         "Nodes.nodes": "Knoten",

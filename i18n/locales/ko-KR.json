@@ -189,6 +189,7 @@
         "NodePowerState.poweringOn": "Powering On",
         "NodePowerState.rebooting": "Rebooting",
         "NodePowerState.unknownPowerState": "\uc54c \uc218 \uc5c6\uc74c",
+        "NodeProvisionState.deploymentPlanLabel": "",
         "NodeProvisionState.provisionStateLabel": "\ud504\ub85c\ube44\uc804 \uc0c1\ud0dc:",
         "Nodes.loadingNodes": "\ub178\ub4dc\ub97c \ubd88\ub7ec\uc624\ub294 \uc911...",
         "Nodes.nodes": "\ub178\ub4dc",

@@ -189,6 +189,7 @@
         "NodePowerState.poweringOn": "\u5f00\u673a",
         "NodePowerState.rebooting": "\u91cd\u542f\u4e2d",
         "NodePowerState.unknownPowerState": "\u672a\u77e5",
+        "NodeProvisionState.deploymentPlanLabel": "",
         "NodeProvisionState.provisionStateLabel": "\u7f6e\u5907\u72b6\u6001\uff1a",
         "Nodes.loadingNodes": "\u6b63\u5728\u52a0\u8f7d\u8282\u70b9 ...",
         "Nodes.nodes": "\u8282\u70b9",
