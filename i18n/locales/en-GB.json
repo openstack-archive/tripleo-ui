@@ -189,7 +189,7 @@
         "NodePowerState.poweringOn": "Powering On",
         "NodePowerState.rebooting": "Rebooting",
         "NodePowerState.unknownPowerState": "Unknown",
-        "NodeProvisionState.deploymentPlanLabel": "",
+        "NodeProvisionState.deploymentPlanLabel": "Deployment Plan:",
         "NodeProvisionState.provisionStateLabel": "Provision State:",
         "Nodes.loadingNodes": "Loading Nodes...",
         "Nodes.nodes": "Nodes",
