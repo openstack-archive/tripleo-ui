@@ -25,6 +25,7 @@ import MistralConstants from '../constants/MistralConstants';
 import { getServiceUrl } from '../selectors/auth';
 import { startWorkflow } from './WorkflowActions';
 import { sanitizeMessage } from '../utils';
+import { generateDownloadUrl } from './utils';
 
 const messages = defineMessages({
   downloadLogsFailedNotificationTitle: {
@@ -112,12 +113,11 @@ export default {
           })
         );
       } else {
-        let urlParser = document.createElement('a');
-        urlParser.href = tempurl;
-        let url = urlParser.hostname;
-        urlParser.href = getServiceUrl(getState(), 'swift');
-        let swiftUrl = urlParser.hostname;
-        dispatch(this.downloadLogsSuccess(tempurl.replace(url, swiftUrl)));
+        dispatch(
+          this.downloadLogsSuccess(
+            generateDownloadUrl(tempurl, getServiceUrl(getState(), 'swift'))
+          )
+        );
       }
     };
   },
