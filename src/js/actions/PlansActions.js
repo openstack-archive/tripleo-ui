@@ -593,12 +593,11 @@ export default {
           })
         );
       } else {
-        let urlParser = document.createElement('a');
-        urlParser.href = tempurl;
-        let url = urlParser.hostname;
-        urlParser.href = getServiceUrl(getState(), 'swift');
-        let swiftUrl = urlParser.hostname;
-        dispatch(this.exportPlanSuccess(tempurl.replace(url, swiftUrl)));
+        dispatch(
+          this.exportPlanSuccess(
+            generateDownloadUrl(tempurl, getServiceUrl(getState(), 'swift'))
+          )
+        );
       }
     };
   }
@@ -619,3 +618,17 @@ export const uploadFilesToContainer = (container, files) => dispatch =>
       )
     )
   );
+
+/**
+ * Generates plan download url by combining swiftUrl and tempurl
+ * @param {string} tempurl
+ * @param {string} swiftUrl
+ */
+export const generateDownloadUrl = (tempurl, swiftUrl) => {
+  const urlParser = document.createElement('a');
+  urlParser.href = tempurl;
+  return `${swiftUrl}/${urlParser.pathname
+    .split('/')
+    .slice(3)
+    .join('/')}${urlParser.search}`;
+};

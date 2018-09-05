@@ -20,7 +20,9 @@ import yaml from 'js-yaml';
 import MistralApiService from '../../js/services/MistralApiService';
 import MistralConstants from '../../js/constants/MistralConstants';
 import { mockStore } from './utils';
-import PlansActions from '../../js/actions/PlansActions';
+import PlansActions, {
+  generateDownloadUrl
+} from '../../js/actions/PlansActions';
 import SwiftApiService from '../../js/services/SwiftApiService';
 import storage from '../mocks/storage';
 import * as WorkflowActions from '../../js/actions/WorkflowActions';
@@ -207,5 +209,19 @@ describe('PlansActions', () => {
           PlansActions.fetchPlanFilesSuccess('overcloud', apiResponse)
         ]);
       }));
+  });
+
+  describe('generateDownloadUrl', () => {
+    it('correctly combines swiftUrl and tempurl', () => {
+      const tempurl =
+        'https://192.168.24.2:13808/v1/AUTH_b37a1bf96c6645618bd0067556f95079/plan-exports/overcloud.tar.gz?temp_url_sig=bf9ee05155229d7340e6781e07058404bbc8ef4e&temp_url_expires=1536141784';
+      const swiftUrl =
+        'https://192.168.24.2:443/swift/v1/AUTH_b37a1bf96c6645618bd0067556f95079';
+      const expectedDownloadUrl =
+        'https://192.168.24.2:443/swift/v1/AUTH_b37a1bf96c6645618bd0067556f95079/plan-exports/overcloud.tar.gz?temp_url_sig=bf9ee05155229d7340e6781e07058404bbc8ef4e&temp_url_expires=1536141784';
+      expect(generateDownloadUrl(tempurl, swiftUrl)).toEqual(
+        expectedDownloadUrl
+      );
+    });
   });
 });
