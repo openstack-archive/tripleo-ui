@@ -25,7 +25,10 @@ import { addActiveFilter } from '../../actions/FiltersActions';
 import BlankSlate from '../ui/BlankSlate';
 import { getCurrentPlanName } from '../../selectors/plans';
 import { InlineLoader, Loader } from '../ui/Loader';
-import ValidationsActions from '../../actions/ValidationsActions';
+import {
+  fetchValidations,
+  runValidation
+} from '../../actions/ValidationsActions';
 import ValidationsToolbar from './ValidationsToolbar';
 import Validation from './Validation';
 import ValidationDetail from './ValidationDetail';
@@ -229,11 +232,11 @@ ValidationsList.propTypes = {
 const mapDispatchToProps = dispatch => ({
   addActiveFilter: data =>
     dispatch(addActiveFilter('validationsToolbar', data)),
-  fetchValidations: () => dispatch(ValidationsActions.fetchValidations()),
+  fetchValidations: () => dispatch(fetchValidations()),
   fetchWorkflowExecutions: () =>
     dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
   runValidation: (id, currentPlanName) => {
-    dispatch(ValidationsActions.runValidation(id, currentPlanName));
+    dispatch(runValidation(id, currentPlanName));
   },
   stopValidation: executionId => {
     dispatch(

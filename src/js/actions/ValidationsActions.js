@@ -23,72 +23,59 @@ import { validationSchema } from '../normalizrSchemas/validations';
 import MistralConstants from '../constants/MistralConstants';
 import { startWorkflow } from './WorkflowActions';
 
-export default {
-  fetchValidations() {
-    return (dispatch, getState) => {
-      dispatch(this.fetchValidationsPending());
-      return dispatch(
-        MistralApiService.runAction(MistralConstants.VALIDATIONS_LIST)
-      )
-        .then(response => {
-          const validations =
-            normalize(response, [validationSchema]).entities.validations || {};
-          dispatch(this.fetchValidationsSuccess(validations));
-        })
-        .catch(error => {
-          dispatch(handleErrors(error, 'Validations could not be loaded'));
-          dispatch(this.fetchValidationsFailed());
-        });
-    };
-  },
-
-  fetchValidationsPending() {
-    return {
-      type: ValidationsConstants.FETCH_VALIDATIONS_PENDING
-    };
-  },
-
-  fetchValidationsSuccess(validations) {
-    return {
-      type: ValidationsConstants.FETCH_VALIDATIONS_SUCCESS,
-      payload: validations
-    };
-  },
-
-  fetchValidationsFailed() {
-    return {
-      type: ValidationsConstants.FETCH_VALIDATIONS_FAILED
-    };
-  },
-
-  runValidation(id, currentPlanName) {
-    return (dispatch, getState) =>
-      dispatch(
-        startWorkflow(MistralConstants.VALIDATIONS_RUN, {
-          validation_name: id,
-          plan: currentPlanName
-        })
-      ).catch(error => {
-        dispatch(handleErrors(error, 'Error running validation'));
-      });
-  },
-
-  runValidationGroups(groups, currentPlanName) {
-    return (dispatch, getState) => {
-      dispatch(
-        MistralApiService.runWorkflow(MistralConstants.VALIDATIONS_RUN_GROUPS, {
-          group_names: groups,
-          plan: currentPlanName
-        })
-      ).catch(error => {
-        dispatch(handleErrors(error, 'Validation Group could not be started'));
-      });
-    };
-  },
-
-  toggleValidations() {
-    return {
-      type: ValidationsConstants.TOGGLE_VALIDATIONS
-    };
-  }
+export const fetchValidations = () => (dispatch, getState) => {
+  dispatch(fetchValidationsPending());
+  return dispatch(
+    MistralApiService.runAction(MistralConstants.VALIDATIONS_LIST)
+  )
+    .then(response => {
+      const validations =
+        normalize(response, [validationSchema]).entities.validations || {};
+      dispatch(fetchValidationsSuccess(validations));
+    })
+    .catch(error => {
+      dispatch(handleErrors(error, 'Validations could not be loaded'));
+      dispatch(fetchValidationsFailed());
+    });
 };
+
+export const fetchValidationsPending = () => ({
+  type: ValidationsConstants.FETCH_VALIDATIONS_PENDING
+});
+
+export const fetchValidationsSuccess = validations => ({
+  type: ValidationsConstants.FETCH_VALIDATIONS_SUCCESS,
+  payload: validations
+});
+
+export const fetchValidationsFailed = () => ({
+  type: ValidationsConstants.FETCH_VALIDATIONS_FAILED
+});
+
+export const runValidation = (id, currentPlanName) => (dispatch, getState) =>
+  dispatch(
+    startWorkflow(MistralConstants.VALIDATIONS_RUN, {
+      validation_name: id,
+      plan: currentPlanName
+    })
+  ).catch(error => {
+    dispatch(handleErrors(error, 'Error running validation'));
+  });
+
+export const runValidationGroups = (groups, currentPlanName) => (
+  dispatch,
+  getState
+) => {
+  dispatch(
+    MistralApiService.runWorkflow(MistralConstants.VALIDATIONS_RUN_GROUPS, {
+      group_names: groups,
+      plan: currentPlanName
+    })
+  ).catch(error => {
+    dispatch(handleErrors(error, 'Validation Group could not be started'));
+  });
+};
+
+export const toggleValidations = () => ({
+  type: ValidationsConstants.TOGGLE_VALIDATIONS
+});

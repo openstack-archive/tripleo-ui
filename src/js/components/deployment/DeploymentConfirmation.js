@@ -36,7 +36,7 @@ import { getEnvironmentConfigurationSummary } from '../../selectors/environmentC
 import InlineNotification from '../ui/InlineNotification';
 import { InlineLoader } from '../ui/Loader';
 import { startDeployment } from '../../actions/DeploymentActions';
-import ValidationsActions from '../../actions/ValidationsActions';
+import { runValidationGroups } from '../../actions/ValidationsActions';
 
 const messages = defineMessages({
   close: {
@@ -168,9 +168,7 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = dispatch => ({
   startDeployment: planName => dispatch(startDeployment(planName)),
   runPreDeploymentValidations: planName =>
-    dispatch(
-      ValidationsActions.runValidationGroups(['pre-deployment'], planName)
-    )
+    dispatch(runValidationGroups(['pre-deployment'], planName))
 });
 
 export default injectIntl(
