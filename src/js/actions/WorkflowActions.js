@@ -16,7 +16,7 @@
 
 import { handleErrors } from './ErrorActions';
 import MistralApiService from '../services/MistralApiService';
-import WorkflowExecutionsActions from './WorkflowExecutionsActions';
+import { addWorkflowExecution } from './WorkflowExecutionsActions';
 import WorkflowExecutionConstants from '../constants/WorkflowExecutionsConstants';
 import { getWorkflowExecution } from '../selectors/workflowExecutions';
 import { getWorkflowExecutionTimeout } from '../selectors/workflowExecutionTimeouts';
@@ -40,7 +40,7 @@ export const startWorkflow = (
   timeout = 30000
 ) => dispatch =>
   dispatch(MistralApiService.runWorkflow(name, input)).then(execution => {
-    dispatch(WorkflowExecutionsActions.addWorkflowExecution(execution));
+    dispatch(addWorkflowExecution(execution));
     const t = setTimeout(
       () => dispatch(pollWorkflowExecution(execution.id, onFinished)),
       timeout
@@ -62,7 +62,7 @@ export const pollWorkflowExecution = (
 ) => dispatch =>
   dispatch(MistralApiService.getWorkflowExecution(executionId))
     .then(execution => {
-      dispatch(WorkflowExecutionsActions.addWorkflowExecution(execution));
+      dispatch(addWorkflowExecution(execution));
       if (execution.state === 'RUNNING') {
         const t = setTimeout(
           () =>
