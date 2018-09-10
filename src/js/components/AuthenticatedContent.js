@@ -30,7 +30,7 @@ import Nodes from './nodes/Nodes';
 import Plans from './plan/Plans.js';
 import StacksActions from '../actions/StacksActions';
 import { fetchPlans } from '../actions/PlansActions';
-import WorkflowExecutionsActions from '../actions/WorkflowExecutionsActions';
+import { fetchWorkflowExecutions } from '../actions/WorkflowExecutionsActions';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 
 const messages = defineMessages({
@@ -96,8 +96,7 @@ AuthenticatedContent.propTypes = {
 const mapDispatchToProps = (dispatch, ownProps) => ({
   fetchStacks: () => dispatch(StacksActions.fetchStacks()),
   fetchPlans: () => dispatch(fetchPlans()),
-  fetchWorkflowExecutions: () =>
-    dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
+  fetchWorkflowExecutions: () => dispatch(fetchWorkflowExecutions()),
   initializeZaqarConnection: () => dispatch(ZaqarWebSocketService.init())
 });
 

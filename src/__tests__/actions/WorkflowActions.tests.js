@@ -18,7 +18,7 @@ jest.useFakeTimers();
 
 import { mockStore } from './utils';
 import MistralApiService from '../../js/services/MistralApiService';
-import WorkflowExecutionsActions from '../../js/actions/WorkflowExecutionsActions';
+import * as WorkflowExecutionsActions from '../../js/actions/WorkflowExecutionsActions';
 import * as WorkflowActions from '../../js/actions/WorkflowActions';
 import * as WorkflowExecutionsSelectors from '../../js/selectors/workflowExecutions';
 import * as WorkflowExecutionTimeoutsSelectors from '../../js/selectors/workflowExecutionTimeouts';

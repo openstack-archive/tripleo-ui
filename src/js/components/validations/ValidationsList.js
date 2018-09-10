@@ -32,7 +32,10 @@ import {
 import ValidationsToolbar from './ValidationsToolbar';
 import Validation from './Validation';
 import ValidationDetail from './ValidationDetail';
-import WorkflowExecutionsActions from '../../actions/WorkflowExecutionsActions';
+import {
+  fetchWorkflowExecutions,
+  updateWorkflowExecution
+} from '../../actions/WorkflowExecutionsActions';
 import { getFilteredValidations } from '../../selectors/validations';
 
 const messages = defineMessages({
@@ -233,14 +236,13 @@ const mapDispatchToProps = dispatch => ({
   addActiveFilter: data =>
     dispatch(addActiveFilter('validationsToolbar', data)),
   fetchValidations: () => dispatch(fetchValidations()),
-  fetchWorkflowExecutions: () =>
-    dispatch(WorkflowExecutionsActions.fetchWorkflowExecutions()),
+  fetchWorkflowExecutions: () => dispatch(fetchWorkflowExecutions()),
   runValidation: (id, currentPlanName) => {
     dispatch(runValidation(id, currentPlanName));
   },
   stopValidation: executionId => {
     dispatch(
-      WorkflowExecutionsActions.updateWorkflowExecution(executionId, {
+      updateWorkflowExecution(executionId, {
         state: 'PAUSED'
       })
     );
