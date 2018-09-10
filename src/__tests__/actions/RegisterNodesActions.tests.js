@@ -20,7 +20,7 @@ import { InitialPlanState, Plan } from '../../js/immutableRecords/plans';
 import { mockStore } from './utils';
 import * as NodesActions from '../../js/actions/NodesActions';
 import NotificationActions from '../../js/actions/NotificationActions';
-import ValidationsActions from '../../js/actions/ValidationsActions';
+import * as ValidationsActions from '../../js/actions/ValidationsActions';
 import RegisterNodesActions from '../../js/actions/RegisterNodesActions';
 
 describe('startNodesRegistration Action', () => {

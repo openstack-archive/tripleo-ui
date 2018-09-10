@@ -15,7 +15,7 @@
  */
 
 import MistralApiService from '../../js/services/MistralApiService';
-import ValidationsActions from '../../js/actions/ValidationsActions';
+import * as ValidationsActions from '../../js/actions/ValidationsActions';
 import ValidationsConstants from '../../js/constants/ValidationsConstants';
 import * as WorkflowActions from '../../js/actions/WorkflowActions';
 import MistralConstants from '../../js/constants/MistralConstants';
