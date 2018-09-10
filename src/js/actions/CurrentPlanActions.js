@@ -18,36 +18,28 @@ import PlansConstants from '../constants/PlansConstants';
 import { runValidationGroups } from '../actions/ValidationsActions';
 import { getPlans, getCurrentPlanName } from '../selectors/plans';
 
-export default {
-  choosePlan(newPlanName) {
-    return (dispatch, getState) => {
-      const currentPlanName = getCurrentPlanName(getState());
-      const plans = getPlans(getState());
+export const choosePlan = newPlanName => (dispatch, getState) => {
+  const currentPlanName = getCurrentPlanName(getState());
+  const plans = getPlans(getState());
 
-      if (plans.get(newPlanName)) {
-        if (newPlanName !== currentPlanName) {
-          storePlan(newPlanName);
-          dispatch(this.planChosen(newPlanName));
-          dispatch(
-            runValidationGroups(['prep', 'pre-deployment'], newPlanName)
-          );
-        }
-      } else {
-        storePlan();
-        dispatch(this.planChosen());
-      }
-    };
-  },
-
-  planChosen(planName) {
-    return {
-      type: PlansConstants.PLAN_CHOSEN,
-      payload: planName
-    };
+  if (plans.get(newPlanName)) {
+    if (newPlanName !== currentPlanName) {
+      storePlan(newPlanName);
+      dispatch(planChosen(newPlanName));
+      dispatch(runValidationGroups(['prep', 'pre-deployment'], newPlanName));
+    }
+  } else {
+    storePlan();
+    dispatch(planChosen());
   }
 };
 
-function storePlan(name) {
+export const planChosen = planName => ({
+  type: PlansConstants.PLAN_CHOSEN,
+  payload: planName
+});
+
+export const storePlan = name => {
   if (window && window.localStorage) {
     if (name) {
       window.localStorage.setItem('currentPlanName', name);
@@ -55,4 +47,4 @@ function storePlan(name) {
       window.localStorage.removeItem('currentPlanName');
     }
   }
-}
+};

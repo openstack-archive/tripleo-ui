@@ -16,7 +16,7 @@
 
 import { Set, List, Map } from 'immutable';
 
-import CurrentPlanActions from '../../js/actions/CurrentPlanActions';
+import * as CurrentPlanActions from '../../js/actions/CurrentPlanActions';
 import {
   InitialPlanState,
   Plan,
