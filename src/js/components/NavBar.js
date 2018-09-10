@@ -28,7 +28,7 @@ import NavTab from './ui/NavTab';
 import I18nDropdown from './i18n/I18nDropdown';
 import StatusDropdown from './StatusDropdown';
 import UserDropdown from './UserDropdown';
-import ValidationsActions from '../actions/ValidationsActions';
+import { toggleValidations } from '../actions/ValidationsActions';
 import ValidationsList from './validations/ValidationsList';
 import ValidationsToggle from './validations/ValidationsToggle';
 
@@ -165,7 +165,7 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
   logoutUser: () => dispatch(LoginActions.logoutUser()),
-  toggleValidations: () => dispatch(ValidationsActions.toggleValidations())
+  toggleValidations: () => dispatch(toggleValidations())
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NavBar));

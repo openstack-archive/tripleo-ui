@@ -23,7 +23,7 @@ import RegisterNodesConstants from '../constants/RegisterNodesConstants';
 import NotificationActions from './NotificationActions';
 import { addNodes, fetchNodes } from './NodesActions';
 import { nodeSchema } from '../normalizrSchemas/nodes';
-import ValidationsActions from './ValidationsActions';
+import { runValidationGroups } from './ValidationsActions';
 
 const messages = defineMessages({
   registrationNotificationTitle: {
@@ -68,7 +68,7 @@ export default {
 
       // run pre-introspection validations
       dispatch(
-        ValidationsActions.runValidationGroups(
+        runValidationGroups(
           ['pre-introspection'],
           getCurrentPlanName(getState())
         )

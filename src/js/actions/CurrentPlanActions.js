@@ -15,7 +15,7 @@
  */
 
 import PlansConstants from '../constants/PlansConstants';
-import ValidationsActions from '../actions/ValidationsActions';
+import { runValidationGroups } from '../actions/ValidationsActions';
 import { getPlans, getCurrentPlanName } from '../selectors/plans';
 
 export default {
@@ -29,10 +29,7 @@ export default {
           storePlan(newPlanName);
           dispatch(this.planChosen(newPlanName));
           dispatch(
-            ValidationsActions.runValidationGroups(
-              ['prep', 'pre-deployment'],
-              newPlanName
-            )
+            runValidationGroups(['prep', 'pre-deployment'], newPlanName)
           );
         }
       } else {
