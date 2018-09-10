@@ -23,7 +23,7 @@ import React from 'react';
 
 import { getFlavorProfiles } from '../../../selectors/flavors';
 import { CloseModalXButton, Modal } from '../../ui/Modals';
-import FlavorsActions from '../../../actions/FlavorsActions';
+import { fetchFlavors } from '../../../actions/FlavorsActions';
 import TagNodesForm from './TagNodesForm';
 
 const messages = defineMessages({
@@ -70,8 +70,4 @@ const mapStateToProps = state => ({
   profiles: getFlavorProfiles(state)
 });
 
-const mapDispatchToProps = dispatch => ({
-  fetchFlavors: () => dispatch(FlavorsActions.fetchFlavors())
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(TagNodesModal);
+export default connect(mapStateToProps, { fetchFlavors })(TagNodesModal);

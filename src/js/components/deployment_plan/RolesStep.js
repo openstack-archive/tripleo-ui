@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
-import FlavorsActions from '../../actions/FlavorsActions';
+import { fetchFlavors } from '../../actions/FlavorsActions';
 import { getCurrentPlanName } from '../../selectors/plans';
 import {
   getAccessibleNodes,
@@ -142,7 +142,7 @@ const mapStateToProps = state => ({
   totalAssignedNodesCount: getTotalAssignedNodesCount(state)
 });
 const mapDispatchToProps = dispatch => ({
-  fetchFlavors: () => dispatch(FlavorsActions.fetchFlavors()),
+  fetchFlavors: () => dispatch(fetchFlavors()),
   fetchRoles: planName => dispatch(RolesActions.fetchRoles(planName)),
   fetchNodes: () => dispatch(fetchNodes())
 });
