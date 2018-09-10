@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import FlavorsActions from '../../js/actions/FlavorsActions';
+import * as FlavorsActions from '../../js/actions/FlavorsActions';
 import NovaApiService from '../../js/services/NovaApiService';
 import { mockStore } from './utils';
 

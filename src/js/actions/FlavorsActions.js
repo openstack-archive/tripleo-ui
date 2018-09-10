@@ -21,50 +21,40 @@ import { handleErrors } from './ErrorActions';
 import NovaApiService from '../services/NovaApiService';
 import FlavorsConstants from '../constants/FlavorsConstants';
 
-export default {
-  fetchFlavorsPending() {
-    return {
-      type: FlavorsConstants.FETCH_FLAVORS_PENDING
-    };
-  },
+export const fetchFlavorsPending = () => ({
+  type: FlavorsConstants.FETCH_FLAVORS_PENDING
+});
 
-  fetchFlavorsSuccess(flavors) {
-    return {
-      type: FlavorsConstants.FETCH_FLAVORS_SUCCESS,
-      payload: flavors
-    };
-  },
+export const fetchFlavorsSuccess = flavors => ({
+  type: FlavorsConstants.FETCH_FLAVORS_SUCCESS,
+  payload: flavors
+});
 
-  fetchFlavorsFailed() {
-    return {
-      type: FlavorsConstants.FETCH_FLAVORS_FAILED
-    };
-  },
+export const fetchFlavorsFailed = () => ({
+  type: FlavorsConstants.FETCH_FLAVORS_FAILED
+});
 
-  // Fetch Nova flavors including os-extra_specs
-  // Unfortunately, we have to make a separate API call for each flavor.
-  fetchFlavors() {
-    return dispatch => {
-      dispatch(this.fetchFlavorsPending());
-      return dispatch(NovaApiService.getFlavors())
-        .then(response => {
-          const flavors = normalize(response.flavors, [flavorSchema]).entities
-            .flavors;
-          return Promise.all(
-            Object.keys(flavors).map(flavorId =>
-              dispatch(NovaApiService.getFlavorExtraSpecs(flavorId))
-            )
-          ).then(flavorProfiles => {
-            flavorProfiles.map(profile => {
-              flavors[profile.id].extra_specs = profile.extra_specs;
-            });
-            dispatch(this.fetchFlavorsSuccess(flavors));
-          });
-        })
-        .catch(error => {
-          dispatch(handleErrors(error, 'Flavors could not be loaded.'));
-          dispatch(this.fetchFlavorsFailed());
+// Fetch Nova flavors including os-extra_specs
+// Unfortunately, we have to make a separate API call for each flavor.
+export const fetchFlavors = () => dispatch => {
+  dispatch(fetchFlavorsPending());
+  return dispatch(NovaApiService.getFlavors())
+    .then(response => {
+      const flavors = normalize(response.flavors, [flavorSchema]).entities
+        .flavors;
+      return Promise.all(
+        Object.keys(flavors).map(flavorId =>
+          dispatch(NovaApiService.getFlavorExtraSpecs(flavorId))
+        )
+      ).then(flavorProfiles => {
+        flavorProfiles.map(profile => {
+          flavors[profile.id].extra_specs = profile.extra_specs;
         });
-    };
-  }
+        dispatch(fetchFlavorsSuccess(flavors));
+      });
+    })
+    .catch(error => {
+      dispatch(handleErrors(error, 'Flavors could not be loaded.'));
+      dispatch(fetchFlavorsFailed());
+    });
 };
