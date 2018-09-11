@@ -44,7 +44,10 @@ import {
 import { handleErrors } from '../../../actions/ErrorActions';
 import { OverlayLoader } from '../../ui/Loader';
 import { notify } from '../../../actions/NotificationActions';
-import RegisterNodesActions from '../../../actions/RegisterNodesActions';
+import {
+  nodesRegistrationFinished,
+  startNodesRegistration
+} from '../../../actions/RegisterNodesActions';
 import RegisterNodesForm from './RegisterNodesForm';
 import MistralApiService from '../../../services/MistralApiService';
 import MistralConstants from '../../../constants/MistralConstants';
@@ -162,7 +165,7 @@ class RegisterNodesDialog extends React.Component {
               kernel_name: 'bm-deploy-kernel',
               ramdisk_name: 'bm-deploy-ramdisk'
             },
-            RegisterNodesActions.nodesRegistrationFinished
+            nodesRegistrationFinished
           )
         )
       )
@@ -282,8 +285,7 @@ function mapDispatchToProps(dispatch) {
     removeNode: nodeIndex =>
       dispatch(arrayRemove('registerNodesForm', 'nodes', nodeIndex)),
     resetForm: () => dispatch(reset('registerNodesForm')),
-    startNodesRegistration: nodes =>
-      dispatch(RegisterNodesActions.startNodesRegistration(nodes)),
+    startNodesRegistration: nodes => dispatch(startNodesRegistration(nodes)),
     submitForm: () => dispatch(submit('registerNodesForm')),
     notify: notification => dispatch(notify(notification))
   };

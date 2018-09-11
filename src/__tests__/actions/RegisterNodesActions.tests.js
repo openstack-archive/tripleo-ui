@@ -21,7 +21,7 @@ import { mockStore } from './utils';
 import * as NodesActions from '../../js/actions/NodesActions';
 import * as NotificationActions from '../../js/actions/NotificationActions';
 import * as ValidationsActions from '../../js/actions/ValidationsActions';
-import RegisterNodesActions from '../../js/actions/RegisterNodesActions';
+import * as RegisterNodesActions from '../../js/actions/RegisterNodesActions';
 
 describe('startNodesRegistration Action', () => {
   const store = mockStore({});
