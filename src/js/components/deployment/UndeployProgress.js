@@ -136,8 +136,6 @@ class UndeployProgress extends React.Component {
 
 UndeployProgress.propTypes = {
   deploymentStatus: PropTypes.object.isRequired,
-  fetchResources: PropTypes.func.isRequired,
-  fetchStacks: PropTypes.func.isRequired,
   intl: PropTypes.object,
   isFetchingStacks: PropTypes.bool.isRequired,
   planName: PropTypes.string.isRequired,
@@ -158,10 +156,4 @@ const mapStateToProps = (state, props) => ({
   stacksLoaded: state.stacks.isLoaded
 });
 
-const mapDispatchToProps = (dispatch, { planName }) => ({
-  fetchStacks: () => dispatch(StacksActions.fetchStacks()),
-  fetchResources: (stackName, stackId) =>
-    dispatch(StacksActions.fetchResources(stackName, stackId))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(UndeployProgress);
+export default connect(mapStateToProps)(UndeployProgress);
