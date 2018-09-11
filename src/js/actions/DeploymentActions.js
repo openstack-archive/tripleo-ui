@@ -44,7 +44,7 @@ import { handleErrors } from './ErrorActions';
 import MistralConstants from '../constants/MistralConstants';
 import { sanitizeMessage } from '../utils';
 import { startWorkflow } from './WorkflowActions';
-import NotificationActions from './NotificationActions';
+import { notify } from './NotificationActions';
 import SwiftApiService from '../services/SwiftApiService';
 
 export const getDeploymentStatusPending = planName => ({
@@ -265,7 +265,7 @@ export const recoverDeploymentStatusFinished = execution => (
   } = execution;
   if (state === 'ERROR') {
     dispatch(
-      NotificationActions.notify({
+      notify({
         title: `Plan ${planName} deployment status could not be recovered`,
         message: sanitizeMessage(message)
       })
@@ -320,7 +320,7 @@ export const getDeploymentFailuresFinished = execution => (
   } = execution;
   if (status === 'FAILED') {
     dispatch(
-      NotificationActions.notify({
+      notify({
         title: `Deployment failures could not be loaded`,
         message: sanitizeMessage(message)
       })
