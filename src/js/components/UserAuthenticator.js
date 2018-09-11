@@ -22,7 +22,7 @@ import { Redirect } from 'react-router-dom';
 
 import AuthenticatedContent from './AuthenticatedContent';
 import { GlobalLoader } from './ui/Loader';
-import LoginActions from '../actions/LoginActions';
+import { authenticateUserViaToken } from '../actions/LoginActions';
 
 const messages = defineMessages({
   authenticating: {
@@ -95,7 +95,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   authenticateUserViaToken: tokenId =>
-    dispatch(LoginActions.authenticateUserViaToken(tokenId))
+    dispatch(authenticateUserViaToken(tokenId))
 });
 
 export default injectIntl(

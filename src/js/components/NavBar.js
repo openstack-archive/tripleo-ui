@@ -23,7 +23,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import { getEnabledLanguages } from '../selectors/i18n';
 import { getValidationStatusCounts } from '../selectors/validations';
-import LoginActions from '../actions/LoginActions';
+import { logoutUser } from '../actions/LoginActions';
 import NavTab from './ui/NavTab';
 import I18nDropdown from './i18n/I18nDropdown';
 import StatusDropdown from './StatusDropdown';
@@ -164,7 +164,7 @@ const mapStateToProps = state => ({
   validationsLoaded: state.validations.get('validationsLoaded')
 });
 const mapDispatchToProps = dispatch => ({
-  logoutUser: () => dispatch(LoginActions.logoutUser()),
+  logoutUser: () => dispatch(logoutUser()),
   toggleValidations: () => dispatch(toggleValidations())
 });
 

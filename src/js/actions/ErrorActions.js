@@ -15,7 +15,7 @@
  */
 
 import logger from '../services/logging/LoggingService';
-import LoginActions from './LoginActions';
+import { userAuthFailure } from './LoginActions';
 import NotificationActions from './NotificationActions';
 import { sanitizeMessage } from '../utils';
 
@@ -26,7 +26,7 @@ export const handleErrors = (
 ) => dispatch => {
   if (error.name === 'AuthenticationError') {
     dispatch(
-      LoginActions.userAuthFailure([
+      userAuthFailure([
         {
           title: 'Unauthorized',
           message: sanitizeMessage(error.message)
