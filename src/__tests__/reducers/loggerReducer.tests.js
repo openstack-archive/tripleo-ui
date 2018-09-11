@@ -17,7 +17,7 @@
 import { List, Map } from 'immutable';
 
 import { InitialLoggerState } from '../../js/immutableRecords/logger';
-import LoggerActions from '../../js/actions/LoggerActions';
+import * as LoggerActions from '../../js/actions/LoggerActions';
 import loggerReducer from '../../js/reducers/loggerReducer';
 
 describe('loggerReducer state', () => {
