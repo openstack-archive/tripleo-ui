@@ -41,7 +41,7 @@ import { fetchEnvironmentConfiguration } from '../../actions/EnvironmentConfigur
 import HardwareStep from './HardwareStep';
 import { Loader } from '../ui/Loader';
 import NetworkConfiguration from '../networkConfiguration/NetworkConfiguration';
-import ParametersActions from '../../actions/ParametersActions';
+import { fetchParameters } from '../../actions/ParametersActions';
 import RoleDetail from '../roles/RoleDetail';
 import RolesStep from './RolesStep';
 
@@ -272,8 +272,7 @@ function mapDispatchToProps(dispatch) {
     fetchEnvironmentConfiguration: (planName, parentPath) => {
       dispatch(fetchEnvironmentConfiguration(planName, parentPath));
     },
-    fetchParameters: planName =>
-      dispatch(ParametersActions.fetchParameters(planName))
+    fetchParameters: planName => dispatch(fetchParameters(planName))
   };
 }
 
