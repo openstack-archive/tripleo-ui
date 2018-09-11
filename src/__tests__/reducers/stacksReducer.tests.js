@@ -17,7 +17,7 @@
 import { fromJS, Map, OrderedMap } from 'immutable';
 
 import { StacksState, Stack } from '../../js/immutableRecords/stacks';
-import StacksActions from '../../js/actions/StacksActions';
+import * as StacksActions from '../../js/actions/StacksActions';
 import stacksReducer from '../../js/reducers/stacksReducer';
 
 describe('stacksReducer state', () => {

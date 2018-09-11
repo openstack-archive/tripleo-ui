@@ -34,7 +34,7 @@ import {
 import InlineNotification from '../ui/InlineNotification';
 import { Loader } from '../ui/Loader';
 import { sanitizeMessage } from '../../utils';
-import StacksActions from '../../actions/StacksActions';
+import { fetchStacks } from '../../actions/StacksActions';
 import { startUndeploy } from '../../actions/DeploymentActions';
 import StackResources from './StackResources';
 
@@ -126,7 +126,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = (dispatch, { planName }) => ({
   undeployPlan: () => dispatch(startUndeploy(planName)),
-  fetchStacks: () => dispatch(StacksActions.fetchStacks())
+  fetchStacks: () => dispatch(fetchStacks())
 });
 
 export default injectIntl(

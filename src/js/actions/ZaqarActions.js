@@ -41,7 +41,7 @@ import {
   fetchAvailableRolesFinished,
   selectRolesFinished
 } from './RolesActions';
-import StacksActions from './StacksActions';
+import { fetchStacksSuccess, fetchResources } from './StacksActions';
 import { stackSchema } from '../normalizrSchemas/stacks';
 import MistralConstants from '../constants/MistralConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
@@ -160,7 +160,7 @@ export default {
         case MistralConstants.HEAT_STACKS_LIST: {
           const stacks =
             normalize(payload.stacks, [stackSchema]).entities.stacks || {};
-          dispatch(StacksActions.fetchStacksSuccess(stacks));
+          dispatch(fetchStacksSuccess(stacks));
 
           // TODO(jtomasek): It would be nicer if we could identify that
           // stack has changed in the component and fetch resources there
@@ -168,7 +168,7 @@ export default {
           const currentStack = getCurrentStack(getState());
           if (!isFetchingResources && currentStack) {
             const { stack_name, id } = currentStack;
-            dispatch(StacksActions.fetchResources(stack_name, id));
+            dispatch(fetchResources(stack_name, id));
           }
         }
 
