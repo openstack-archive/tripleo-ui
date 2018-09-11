@@ -17,11 +17,34 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import PlansList from './PlansList';
-import DeletePlan from './DeletePlan';
-import EditPlan from './EditPlan';
-import ExportPlan from './ExportPlan';
-import NewPlan from './NewPlan';
+import Loadable from 'react-loadable';
+
+const Loading = () => <div>Loading...</div>;
+
+const PlanList = Loadable({
+  loader: () => import('./PlansList'),
+  loading: Loading,
+});
+
+const NewPlan = Loadable({
+  loader: () => import('./NewPlan'),
+  loading: Loading,
+});
+
+const DeletePlan = Loadable({
+  loader: () => import('./DeletePlan'),
+  loading: Loading,
+});
+
+const EditPlan = Loadable({
+  loader: () => import('./EditPlan'),
+  loading: Loading,
+});
+
+const ExportPlan = Loadable({
+  loader: () => import('./ExportPlan'),
+  loading: Loading,
+});
 
 export default class Plans extends React.Component {
   render() {

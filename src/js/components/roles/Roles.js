@@ -20,8 +20,16 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 
 import { Loader } from '../ui/Loader';
-import SelectRolesDialog from './SelectRolesDialog';
 import NodesAssignment from './NodesAssignment';
+
+import Loadable from 'react-loadable';
+
+const Loading = () => <div>Loading...</div>;
+
+const SelectRolesDialog = Loadable({
+  loader: () => import('./SelectRolesDialog'),
+  loading: Loading,
+});
 
 const messages = defineMessages({
   loadingDeploymentRoles: {

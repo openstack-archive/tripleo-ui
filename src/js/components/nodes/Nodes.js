@@ -25,14 +25,26 @@ import { Route } from 'react-router-dom';
 import { getFilterByName } from '../../selectors/filters';
 import { getFilteredNodes, nodesInProgress } from '../../selectors/nodes';
 import { Loader, InlineLoader } from '../ui/Loader';
-import NodeDrives from './NodeDrives/NodeDrives';
 import NodesActions from '../../actions/NodesActions';
 import NodesListForm from './NodesListView/NodesListForm';
 import NodesListView from './NodesListView/NodesListView';
 import NodesToolbar from './NodesToolbar/NodesToolbar';
 import NodesTableView from './NodesTableView';
-import RegisterNodesDialog from './registerNodes/RegisterNodesDialog';
 import StacksActions from '../../actions/StacksActions';
+
+import Loadable from 'react-loadable';
+
+const Loading = () => <div>Loading...</div>;
+
+const RegisterNodesDialog = Loadable({
+  loader: () => import('./registerNodes/RegisterNodesDialog'),
+  loading: Loading,
+});
+
+const NodeDrivers = Loadable({
+  loader: () => import('./NodeDrives/NodeDrives'),
+  loading: Loading,
+});
 
 const messages = defineMessages({
   loadingNodes: {

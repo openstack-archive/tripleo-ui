@@ -17,9 +17,21 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Login from './login/Login';
 import NotificationsToaster from './notifications/NotificationsToaster';
-import UserAuthenticator from './UserAuthenticator';
+
+import Loadable from 'react-loadable';
+
+const Loading = () => <div>Loading...</div>;
+
+const Login = Loadable({
+  loader: () => import('./login/Login'),
+  loading: Loading,
+});
+
+const UserAuthenticator = Loadable({
+  loader: () => import('./UserAuthenticator'),
+  loading: Loading,
+});
 
 export default class App extends React.Component {
   render() {

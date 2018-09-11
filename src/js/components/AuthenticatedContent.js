@@ -21,17 +21,37 @@ import React from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 
 import MainContent from './MainContent';
-import DebugScreen from './debug/DebugScreen';
-import DeploymentPlan from './deployment_plan/DeploymentPlan';
 import { getCurrentPlanName } from '../selectors/plans';
 import { GlobalLoader } from './ui/Loader';
 import NavBar from './NavBar';
-import Nodes from './nodes/Nodes';
-import Plans from './plan/Plans.js';
 import PlansActions from '../actions/PlansActions';
 import StacksActions from '../actions/StacksActions';
 import WorkflowExecutionsActions from '../actions/WorkflowExecutionsActions';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
+
+import Loadable from 'react-loadable';
+
+const Loading = () => <div>Loading...</div>;
+
+const DeploymentPlan = Loadable({
+  loader: () => import('./deployment_plan/DeploymentPlan'),
+  loading: Loading,
+});
+
+const Plans = Loadable({
+  loader: () => import('./plan/Plans'),
+  loading: Loading,
+});
+
+const Nodes = Loadable({
+  loader: () => import('./nodes/Nodes'),
+  loading: Loading,
+});
+
+const DebugScreen = Loadable({
+  loader: () => import('./debug/DebugScreen'),
+  loading: Loading,
+});
 
 const messages = defineMessages({
   loadingDeployments: {
