@@ -20,7 +20,7 @@ import { defineMessages } from 'react-intl';
 import { handleErrors } from './ErrorActions';
 import LoggerConstants from '../constants/LoggerConstants';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
-import NotificationActions from '../actions/NotificationActions';
+import { notify } from '../actions/NotificationActions';
 import MistralConstants from '../constants/MistralConstants';
 import { getServiceUrl } from '../selectors/auth';
 import { startWorkflow } from './WorkflowActions';
@@ -58,7 +58,7 @@ export const flushMessages = () => (dispatch, getState) => {
       // We're using `console` here to avoid circular imports.
       console.error(error); // eslint-disable-line no-console
       dispatch(
-        NotificationActions.notify({
+        notify({
           title: 'Logging error',
           message: 'Failed to flush Zaqar messages.'
         })
@@ -93,7 +93,7 @@ export const downloadLogsFinished = execution => (
   if (state === 'ERROR' || !tempurl) {
     dispatch(downloadLogsFailed());
     dispatch(
-      NotificationActions.notify({
+      notify({
         title: formatMessage(messages.downloadLogsFailedNotificationTitle),
         message: sanitizeMessage(message),
         type: 'error'

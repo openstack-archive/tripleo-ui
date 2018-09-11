@@ -22,7 +22,7 @@ import { startSubmit, stopSubmit } from 'redux-form';
 import { handleErrors } from './ErrorActions';
 import history from '../utils/history';
 import MistralApiService from '../services/MistralApiService';
-import NotificationActions from '../actions/NotificationActions';
+import { notify } from '../actions/NotificationActions';
 import PlansConstants from '../constants/PlansConstants';
 import SwiftApiService from '../services/SwiftApiService';
 import MistralConstants from '../constants/MistralConstants';
@@ -266,7 +266,7 @@ export const updatePlanFinished = execution => (
   if (state === 'SUCCESS') {
     dispatch(updatePlanSuccess(planName));
     dispatch(
-      NotificationActions.notify({
+      notify({
         title: formatMessage(messages.planUpdatedNotificationTitle),
         message: formatMessage(messages.planUpdatedNotificationMessage, {
           planName
@@ -437,7 +437,7 @@ export const createPlanFinished = execution => (
     dispatch(stopSubmit('newPlanForm'));
     dispatch(createPlanSuccess(planName));
     dispatch(
-      NotificationActions.notify({
+      notify({
         type: 'success',
         title: formatMessage(messages.planCreatedNotificationTitle),
         message: formatMessage(messages.planCreatedNotificationMessage, {
@@ -485,7 +485,7 @@ export const deletePlan = planName => (dispatch, getState, { getIntl }) => {
     .then(response => {
       dispatch(deletePlanSuccess(planName));
       dispatch(
-        NotificationActions.notify({
+        notify({
           title: formatMessage(messages.planDeletedNotificationTitle),
           message: formatMessage(messages.planDeletedNotificationMessage, {
             planName: planName
@@ -539,7 +539,7 @@ export const exportPlanFinished = execution => (
   if (state === 'ERROR' || !tempurl) {
     dispatch(exportPlanFailed(plan));
     dispatch(
-      NotificationActions.notify({
+      notify({
         title: formatMessage(messages.exportFailedNotificationTitle),
         message: sanitizeMessage(message)
       })

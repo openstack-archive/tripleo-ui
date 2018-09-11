@@ -16,13 +16,13 @@
 
 import logger from '../services/logging/LoggingService';
 import { userAuthFailure } from './LoginActions';
-import NotificationActions from './NotificationActions';
+import { notify } from './NotificationActions';
 import { sanitizeMessage } from '../utils';
 
 export const handleErrors = (
   error,
   title = 'Error',
-  notify = true
+  doNotify = true
 ) => dispatch => {
   if (error.name === 'AuthenticationError') {
     dispatch(
@@ -34,13 +34,8 @@ export const handleErrors = (
       ])
     );
   } else {
-    if (notify) {
-      dispatch(
-        NotificationActions.notify({
-          title,
-          message: sanitizeMessage(error.message)
-        })
-      );
+    if (doNotify) {
+      dispatch(notify({ title, message: sanitizeMessage(error.message) }));
     }
   }
   logger.error(title, error, error.stack);

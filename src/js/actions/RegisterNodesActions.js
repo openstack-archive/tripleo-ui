@@ -20,7 +20,7 @@ import { Map } from 'immutable';
 
 import { getCurrentPlanName } from '../selectors/plans';
 import RegisterNodesConstants from '../constants/RegisterNodesConstants';
-import NotificationActions from './NotificationActions';
+import { notify } from './NotificationActions';
 import { addNodes, fetchNodes } from './NodesActions';
 import { nodeSchema } from '../normalizrSchemas/nodes';
 import { runValidationGroups } from './ValidationsActions';
@@ -77,7 +77,7 @@ export default {
       switch (state) {
         case 'SUCCESS': {
           dispatch(
-            NotificationActions.notify({
+            notify({
               type: 'success',
               title: formatMessage(messages.registrationNotificationTitle),
               message: formatMessage(messages.registrationNotificationMessage)

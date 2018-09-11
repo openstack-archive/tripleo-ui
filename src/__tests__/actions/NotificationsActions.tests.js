@@ -17,7 +17,7 @@
 import shortid from 'shortid';
 
 import { Notification } from '../../js/immutableRecords/notifications';
-import NotificationActions from '../../js/actions/NotificationActions';
+import * as NotificationActions from '../../js/actions/NotificationActions';
 import NotificationConstants from '../../js/constants/NotificationConstants';
 
 describe('Notification actions', () => {
