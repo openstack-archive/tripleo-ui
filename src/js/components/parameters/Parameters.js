@@ -19,7 +19,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
+import { fetchEnvironmentConfiguration } from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentParameters from './EnvironmentParameters';
 import { getCurrentPlanName } from '../../selectors/plans';
 import { getRootParameters } from '../../selectors/parameters';
@@ -142,9 +142,8 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     fetchEnvironmentConfiguration: currentPlanName => {
       dispatch(
-        EnvironmentConfigurationActions.fetchEnvironmentConfiguration(
-          currentPlanName,
-          () => ownProps.history.push(`/plans/${currentPlanName}`)
+        fetchEnvironmentConfiguration(currentPlanName, () =>
+          ownProps.history.push(`/plans/${currentPlanName}`)
         )
       );
     },

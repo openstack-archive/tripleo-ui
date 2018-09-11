@@ -21,7 +21,10 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
+import {
+  fetchEnvironmentConfiguration,
+  updateEnvironmentConfiguration
+} from '../../actions/EnvironmentConfigurationActions';
 import EnvironmentConfigurationForm from './EnvironmentConfigurationForm';
 import EnvironmentConfigurationSidebar from './EnvironmentConfigurationSidebar';
 import EnvironmentConfigurationTopic from './EnvironmentConfigurationTopic';
@@ -175,23 +178,9 @@ const mapStateToProps = state => ({
   isFetching: state.environmentConfiguration.isFetching
 });
 
-const mapDispatchToProps = dispatch => ({
-  fetchEnvironmentConfiguration: planName => {
-    dispatch(
-      EnvironmentConfigurationActions.fetchEnvironmentConfiguration(planName)
-    );
-  },
-  updateEnvironmentConfiguration: (planName, data, inputFields) => {
-    dispatch(
-      EnvironmentConfigurationActions.updateEnvironmentConfiguration(
-        planName,
-        data,
-        inputFields
-      )
-    );
-  }
-});
-
 export default injectIntl(
-  connect(mapStateToProps, mapDispatchToProps)(EnvironmentConfiguration)
+  connect(mapStateToProps, {
+    fetchEnvironmentConfiguration,
+    updateEnvironmentConfiguration
+  })(EnvironmentConfiguration)
 );
