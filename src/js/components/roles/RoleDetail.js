@@ -28,7 +28,10 @@ import { getRole } from '../../selectors/roles';
 import { Loader } from '../ui/Loader';
 import { CloseModalXButton, RoutedModalPanel } from '../ui/Modals';
 import NavTab from '../ui/NavTab';
-import ParametersActions from '../../actions/ParametersActions';
+import {
+  fetchParameters,
+  updateParameters
+} from '../../actions/ParametersActions';
 import ParametersForm from '../parameters/ParametersForm';
 import RoleNetworkConfig from './RoleNetworkConfig';
 import RoleParameters from './RoleParameters';
@@ -204,15 +207,13 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     fetchParameters: currentPlanName => {
       dispatch(
-        ParametersActions.fetchParameters(currentPlanName, () =>
+        fetchParameters(currentPlanName, () =>
           ownProps.history.push(`/plans/${currentPlanName}`)
         )
       );
     },
     updateParameters: (currentPlanName, data, redirectPath) => {
-      dispatch(
-        ParametersActions.updateParameters(currentPlanName, data, redirectPath)
-      );
+      dispatch(updateParameters(currentPlanName, data, redirectPath));
     }
   };
 }

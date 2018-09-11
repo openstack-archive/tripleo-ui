@@ -17,7 +17,7 @@
 import * as ReduxFormActions from 'redux-form';
 
 import * as ErrorActions from '../../js/actions/ErrorActions';
-import ParametersActions from '../../js/actions/ParametersActions';
+import * as ParametersActions from '../../js/actions/ParametersActions';
 import ParametersConstants from '../../js/constants/ParametersConstants';
 import MistralApiService from '../../js/services/MistralApiService';
 import MistralConstants from '../../js/constants/MistralConstants';
