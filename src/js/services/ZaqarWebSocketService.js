@@ -21,7 +21,7 @@ import {
   getDefaultZaqarQueue,
   getLoggingZaqarQueue
 } from '../selectors/appConfig';
-import ZaqarActions from '../actions/ZaqarActions';
+import { messageReceived } from '../actions/ZaqarActions';
 import { notify } from '../actions/NotificationActions';
 
 // We're using `console` here to avoid circular imports.
@@ -65,7 +65,7 @@ export default {
 
       this.socket.onmessage = evt => {
         const data = JSON.parse(evt.data);
-        dispatch(ZaqarActions.messageReceived(data));
+        dispatch(messageReceived(data));
       };
     };
   },
