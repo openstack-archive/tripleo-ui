@@ -22,105 +22,88 @@ import logger from '../services/logging/LoggingService';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
 import cookie from 'react-cookie';
 
-export default {
-  authenticateUserViaToken(keystoneAuthTokenId, nextPath) {
-    return (dispatch, getState) => {
-      dispatch(this.userAuthStarted());
-      return dispatch(
-        KeystoneApiService.authenticateUserViaToken(keystoneAuthTokenId)
-      )
-        .then(response => {
-          const {
-            data: { token },
-            headers: { 'x-subject-token': tokenId }
-          } = response;
-          cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
-          dispatch(this.userAuthSuccess(tokenId, token));
-        })
-        .catch(error => {
-          dispatch(
-            this.userAuthFailure([
-              {
-                title: 'Unauthorized',
-                message: error.message
-              }
-            ])
-          );
-          logger.error(
-            'Could not authenticate user via token',
-            error,
-            error.stack
-          );
-        });
-    };
-  },
-
-  authenticateUser(formData, formFields, nextPath) {
-    return (dispatch, getState) => {
-      dispatch(this.userAuthStarted());
-      return dispatch(
-        KeystoneApiService.authenticateUser(
-          formData.username,
-          formData.password
-        )
-      )
-        .then(response => {
-          const {
-            data: { token },
-            headers: { 'x-subject-token': tokenId }
-          } = response;
-          cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
-          dispatch(this.userAuthSuccess(tokenId, token));
-        })
-        .catch(error => {
-          dispatch(
-            this.userAuthFailure([
-              {
-                title: 'Unauthorized',
-                message: error.message
-              }
-            ])
-          );
-          logger.error('Could not authenticate user', error, error.stack);
-        });
-    };
-  },
-
-  userAuthStarted() {
-    return {
-      type: LoginConstants.USER_AUTH_STARTED
-    };
-  },
-
-  userAuthFailure(errors, formFieldErrors = {}) {
-    return {
-      type: LoginConstants.USER_AUTH_FAILURE,
-      payload: Map({
-        formErrors: fromJS(errors),
-        formFieldErrors: fromJS(formFieldErrors)
-      }),
-      error: true
-    };
-  },
-
-  userAuthSuccess(tokenId, token) {
-    return {
-      type: LoginConstants.USER_AUTH_SUCCESS,
-      payload: { token, tokenId }
-    };
-  },
-
-  logoutUser() {
-    return dispatch => {
-      cookie.remove('keystoneAuthTokenId');
-      dispatch(this.logoutUserSuccess());
-      ZaqarWebSocketService.close();
-    };
-  },
-
-  logoutUserSuccess() {
-    return {
-      type: LoginConstants.LOGOUT_USER_SUCCESS
-    };
-  }
+export const authenticateUserViaToken = (keystoneAuthTokenId, nextPath) => (
+  dispatch,
+  getState
+) => {
+  dispatch(userAuthStarted());
+  return dispatch(
+    KeystoneApiService.authenticateUserViaToken(keystoneAuthTokenId)
+  )
+    .then(response => {
+      const {
+        data: { token },
+        headers: { 'x-subject-token': tokenId }
+      } = response;
+      cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
+      dispatch(userAuthSuccess(tokenId, token));
+    })
+    .catch(error => {
+      dispatch(
+        userAuthFailure([
+          {
+            title: 'Unauthorized',
+            message: error.message
+          }
+        ])
+      );
+      logger.error('Could not authenticate user via token', error, error.stack);
+    });
 };
+
+export const authenticateUser = (formData, formFields, nextPath) => (
+  dispatch,
+  getState
+) => {
+  dispatch(userAuthStarted());
+  return dispatch(
+    KeystoneApiService.authenticateUser(formData.username, formData.password)
+  )
+    .then(response => {
+      const {
+        data: { token },
+        headers: { 'x-subject-token': tokenId }
+      } = response;
+      cookie.save('keystoneAuthTokenId', tokenId, { path: '/' });
+      dispatch(userAuthSuccess(tokenId, token));
+    })
+    .catch(error => {
+      dispatch(
+        userAuthFailure([
+          {
+            title: 'Unauthorized',
+            message: error.message
+          }
+        ])
+      );
+      logger.error('Could not authenticate user', error, error.stack);
+    });
+};
+
+export const userAuthStarted = () => ({
+  type: LoginConstants.USER_AUTH_STARTED
+});
+
+export const userAuthFailure = (errors, formFieldErrors = {}) => ({
+  type: LoginConstants.USER_AUTH_FAILURE,
+  payload: Map({
+    formErrors: fromJS(errors),
+    formFieldErrors: fromJS(formFieldErrors)
+  }),
+  error: true
+});
+
+export const userAuthSuccess = (tokenId, token) => ({
+  type: LoginConstants.USER_AUTH_SUCCESS,
+  payload: { token, tokenId }
+});
+
+export const logoutUser = () => dispatch => {
+  cookie.remove('keystoneAuthTokenId');
+  dispatch(logoutUserSuccess());
+  ZaqarWebSocketService.close();
+};
+
+export const logoutUserSuccess = () => ({
+  type: LoginConstants.LOGOUT_USER_SUCCESS
+});
