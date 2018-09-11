@@ -28,7 +28,7 @@ import { CloseModalXButton, RoutedModal } from '../ui/Modals';
 import { getMergedRoles, getRoles } from '../../selectors/roles';
 import { getCurrentPlanName } from '../../selectors/plans';
 import { Loader } from '../ui/Loader';
-import RolesActions from '../../actions/RolesActions';
+import { fetchAvailableRoles, selectRoles } from '../../actions/RolesActions';
 import SelectRolesForm from './SelectRolesForm';
 
 const messages = defineMessages({
@@ -117,13 +117,8 @@ const mapStateToProps = state => ({
   roles: getRoles(state)
 });
 
-const mapDispatchToProps = dispatch => ({
-  fetchAvailableRoles: planName =>
-    dispatch(RolesActions.fetchAvailableRoles(planName)),
-  selectRoles: (planName, roleNames) =>
-    dispatch(RolesActions.selectRoles(planName, roleNames))
-});
-
 export default injectIntl(
-  connect(mapStateToProps, mapDispatchToProps)(SelectRolesDialog)
+  connect(mapStateToProps, { fetchAvailableRoles, selectRoles })(
+    SelectRolesDialog
+  )
 );

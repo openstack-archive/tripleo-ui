@@ -25,7 +25,7 @@ import { startWorkflow } from './WorkflowActions';
 
 const messages = defineMessages({
   fetchNetworksFailed: {
-    id: 'RolesActions.fetchNetworksFailed',
+    id: 'NetworksActions.fetchNetworksFailed',
     defaultMessage: 'Networks could not be loaded'
   }
 });
