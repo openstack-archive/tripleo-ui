@@ -27,7 +27,7 @@ import {
 import { getCurrentPlanName } from '../../selectors/plans';
 import { getRoles } from '../../selectors/roles';
 import NodesAssignmentForm from './NodesAssignmentForm';
-import ParametersActions from '../../actions/ParametersActions';
+import { updateNodesAssignment } from '../../actions/ParametersActions';
 import RoleCard from './RoleCard';
 
 const NodesAssignment = ({
@@ -79,10 +79,6 @@ const mapStateToProps = state => ({
   roles: getRoles(state)
 });
 
-const mapDispatchToProps = dispatch => ({
-  updateNodesAssignment: (currentPlanName, data) => {
-    dispatch(ParametersActions.updateNodesAssignment(currentPlanName, data));
-  }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(NodesAssignment);
+export default connect(mapStateToProps, { updateNodesAssignment })(
+  NodesAssignment
+);

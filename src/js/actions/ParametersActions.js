@@ -37,134 +37,126 @@ const messages = defineMessages({
   }
 });
 
-export default {
-  fetchParametersPending() {
-    return {
-      type: ParametersConstants.FETCH_PARAMETERS_PENDING
-    };
-  },
+export const fetchParametersPending = () => ({
+  type: ParametersConstants.FETCH_PARAMETERS_PENDING
+});
 
-  fetchParametersSuccess(entities) {
-    return {
-      type: ParametersConstants.FETCH_PARAMETERS_SUCCESS,
-      payload: entities
-    };
-  },
+export const fetchParametersSuccess = entities => ({
+  type: ParametersConstants.FETCH_PARAMETERS_SUCCESS,
+  payload: entities
+});
 
-  fetchParametersFailed(formErrors, formFieldErrors) {
-    return {
-      type: ParametersConstants.FETCH_PARAMETERS_FAILED
-    };
-  },
+export const fetchParametersFailed = (formErrors, formFieldErrors) => ({
+  type: ParametersConstants.FETCH_PARAMETERS_FAILED
+});
 
-  fetchParameters(planName, redirect) {
-    return dispatch => {
-      dispatch(this.fetchParametersPending());
-      return dispatch(
-        MistralApiService.runAction(MistralConstants.PARAMETERS_GET, {
-          container: planName
+export const fetchParameters = (planName, redirect) => dispatch => {
+  dispatch(fetchParametersPending());
+  return dispatch(
+    MistralApiService.runAction(MistralConstants.PARAMETERS_GET, {
+      container: planName
+    })
+  )
+    .then(response => {
+      const { resources, parameters } = response.heat_resource_tree;
+      const mistralParameters = response.environment_parameters;
+      dispatch(
+        fetchParametersSuccess({
+          resources,
+          parameters,
+          mistralParameters
         })
-      )
-        .then(response => {
-          const { resources, parameters } = response.heat_resource_tree;
-          const mistralParameters = response.environment_parameters;
-          dispatch(
-            this.fetchParametersSuccess({
-              resources,
-              parameters,
-              mistralParameters
-            })
-          );
-        })
-        .catch(error => {
-          dispatch(this.fetchParametersFailed());
-          if (redirect) {
-            redirect();
-          }
-          dispatch(
-            handleErrors(error, 'Deployment parameters could not be loaded')
-          );
-        });
-    };
-  },
+      );
+    })
+    .catch(error => {
+      dispatch(fetchParametersFailed());
+      if (redirect) {
+        redirect();
+      }
+      dispatch(
+        handleErrors(error, 'Deployment parameters could not be loaded')
+      );
+    });
+};
 
-  updateParametersSuccess(updatedParameters) {
-    return {
-      type: ParametersConstants.UPDATE_PARAMETERS_SUCCESS,
-      payload: updatedParameters
-    };
-  },
+export const updateParametersSuccess = updatedParameters => ({
+  type: ParametersConstants.UPDATE_PARAMETERS_SUCCESS,
+  payload: updatedParameters
+});
 
-  updateNodesAssignment(planName, data) {
-    return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      dispatch(startSubmit('nodesAssignment'));
-      return dispatch(
-        MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE, {
-          container: planName,
-          parameters: data
+export const updateNodesAssignment = (planName, data) => (
+  dispatch,
+  getState,
+  { getIntl }
+) => {
+  const { formatMessage } = getIntl(getState());
+  dispatch(startSubmit('nodesAssignment'));
+  return dispatch(
+    MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE, {
+      container: planName,
+      parameters: data
+    })
+  )
+    .then(response => {
+      const { resources, parameters } = response.heat_resource_tree;
+      const mistralParameters = response.environment_parameters;
+      dispatch(
+        updateParametersSuccess({
+          resources,
+          parameters,
+          mistralParameters
         })
-      )
-        .then(response => {
-          const { resources, parameters } = response.heat_resource_tree;
-          const mistralParameters = response.environment_parameters;
-          dispatch(
-            this.updateParametersSuccess({
-              resources,
-              parameters,
-              mistralParameters
-            })
-          );
-          dispatch(stopSubmit('nodesAssignment'));
-        })
-        .catch(error => {
-          dispatch(
-            stopSubmit('nodesAssignment', {
-              _error: {
-                title: formatMessage(messages.updateParametersFailed),
-                message: error.message
-              }
-            })
-          );
-        });
-    };
-  },
-
-  updateParameters(planName, data, redirect) {
-    return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      dispatch(startSubmit('parametersForm'));
-      return dispatch(
-        MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE, {
-          container: planName,
-          parameters: data
-        })
-      )
-        .then(response => {
-          const { resources, parameters } = response.heat_resource_tree;
-          const mistralParameters = response.environment_parameters;
-          dispatch(
-            this.updateParametersSuccess({
-              resources,
-              parameters,
-              mistralParameters
-            })
-          );
-          dispatch(stopSubmit('parametersForm'));
-          if (redirect) {
-            redirect();
+      );
+      dispatch(stopSubmit('nodesAssignment'));
+    })
+    .catch(error => {
+      dispatch(
+        stopSubmit('nodesAssignment', {
+          _error: {
+            title: formatMessage(messages.updateParametersFailed),
+            message: error.message
           }
         })
-        .catch(error => {
-          dispatch(
-            stopSubmit('parametersForm', {
-              _error: {
-                title: formatMessage(messages.updateParametersFailed),
-                message: error.message
-              }
-            })
-          );
-        });
-    };
-  }
+      );
+    });
+};
+
+export const updateParameters = (planName, data, redirect) => (
+  dispatch,
+  getState,
+  { getIntl }
+) => {
+  const { formatMessage } = getIntl(getState());
+  dispatch(startSubmit('parametersForm'));
+  return dispatch(
+    MistralApiService.runAction(MistralConstants.PARAMETERS_UPDATE, {
+      container: planName,
+      parameters: data
+    })
+  )
+    .then(response => {
+      const { resources, parameters } = response.heat_resource_tree;
+      const mistralParameters = response.environment_parameters;
+      dispatch(
+        updateParametersSuccess({
+          resources,
+          parameters,
+          mistralParameters
+        })
+      );
+      dispatch(stopSubmit('parametersForm'));
+      if (redirect) {
+        redirect();
+      }
+    })
+    .catch(error => {
+      dispatch(
+        stopSubmit('parametersForm', {
+          _error: {
+            title: formatMessage(messages.updateParametersFailed),
+            message: error.message
+          }
+        })
+      );
+    });
 };
