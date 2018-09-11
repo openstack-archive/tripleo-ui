@@ -51,7 +51,7 @@ import {
   recoverDeploymentStatusFinished,
   getDeploymentFailuresFinished
 } from './DeploymentActions';
-import NetworksActions from './NetworksActions';
+import { fetchNetworksFinished } from './NetworksActions';
 
 export default {
   handleAuthenticationSuccess(message, dispatch) {
@@ -261,10 +261,7 @@ export default {
 
         case MistralConstants.NETWORK_LIST: {
           dispatch(
-            handleWorkflowMessage(
-              payload.execution.id,
-              NetworksActions.fetchNetworksFinished
-            )
+            handleWorkflowMessage(payload.execution.id, fetchNetworksFinished)
           );
           break;
         }
