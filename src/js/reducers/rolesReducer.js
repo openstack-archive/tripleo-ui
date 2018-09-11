@@ -81,6 +81,11 @@ const rolesReducer = (state = initialState, action) => {
         .set('loaded', true);
 
     case RolesConstants.SELECT_ROLES_SUCCESS:
+      const roles = fromJS(action.payload).map(role =>
+        new Role(role).update(role =>
+          role.set('identifier', _getRoleIdentifier(role.name))
+        )
+      );
       return state.set('roles', roles);
 
     case PlansConstants.PLAN_CHOSEN:

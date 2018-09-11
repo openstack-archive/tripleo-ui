@@ -36,16 +36,15 @@ const messages = defineMessages({
   }
 });
 
-export const startNodesRegistration = nodes => dispatch => {
-  // TODO(jtomasek): Once we are able to generate UUIDs for nodes,
-  // add nodes to the list and add operation using startNodesOperation action.
-  // Remove registerNodesReducer and track the progress on each node.
-  // Introduce separate reducer for tracking operations: nodeOperationsById
-  // dispatch(addNodes(nodes.map(node => new Node(node))));
-  // dispatch(startOperation(nodes.map(node => node.uuid), 'register'))
-  // addNodes(nodesToRegister.map(node => new Node))
-  return dispatch(nodesRegistrationPending());
-};
+// TODO(jtomasek): Once we are able to generate UUIDs for nodes,
+// add nodes to the list and add operation using startNodesOperation action.
+// Remove registerNodesReducer and track the progress on each node.
+// Introduce separate reducer for tracking operations: nodeOperationsById
+// dispatch(addNodes(nodes.map(node => new Node(node))));
+// dispatch(startOperation(nodes.map(node => node.uuid), 'register'))
+// addNodes(nodesToRegister.map(node => new Node))
+export const startNodesRegistration = nodes => dispatch =>
+  dispatch(nodesRegistrationPending());
 
 export const nodesRegistrationPending = () => ({
   type: RegisterNodesConstants.NODES_REGISTRATION_PENDING
