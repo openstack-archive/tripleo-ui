@@ -35,149 +35,129 @@ const messages = defineMessages({
   }
 });
 
-export default {
-  fetchRoles(planName) {
-    return (dispatch, getState) => {
-      dispatch(this.fetchRolesPending());
+export const fetchRoles = planName => dispatch => {
+  dispatch(fetchRolesPending());
 
-      dispatch(
-        MistralApiService.runAction(MistralConstants.ROLE_LIST, {
-          container: planName,
-          detail: true
-        })
-      )
-        .then(response => {
-          const roles = normalize(response, [roleSchema]).entities.roles || {};
-          dispatch(this.fetchRolesSuccess(roles));
-        })
-        .catch(error => {
-          dispatch(handleErrors(error, 'Roles could not be loaded'));
-          dispatch(this.fetchRolesFailed());
-        });
-    };
-  },
+  dispatch(
+    MistralApiService.runAction(MistralConstants.ROLE_LIST, {
+      container: planName,
+      detail: true
+    })
+  )
+    .then(response => {
+      const roles = normalize(response, [roleSchema]).entities.roles || {};
+      dispatch(fetchRolesSuccess(roles));
+    })
+    .catch(error => {
+      dispatch(handleErrors(error, 'Roles could not be loaded'));
+      dispatch(fetchRolesFailed());
+    });
+};
 
-  fetchRolesPending() {
-    return {
-      type: RolesConstants.FETCH_ROLES_PENDING
-    };
-  },
+export const fetchRolesPending = () => ({
+  type: RolesConstants.FETCH_ROLES_PENDING
+});
 
-  fetchRolesSuccess(roles) {
-    return {
-      type: RolesConstants.FETCH_ROLES_SUCCESS,
-      payload: roles
-    };
-  },
+export const fetchRolesSuccess = roles => ({
+  type: RolesConstants.FETCH_ROLES_SUCCESS,
+  payload: roles
+});
 
-  fetchRolesFailed() {
-    return {
-      type: RolesConstants.FETCH_ROLES_FAILED
-    };
-  },
+export const fetchRolesFailed = () => ({
+  type: RolesConstants.FETCH_ROLES_FAILED
+});
 
-  fetchAvailableRoles(planName) {
-    return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      dispatch(this.fetchAvailableRolesPending());
-      dispatch(
-        startWorkflow(
-          MistralConstants.LIST_AVAILABLE_ROLES,
-          { container: planName },
-          this.fetchAvailableRolesFinished
-        )
-      ).catch(error => {
-        history.push('/plans');
-        dispatch(this.fetchAvailableRolesFailed());
-        dispatch(
-          handleErrors(error, formatMessage(messages.availableRolesNotLoaded))
-        );
-      });
-    };
-  },
+export const fetchAvailableRoles = planName => (
+  dispatch,
+  getState,
+  { getIntl }
+) => {
+  const { formatMessage } = getIntl(getState());
+  dispatch(fetchAvailableRolesPending());
+  dispatch(
+    startWorkflow(
+      MistralConstants.LIST_AVAILABLE_ROLES,
+      { container: planName },
+      fetchAvailableRolesFinished
+    )
+  ).catch(error => {
+    history.push('/plans');
+    dispatch(fetchAvailableRolesFailed());
+    dispatch(
+      handleErrors(error, formatMessage(messages.availableRolesNotLoaded))
+    );
+  });
+};
 
-  fetchAvailableRolesFinished({ output: { available_roles, message }, state }) {
-    return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      if (state === 'SUCCESS') {
-        const roles =
-          normalize(available_roles, [roleSchema]).entities.roles || {};
-        dispatch(this.fetchAvailableRolesSuccess(roles));
-      } else {
-        history.push('/plans');
-        dispatch(this.fetchAvailableRolesFailed());
-        dispatch(
-          notify({
-            title: formatMessage(messages.availableRolesNotLoaded),
-            message: sanitizeMessage(message)
-          })
-        );
-      }
-    };
-  },
-
-  fetchAvailableRolesPending() {
-    return {
-      type: RolesConstants.FETCH_AVAILABLE_ROLES_PENDING
-    };
-  },
-
-  fetchAvailableRolesSuccess(roles) {
-    return {
-      type: RolesConstants.FETCH_AVAILABLE_ROLES_SUCCESS,
-      payload: roles
-    };
-  },
-
-  fetchAvailableRolesFailed() {
-    return {
-      type: RolesConstants.FETCH_AVAILABLE_ROLES_FAILED
-    };
-  },
-
-  selectRoles(planName, roleNames) {
-    return (dispatch, getState) => {
-      dispatch(startSubmit('selectRoles'));
-      dispatch(
-        startWorkflow(
-          MistralConstants.SELECT_ROLES,
-          {
-            container: planName,
-            role_names: roleNames
-          },
-          this.selectRolesFinished
-        )
-      ).catch(error => {
-        const { name, message } = error;
-        dispatch(
-          stopSubmit('selectRoles', { _error: { title: name, message } })
-        );
-      });
-    };
-  },
-
-  selectRolesFinished({ output: { selected_roles, message }, state }) {
-    return (dispatch, getState) => {
-      if (state === 'SUCCESS') {
-        const roles =
-          normalize(selected_roles, [roleSchema]).entities.roles || {};
-        dispatch(this.selectRolesSuccess(roles));
-        dispatch(stopSubmit('selectRoles'));
-        history.push('/plans');
-      } else {
-        dispatch(
-          stopSubmit('selectRoles', {
-            _error: { message: message.message || message }
-          })
-        );
-      }
-    };
-  },
-
-  selectRolesSuccess(roles) {
-    return {
-      type: RolesConstants.SELECT_ROLES_SUCCESS,
-      payload: roles
-    };
+export const fetchAvailableRolesFinished = ({
+  output: { available_roles, message },
+  state
+}) => (dispatch, getState, { getIntl }) => {
+  const { formatMessage } = getIntl(getState());
+  if (state === 'SUCCESS') {
+    const roles = normalize(available_roles, [roleSchema]).entities.roles || {};
+    dispatch(fetchAvailableRolesSuccess(roles));
+  } else {
+    history.push('/plans');
+    dispatch(fetchAvailableRolesFailed());
+    dispatch(
+      notify({
+        title: formatMessage(messages.availableRolesNotLoaded),
+        message: sanitizeMessage(message)
+      })
+    );
   }
 };
+
+export const fetchAvailableRolesPending = () => ({
+  type: RolesConstants.FETCH_AVAILABLE_ROLES_PENDING
+});
+
+export const fetchAvailableRolesSuccess = roles => ({
+  type: RolesConstants.FETCH_AVAILABLE_ROLES_SUCCESS,
+  payload: roles
+});
+
+export const fetchAvailableRolesFailed = () => ({
+  type: RolesConstants.FETCH_AVAILABLE_ROLES_FAILED
+});
+
+export const selectRoles = (planName, roleNames) => dispatch => {
+  dispatch(startSubmit('selectRoles'));
+  dispatch(
+    startWorkflow(
+      MistralConstants.SELECT_ROLES,
+      {
+        container: planName,
+        role_names: roleNames
+      },
+      selectRolesFinished
+    )
+  ).catch(error => {
+    const { name, message } = error;
+    dispatch(stopSubmit('selectRoles', { _error: { title: name, message } }));
+  });
+};
+
+export const selectRolesFinished = ({
+  output: { selected_roles, message },
+  state
+}) => dispatch => {
+  if (state === 'SUCCESS') {
+    const roles = normalize(selected_roles, [roleSchema]).entities.roles || {};
+    dispatch(selectRolesSuccess(roles));
+    dispatch(stopSubmit('selectRoles'));
+    history.push('/plans');
+  } else {
+    dispatch(
+      stopSubmit('selectRoles', {
+        _error: { message: message.message || message }
+      })
+    );
+  }
+};
+
+export const selectRolesSuccess = roles => ({
+  type: RolesConstants.SELECT_ROLES_SUCCESS,
+  payload: roles
+});

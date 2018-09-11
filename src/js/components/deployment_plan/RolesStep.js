@@ -31,7 +31,7 @@ import { InlineLoader } from '../ui/Loader';
 import { Link } from 'react-router-dom';
 import { fetchNodes } from '../../actions/NodesActions';
 import Roles from '../roles/Roles';
-import RolesActions from '../../actions/RolesActions';
+import { fetchRoles } from '../../actions/RolesActions';
 
 const messages = defineMessages({
   loadingNodes: {
@@ -141,12 +141,11 @@ const mapStateToProps = state => ({
   nodesLoaded: state.nodes.isLoaded,
   totalAssignedNodesCount: getTotalAssignedNodesCount(state)
 });
-const mapDispatchToProps = dispatch => ({
-  fetchFlavors: () => dispatch(fetchFlavors()),
-  fetchRoles: planName => dispatch(RolesActions.fetchRoles(planName)),
-  fetchNodes: () => dispatch(fetchNodes())
-});
 
 export default injectIntl(
-  withRouter(connect(mapStateToProps, mapDispatchToProps)(RolesStep))
+  withRouter(
+    connect(mapStateToProps, { fetchFlavors, fetchRoles, fetchNodes })(
+      RolesStep
+    )
+  )
 );

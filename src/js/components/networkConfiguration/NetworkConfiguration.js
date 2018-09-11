@@ -31,7 +31,7 @@ import { Loader } from '../ui/Loader';
 import NetworkTopology from './NetworkTopology';
 import { fetchParameters } from '../../actions/ParametersActions';
 import { fetchNetworks } from '../../actions/NetworksActions';
-import RolesActions from '../../actions/RolesActions';
+import { fetchRoles } from '../../actions/RolesActions';
 import {
   CloseModalXButton,
   CloseModalButton,
@@ -130,12 +130,10 @@ const mapStateToProps = state => ({
   isFetchingRoles: state.roles.isFetching
 });
 
-const mapDispatchToProps = dispatch => ({
-  fetchNetworks: planName => dispatch(fetchNetworks(planName)),
-  fetchRoles: planName => dispatch(RolesActions.fetchRoles(planName)),
-  fetchParameters: planName => dispatch(fetchParameters(planName))
-});
-
 export default checkRunningDeployment(
-  injectIntl(connect(mapStateToProps, mapDispatchToProps)(NetworkConfiguration))
+  injectIntl(
+    connect(mapStateToProps, { fetchNetworks, fetchRoles, fetchParameters })(
+      NetworkConfiguration
+    )
+  )
 );
