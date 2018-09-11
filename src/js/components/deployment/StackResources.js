@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 
 import StackResourcesTable from './StackResourcesTable';
-import StacksActions from '../../actions/StacksActions';
+import { fetchResources } from '../../actions/StacksActions';
 
 const messages = defineMessages({
   title: {
@@ -75,8 +75,7 @@ const mapStateToProps = state => ({
   isFetchingResources: state.stacks.isFetchingResources
 });
 const mapDispatchToProps = (dispatch, { stack }) => ({
-  fetchResources: () =>
-    dispatch(StacksActions.fetchResources(stack.stack_name, stack.id))
+  fetchResources: () => dispatch(fetchResources(stack.stack_name, stack.id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StackResources);
