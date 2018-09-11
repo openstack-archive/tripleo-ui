@@ -19,7 +19,12 @@ import { normalize } from 'normalizr';
 
 import { deploymentStates } from '../constants/DeploymentConstants';
 import { getCurrentStack } from '../selectors/stacks';
-import LoggerActions from './LoggerActions';
+import {
+  authenticated,
+  flushMessages,
+  downloadLogsFinished,
+  queueMessage
+} from './LoggerActions';
 import {
   nodesIntrospectionFinished,
   nodeIntrospectionFinished,
@@ -53,8 +58,8 @@ export default {
     message = get(message, ['body', 'message']);
 
     if (message === 'Authentified.') {
-      dispatch(LoggerActions.authenticated());
-      dispatch(LoggerActions.flushMessages());
+      dispatch(authenticated());
+      dispatch(flushMessages());
     }
   },
 
@@ -228,10 +233,7 @@ export default {
 
         case MistralConstants.DOWNLOAD_LOGS: {
           dispatch(
-            handleWorkflowMessage(
-              payload.execution.id,
-              LoggerActions.downloadLogsFinished
-            )
+            handleWorkflowMessage(payload.execution.id, downloadLogsFinished)
           );
           break;
         }
@@ -291,7 +293,7 @@ export default {
       }
 
       if (!getState().logger.authenticated) {
-        dispatch(LoggerActions.queueMessage(message));
+        dispatch(queueMessage(message));
         return;
       }
 
