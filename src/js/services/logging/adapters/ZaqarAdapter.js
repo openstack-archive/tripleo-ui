@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import ZaqarActions from '../../../actions/ZaqarActions';
+import { postMessage } from '../../../actions/ZaqarActions';
 import Adapter from './BaseAdapter';
 
 export default class ZaqarAdapter extends Adapter {
@@ -62,7 +62,7 @@ export default class ZaqarAdapter extends Adapter {
     const loggingQueue =
       (window.tripleOUiConfig || {})['logger-zaqar-queue'] ||
       'tripleo-ui-logging';
-    this._dispatch(ZaqarActions.postMessage(loggingQueue, msg));
+    this._dispatch(postMessage(loggingQueue, msg));
   }
 
   debug(...args) {
