@@ -19,7 +19,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
+import { fetchEnvironment } from '../../actions/EnvironmentConfigurationActions';
 import { getCurrentPlanName } from '../../selectors/plans';
 import { getEnvironmentParameters } from '../../selectors/parameters';
 import { getEnvironment } from '../../selectors/environmentConfiguration';
@@ -65,29 +65,13 @@ EnvironmentParameters.propTypes = {
   parameters: ImmutablePropTypes.map.isRequired
 };
 
-function mapStateToProps(state, ownProps) {
-  return {
-    currentPlanName: getCurrentPlanName(state),
-    environmentError: getEnvironment(state, ownProps.environment).error,
-    parameters: getEnvironmentParameters(state, ownProps.environment),
-    isFetchingEnvironment: getEnvironment(state, ownProps.environment)
-      .isFetching
-  };
-}
+const mapStateToProps = (state, ownProps) => ({
+  currentPlanName: getCurrentPlanName(state),
+  environmentError: getEnvironment(state, ownProps.environment).error,
+  parameters: getEnvironmentParameters(state, ownProps.environment),
+  isFetchingEnvironment: getEnvironment(state, ownProps.environment).isFetching
+});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchEnvironment: (currentPlanName, environmentFileName) => {
-      dispatch(
-        EnvironmentConfigurationActions.fetchEnvironment(
-          currentPlanName,
-          environmentFileName
-        )
-      );
-    }
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(mapStateToProps, { fetchEnvironment })(
   EnvironmentParameters
 );

@@ -16,7 +16,7 @@
 
 import { Map, fromJS } from 'immutable';
 
-import EnvironmentConfigurationActions from '../../js/actions/EnvironmentConfigurationActions';
+import * as EnvironmentConfigurationActions from '../../js/actions/EnvironmentConfigurationActions';
 import EnvironmentConfigurationConstants from '../../js/constants/EnvironmentConfigurationConstants';
 import environmentConfigurationReducer from '../../js/reducers/environmentConfigurationReducer';
 import { EnvironmentConfigurationState } from '../../js/immutableRecords/environmentConfiguration';

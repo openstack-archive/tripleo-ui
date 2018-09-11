@@ -18,7 +18,7 @@ import configureMockStore from 'redux-mock-store';
 import { startSubmit, stopSubmit } from 'redux-form';
 import thunkMiddleware from 'redux-thunk';
 
-import EnvironmentConfigurationActions from '../../js/actions/EnvironmentConfigurationActions';
+import * as EnvironmentConfigurationActions from '../../js/actions/EnvironmentConfigurationActions';
 import NotificationActions from '../../js/actions/NotificationActions';
 import MistralApiService from '../../js/services/MistralApiService';
 import { mockGetIntl } from './utils';
