@@ -36,7 +36,7 @@ import {
   updatePlanFinished,
   exportPlanFinished
 } from './PlansActions';
-import RegisterNodesActions from './RegisterNodesActions';
+import { nodesRegistrationFinished } from './RegisterNodesActions';
 import RolesActions from './RolesActions';
 import StacksActions from './StacksActions';
 import { stackSchema } from '../normalizrSchemas/stacks';
@@ -72,7 +72,7 @@ export default {
           dispatch(
             handleWorkflowMessage(
               payload.execution.id,
-              RegisterNodesActions.nodesRegistrationFinished
+              nodesRegistrationFinished
             )
           );
           break;
