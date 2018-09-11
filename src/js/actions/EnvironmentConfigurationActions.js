@@ -22,7 +22,7 @@ import yaml from 'js-yaml';
 import EnvironmentConfigurationConstants from '../constants/EnvironmentConfigurationConstants';
 import { handleErrors } from './ErrorActions';
 import MistralApiService from '../services/MistralApiService';
-import NotificationActions from '../actions/NotificationActions';
+import { notify } from '../actions/NotificationActions';
 import { topicSchema } from '../normalizrSchemas/environmentConfiguration';
 import MistralConstants from '../constants/MistralConstants';
 import SwiftApiService from '../services/SwiftApiService';
@@ -102,7 +102,7 @@ export const updateEnvironmentConfiguration = (planName, data, redirect) => (
       dispatch(updateEnvironmentConfigurationSuccess(enabledEnvs));
       dispatch(stopSubmit('environmentConfigurationForm'));
       dispatch(
-        NotificationActions.notify({
+        notify({
           title: formatMessage(messages.envConfigUpdatedNotificationTitle),
           message: formatMessage(messages.envConfigUpdatedNotificationMessage),
           type: 'success'

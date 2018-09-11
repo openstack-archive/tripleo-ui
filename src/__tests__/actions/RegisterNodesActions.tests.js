@@ -19,7 +19,7 @@ import { Map } from 'immutable';
 import { InitialPlanState, Plan } from '../../js/immutableRecords/plans';
 import { mockStore } from './utils';
 import * as NodesActions from '../../js/actions/NodesActions';
-import NotificationActions from '../../js/actions/NotificationActions';
+import * as NotificationActions from '../../js/actions/NotificationActions';
 import * as ValidationsActions from '../../js/actions/ValidationsActions';
 import RegisterNodesActions from '../../js/actions/RegisterNodesActions';
 

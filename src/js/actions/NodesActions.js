@@ -23,7 +23,7 @@ import { handleErrors } from './ErrorActions';
 import IronicApiService from '../services/IronicApiService';
 import IronicInspectorApiService from '../services/IronicInspectorApiService';
 import NodesConstants from '../constants/NodesConstants';
-import NotificationActions from './NotificationActions';
+import { notify } from './NotificationActions';
 import {
   nodeSchema,
   portSchema,
@@ -175,7 +175,7 @@ export const nodesIntrospectionFinished = execution => (
   switch (state) {
     case 'SUCCESS': {
       dispatch(
-        NotificationActions.notify({
+        notify({
           type: 'success',
           title: formatMessage(messages.introspectionNotificationTitle),
           message: formatMessage(messages.introspectionNotificationMessage)
@@ -185,7 +185,7 @@ export const nodesIntrospectionFinished = execution => (
     }
     case 'ERROR': {
       dispatch(
-        NotificationActions.notify({
+        notify({
           title: formatMessage(messages.introspectionFailedNotificationTitle),
           message: sanitizeMessage(message)
         })
@@ -212,7 +212,7 @@ export const nodeIntrospectionFinished = execution => (
 
   if (state === 'ERROR') {
     dispatch(
-      NotificationActions.notify({
+      notify({
         title: formatMessage(messages.nodeIntrospectionFailedNotificationTitle),
         message: sanitizeMessage(message)
       })
@@ -266,7 +266,7 @@ export const provideNodesFinished = execution => (dispatch, getState) => {
   switch (state) {
     case 'SUCCESS': {
       dispatch(
-        NotificationActions.notify({
+        notify({
           type: 'success',
           title: 'Nodes are available',
           message: sanitizeMessage(output.message)
@@ -276,7 +276,7 @@ export const provideNodesFinished = execution => (dispatch, getState) => {
     }
     case 'ERROR': {
       dispatch(
-        NotificationActions.notify({
+        notify({
           title: 'Some Nodes could not be provided',
           message: sanitizeMessage(output.message)
         })
@@ -315,7 +315,7 @@ export const manageNodesFinished = execution => (dispatch, getState) => {
   switch (state) {
     case 'SUCCESS': {
       dispatch(
-        NotificationActions.notify({
+        notify({
           type: 'success',
           title: 'Nodes are manageable',
           message: sanitizeMessage(message)
@@ -325,7 +325,7 @@ export const manageNodesFinished = execution => (dispatch, getState) => {
     }
     case 'ERROR': {
       dispatch(
-        NotificationActions.notify({
+        notify({
           title: 'Some Nodes could not be managed',
           message: sanitizeMessage(message)
         })
