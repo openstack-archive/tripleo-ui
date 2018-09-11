@@ -24,7 +24,7 @@ import Dropdown from '../ui/dropdown/Dropdown';
 import DropdownToggle from '../ui/dropdown/DropdownToggle';
 import DropdownItem from '../ui/dropdown/DropdownItem';
 import { getEnabledLanguages, getCurrentLanguage } from '../../selectors/i18n';
-import I18nActions from '../../actions/I18nActions';
+import { chooseLanguage } from '../../actions/I18nActions';
 import { MESSAGES } from './messages';
 
 const messages = defineMessages({
@@ -76,10 +76,6 @@ const mapStateToProps = state => ({
   currentLanguage: getCurrentLanguage(state)
 });
 
-const mapDispatchToProps = dispatch => ({
-  chooseLanguage: language => dispatch(I18nActions.chooseLanguage(language))
-});
-
 export default injectIntl(
-  connect(mapStateToProps, mapDispatchToProps)(I18nDropdown)
+  connect(mapStateToProps, { chooseLanguage })(I18nDropdown)
 );
