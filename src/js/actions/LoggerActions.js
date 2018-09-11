@@ -34,107 +34,87 @@ const messages = defineMessages({
   }
 });
 
-export default {
-  queueMessage(message) {
-    return {
-      type: LoggerConstants.QUEUE_MESSAGE,
-      payload: message
-    };
-  },
+export const queueMessage = message => ({
+  type: LoggerConstants.QUEUE_MESSAGE,
+  payload: message
+});
 
-  flushMessagesSuccess() {
-    return {
-      type: LoggerConstants.FLUSH_MESSAGES_SUCCESS
-    };
-  },
+export const flushMessagesSuccess = () => ({
+  type: LoggerConstants.FLUSH_MESSAGES_SUCCESS
+});
 
-  flushMessages() {
-    return (dispatch, getState) => {
-      const messages = getState().logger.messages;
+export const flushMessages = () => (dispatch, getState) => {
+  const messages = getState().logger.messages;
 
-      when
-        .all(() => {
-          messages.map(message => {
-            ZaqarWebSocketService.sendMessage('message_post', message);
-          });
-        })
-        .then(() => {
-          dispatch(this.flushMessagesSuccess());
-        })
-        .catch(error => {
-          // We're using `console` here to avoid circular imports.
-          console.error(error); // eslint-disable-line no-console
-          dispatch(
-            NotificationActions.notify({
-              title: 'Logging error',
-              message: 'Failed to flush Zaqar messages.'
-            })
-          );
-        });
-    };
-  },
-
-  authenticated() {
-    return {
-      type: LoggerConstants.WS_AUTHENTICATION_SUCCESS
-    };
-  },
-
-  downloadLogsPending() {
-    return {
-      type: LoggerConstants.DOWNLOAD_LOGS_PENDING
-    };
-  },
-
-  downloadLogsSuccess(url) {
-    return {
-      type: LoggerConstants.DOWNLOAD_LOGS_SUCCESS,
-      payload: url
-    };
-  },
-
-  downloadLogsFailed() {
-    return {
-      type: LoggerConstants.DOWNLOAD_LOGS_FAILED
-    };
-  },
-
-  downloadLogsFinished(execution) {
-    return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      const { output: { tempurl, message }, state } = execution;
-      if (state === 'ERROR' || !tempurl) {
-        dispatch(this.downloadLogsFailed());
-        dispatch(
-          NotificationActions.notify({
-            title: formatMessage(messages.downloadLogsFailedNotificationTitle),
-            message: sanitizeMessage(message),
-            type: 'error'
-          })
-        );
-      } else {
-        dispatch(
-          this.downloadLogsSuccess(
-            generateDownloadUrl(tempurl, getServiceUrl(getState(), 'swift'))
-          )
-        );
-      }
-    };
-  },
-
-  downloadLogs() {
-    return dispatch => {
-      dispatch(this.downloadLogsPending());
-      dispatch(
-        startWorkflow(
-          MistralConstants.DOWNLOAD_LOGS,
-          {},
-          this.downloadLogsFinished
-        )
-      ).catch(error => {
-        dispatch(handleErrors(error, 'Failed to download logs'));
-        dispatch(this.downloadLogsFailed());
+  when
+    .all(() => {
+      messages.map(message => {
+        ZaqarWebSocketService.sendMessage('message_post', message);
       });
-    };
+    })
+    .then(() => {
+      dispatch(flushMessagesSuccess());
+    })
+    .catch(error => {
+      // We're using `console` here to avoid circular imports.
+      console.error(error); // eslint-disable-line no-console
+      dispatch(
+        NotificationActions.notify({
+          title: 'Logging error',
+          message: 'Failed to flush Zaqar messages.'
+        })
+      );
+    });
+};
+
+export const authenticated = () => ({
+  type: LoggerConstants.WS_AUTHENTICATION_SUCCESS
+});
+
+export const downloadLogsPending = () => ({
+  type: LoggerConstants.DOWNLOAD_LOGS_PENDING
+});
+
+export const downloadLogsSuccess = url => ({
+  type: LoggerConstants.DOWNLOAD_LOGS_SUCCESS,
+  payload: url
+});
+
+export const downloadLogsFailed = () => ({
+  type: LoggerConstants.DOWNLOAD_LOGS_FAILED
+});
+
+export const downloadLogsFinished = execution => (
+  dispatch,
+  getState,
+  { getIntl }
+) => {
+  const { formatMessage } = getIntl(getState());
+  const { output: { tempurl, message }, state } = execution;
+  if (state === 'ERROR' || !tempurl) {
+    dispatch(downloadLogsFailed());
+    dispatch(
+      NotificationActions.notify({
+        title: formatMessage(messages.downloadLogsFailedNotificationTitle),
+        message: sanitizeMessage(message),
+        type: 'error'
+      })
+    );
+  } else {
+    dispatch(
+      this.downloadLogsSuccess(
+        generateDownloadUrl(tempurl, getServiceUrl(getState(), 'swift'))
+      )
+    );
   }
+};
+
+export const downloadLogs = () => dispatch => {
+  dispatch(downloadLogsPending());
+  dispatch(
+    startWorkflow(MistralConstants.DOWNLOAD_LOGS, {}, downloadLogsFinished)
+  ).catch(error => {
+    dispatch(handleErrors(error, 'Failed to download logs'));
+    dispatch(downloadLogsFailed());
+  });
 };
