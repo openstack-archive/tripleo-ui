@@ -25,7 +25,7 @@ import { Redirect } from 'react-router-dom';
 
 import FormErrorList from '../ui/forms/FormErrorList';
 import { getCurrentLanguage, getEnabledLanguages } from '../../selectors/i18n';
-import I18nActions from '../../actions/I18nActions';
+import { chooseLanguage } from '../../actions/I18nActions';
 import { GlobalLoader } from '../ui/Loader';
 import LoginInput from '../ui/forms/LoginInput';
 import LanguageInput from './LanguageInput';
@@ -227,7 +227,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  chooseLanguage: language => dispatch(I18nActions.chooseLanguage(language)),
+  chooseLanguage: language => dispatch(chooseLanguage(language)),
   authenticateUser: (formData, formFields, nextPath) =>
     dispatch(LoginActions.authenticateUser(formData, formFields, nextPath))
 });
