@@ -37,7 +37,10 @@ import {
   exportPlanFinished
 } from './PlansActions';
 import { nodesRegistrationFinished } from './RegisterNodesActions';
-import RolesActions from './RolesActions';
+import {
+  fetchAvailableRolesFinished,
+  selectRolesFinished
+} from './RolesActions';
 import StacksActions from './StacksActions';
 import { stackSchema } from '../normalizrSchemas/stacks';
 import MistralConstants from '../constants/MistralConstants';
@@ -242,7 +245,7 @@ export default {
           dispatch(
             handleWorkflowMessage(
               payload.execution.id,
-              RolesActions.fetchAvailableRolesFinished
+              fetchAvailableRolesFinished
             )
           );
           break;
@@ -251,10 +254,7 @@ export default {
         case MistralConstants.SELECT_ROLES: {
           // case 'tripleo.roles.v1.select_roles': {
           dispatch(
-            handleWorkflowMessage(
-              payload.execution.id,
-              RolesActions.selectRolesFinished
-            )
+            handleWorkflowMessage(payload.execution.id, selectRolesFinished)
           );
           break;
         }

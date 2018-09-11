@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import RolesActions from '../../js/actions/RolesActions';
+import * as RolesActions from '../../js/actions/RolesActions';
 import RolesConstants from '../../js/constants/RolesConstants';
 
 describe('Roles actions', () => {
