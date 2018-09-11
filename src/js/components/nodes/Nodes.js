@@ -35,7 +35,7 @@ import NodesListView from './NodesListView/NodesListView';
 import NodesToolbar from './NodesToolbar/NodesToolbar';
 import NodesTableView from './NodesTableView';
 import RegisterNodesDialog from './registerNodes/RegisterNodesDialog';
-import StacksActions from '../../actions/StacksActions';
+import { fetchStacks } from '../../actions/StacksActions';
 
 const messages = defineMessages({
   loadingNodes: {
@@ -180,11 +180,10 @@ const mapStateToProps = state => ({
   stacksLoaded: state.stacks.isLoaded
 });
 
-const mapDispatchToProps = dispatch => ({
-  fetchStacks: () => dispatch(StacksActions.fetchStacks()),
-  fetchNodes: () => dispatch(fetchNodes()),
-  fetchNodeIntrospectionData: nodeId =>
-    dispatch(fetchNodeIntrospectionData(nodeId))
-});
-
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Nodes));
+export default injectIntl(
+  connect(mapStateToProps, {
+    fetchStacks,
+    fetchNodes,
+    fetchNodeIntrospectionData
+  })(Nodes)
+);

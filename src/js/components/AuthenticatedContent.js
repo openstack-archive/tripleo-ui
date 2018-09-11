@@ -28,7 +28,7 @@ import { GlobalLoader } from './ui/Loader';
 import NavBar from './NavBar';
 import Nodes from './nodes/Nodes';
 import Plans from './plan/Plans.js';
-import StacksActions from '../actions/StacksActions';
+import { fetchStacks } from '../actions/StacksActions';
 import { fetchPlans } from '../actions/PlansActions';
 import { fetchWorkflowExecutions } from '../actions/WorkflowExecutionsActions';
 import ZaqarWebSocketService from '../services/ZaqarWebSocketService';
@@ -94,7 +94,7 @@ AuthenticatedContent.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchStacks: () => dispatch(StacksActions.fetchStacks()),
+  fetchStacks: () => dispatch(fetchStacks()),
   fetchPlans: () => dispatch(fetchPlans()),
   fetchWorkflowExecutions: () => dispatch(fetchWorkflowExecutions()),
   initializeZaqarConnection: () => dispatch(ZaqarWebSocketService.init())

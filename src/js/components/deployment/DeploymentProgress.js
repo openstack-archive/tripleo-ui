@@ -147,8 +147,6 @@ class DeploymentProgress extends React.Component {
 DeploymentProgress.propTypes = {
   completeResourcesCount: PropTypes.number,
   deploymentStatus: PropTypes.object.isRequired,
-  fetchResources: PropTypes.func.isRequired,
-  fetchStacks: PropTypes.func.isRequired,
   intl: PropTypes.object,
   isFetchingStacks: PropTypes.bool.isRequired,
   planName: PropTypes.string.isRequired,
@@ -172,10 +170,4 @@ const mapStateToProps = (state, props) => ({
   stacksLoaded: state.stacks.isLoaded
 });
 
-const mapDispatchToProps = (dispatch, { planName }) => ({
-  fetchStacks: () => dispatch(StacksActions.fetchStacks()),
-  fetchResources: (stackName, stackId) =>
-    dispatch(StacksActions.fetchResources(stackName, stackId))
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(DeploymentProgress);
+export default connect(mapStateToProps)(DeploymentProgress);
