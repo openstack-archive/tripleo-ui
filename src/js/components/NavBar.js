@@ -32,7 +32,7 @@ import ValidationsActions from '../actions/ValidationsActions';
 import ValidationsList from './validations/ValidationsList';
 import ValidationsToggle from './validations/ValidationsToggle';
 
-import TripleoOwlSvg from '../../img/tripleo-owl-navbar.svg';
+import RedHatLogoSvg from '../../img/Masthead.svg';
 
 const messages = defineMessages({
   toggleNavigation: {
@@ -107,7 +107,8 @@ class NavBar extends React.Component {
               <span className="icon-bar" />
             </button>
             <Link className="navbar-brand" to="/" id="NavBar__indexLink">
-              <img src={TripleoOwlSvg} alt="TripleO" />
+              <img src={RedHatLogoSvg}
+              alt="Red Hat&reg; OpenStack Platform Director" />
             </Link>
           </div>
           <div

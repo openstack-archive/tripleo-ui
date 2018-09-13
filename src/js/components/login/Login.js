@@ -32,7 +32,7 @@ import LanguageInput from './LanguageInput';
 import LoginActions from '../../actions/LoginActions';
 
 import LogoSvg from '../../../img/logo.svg';
-import TripleoOwlSvg from '../../../img/tripleo-owl.svg';
+import LoginSvg from '../../../img/Login.svg';
 
 const messages = defineMessages({
   authenticating: {
@@ -132,7 +132,8 @@ class Login extends React.Component {
             <div className="row">
               <div className="col-sm-12">
                 <div id="brand">
-                  <img src={TripleoOwlSvg} alt="TripleO" />
+                <img src={LoginSvg}
+                alt="Red Hat&reg; OpenStack Platform Director" />
                 </div>
               </div>
               <div className="col-sm-7 col-md-6 col-lg-5 login">

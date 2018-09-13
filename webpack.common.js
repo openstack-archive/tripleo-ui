@@ -36,7 +36,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: 'src/index.html',
-      favicon: 'src/img/owl.png'
+      favicon: 'src/img/favicons/favicon.ico'
     }),
     new I18nPlugin({
       localePath: 'i18n/locales'

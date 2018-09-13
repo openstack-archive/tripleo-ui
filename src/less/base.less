@@ -176,8 +176,45 @@
 @import "components/NetworkTopology";
 @import "components/DeploymentFailures";
 
+/* rcue downstream theme */
+@import "rcue/variables";
+@import "rcue/login";
+
 a {
  &.link {
    cursor: pointer;
  }
+}
+
+.login-pf #brand img {
+  height: 18px;
+}
+
+.navbar li {
+  line-height: 1.25;
+  /* make the text non selectable if it's a menu item */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.navbar-pf .navbar-utility > li > a {
+    padding: 12px 10px;
+}
+
+.navbar-pf .navbar-brand {
+  padding: 12px 0;
+}
+
+.navbar-brand img {
+    height: 11px;
+}
+
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+  color: #fff;
+}
+
+.fixed-container.validations-sidebar {
+  top: 38px;
 }
