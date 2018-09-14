@@ -61,7 +61,7 @@
         "DeploymentFailures.noDeploymentFailures": "Keine Bereitstellungsfehler anzuzeigen",
         "DeploymentFailures.nodeTableColumnLabel": "Knoten",
         "DeploymentFailures.outputsTableColumnLabel": "Ausgaben",
-        "DeploymentFailures.taskTableColumnLabel": "Aufgaben",
+        "DeploymentFailures.taskTableColumnLabel": "Aufgabe",
         "DeploymentFailures.title": "Deployment-Konfigurationsfehler",
         "DeploymentFailures.viewDetails": "Detailansicht",
         "DeploymentProgress.configuringPlan": "Konfiguriere {planName} Bereitstellung",
