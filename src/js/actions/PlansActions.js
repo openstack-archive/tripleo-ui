@@ -30,6 +30,7 @@ import { PLAN_ENVIRONMENT } from '../constants/PlansConstants';
 import { getServiceUrl } from '../selectors/auth';
 import { startWorkflow } from './WorkflowActions';
 import { sanitizeMessage } from '../utils';
+import { generateDownloadUrl } from './utils';
 
 const messages = defineMessages({
   planCreatedNotificationTitle: {
@@ -593,12 +594,11 @@ export default {
           })
         );
       } else {
-        let urlParser = document.createElement('a');
-        urlParser.href = tempurl;
-        let url = urlParser.hostname;
-        urlParser.href = getServiceUrl(getState(), 'swift');
-        let swiftUrl = urlParser.hostname;
-        dispatch(this.exportPlanSuccess(tempurl.replace(url, swiftUrl)));
+        dispatch(
+          this.exportPlanSuccess(
+            generateDownloadUrl(tempurl, getServiceUrl(getState(), 'swift'))
+          )
+        );
       }
     };
   }
