@@ -25,7 +25,10 @@ import { getCurrentPlanName } from '../../selectors/plans';
 import { getRootParameters } from '../../selectors/parameters';
 import { getEnabledEnvironments } from '../../selectors/environmentConfiguration';
 import { Loader } from '../ui/Loader';
-import ParametersActions from '../../actions/ParametersActions';
+import {
+  fetchParameters,
+  updateParameters
+} from '../../actions/ParametersActions';
 import ParametersForm from './ParametersForm';
 import ParameterInputList from './ParameterInputList';
 import ParametersSidebar from './ParametersSidebar';
@@ -149,15 +152,13 @@ function mapDispatchToProps(dispatch, ownProps) {
     },
     fetchParameters: currentPlanName => {
       dispatch(
-        ParametersActions.fetchParameters(currentPlanName, () =>
+        fetchParameters(currentPlanName, () =>
           ownProps.history.push(`/plans/${currentPlanName}`)
         )
       );
     },
     updateParameters: (currentPlanName, data, redirect) => {
-      dispatch(
-        ParametersActions.updateParameters(currentPlanName, data, redirect)
-      );
+      dispatch(updateParameters(currentPlanName, data, redirect));
     }
   };
 }

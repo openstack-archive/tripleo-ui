@@ -29,7 +29,7 @@ import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
 import { getCurrentPlanName } from '../../selectors/plans';
 import { Loader } from '../ui/Loader';
 import NetworkTopology from './NetworkTopology';
-import ParametersActions from '../../actions/ParametersActions';
+import { fetchParameters } from '../../actions/ParametersActions';
 import { fetchNetworks } from '../../actions/NetworksActions';
 import RolesActions from '../../actions/RolesActions';
 import {
@@ -133,8 +133,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchNetworks: planName => dispatch(fetchNetworks(planName)),
   fetchRoles: planName => dispatch(RolesActions.fetchRoles(planName)),
-  fetchParameters: planName =>
-    dispatch(ParametersActions.fetchParameters(planName))
+  fetchParameters: planName => dispatch(fetchParameters(planName))
 });
 
 export default checkRunningDeployment(
