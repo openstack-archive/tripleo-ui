@@ -43,7 +43,7 @@ import {
 } from '../../ui/Modals';
 import { handleErrors } from '../../../actions/ErrorActions';
 import { OverlayLoader } from '../../ui/Loader';
-import NotificationActions from '../../../actions/NotificationActions';
+import { notify } from '../../../actions/NotificationActions';
 import RegisterNodesActions from '../../../actions/RegisterNodesActions';
 import RegisterNodesForm from './RegisterNodesForm';
 import MistralApiService from '../../../services/MistralApiService';
@@ -285,7 +285,7 @@ function mapDispatchToProps(dispatch) {
     startNodesRegistration: nodes =>
       dispatch(RegisterNodesActions.startNodesRegistration(nodes)),
     submitForm: () => dispatch(submit('registerNodesForm')),
-    notify: notification => dispatch(NotificationActions.notify(notification))
+    notify: notification => dispatch(notify(notification))
   };
 }
 

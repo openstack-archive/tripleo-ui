@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import Notification from './Notification';
-import NotificationActions from '../../actions/NotificationActions';
+import { notificationViewed } from '../../actions/NotificationActions';
 import { getNonViewedNotifications } from '../../selectors/notifications';
 
 class NotificationsToaster extends React.Component {
@@ -53,7 +53,7 @@ class NotificationsToaster extends React.Component {
           timeoutable={notification.type !== 'error'}
           timerPaused={this.state.isHovered}
           removeNotification={() =>
-            this.props.removeNotification(notification.id)
+            this.props.notificationViewed(notification.id)
           }
         />
       ));
@@ -72,22 +72,14 @@ class NotificationsToaster extends React.Component {
   }
 }
 NotificationsToaster.propTypes = {
-  notifications: ImmutablePropTypes.map.isRequired,
-  removeNotification: PropTypes.func
+  notificationViewed: PropTypes.func.isRequired,
+  notifications: ImmutablePropTypes.map.isRequired
 };
 
-function mapStateToProps(state) {
-  return {
-    notifications: getNonViewedNotifications(state).sortBy(n => n.timestamp)
-  };
-}
-function mapDispatchToProps(dispatch) {
-  return {
-    removeNotification: notificationId =>
-      dispatch(NotificationActions.notificationViewed(notificationId))
-  };
-}
+const mapStateToProps = state => ({
+  notifications: getNonViewedNotifications(state).sortBy(n => n.timestamp)
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(mapStateToProps, { notificationViewed })(
   NotificationsToaster
 );

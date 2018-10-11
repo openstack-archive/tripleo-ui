@@ -22,7 +22,7 @@ import {
   getLoggingZaqarQueue
 } from '../selectors/appConfig';
 import ZaqarActions from '../actions/ZaqarActions';
-import NotificationActions from '../actions/NotificationActions';
+import { notify } from '../actions/NotificationActions';
 
 // We're using `console` here to avoid circular imports.
 const logger = {
@@ -55,7 +55,7 @@ export default {
           'Closing Socket.'
         );
         dispatch(
-          NotificationActions.notify({
+          notify({
             title: 'Zaqar WebSocket encountered Error',
             message: error.message
           })
