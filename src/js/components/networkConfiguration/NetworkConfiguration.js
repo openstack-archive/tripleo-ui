@@ -30,7 +30,7 @@ import { getCurrentPlanName } from '../../selectors/plans';
 import { Loader } from '../ui/Loader';
 import NetworkTopology from './NetworkTopology';
 import ParametersActions from '../../actions/ParametersActions';
-import NetworksActions from '../../actions/NetworksActions';
+import { fetchNetworks } from '../../actions/NetworksActions';
 import RolesActions from '../../actions/RolesActions';
 import {
   CloseModalXButton,
@@ -131,7 +131,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchNetworks: planName => dispatch(NetworksActions.fetchNetworks(planName)),
+  fetchNetworks: planName => dispatch(fetchNetworks(planName)),
   fetchRoles: planName => dispatch(RolesActions.fetchRoles(planName)),
   fetchParameters: planName =>
     dispatch(ParametersActions.fetchParameters(planName))

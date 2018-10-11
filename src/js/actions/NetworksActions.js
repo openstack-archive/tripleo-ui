@@ -30,59 +30,48 @@ const messages = defineMessages({
   }
 });
 
-export default {
-  fetchNetworks(planName) {
-    return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      dispatch(this.fetchNetworksPending());
-      dispatch(
-        startWorkflow(
-          MistralConstants.NETWORK_LIST,
-          { container: planName },
-          this.fetchNetworksFinished
-        )
-      ).catch(error => {
-        dispatch(
-          handleErrors(error, formatMessage(messages.fetchNetworksFailed))
-        );
-        dispatch(this.fetchNetworksFailed());
-      });
-    };
-  },
+export const fetchNetworks = planName => (dispatch, getState, { getIntl }) => {
+  const { formatMessage } = getIntl(getState());
+  dispatch(fetchNetworksPending());
+  dispatch(
+    startWorkflow(
+      MistralConstants.NETWORK_LIST,
+      { container: planName },
+      fetchNetworksFinished
+    )
+  ).catch(error => {
+    dispatch(handleErrors(error, formatMessage(messages.fetchNetworksFailed)));
+    dispatch(fetchNetworksFailed());
+  });
+};
 
-  fetchNetworksFinished({ output: { network_data, message }, state }) {
-    return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
+export const fetchNetworksFinished = ({
+  output: { network_data, message },
+  state
+}) => (dispatch, getState, { getIntl }) => {
+  const { formatMessage } = getIntl(getState());
 
-      if (state === 'SUCCESS') {
-        const networks =
-          normalize(network_data, [networkSchema]).entities.networks || {};
-        dispatch(this.fetchNetworksSuccess(networks));
-      } else {
-        dispatch(
-          handleErrors(message, formatMessage(messages.fetchNetworksFailed))
-        );
-        dispatch(this.fetchNetworksFailed());
-      }
-    };
-  },
-
-  fetchNetworksPending() {
-    return {
-      type: NetworksConstants.FETCH_NETWORKS_PENDING
-    };
-  },
-
-  fetchNetworksSuccess(networks) {
-    return {
-      type: NetworksConstants.FETCH_NETWORKS_SUCCESS,
-      payload: networks
-    };
-  },
-
-  fetchNetworksFailed() {
-    return {
-      type: NetworksConstants.FETCH_NETWORKS_FAILED
-    };
+  if (state === 'SUCCESS') {
+    const networks =
+      normalize(network_data, [networkSchema]).entities.networks || {};
+    dispatch(fetchNetworksSuccess(networks));
+  } else {
+    dispatch(
+      handleErrors(message, formatMessage(messages.fetchNetworksFailed))
+    );
+    dispatch(fetchNetworksFailed());
   }
 };
+
+export const fetchNetworksPending = () => ({
+  type: NetworksConstants.FETCH_NETWORKS_PENDING
+});
+
+export const fetchNetworksSuccess = networks => ({
+  type: NetworksConstants.FETCH_NETWORKS_SUCCESS,
+  payload: networks
+});
+
+export const fetchNetworksFailed = () => ({
+  type: NetworksConstants.FETCH_NETWORKS_FAILED
+});
