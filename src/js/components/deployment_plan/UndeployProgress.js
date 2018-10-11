@@ -31,7 +31,7 @@ import {
   getDeleteCompleteResources
 } from '../../selectors/stacks';
 import { InlineLoader, Loader } from '../ui/Loader';
-import StacksActions from '../../actions/StacksActions';
+import { fetchStacks, fetchResources } from '../../actions/StacksActions';
 
 const messages = defineMessages({
   initializingUndeploy: {
@@ -172,12 +172,6 @@ const mapStateToProps = (state, props) => ({
   resourcesCount: state.stacks.resources.size
 });
 
-const mapDispatchToProps = (dispatch, { planName }) => ({
-  fetchStacks: () => dispatch(StacksActions.fetchStacks()),
-  fetchResources: (stackName, stackId) =>
-    dispatch(StacksActions.fetchResources(stackName, stackId))
-});
-
 export default injectIntl(
-  connect(mapStateToProps, mapDispatchToProps)(UndeployProgress)
+  connect(mapStateToProps, { fetchStacks, fetchResources })(UndeployProgress)
 );

@@ -32,7 +32,11 @@ import InlineNotification from '../ui/InlineNotification';
 import OvercloudInfo from '../deployment/OvercloudInfo';
 import { Loader } from '../ui/Loader';
 import { startUndeploy } from '../../actions/DeploymentActions';
-import StacksActions from '../../actions/StacksActions';
+import {
+  fetchStacks,
+  fetchEnvironment,
+  fetchResource
+} from '../../actions/StacksActions';
 
 class DeploymentSuccess extends React.Component {
   componentDidMount() {
@@ -108,11 +112,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   undeployPlan: planName => dispatch(startUndeploy(planName)),
-  fetchStacks: () => dispatch(StacksActions.fetchStacks()),
-  fetchStackEnvironment: stack =>
-    dispatch(StacksActions.fetchEnvironment(stack)),
+  fetchStacks: () => dispatch(fetchStacks()),
+  fetchStackEnvironment: stack => dispatch(fetchEnvironment(stack)),
   fetchStackResource: (stack, resourceName) =>
-    dispatch(StacksActions.fetchResource(stack, resourceName))
+    dispatch(fetchResource(stack, resourceName))
 });
 
 export default injectIntl(

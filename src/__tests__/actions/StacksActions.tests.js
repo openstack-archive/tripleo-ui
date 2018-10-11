@@ -17,7 +17,7 @@
 import { mockStore } from './utils';
 import * as ErrorActions from '../../js/actions/ErrorActions';
 import HeatApiService from '../../js/services/HeatApiService';
-import StacksActions from '../../js/actions/StacksActions';
+import * as StacksActions from '../../js/actions/StacksActions';
 
 describe('StacksActions', () => {
   describe('fetchStacks (success)', () => {

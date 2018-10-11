@@ -24,7 +24,6 @@ import { deploymentStatusMessages } from '../../constants/DeploymentConstants';
 import { getCurrentPlanDeploymentStatus } from '../../selectors/deployment';
 import InlineNotification from '../ui/InlineNotification';
 import { sanitizeMessage } from '../../utils';
-import StacksActions from '../../actions/StacksActions';
 
 const messages = defineMessages({
   deleteDeployment: {
@@ -75,12 +74,4 @@ const mapStateToProps = (state, props) => ({
   deploymentStatus: getCurrentPlanDeploymentStatus(state)
 });
 
-const mapDispatchToProps = (dispatch, { planName }) => ({
-  deleteStack: () => {
-    dispatch(StacksActions.deleteStack(planName, ''));
-  }
-});
-
-export default injectIntl(
-  connect(mapStateToProps, mapDispatchToProps)(DeploymentFailure)
-);
+export default injectIntl(connect(mapStateToProps)(DeploymentFailure));
