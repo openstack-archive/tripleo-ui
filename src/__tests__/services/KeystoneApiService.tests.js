@@ -15,7 +15,7 @@
  */
 
 import KeystoneApiService from '../../js/services/KeystoneApiService';
-import LoginActions from '../../js/actions/LoginActions';
+import * as LoginActions from '../../js/actions/LoginActions';
 import when from 'when';
 
 describe('KeystoneApiService', () => {

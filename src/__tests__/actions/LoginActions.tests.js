@@ -19,7 +19,7 @@ import cookie from 'react-cookie';
 import thunkMiddleware from 'redux-thunk';
 
 import KeystoneApiService from '../../js/services/KeystoneApiService';
-import LoginActions from '../../js/actions/LoginActions';
+import * as LoginActions from '../../js/actions/LoginActions';
 import { mockGetIntl } from './utils';
 import ZaqarWebSocketService from '../../js/services/ZaqarWebSocketService';
 

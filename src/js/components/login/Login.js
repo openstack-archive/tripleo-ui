@@ -29,7 +29,7 @@ import { chooseLanguage } from '../../actions/I18nActions';
 import { GlobalLoader } from '../ui/Loader';
 import LoginInput from '../ui/forms/LoginInput';
 import LanguageInput from './LanguageInput';
-import LoginActions from '../../actions/LoginActions';
+import { authenticateUser } from '../../actions/LoginActions';
 
 import LogoSvg from '../../../img/logo.svg';
 import TripleoOwlSvg from '../../../img/tripleo-owl.svg';
@@ -229,7 +229,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => ({
   chooseLanguage: language => dispatch(chooseLanguage(language)),
   authenticateUser: (formData, formFields, nextPath) =>
-    dispatch(LoginActions.authenticateUser(formData, formFields, nextPath))
+    dispatch(authenticateUser(formData, formFields, nextPath))
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Login));
