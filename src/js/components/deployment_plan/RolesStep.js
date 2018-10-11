@@ -29,7 +29,7 @@ import {
 } from '../../selectors/nodesAssignment';
 import { InlineLoader } from '../ui/Loader';
 import { Link } from 'react-router-dom';
-import NodesActions from '../../actions/NodesActions';
+import { fetchNodes } from '../../actions/NodesActions';
 import Roles from '../roles/Roles';
 import RolesActions from '../../actions/RolesActions';
 
@@ -144,7 +144,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchFlavors: () => dispatch(FlavorsActions.fetchFlavors()),
   fetchRoles: planName => dispatch(RolesActions.fetchRoles(planName)),
-  fetchNodes: () => dispatch(NodesActions.fetchNodes())
+  fetchNodes: () => dispatch(fetchNodes())
 });
 
 export default injectIntl(

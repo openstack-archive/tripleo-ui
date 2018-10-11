@@ -34,7 +34,7 @@ import {
 } from '../../ui/Modals';
 import { getNodeDrives } from '../../../selectors/nodes';
 import NodeDrive from './NodeDrive';
-import NodesActions from '../../../actions/NodesActions';
+import { fetchNodeIntrospectionData } from '../../../actions/NodesActions';
 
 const messages = defineMessages({
   title: {
@@ -91,7 +91,7 @@ const mapStateToProps = (state, props) => ({
 });
 const mapDispatchToProps = (dispatch, props) => ({
   fetchNodeIntrospectionData: () =>
-    dispatch(NodesActions.fetchNodeIntrospectionData(props.match.params.nodeId))
+    dispatch(fetchNodeIntrospectionData(props.match.params.nodeId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NodeDrives);

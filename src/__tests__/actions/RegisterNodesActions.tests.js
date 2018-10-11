@@ -18,7 +18,7 @@ import shortid from 'shortid';
 import { Map } from 'immutable';
 import { InitialPlanState, Plan } from '../../js/immutableRecords/plans';
 import { mockStore } from './utils';
-import NodesActions from '../../js/actions/NodesActions';
+import * as NodesActions from '../../js/actions/NodesActions';
 import NotificationActions from '../../js/actions/NotificationActions';
 import ValidationsActions from '../../js/actions/ValidationsActions';
 import RegisterNodesActions from '../../js/actions/RegisterNodesActions';
