@@ -15,7 +15,7 @@
  */
 
 import MistralApiService from '../../js/services/MistralApiService';
-import WorkflowExecutionsActions from '../../js/actions/WorkflowExecutionsActions';
+import * as WorkflowExecutionsActions from '../../js/actions/WorkflowExecutionsActions';
 import { mockStore } from './utils';
 
 describe('fetchWorkflowExecutions action', () => {

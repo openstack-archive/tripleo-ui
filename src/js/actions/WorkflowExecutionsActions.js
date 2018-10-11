@@ -21,74 +21,54 @@ import MistralApiService from '../services/MistralApiService';
 import WorkflowExecutionsConstants from '../constants/WorkflowExecutionsConstants';
 import { workflowExecutionSchema } from '../normalizrSchemas/workflowExecutions';
 
-export default {
-  fetchWorkflowExecutions() {
-    return (dispatch, getState) => {
-      dispatch(this.fetchWorkflowExecutionsPending());
-      return dispatch(MistralApiService.getWorkflowExecutions())
-        .then(response => {
-          const executions =
-            normalize(response, [workflowExecutionSchema]).entities
-              .executions || {};
-          dispatch(this.fetchWorkflowExecutionsSuccess(executions));
-        })
-        .catch(error => {
-          dispatch(
-            handleErrors(error, 'Workflow Executions could not be loaded')
-          );
-          dispatch(this.fetchWorkflowExecutionsFailed());
-        });
-    };
-  },
-
-  fetchWorkflowExecutionsPending() {
-    return {
-      type: WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_PENDING
-    };
-  },
-
-  fetchWorkflowExecutionsSuccess(executions) {
-    return {
-      type: WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_SUCCESS,
-      payload: executions
-    };
-  },
-
-  fetchWorkflowExecutionsFailed() {
-    return {
-      type: WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_FAILED
-    };
-  },
-
-  addWorkflowExecution(execution) {
-    return {
-      type: WorkflowExecutionsConstants.ADD_WORKFLOW_EXECUTION,
-      payload: execution
-    };
-  },
-
-  updateWorkflowExecution(id, patch) {
-    return (dispatch, getState) => {
-      dispatch(this.updateWorkflowExecutionPending(id, patch));
-      return dispatch(MistralApiService.updateWorkflowExecution(id, patch))
-        .then(response => {
-          dispatch(this.addWorkflowExecution(response));
-        })
-        .catch(error => {
-          dispatch(
-            handleErrors(error, 'Workflow Execution could not be updated')
-          );
-        });
-    };
-  },
-
-  updateWorkflowExecutionPending(id, patch) {
-    return {
-      type: WorkflowExecutionsConstants.UPDATE_WORKFLOW_EXECUTION_PENDING,
-      payload: {
-        id,
-        patch
-      }
-    };
-  }
+export const fetchWorkflowExecutions = () => (dispatch, getState) => {
+  dispatch(fetchWorkflowExecutionsPending());
+  return dispatch(MistralApiService.getWorkflowExecutions())
+    .then(response => {
+      const executions =
+        normalize(response, [workflowExecutionSchema]).entities.executions ||
+        {};
+      dispatch(fetchWorkflowExecutionsSuccess(executions));
+    })
+    .catch(error => {
+      dispatch(handleErrors(error, 'Workflow Executions could not be loaded'));
+      dispatch(fetchWorkflowExecutionsFailed());
+    });
 };
+
+export const fetchWorkflowExecutionsPending = () => ({
+  type: WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_PENDING
+});
+
+export const fetchWorkflowExecutionsSuccess = executions => ({
+  type: WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_SUCCESS,
+  payload: executions
+});
+
+export const fetchWorkflowExecutionsFailed = () => ({
+  type: WorkflowExecutionsConstants.FETCH_WORKFLOW_EXECUTIONS_FAILED
+});
+
+export const addWorkflowExecution = execution => ({
+  type: WorkflowExecutionsConstants.ADD_WORKFLOW_EXECUTION,
+  payload: execution
+});
+
+export const updateWorkflowExecution = (id, patch) => (dispatch, getState) => {
+  dispatch(updateWorkflowExecutionPending(id, patch));
+  return dispatch(MistralApiService.updateWorkflowExecution(id, patch))
+    .then(response => {
+      dispatch(addWorkflowExecution(response));
+    })
+    .catch(error => {
+      dispatch(handleErrors(error, 'Workflow Execution could not be updated'));
+    });
+};
+
+export const updateWorkflowExecutionPending = (id, patch) => ({
+  type: WorkflowExecutionsConstants.UPDATE_WORKFLOW_EXECUTION_PENDING,
+  payload: {
+    id,
+    patch
+  }
+});
