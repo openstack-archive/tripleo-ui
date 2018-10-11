@@ -21,7 +21,7 @@ import { connect } from 'react-redux';
 import { ModalHeader, ModalTitle, ModalBody } from 'react-bootstrap';
 
 import { CloseModalXButton } from '../ui/Modals';
-import LoggerActions from '../../actions/LoggerActions';
+import { downloadLogs } from '../../actions/LoggerActions';
 import { InlineLoader } from '../ui/Loader';
 import { RoutedModal } from '../ui/Modals';
 import { getAppVersion, getAppVersionGitSha } from '../../selectors/appConfig';
@@ -171,21 +171,13 @@ DebugScreen.propTypes = {
   version: PropTypes.string.isRequired
 };
 
-function mapStateToProps(state) {
-  return {
-    gitSha: getAppVersionGitSha(state),
-    isDownloadingLogs: state.logger.isDownloadingLogs,
-    logsUrl: state.logger.logsUrl,
-    version: getAppVersion(state)
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    downloadLogs: () => dispatch(LoggerActions.downloadLogs())
-  };
-}
+const mapStateToProps = state => ({
+  gitSha: getAppVersionGitSha(state),
+  isDownloadingLogs: state.logger.isDownloadingLogs,
+  logsUrl: state.logger.logsUrl,
+  version: getAppVersion(state)
+});
 
 export default injectIntl(
-  connect(mapStateToProps, mapDispatchToProps)(DebugScreen)
+  connect(mapStateToProps, { downloadLogs })(DebugScreen)
 );
