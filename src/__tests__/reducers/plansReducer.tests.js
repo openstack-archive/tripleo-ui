@@ -22,7 +22,7 @@ import {
   Plan,
   PlanEnvironment
 } from '../../js/immutableRecords/plans';
-import PlansActions from '../../js/actions/PlansActions';
+import * as PlansActions from '../../js/actions/PlansActions';
 import plansReducer from '../../js/reducers/plansReducer';
 
 describe('plansReducer state', () => {

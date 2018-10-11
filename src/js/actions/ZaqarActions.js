@@ -21,7 +21,11 @@ import { deploymentStates } from '../constants/DeploymentConstants';
 import { getCurrentStack } from '../selectors/stacks';
 import LoggerActions from './LoggerActions';
 import NodesActions from './NodesActions';
-import PlansActions from './PlansActions';
+import {
+  createPlanFinished,
+  updatePlanFinished,
+  exportPlanFinished
+} from './PlansActions';
 import RegisterNodesActions from './RegisterNodesActions';
 import RolesActions from './RolesActions';
 import StacksActions from './StacksActions';
@@ -117,20 +121,14 @@ export default {
 
         case MistralConstants.PLAN_CREATE: {
           dispatch(
-            handleWorkflowMessage(
-              payload.execution.id,
-              PlansActions.createPlanFinished
-            )
+            handleWorkflowMessage(payload.execution_id, createPlanFinished)
           );
           break;
         }
 
         case MistralConstants.PLAN_UPDATE: {
           dispatch(
-            handleWorkflowMessage(
-              payload.execution.id,
-              PlansActions.updatePlanFinished
-            )
+            handleWorkflowMessage(payload.execution_id, updatePlanFinished)
           );
           break;
         }
@@ -224,10 +222,7 @@ export default {
 
         case MistralConstants.PLAN_EXPORT: {
           dispatch(
-            handleWorkflowMessage(
-              payload.execution.id,
-              PlansActions.exportPlanFinished
-            )
+            handleWorkflowMessage(payload.execution_id, exportPlanFinished)
           );
           break;
         }
