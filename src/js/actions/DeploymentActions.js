@@ -117,7 +117,7 @@ export const startDeployment = planName => dispatch => {
         timeout: 240,
         config_download: true
       },
-      execution => dispatch(deploymentFinished(execution)),
+      deploymentFinished,
       90 * 60 * 1000
     )
   )
@@ -240,7 +240,7 @@ export const recoverDeploymentStatus = planName => dispatch => {
     startWorkflow(
       MistralConstants.RECOVER_DEPLOYMENT_STATUS,
       { container: planName },
-      execution => dispatch(recoverDeploymentStatusFinished(execution))
+      recoverDeploymentStatusFinished
     )
   ).catch(error => {
     dispatch(
@@ -302,7 +302,7 @@ export const getDeploymentFailures = planName => dispatch => {
     startWorkflow(
       MistralConstants.GET_DEPLOYMENT_FAILURES,
       { plan: planName },
-      execution => dispatch(getDeploymentFailuresFinished(execution))
+      getDeploymentFailuresFinished
     )
   ).catch(error => {
     dispatch(handleErrors(error, `Deployment failures could not be loaded`));

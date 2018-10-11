@@ -126,8 +126,10 @@ export default {
     return dispatch => {
       dispatch(this.downloadLogsPending());
       dispatch(
-        startWorkflow(MistralConstants.DOWNLOAD_LOGS, {}, execution =>
-          dispatch(this.downloadLogsFinished(execution))
+        startWorkflow(
+          MistralConstants.DOWNLOAD_LOGS,
+          {},
+          this.downloadLogsFinished
         )
       ).catch(error => {
         dispatch(handleErrors(error, 'Failed to download logs'));

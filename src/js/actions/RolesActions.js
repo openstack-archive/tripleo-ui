@@ -83,10 +83,8 @@ export default {
       dispatch(
         startWorkflow(
           MistralConstants.LIST_AVAILABLE_ROLES,
-          {
-            container: planName
-          },
-          execution => dispatch(this.fetchAvailableRolesFinished(execution))
+          { container: planName },
+          this.fetchAvailableRolesFinished
         )
       ).catch(error => {
         history.push('/plans');
@@ -147,7 +145,7 @@ export default {
             container: planName,
             role_names: roleNames
           },
-          execution => dispatch(this.selectRolesFinished(execution))
+          this.selectRolesFinished
         )
       ).catch(error => {
         const { name, message } = error;
