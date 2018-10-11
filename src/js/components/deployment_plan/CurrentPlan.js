@@ -37,7 +37,7 @@ import ConfigurePlanStep from './ConfigurePlanStep';
 import ConfigureNetworkStep from './ConfigureNetworkStep';
 import { DeploymentPlanStep } from './DeploymentPlanStep';
 import DeployStep from './DeployStep';
-import EnvironmentConfigurationActions from '../../actions/EnvironmentConfigurationActions';
+import { fetchEnvironmentConfiguration } from '../../actions/EnvironmentConfigurationActions';
 import HardwareStep from './HardwareStep';
 import { Loader } from '../ui/Loader';
 import NetworkConfiguration from '../networkConfiguration/NetworkConfiguration';
@@ -270,12 +270,7 @@ function mapDispatchToProps(dispatch) {
   return {
     getDeploymentStatus: planName => dispatch(getDeploymentStatus(planName)),
     fetchEnvironmentConfiguration: (planName, parentPath) => {
-      dispatch(
-        EnvironmentConfigurationActions.fetchEnvironmentConfiguration(
-          planName,
-          parentPath
-        )
-      );
+      dispatch(fetchEnvironmentConfiguration(planName, parentPath));
     },
     fetchParameters: planName =>
       dispatch(ParametersActions.fetchParameters(planName))

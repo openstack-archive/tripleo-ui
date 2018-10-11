@@ -43,159 +43,141 @@ const messages = defineMessages({
   }
 });
 
-export default {
-  fetchEnvironmentConfiguration(planName, redirect) {
-    return dispatch => {
-      dispatch(this.fetchEnvironmentConfigurationPending());
-      return dispatch(
-        MistralApiService.runAction(MistralConstants.CAPABILITIES_GET, {
-          container: planName
-        })
-      )
-        .then(response => {
-          const entities = normalize(response, [topicSchema]).entities || {};
-          dispatch(this.fetchEnvironmentConfigurationSuccess(entities));
-        })
-        .catch(error => {
-          if (redirect) {
-            redirect();
-          }
-          dispatch(
-            handleErrors(error, 'Deployment configuration could not be loaded')
-          );
-          dispatch(this.fetchEnvironmentConfigurationFailed());
-        });
-    };
-  },
-
-  fetchEnvironmentConfigurationPending() {
-    return {
-      type:
-        EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_PENDING
-    };
-  },
-
-  fetchEnvironmentConfigurationSuccess(entities) {
-    return {
-      type:
-        EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_SUCCESS,
-      payload: entities
-    };
-  },
-
-  fetchEnvironmentConfigurationFailed(environment) {
-    return {
-      type:
-        EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_FAILED
-    };
-  },
-
-  updateEnvironmentConfiguration(planName, data, redirect) {
-    return (dispatch, getState, { getIntl }) => {
-      const { formatMessage } = getIntl(getState());
-      dispatch(startSubmit('environmentConfigurationForm'));
-      return dispatch(
-        MistralApiService.runAction(MistralConstants.CAPABILITIES_UPDATE, {
-          environments: data,
-          container: planName,
-          sort_environments: true
-        })
-      )
-        .then(response => {
-          const enabledEnvs = response.environments.map(env => env.path);
-          dispatch(this.updateEnvironmentConfigurationSuccess(enabledEnvs));
-          dispatch(stopSubmit('environmentConfigurationForm'));
-          dispatch(
-            NotificationActions.notify({
-              title: formatMessage(messages.envConfigUpdatedNotificationTitle),
-              message: formatMessage(
-                messages.envConfigUpdatedNotificationMessage
-              ),
-              type: 'success'
-            })
-          );
-          redirect && redirect();
-        })
-        .catch(error => {
-          dispatch(
-            stopSubmit('environmentConfigurationForm', {
-              _error: {
-                title: formatMessage(messages.configurationNotUpdatedError),
-                message: error.message
-              }
-            })
-          );
-        });
-    };
-  },
-
-  updateEnvironmentConfigurationSuccess(enabledEnvironments) {
-    return {
-      type:
-        EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS,
-      payload: enabledEnvironments
-    };
-  },
-
-  fetchEnvironment(planName, environmentPath) {
-    return dispatch => {
-      dispatch(this.fetchEnvironmentPending(environmentPath));
-      dispatch(SwiftApiService.getObject(planName, environmentPath))
-        .then(response => {
-          const { resource_registry, parameter_defaults } = yaml.safeLoad(
-            response,
-            {
-              filename: environmentPath,
-              json: true
-            }
-          );
-          dispatch(
-            this.fetchEnvironmentSuccess({
-              file: environmentPath,
-              resourceRegistry: resource_registry,
-              parameterDefaults: parameter_defaults
-            })
-          );
-        })
-        .catch(error => {
-          dispatch(
-            handleErrors(
-              error,
-              `Environment ${environmentPath} could not be loaded`,
-              false
-            )
-          );
-          dispatch(
-            this.fetchEnvironmentFailed(environmentPath, {
-              title: `Environment ${environmentPath} could not be loaded`,
-              message: error.message
-            })
-          );
-        });
-    };
-  },
-
-  fetchEnvironmentPending(environmentPath) {
-    return {
-      type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_PENDING,
-      payload: environmentPath
-    };
-  },
-
-  fetchEnvironmentSuccess(environment) {
-    return {
-      type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_SUCCESS,
-      payload: environment
-    };
-  },
-
-  fetchEnvironmentFailed(environmentPath, error) {
-    return {
-      type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_FAILED,
-      payload: {
-        environmentPath,
-        error
+export const fetchEnvironmentConfiguration = (
+  planName,
+  redirect
+) => dispatch => {
+  dispatch(fetchEnvironmentConfigurationPending());
+  return dispatch(
+    MistralApiService.runAction(MistralConstants.CAPABILITIES_GET, {
+      container: planName
+    })
+  )
+    .then(response => {
+      const entities = normalize(response, [topicSchema]).entities || {};
+      dispatch(fetchEnvironmentConfigurationSuccess(entities));
+    })
+    .catch(error => {
+      if (redirect) {
+        redirect();
       }
-    };
-  }
+      dispatch(
+        handleErrors(error, 'Deployment configuration could not be loaded')
+      );
+      dispatch(fetchEnvironmentConfigurationFailed());
+    });
 };
+
+export const fetchEnvironmentConfigurationPending = () => ({
+  type:
+    EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_PENDING
+});
+
+export const fetchEnvironmentConfigurationSuccess = entities => ({
+  type:
+    EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_SUCCESS,
+  payload: entities
+});
+
+export const fetchEnvironmentConfigurationFailed = environment => ({
+  type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_CONFIGURATION_FAILED
+});
+
+export const updateEnvironmentConfiguration = (planName, data, redirect) => (
+  dispatch,
+  getState,
+  { getIntl }
+) => {
+  const { formatMessage } = getIntl(getState());
+  dispatch(startSubmit('environmentConfigurationForm'));
+  return dispatch(
+    MistralApiService.runAction(MistralConstants.CAPABILITIES_UPDATE, {
+      environments: data,
+      container: planName,
+      sort_environments: true
+    })
+  )
+    .then(response => {
+      const enabledEnvs = response.environments.map(env => env.path);
+      dispatch(updateEnvironmentConfigurationSuccess(enabledEnvs));
+      dispatch(stopSubmit('environmentConfigurationForm'));
+      dispatch(
+        NotificationActions.notify({
+          title: formatMessage(messages.envConfigUpdatedNotificationTitle),
+          message: formatMessage(messages.envConfigUpdatedNotificationMessage),
+          type: 'success'
+        })
+      );
+      redirect && redirect();
+    })
+    .catch(error => {
+      dispatch(
+        stopSubmit('environmentConfigurationForm', {
+          _error: {
+            title: formatMessage(messages.configurationNotUpdatedError),
+            message: error.message
+          }
+        })
+      );
+    });
+};
+
+export const updateEnvironmentConfigurationSuccess = enabledEnvironments => ({
+  type:
+    EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS,
+  payload: enabledEnvironments
+});
+
+export const fetchEnvironment = (planName, environmentPath) => dispatch => {
+  dispatch(fetchEnvironmentPending(environmentPath));
+  dispatch(SwiftApiService.getObject(planName, environmentPath))
+    .then(response => {
+      const { resource_registry, parameter_defaults } = yaml.safeLoad(
+        response,
+        {
+          filename: environmentPath,
+          json: true
+        }
+      );
+      dispatch(
+        fetchEnvironmentSuccess({
+          file: environmentPath,
+          resourceRegistry: resource_registry,
+          parameterDefaults: parameter_defaults
+        })
+      );
+    })
+    .catch(error => {
+      dispatch(
+        handleErrors(
+          error,
+          `Environment ${environmentPath} could not be loaded`,
+          false
+        )
+      );
+      dispatch(
+        fetchEnvironmentFailed(environmentPath, {
+          title: `Environment ${environmentPath} could not be loaded`,
+          message: error.message
+        })
+      );
+    });
+};
+
+export const fetchEnvironmentPending = environmentPath => ({
+  type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_PENDING,
+  payload: environmentPath
+});
+
+export const fetchEnvironmentSuccess = environment => ({
+  type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_SUCCESS,
+  payload: environment
+});
+
+export const fetchEnvironmentFailed = (environmentPath, error) => ({
+  type: EnvironmentConfigurationConstants.FETCH_ENVIRONMENT_FAILED,
+  payload: {
+    environmentPath,
+    error
+  }
+});
