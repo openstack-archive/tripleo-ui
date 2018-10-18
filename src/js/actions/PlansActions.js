@@ -547,7 +547,7 @@ export const exportPlanFinished = execution => (
     );
   } else {
     dispatch(
-      this.exportPlanSuccess(
+      exportPlanSuccess(
         generateDownloadUrl(tempurl, getServiceUrl(getState(), 'swift'))
       )
     );
