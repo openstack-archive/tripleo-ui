@@ -113,7 +113,9 @@ const PlanFieldsTab = ({ active, intl: { formatMessage }, planUploadType }) => (
         type="file"
         label={formatMessage(messages.planTarball)}
         labelColumns={3}
-        validate={file({ accept: 'application/x-gzip, application/gzip' })}
+        validate={file({
+          accept: 'application/x-gzip, application/gzip, .tgz, .tar.gz'
+        })}
         description={
           <FormattedMessage
             {...messages.tarballInputDescription}
