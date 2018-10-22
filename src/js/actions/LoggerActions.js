@@ -102,7 +102,7 @@ export const downloadLogsFinished = execution => (
     );
   } else {
     dispatch(
-      this.downloadLogsSuccess(
+      downloadLogsSuccess(
         generateDownloadUrl(tempurl, getServiceUrl(getState(), 'swift'))
       )
     );
