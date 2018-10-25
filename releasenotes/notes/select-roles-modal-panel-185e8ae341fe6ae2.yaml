@@ -1,0 +1,10 @@
+features:
+  - |
+    Available Roles in Roles selection dialog are now displayed in scrollable
+    modal panel view, which allows to submit the form more easily.
+  - |
+    Role cards are now equal size, to make the cards more organized. Description
+    is truncated when needed.
+  - |
+    Clicking Role name opens Role details dialog which contains title, complete
+    description, tags, role networks and services

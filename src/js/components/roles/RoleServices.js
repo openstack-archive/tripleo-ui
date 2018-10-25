@@ -60,7 +60,7 @@ class RoleServices extends React.Component {
         isActive={service.id === this.state.selectedService}
       >
         <a className="link" onClick={this.selectService.bind(this, service.id)}>
-          {service.type.split('::').pop()}
+          {service.type.split('OS::TripleO::Services::').pop()}
         </a>
       </Tab>
     ));
