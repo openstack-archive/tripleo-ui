@@ -14,16 +14,16 @@
  * under the License.
  */
 
-import { Button } from 'react-bootstrap';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import { ModalFooter } from 'react-bootstrap';
 import { pickBy } from 'lodash';
 import { OverlayLoader } from '../ui/Loader';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { reduxForm } from 'redux-form';
+import { Modal, Button } from 'patternfly-react';
 
 import { CloseModalButton } from '../ui/Modals';
+import { CardGridFluid } from '../ui/cards';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
 
 const messages = defineMessages({
@@ -46,44 +46,40 @@ const messages = defineMessages({
   }
 });
 
-class SelectRolesForm extends React.Component {
-  render() {
-    const {
-      children,
-      error,
-      handleSubmit,
-      invalid,
-      intl: { formatMessage },
-      pristine,
-      submitting
-    } = this.props;
-    return (
-      <form onSubmit={handleSubmit}>
-        <OverlayLoader
-          loaded={!submitting}
-          content={formatMessage(messages.updatingRoles)}
-        >
-          <ModalFormErrorList errors={error ? [error] : []} />
-          <div className="cards-pf">
-            <div className="row row-cards-pf">{children}</div>
-          </div>
-        </OverlayLoader>
-        <ModalFooter>
-          <CloseModalButton>
-            <FormattedMessage {...messages.cancel} />
-          </CloseModalButton>
-          <Button
-            disabled={invalid || pristine || submitting}
-            bsStyle="primary"
-            type="submit"
-          >
-            <FormattedMessage {...messages.saveChanges} />
-          </Button>
-        </ModalFooter>
-      </form>
-    );
-  }
-}
+const SelectRolesForm = ({
+  children,
+  error,
+  handleSubmit,
+  invalid,
+  intl: { formatMessage },
+  pristine,
+  submitting
+}) => (
+  <form className="flex-container" onSubmit={handleSubmit}>
+    <OverlayLoader
+      loaded={!submitting}
+      content={formatMessage(messages.updatingRoles)}
+      containerClassName="flex-container"
+    >
+      <ModalFormErrorList errors={error ? [error] : []} />
+      <CardGridFluid className="flex-column" matchHeight>
+        {children}
+      </CardGridFluid>
+    </OverlayLoader>
+    <Modal.Footer>
+      <CloseModalButton>
+        <FormattedMessage {...messages.cancel} />
+      </CloseModalButton>
+      <Button
+        disabled={invalid || pristine || submitting}
+        bsStyle="primary"
+        type="submit"
+      >
+        <FormattedMessage {...messages.saveChanges} />
+      </Button>
+    </Modal.Footer>
+  </form>
+);
 SelectRolesForm.propTypes = {
   children: PropTypes.node,
   currentPlanName: PropTypes.string.isRequired,

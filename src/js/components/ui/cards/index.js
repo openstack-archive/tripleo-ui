@@ -17,6 +17,7 @@
 import cx from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Row, CardGrid } from 'patternfly-react';
 
 export const ActionCard = ({ children, className, onClick, ...rest }) => (
   <div
@@ -37,4 +38,19 @@ ActionCard.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   onClick: PropTypes.func.isRequired
+};
+
+export const CardGridFluid = ({ children, className, matchHeight }) => (
+  <div className={cx('cards-pf', className)}>
+    <CardGrid matchHeight={matchHeight} fluid>
+      <Row style={{ marginRight: '-10px', marginLeft: '-10px' }}>
+        {children}
+      </Row>
+    </CardGrid>
+  </div>
+);
+CardGridFluid.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
+  matchHeight: PropTypes.bool.isRequired
 };
