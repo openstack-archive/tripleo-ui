@@ -14,14 +14,13 @@
  * under the License.
  */
 
-import { Button } from 'react-bootstrap';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import { ModalFooter } from 'react-bootstrap';
 import { pickBy } from 'lodash';
 import { OverlayLoader } from '../ui/Loader';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { reduxForm } from 'redux-form';
+import { CardGrid, Modal, Button, Row } from 'patternfly-react';
 
 import { CloseModalButton } from '../ui/Modals';
 import ModalFormErrorList from '../ui/forms/ModalFormErrorList';
@@ -58,17 +57,18 @@ class SelectRolesForm extends React.Component {
       submitting
     } = this.props;
     return (
-      <form onSubmit={handleSubmit}>
+      <form className="flex-container" onSubmit={handleSubmit}>
         <OverlayLoader
           loaded={!submitting}
           content={formatMessage(messages.updatingRoles)}
+          containerClassName="flex-container"
         >
           <ModalFormErrorList errors={error ? [error] : []} />
-          <div className="cards-pf">
-            <div className="row row-cards-pf">{children}</div>
+          <div className="flex-column cards-pf">
+            <Row className="row-cards-pf">{children}</Row>
           </div>
         </OverlayLoader>
-        <ModalFooter>
+        <Modal.Footer>
           <CloseModalButton>
             <FormattedMessage {...messages.cancel} />
           </CloseModalButton>
@@ -79,7 +79,7 @@ class SelectRolesForm extends React.Component {
           >
             <FormattedMessage {...messages.saveChanges} />
           </Button>
-        </ModalFooter>
+        </Modal.Footer>
       </form>
     );
   }
