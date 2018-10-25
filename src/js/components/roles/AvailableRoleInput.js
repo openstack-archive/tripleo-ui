@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { Col } from 'react-bootstrap';
+import { Col, Card, CardTitle, CardBody } from 'patternfly-react';
 import cx from 'classnames';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
@@ -26,18 +26,18 @@ const AvailableRoleInput = ({
   input: { value, name, onChange },
   style
 }) => (
-  <Col xs={12} sm={4} lg={3} style={style}>
-    <div
+  <Col xs={12} sm={4} lg={3} style={{ height: 140, ...style }}>
+    <Card
+      accented
       className={cx(
-        'card-pf card-pf-view card-pf-view-select card-pf-view-multi-select',
-        'role-card card-pf-accented',
+        'card-pf card-pf-view card-pf-view-select card-pf-view-multi-select role-card role-card-select',
         { active: value },
         role.identifier,
         className
       )}
     >
-      <h2 className="card-pf-title">{name}</h2>
-      <div className="card-pf-body">
+      <CardTitle>{name}</CardTitle>
+      <CardBody>
         {!role.tags.isEmpty() && (
           <h6>
             {role.tags.map(t => (
@@ -48,7 +48,7 @@ const AvailableRoleInput = ({
           </h6>
         )}
         <p className="card-pf-info">{role.description}</p>
-      </div>
+      </CardBody>
       <div
         className="card-pf-view-checkbox"
         style={{ right: 15, left: 'auto' }}
@@ -59,7 +59,7 @@ const AvailableRoleInput = ({
           checked={value}
         />
       </div>
-    </div>
+    </Card>
   </Col>
 );
 AvailableRoleInput.propTypes = {
