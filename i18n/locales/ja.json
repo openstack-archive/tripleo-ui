@@ -361,7 +361,7 @@
         "nodeExtendedinfo.productName": "\u540d\u524d",
         "nodeExtendedinfo.productVendor": "\u30d9\u30f3\u30c0\u30fc",
         "nodeExtendedinfo.productVersion": "\u30d0\u30fc\u30b8\u30e7\u30f3",
-        "nodeExtendedinfo.registered": "\u767b\u9332\u6e08\u307f:",
+        "nodeExtendedinfo.registered": "\u767b\u9332\u65e5\u6642:",
         "nodeExtendedinfo.rootDisk": "\u30eb\u30fc\u30c8\u30c7\u30a3\u30b9\u30af:",
         "nodeExtendedinfo.uuid": "UUID:",
         "reduxForm.validations.maxValue": "\u6700\u5927\u5024\u306f {count, number} \u3067\u3059\u3002",
