@@ -14,11 +14,14 @@
  * under the License.
  */
 
-import { Col } from 'react-bootstrap';
+import { Col, Card, CardTitle, CardBody } from 'patternfly-react';
 import cx from 'classnames';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { truncate } from 'lodash';
+
+import AvailableRoleDetailDialog from './AvailableRoleDetailDialog';
 
 const AvailableRoleInput = ({
   className,
@@ -27,17 +30,24 @@ const AvailableRoleInput = ({
   style
 }) => (
   <Col xs={12} sm={4} lg={3} style={style}>
-    <div
+    <Card
+      matchHeight
+      accented
       className={cx(
-        'card-pf card-pf-view card-pf-view-select card-pf-view-multi-select',
-        'role-card card-pf-accented',
+        'card-pf card-pf-view card-pf-view-select card-pf-view-multi-select role-card',
         { active: value },
         role.identifier,
         className
       )}
     >
-      <h2 className="card-pf-title">{name}</h2>
-      <div className="card-pf-body">
+      <CardTitle>
+        <AvailableRoleDetailDialog
+          role={role}
+          enabled={value}
+          toggle={() => onChange(!value)}
+        />
+      </CardTitle>
+      <CardBody>
         {!role.tags.isEmpty() && (
           <h6>
             {role.tags.map(t => (
@@ -47,8 +57,10 @@ const AvailableRoleInput = ({
             ))}
           </h6>
         )}
-        <p className="card-pf-info">{role.description}</p>
-      </div>
+        <p className="card-pf-info">
+          {truncate(role.description, { length: 80 })}
+        </p>
+      </CardBody>
       <div
         className="card-pf-view-checkbox"
         style={{ right: 15, left: 'auto' }}
@@ -59,7 +71,7 @@ const AvailableRoleInput = ({
           checked={value}
         />
       </div>
-    </div>
+    </Card>
   </Col>
 );
 AvailableRoleInput.propTypes = {

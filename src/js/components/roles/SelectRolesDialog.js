@@ -24,7 +24,7 @@ import { pickBy } from 'lodash';
 import PropTypes from 'prop-types';
 
 import AvailableRoleInput from './AvailableRoleInput';
-import { CloseModalXButton, RoutedModal } from '../ui/Modals';
+import { CloseModalXButton, RoutedModalPanel } from '../ui/Modals';
 import { getMergedRoles, getRoles } from '../../selectors/roles';
 import { getCurrentPlanName } from '../../selectors/plans';
 import { Loader } from '../ui/Loader';
@@ -62,7 +62,7 @@ class SelectRolesDialog extends React.Component {
       roles
     } = this.props;
     return (
-      <RoutedModal bsSize="xl" redirectPath={`/plans/${currentPlanName}`}>
+      <RoutedModalPanel redirectPath={`/plans/${currentPlanName}`}>
         <ModalHeader>
           <CloseModalXButton />
           <ModalTitle>
@@ -73,6 +73,7 @@ class SelectRolesDialog extends React.Component {
           height={100}
           loaded={availableRolesLoaded && !fetchingAvailableRoles}
           content={formatMessage(messages.loadingAvailableRoles)}
+          componentProps={{ className: 'flex-container' }}
         >
           <SelectRolesForm
             onSubmit={this.handleFormSubmit}
@@ -94,7 +95,7 @@ class SelectRolesDialog extends React.Component {
               ))}
           </SelectRolesForm>
         </Loader>
-      </RoutedModal>
+      </RoutedModalPanel>
     );
   }
 }
