@@ -20,7 +20,7 @@ import { List, Set } from 'immutable';
 import { internalParameters } from '../constants/ParametersConstants';
 import { getRole } from './roles';
 import { getEnvironment } from './environmentConfiguration';
-import { Resource } from '../immutableRecords/parameters';
+import { Resource, Parameter } from '../immutableRecords/parameters';
 
 const parameters = state => state.parameters.get('parameters');
 const resources = state => state.parameters.get('resources');
@@ -187,6 +187,37 @@ export const getResourceParametersDeep = createSelector(
       resource.resources,
       resources
     ).update(filterParameters(parameters))
+);
+
+/** Get ContainerImagePrepare parameter value. Used for container images configuration */
+export const getContainerImagePrepareParameter = createSelector(
+  getParameters,
+  parameters =>
+    parameters.get('ContainerImagePrepare', new Parameter({ default: [] }))
+);
+
+/** Get seed values from ContainerImagePrepare parameter */
+export const getContainerImagePrepareParameterSeed = createSelector(
+  getContainerImagePrepareParameter,
+  parameter => {
+    if (parameter.default[0]) {
+      const {
+        push_destination,
+        tag_from_label,
+        set: { namespace, name_prefix, name_suffix, tag }
+      } = parameter.default[0];
+      return {
+        push_destination,
+        tag_from_label,
+        namespace,
+        name_prefix,
+        name_suffix,
+        tag
+      };
+    } else {
+      return {};
+    }
+  }
 );
 
 /**
