@@ -189,6 +189,12 @@ export const getResourceParametersDeep = createSelector(
     ).update(filterParameters(parameters))
 );
 
+/** Get ContainerImagePrepare parameter value. Used for container images configuration */
+export const getContainerImagePrepareParameter = createSelector(
+  getParameters,
+  parameters => parameters.getIn(['ContainerImagePrepare', 'default'], [])
+);
+
 /**
  * Recursively extracts Parameter names from a Resource and it's nested Resources
  */
