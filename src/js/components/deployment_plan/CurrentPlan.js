@@ -31,10 +31,12 @@ import {
   getCurrentPlanDeploymentIsInProgress
 } from '../../selectors/deployment';
 import { getEnvironmentConfigurationSummary } from '../../selectors/environmentConfiguration';
+import { getContainerImagePrepareParameterSeed } from '../../selectors/parameters';
 import { getCurrentPlan } from '../../selectors/plans';
 import { getDeploymentStatus } from '../../actions/DeploymentActions';
 import ConfigurePlanStep from './ConfigurePlanStep';
 import ConfigureNetworkStep from './ConfigureNetworkStep';
+import ConfigureContainerImagesStep from './ConfigureContainerImagesStep';
 import { DeploymentPlanStep } from './DeploymentPlanStep';
 import DeployStep from './DeployStep';
 import { fetchEnvironmentConfiguration } from '../../actions/EnvironmentConfigurationActions';
@@ -66,6 +68,20 @@ const messages = defineMessages({
     id: 'CurrentPlan.configureNetworkStepHeader',
     defaultMessage: 'Configure Network'
   },
+  configureContainerImagesStepHeader: {
+    id: 'CurrentPlan.configureContainerImagesStepHeader',
+    defaultMessage: 'Prepare Container Images'
+  },
+  configureContainerImagesStepTooltip: {
+    id: 'CurrentPlan.configureContainerImagesStepTooltip',
+    defaultMessage:
+      'Container images need to be pulled from an image registry which is reliably \
+      available to overcloud nodes. The three common options to serve images are \
+      to use the default registry, the registry available on the undercloud, or an \
+      independently managed registry. Use this step to configure where to pull images \
+      from, which local repository to push images to and how to discover the last \
+      versioned tag for each image.'
+  },
   deployStepHeader: {
     id: 'CurrentPlan.deployStepHeader',
     defaultMessage: 'Deploy'
@@ -96,7 +112,7 @@ const messages = defineMessages({
     id: 'CurrentPlan.configureNetworkStepTooltip',
     defaultMessage:
       'This step lets user manage deployment networks, assign them to deployment roles, ' +
-      'and configure network interfaces'
+      'and configure network interfaces.'
   },
   deployStepTooltip: {
     id: 'CurrentPlan.deploymentStepTooltip',
@@ -124,6 +140,7 @@ class CurrentPlan extends React.Component {
   render() {
     const {
       intl: { formatMessage },
+      containerImagePrepareParameterSeed,
       currentPlan,
       deploymentInProgress,
       deploymentStatus,
@@ -131,6 +148,7 @@ class CurrentPlan extends React.Component {
       environmentConfigurationSummary,
       environmentConfigurationLoaded,
       isFetchingEnvironmentConfiguration,
+      isFetchingParameters,
       fetchEnvironmentConfiguration
     } = this.props;
 
@@ -186,6 +204,21 @@ class CurrentPlan extends React.Component {
               <ConfigureNetworkStep planName={currentPlanName} />
             </DeploymentPlanStep>
             <DeploymentPlanStep
+              title={formatMessage(messages.configureContainerImagesStepHeader)}
+              disabled={disableDeploymentSteps}
+              tooltip={formatMessage(
+                messages.configureContainerImagesStepTooltip
+              )}
+            >
+              <ConfigureContainerImagesStep
+                planName={currentPlanName}
+                isFetchingParameters={isFetchingParameters}
+                containerImagePrepareParameterSeed={
+                  containerImagePrepareParameterSeed
+                }
+              />
+            </DeploymentPlanStep>
+            <DeploymentPlanStep
               title={formatMessage(messages.deployStepHeader)}
               tooltip={formatMessage(messages.deployStepTooltip)}
             >
@@ -238,6 +271,7 @@ class CurrentPlan extends React.Component {
 }
 
 CurrentPlan.propTypes = {
+  containerImagePrepareParameterSeed: PropTypes.object.isRequired,
   currentPlan: ImmutablePropTypes.record,
   deploymentInProgress: PropTypes.bool.isRequired,
   deploymentStatus: PropTypes.object.isRequired,
@@ -248,8 +282,8 @@ CurrentPlan.propTypes = {
   fetchParameters: PropTypes.func,
   getDeploymentStatus: PropTypes.func.isRequired,
   intl: PropTypes.object,
-  isFetchingEnvironmentConfiguration: PropTypes.bool,
-  isFetchingParameters: PropTypes.bool
+  isFetchingEnvironmentConfiguration: PropTypes.bool.isRequired,
+  isFetchingParameters: PropTypes.bool.isRequired
 };
 
 export function mapStateToProps(state, props) {
@@ -262,7 +296,10 @@ export function mapStateToProps(state, props) {
     environmentConfigurationSummary: getEnvironmentConfigurationSummary(state),
     isFetchingEnvironmentConfiguration:
       state.environmentConfiguration.isFetching,
-    isFetchingParameters: state.parameters.isFetching
+    isFetchingParameters: state.parameters.isFetching,
+    containerImagePrepareParameterSeed: getContainerImagePrepareParameterSeed(
+      state
+    )
   };
 }
 
