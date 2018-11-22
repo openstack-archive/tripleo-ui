@@ -38,6 +38,7 @@ import {
   getDeploymentFailuresFinished
 } from './DeploymentActions';
 import NetworksActions from './NetworksActions';
+import { containerImagesPrepareFinished } from './ContainerImagesActions';
 
 export default {
   handleAuthenticationSuccess(message, dispatch) {
@@ -260,6 +261,15 @@ export default {
           dispatch(
             handleWorkflowMessage(payload.execution.id, execution =>
               dispatch(NetworksActions.fetchNetworksFinished(execution))
+            )
+          );
+          break;
+        }
+
+        case MistralConstants.CONTAINER_IMAGES_PREPARE_DEFAULT: {
+          dispatch(
+            handleWorkflowMessage(payload.execution.id, execution =>
+              dispatch(containerImagesPrepareFinished(execution))
             )
           );
           break;
