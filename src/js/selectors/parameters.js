@@ -195,6 +195,30 @@ export const getContainerImagePrepareParameter = createSelector(
   parameters => parameters.getIn(['ContainerImagePrepare', 'default'], [])
 );
 
+/** Get seed values from ContainerImagePrepare parameter */
+export const getContainerImagePrepareParameterSeed = createSelector(
+  getContainerImagePrepareParameter,
+  parameter => {
+    if (parameter[0]) {
+      const {
+        push_destination,
+        tag_from_label,
+        set: { namespace, name_prefix, name_suffix, tag }
+      } = parameter[0];
+      return {
+        push_destination,
+        tag_from_label,
+        namespace,
+        name_prefix,
+        name_suffix,
+        tag
+      };
+    } else {
+      return {};
+    }
+  }
+);
+
 /**
  * Recursively extracts Parameter names from a Resource and it's nested Resources
  */
