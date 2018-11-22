@@ -24,6 +24,7 @@ import {
   Resource,
   Parameter
 } from '../immutableRecords/parameters';
+import { CONTAINER_IMAGES_PREPARE_SUCCESS } from '../constants/ContainerImagesConstants';
 
 const initialState = new ParametersDefaultState();
 
@@ -54,6 +55,12 @@ export default function parametersReducer(state = initialState, action) {
 
     case EnvironmentConfigurationConstants.UPDATE_ENVIRONMENT_CONFIGURATION_SUCCESS:
       return state.set('loaded', false);
+
+    case CONTAINER_IMAGES_PREPARE_SUCCESS:
+      return state.updateIn(
+        ['parameters', 'ContainerImagePrepare'],
+        p => p && p.set('default', action.payload)
+      );
 
     case PlansConstants.PLAN_CHOSEN:
       return initialState;

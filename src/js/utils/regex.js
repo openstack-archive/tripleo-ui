@@ -33,3 +33,15 @@ export const FQDN_REGEX = new RegExp(
 export const PORT_REGEX = new RegExp(
   /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/
 );
+
+export const DOCKER_TAG_REGEX = new RegExp(/^[\w][\w.-]{0,127}$/);
+
+// FQDN or IPV4:PORT / DOCKER_TAG (Docker tag format is the same as image name format)
+export const DOCKER_REGISTRY_NAMESPACE_REGEX = new RegExp(
+  /^(((?=[a-z0-9-]{1,63}\.)[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63}|(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?):([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))\/[\w][\w.-]{0,127}$/i
+);
+
+// IPV4:PORT
+export const IPV4_WITH_PORT_REGEX = new RegExp(
+  /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?):([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/
+);
