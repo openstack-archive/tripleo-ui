@@ -55,6 +55,7 @@ import {
   getDeploymentFailuresFinished
 } from './DeploymentActions';
 import { fetchNetworksFinished } from './NetworksActions';
+import { containerImagesPrepareFinished } from './ContainerImagesActions';
 
 export const handleAuthenticationSuccess = (message, dispatch) => {
   message = get(message, ['body', 'message']);
@@ -240,6 +241,16 @@ export const messageReceived = message => (dispatch, getState) => {
     case MistralConstants.NETWORK_LIST: {
       dispatch(
         handleWorkflowMessage(payload.execution.id, fetchNetworksFinished)
+      );
+      break;
+    }
+
+    case MistralConstants.CONTAINER_IMAGES_PREPARE_DEFAULT: {
+      dispatch(
+        handleWorkflowMessage(
+          payload.execution.id,
+          containerImagesPrepareFinished
+        )
       );
       break;
     }
