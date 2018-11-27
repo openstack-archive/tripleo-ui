@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 
 import DeploymentActions from '../deployment/DeploymentActions';
-import { REDEPLOY, UNDEPLOY } from '../../constants/DeploymentConstants';
+import { REDEPLOY, UNDEPLOY } from '../../constants/DeploymentActionsConstants';
 import { deploymentStatusMessages } from '../../constants/DeploymentConstants';
 import { getCurrentPlanDeploymentStatus } from '../../selectors/deployment';
 import { getCurrentStack, getOvercloudInfo } from '../../selectors/stacks';
