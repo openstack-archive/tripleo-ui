@@ -22,41 +22,33 @@ import { Icon, Button } from 'patternfly-react';
 import { submit, isSubmitting, isPristine, isInvalid } from 'redux-form';
 
 import { CloseModalButton } from '../ui/Modals';
-import { startContainerImagesPrepare } from '../../actions/ContainerImagesActions';
 
 const messages = defineMessages({
-  cancel: {
-    id: 'ContainerImagesWizard.cancel',
-    defaultMessage: 'Cancel'
+  back: {
+    id: 'ContainerImagePrepareParameterFormActions.back',
+    defaultMessage: 'Back'
   },
   save: {
-    id: 'ContainerImagesPrepareFormActions.save',
+    id: 'ContainerImagePrepareParameterFormActions.save',
     defaultMessage: 'Save Changes'
   },
-  next: {
-    id: 'ContainerImagesPrepareFormActions.next',
-    defaultMessage: 'Next'
-  },
-  reset: {
-    id: 'ContainerImagesPrepareFormActions.reset',
-    defaultMessage: 'Reset to Defaults'
+  close: {
+    id: 'ContainerImagePrepareParameterFormActions.close',
+    defaultMessage: 'Close'
   }
 });
 
-const ContainerImagesPrepareFormActions = ({
-  goForward,
+const ContainerImagePrepareParameterFormActions = ({
+  goBack,
   isSubmitting,
   isInvalid,
   isPristine,
-  resetToDefaults,
   submitForm
 }) => (
   <Fragment>
-    <CloseModalButton>
-      <FormattedMessage {...messages.cancel} />
-    </CloseModalButton>
-    <Button onClick={resetToDefaults} disabled={isSubmitting}>
-      <FormattedMessage {...messages.reset} />
+    <Button bsStyle="default" onClick={goBack} disabled={isSubmitting}>
+      <Icon type="fa" name="angle-left" />
+      <FormattedMessage {...messages.back} />
     </Button>
     <Button
       bsStyle="primary"
@@ -65,35 +57,32 @@ const ContainerImagesPrepareFormActions = ({
     >
       <FormattedMessage {...messages.save} />
     </Button>
-    <Button bsStyle="default" onClick={goForward} disabled={isSubmitting}>
-      <FormattedMessage {...messages.next} />
-      <Icon type="fa" name="angle-right" />
-    </Button>
+    <CloseModalButton>
+      <FormattedMessage {...messages.close} />
+    </CloseModalButton>
   </Fragment>
 );
-ContainerImagesPrepareFormActions.propTypes = {
-  goForward: PropTypes.func.isRequired,
+ContainerImagePrepareParameterFormActions.propTypes = {
+  goBack: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,
   isInvalid: PropTypes.bool.isRequired,
   isPristine: PropTypes.bool.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
-  resetToDefaults: PropTypes.func.isRequired,
   submitForm: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  isSubmitting: isSubmitting('containerImagesPrepareForm')(state),
-  isPristine: isPristine('containerImagesPrepareForm')(state),
-  isInvalid: isInvalid('containerImagesPrepareForm')(state)
+  isSubmitting: isSubmitting('parametersForm')(state),
+  isPristine: isPristine('parametersForm')(state),
+  isInvalid: isInvalid('parametersForm')(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  resetToDefaults: () => dispatch(startContainerImagesPrepare({})),
-  submitForm: () => dispatch(submit('containerImagesPrepareForm'))
+  submitForm: () => dispatch(submit('parametersForm'))
 });
 
 export default injectIntl(
   connect(mapStateToProps, mapDispatchToProps)(
-    ContainerImagesPrepareFormActions
+    ContainerImagePrepareParameterFormActions
   )
 );
