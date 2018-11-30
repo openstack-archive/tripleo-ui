@@ -14,11 +14,13 @@
  * under the License.
  */
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
-import { Wizard, Modal, Icon, Button } from 'patternfly-react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import { Wizard, Modal } from 'patternfly-react';
+import yaml from 'js-yaml';
 
 import { checkRunningDeployment } from '../utils/checkRunningDeploymentHOC';
 import { getCurrentPlanName } from '../../selectors/plans';
@@ -31,25 +33,18 @@ import {
   CloseModalButton
 } from '../ui/Modals';
 import ContainerImagesPrepareForm from './ContainerImagesPrepareForm';
-import { getContainerImagePrepareParameterSeed } from '../../selectors/parameters';
+import {
+  getContainerImagePrepareParameterSeed,
+  getContainerImagePrepareParameter
+} from '../../selectors/parameters';
 import ContainerImagesPrepareFormActions from './ContainerImagesPrepareFormActions';
+import ContainerImagePrepareParameterForm from './ContainerImagePrepareParameterForm';
+import ContainerImagePrepareParameterFormActions from './ContainerImagePrepareParameterFormActions';
 
 const messages = defineMessages({
-  close: {
-    id: 'ContainerImagesWizard.close',
-    defaultMessage: 'Close'
-  },
   cancel: {
     id: 'ContainerImagesWizard.cancel',
     defaultMessage: 'Cancel'
-  },
-  back: {
-    id: 'ContainerImagesWizard.back',
-    defaultMessage: 'Back'
-  },
-  save: {
-    id: 'ContainerImagesWizard.save',
-    defaultMessage: 'Save Changes'
   },
   title: {
     id: 'ContainerImagesWizard.title',
@@ -93,6 +88,7 @@ class ContainerImagesWizard extends Component {
       intl: { formatMessage },
       isFetchingParameters,
       containerImagePrepareParameterSeed,
+      containerImagePrepareParameter,
       resetToDefaults
     } = this.props;
 
@@ -152,7 +148,15 @@ class ContainerImagesWizard extends Component {
                 resetToDefaults={resetToDefaults}
               />
             ) : (
-              <p>parameter form here</p>
+              <ContainerImagePrepareParameterForm
+                parameter={containerImagePrepareParameter}
+                currentPlanName={currentPlanName}
+                initialValues={{
+                  [containerImagePrepareParameter.name]: yaml.safeDump(
+                    containerImagePrepareParameter.default
+                  )
+                }}
+              />
             )}
           </Loader>
         </Wizard.Body>
@@ -160,23 +164,15 @@ class ContainerImagesWizard extends Component {
           <CloseModalButton>
             <FormattedMessage {...messages.cancel} />
           </CloseModalButton>
-          {activeStepIndex === 0 && <ContainerImagesPrepareFormActions />}
+          {activeStepIndex === 0 && (
+            <ContainerImagesPrepareFormActions
+              goForward={() => this.setActiveStepIndex(1)}
+            />
+          )}
           {activeStepIndex === 1 && (
-            <Fragment>
-              <Button
-                bsStyle="default"
-                onClick={() => this.setActiveStepIndex(0)}
-              >
-                <Icon type="fa" name="angle-left" />
-                <FormattedMessage {...messages.back} />
-              </Button>
-              <Button bsStyle="primary" onClick={this.onNextButtonClick}>
-                <FormattedMessage {...messages.save} />
-              </Button>
-              <CloseModalButton>
-                <FormattedMessage {...messages.close} />
-              </CloseModalButton>
-            </Fragment>
+            <ContainerImagePrepareParameterFormActions
+              goBack={() => this.setActiveStepIndex(0)}
+            />
           )}
         </Wizard.Footer>
       </RoutedWizard>
@@ -184,6 +180,7 @@ class ContainerImagesWizard extends Component {
   }
 }
 ContainerImagesWizard.propTypes = {
+  containerImagePrepareParameter: ImmutablePropTypes.record.isRequired,
   containerImagePrepareParameterSeed: PropTypes.object.isRequired,
   currentPlanName: PropTypes.string.isRequired,
   fetchParameters: PropTypes.func.isRequired,
@@ -196,6 +193,7 @@ const mapStateToProps = state => ({
   containerImagePrepareParameterSeed: getContainerImagePrepareParameterSeed(
     state
   ),
+  containerImagePrepareParameter: getContainerImagePrepareParameter(state),
   currentPlanName: getCurrentPlanName(state),
   isFetchingParameters: state.parameters.isFetching
 });
