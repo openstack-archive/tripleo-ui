@@ -13,7 +13,7 @@
               - ^npm-shrinkwrap.json$
               - ^.babelrc$
     gate:
-      queue: tripleo
+      queue: tripleo-ui
       jobs:
         - tripleo-ci-centos-7-undercloud-oooq:
             files:
