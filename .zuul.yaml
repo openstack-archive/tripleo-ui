@@ -5,7 +5,7 @@
       - release-notes-jobs-python3
     check:
       jobs:
-        - tripleo-ci-centos-7-undercloud-oooq:
+        - tripleo-ci-centos-7-undercloud-containers:
             files:
               - ^src/.*$
               - ^webpack.*$
@@ -15,7 +15,7 @@
     gate:
       queue: tripleo
       jobs:
-        - tripleo-ci-centos-7-undercloud-oooq:
+        - tripleo-ci-centos-7-undercloud-containers:
             files:
               - ^src/.*$
               - ^webpack.*$
