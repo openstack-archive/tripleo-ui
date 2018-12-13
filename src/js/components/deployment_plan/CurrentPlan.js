@@ -44,6 +44,7 @@ import HardwareStep from './HardwareStep';
 import { Loader } from '../ui/Loader';
 import NetworkConfiguration from '../networkConfiguration/NetworkConfiguration';
 import ParametersActions from '../../actions/ParametersActions';
+import ContainerImagesWizard from '../containerImages/ContainerImagesWizard';
 import RoleDetail from '../roles/RoleDetail';
 import RolesStep from './RolesStep';
 
@@ -244,6 +245,10 @@ class CurrentPlan extends React.Component {
             <Route
               path="/plans/:planName/network-configuration"
               component={NetworkConfiguration}
+            />
+            <Route
+              path="/plans/:planName/container-images"
+              component={ContainerImagesWizard}
             />
             <Route
               path="/plans/:planName/deployment-confirmation"

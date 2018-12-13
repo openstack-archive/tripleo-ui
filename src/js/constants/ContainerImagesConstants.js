@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Red Hat Inc.
+ * Copyright 2018 Red Hat Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License. You may obtain
@@ -14,10 +14,5 @@
  * under the License.
  */
 
-export { CloseModal, CloseModalButton, CloseModalXButton } from './CloseModal';
-export ConfirmationModal from './ConfirmationModal';
-export Modal from './Modal';
-export ModalPanel from './ModalPanel';
-export RoutedModal from './RoutedModal';
-export RoutedWizard from './RoutedWizard';
-export RoutedModalPanel from './RoutedModalPanel';
+export const CONTAINER_IMAGES_PREPARE_SUCCESS =
+  'CONTAINER_IMAGES_PREPARE_SUCCESS';
