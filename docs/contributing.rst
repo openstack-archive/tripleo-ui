@@ -13,6 +13,6 @@ Use `OpenStack Gerrit`_ for patches and reviews.
 6. Run ``git review`` to push your patch up for review
 7. `Review and merge patches`_ on OpenStack Gerrit
 
-.. _OpenStack Gerrit: http://docs.openstack.org/infra/manual/developers.html
+.. _OpenStack Gerrit: https://docs.openstack.org/infra/manual/developers.html
 .. _best practices on OpenStack Wiki: https://wiki.openstack.org/wiki/GitCommitMessages
 .. _Review and merge patches: https://review.openstack.org/#/q/project:openstack/tripleo-ui
