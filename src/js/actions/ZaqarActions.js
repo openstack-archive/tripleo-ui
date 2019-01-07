@@ -72,7 +72,7 @@ export const messageReceived = message => (dispatch, getState) => {
   switch (type) {
     case MistralConstants.BAREMETAL_REGISTER_OR_UPDATE:
       dispatch(
-        handleWorkflowMessage(payload.execution.id, nodesRegistrationFinished)
+        handleWorkflowMessage(payload.execution_id, nodesRegistrationFinished)
       );
       break;
 
@@ -111,7 +111,7 @@ export const messageReceived = message => (dispatch, getState) => {
         pollTimeout = 30000;
       }
       dispatch(
-        handleWorkflowMessage(payload.execution.id, undefined, pollTimeout)
+        handleWorkflowMessage(payload.execution_id, undefined, pollTimeout)
       );
       break;
     }
@@ -196,7 +196,7 @@ export const messageReceived = message => (dispatch, getState) => {
     case MistralConstants.RECOVER_DEPLOYMENT_STATUS:
       dispatch(
         handleWorkflowMessage(
-          payload.execution.id,
+          payload.execution_id,
           recoverDeploymentStatusFinished
         )
       );
@@ -205,7 +205,7 @@ export const messageReceived = message => (dispatch, getState) => {
     case MistralConstants.GET_DEPLOYMENT_FAILURES:
       dispatch(
         handleWorkflowMessage(
-          payload.execution.id,
+          payload.execution_id,
           getDeploymentFailuresFinished
         )
       );
@@ -218,14 +218,14 @@ export const messageReceived = message => (dispatch, getState) => {
 
     case MistralConstants.DOWNLOAD_LOGS: {
       dispatch(
-        handleWorkflowMessage(payload.execution.id, downloadLogsFinished)
+        handleWorkflowMessage(payload.execution_id, downloadLogsFinished)
       );
       break;
     }
 
     case MistralConstants.LIST_AVAILABLE_ROLES: {
       dispatch(
-        handleWorkflowMessage(payload.execution.id, fetchAvailableRolesFinished)
+        handleWorkflowMessage(payload.execution_id, fetchAvailableRolesFinished)
       );
       break;
     }
@@ -233,14 +233,14 @@ export const messageReceived = message => (dispatch, getState) => {
     case MistralConstants.SELECT_ROLES: {
       // case 'tripleo.roles.v1.select_roles': {
       dispatch(
-        handleWorkflowMessage(payload.execution.id, selectRolesFinished)
+        handleWorkflowMessage(payload.execution_id, selectRolesFinished)
       );
       break;
     }
 
     case MistralConstants.NETWORK_LIST: {
       dispatch(
-        handleWorkflowMessage(payload.execution.id, fetchNetworksFinished)
+        handleWorkflowMessage(payload.execution_id, fetchNetworksFinished)
       );
       break;
     }
@@ -248,7 +248,7 @@ export const messageReceived = message => (dispatch, getState) => {
     case MistralConstants.CONTAINER_IMAGES_PREPARE_DEFAULT: {
       dispatch(
         handleWorkflowMessage(
-          payload.execution.id,
+          payload.execution_id,
           containerImagesPrepareFinished
         )
       );
