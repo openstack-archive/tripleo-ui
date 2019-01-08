@@ -77,6 +77,7 @@ ContainerImagePrepareParameterForm.propTypes = {
 
 const form = reduxForm({
   form: 'parametersForm',
+  enableReinitialize: true,
   onSubmit: (
     { ContainerImagePrepare },
     dispatch,
