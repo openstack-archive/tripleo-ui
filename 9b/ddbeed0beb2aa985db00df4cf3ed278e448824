@@ -1,0 +1,10 @@
+Code-Review+1: Ivan Kolodyazhny <e0ne@e0ne.info>
+Code-Review+2: Alex Schultz <aschultz@redhat.com>
+Code-Review+2: Florian Fuchs <flfuchs@redhat.com>
+Workflow+1: Florian Fuchs <flfuchs@redhat.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Fri, 22 Feb 2019 10:34:43 +0000
+Reviewed-on: https://review.openstack.org/625158
+Project: openstack/tripleo-ui
+Branch: refs/heads/stable/rocky
