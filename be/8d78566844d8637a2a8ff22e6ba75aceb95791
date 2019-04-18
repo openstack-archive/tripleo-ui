@@ -1,0 +1,8 @@
+Code-Review+2: Emilien Macchi <emilien@redhat.com>
+Workflow+1: Emilien Macchi <emilien@redhat.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Thu, 18 Apr 2019 17:09:24 +0000
+Reviewed-on: https://review.openstack.org/653778
+Project: openstack/tripleo-ui
+Branch: refs/heads/stable/stein
