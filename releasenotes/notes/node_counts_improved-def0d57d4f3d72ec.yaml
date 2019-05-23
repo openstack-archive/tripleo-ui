@@ -1,6 +1,0 @@
----
-fixes:
-  - |
-    Fixes `bug 1750821 <https://launchpad.net/bugs/1750821>`__
-    Available node counts in Role cards are properly calculated based on
-    node - flavor - role tagging

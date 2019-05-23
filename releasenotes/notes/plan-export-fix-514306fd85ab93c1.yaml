@@ -1,5 +1,0 @@
-fixes:
-  - |
-    Fixes `bug 1707055 <https://launchpad.net/bugs/1707055>`__
-    Fixes incorrectly generated exported plan URL for specific application
-    configurations

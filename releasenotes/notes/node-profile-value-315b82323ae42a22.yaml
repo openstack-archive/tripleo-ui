@@ -1,7 +1,0 @@
----
-fixes:
-  - |
-    Fixes `bug 1680926 <https://launchpad.net/bugs/1680926>`__
-    Node profile matches Node to flavor which is then matched to Role.
-    Therefore the Node profile value is displayed as a Flavor tag, rather
-    than Role name because these don't necessarily have to match. 

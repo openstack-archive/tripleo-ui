@@ -1,9 +1,0 @@
-features:
-  - |
-    Introduced Prepare Container Images as Step 5 in deployment plan
-    page and included container images configuration summary
-  - |
-    Add wizard to configure container images, user can provide basic container
-    images information, configuration gets automatically generated, user can
-    review and tweak details of the configuration in convenient editor-like
-    interface

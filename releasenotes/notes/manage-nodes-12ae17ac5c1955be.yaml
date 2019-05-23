@@ -1,5 +1,0 @@
----
-fixes:
-  - |
-    Fixes `bug 1639262 <https://launchpad.net/bugs/1639262>`__
-    Add manage nodes button to nodes list page
