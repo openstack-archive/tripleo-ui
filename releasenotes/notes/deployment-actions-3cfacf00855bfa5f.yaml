@@ -1,6 +1,0 @@
-features:
-  - |
-    Added 'Delete' and 'Redeploy' deployment actions. These actions
-    are available in appropriate phases of deployment lifecycle and
-    allow user to undeploy deployment or redeploy it with updated
-    configuration

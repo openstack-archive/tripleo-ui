@@ -1,6 +1,0 @@
----
-features:
-  - |
-    Improvements in Deployment configuration -> Overal Settings, Improved
-    performance, form now shows general error in case when some sub section
-    contains error

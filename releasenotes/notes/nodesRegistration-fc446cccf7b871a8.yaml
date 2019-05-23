@@ -1,7 +1,0 @@
----
-features:
-  - |
-    Nodes Registration form has been streamlined. After the nodes registration
-    form is submitted, nodes are confirmed valid and registration begins. At
-    this point registration form is closed and remaining registration process is
-    tracked in Nodes listing view.

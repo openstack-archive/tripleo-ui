@@ -1,6 +1,0 @@
----
-fixes:
-  - |
-    Fixes `bug 1688630 <https://launchpad.net/bugs/1688630>`__
-    Increase granularity of deployment progress bar to provide more accurate
-    feedback

@@ -1,4 +1,0 @@
-fixes:
-  - |
-    Fixes `bug 1664975 <https://launchpad.net/bugs/1664975>`__
-    Properly parse numbers as numbers rather than strings in Parameters forms

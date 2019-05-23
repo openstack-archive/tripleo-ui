@@ -1,5 +1,0 @@
----
-fixes:
-  - |
-    Fixes `bug 1671479 <https://launchpad.net/bugs/1671479>`__
-    Upgrade the UI to use keystone v3

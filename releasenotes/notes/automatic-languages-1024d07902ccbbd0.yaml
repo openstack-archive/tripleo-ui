@@ -1,5 +1,0 @@
----
-fixes:
-  - |
-    Fixes `bug 1682452 <https://launchpad.net/bugs/1682452>`__
-    Automatically enable all available languages

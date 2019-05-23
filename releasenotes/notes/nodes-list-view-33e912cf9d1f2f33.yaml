@@ -1,8 +1,0 @@
----
-features:
-  - |
-    Nodes listing has been reworked, it now provides 2 separate views which
-    can be changed via toolbar content view switcher. Default nodes listing
-    is using ListView component instead of table. New nodes listing provides
-    information about node in more user friendly way. Actions on selected nodes
-    are triggered using action buttons in Nodes toolbar.

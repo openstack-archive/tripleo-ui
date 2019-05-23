@@ -1,6 +1,0 @@
----
-features:
-  - |
-    Added new Toolbar functionality which enables extensive items filtering
-    and sorting. Functionality is represented by Nodes Toolbar available in
-    Nodes listing page

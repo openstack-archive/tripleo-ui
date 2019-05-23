@@ -1,5 +1,0 @@
----
-fixes:
-  - |
-    Fixes `bug 1667064 <https://bugs.launchpad.net/tripleo/+bug/1667064>`__
-    Add a language picker to the login page

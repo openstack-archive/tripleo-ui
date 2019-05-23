@@ -1,5 +1,0 @@
-fixes:
-  - |
-    Fixes `bug 1671100 <https://launchpad.net/bugs/1671100>`__
-    Fixes a bug in the nodes table toolbar which made the introspect and
-    provide buttons unclickable
