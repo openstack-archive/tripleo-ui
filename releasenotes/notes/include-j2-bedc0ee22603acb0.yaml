@@ -1,4 +1,0 @@
-fixes:
-  - |
-    Fixes `bug 1664892 <https://launchpad.net/bugs/1664892>`__
-    Jinja2 partials are included in plan creation

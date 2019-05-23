@@ -1,5 +1,0 @@
----
-fixes:
-  - |
-    Fixes `bug 1750821 <https://launchpad.net/bugs/1750821>`__
-    Use Nova profiles in node tagging form instead of role profiles

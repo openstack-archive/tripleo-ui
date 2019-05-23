@@ -1,9 +1,0 @@
----
-features:
-  - |
-    Nodes Assignment Modal has been removed and replaced by 2 separate steps.
-    Assigning Node to a Role is now done by tagging node to a certain Flavor
-    in Nodes view. This Flavor then needs to be set in Role configuration.
-    Based on this, count of available Nodes are provided in Deployment Plan
-    page and it is possible to set counts of Nodes intended to be deployed
-    with Roles.
